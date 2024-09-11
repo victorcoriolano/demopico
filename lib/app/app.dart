@@ -1,4 +1,4 @@
-import 'package:demopico/features/home/presentation/ui/pages/home_page.dart';
+import 'package:demopico/app/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
