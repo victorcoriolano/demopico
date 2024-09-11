@@ -43,7 +43,7 @@ class CentralPage extends StatelessWidget {
                             alignment: Alignment.center,
                             transform: Matrix4.identity()..setRotationZ(10.2),
                             child: Image.asset(
-                                'lib/assets/images/skatepico-icon.png',
+                                'assets/images/skatepico-icon.png',
                                 filterQuality: FilterQuality.high,
                                 width: 150,
                                 height: 150),
