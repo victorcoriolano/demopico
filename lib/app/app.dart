@@ -1,4 +1,6 @@
 import 'package:demopico/app/home_page.dart';
+import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
+import 'package:demopico/infra/ui/pages/map_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,10 +14,8 @@ class MyAppWidget extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         '/': (context) => const HomePage(),
-        '/hub': (context) => const HomePage(),
-        '/map': (context) => const HomePage(),
-        '/chat': (context) => const HomePage(),
-        '/profile': (context) => const HomePage(),
+        '/hub': (context) => const HubPage(),
+        '/map': (context) => const MapPage(),
       },
       title: 'DemoPico!',
       theme: ThemeData(
