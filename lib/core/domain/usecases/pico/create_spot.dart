@@ -1,5 +1,5 @@
-import 'package:demopico/domain/entities/spot.dart';
-import 'package:demopico/domain/repositories/spot_repository.dart';
+import 'package:demopico/core/domain/entities/spot.dart';
+import 'package:demopico/features/mapa/data/repositories/spot_repository.dart';
 
 class CreateSpot {
   final SpotRepository spotRepository;

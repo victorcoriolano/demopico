@@ -1,4 +1,4 @@
-import 'package:demopico/infra/ui/widgets/hub_tile.dart';
+import 'package:demopico/features/home/presentation/ui/widgets/hub_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

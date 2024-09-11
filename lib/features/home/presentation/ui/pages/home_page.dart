@@ -1,8 +1,8 @@
 import 'dart:developer';
 
-import 'package:demopico/infra/ui/pages/central_page.dart';
-import 'package:demopico/infra/ui/pages/map_page.dart';
-import 'package:demopico/infra/ui/pages/user_page.dart';
+import 'package:demopico/features/home/presentation/ui/pages/central_page.dart';
+import 'package:demopico/features/home/presentation/ui/pages/map_page.dart';
+import 'package:demopico/features/home/presentation/ui/pages/user_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {

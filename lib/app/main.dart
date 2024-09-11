@@ -1,4 +1,4 @@
-import 'package:demopico/app.dart';
+import 'package:demopico/app/app.dart';
 import 'package:flutter/material.dart';
 
 void main() {

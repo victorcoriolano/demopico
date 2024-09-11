@@ -1,4 +1,4 @@
-import 'package:demopico/domain/entities/spot.dart';
+import 'package:demopico/core/domain/entities/spot.dart';
 
 abstract class ISpotRepository {
   Future<List<Spot>> findAll();
