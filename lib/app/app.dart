@@ -23,7 +23,6 @@ class MyAppWidget extends StatelessWidget {
         useMaterial3: true,
       ),
       routes: {
-        '/': (context) => const HomePage(),
         '/hub': (context) => const HubPage(),
         '/map': (context) => const MapPage(),
       },
