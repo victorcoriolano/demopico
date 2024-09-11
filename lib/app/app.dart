@@ -2,8 +2,8 @@ import 'package:demopico/features/home/presentation/ui/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyAppWidget extends StatelessWidget {
+  const MyAppWidget({super.key});
 
   // This widget is the root of your application.
   @override
