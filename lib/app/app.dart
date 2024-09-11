@@ -1,6 +1,8 @@
 import 'package:demopico/app/home_page.dart';
+
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
-import 'package:demopico/infra/ui/pages/map_page.dart';
+import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,11 +14,6 @@ class MyAppWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      routes: {
-        '/': (context) => const HomePage(),
-        '/hub': (context) => const HubPage(),
-        '/map': (context) => const MapPage(),
-      },
       title: 'DemoPico!',
       theme: ThemeData(
         // This is the theme of your application.
@@ -24,8 +21,14 @@ class MyAppWidget extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(
             seedColor: const Color.fromARGB(255, 139, 0, 0)),
         useMaterial3: true,
-      ),
-      home: const HomePage(),
+        
+      ), 
+       routes: {
+         '/': (context) => const HomePage(),
+        '/hub': (context) => const HubPage(),
+        '/map': (context) => const MapPage(),
+      },
+      
     );
   }
 }
