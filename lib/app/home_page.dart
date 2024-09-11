@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:demopico/features/home/presentation/ui/pages/central_page.dart';
+import 'package:demopico/features/home/presentation/pages/central_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
 import 'package:demopico/features/profile/presentation/pages/user_page.dart';
 import 'package:flutter/material.dart';
