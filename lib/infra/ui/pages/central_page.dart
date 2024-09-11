@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-import 'package:demopico/ui/widgets/events_bottom_sheet.dart';
-import 'package:demopico/ui/widgets/hub_upper_sheet.dart';
+import 'package:demopico/infra/ui/widgets/events_bottom_sheet.dart';
+import 'package:demopico/infra/ui/widgets/hub_upper_sheet.dart';
 import 'package:flutter/material.dart';
 
 class CentralPage extends StatelessWidget {

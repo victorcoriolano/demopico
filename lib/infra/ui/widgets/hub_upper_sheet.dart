@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
 
-import 'package:demopico/ui/pages/hub_page.dart';
-import 'package:demopico/ui/widgets/EFEMERO_scroll_text.dart';
+import 'package:demopico/infra/ui/pages/hub_page.dart';
+import 'package:demopico/infra/ui/widgets/EFEMERO_scroll_text.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'dart:ui';
