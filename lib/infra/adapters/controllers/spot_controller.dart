@@ -1,4 +1,3 @@
-@ -1,32 +0,0 @@
 import 'package:demopico/domain/usecases/create_spot.dart';
 import 'package:demopico/domain/usecases/delete_spot.dart';
 import 'package:demopico/domain/usecases/list_spot.dart';
