@@ -1,4 +1,4 @@
-import 'package:cleancode_poc/domain/entities/spot.dart';
+import 'package:demopico/domain/entities/spot.dart';
 
 abstract class ISpotRepository {
   Future<List<Spot>> findAll();
@@ -10,12 +10,12 @@ abstract class ISpotRepository {
 
 class SpotRepository implements ISpotRepository {
   final List<Spot> yourSpots = [];
-  
+
   @override
   Future<List<Spot>> findAll() async {
-    if(yourSpots.isNotEmpty) {
+    if (yourSpots.isNotEmpty) {
       return yourSpots;
-    } else{
+    } else {
       throw Exception('No spots found');
     }
   }
@@ -29,23 +29,22 @@ class SpotRepository implements ISpotRepository {
   void saveSpot(Spot spot) async {
     final id = yourSpots.length + 1;
     final newSpot = Spot(
-      id: id,
-      spotName: spot.spotName,
-      description: spot.description,
-      lat: spot.lat,
-      long: spot.long
-    );
+        id: id,
+        spotName: spot.spotName,
+        description: spot.description,
+        lat: spot.lat,
+        long: spot.long);
     yourSpots.add(newSpot);
-  } 
+  }
 
   @override
   void updateSpots(Spot spot) async {
     final index = yourSpots.indexWhere((spots) => spots.id == spot.id);
-    if(index != -1){
+    if (index != -1) {
       yourSpots[index] = spot;
     }
   }
-  
+
   @override
   void deleteSpot(int id) async {
     yourSpots.removeWhere((spot) => spot.id == id);
