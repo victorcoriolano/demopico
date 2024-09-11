@@ -1,5 +1,5 @@
-import 'package:cleancode_poc/domain/entities/spot.dart';
-import 'package:cleancode_poc/domain/repositories/spot_repository.dart';
+import 'package:demopico/domain/entities/spot.dart';
+import 'package:demopico/domain/repositories/spot_repository.dart';
 
 class UpdateSpot {
 
