@@ -1,5 +1,8 @@
 import 'dart:developer';
 
+import 'package:demopico/ui/pages/central_page.dart';
+import 'package:demopico/ui/pages/map_page.dart';
+import 'package:demopico/ui/pages/user_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -32,9 +35,9 @@ class _HomePageState extends State<HomePage> {
         },
         controller: _pageController,
         children: [
-          const ZeroPage(),
-          OnePage(),
-          const TwoPage(),
+          const MapPage(),
+          CentralPage(),
+          const UserPage(),
         ],
       ),
     ));
