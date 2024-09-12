@@ -1,4 +1,5 @@
 {
     "cmake.sourceDirectory": "C:/Users/Arthur Selingin/Documents/GitHub/demopico/windows",
-    "cmake.ignoreCMakeListsMissing": true
+    "cmake.ignoreCMakeListsMissing": true,
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
