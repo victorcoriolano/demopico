@@ -10,9 +10,7 @@ class FirebaseAuthDataSource {
 
   Future<UserModel> login(String email, String password) async {
       await firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
-      return UserModel(senha: password, email: email, vulgo: null, id: null);
-  
-    
+      return UserModel(senha: password, email: email, vulgo: null, id: null); 
   }
 
   Future<UserModel> register(String email, String password) async {
