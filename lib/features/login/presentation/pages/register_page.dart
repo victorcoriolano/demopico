@@ -1,4 +1,4 @@
-import 'package:barna_chat/feature_auth/ui/register_form.dart';
+import 'package:demopico/features/login/presentation/widgets/register_form.dart';
 import 'package:flutter/material.dart';
 
 

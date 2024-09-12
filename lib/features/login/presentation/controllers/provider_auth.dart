@@ -1,6 +1,6 @@
-import 'package:barna_chat/feature_auth/domain/entities/user.dart';
-import 'package:barna_chat/feature_auth/domain/usecases/cadastro_uc.dart';
-import 'package:barna_chat/feature_auth/domain/usecases/login_use_case.dart';
+import 'package:demopico/core/domain/entities/user.dart';
+import 'package:demopico/core/domain/usecases/login/cadastro_use_case.dart';
+import 'package:demopico/core/domain/usecases/login/login_use_case.dart';
 import 'package:flutter/foundation.dart';
 
 class ProviderAuth  extends ChangeNotifier{

@@ -1,9 +1,8 @@
-
-import 'package:barna_chat/feature_auth/domain/entities/user.dart';
-import 'package:barna_chat/feature_auth/domain/infra/repository_uc.dart';
-import 'package:barna_chat/feature_auth/util/failure_server.dart';
-import 'package:barna_chat/feature_auth/util/model_use_case.dart';
 import 'package:dartz/dartz.dart';
+import 'package:demopico/core/domain/entities/user.dart';
+import 'package:demopico/core/errors/failure_server.dart';
+import 'package:demopico/features/login/domain/interfaces/model_use_case.dart';
+import 'package:demopico/features/login/domain/interfaces/repository_uc.dart';
 
 class LoginUseCase implements UseCase<User, LoginParams>{
   final AuthRepository authRepository;

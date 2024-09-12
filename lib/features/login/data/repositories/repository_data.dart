@@ -1,12 +1,11 @@
 
-
-import 'package:barna_chat/feature_auth/domain/entities/user.dart';
-import 'package:barna_chat/feature_auth/domain/infra/repository_uc.dart';
-import 'package:barna_chat/feature_auth/infra/datasources/auth_datasouce.dart';
-import 'package:barna_chat/feature_auth/infra/datasources/get_vulgo_by_id.dart';
 import 'package:dartz/dartz.dart';
+import 'package:demopico/core/errors/failure_server.dart';
+import 'package:demopico/features/login/data/services/firebase_service.dart';
+import 'package:demopico/features/login/data/services/get_vulgo_by_id.dart';
+import 'package:demopico/features/login/domain/entities/user.dart';
+import 'package:demopico/features/login/domain/interfaces/repository_uc.dart';
 
-import '../../util/failure_server.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final FirebaseAuthDataSource firebaseDataSource;
