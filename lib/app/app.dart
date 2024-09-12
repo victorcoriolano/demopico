@@ -21,12 +21,14 @@ class MyAppWidget extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(
             seedColor: const Color.fromARGB(255, 139, 0, 0)),
         useMaterial3: true,
-      ),
-      routes: {
+        
+      ), 
+       routes: {
+         '/': (context) => const HomePage(),
         '/hub': (context) => const HubPage(),
         '/map': (context) => const MapPage(),
       },
-      home: const HomePage(),
+      
     );
   }
 }
