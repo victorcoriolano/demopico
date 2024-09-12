@@ -59,7 +59,7 @@ class _HubPageState extends State<HubPage> {
                     child: ListView.builder(
                       itemBuilder: (BuildContext context, int index) {
                         return const Padding(
-                            padding: EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(6.0),
                             child: HubTile(
                               userName: 'Arthur Selingin',
                               text:
