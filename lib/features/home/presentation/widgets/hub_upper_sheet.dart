@@ -32,7 +32,7 @@ class _HubUpperSheetState extends State<HubUpperSheet>
       lerpDouble(min, max, _controller.value)!;
 
   //var com estilos animados
-  double get maxHeight => MediaQuery.of(context).size.height * 0.6;
+  double get maxHeight => MediaQuery.of(context).size.height * 0.58;
   double get headerTopMargin =>
       lerp(2, 50 + MediaQuery.of(context).padding.top);
   double get headerFontSize => lerp(14, 24);
@@ -66,7 +66,7 @@ class _HubUpperSheetState extends State<HubUpperSheet>
         animation: _controller,
         builder: (context, child) {
           return Positioned(
-              height: lerp(minHeight, maxHeight + 90),
+              height: lerp(minHeight, maxHeight + 100),
               left: 0,
               right: 0,
               bottom: MediaQuery.maybeSizeOf(context)!.height / 3.3 +
@@ -93,7 +93,7 @@ class _HubUpperSheetState extends State<HubUpperSheet>
                               2,
                             ),
                             child: Stack(children: [
-                              HubIcon(isVisible: _controller.value > 0.5),
+                              HubIcon(isVisible: _controller.value > 0.3),
                               ScrollingText(
                                   isVisible: _controller.value > 0.3,
                                   textStyle: TextStyle(
@@ -174,7 +174,7 @@ class HubIcon extends StatelessWidget {
         curve: Curves.bounceInOut,
         opacity: isVisible ? 1 : 0,
         duration: const Duration(milliseconds: 100),
-        child: Icon(Icons.bubble_chart, size: 300, color: Colors.white),
+        child: Icon(Icons.bubble_chart, size: 250, color: Colors.white),
       ),
     );
   }
