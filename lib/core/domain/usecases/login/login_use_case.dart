@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:demopico/core/domain/entities/user.dart';
 import 'package:demopico/core/errors/failure_server.dart';
+import 'package:demopico/features/login/domain/entities/user.dart';
 import 'package:demopico/features/login/domain/interfaces/model_use_case.dart';
 import 'package:demopico/features/login/domain/interfaces/repository_uc.dart';
 
