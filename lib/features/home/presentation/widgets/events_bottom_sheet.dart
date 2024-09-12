@@ -84,7 +84,6 @@ class _EventsBottomSheetState extends State<EventsBottomSheet>
                     ),
                     child: Stack(
                       children: <Widget>[
-                        MenuButton(),
                         SheetHeader(
                           fontSize: headerFontSize,
                           topMargin: headerTopMargin,
@@ -105,15 +104,19 @@ class _EventsBottomSheetState extends State<EventsBottomSheet>
         top: iconTopMargin(index),
         left: iconLeftMargin(index),
         child: ClipRRect(
-          borderRadius: BorderRadius.horizontal(
-              left: Radius.circular(iconLeftBorderRadius),
-              right: Radius.circular(iconRightBorderRadius)),
-          child: Image.asset(
-            event.assetName,
-            fit: BoxFit.cover,
-            alignment: Alignment(lerp(1, 0), 0),
-          ),
-        ));
+            borderRadius: BorderRadius.horizontal(
+                left: Radius.circular(iconLeftBorderRadius),
+                right: Radius.circular(iconRightBorderRadius)),
+            child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                child: Container(
+                  color: Colors.transparent,
+                  child: Icon(
+                    Icons.skateboarding_outlined,
+                    color: Colors.white,
+                    size: iconSize,
+                  ),
+                ))));
   }
 
   Widget _buildFullItem(Event event) {
@@ -244,14 +247,7 @@ class ExpandedEventItem extends StatelessWidget {
   }
 }
 
-final List<Event> events = [
-  Event('lib/assets/images/exercicios.jpeg', 'Rotina Saudável', 'sua morte',
-      false),
-  Event('lib/assets/images/back-two.jpg', 'BACK-TO-BACK', '10/9', false),
-  Event('lib/assets/images/best-trick.jpg', 'BEST TRICK', '20/9', false),
-  Event('lib/assets/images/primitive.jpg', 'PRIMITIVE ITACITY PREMIERE', '15/9',
-      true)
-];
+final List<Event> events = [];
 
 class SheetHeader extends StatelessWidget {
   final double fontSize;
@@ -271,21 +267,6 @@ class SheetHeader extends StatelessWidget {
           fontSize: fontSize,
           fontWeight: FontWeight.w500,
         ),
-      ),
-    );
-  }
-}
-
-class MenuButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      right: 0,
-      bottom: 24,
-      child: Icon(
-        Icons.emoji_events_rounded,
-        color: Colors.white,
-        size: 28,
       ),
     );
   }
