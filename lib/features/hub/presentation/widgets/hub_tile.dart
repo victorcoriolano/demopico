@@ -47,7 +47,7 @@ class _HubTileState extends State<HubTile> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            // Ícone do usuário
+            // Ícone e nome do usuário
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -80,16 +80,20 @@ class _HubTileState extends State<HubTile> {
                 ),
               ],
             ),
-            // Texto com o nome e a pergunta
+            // Texto do post
             Expanded(
-              child:Padding(padding: const EdgeInsets.symmetric(horizontal: 10),
-              child:Text(text,
+                child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Text(text,
                   softWrap: true,
                   style: const TextStyle(
                       fontWeight: FontWeight.w400, fontSize: 16)),
             )),
             // Ícone de bandeira
             const Icon(Icons.flag),
+            // Ícone de donação
+            if (_isDonation ?? false) const Icon(Icons.pest_control_rodent),
+            if (_isEvent ?? false) const Icon(Icons.event),
           ],
         ));
   }

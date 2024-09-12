@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "C:/Users/Arthur Selingin/Documents/GitHub/demopico/windows"
+    "cmake.sourceDirectory": "C:/Users/Arthur Selingin/Documents/GitHub/demopico/windows",
+    "cmake.ignoreCMakeListsMissing": true
 }

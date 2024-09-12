@@ -27,7 +27,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-//
         body: SafeArea(
       child: PageView(
         onPageChanged: (value) {
