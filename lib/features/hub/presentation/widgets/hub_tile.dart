@@ -39,7 +39,7 @@ class _HubTileState extends State<HubTile> {
     return Container(
         padding: const EdgeInsets.all(17.0),
         width: 300,
-        height: 100,
+        height: 150,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black12),
           borderRadius: BorderRadius.circular(10),
@@ -50,38 +50,44 @@ class _HubTileState extends State<HubTile> {
             // Ícone do usuário
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                const CircleAvatar(
-                  radius: 20,
-                  child: Icon(Icons.person),
-                ),
-                const Spacer(),
+                const Expanded(
+                    flex: 1,
+                    child: Center(
+                      child: CircleAvatar(
+                        radius: 20,
+                        child: Icon(Icons.person),
+                      ),
+                    )),
                 Expanded(
-                  child: SizedBox(
-                    width: 80,
-                    child: Text(
-                      maxLines: 2,
-                      textAlign: TextAlign.center,
-                      userName,
-                      softWrap: true,
-                      style: const TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
+                  flex: 1,
+                  child: Center(
+                    child: SizedBox(
+                      width: 80,
+                      child: Text(
+                        maxLines: 2,
+                        textAlign: TextAlign.center,
+                        userName,
+                        softWrap: true,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(width: 10),
             // Texto com o nome e a pergunta
             Expanded(
-              child: Text(text,
+              child:Padding(padding: const EdgeInsets.symmetric(horizontal: 10),
+              child:Text(text,
                   softWrap: true,
                   style: const TextStyle(
-                      fontWeight: FontWeight.w400, fontSize: 17)),
-            ),
+                      fontWeight: FontWeight.w400, fontSize: 16)),
+            )),
             // Ícone de bandeira
             const Icon(Icons.flag),
           ],
