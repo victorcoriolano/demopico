@@ -1,3 +1,4 @@
+import 'package:demopico/features/login/presentation/widgets/validator.dart';
 import 'package:demopico/features/login/presentation/controllers/login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:demopico/features/login/presentation/pages/register_page.dart';
@@ -13,7 +14,7 @@ class LoginForm extends StatefulWidget {
   State<LoginForm> createState() => _LoginFormState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+class _LoginFormState extends State<LoginForm>  with Validators{
   final TextEditingController _vulgoController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
 
@@ -53,10 +54,7 @@ class _LoginFormState extends State<LoginForm> {
               cursorColor: Colors.white,
               style: const TextStyle(color: Colors.white),
               controller: _vulgoController,
-              validator: (value) {
-                loginTry(value);
-                return null;
-              },
+              validator: (value) => combineValidators([() => isNotEmpty(value), () => isValidEmail(value),]),
             ),
 
             const SizedBox(
@@ -69,10 +67,10 @@ class _LoginFormState extends State<LoginForm> {
               style: const TextStyle(color: Colors.white),
               obscureText: true,
               controller: _senhaController,
-              validator: (value) {
-                loginTry(value);
-                return null;
-              },
+              validator: (value) => combineValidators([
+                () => isNotEmpty(value),
+                () => isValidPassword(value),
+              ]),
             ),
             // text input(esqueceu senha)
             TextButton(
