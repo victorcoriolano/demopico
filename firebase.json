@@ -1,0 +1,1 @@
+{"flutter":{"platforms":{"android":{"default":{"projectId":"pico-skatepico","appId":"1:495399023145:android:5c56e3301f8a2187546238","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"pico-skatepico","configurations":{"android":"1:495399023145:android:5c56e3301f8a2187546238","ios":"1:495399023145:ios:7ea702e0d60eece9546238"}}}}}}
