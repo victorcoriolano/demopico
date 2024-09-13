@@ -16,7 +16,8 @@ class FirebaseService {
   }
 
   //Serviço de registro CREDENCIAIS
-  Future<UserModel> register(String email, String password) async {
+  Future<UserModel> registerByEmailAndPassword(
+      String email, String password) async {
     await firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
     return UserModel(senha: password, email: email, vulgo: null, id: null);

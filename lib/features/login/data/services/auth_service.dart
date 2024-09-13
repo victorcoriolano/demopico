@@ -21,7 +21,8 @@ class AuthService implements AuthInterface {
   @override
   Future<Either<Failure, User>> register(String email, String password) async {
     try {
-      final userModel = await firebaseService.register(email, password);
+      final userModel =
+          await firebaseService.registerByEmailAndPassword(email, password);
       return Right(userModel);
     } catch (e) {
       return Left(ServerFailure());
