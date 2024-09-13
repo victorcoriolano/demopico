@@ -3,6 +3,8 @@
         android:label="demopico"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+         <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyC-fL7BbfWCQV7tS1XxyxDG3xEd9P5AIoU"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
