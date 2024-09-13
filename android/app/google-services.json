@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "495399023145",
+    "project_id": "pico-skatepico",
+    "storage_bucket": "pico-skatepico.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:495399023145:android:5c56e3301f8a2187546238",
+        "android_client_info": {
+          "package_name": "com.example.demopico"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHUyAejc79CWSY1Zb-6Vqs_r1B51dIR9E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
