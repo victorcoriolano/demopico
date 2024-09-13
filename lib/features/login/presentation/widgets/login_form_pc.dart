@@ -1,10 +1,13 @@
+import 'package:demopico/features/login/presentation/controllers/login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:demopico/features/login/presentation/pages/register_page.dart';
 import 'package:demopico/features/login/presentation/widgets/button_custom.dart';
-import 'package:demopico/features/login/presentation/widgets/textfield_custom.dart';
+import 'package:demopico/features/login/presentation/widgets/textfield_decoration.dart';
+import 'package:get/get.dart';
 
 class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
+  final LoginController loginController;
+  const LoginForm({super.key, required this.loginController});
 
   @override
   State<LoginForm> createState() => _LoginFormState();
@@ -51,6 +54,7 @@ class _LoginFormState extends State<LoginForm> {
               style: const TextStyle(color: Colors.white),
               controller: _vulgoController,
               validator: (value) {
+                loginTry(value);
                 return null;
               },
             ),
@@ -66,11 +70,8 @@ class _LoginFormState extends State<LoginForm> {
               obscureText: true,
               controller: _senhaController,
               validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return "Campo obrigatório";
-                } else {
-                  return null;
-                }
+                loginTry(value);
+                return null;
               },
             ),
             // text input(esqueceu senha)
@@ -109,8 +110,16 @@ class _LoginFormState extends State<LoginForm> {
             ElevatedButton(
               onPressed: () {
                 setState(() {
-                  if (FormFieldValidator.toString().isEmpty) {
-                    print("OK!!!!");
+                  if (FormFieldValidator.toString().isNotEmpty ||
+                      _vulgoController.text.isNotEmpty &&
+                          _senhaController.text.isNotEmpty) {
+                    String vulgo = _vulgoController.text;
+                    String password = _senhaController.text;
+                    _vulgoController.text.contains("@")
+                        ? widget.loginController.loginByEmail(vulgo, password)
+                        : widget.loginController.loginByVulgo(vulgo, password);
+                  } else {
+                    loginTry(FormFieldValidator.toString());
                   }
                 });
               },
@@ -128,10 +137,9 @@ class _LoginFormState extends State<LoginForm> {
             //button (fazer parte)
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const RegisterPage()),
-                );
+                Get.to(() => const RegisterPage(),
+                transition: Transition.circularReveal,
+                duration: const Duration(seconds: 1));
               },
               style: buttonStyle(),
               child: const Text("FAZER PARTE",
@@ -141,5 +149,13 @@ class _LoginFormState extends State<LoginForm> {
         ),
       ),
     ));
+  }
+
+  String loginTry(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Campo obrigatório";
+    } else {
+      return value;
+    }
   }
 }

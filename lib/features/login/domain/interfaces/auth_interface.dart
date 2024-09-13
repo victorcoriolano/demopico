@@ -1,9 +1,9 @@
-
 import 'package:dartz/dartz.dart';
+import 'package:demopico/core/domain/entities/user_profile.dart';
 import 'package:demopico/core/errors/failure_server.dart';
 import 'package:demopico/features/login/domain/entities/user.dart';
 
-abstract class AuthRepository{
+abstract class AuthInterface {
   Future<Either<Failure, User>> login(String email, String password);
   Future<Either<Failure, User>> register(String email, String password);
   Future<Either<Failure, User>> registerFirestore(String email, String vulgo);

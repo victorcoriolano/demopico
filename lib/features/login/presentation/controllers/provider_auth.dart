@@ -1,16 +1,26 @@
-import 'package:demopico/core/domain/usecases/login/cadastro_use_case.dart';
+import 'package:demopico/core/domain/entities/user_profile.dart';
+import 'package:demopico/core/domain/interfaces/register_params.dart';
+import 'package:demopico/core/domain/usecases/login/sign_up_use_case.dart';
 import 'package:demopico/core/domain/usecases/login/login_use_case.dart';
+import 'package:demopico/features/login/data/repositories/login_params.dart';
+import 'package:demopico/features/login/data/services/auth_service.dart';
 import 'package:demopico/features/login/domain/entities/user.dart';
+import 'package:demopico/features/login/presentation/controllers/login_controller.dart';
 import 'package:flutter/foundation.dart';
 
 class ProviderAuth extends ChangeNotifier {
+  final LoginController loginController;
   final LoginUseCase loginUseCase;
   final RegisterUseCase registerUseCase;
 
-  User? _user;
+  LoggedUser? _user;
   User? get user => _user;
-
-  ProviderAuth({required this.loginUseCase, required this.registerUseCase});
+  AuthService authService;
+  ProviderAuth(
+      {required this.loginUseCase,
+      required this.registerUseCase,
+      required this.authService,
+      required this.loginController});
 
   Future<void> login(String email, String senha) async {
     final result =
@@ -21,6 +31,7 @@ class ProviderAuth extends ChangeNotifier {
       },
       (user) {
         _user = user;
+        authService.login(email, senha);
         notifyListeners();
       },
     );
@@ -35,6 +46,7 @@ class ProviderAuth extends ChangeNotifier {
       },
       (user) {
         _user = user;
+        authService.register(email, password);
         notifyListeners();
       },
     );

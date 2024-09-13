@@ -1,4 +1,5 @@
 
+import 'package:demopico/features/login/presentation/controllers/login_controller.dart';
 import 'package:demopico/features/login/presentation/widgets/login_form_pc.dart';
 import 'package:flutter/material.dart';
 
@@ -36,7 +37,10 @@ class LoginPage extends StatelessWidget {
             ),
           ),
           const Center(
-            child: LoginForm(),
+            child: LoginForm(loginController: LoginController(
+              authService: ,
+              firebaseService: ,
+            )),
           ),
         ],
       ),  

@@ -26,7 +26,7 @@ class _MapPageState extends State<MapPage> {
           onTap: _onMapPointTapped, // Simula o clique no ponto do mapa
           child: Container(
             color: Colors.blue, // Substitua pelo widget de mapa real
-            child: Center(
+            child: const Center(
               child: Text(
                 'Clique no mapa para abrir o painel',
                 style: TextStyle(color: Colors.white, fontSize: 18),
@@ -43,7 +43,7 @@ class _MapPageState extends State<MapPage> {
             maxChildSize: 0.8, // Tamanho máximo ao deslizar para cima
             builder: (BuildContext context, ScrollController scrollController) {
               return Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
                   boxShadow: [
@@ -62,7 +62,7 @@ class _MapPageState extends State<MapPage> {
                       alignment:
                           Alignment.center, // Centraliza a barra no painel
                       child: Container(
-                        margin: EdgeInsets.symmetric(vertical: 10),
+                        margin: const EdgeInsets.symmetric(vertical: 10),
                         height: 5,
                         width: 8 * 0, // Largura desejada da barra de arrastar
                         decoration: BoxDecoration(
@@ -72,11 +72,11 @@ class _MapPageState extends State<MapPage> {
                       ),
                     ),
 
-                    ListTile(
+                    const ListTile(
                       title: Text('Detalhes do Local'),
                       subtitle: Text('Informações do local clicado no mapa'),
                     ),
-                    ListTile(
+                    const ListTile(
                       title: Text('Mais detalhes'),
                       subtitle:
                           Text('Você pode adicionar mais informações aqui.'),
