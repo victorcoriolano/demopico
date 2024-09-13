@@ -1,3 +1,4 @@
+import 'package:demopico/features/mapa/presentation/widgets/map_widget.dart';
 import 'package:demopico/features/mapa/presentation/widgets/show_pico_widget.dart';
 import 'package:demopico/features/mapa/presentation/widgets/top_side_map_widget.dart';
 import 'package:flutter/material.dart';
@@ -26,18 +27,11 @@ class _MapPageState extends State<MapPage> {
       appBar: const TopSideMapWidget(),
       body: Stack(
         children: [
+          MapWidget(),
           // Simulação do widget de mapa (substitua pelo widget real)
           GestureDetector(
             onTap: _onMapPointTapped, // Simula o clique no ponto do mapa
-            child: Container(
-              color: Colors.blue, // Substitua pelo widget de mapa real
-              child: const Center(
-                child: Text(
-                  'Clique no mapa para abrir o painel',
-                  style: TextStyle(color: Colors.white, fontSize: 18),
-                ),
-              ),
-            ),
+             
           ),
 
           // Painel arrastável (oculto até o clique no mapa)
