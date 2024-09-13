@@ -9,7 +9,7 @@ class ShowPicoWidget extends StatefulWidget {
 class _ShowPicoWidgetState extends State<ShowPicoWidget> {
   @override
   Widget build(BuildContext context) {
-    return   DraggableScrollableSheet(
+    return  DraggableScrollableSheet(
             initialChildSize: 0.2, // Tamanho inicial do painel (20%)
             minChildSize: 0.0, // Tamanho mínimo ao deslizar para baixo
             maxChildSize: 0.95, // Tamanho máximo ao deslizar para cima
