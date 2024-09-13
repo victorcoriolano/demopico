@@ -1,8 +1,7 @@
 
-
-import 'package:barna_chat/feature_auth/domain/entities/user.dart';
-import 'package:barna_chat/feature_auth/util/failure_server.dart';
 import 'package:dartz/dartz.dart';
+import 'package:demopico/core/errors/failure_server.dart';
+import 'package:demopico/features/login/domain/entities/user.dart';
 
 abstract class AuthRepository{
   Future<Either<Failure, User>> login(String email, String password);

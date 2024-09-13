@@ -1,8 +1,6 @@
-
-
-import 'package:barna_chat/feature_auth/ui/componentes/button_custom.dart';
-import 'package:barna_chat/feature_auth/ui/componentes/dropdown.dart';
-import 'package:barna_chat/feature_auth/ui/componentes/textfield_custom.dart';
+import 'package:demopico/features/login/presentation/widgets/button_custom.dart';
+import 'package:demopico/features/login/presentation/widgets/dropdown.dart';
+import 'package:demopico/features/login/presentation/widgets/textfield_custom.dart';
 import 'package:flutter/material.dart';
 
 class RegisterForm extends StatefulWidget {
