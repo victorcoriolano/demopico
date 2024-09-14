@@ -40,6 +40,13 @@ android {
             signingConfig = signingConfigs.debug
         }
     }
+
+    dependencies {
+
+  implementation 'com.google.firebase:firebase-firestore:24.4.0'
+
+    }
+
 }
 
 flutter {

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:demopico/features/login/data/models/user_model.dart';
+import 'package:demopico/features/user/data/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseService {

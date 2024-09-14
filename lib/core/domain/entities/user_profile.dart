@@ -1,4 +1,4 @@
-import 'package:demopico/features/login/domain/entities/user.dart';
+import 'package:demopico/features/user/domain/entities/user.dart';
 import 'package:flutter/material.dart';
 
 class LoggedUser extends User {

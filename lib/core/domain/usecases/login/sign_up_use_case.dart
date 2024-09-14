@@ -1,8 +1,8 @@
 import 'package:demopico/core/domain/interfaces/register_params.dart';
 import 'package:demopico/core/errors/failure_server.dart';
-import 'package:demopico/features/login/domain/entities/user.dart';
-import 'package:demopico/features/login/domain/interfaces/model_use_case.dart';
-import 'package:demopico/features/login/domain/interfaces/auth_interface.dart';
+import 'package:demopico/features/user/domain/entities/user.dart';
+import 'package:demopico/features/user/domain/interfaces/model_use_case.dart';
+import 'package:demopico/features/user/domain/interfaces/auth_interface.dart';
 import 'package:dartz/dartz.dart';
 
 class RegisterUseCase implements UseCase<User, RegisterParams> {

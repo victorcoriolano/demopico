@@ -1,8 +1,8 @@
-import 'package:demopico/features/login/presentation/controllers/login_controller.dart';
+import 'package:demopico/features/user/presentation/controllers/login_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:demopico/features/login/presentation/pages/register_page.dart';
-import 'package:demopico/features/login/presentation/widgets/button_custom.dart';
-import 'package:demopico/features/login/presentation/widgets/textfield_decoration.dart';
+import 'package:demopico/features/user/presentation/pages/register_page.dart';
+import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
+import 'package:demopico/features/user/presentation/widgets/textfield_decoration.dart';
 import 'package:get/get.dart';
 
 class LoginForm extends StatefulWidget {
@@ -116,8 +116,10 @@ class _LoginFormState extends State<LoginForm> {
                     String vulgo = _vulgoController.text;
                     String password = _senhaController.text;
                     _vulgoController.text.contains("@")
-                        ? widget.loginController.loginByEmail(vulgo, password)
-                        : widget.loginController.loginByVulgo(vulgo, password);
+                        ? widget.loginController
+                            .loginByEmail(email: vulgo, password: password)
+                        : widget.loginController
+                            .loginByVulgo(vulgo: vulgo, password: password);
                   } else {
                     loginTry(FormFieldValidator.toString());
                   }
@@ -138,8 +140,8 @@ class _LoginFormState extends State<LoginForm> {
             ElevatedButton(
               onPressed: () {
                 Get.to(() => const RegisterPage(),
-                transition: Transition.circularReveal,
-                duration: const Duration(seconds: 1));
+                    transition: Transition.circularReveal,
+                    duration: const Duration(seconds: 1));
               },
               style: buttonStyle(),
               child: const Text("FAZER PARTE",

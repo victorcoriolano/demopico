@@ -1,5 +1,5 @@
-import 'package:demopico/features/login/data/services/auth_service.dart';
-import 'package:demopico/features/login/data/services/firebase_service.dart';
+import 'package:demopico/features/user/data/services/auth_service.dart';
+import 'package:demopico/features/user/data/services/firebase_service.dart';
 
 class LoginController {
   final AuthService authService;

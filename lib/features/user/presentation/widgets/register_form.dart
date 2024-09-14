@@ -1,6 +1,6 @@
-import 'package:demopico/features/login/presentation/widgets/button_custom.dart';
-import 'package:demopico/features/login/presentation/widgets/dropdown.dart';
-import 'package:demopico/features/login/presentation/widgets/textfield_decoration.dart';
+import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
+import 'package:demopico/features/user/presentation/widgets/dropdown.dart';
+import 'package:demopico/features/user/presentation/widgets/textfield_decoration.dart';
 import 'package:flutter/material.dart';
 
 class RegisterForm extends StatefulWidget {
