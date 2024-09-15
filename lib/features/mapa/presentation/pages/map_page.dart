@@ -30,7 +30,7 @@ class _MapPageState extends State<MapPage> {
           // Simulação do widget de mapa (substitua pelo widget real)
           GestureDetector(
             onTap: _onMapPointTapped, // Simula o clique no ponto do mapa
-            child:           MapWidget(),
+            child:           const MapWidget(),
           ),
 
           // Painel arrastável (oculto até o clique no mapa)

@@ -34,7 +34,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                       alignment:
                           Alignment.center, // Centraliza a barra no painel
                       child: Container(
-                        margin: EdgeInsets.symmetric(vertical: 10),
+                        margin: const EdgeInsets.symmetric(vertical: 10),
                         height: 5,
                         width: 80, // Largura desejada da barra de arrastar
                         decoration: BoxDecoration(
@@ -44,11 +44,11 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                       ),
                     ),
 
-                    ListTile(
+                    const ListTile(
                       title: Text('Detalhes do Local'),
                       subtitle: Text('Informações do local clicado no mapa'),
                     ),
-                    ListTile(
+                    const ListTile(
                       title: Text('Mais detalhes'),
                       subtitle:
                           Text('Você pode adicionar mais informações aqui.'),
