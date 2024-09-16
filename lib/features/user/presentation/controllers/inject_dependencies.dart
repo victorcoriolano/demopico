@@ -1,7 +1,12 @@
 import 'package:demopico/core/domain/usecases/login/login_use_case.dart';
 import 'package:demopico/core/domain/usecases/login/sign_up_use_case.dart';
+import 'package:demopico/features/user/data/external/firebase_auth.dart';
+import 'package:demopico/features/user/data/services/auth_service.dart';
+import 'package:demopico/features/user/data/services/firebase_service.dart';
 import 'package:demopico/features/user/domain/interfaces/auth_interface.dart';
 import 'package:demopico/features/user/presentation/controllers/provider_auth.dart';
+import 'package:demopico/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 
 final serviceLocator = GetIt.instance;
@@ -19,14 +24,14 @@ Future<void> init() async {
   serviceLocator.registerLazySingleton(() => RegisterUseCase(serviceLocator()));
 
   // Repository
-  serviceLocator.registerLazySingleton<AuthInterface>(() => Auth(sl()));
+  serviceLocator.registerLazySingleton<AuthInterface>(() => AuthService(serviceLocator()));
 
   // Data Sources
-  sl.registerLazySingleton(() => FirebaseAuthDataSource(sl()));
+  serviceLocator.registerLazySingleton(() => FirebaseService(serviceLocator(),serviceLocator()));
 
   // External
   final firebaseApp = await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  sl.registerLazySingleton(() => FirebaseAuth.instance);
+  serviceLocator.registerLazySingleton(() => FirebaseAuth.instance);
 }
