@@ -1,5 +1,5 @@
 class FirebaseAuth {
-  FirebaseAuth();
+  FirebaseAuth._();
 
   static FirebaseAuth get instance => FirebaseAuth.instance;
 

@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:demopico/core/errors/failure_server.dart';
-import 'package:demopico/features/login/data/services/firebase_service.dart';
-import 'package:demopico/features/login/domain/entities/user.dart';
-import 'package:demopico/features/login/domain/interfaces/auth_interface.dart';
+import 'package:demopico/features/user/data/services/firebase_service.dart';
+import 'package:demopico/features/user/domain/entities/user.dart';
+import 'package:demopico/features/user/domain/interfaces/auth_interface.dart';
 
 class AuthService implements AuthInterface {
   final FirebaseService firebaseService;
@@ -21,7 +21,8 @@ class AuthService implements AuthInterface {
   @override
   Future<Either<Failure, User>> register(String email, String password) async {
     try {
-      final userModel = await firebaseService.register(email, password);
+      final userModel =
+          await firebaseService.registerByEmailAndPassword(email, password);
       return Right(userModel);
     } catch (e) {
       return Left(ServerFailure());

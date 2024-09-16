@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:demopico/features/login/data/models/user_model.dart';
+import 'package:demopico/features/user/data/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseService {
@@ -16,7 +16,8 @@ class FirebaseService {
   }
 
   //Serviço de registro CREDENCIAIS
-  Future<UserModel> register(String email, String password) async {
+  Future<UserModel> registerByEmailAndPassword(
+      String email, String password) async {
     await firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
     return UserModel(senha: password, email: email, vulgo: null, id: null);

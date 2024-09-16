@@ -1,4 +1,4 @@
-import 'package:demopico/features/login/presentation/widgets/textfield_decoration.dart';
+import 'package:demopico/features/user/presentation/widgets/textfield_decoration.dart';
 import 'package:flutter/material.dart';
 
 class TipoContaDropdownButton extends StatefulWidget {

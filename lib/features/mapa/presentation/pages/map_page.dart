@@ -27,11 +27,10 @@ class _MapPageState extends State<MapPage> {
       appBar: const TopSideMapWidget(),
       body: Stack(
         children: [
-          MapWidget(),
           // Simulação do widget de mapa (substitua pelo widget real)
           GestureDetector(
             onTap: _onMapPointTapped, // Simula o clique no ponto do mapa
-             
+            child:           const MapWidget(),
           ),
 
           // Painel arrastável (oculto até o clique no mapa)

@@ -1,5 +1,5 @@
-import 'package:demopico/features/login/data/models/user_model.dart';
-import 'package:demopico/features/login/domain/entities/user.dart';
+import 'package:demopico/features/user/data/models/user_model.dart';
+import 'package:demopico/features/user/domain/entities/user.dart';
 
 class UserCredentials extends UserModel {
   UserCredentials(

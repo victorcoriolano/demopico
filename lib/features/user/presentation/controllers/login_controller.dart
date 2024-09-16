@@ -1,5 +1,5 @@
-import 'package:demopico/features/login/data/services/auth_service.dart';
-import 'package:demopico/features/login/data/services/firebase_service.dart';
+import 'package:demopico/features/user/data/services/auth_service.dart';
+import 'package:demopico/features/user/data/services/firebase_service.dart';
 
 class LoginController {
   final AuthService authService;
@@ -8,7 +8,8 @@ class LoginController {
   String? email;
   LoginController({required this.authService, required this.firebaseService});
 
-  Future<bool> loginByEmail(String email, String password) async {
+  Future<bool> loginByEmail(
+      {required String email, required String password}) async {
     try {
       authService.login(email, password);
       return true;
@@ -17,7 +18,8 @@ class LoginController {
     }
   }
 
-  Future<bool> loginByVulgo(String vulgo, String password) async {
+  Future<bool> loginByVulgo(
+      {required String vulgo, required String password}) async {
     try {
       id = await firebaseService.getIDByVulgo(vulgo);
       if (id != null) {

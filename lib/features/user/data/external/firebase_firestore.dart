@@ -1,5 +1,5 @@
 class FirebaseFirestore {
-  FirebaseFirestore();
+  FirebaseFirestore._();
 
   static FirebaseFirestore get instance => FirebaseFirestore.instance;
 

@@ -14,31 +14,39 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late PageController _pageController;
+  int _currentPage = 1;
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController(
       viewportFraction: 1.0,
-      initialPage: 1,
+      initialPage: _currentPage,
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-      child: PageView(
-        onPageChanged: (value) {
-          log('$value');
-        },
-        controller: _pageController,
-        children: [
-          const MapPage(),
-          CentralPage(),
-          const UserPage(),
-        ],
+      body: SafeArea(
+        child: PageView(
+          physics: _currentPage == 0 
+              ? const NeverScrollableScrollPhysics() // Desativar rolagem na página do mapa
+              : const BouncingScrollPhysics(), // Habilitar rolagem nas outras páginas
+          onPageChanged: (value) {
+            setState(() {
+              _currentPage = value;
+            });
+            log('$value');
+          },
+          controller: _pageController,
+          children: [
+            const MapPage(),
+            CentralPage(),
+            const UserPage(),
+          ],
+        ),
       ),
-    ));
+    );
   }
 }
