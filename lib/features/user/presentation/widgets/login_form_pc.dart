@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LoginForm extends StatefulWidget {
-  final LoginController loginController;
-  const LoginForm({super.key, required this.loginController});
+ 
+  const LoginForm({super.key,});
 
   @override
   State<LoginForm> createState() => _LoginFormState();
@@ -114,7 +114,7 @@ class _LoginFormState extends State<LoginForm>  with Validators{
                     String vulgo = _vulgoController.text;
                     String password = _senhaController.text;
                     _vulgoController.text.contains("@")
-                        ? widget.loginController.loginByEmail(vulgo, password)
+                        ? widget.loginController.loginByEmail( vulgo, password)
                         : widget.loginController.loginByVulgo(vulgo, password);
                   } else {
                     loginTry(FormFieldValidator.toString());

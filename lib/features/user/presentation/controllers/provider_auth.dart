@@ -46,6 +46,8 @@ class ProviderAuth extends ChangeNotifier {
     );
   }
 
+  
+
   void logout() {
     _user = null;
     notifyListeners();
