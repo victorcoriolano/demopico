@@ -1,14 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/user/data/models/user_model.dart';
+import 'package:demopico/features/user/domain/interfaces/firebase_interface.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class FirebaseService {
-  final FirebaseAuth firebaseAuth;
-  final FirebaseFirestore firebaseFirestore;
-
+class FirebaseService implements FirebaseInterface {
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   FirebaseService(this.firebaseAuth, this.firebaseFirestore);
 
+//getters
+  Stream<User?> get authState => FirebaseAuth.instance.authStateChanges();
+
+  Stream<User?> get userInstanceChanges => FirebaseAuth.instance.userChanges();
+
+//métodos de leitura e escrita
+
   //Serviço de login
+  @override
   Future<UserModel> login(String email, String password) async {
     await firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
@@ -16,6 +24,7 @@ class FirebaseService {
   }
 
   //Serviço de registro CREDENCIAIS
+  @override
   Future<UserModel> registerByEmailAndPassword(
       String email, String password) async {
     await firebaseAuth.createUserWithEmailAndPassword(
@@ -24,6 +33,7 @@ class FirebaseService {
   }
 
   //Serviço de registro LOGIN
+  @override
   Future<UserModel> registerFirestore(String email, String vulgo) async {
     await firebaseFirestore
         .collection("user_email_vulgo")
@@ -32,6 +42,7 @@ class FirebaseService {
   }
 
   //Serviço GET ID by USERNAME
+  @override
   Future<String?> getIDByVulgo(
     String vulgo,
   ) async {
@@ -47,6 +58,7 @@ class FirebaseService {
   }
 
   //Serviço GET EMAIL by ID
+  @override
   Future<String?> getEmailByID(String id) async {
     DocumentSnapshot emailSnapshot =
         await firebaseFirestore.collection("user_email_vulgo").doc(id).get();

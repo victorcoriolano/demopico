@@ -1,20 +1,31 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:demopico/core/errors/failure_server.dart';
+import 'package:demopico/features/user/data/repositories/user_repository.dart';
 import 'package:demopico/features/user/data/services/firebase_service.dart';
 import 'package:demopico/features/user/domain/entities/user.dart';
 import 'package:demopico/features/user/domain/interfaces/auth_interface.dart';
+import 'package:firebase_auth/firebase_auth.dart' hide User;
 
 class AuthService implements AuthInterface {
-  final FirebaseService firebaseService;
-  AuthService(this.firebaseService);
+  final FirebaseService firebaseService =
+      FirebaseService(FirebaseAuth.instance, FirebaseFirestore.instance);
 
   @override
   Future<Either<Failure, User>> login(String email, String password) async {
     try {
       final userModel = await firebaseService.login(email, password);
       return right(userModel);
-    } catch (e) {
-      return left(ServerFailure());
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        return left(UserNotFoundFailure());
+      } else if (e.code == 'wrong-password') {
+        return left(WrongPasswordFailure());
+      } else if (e.code == 'invalid-email') {
+        return left(InvalidEmailFailure());
+      } else {
+        return left(ServerFailure());
+      }
     }
   }
 
@@ -23,9 +34,18 @@ class AuthService implements AuthInterface {
     try {
       final userModel =
           await firebaseService.registerByEmailAndPassword(email, password);
-      return Right(userModel);
-    } catch (e) {
-      return Left(ServerFailure());
+      UserRepository.systemUsers.add(userModel);
+      return right(userModel);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        return left(UserNotFoundFailure());
+      } else if (e.code == 'wrong-password') {
+        return left(WrongPasswordFailure());
+      } else if (e.code == 'invalid-email') {
+        return left(InvalidEmailFailure());
+      } else {
+        return left(ServerFailure());
+      }
     }
   }
 
@@ -34,9 +54,17 @@ class AuthService implements AuthInterface {
       String email, String vulgo) async {
     try {
       final userModel = await firebaseService.registerFirestore(email, vulgo);
-      return Right(userModel);
-    } catch (e) {
-      return Left(ServerFailure());
+      return right(userModel);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        return left(UserNotFoundFailure());
+      } else if (e.code == 'wrong-password') {
+        return left(WrongPasswordFailure());
+      } else if (e.code == 'invalid-email') {
+        return left(InvalidEmailFailure());
+      } else {
+        return left(ServerFailure());
+      }
     }
   }
 
