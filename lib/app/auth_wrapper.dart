@@ -4,7 +4,6 @@ import 'package:demopico/features/user/presentation/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-
 class AuthWrapper extends StatelessWidget {
   const AuthWrapper({super.key});
   @override

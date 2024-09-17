@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             const MapPage(),
             CentralPage(),
-            const UserPage(),
+            const AuthWrapper(),
           ],
         ),
       ),
