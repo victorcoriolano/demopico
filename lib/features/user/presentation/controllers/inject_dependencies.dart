@@ -24,10 +24,12 @@ Future<void> init() async {
   serviceLocator.registerLazySingleton(() => RegisterUseCase(serviceLocator()));
 
   // Repository
-  serviceLocator.registerLazySingleton<AuthInterface>(() => AuthService(serviceLocator()));
+  serviceLocator.registerLazySingleton<AuthInterface>(
+      () => AuthService(serviceLocator()));
 
   // Data Sources
-  serviceLocator.registerLazySingleton(() => FirebaseService(serviceLocator(),serviceLocator()));
+  serviceLocator.registerLazySingleton(
+      () => FirebaseService(serviceLocator(), serviceLocator()));
 
   // External
   final firebaseApp = await Firebase.initializeApp(
