@@ -5,9 +5,7 @@ class AddPicoWidget extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return  Stack(
-        children: [
-          Positioned(
+    return Positioned(
             bottom: 20.0, // Distância do fundo da tela
             right: 20.0, // Distância da borda direita da tela
             child: Container(
@@ -52,8 +50,6 @@ class AddPicoWidget extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-        ],
-      );
+          ); 
   }
 }
