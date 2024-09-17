@@ -23,3 +23,15 @@ class NetworkFailure extends Failure {
 class CacheFailure extends Failure {
   CacheFailure({super.message = 'Cache failure'});
 }
+
+class UserNotFoundFailure extends Failure {
+  UserNotFoundFailure({super.message = 'Não achamos ninguém com esse vulgo!'});
+}
+
+class WrongPasswordFailure extends Failure {
+  WrongPasswordFailure({super.message = 'Você digitou uma senha errada!'});
+}
+
+class InvalidEmailFailure extends Failure {
+  InvalidEmailFailure({super.message = 'Esse e-mail é inválido. '});
+}

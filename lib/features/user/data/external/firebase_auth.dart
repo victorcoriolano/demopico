@@ -1,7 +1,7 @@
-class FirebaseAuth {
-  FirebaseAuth._();
+import 'package:firebase_auth/firebase_auth.dart';
+
+class FirebaseAuthInstance {
+  FirebaseAuthInstance._();
 
   static FirebaseAuth get instance => FirebaseAuth.instance;
-
-  static FirebaseAuth get platform => FirebaseAuth.platform;
 }

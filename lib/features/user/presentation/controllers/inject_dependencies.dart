@@ -14,20 +14,24 @@ final serviceLocator = GetIt.instance;
 Future<void> init() async {
   // Features - Auth
   // Providers
+  //injetando instancias dos casos de uso no auth provider
   serviceLocator.registerFactory(() => ProviderAuth(
         loginUseCase: serviceLocator(),
         registerUseCase: serviceLocator(),
       ));
 
   // Use Cases
+  //mapendo instancias dos caso de uso 
   serviceLocator.registerLazySingleton(() => LoginUseCase(serviceLocator()));
   serviceLocator.registerLazySingleton(() => RegisterUseCase(serviceLocator()));
 
   // Repository
+  
   serviceLocator.registerLazySingleton<AuthInterface>(() => AuthService(serviceLocator()));
 
   // Data Sources
-  serviceLocator.registerLazySingleton(() => FirebaseService(serviceLocator(),serviceLocator()));
+  serviceLocator.registerLazySingleton(
+      () => FirebaseService(serviceLocator(), serviceLocator()));
 
   // External
   final firebaseApp = await Firebase.initializeApp(
