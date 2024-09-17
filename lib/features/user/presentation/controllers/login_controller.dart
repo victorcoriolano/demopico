@@ -16,10 +16,10 @@ class LoginController {
   }
 
   Future<bool> loginByVulgo(
-    String vulgo, String password) async {
+    String vulgo, String senha) async {
     try {
-      final email? = 
-      return false;
+      final String? emailForVulgo = repository.getEmail();
+      authProvider.login(emailForVulgo, senha) ;
     } catch (e) {
       rethrow;
     }
