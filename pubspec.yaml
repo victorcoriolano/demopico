@@ -20,15 +20,10 @@ dependencies:
   cloud_firestore: ^5.4.1
   google_sign_in: ^6.2.1
   google_maps_flutter: ^2.9.0
-<<<<<<< Updated upstream
   dartz: ^0.10.1
   geolocator: ^13.0.1
   permission_handler: ^11.3.1
   get_it: ^7.7.0
-=======
-  get_it: ^7.7.0
-  dartz: ^0.10.1
->>>>>>> Stashed changes
 
 dev_dependencies:
   flutter_test:
