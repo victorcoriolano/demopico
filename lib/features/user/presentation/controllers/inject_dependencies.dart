@@ -28,7 +28,7 @@ Future<void> init() async {
 
   // Repository
   
-  serviceLocator.registerLazySingleton<AuthInterface>(() => AuthService(serviceLocator()));
+  serviceLocator.registerLazySingleton<AuthInterface>(() => AuthService(serviceLocator(), serviceLocator()));
 
   // Data Sources
   serviceLocator.registerLazySingleton(
