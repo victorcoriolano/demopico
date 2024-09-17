@@ -54,6 +54,6 @@ class AddPicoWidget extends StatelessWidget {
             ),
           ),
         ],
-      ),
+      );
   }
 }
