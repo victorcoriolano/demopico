@@ -5,7 +5,7 @@ class UserModel extends User {
       {required super.senha,
       required super.email,
       required super.vulgo,
-      required super.id});
+      super.id});
 
   factory UserModel.fromFirebase(User firebaseUser) {
     return UserModel(

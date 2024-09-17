@@ -21,6 +21,6 @@ class User{
   }
 
   bool isValidSenha(){
-    return senha!.length >= 6; 
+    return senha!.length >= 6;
   }
 }

@@ -1,9 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:demopico/features/user/data/services/auth_service.dart';
-import 'package:demopico/features/user/data/services/firebase_service.dart';
-import 'package:demopico/features/user/presentation/controllers/login_controller.dart';
 import 'package:demopico/features/user/presentation/widgets/login_form_pc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
@@ -40,13 +35,8 @@ class LoginPage extends StatelessWidget {
               },
             ),
           ),
-          Center(
-            child: LoginForm(
-                loginController: LoginController(
-              authService: AuthService(),
-              firebaseService: FirebaseService(
-                  FirebaseAuth.instance, FirebaseFirestore.instance),
-            )),
+          const Center(
+            child: LoginForm(),
           ),
         ],
       ),

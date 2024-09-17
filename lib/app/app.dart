@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/app/home_page.dart';
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
 import 'package:demopico/features/user/data/services/auth_service.dart';
-
+import 'package:demopico/features/user/data/services/firebase_service.dart';
+import 'package:demopico/core/common/inject_dependencies.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +18,10 @@ class MyAppWidget extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider<AuthService>(
-          create: (_) => AuthService(),
+          create: (_) => AuthService(
+            firebaseService: serviceLocator<FirebaseService>(),
+            firebaseFirestore: FirebaseFirestore.instance,
+          ),
         ),
         StreamProvider(
             create: (context) =>

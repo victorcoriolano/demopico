@@ -1,18 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:demopico/core/errors/failure_server.dart';
+import 'package:demopico/features/user/data/models/user_credentials.dart';
 import 'package:demopico/features/user/data/repositories/user_repository.dart';
 import 'package:demopico/features/user/data/services/firebase_service.dart';
 import 'package:demopico/features/user/domain/entities/user.dart';
 import 'package:demopico/features/user/domain/interfaces/auth_interface.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide User;
-import 'package:get_it/get_it.dart';
-
 class AuthService implements AuthInterface {
-  final FirebaseService firebaseService =
-      FirebaseService(FirebaseAuth.instance, FirebaseFirestore.instance);
-
-  AuthService(GetIt serviceLocator, Object object);
+  
+  final FirebaseService firebaseService;
+  final FirebaseFirestore firebaseFirestore;
+  AuthService({required this.firebaseService, required this.firebaseFirestore});
 
   @override
   Future<Either<Failure, User>> login(String email, String password) async {
@@ -37,7 +36,8 @@ class AuthService implements AuthInterface {
     try {
       final userModel =
           await firebaseService.registerByEmailAndPassword(email, password);
-      UserRepository.systemUsers.add(userModel);
+      CredentialsRepository.usersCredentials
+          .add(UserCredentials.fromFirebase(userModel));
       return right(userModel);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {

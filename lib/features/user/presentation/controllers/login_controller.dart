@@ -1,4 +1,6 @@
-import 'package:demopico/core/errors/failure_server.dart';
+import 'package:dartz/dartz.dart';
+import 'package:demopico/core/common/inject_dependencies.dart';
+import 'package:demopico/features/user/domain/interfaces/firebase_interface.dart';
 import 'package:demopico/features/user/presentation/controllers/provider_auth.dart';
 
 class LoginController {
@@ -11,22 +13,33 @@ class LoginController {
     String password,
   ) async {
     try {
-      authProvider.login(email, password);
-      return true;
+      final result = authProvider.login(email, password);
+      if (result is Right) {
+        return true;
+      } else {
+        return false;
+      }
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<bool?> loginByVulgo(String vulgo, String senha) async {
+  Future<bool> loginByVulgo(String vulgo, String senha) async {
+    FirebaseInterface firebaseInterface = serviceLocator<FirebaseInterface>();
     try {
-      final String? emailForVulgo = repository.getEmail();
-      if (emailForVulgo != null) {
-        authProvider.login(emailForVulgo, senha);
-        return false;
+      String? id = await firebaseInterface.getIDByVulgo(vulgo);
+      if (id != null) {
+        final String? emailForVulgo = await firebaseInterface.getEmailByID(id);
+        if (emailForVulgo != null) {
+          final result = authProvider.login(emailForVulgo, senha);
+          result is Right ? true : false;
+        } else {
+          return false;
+        }
       } else {
-        throw UserNotFoundFailure();
+        return false;
       }
+      return false;
     } catch (e) {
       rethrow;
     }

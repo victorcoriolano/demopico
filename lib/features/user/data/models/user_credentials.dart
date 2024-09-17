@@ -5,14 +5,12 @@ class UserCredentials extends UserModel {
   UserCredentials(
       {required super.senha,
       required super.email,
-      required super.vulgo,
-      required super.id});
+      required super.vulgo});
 
   factory UserCredentials.fromFirebase(User firebaseUser) {
     return UserCredentials(
         senha: firebaseUser.senha,
         email: firebaseUser.email,
-        vulgo: firebaseUser.vulgo,
-        id: firebaseUser.id ?? '');
+        vulgo: firebaseUser.vulgo);
   }
 }

@@ -1,21 +1,25 @@
+import 'package:demopico/core/errors/failure_server.dart';
+import 'package:demopico/features/profile/presentation/pages/user_page.dart';
+import 'package:demopico/features/user/presentation/controllers/login_controller.dart';
 import 'package:demopico/features/user/presentation/pages/register_page.dart';
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
 import 'package:demopico/features/user/presentation/widgets/textfield_decoration.dart';
 import 'package:demopico/features/user/presentation/widgets/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../core/common/inject_dependencies.dart';
 
 class LoginForm extends StatefulWidget {
-  
   const LoginForm({super.key});
 
   @override
   State<LoginForm> createState() => _LoginFormState();
 }
 
-class _LoginFormState extends State<LoginForm>  with Validators{
+class _LoginFormState extends State<LoginForm> with Validators {
   final TextEditingController _vulgoController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
+  final loginController = serviceLocator<LoginController>();
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +57,10 @@ class _LoginFormState extends State<LoginForm>  with Validators{
               cursorColor: Colors.white,
               style: const TextStyle(color: Colors.white),
               controller: _vulgoController,
-              validator: (value) => combineValidators([() => isNotEmpty(value), () => isValidEmail(value),]),
+              validator: (value) => combineValidators([
+                () => isNotEmpty(value),
+                () => isValidEmail(value),
+              ]),
             ),
 
             const SizedBox(
@@ -106,17 +113,23 @@ class _LoginFormState extends State<LoginForm>  with Validators{
             // button (entrar)
             ElevatedButton(
               onPressed: () {
-                setState(() {
+                setState(() async {
                   if (FormFieldValidator.toString().isNotEmpty ||
                       _vulgoController.text.isNotEmpty &&
                           _senhaController.text.isNotEmpty) {
                     String vulgo = _vulgoController.text;
                     String password = _senhaController.text;
-                    _vulgoController.text.contains("@")
-                        ? loginController.loginByEmail( vulgo, password)
-                        : loginController.loginByVulgo(vulgo, password);
+                    if (vulgo.contains("@")) {
+                      await loginController.loginByEmail(vulgo, password)
+                          ? Get.to(() => const UserPage())
+                          : showSnackbar('email');
+                    } else {
+                      await loginController.loginByVulgo(vulgo, password)
+                          ? Get.to(() => const UserPage())
+                          : showSnackbar('user');
+                    }
                   } else {
-                    loginTry(FormFieldValidator.toString());
+                    showSnackbar('default');
                   }
                 });
               },
@@ -135,8 +148,8 @@ class _LoginFormState extends State<LoginForm>  with Validators{
             ElevatedButton(
               onPressed: () {
                 Get.to(() => const RegisterPage(),
-                transition: Transition.circularReveal,
-                duration: const Duration(seconds: 1));
+                    transition: Transition.circularReveal,
+                    duration: const Duration(seconds: 1));
               },
               style: buttonStyle(),
               child: const Text("FAZER PARTE",
@@ -153,6 +166,20 @@ class _LoginFormState extends State<LoginForm>  with Validators{
       return "Campo obrigatório";
     } else {
       return value;
+    }
+  }
+
+  void showSnackbar(errorType) {
+    switch (errorType) {
+      case 'email':
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(InvalidEmailFailure().message)));
+      case 'user':
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(UserNotFoundFailure().message)));
+      case 'default':
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(ServerFailure().message)));
     }
   }
 }
