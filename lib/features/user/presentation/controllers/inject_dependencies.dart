@@ -1,6 +1,5 @@
 import 'package:demopico/core/domain/usecases/login/login_use_case.dart';
 import 'package:demopico/core/domain/usecases/login/sign_up_use_case.dart';
-import 'package:demopico/features/user/data/external/firebase_auth.dart';
 import 'package:demopico/features/user/data/services/auth_service.dart';
 import 'package:demopico/features/user/data/services/firebase_service.dart';
 import 'package:demopico/features/user/domain/interfaces/auth_interface.dart';
@@ -28,7 +27,7 @@ Future<void> init() async {
 
   // Repository
   
-  serviceLocator.registerLazySingleton<AuthInterface>(() => AuthService(serviceLocator(), serviceLocator()));
+  serviceLocator.registerLazySingleton<AuthInterface>(() => AuthService(serviceLocator, serviceLocator()));
 
   // Data Sources
   serviceLocator.registerLazySingleton(

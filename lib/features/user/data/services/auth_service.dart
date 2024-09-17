@@ -6,10 +6,13 @@ import 'package:demopico/features/user/data/services/firebase_service.dart';
 import 'package:demopico/features/user/domain/entities/user.dart';
 import 'package:demopico/features/user/domain/interfaces/auth_interface.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide User;
+import 'package:get_it/get_it.dart';
 
 class AuthService implements AuthInterface {
   final FirebaseService firebaseService =
       FirebaseService(FirebaseAuth.instance, FirebaseFirestore.instance);
+
+  AuthService(GetIt serviceLocator, Object object);
 
   @override
   Future<Either<Failure, User>> login(String email, String password) async {

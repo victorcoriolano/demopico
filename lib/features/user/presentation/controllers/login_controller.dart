@@ -18,11 +18,12 @@ class LoginController {
     }
   }
 
-  Future<bool> loginByVulgo(String vulgo, String senha) async {
+  Future<bool?> loginByVulgo(String vulgo, String senha) async {
     try {
       final String? emailForVulgo = repository.getEmail();
       if (emailForVulgo != null) {
         authProvider.login(emailForVulgo, senha);
+        return false;
       } else {
         throw UserNotFoundFailure();
       }
