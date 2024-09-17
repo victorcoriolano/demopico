@@ -6,6 +6,7 @@ import 'package:demopico/features/user/data/services/firebase_service.dart';
 import 'package:demopico/features/user/domain/interfaces/auth_interface.dart';
 import 'package:demopico/features/user/presentation/controllers/provider_auth.dart';
 import 'package:demopico/firebase_options.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 
