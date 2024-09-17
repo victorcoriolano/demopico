@@ -1,4 +1,3 @@
-import 'package:demopico/features/user/presentation/controllers/login_controller.dart';
 import 'package:demopico/features/user/presentation/pages/register_page.dart';
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
 import 'package:demopico/features/user/presentation/widgets/textfield_decoration.dart';
@@ -7,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LoginForm extends StatefulWidget {
- 
-  const LoginForm({super.key,});
+  
+  const LoginForm({super.key});
 
   @override
   State<LoginForm> createState() => _LoginFormState();
@@ -20,8 +19,6 @@ class _LoginFormState extends State<LoginForm>  with Validators{
 
   @override
   Widget build(BuildContext context) {
-
-    final LoginController loginController;
     return Form(
         child: SingleChildScrollView(
       child: Padding(

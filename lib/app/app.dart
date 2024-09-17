@@ -1,11 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/app/home_page.dart';
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
-import 'package:demopico/features/user/data/external/firebase_auth.dart';
 import 'package:demopico/features/user/data/services/auth_service.dart';
-import 'package:demopico/features/user/data/services/firebase_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
