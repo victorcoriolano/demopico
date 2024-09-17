@@ -1,3 +1,4 @@
+import 'package:demopico/core/errors/failure_server.dart';
 import 'package:demopico/features/user/presentation/controllers/provider_auth.dart';
 
 class LoginController {
@@ -6,7 +7,9 @@ class LoginController {
   LoginController({required this.authProvider});
 
   Future<bool> loginByEmail(
-      String email,  String password,  ) async {
+    String email,
+    String password,
+  ) async {
     try {
       authProvider.login(email, password);
       return true;
@@ -15,11 +18,14 @@ class LoginController {
     }
   }
 
-  Future<bool> loginByVulgo(
-    String vulgo, String senha) async {
+  Future<bool> loginByVulgo(String vulgo, String senha) async {
     try {
       final String? emailForVulgo = repository.getEmail();
-      authProvider.login(emailForVulgo, senha) ;
+      if (emailForVulgo != null) {
+        authProvider.login(emailForVulgo, senha);
+      } else {
+        throw UserNotFoundFailure();
+      }
     } catch (e) {
       rethrow;
     }
