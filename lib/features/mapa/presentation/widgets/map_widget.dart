@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -40,7 +42,7 @@ class _MapWidgetState extends State<MapWidget> {
     Position position;
     try {
       // Configurações específicas para Android, iOS e Web
-      LocationSettings locationSettings = LocationSettings(
+      LocationSettings locationSettings = const LocationSettings(
         accuracy: LocationAccuracy.high, // Precisão alta
         distanceFilter: 50, // Atualiza a cada 100 metros
       );
@@ -65,36 +67,23 @@ class _MapWidgetState extends State<MapWidget> {
   }
   @override
   Widget build(BuildContext context) {
-    return  Stack(
-        children: [
-          // O mapa do Google Maps
-          GoogleMap(
-            onMapCreated: (GoogleMapController controller) {
-              mapController = controller;
-            },
-            initialCameraPosition: CameraPosition(
-              target: _center,
-              zoom: 11.0,
-            ),
-            myLocationEnabled: true,
-            myLocationButtonEnabled: true,
-          ),
-          // Botão para obter a localização
-          Positioned(
-            bottom: 50,
-            left: 10,
-            child: ElevatedButton(
-              onPressed: _getLocation,
-              child: const Text('Obter Localização Atual'),
-            ),
-          ),
-          // Exibe a mensagem com a localização ou o erro
-          Positioned(
-            bottom: 10,
-            left: 10,
-            child: Text(_locationMessage),
-          ),
-        ],
+    return  GoogleMap(
+      
+      onMapCreated: (GoogleMapController controller) {
+        mapController = controller;
+      },
+      initialCameraPosition: CameraPosition(
+        target: _center,
+        zoom: 11.0,
+      ),
+      myLocationEnabled: true,
+      myLocationButtonEnabled: true,
+      gestureRecognizers: Set()
+    ..add(Factory<PanGestureRecognizer>(() => PanGestureRecognizer()))
+    ..add(Factory<ScaleGestureRecognizer>(() => ScaleGestureRecognizer()))
+    ..add(Factory<TapGestureRecognizer>(() => TapGestureRecognizer()))
+    ..add(Factory<VerticalDragGestureRecognizer>(() => VerticalDragGestureRecognizer())),
+
     );
   }
 }

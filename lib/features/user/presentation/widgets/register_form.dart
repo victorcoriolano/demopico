@@ -1,6 +1,8 @@
+
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
 import 'package:demopico/features/user/presentation/widgets/dropdown.dart';
 import 'package:demopico/features/user/presentation/widgets/textfield_decoration.dart';
+import 'package:demopico/features/user/presentation/widgets/validator.dart';
 import 'package:flutter/material.dart';
 
 class RegisterForm extends StatefulWidget {
@@ -10,10 +12,11 @@ class RegisterForm extends StatefulWidget {
   State<RegisterForm> createState() => _RegisterFormState();
 }
 
-class _RegisterFormState extends State<RegisterForm> {
+class _RegisterFormState extends State<RegisterForm> with Validators {
   final TextEditingController _vulgoCadastro = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
+  final TextEditingController _senhaController2 = TextEditingController();
   String _tipoConta = '';
 
   void _onTipoContaChanged(String newValue) {
@@ -58,7 +61,7 @@ class _RegisterFormState extends State<RegisterForm> {
                   color: Colors.white
                 ),
                 controller: _vulgoCadastro,
-                validator: (value){},
+                validator: isNotEmpty,
               ),
 
               const SizedBox(height: 20,),
@@ -70,7 +73,10 @@ class _RegisterFormState extends State<RegisterForm> {
                   color: Colors.white
                 ),
                 controller: _emailController,
-                validator: (value){},
+                validator: (value) => combineValidators([
+                  () => isNotEmpty(value),
+                  () => isValidEmail(value),
+                ]),
               ),
 
               const SizedBox(height: 20,),
@@ -83,7 +89,10 @@ class _RegisterFormState extends State<RegisterForm> {
                 ),
                 obscureText: true,
                 controller: _senhaController,
-                validator: (value){},
+                validator: (value) => combineValidators([
+                  () => isNotEmpty(value),
+                  () => isValidPassword(value),
+                ]),
               ),
               const SizedBox(height: 20,),
 
@@ -95,8 +104,11 @@ class _RegisterFormState extends State<RegisterForm> {
                   color: Colors.white
                 ),
                 obscureText: true,
-                controller: _senhaController,
-                validator: (value){},
+                controller: _senhaController2,
+                validator: (value) => combineValidators([
+                  () => isNotEmpty(value),
+                  () => checkPassword(_senhaController.text, value),
+                ]),
               ),
               const SizedBox(height: 20,),
               //tipo de onta
