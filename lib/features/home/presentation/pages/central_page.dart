@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:demopico/features/home/presentation/widgets/events_bottom_sheet.dart';
 import 'package:demopico/features/home/presentation/widgets/hub_upper_sheet.dart';
+import 'package:demopico/features/user/presentation/pages/login_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CentralPage extends StatelessWidget {
   CentralPage({super.key});
@@ -54,7 +56,7 @@ class CentralPage extends StatelessWidget {
                   top: 70,
                   child: SizedBox(
                     width: MediaQuery.maybeSizeOf(context)!.width,
-                    height: 180,
+                    height: 120,
                     child: Row(children: [
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -92,7 +94,12 @@ class CentralPage extends StatelessWidget {
                         ],
                       ),
                       Spacer(),
-                      Icon(Icons.supervised_user_circle, size: 64),
+                      GestureDetector(
+                          onTap: () => Get.to(
+                                LoginPage(),
+                                transition: Transition.circularReveal,
+                              ),
+                          child: Icon(Icons.supervised_user_circle, size: 64)),
                     ]),
                   ),
                 ),
