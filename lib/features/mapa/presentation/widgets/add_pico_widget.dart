@@ -15,7 +15,7 @@ class AddPicoWidget extends StatelessWidget {
                 shape: BoxShape.circle,
                 color: Colors.transparent, // Cor de fundo do Container
                 border: Border.all(
-                  color: Color(0xff343434), // Cor da borda
+                  color: const Color(0xff343434), // Cor da borda
                   width: 2, // Largura da borda
                 ),
               ),
@@ -24,7 +24,7 @@ class AddPicoWidget extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white, // Cor de fundo
                     elevation: 0, // Remove a sombra
-                    shape: CircleBorder(), // Forma circular
+                    shape: const CircleBorder(), // Forma circular
                     padding: EdgeInsets.zero, // Remove o padding padrão
                   ),
                   onPressed: () {
@@ -37,12 +37,12 @@ class AddPicoWidget extends StatelessWidget {
                         Container(
                           width: 40, // Largura da linha horizontal
                           height: 6, // Espessura da linha horizontal
-                          color: Color.fromARGB(255, 139, 0, 0), // Cor da linha
+                          color: const Color.fromARGB(255, 139, 0, 0), // Cor da linha
                         ),
                         Container(
                           width: 6, // Espessura da linha vertical
                           height: 40, // Altura da linha vertical
-                          color: Color.fromARGB(255, 139, 0, 0), // Cor da linha
+                          color: const Color.fromARGB(255, 139, 0, 0), // Cor da linha
                         ),
                       ],
                     ),
