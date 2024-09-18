@@ -53,3 +53,7 @@ class WrongPasswordFailure extends Failure {
 class InvalidEmailFailure extends Failure {
   InvalidEmailFailure({super.message = 'Esse e-mail é inválido. '});
 }
+
+class NotSetMapController extends Failure {
+  NotSetMapController ({super.message = 'GoogleMapController não definido. Defina o controller primeiro.'});
+}
