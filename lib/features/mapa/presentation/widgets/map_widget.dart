@@ -1,3 +1,4 @@
+import 'package:demopico/features/mapa/data/services/maps_service_singleton.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -65,13 +66,13 @@ class MapWidgetState extends State<MapWidget> {
   }
   @override
   Widget build(BuildContext context) {
-    return  GoogleMap(
-      
+    return  GoogleMap( 
       onMapCreated: (GoogleMapController controller) {
-        mapController = controller;
+          MapsServiceSingleton().setController(controller);
       },
        zoomControlsEnabled: false, 
-      initialCameraPosition: CameraPosition(
+      initialCameraPosition:
+       CameraPosition(
         target: _center,
         zoom: 20.0,
       ),
