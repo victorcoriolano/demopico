@@ -21,6 +21,10 @@ class User{
   }
 
   bool isValidSenha(){
-    return senha!.length >= 6;
+    return senha!.length >= 8; // regra de negocia 
+  }
+
+  bool isValidVulgo(){
+    return vulgo!.length <= 15;// regra de negocia
   }
 }
