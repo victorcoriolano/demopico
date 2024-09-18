@@ -1,3 +1,4 @@
+import 'package:demopico/features/mapa/presentation/widgets/add_pico_widget.dart';
 import 'package:demopico/features/mapa/presentation/widgets/map_widget.dart';
 import 'package:demopico/features/mapa/presentation/widgets/show_pico_widget.dart';
 import 'package:demopico/features/mapa/presentation/widgets/top_side_map_widget.dart';
@@ -32,7 +33,7 @@ class _MapPageState extends State<MapPage> {
             onTap: _onMapPointTapped, // Simula o clique no ponto do mapa
             child:           const MapWidget(),
           ),
-
+          AddPicoWidget(),
           // Painel arrastável (oculto até o clique no mapa)
           if (_isPanelVisible) const ShowPicoWidget()
         ],

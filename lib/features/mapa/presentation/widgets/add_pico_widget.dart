@@ -6,16 +6,16 @@ class AddPicoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-            bottom: 20.0, // Distância do fundo da tela
+            bottom:40.0, // Distância do fundo da tela
             right: 20.0, // Distância da borda direita da tela
             child: Container(
-              width: 70, // Tamanho total do Container
-              height: 70, // Tamanho total do Container
+              width: 75, // Tamanho total do Container
+              height: 75, // Tamanho total do Container
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.transparent, // Cor de fundo do Container
                 border: Border.all(
-                  color: const Color(0xff343434), // Cor da borda
+                  color: const Color.fromARGB(255, 162, 162, 162), // Cor da borda
                   width: 2, // Largura da borda
                 ),
               ),
@@ -23,7 +23,7 @@ class AddPicoWidget extends StatelessWidget {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white, // Cor de fundo
-                    elevation: 0, // Remove a sombra
+                    elevation: 6, // Remove a sombra
                     shape: const CircleBorder(), // Forma circular
                     padding: EdgeInsets.zero, // Remove o padding padrão
                   ),
@@ -35,14 +35,20 @@ class AddPicoWidget extends StatelessWidget {
                       alignment: Alignment.center,
                       children: [
                         Container(
-                          width: 40, // Largura da linha horizontal
-                          height: 6, // Espessura da linha horizontal
-                          color: const Color.fromARGB(255, 139, 0, 0), // Cor da linha
+                         decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                            color: const Color.fromARGB(255, 139, 0, 0), // Cor da linha
+                          ),
+                          width: 42, // Largura da linha horizontal
+                          height: 8, // Espessura da linha horizontal
                         ),
                         Container(
-                          width: 6, // Espessura da linha vertical
-                          height: 40, // Altura da linha vertical
-                          color: const Color.fromARGB(255, 139, 0, 0), // Cor da linha
+                           decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                            color: const Color.fromARGB(255, 139, 0, 0), // Cor da linha
+                          ),
+                          width: 8, // Espessura da linha vertical
+                          height: 42, // Altura da linha vertical
                         ),
                       ],
                     ),
