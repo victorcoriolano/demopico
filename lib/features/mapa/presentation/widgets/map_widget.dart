@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -72,18 +70,16 @@ class _MapWidgetState extends State<MapWidget> {
       onMapCreated: (GoogleMapController controller) {
         mapController = controller;
       },
+       zoomControlsEnabled: false, 
       initialCameraPosition: CameraPosition(
         target: _center,
-        zoom: 11.0,
+        zoom: 20.0,
       ),
+      scrollGesturesEnabled: true,
+      rotateGesturesEnabled: true,
       myLocationEnabled: true,
       myLocationButtonEnabled: true,
-      gestureRecognizers: Set()
-    ..add(Factory<PanGestureRecognizer>(() => PanGestureRecognizer()))
-    ..add(Factory<ScaleGestureRecognizer>(() => ScaleGestureRecognizer()))
-    ..add(Factory<TapGestureRecognizer>(() => TapGestureRecognizer()))
-    ..add(Factory<VerticalDragGestureRecognizer>(() => VerticalDragGestureRecognizer())),
-
+      tiltGesturesEnabled: true,
     );
   }
 }
