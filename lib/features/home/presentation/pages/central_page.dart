@@ -54,7 +54,7 @@ class CentralPage extends StatelessWidget {
                   top: 70,
                   child: SizedBox(
                     width: MediaQuery.maybeSizeOf(context)!.width,
-                    height: 100,
+                    height: 180,
                     child: Row(children: [
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,

@@ -18,10 +18,7 @@ class MyAppWidget extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider<AuthService>(
-          create: (_) => AuthService(
-            firebaseService: serviceLocator<FirebaseService>(),
-            firebaseFirestore: FirebaseFirestore.instance,
-          ),
+          create: (_) => serviceLocator<AuthService>(),
         ),
         StreamProvider(
             create: (context) =>
