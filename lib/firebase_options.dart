@@ -65,4 +65,13 @@ class DefaultFirebaseOptions {
     storageBucket: 'pico-skatepico.appspot.com',
     iosBundleId: 'com.example.demopico',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+      apiKey: "AIzaSyD1-BgFXNQcgU589XVeiluCl1g8AK5FQbg",
+      authDomain: "pico-skatepico.firebaseapp.com",
+      projectId: "pico-skatepico",
+      storageBucket: "pico-skatepico.appspot.com",
+      messagingSenderId: "495399023145",
+      appId: "1:495399023145:web:c4b083cbcb1da3eb546238",
+      measurementId: "G-51K65SHSYJ");
 }
