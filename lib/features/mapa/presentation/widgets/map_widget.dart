@@ -7,10 +7,10 @@ class MapWidget extends StatefulWidget {
   const MapWidget({super.key});
 
   @override
-  _MapWidgetState createState() => _MapWidgetState();
+  MapWidgetState createState() => MapWidgetState();
 }
 
-class _MapWidgetState extends State<MapWidget> {
+class MapWidgetState extends State<MapWidget> {
   String _locationMessage = "Aguardando localização...";
   late GoogleMapController mapController;
   LatLng _center = const LatLng(0, 0); // Inicializa o centro do mapa
