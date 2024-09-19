@@ -34,3 +34,5 @@ flutter:
     uses-material-design: true
     assets:
       - assets/images/skatepico-icon.png
+      - assets/images/containerLogin.jpg
+      - assets/images/containerCadastro.jpg

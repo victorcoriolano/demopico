@@ -12,7 +12,7 @@ class LoginPage extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: const AssetImage('assets/containerLogin.jpg'),
+                image: const AssetImage('assets/images/containerLogin.jpg'),
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
                   Colors.black.withOpacity(0.2), // Ajuste a opacidade aqui

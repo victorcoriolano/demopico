@@ -14,7 +14,7 @@ class RegisterPage extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: const AssetImage('assets/containerCadastro.jpg'),
+                image: const AssetImage('assets/images/containerCadastro.jpg'),
                 fit: BoxFit.cover, 
                 colorFilter: ColorFilter.mode(
                   Colors.black.withOpacity(0.2), // Ajuste a opacidade aqui
