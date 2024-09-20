@@ -14,7 +14,7 @@ Future<void> init() async {
   // Features - Auth
   // Providers
   //injetando instancias dos casos de uso no auth provider
-  serviceLocator.registerFactoryAsync(() async => ProviderAuth(
+  serviceLocator.registerFactory(()  => ProviderAuth(
         loginUseCase: serviceLocator(),
         registerUseCase: serviceLocator(),
       ));

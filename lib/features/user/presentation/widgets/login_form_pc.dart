@@ -114,27 +114,32 @@ class _LoginFormState extends State<LoginForm> with Validators {
 
             // button (entrar)
             ElevatedButton(
-              onPressed: () {
-                setState(() async {
-                  if (FormFieldValidator.toString().isNotEmpty ||
-                      _vulgoController.text.isNotEmpty &&
-                          _senhaController.text.isNotEmpty) {
-                    String vulgo = _vulgoController.text;
-                    String password = _senhaController.text;
-                    if (vulgo.contains("@")) {
-                      await loginController.loginByEmail(vulgo, password)
-                          ? Get.to(() => const UserPage())
-                          : showSnackbar('email');
-                    } else {
-                      await loginController.loginByVulgo(vulgo, password)
-                          ? Get.to(() => const UserPage())
-                          : showSnackbar('user');
-                    }
+              onPressed: () async {
+                if (FormFieldValidator.toString().isNotEmpty ||
+                  _vulgoController.text.isNotEmpty &&
+                  _senhaController.text.isNotEmpty) {
+                  String vulgo = _vulgoController.text.trim();
+                  String password = _senhaController.text.trim();
+                  bool loginSuccess;
+    
+                  if (vulgo.contains("@")) {
+                    loginSuccess = await loginController.loginByEmail(vulgo, password);
                   } else {
-                    showSnackbar('default');
+                    loginSuccess = await loginController.loginByVulgo(vulgo, password);
                   }
-                });
+    
+                  setState(() {
+                    if (loginSuccess) {
+                      Get.to(() => const UserPage());
+                    } else {
+                      showSnackbar(vulgo.contains("@") ? 'email' : 'user');
+                    }
+                  });
+                } else {
+                  showSnackbar('default');
+                }
               },
+
               style: buttonStyle(),
               child: const Text(
                 "Entrar",
