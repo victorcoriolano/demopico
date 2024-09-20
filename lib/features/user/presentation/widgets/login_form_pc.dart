@@ -1,12 +1,10 @@
 import 'package:demopico/core/errors/failure_server.dart';
 import 'package:demopico/features/profile/presentation/pages/user_page.dart';
 import 'package:demopico/features/user/presentation/controllers/login_controller.dart';
-import 'package:demopico/features/user/presentation/controllers/provider_auth.dart';
 import 'package:demopico/features/user/presentation/pages/register_page.dart';
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
 import 'package:demopico/features/user/presentation/widgets/textfield_decoration.dart';
 import 'package:demopico/features/user/presentation/widgets/validator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../core/common/inject_dependencies.dart';

@@ -1,9 +1,13 @@
 import 'package:dartz/dartz.dart';
+import 'package:demopico/core/common/inject_dependencies.dart';
 import 'package:demopico/core/domain/interfaces/register_params.dart';
 import 'package:demopico/core/domain/usecases/login/sign_up_use_case.dart';
 import 'package:demopico/core/domain/usecases/login/login_use_case.dart';
 import 'package:demopico/core/errors/failure_server.dart';
+import 'package:demopico/features/user/data/models/user_model.dart';
 import 'package:demopico/features/user/data/repositories/login_params.dart';
+import 'package:demopico/features/user/data/services/auth_service.dart';
+import 'package:demopico/features/user/data/services/firebase_service.dart';
 import 'package:demopico/features/user/domain/entities/user.dart';
 import 'package:flutter/foundation.dart';
 class ProviderAuth extends ChangeNotifier {
@@ -50,6 +54,13 @@ class ProviderAuth extends ChangeNotifier {
       },
     );
     return result;
+  }
+
+  Future<bool> registerEmailAndVulgo(String email, String vulgo) async{
+    final credencials = await serviceLocator<FirebaseService>().registerFirestore(email, vulgo);
+    if(credencials is Right){
+      return true;
+    }return false;
   }
 
   void logout() {

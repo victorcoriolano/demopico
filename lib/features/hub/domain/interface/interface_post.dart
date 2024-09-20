@@ -6,6 +6,7 @@ abstract class InterfacePost {
   Future<void> editarPostagem(PostagemHub postagem);
   Future<List<PostagemHub>> listarPostagens();
   Future<PostagemHub> getPostagemById(String id);
+  
   Future<void> filtrarPostagem(String parametro);
 
 }
