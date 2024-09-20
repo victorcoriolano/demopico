@@ -1,8 +1,10 @@
+import 'package:demopico/core/domain/entities/marker_maps_entity.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_widget.dart';
 import 'package:demopico/features/mapa/presentation/widgets/map_widget.dart';
 import 'package:demopico/features/mapa/presentation/widgets/show_pico_widget.dart';
 import 'package:demopico/features/mapa/presentation/widgets/top_side_map_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -23,21 +25,36 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
+    return Scaffold(
       appBar: const TopSideMapWidget(),
       body: Stack(
         children: [
-          // Simulação do widget de mapa (substitua pelo widget real)
+          // Widget de mapa com marcadores
           GestureDetector(
-            onTap: _onMapPointTapped, // Simula o clique no ponto do mapa
-            child:           const MapWidget(),
+            onTap: _onMapPointTapped, // Detecta o clique no ponto do mapa
+            child: MapWidget(
+              markers: [
+                MarkerData(
+                  id: '1',
+                  position: LatLng(37.7749, -122.4194),
+          
+                ),
+                MarkerData(
+                  id: '2',
+                  position: LatLng(37.8949, -122.4194),
+               
+               
+                ),
+              ],
+            ),
           ),
-          AddPicoWidget(),
-          // Painel arrastável (oculto até o clique no mapa)
-          if (_isPanelVisible) const ShowPicoWidget()
+          // Widget para adicionar um "pico" (local)
+          const AddPicoWidget(),
+
+          // Painel arrastável que aparece ao clicar no mapa
+          if (_isPanelVisible) const ShowPicoWidget(),
         ],
       ),
-    ));
+    );
   }
 }
