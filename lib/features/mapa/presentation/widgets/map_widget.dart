@@ -1,3 +1,4 @@
+import 'package:demopico/core/domain/entities/marker_maps_entity.dart';
 import 'package:demopico/features/mapa/data/services/maps_service_singleton.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -5,7 +6,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart'; // Importa o permission_handler
 
 class MapWidget extends StatefulWidget {
-  const MapWidget({super.key});
+  const MapWidget({super.key, required this.markers});
+    final List<MarkerData> markers;
 
   @override
   MapWidgetState createState() => MapWidgetState();
@@ -81,6 +83,20 @@ class MapWidgetState extends State<MapWidget> {
       myLocationEnabled: true,
       myLocationButtonEnabled: true,
       tiltGesturesEnabled: true,
+      markers: _createMarkers(),
     );
   }
+  Set<Marker> _createMarkers() {
+    return widget.markers.map((markerData) {
+      return Marker(
+        markerId: MarkerId(markerData.id),
+        position: markerData.position,
+        infoWindow: InfoWindow(
+          title: 'sou um local',
+          snippet: 'oi'
+        ),
+      );
+    }).toSet();
+  }
 }
+
