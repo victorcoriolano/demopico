@@ -13,7 +13,7 @@ class LoginController {
     String password,
   ) async {
     try {
-      final result = authProvider.login(email, password);
+      final result = await authProvider.login(email, password);
       if (result is Right) {
         return true;
       } else {
@@ -31,7 +31,7 @@ class LoginController {
       if (id != null) {
         final String? emailForVulgo = await firebaseInterface.getEmailByID(id);
         if (emailForVulgo != null) {
-          final result = authProvider.login(emailForVulgo, senha);
+          final result =  await authProvider.login(emailForVulgo, senha);
           result is Right ? true : false;
         } else {
           return false;

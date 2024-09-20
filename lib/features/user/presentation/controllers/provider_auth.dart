@@ -35,7 +35,7 @@ class ProviderAuth extends ChangeNotifier {
     return result;
   }
 
-  Future<Either<Failure, User>> register(String email, String password) async {
+  Future<Either<Failure, User>> registerOnFirebase(String email, String password) async {
     final result =
         await registerUseCase(RegisterParams(email: email, password: password));
     result.fold(

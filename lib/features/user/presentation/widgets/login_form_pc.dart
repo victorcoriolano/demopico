@@ -21,7 +21,6 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> with Validators {
   final TextEditingController _vulgoController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
-  final LoginController loginController = LoginController(authProvider: serviceLocator<ProviderAuth>());
 
   @override
   Widget build(BuildContext context) {
@@ -123,9 +122,9 @@ class _LoginFormState extends State<LoginForm> with Validators {
                   bool loginSuccess;
     
                   if (vulgo.contains("@")) {
-                    loginSuccess = await loginController.loginByEmail(vulgo, password);
+                    loginSuccess = await serviceLocator<LoginController>().loginByEmail(vulgo, password);
                   } else {
-                    loginSuccess = await loginController.loginByVulgo(vulgo, password);
+                    loginSuccess = await serviceLocator<LoginController>().loginByVulgo(vulgo, password);
                   }
     
                   setState(() {

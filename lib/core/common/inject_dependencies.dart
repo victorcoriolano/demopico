@@ -11,10 +11,12 @@ import 'package:get_it/get_it.dart';
 final GetIt serviceLocator = GetIt.instance;
 
 Future<void> init() async {
+  //espera todas as dependencias serem instanciadas?
+  await serviceLocator.allReady();
   // Features - Auth
   // Providers
   //injetando instancias dos casos de uso no auth provider
-  serviceLocator.registerFactory(()  => ProviderAuth(
+  serviceLocator.registerFactoryAsync(() async => ProviderAuth(
         loginUseCase: serviceLocator(),
         registerUseCase: serviceLocator(),
       ));
@@ -36,6 +38,6 @@ Future<void> init() async {
       firebaseFirestore: serviceLocator(), firebaseService: serviceLocator()));
 
   // Controllers
-  serviceLocator.registerLazySingletonAsync<LoginController>(
+serviceLocator.registerLazySingletonAsync<LoginController>(
       () async=> LoginController(authProvider: serviceLocator()));
 }
