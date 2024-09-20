@@ -4,7 +4,7 @@ class MarkerData {
   final String id;
   final LatLng position;
 
-  MarkerData(this.id, this.position,);
+  MarkerData({required this.id, required this.position});
 }
 
 Set<Marker> createMarkers(List<MarkerData> markersData) {
