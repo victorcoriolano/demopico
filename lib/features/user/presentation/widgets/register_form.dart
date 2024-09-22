@@ -1,6 +1,7 @@
 import 'package:demopico/core/common/inject_dependencies.dart';
 import 'package:demopico/features/profile/presentation/pages/user_page.dart';
 import 'package:demopico/features/user/data/services/auth_service.dart';
+import 'package:demopico/features/user/presentation/controllers/provider_auth.dart';
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
 import 'package:demopico/features/user/presentation/widgets/dropdown.dart';
 import 'package:demopico/features/user/presentation/widgets/textfield_decoration.dart';
@@ -136,10 +137,10 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                   String vulgo = _vulgoCadastro.text.trim();
                   String email = _emailController.text.trim();
                   String password = _senhaController.text.trim();
-                  final credencials = await serviceLocator<AuthService>().register(email, password);
-                  final credencialOnFirestore = await serviceLocator<AuthService>().registerFirestore(email, vulgo);
-                  // ir pra página de perfil se der tudo certo 
+                  final deuBom = serviceLocator<ProviderAuth>().registerEmailAndVulgo(email, vulgo);
                   
+                  // ir pra página de perfil se der tudo certo 
+
                 }
               },
               style: buttonStyle(),
