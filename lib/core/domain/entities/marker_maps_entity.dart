@@ -1,3 +1,4 @@
+import 'package:demopico/core/domain/entities/pico_entity_dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MarkerData {
@@ -7,11 +8,13 @@ class MarkerData {
   MarkerData({required this.id, required this.position});
 }
 
-Set<Marker> createMarkers(List<MarkerData> markersData) {
+
+
+Set<Marker> createMarkers(List<Pico> markersData) {
   return markersData.map((markerData) {
     return Marker(
-      markerId: MarkerId(markerData.id),
-      position: markerData.position,
+      markerId: MarkerId(markerData.urlIdPico),
+      position:   Pico().id,
     );
   }).toSet();
 }
