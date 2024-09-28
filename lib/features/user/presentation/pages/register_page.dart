@@ -1,6 +1,6 @@
 import 'package:demopico/features/user/presentation/widgets/register_form.dart';
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
@@ -8,14 +8,13 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       body: Stack(
         children: [
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: const AssetImage('assets/images/containerCadastro.jpg'),
-                fit: BoxFit.cover, 
+                fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
                   Colors.black.withOpacity(0.2), // Ajuste a opacidade aqui
                   BlendMode.darken,
@@ -27,9 +26,13 @@ class RegisterPage extends StatelessWidget {
             top: 16,
             left: 16,
             child: IconButton(
-              icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white,size: 40,),
+              icon: const Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: Colors.white,
+                size: 40,
+              ),
               onPressed: () {
-                Navigator.pop(context); // Navega para a tela anterior
+                Get.back(); // Navega para a tela anterior
               },
             ),
           ),
@@ -37,7 +40,7 @@ class RegisterPage extends StatelessWidget {
             child: RegisterForm(),
           ),
         ],
-      ),  
+      ),
     );
   }
 }

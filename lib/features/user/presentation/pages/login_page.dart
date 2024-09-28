@@ -1,5 +1,6 @@
 import 'package:demopico/features/user/presentation/widgets/login_form_pc.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -26,12 +27,12 @@ class LoginPage extends StatelessWidget {
             left: 16,
             child: IconButton(
               icon: const Icon(
-                Icons.arrow_back_ios_new_rounded,
+                Icons.arrow_left,
                 color: Colors.white,
                 size: 40,
               ),
               onPressed: () {
-                Navigator.pop(context); // Navega para a tela anterior
+                Get.back(); // Navega para a tela anterior
               },
             ),
           ),

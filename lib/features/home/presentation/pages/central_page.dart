@@ -98,6 +98,8 @@ class CentralPage extends StatelessWidget {
                           onTap: () => Get.to(
                                 LoginPage(),
                                 transition: Transition.circularReveal,
+                                duration: const Duration(milliseconds: 600),
+                                curve: Curves.fastEaseInToSlowEaseOut,
                               ),
                           child: Icon(Icons.supervised_user_circle, size: 64)),
                     ]),

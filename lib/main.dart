@@ -10,5 +10,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await init();
+  await serviceLocator.allReady();
   runApp(const MyAppWidget());
 }
