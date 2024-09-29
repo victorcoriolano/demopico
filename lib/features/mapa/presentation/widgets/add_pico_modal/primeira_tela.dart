@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'segunda_tela.dart'; // Importando a segunda tela
 
 class EspecificidadeScreen extends StatefulWidget {
+  const EspecificidadeScreen({super.key});
+
   @override
-  _EspecificidadeScreenState createState() => _EspecificidadeScreenState();
+  State<EspecificidadeScreen> createState() => _EspecificidadeScreenState();
 }
 
 class _EspecificidadeScreenState extends State<EspecificidadeScreen> {

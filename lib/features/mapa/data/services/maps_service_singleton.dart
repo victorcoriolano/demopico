@@ -15,7 +15,7 @@ class MapsServiceSingleton {
     _controller = controller;
   } 
 
-   GoogleMapController get controller {
+  GoogleMapController get controller {
     if (_controller == null) {
       throw NotSetMapController();
     }
