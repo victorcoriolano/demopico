@@ -5,21 +5,26 @@ class Pico {
   final String picoName;
   final String? description;
   final LatLng position;
-  final String userCreator;// id do usuário que for criar 
+  final String userCreator; // id do usuário que for criar
   final List<String> fotoPico;
-  final List<String> utilidades;// utilidades do tipo água, banheiro etc
+  final List<String> utilidades; // utilidades do tipo água, banheiro etc
   final Map<String, int> atributos;
   final List<String> obstaculos;
+  final double nota;
+  final int numeroAvaliacoes;
+  // final Map<Comentarios>
 
-  Pico( 
-    {required this.description, 
+  Pico(
+    this.nota,
+    this.numeroAvaliacoes, {
+    required this.description,
     required this.atributos,
     required this.fotoPico,
     required this.obstaculos,
     required this.utilidades,
     required this.userCreator,
-    required this.position, 
-    required this.urlIdPico, 
-    required this.picoName,}
-  );
+    required this.position,
+    required this.urlIdPico,
+    required this.picoName,
+  });
 }
