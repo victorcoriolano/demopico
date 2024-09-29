@@ -1,5 +1,7 @@
+import 'package:demopico/app/home_page.dart';
 import 'package:demopico/core/errors/failure_server.dart';
 import 'package:demopico/features/profile/presentation/pages/user_page.dart';
+import 'package:demopico/features/user/data/services/firebase_service.dart';
 import 'package:demopico/features/user/presentation/controllers/login_controller.dart';
 import 'package:demopico/features/user/presentation/pages/register_page.dart';
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
@@ -17,6 +19,7 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> with Validators {
+  
   final TextEditingController _vulgoController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
 
@@ -118,16 +121,18 @@ class _LoginFormState extends State<LoginForm> with Validators {
                   String vulgo = _vulgoController.text.trim();
                   String password = _senhaController.text.trim();
                   bool loginSuccess;
+                  
     
                   if (vulgo.contains("@")) {
-                    loginSuccess = await serviceLocator<LoginController>().loginByEmail(vulgo, password);
+                    await serviceLocator<FirebaseService>().login(vulgo, password);
+                    loginSuccess = true;
                   } else {
                     loginSuccess = await serviceLocator<LoginController>().loginByVulgo(vulgo, password);
                   }
     
                   setState(() {
                     if (loginSuccess) {
-                      Get.to(() => const UserPage());
+                      Get.to(() => const HomePage());
                     } else {
                       showSnackbar(vulgo.contains("@") ? 'email' : 'user');
                     }

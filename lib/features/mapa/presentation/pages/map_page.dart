@@ -42,8 +42,6 @@ class _MapPageState extends State<MapPage> {
                 MarkerData(
                   id: '2',
                   position: LatLng(37.8949, -122.4194),
-               
-               
                 ),
               ],
             ),
