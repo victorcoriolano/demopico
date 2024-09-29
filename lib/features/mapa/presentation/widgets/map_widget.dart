@@ -91,7 +91,7 @@ class MapWidgetState extends State<MapWidget> {
       return Marker(
         markerId: MarkerId(markerData.id),
         position: markerData.position,
-        infoWindow: InfoWindow(
+        infoWindow: const InfoWindow(
           title: 'sou um local',
           snippet: 'oi'
         ),

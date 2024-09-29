@@ -1,4 +1,4 @@
-import 'package:demopico/core/domain/entities/pico_entity_dart';
+/* import 'package:demopico/core/domain/entities/pico_entity_dart';
 
 abstract class ISpotRepository {
   Future<List<Spot>> findAll();
@@ -50,3 +50,4 @@ class SpotRepository implements ISpotRepository {
     yourSpots.removeWhere((spot) => spot.id == id);
   }
 }
+ */
