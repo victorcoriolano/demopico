@@ -72,9 +72,8 @@ class MapWidgetState extends State<MapWidget> {
       onMapCreated: (GoogleMapController controller) {
           MapsServiceSingleton().setController(controller);
       },
-       zoomControlsEnabled: false, 
-      initialCameraPosition:
-       CameraPosition(
+      zoomControlsEnabled: false, 
+      initialCameraPosition:CameraPosition(
         target: _center,
         zoom: 20.0,
       ),
