@@ -1,4 +1,4 @@
-import 'package:demopico/features/mapa/data/repositories/spot_repository.dart';
+/* import 'package:demopico/features/mapa/data/repositories/spot_repository.dart';
 
 class DeleteSpot {
   final SpotRepository spotRepository;
@@ -9,3 +9,4 @@ class DeleteSpot {
     spotRepository.deleteSpot(id);
   }
 }
+ */

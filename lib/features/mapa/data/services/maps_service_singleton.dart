@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class MapsServiceSingleton {
 
   static final MapsServiceSingleton _instance = MapsServiceSingleton._internal();
+  
   GoogleMapController? _controller;
 
   factory MapsServiceSingleton(){

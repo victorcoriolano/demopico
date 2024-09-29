@@ -1,4 +1,4 @@
-import 'package:demopico/core/domain/entities/marker_maps_entity.dart';
+import 'package:demopico/features/mapa/domain/entities/marker_maps_entity.dart';
 import 'package:demopico/features/mapa/data/services/maps_service_singleton.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';

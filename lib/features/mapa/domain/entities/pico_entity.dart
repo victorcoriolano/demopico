@@ -4,7 +4,8 @@ class Pico {
   final String urlIdPico;
   final String picoName;
   final String? description;
-  final LatLng position;
+  final double long;
+  final double lat;
   final String userCreator; // id do usuário que for criar
   final List<String> fotoPico;
   final List<String> utilidades; // utilidades do tipo água, banheiro etc
@@ -16,15 +17,16 @@ class Pico {
 
   Pico(
     this.nota,
-    this.numeroAvaliacoes, {
+    this.numeroAvaliacoes,{
+     required this.long, required this.lat, 
     required this.description,
     required this.atributos,
     required this.fotoPico,
     required this.obstaculos,
     required this.utilidades,
     required this.userCreator,
-    required this.position,
     required this.urlIdPico,
     required this.picoName,
   });
 }
+

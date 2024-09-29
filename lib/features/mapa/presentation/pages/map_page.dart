@@ -1,4 +1,4 @@
-import 'package:demopico/core/domain/entities/marker_maps_entity.dart';
+import 'package:demopico/features/mapa/domain/entities/marker_maps_entity.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_widget.dart';
 import 'package:demopico/features/mapa/presentation/widgets/map_widget.dart';
 import 'package:demopico/features/mapa/presentation/widgets/show_pico_widget.dart';
