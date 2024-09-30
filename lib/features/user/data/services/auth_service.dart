@@ -39,7 +39,7 @@ class AuthService implements AuthInterface {
       CredentialsRepository.usersCredentials
           .add(UserCredentials.fromFirebase(userModel));
       return right(userModel);
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (e) { //por que que a senha estaria errada aqui ? sendo que é pra registrar kkkkk
       if (e.code == 'user-not-found') {
         return left(UserNotFoundFailure());
       } else if (e.code == 'wrong-password') {

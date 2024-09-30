@@ -8,6 +8,7 @@ class LoginController {
 
   LoginController({required this.authProvider});
 
+
   Future<bool> loginByEmail(
     String email,
     String password,

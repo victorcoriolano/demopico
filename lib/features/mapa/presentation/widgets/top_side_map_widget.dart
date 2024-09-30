@@ -6,26 +6,42 @@ class TopSideMapWidget extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      toolbarHeight: 100.0,
-      backgroundColor: const Color.fromARGB(255, 103, 0, 0),
-      foregroundColor: Colors.white,
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.search),
-          onPressed: () {
-            // Ação para busca
-          },
+        backgroundColor: Color(0xFF8B0000),
+        title: Row(
+          children: [
+            Expanded(
+              child: Container(
+                height: 40, // Ajuste da altura da barra de pesquisa
+                child: TextField(
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(vertical: 10), // Centraliza o conteúdo verticalmente
+                    hintText: 'Buscar Picos',
+                    prefixIcon: Icon(Icons.search, color: Colors.grey), // Ícone ajustado para centralizar melhor
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide.none,
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(width: 10), // Espaçamento entre a barra de busca e os ícones
+            IconButton(
+              icon: Icon(Icons.filter_list, color: Colors.white),
+              onPressed: () {},
+            ),
+            IconButton(
+              icon: Icon(Icons.settings, color: Colors.white),
+              onPressed: () {},
+            ),
+          ],
         ),
-        IconButton(
-          icon: const Icon(Icons.filter_list),
-          onPressed: () {
-            // Ação para filtro
-          },
-        ),
-      ],
-    );
+      );
   }
 
   @override
   Size get preferredSize => const Size.fromHeight(80);
 }
+

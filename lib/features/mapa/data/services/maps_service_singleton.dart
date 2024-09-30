@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class MapsServiceSingleton {
 
   static final MapsServiceSingleton _instance = MapsServiceSingleton._internal();
+  
   GoogleMapController? _controller;
 
   factory MapsServiceSingleton(){
@@ -15,7 +16,7 @@ class MapsServiceSingleton {
     _controller = controller;
   } 
 
-   GoogleMapController get controller {
+  GoogleMapController get controller {
     if (_controller == null) {
       throw NotSetMapController();
     }

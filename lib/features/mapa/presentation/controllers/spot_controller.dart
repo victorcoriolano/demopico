@@ -1,4 +1,4 @@
-import 'package:demopico/core/domain/usecases/pico/create_spot.dart';
+/* import 'package:demopico/core/domain/usecases/pico/create_spot.dart';
 import 'package:demopico/core/domain/usecases/pico/delete_spot.dart';
 import 'package:demopico/core/domain/usecases/pico/list_spot.dart';
 import 'package:demopico/core/domain/usecases/pico/update_spot.dart';
@@ -30,3 +30,4 @@ class SpotController {
     listSpotsUseCase.execute();
   }
 }
+ */

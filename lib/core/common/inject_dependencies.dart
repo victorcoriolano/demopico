@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/core/domain/usecases/login/login_use_case.dart';
 import 'package:demopico/core/domain/usecases/login/sign_up_use_case.dart';
@@ -6,6 +8,7 @@ import 'package:demopico/features/user/data/services/firebase_service.dart';
 import 'package:demopico/features/user/domain/interfaces/firebase_interface.dart';
 import 'package:demopico/features/user/presentation/controllers/login_controller.dart';
 import 'package:demopico/features/user/presentation/controllers/provider_auth.dart';
+import 'package:demopico/features/user/presentation/controllers/register_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 
@@ -17,7 +20,7 @@ Future<void> init() async {
   // Features - Auth
   // Providers
   //injetando instancias dos casos de uso no auth provider
-  serviceLocator.registerFactoryAsync(() async => ProviderAuth(
+  serviceLocator.registerFactory(()  => ProviderAuth(
         loginUseCase: serviceLocator(),
         registerUseCase: serviceLocator(),
       ));
@@ -33,16 +36,16 @@ Future<void> init() async {
   serviceLocator.registerLazySingletonAsync(() async => FirebaseFirestore.instance);
 
   // Services
-  serviceLocator.registerLazySingletonAsync<FirebaseService>(
-      () async => FirebaseService(serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory<FirebaseService>(
+      ()  => FirebaseService(serviceLocator(), serviceLocator()));
 
   serviceLocator.registerLazySingletonAsync<AuthService>(() async => AuthService(
       firebaseFirestore: serviceLocator(), firebaseService: serviceLocator()));
 
   // Controllers
-  serviceLocator.registerLazySingletonAsync<LoginController>(
-      () async=> LoginController(authProvider: serviceLocator()));
+  serviceLocator.registerLazySingleton<LoginController>(
+      () => LoginController(authProvider: serviceLocator()));
 
-
+  serviceLocator.registerFactory<RegisterController>(() => RegisterController());
 
 }

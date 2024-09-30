@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'add_pico_modal/primeira_tela.dart';
+
 class AddPicoWidget extends StatelessWidget {
   const AddPicoWidget({super.key});
 
@@ -29,6 +31,7 @@ class AddPicoWidget extends StatelessWidget {
             ),
             onPressed: () {
               // Função de exemplo
+              EspecificidadeScreen();
             },
             child: SizedBox.expand(
               child: Stack(
