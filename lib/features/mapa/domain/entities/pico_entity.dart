@@ -9,7 +9,7 @@ class Pico {
   final String userCreator; // id do usuário que for criar
   final List<String> fotoPico;
   final List<String> utilidades; // utilidades do tipo água, banheiro etc
-  final Map<String, int> atributos;
+  final Map<String, double> atributos;
   final List<String> obstaculos;
   final double nota;
   final int numeroAvaliacoes;
