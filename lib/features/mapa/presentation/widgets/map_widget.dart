@@ -8,14 +8,14 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../domain/entities/pico_entity.dart'; // Importa o permission_handler
 
 class MapWidget extends StatefulWidget {
- MapWidget({super.key, required List<Pico> markers, });
-   
+  const MapWidget({super.key, required List<Pico> markers, });
 
   @override
   MapWidgetState createState() => MapWidgetState();
 }
 
 class MapWidgetState extends State<MapWidget> {
+  
   String _locationMessage = "Aguardando localização...";
   late GoogleMapController mapController;
   LatLng _center = const LatLng(0, 0);
@@ -88,14 +88,14 @@ class MapWidgetState extends State<MapWidget> {
       markers: _createMarkers(),
     );
   }
-    Set<Marker> _createMarkers(List<Pico> markersData) {
-  return markersData.map((markerData) {
-    return Marker(
-      markerId: MarkerId(markerData.urlIdPico),
-      position: LatLng(markerData.lat, markerData.long),
- );}).toSet();
-
-}
-  
+  Set<Marker> _createMarkers() {
+    final List<Pico> markersData = [];
+    return markersData.map((markerData) {
+      return Marker(
+        markerId: MarkerId(markerData.urlIdPico),
+        position: LatLng(markerData.lat, markerData.long),
+      );
+    }).toSet();
+  }
 }
 

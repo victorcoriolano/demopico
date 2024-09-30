@@ -71,7 +71,7 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
                   child: Image.asset('lib/assets/addPico1.png', height: 105),
                 ),
                 // Título da seção de modalidades
-                Text(
+                const Text(
                   'Modalidade',
                   style: TextStyle(
                     fontSize: 16,
@@ -79,7 +79,7 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
                     color: Colors.black,
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 // Botões para seleção da modalidade
                 ModalidadeButtons(
                   onSelected: (String modalidade) {
@@ -87,9 +87,9 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
                   },
                   selectedModalidade: selectedModalidade,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 // Título da seção de tipo de pico
-                Align(
+                const Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     'Tipo de Pico:',
@@ -100,7 +100,7 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 // Dropdown para seleção do tipo de pico
                 Container(
                   width: double.infinity,
@@ -130,9 +130,9 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
                     underline: SizedBox(),
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 // Título da seção de utilidades
-                Align(
+                const Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     'UTILIDADES',

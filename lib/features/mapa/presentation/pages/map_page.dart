@@ -1,8 +1,10 @@
+import 'package:demopico/core/domain/entities/user_profile.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_widget.dart';
 import 'package:demopico/features/mapa/presentation/widgets/map_widget.dart';
 import 'package:demopico/features/mapa/presentation/widgets/show_pico_widget.dart';
 import 'package:demopico/features/mapa/presentation/widgets/top_side_map_widget.dart';
+import 'package:demopico/features/user/domain/entities/user.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -15,7 +17,7 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   bool _isPanelVisible = false; // Controla a visibilidade do painel
-  final List<Pico>  picos = [
+  /* final List<Pico>  picos = [
     Pico(
       0, 
       0, 
@@ -36,11 +38,11 @@ class _MapPageState extends State<MapPage> {
       long: 0, 
       lat: 0, 
       description: "Marreto neste pico desde dos 7 anos, foi nele que aprendi a pular gap e mandar flip",
-           atributos:{ "Chão": 5, "Iluminação": 3.5, 'Policiamento': 4, 'Movimento': 2, 'KickOut': 5 },
+      atributos:{ "Chão": 5, "Iluminação": 3.5, 'Policiamento': 4, 'Movimento': 2, 'KickOut': 5 },
       fotoPico: ['https://www.xtremespots.com/wp-content/uploads/2013/10/Skate-Boarding-in-East-Monroe-Gap.jpg'], 
       obstaculos: ['corrimão', 'miniramp'], 
       utilidades: ['agua', 'banheiro'], 
-      userCreator: , 
+      userCreator: 'negocete', 
       urlIdPico: 'urlIdPico', 
       picoName: 'picoName'),
 
@@ -50,11 +52,11 @@ class _MapPageState extends State<MapPage> {
       long: 0, 
       lat: 0, 
       description: "Marreto neste pico desde dos 7 anos, foi nele que aprendi a pular gap e mandar flip",
-           atributos:{ "Chão": 5, "Iluminação": 3.5, 'Policiamento': 4, 'Movimento': 2, 'KickOut': 5 },
+      atributos:{ "Chão": 5, "Iluminação": 3.5, 'Policiamento': 4, 'Movimento': 2, 'KickOut': 5 },
       fotoPico: ['https://www.xtremespots.com/wp-content/uploads/2013/10/Skate-Boarding-in-East-Monroe-Gap.jpg'], 
       obstaculos: ['corrimão', 'miniramp'], 
       utilidades: ['agua', 'banheiro'], 
-      userCreator: , 
+      userCreator: "biel", 
       urlIdPico: 'urlIdPico', 
       picoName: 'picoName'),
 
@@ -68,10 +70,10 @@ class _MapPageState extends State<MapPage> {
       fotoPico: ['https://www.xtremespots.com/wp-content/uploads/2013/10/Skate-Boarding-in-East-Monroe-Gap.jpg'], 
       obstaculos: ['corrimão', 'miniramp'], 
       utilidades: ['agua', 'banheiro'], 
-      userCreator: , 
+      userCreator: "dera", 
       urlIdPico: 'urlIdPico', 
       picoName: 'picoName'),
-      ]; 
+      ];  */
   // Função chamada quando um ponto no mapa é clicado
   void _onMapPointTapped() {
     setState(() {
@@ -88,8 +90,10 @@ class _MapPageState extends State<MapPage> {
           // Widget de mapa com marcadores
           GestureDetector(
             onTap: _onMapPointTapped, // Detecta o clique no ponto do mapa
-            child: MapWidget(
-              markers: picos,
+            child: const MapWidget(
+              markers: [
+                
+              ],
             ),
           ),
           // Widget para adicionar um "pico" (local)

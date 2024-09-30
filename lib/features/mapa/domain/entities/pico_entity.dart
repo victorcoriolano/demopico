@@ -1,4 +1,4 @@
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'dart:io';
 
 class Pico {
   final String urlIdPico;
@@ -7,7 +7,7 @@ class Pico {
   final double long;
   final double lat;
   final String userCreator; // id do usuário que for criar
-  final List<String> fotoPico;
+  final File? fotoPico;
   final List<String> utilidades; // utilidades do tipo água, banheiro etc
   final Map<String, double> atributos;
   final List<String> obstaculos;
@@ -18,7 +18,7 @@ class Pico {
   Pico(
     this.nota,
     this.numeroAvaliacoes,{
-     required this.long, required this.lat, 
+    required this.long, required this.lat, 
     required this.description,
     required this.atributos,
     required this.fotoPico,
