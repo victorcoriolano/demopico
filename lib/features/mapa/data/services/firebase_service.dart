@@ -10,12 +10,12 @@ class FirebaseService implements SpotRepository{
   @override
   Future<void> createSpot(Pico pico) async {
     String imageUrl = '';
-      // Upload da imagem para o Firebase Storage
+      // upload da imagem para o Storage
       if(pico.fotoPico != null){
       final ref = FirebaseStorage.instance
           .ref()
           .child('spots_images')
-          .child('${pico.picoName.toString()}.jpg');
+          .child('images/${pico.picoName.toString()}.jpg');
       await ref.putFile(pico.fotoPico!);
       imageUrl = await ref.getDownloadURL();//pegando a url da imagem pra subir no bd
       }

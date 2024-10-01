@@ -26,14 +26,14 @@ Future<void> init() async {
       ));
   // Use Cases
   //mapendo instancias dos caso de uso
-  serviceLocator.registerLazySingletonAsync(() async =>   LoginUseCase(serviceLocator()));
-  serviceLocator.registerLazySingletonAsync(() async => RegisterUseCase(serviceLocator()));
+  serviceLocator.registerLazySingleton(()  =>   LoginUseCase(serviceLocator()));
+  serviceLocator.registerLazySingleton(()  => RegisterUseCase(serviceLocator()));
 
   //FirebaseAuth
-  serviceLocator.registerLazySingletonAsync(() async => FirebaseAuth.instance);
+  serviceLocator.registerLazySingleton(()  => FirebaseAuth.instance);
 
   //FirebaseFirestore
-  serviceLocator.registerLazySingletonAsync(() async => FirebaseFirestore.instance);
+  serviceLocator.registerLazySingleton(()  => FirebaseFirestore.instance);
 
   // Services
   serviceLocator.registerFactory<FirebaseService>(

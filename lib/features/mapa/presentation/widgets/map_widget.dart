@@ -1,10 +1,8 @@
-import 'package:demopico/features/mapa/domain/entities/marker_maps_entity.dart';
 import 'package:demopico/features/mapa/data/services/maps_service_singleton.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
-
 import '../../domain/entities/pico_entity.dart'; // Importa o permission_handler
 
 class MapWidget extends StatefulWidget {
