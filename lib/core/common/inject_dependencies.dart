@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/core/domain/usecases/login/login_use_case.dart';
 import 'package:demopico/core/domain/usecases/login/sign_up_use_case.dart';
@@ -20,32 +18,37 @@ Future<void> init() async {
   // Features - Auth
   // Providers
   //injetando instancias dos casos de uso no auth provider
-  serviceLocator.registerFactory(()  => ProviderAuth(
+  serviceLocator.registerFactory(() => ProviderAuth(
         loginUseCase: serviceLocator(),
         registerUseCase: serviceLocator(),
       ));
   // Use Cases
   //mapendo instancias dos caso de uso
-  serviceLocator.registerLazySingletonAsync(() async =>   LoginUseCase(serviceLocator()));
-  serviceLocator.registerLazySingletonAsync(() async => RegisterUseCase(serviceLocator()));
+  serviceLocator
+      .registerLazySingletonAsync(() async => LoginUseCase(serviceLocator()));
+  serviceLocator.registerLazySingletonAsync(
+      () async => RegisterUseCase(serviceLocator()));
 
   //FirebaseAuth
   serviceLocator.registerLazySingletonAsync(() async => FirebaseAuth.instance);
 
   //FirebaseFirestore
-  serviceLocator.registerLazySingletonAsync(() async => FirebaseFirestore.instance);
+  serviceLocator
+      .registerLazySingletonAsync(() async => FirebaseFirestore.instance);
 
   // Services
   serviceLocator.registerFactory<FirebaseService>(
-      ()  => FirebaseService(serviceLocator(), serviceLocator()));
+      () => FirebaseService(serviceLocator(), serviceLocator()));
 
-  serviceLocator.registerLazySingletonAsync<AuthService>(() async => AuthService(
-      firebaseFirestore: serviceLocator(), firebaseService: serviceLocator()));
+  serviceLocator.registerLazySingletonAsync<AuthService>(() async =>
+      AuthService(
+          firebaseFirestore: serviceLocator(),
+          firebaseService: serviceLocator()));
 
   // Controllers
   serviceLocator.registerLazySingleton<LoginController>(
       () => LoginController(authProvider: serviceLocator()));
 
-  serviceLocator.registerFactory<RegisterController>(() => RegisterController());
-
+  serviceLocator
+      .registerFactory<RegisterController>(() => RegisterController());
 }
