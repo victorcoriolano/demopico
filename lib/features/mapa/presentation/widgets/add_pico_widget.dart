@@ -31,7 +31,7 @@ class AddPicoWidget extends StatelessWidget {
             ),
             onPressed: () {
               // Função de exemplo
-              EspecificidadeScreen();
+              AlertDialog(actions: [EspecificidadeScreen()],);
             },
             child: SizedBox.expand(
               child: Stack(

@@ -18,8 +18,8 @@ class SpotController {
   }
 
   //método de mostrar os picos a partir dos picos salvos no bd 
-  Future<List<Pico>> showAllPico() async {
-    return showAllPicoUseCase.showAllPico();
+  Future<List<Marker>> showAllPico() async {
+    return showAllPicoUseCase.execute();
   }
   
 
