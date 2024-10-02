@@ -30,11 +30,11 @@ Widget build(BuildContext context) {
         ),
         SizedBox(width: 10), // Espaçamento entre a barra de busca e os ícones
         IconButton(
-          icon: Icon(Icons.filter_list, color: Colors.white, size: 38,),
+          icon: Icon(Icons.filter_list, color: Colors.white, size: 30,),
           onPressed: () {},
         ),
         IconButton(
-          icon: Icon(Icons.settings, color: Colors.white,size: 32),
+          icon: Icon(Icons.settings, color: Colors.white,size: 30),
           onPressed: () {},
         ),
       ],
