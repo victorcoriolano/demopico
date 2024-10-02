@@ -47,147 +47,141 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
     });
   }
 
-  @override
+   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[200], // Cor de fundo da tela
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Container(
-            width: 350, // Largura do contêiner principal
-            padding: EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12), // Arredondamento das bordas
-              border: Border.all(color: Color(0xFF8B0000), width: 3), // Borda vermelha
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Imagem do topo
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  child: Image.asset('lib/assets/addPico1.png', height: 105),
-                ),
-                // Título da seção de modalidades
-                const Text(
-                  'Modalidade',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                // Botões para seleção da modalidade
-                ModalidadeButtons(
-                  onSelected: (String modalidade) {
-                    atualizarUtilidades(modalidade); // Atualiza utilidades ao selecionar uma modalidade
-                  },
-                  selectedModalidade: selectedModalidade,
-                ),
-                const SizedBox(height: 20),
-                // Título da seção de tipo de pico
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Tipo de Pico:',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                // Dropdown para seleção do tipo de pico
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.grey),
-                  ),
-                  child: DropdownButton<String>(
-                    value: dropdownValue,
-                    isExpanded: true,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        dropdownValue = newValue!; // Atualiza o valor do dropdown
-                      });
-                    },
-                    items: <String>['none', 'Pico 1', 'Pico 2']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(
-                          value,
-                          style: TextStyle(fontSize: 13),
-                        ),
-                      );
-                    }).toList(),
-                    underline: SizedBox(),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                // Título da seção de utilidades
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'UTILIDADES',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF8B0000),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10),
-                // Lista de utilidades com checkboxes
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: utilidadesAtuais.map((utilidade) {
-                        return CheckboxListTile(
-                          title: Text(utilidade), // Nome da utilidade
-                          value: utilidadesSelecionadas[utilidade], // Valor do checkbox
-                          onChanged: (bool? value) {
-                            setState(() {
-                              utilidadesSelecionadas[utilidade] = value!; // Atualiza seleção
-                            });
-                          },
-                          controlAffinity: ListTileControlAffinity.leading,
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20),
-                // Botão de prosseguir
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF8B0000), // Cor do botão
-                    foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  onPressed: () {
-                    // Navega para a segunda tela
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SegundaTela()),
-                    );
-                  },
-                  child: Text('PROSSEGUIR', style: TextStyle(fontSize: 15)),
-                ),
-              ],
-            ),
-          ),
+    return   Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12), // Arredondamento das bordas
+          border: Border.all(color: Color(0xFF8B0000), width: 3), // Borda vermelha
         ),
-      ),
+        child: Padding(
+          padding: EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min, // Para o dialog ajustar o tamanho ao conteúdo
+            children: [
+              
+                    // Imagem do topo
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: Image.asset('lib/assets/addPico1.png', height: 105),
+                    ),
+                    // Título da seção de modalidades
+                    const Text(
+                      'Modalidade',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    // Botões para seleção da modalidade
+                    ModalidadeButtons(
+                      onSelected: (String modalidade) {
+                        atualizarUtilidades(modalidade); // Atualiza utilidades ao selecionar uma modalidade
+                      },
+                      selectedModalidade: selectedModalidade,
+                    ),
+                    const SizedBox(height: 20),
+                    // Título da seção de tipo de pico
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Tipo de Pico:',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    // Dropdown para seleção do tipo de pico
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.grey),
+                      ),
+                      child: DropdownButton<String>(
+                        value: dropdownValue,
+                        isExpanded: true,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            dropdownValue = newValue!; // Atualiza o valor do dropdown
+                          });
+                        },
+                        items: <String>['none', 'Pico 1', 'Pico 2']
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: TextStyle(fontSize: 13),
+                            ),
+                          );
+                        }).toList(),
+                        underline: SizedBox(),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    // Título da seção de utilidades
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'UTILIDADES',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF8B0000),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    // Lista de utilidades com checkboxes
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: utilidadesAtuais.map((utilidade) {
+                            return CheckboxListTile(
+                              title: Text(utilidade), // Nome da utilidade
+                              value: utilidadesSelecionadas[utilidade], // Valor do checkbox
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  utilidadesSelecionadas[utilidade] = value!; // Atualiza seleção
+                                });
+                              },
+                              controlAffinity: ListTileControlAffinity.leading,
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    // Botão de prosseguir
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF8B0000), // Cor do botão
+                        foregroundColor: Colors.white,
+                        padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      onPressed: () {
+                        // Navega para a segunda tela
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SegundaTela()),
+                        );
+                      },
+                      child: Text('PROSSEGUIR', style: TextStyle(fontSize: 15)),
+                    ),
+                  ],
+                ),
+        ),
     );
   }
 }

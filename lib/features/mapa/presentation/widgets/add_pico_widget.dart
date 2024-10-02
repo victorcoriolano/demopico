@@ -34,7 +34,15 @@ class AddPicoWidget extends StatelessWidget {
             ),
             onPressed: () {
               // Função de exemplo
-              createPico();
+              showDialog(
+    context: context,
+    builder: (BuildContext context) => Dialog.fullscreen(
+      child:  // Ocupa toda a altura
+
+       EspecificidadeScreen(), // Mostra a tela dentro do diálogo
+      
+    ),
+  );
             },
             child: SizedBox.expand(
               child: Stack(
