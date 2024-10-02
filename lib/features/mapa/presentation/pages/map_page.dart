@@ -87,9 +87,7 @@ class _MapPageState extends State<MapPage> {
           // Widget de mapa com marcadores
           GestureDetector(
             onTap: _onMapPointTapped, // Detecta o clique no ponto do mapa
-            child: const MapWidget(
-              markers: [],
-            ),
+            child: const MapWidget(),
           ),
           // Widget para adicionar um "pico" (local)
           const AddPicoWidget(),

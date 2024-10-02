@@ -1,10 +1,11 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/core/domain/entities/user_profile.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/interfaces/spot_repository.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-class FirebaseService implements SpotRepository{
+class FirebaseServiceMap implements SpotRepository{
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
   @override
@@ -26,7 +27,7 @@ class FirebaseService implements SpotRepository{
       'description': pico.description,
       'latitude': pico.lat,
       'longitude': pico.long,
-      'imageUrl': imageUrl,
+      'imageUrl': imageUrl, // subindo no bd o link da imagem
       'utilidades': pico.utilidades,
       'atributos': pico.atributos,
       'obstaculos': pico.obstaculos,
@@ -53,7 +54,7 @@ class FirebaseService implements SpotRepository{
         lat: data['latitude'],
         description: data['description'],
         atributos: data['atributos'],
-        fotoPico: null,
+        fotoPico: null,// vou inserir a imagem diretamente no código usando o image.network
         obstaculos: data['obstaculos'],
         utilidades: data['utilidades'],
         userCreator: data['criador'],

@@ -1,20 +1,24 @@
+import 'package:demopico/core/common/inject_dependencies.dart';
 import 'package:demopico/features/mapa/data/services/maps_service_singleton.dart';
+import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:permission_handler/permission_handler.dart';
-import '../../domain/entities/pico_entity.dart'; // Importa o permission_handler
+import 'package:permission_handler/permission_handler.dart'; // Importa o permission_handler
 
 class MapWidget extends StatefulWidget {
-  const MapWidget({super.key, required List<Pico> markers, });
+
+  const MapWidget({super.key,});
 
   @override
   MapWidgetState createState() => MapWidgetState();
 }
 
 class MapWidgetState extends State<MapWidget> {
+
+  final _controller = serviceLocator<SpotController>();
   
-  String _locationMessage = "Aguardando localização...";
+  String _locationMessage = "Aguardando localização...";//pra que isso ????
   late GoogleMapController mapController;
   LatLng _center = const LatLng(0, 0);
   // Inicializa o centro do mapa
@@ -69,7 +73,7 @@ class MapWidgetState extends State<MapWidget> {
   }
   @override
   Widget build(BuildContext context) {
-    return  GoogleMap( 
+    return  GoogleMap ( 
       onMapCreated: (GoogleMapController controller) {
           MapsServiceSingleton().setController(controller);
       },
@@ -83,17 +87,11 @@ class MapWidgetState extends State<MapWidget> {
       myLocationEnabled: true,
       myLocationButtonEnabled: true,
       tiltGesturesEnabled: true,
-      markers: _createMarkers(),
+      markers: Set<Marker>.of(_controller.markers),
     );
   }
-  Set<Marker> _createMarkers() {
-    final List<Pico> markersData = [];
-    return markersData.map((markerData) {
-      return Marker(
-        markerId: MarkerId(markerData.urlIdPico),
-        position: LatLng(markerData.lat, markerData.long),
-      );
-    }).toSet();
-  }
+  
+
+
 }
 

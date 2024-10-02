@@ -1,3 +1,6 @@
+import 'package:demopico/core/common/inject_dependencies.dart';
+import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
+import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:flutter/material.dart';
 
 import 'add_pico_modal/primeira_tela.dart';
@@ -31,7 +34,7 @@ class AddPicoWidget extends StatelessWidget {
             ),
             onPressed: () {
               // Função de exemplo
-              AlertDialog(actions: [EspecificidadeScreen()],);
+              createPico();
             },
             child: SizedBox.expand(
               child: Stack(
@@ -61,5 +64,24 @@ class AddPicoWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+  // simulação de criação do pico so pra ver se tpa funfando o firebase service 
+  void createPico() {
+    final pico =       Pico(
+      0, 
+      0, 
+      long: -46.9400143, 
+      lat: -23.548546, 
+      description: "exemplo",
+          atributos:{ "Chão": 5, "Iluminação": 3.5, 'Policiamento': 4, 'Movimento': 2, 'KickOut': 5 },
+      fotoPico: null, 
+      obstaculos: ['corrimão', 'miniramp'], 
+      utilidades: ['agua', 'banheiro'], 
+      userCreator: "fulano de tal", 
+      urlIdPico: '', 
+      picoName: 'picoName');
+    final instanciaGetIt = serviceLocator<SpotController>();
+
+    instanciaGetIt.createSpot(pico);
   }
 }
