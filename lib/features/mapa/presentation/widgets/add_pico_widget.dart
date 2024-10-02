@@ -1,9 +1,6 @@
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/container_telas.dart';
-import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/quarta_tela.dart';
-import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/segunda_tela.dart';
-import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/terceira_tela.dart';
 import 'package:flutter/material.dart';
-import 'add_pico_modal/primeira_tela.dart';
+
 
 class AddPicoWidget extends StatefulWidget {
   const AddPicoWidget({super.key});

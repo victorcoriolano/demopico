@@ -49,17 +49,7 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return   Container(
-        width: double.infinity,
-        padding: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12), // Arredondamento das bordas
-          border: Border.all(color: Color(0xFF8B0000), width: 3), // Borda vermelha
-        ),
-        child: Padding(
-          padding: EdgeInsets.all(10),
-          child: Column(
+    return  Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min, // Para o dialog ajustar o tamanho ao conteúdo
             children: [
@@ -164,11 +154,11 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
                     // Botão de prosseguir
                   
                   ],
-                ),
-        ),
-    );
+                );
   }
 }
+
+
 
 // Widget para os botões de modalidade
 class ModalidadeButtons extends StatelessWidget {

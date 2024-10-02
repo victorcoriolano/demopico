@@ -37,12 +37,22 @@ class _ContainerTelasState extends State<ContainerTelas> {
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             width: MediaQuery.of(context).size.width * 0.95,
             height: MediaQuery.of(context).size.height * 0.95,
-            child: Column(
+            child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12), // Arredondamento das bordas
+          border: Border.all(color: Color(0xFF8B0000), width: 3), // Borda vermelha
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(10),
+          child:Column(
               children: [
                 Expanded(
                   child: _screens[_currentIndex], // Exibe o widget atual
                 ),
-                ElevatedButton(
+                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF8B0000), // Cor do botão
                     foregroundColor: Colors.white,
@@ -60,7 +70,7 @@ class _ContainerTelasState extends State<ContainerTelas> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
+      )
+        )
+      ));
+}}
