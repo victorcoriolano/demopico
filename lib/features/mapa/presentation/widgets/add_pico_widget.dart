@@ -29,10 +29,19 @@ class AddPicoWidget extends StatelessWidget {
               shape: const CircleBorder(), // Forma circular
               padding: EdgeInsets.zero, // Remove o padding padrão
             ),
-            onPressed: () {
-              // Função de exemplo
-              AlertDialog(actions: [EspecificidadeScreen()],);
-            },
+onPressed: () {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) => Dialog.fullscreen(
+      child:  // Ocupa toda a altura
+
+       EspecificidadeScreen(), // Mostra a tela dentro do diálogo
+      
+    ),
+  );
+},
+
+
             child: SizedBox.expand(
               child: Stack(
                 alignment: Alignment.center,
