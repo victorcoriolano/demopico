@@ -12,7 +12,7 @@ Widget build(BuildContext context) {
       children: [
         Expanded(
           child: Container(
-            height: 50, // Altura do campo de busca
+            height: 42, // Altura do campo de busca
             child: TextField(
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(vertical: 10), // Centraliza o conteúdo verticalmente
@@ -30,11 +30,11 @@ Widget build(BuildContext context) {
         ),
         SizedBox(width: 10), // Espaçamento entre a barra de busca e os ícones
         IconButton(
-          icon: Icon(Icons.filter_list, color: Colors.white),
+          icon: Icon(Icons.filter_list, color: Colors.white, size: 38,),
           onPressed: () {},
         ),
         IconButton(
-          icon: Icon(Icons.settings, color: Colors.white),
+          icon: Icon(Icons.settings, color: Colors.white,size: 32),
           onPressed: () {},
         ),
       ],
