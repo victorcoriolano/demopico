@@ -1,91 +1,87 @@
+import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/container_telas.dart';
+import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/quarta_tela.dart';
+import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/segunda_tela.dart';
+import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/terceira_tela.dart';
 import 'package:flutter/material.dart';
-
 import 'add_pico_modal/primeira_tela.dart';
 
-class AddPicoWidget extends StatelessWidget {
+class AddPicoWidget extends StatefulWidget {
   const AddPicoWidget({super.key});
   
   @override
+  AddPicoWidgetState createState() => AddPicoWidgetState();
+}
+
+class AddPicoWidgetState extends State<AddPicoWidget> {
+  bool _isExpanded = false;
+  
+
+  @override
   Widget build(BuildContext context) {
-    
-    return Positioned(
-      bottom: 40.0, // Distância do fundo da tela
-      right: 20.0, // Distância da borda direita da tela
-      child: Container(
-        width: 72, // Tamanho total do Container
-        height: 72, // Tamanho total do Container
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.transparent, // Cor de fundo do Container
-          border: Border.all(
-            color: const Color.fromARGB(255, 162, 162, 162), // Cor da borda
-            width: 2, // Largura da borda
-          ),
-        ),
-        child: Center(
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white, // Cor de fundo
-              elevation: 6, // Remove a sombra
-              shape: const CircleBorder(), // Forma circular
-              padding: EdgeInsets.zero, // Remove o padding padrão
+    return Stack(
+      children: [
+if (_isExpanded)
+  const ContainerTelas(),
+        
+        if(_isExpanded != true)
+        Positioned(
+          bottom: 40.0,
+          right: 20.0,
+          child: Container(
+            width: 72,
+            height: 72,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.transparent,
+              border: Border.all(
+                color: const Color.fromARGB(255, 162, 162, 162),
+                width: 2,
+              ),
             ),
-            onPressed: () {
-              // Função de exemplo
-              showDialog(
-                context: context,
-                builder: (BuildContext context) => const Dialog.fullscreen( // Ocupa toda a altura
-                  child:  
-                  EspecificidadeScreen(), // Mostra a tela dentro do diálogo
+            child: Center(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  elevation: 6,
+                  shape: const CircleBorder(),
+                  padding: EdgeInsets.zero,
                 ),
-              );
-            },
-            child: SizedBox.expand(
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                      color:  Color(0xFFBB271A),
-                      // Cor da linha
-                    ),
-                    width: 44, // Largura da linha horizontal
-                    height: 8, // Espessura da linha horizontal
+                onPressed: () {
+                  setState(() {
+                    _isExpanded = !_isExpanded; // Alterna a exibição do widget
+                  });
+                },
+                child: SizedBox.expand(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                          color: Color(0xFFBB271A),
+                        ),
+                        width: 44,
+                        height: 8,
+                      ),
+                      Container(
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                          color: Color(0xFFBB271A),
+                        ),
+                        width: 8,
+                        height: 44,
+                      ),
+                    ],
                   ),
-                  Container(
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                      color: Color(0xFFBB271A),
-                    ),
-                    width: 8, // Espessura da linha vertical
-                    height: 44, // Altura da linha vertical
-                  ),
-                ],
+                ),
               ),
             ),
           ),
-        ),
-      ),
+        )
+      ],
+      
     );
   }
-  // simulação de criação do pico so pra ver se tpa funfando o firebase service 
-  /* void createPico() {
-    final pico =       Pico(
-      0.1, 
-      0, 
-      long: -46.9400143, 
-      lat: -23.548546, 
-      description: "exemplo",
-          atributos:{ "Chão": 5, "Iluminação": 3.5, 'Policiamento': 4, 'Movimento': 2, 'KickOut': 5 },
-      fotoPico: null, 
-      obstaculos: ['corrimão', 'miniramp'], 
-      utilidades: ['agua', 'banheiro'], 
-      userCreator: "fulano de tal", 
-      urlIdPico: '', 
-      picoName: 'picoName');
-
-
-    //instanciaGetIt.createSpot(pico);
-  } */
 }
+
+

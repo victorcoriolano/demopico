@@ -51,6 +51,7 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
   Widget build(BuildContext context) {
     return   Container(
         width: double.infinity,
+        padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12), // Arredondamento das bordas
@@ -161,24 +162,7 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
                     ),
                     SizedBox(height: 20),
                     // Botão de prosseguir
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF8B0000), // Cor do botão
-                        foregroundColor: Colors.white,
-                        padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      onPressed: () {
-                        // Navega para a segunda tela
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => SegundaTela()),
-                        );
-                      },
-                      child: Text('PROSSEGUIR', style: TextStyle(fontSize: 15)),
-                    ),
+                  
                   ],
                 ),
         ),
