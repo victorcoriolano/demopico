@@ -1,15 +1,13 @@
-import 'package:demopico/core/common/inject_dependencies.dart';
-import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
-import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:flutter/material.dart';
 
 import 'add_pico_modal/primeira_tela.dart';
 
 class AddPicoWidget extends StatelessWidget {
   const AddPicoWidget({super.key});
-
+  
   @override
   Widget build(BuildContext context) {
+    
     return Positioned(
       bottom: 40.0, // Distância do fundo da tela
       right: 20.0, // Distância da borda direita da tela
@@ -35,14 +33,12 @@ class AddPicoWidget extends StatelessWidget {
             onPressed: () {
               // Função de exemplo
               showDialog(
-    context: context,
-    builder: (BuildContext context) => Dialog.fullscreen(
-      child:  // Ocupa toda a altura
-
-       EspecificidadeScreen(), // Mostra a tela dentro do diálogo
-      
-    ),
-  );
+                context: context,
+                builder: (BuildContext context) => const Dialog.fullscreen( // Ocupa toda a altura
+                  child:  
+                  EspecificidadeScreen(), // Mostra a tela dentro do diálogo
+                ),
+              );
             },
             child: SizedBox.expand(
               child: Stack(
@@ -74,9 +70,9 @@ class AddPicoWidget extends StatelessWidget {
     );
   }
   // simulação de criação do pico so pra ver se tpa funfando o firebase service 
-  void createPico() {
+  /* void createPico() {
     final pico =       Pico(
-      0, 
+      0.1, 
       0, 
       long: -46.9400143, 
       lat: -23.548546, 
@@ -88,8 +84,8 @@ class AddPicoWidget extends StatelessWidget {
       userCreator: "fulano de tal", 
       urlIdPico: '', 
       picoName: 'picoName');
-    final instanciaGetIt = serviceLocator<SpotController>();
 
-    instanciaGetIt.createSpot(pico);
-  }
+
+    //instanciaGetIt.createSpot(pico);
+  } */
 }

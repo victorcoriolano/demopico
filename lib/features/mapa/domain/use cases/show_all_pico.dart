@@ -9,14 +9,22 @@ class ShowAllPico {
 
   Future<List<Marker>> execute() async {
     // pegando o spot do banco de dados e transformando em um marker
-    List<Pico> spots = await spotRepository.showAllPico();
-    return spots.map((spot) => Marker(
-      markerId: MarkerId(spot.picoName),
-      position: LatLng(spot.lat, spot.long),
-      infoWindow: InfoWindow(
-        title: spot.picoName,
-      ),
-    )).toList();
+    try {
+      List<Pico> spots = await spotRepository.showAllPico();
+      return spots.map((spot) {
+        return Marker(
+          markerId: MarkerId(spot.picoName!),
+          position: LatLng(spot.lat!, spot.long!),
+          infoWindow: InfoWindow(
+            title: spot.picoName,
+            snippet: spot.description,
+          ),
+        );
+      }).toList();
+    } catch (e) {
+      print('Erro ao buscar spots: $e');
+      return [];
+    }
   }
 
 }

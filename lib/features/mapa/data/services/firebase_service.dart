@@ -48,8 +48,8 @@ class FirebaseServiceMap implements SpotRepository{
     return snapshot.docs.map((doc) {
       final data = doc.data() as Map<String, dynamic>;
       return Pico(
-        data['nota'],
-        data['avaliacoes'],
+        nota: data['nota'],
+        numeroAvaliacoes: data['avaliacoes'],
         long: data['longitude'],
         lat: data['latitude'],
         description: data['description'],

@@ -18,8 +18,12 @@ class SpotController {
   }
 
   //método de mostrar os picos a partir dos picos salvos no bd 
-  Future<Set<Marker>> showAllPico()  async {
-    await showAllPicoUseCase.execute().then((spotInList) => markers.addAll(spotInList));
-    return markers;
+  Future<void> showAllPico() async {
+    try {
+      List<Marker> spotMarkers = await showAllPicoUseCase.execute();
+      markers = spotMarkers.toSet(); // Converte a lista de markers para um Set
+    } catch (e) {
+      print('Erro ao carregar markers: $e');
+    }
   }
 }

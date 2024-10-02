@@ -17,10 +17,23 @@ class MapWidget extends StatefulWidget {
 class MapWidgetState extends State<MapWidget> {
 
   final _controller = serviceLocator<SpotController>();
-  
+
+  @override
+  void initState() {
+    super.initState();
+    loadPico();//carregar os marker do bd quando o widget iniciar
+  }
+
+  Future<void> loadPico() async {
+    await _controller.showAllPico();
+    setState(() {
+      marcadores.addAll(_controller.markers);
+    });
+  }
+  Set<Marker> marcadores = <Marker>{};
   String _locationMessage = "Aguardando localização...";//pra que isso ????
   late GoogleMapController mapController;
-  LatLng _center = const LatLng(0, 0);
+  LatLng _center = LatLng(-23.548546, -46.9400143);
   // Inicializa o centro do mapa
 
   // Função para verificar permissões
@@ -80,14 +93,14 @@ class MapWidgetState extends State<MapWidget> {
       zoomControlsEnabled: false, 
       initialCameraPosition:CameraPosition(
         target: _center,
-        zoom: 20.0,
+        zoom: 15.0,
       ),
       scrollGesturesEnabled: true,
       rotateGesturesEnabled: true,
       myLocationEnabled: true,
       myLocationButtonEnabled: true,
       tiltGesturesEnabled: true,
-      markers: Set<Marker>.of(_controller.markers),
+      markers: marcadores,
     );
   }
   

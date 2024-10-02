@@ -41,13 +41,13 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
       utilidadesAtuais = utilidadesPorModalidade[modalidade] ?? []; // Atualiza as utilidades atuais
       utilidadesSelecionadas.clear(); // Limpa as seleções anteriores
       // Preenche novamente o mapa de utilidades selecionadas
-      utilidadesAtuais.forEach((utilidade) {
+      utilidadesAtuais.map((utilidade) {
         utilidadesSelecionadas[utilidade] = false;
       });
     });
   }
 
-   @override
+  @override
   Widget build(BuildContext context) {
     return   Container(
         width: double.infinity,
