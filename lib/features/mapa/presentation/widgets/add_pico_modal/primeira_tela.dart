@@ -10,8 +10,8 @@ class EspecificidadeScreen extends StatefulWidget {
 
 class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
   // Variáveis para armazenar o valor selecionado do dropdown e a modalidade escolhida
-  String? dropdownValue = 'none';
   String selectedModalidade = 'Skate';
+   String dropdownValue = 'Pico de Rua';
 
   // Mapa que define as utilidades para cada modalidade
   Map<String, List<String>> utilidadesPorModalidade = {
@@ -61,11 +61,11 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
                     ),
                     // Título da seção de modalidades
                     const Text(
-                      'Modalidade',
+                      'MODALIDADE',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: Color(0xFF8B0000),
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -81,11 +81,11 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
                     const Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Tipo de Pico:',
+                        'TIPO DE PICO:',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                       color: Color(0xFF8B0000),
                         ),
                       ),
                     ),
@@ -96,35 +96,44 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(color: Colors.grey),
                       ),
-                      child: DropdownButton<String>(
-                        value: dropdownValue,
-                        isExpanded: true,
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            dropdownValue = newValue!; // Atualiza o valor do dropdown
-                          });
-                        },
-                        items: <String>['none', 'Pico 1', 'Pico 2']
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(
-                              value,
-                              style: TextStyle(fontSize: 13),
-                            ),
-                          );
-                        }).toList(),
-                        underline: SizedBox(),
+                      child:Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: DropdownButton<String>(
+                                menuWidth: 400,  
+                                dropdownColor: Colors.white,         
+                                value: dropdownValue,
+                                isExpanded: true,
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    dropdownValue = newValue!; // Atualiza o valor do dropdown
+                                  });
+                                },
+                                items: <String>['Pico de Rua', 'Half', 'Bowl', 'Street', 'SkatePark']
+                                    .map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    
+                                    value: value,
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 10),
+                                      child: Text(
+                                        value,
+                                        style: TextStyle(fontSize: 15,   color: Color.fromARGB(255, 0, 0, 0),),
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                          underline: SizedBox(),
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 40),
                     // Título da seção de utilidades
                     const Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
                         'UTILIDADES',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: Color(0xFF8B0000),
                         ),
@@ -137,6 +146,7 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
                         child: Column(
                           children: utilidadesAtuais.map((utilidade) {
                             return CheckboxListTile(
+                              contentPadding: EdgeInsets.all(0),
                               title: Text(utilidade), // Nome da utilidade
                               value: utilidadesSelecionadas[utilidade], // Valor do checkbox
                               onChanged: (bool? value) {
@@ -189,9 +199,9 @@ class ModalidadeButtons extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: isSelected ? Color(0xFF8B0000) : Colors.grey[300], // Cor do botão
         foregroundColor: isSelected ? Colors.white : Colors.black,
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 25),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30), // Bordas arredondadas
+          borderRadius: BorderRadius.circular(20), // Bordas arredondadas
         ),
       ),
       onPressed: () {
