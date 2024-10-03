@@ -1,5 +1,6 @@
 import 'package:demopico/core/common/inject_dependencies.dart';
 import 'package:demopico/features/mapa/data/services/maps_service_singleton.dart';
+import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -101,7 +102,25 @@ class MapWidgetState extends State<MapWidget> {
       myLocationButtonEnabled: true,
       tiltGesturesEnabled: true,
       markers: marcadores,
+      onLongPress: (argument) => simulaCriarPico(argument), //simulação de criar pico em passando a latlang
     );
+  }
+  
+  simulaCriarPico(LatLng argument) {
+    final Pico pico = Pico(
+      nota: 0, 
+      numeroAvaliacoes: 0, 
+      long: argument.longitude, 
+      lat: argument.latitude, 
+      description: "testando criar a partir de uma latlang do mapa", 
+      atributos: {}, 
+      fotoPico: null, 
+      obstaculos: [], 
+      utilidades: [], 
+      userCreator: 'userCreator', 
+      urlIdPico: '', 
+      picoName: 'picoName2');
+    _controller.createSpot(pico);
   }
   
 

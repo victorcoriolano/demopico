@@ -53,7 +53,7 @@ Future<void> init() async {
 
   //injeção de dependencia para o mapa 
   //registrando o service do mapa no get it
-  serviceLocator.registerFactory<SpotRepository>(() => FirebaseServiceMap());
+  serviceLocator.registerLazySingleton<SpotRepository>(() => FirebaseServiceMap());
   //registrando os casos de uso e passando suas dependencias 
   //que já foram registradas na linha d cima
   //registrei como singleton por que não ira ter alteraçoes 
@@ -64,5 +64,8 @@ Future<void> init() async {
 
   //registrando o controller e injetoando dependencia
   serviceLocator.registerLazySingleton(() => SpotController(serviceLocator(), serviceLocator()));
+
+
+  //instancia da entidade pico que será criada 
 
 }

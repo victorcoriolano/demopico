@@ -13,8 +13,13 @@ class SpotController {
 
   //método para chamar o caso de uso criar pico que irá execultar a lógica de criar o pico
   Future<void> createSpot(Pico pico) async {
-    createSpotUseCase.createSpot(pico);
-    //sem nenhum tratamento de erro pq nois eh ruim 
+    try{
+      await createSpotUseCase.createSpot(pico);
+    } catch (e){
+      print('Erro ao criar pico: $e');
+    }
+    //chama a função de apresentar pico para atualizar a tela com o novo pico 
+    showAllPico();
   }
 
   //método de mostrar os picos a partir dos picos salvos no bd 

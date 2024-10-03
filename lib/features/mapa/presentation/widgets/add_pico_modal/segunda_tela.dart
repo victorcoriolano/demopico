@@ -64,7 +64,7 @@ class _SegundaTelaState extends State<SegundaTela> {
                   ),
                   buildAtributo(
                     'Iluminação',
-                    'ClariNHO',
+                    'Clarinho',
                     atributos['Iluminação']!,
                     (valor) => setAtributo('Iluminação', valor),
                   ),
@@ -157,7 +157,7 @@ class _SegundaTelaState extends State<SegundaTela> {
           mainAxisAlignment: MainAxisAlignment.center, // Centraliza os ícones
           children: List.generate(5, (index) {
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 0.0), // Ajustado para um espaçamento menor
+              padding: const EdgeInsets.symmetric(horizontal: 0.0,), // Ajustado para um espaçamento menor
               child: IconButton(
                 icon: Image.asset(
                   'lib/assets/iconPico.png', // Substitua pelo caminho da sua imagem
