@@ -82,7 +82,6 @@ class _MapPageState extends State<MapPage> {
   
            const MapWidget(),
       
-          // Widget para adicionar um "pico" (local)
           const AddPicoWidget(),
         ],
       ),

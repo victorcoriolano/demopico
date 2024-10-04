@@ -33,24 +33,15 @@ class ShowAllPico {
 
 void _showPicoModal(BuildContext context, Pico pico) {
   print('Chamando modal para: ${pico.picoName}'); // Adicione isto para depuração
-  showDialog(
+  showModalBottomSheet(
+    backgroundColor: Colors.transparent,
     context: context,
     builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text(pico.picoName),
-        content: ShowPicoWidget(pico: pico),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text('Fechar'),
-          ),
-        ],
-      );
+      return ShowPicoWidget(pico: pico); // Exibe seu widget aqui
     },
   );
 }
+
 
 
 }
