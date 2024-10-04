@@ -1,7 +1,11 @@
+import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:flutter/material.dart';
 
 class ShowPicoWidget extends StatefulWidget {
-  const ShowPicoWidget({super.key});
+    final Pico pico;
+
+  const ShowPicoWidget({super.key, required this.pico});
+
   
   @override
   State<ShowPicoWidget> createState() => _ShowPicoWidgetState();

@@ -26,7 +26,7 @@ class MapWidgetState extends State<MapWidget> {
   }
 
   Future<void> loadPico() async {
-    await _controller.showAllPico();
+    await _controller.showAllPico(context);
     setState(() {
       marcadores.addAll(_controller.markers);
     });
@@ -120,7 +120,8 @@ class MapWidgetState extends State<MapWidget> {
       userCreator: 'userCreator', 
       urlIdPico: '', 
       picoName: 'picoName2');
-    _controller.createSpot(pico);
+    _controller.createSpot(pico, context
+    );
   }
   
 

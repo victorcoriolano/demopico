@@ -71,12 +71,7 @@ class _MapPageState extends State<MapPage> {
       urlIdPico: 'urlIdPico', 
       picoName: 'picoName'),
       ];  */
-  // Função chamada quando um ponto no mapa é clicado
-  void _onMapPointTapped() {
-    setState(() {
-      _isPanelVisible = true; // Exibe o painel ao clicar em um ponto
-    });
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -84,16 +79,11 @@ class _MapPageState extends State<MapPage> {
       appBar: const TopSideMapWidget(),
       body: Stack(
         children: [
-          // Widget de mapa com marcadores
-          GestureDetector(
-            onTap: _onMapPointTapped, // Detecta o clique no ponto do mapa
-            child: const MapWidget(),
-          ),
+  
+           const MapWidget(),
+      
           // Widget para adicionar um "pico" (local)
           const AddPicoWidget(),
-
-          // Painel arrastável que aparece ao clicar no mapa
-          if (_isPanelVisible) const ShowPicoWidget(),
         ],
       ),
     );
