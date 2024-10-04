@@ -1,8 +1,8 @@
 import 'dart:io';
 
 class Pico {
-  final String? urlIdPico;
-  final String? picoName;
+  final String urlIdPico;
+  final String picoName;
   final String? description;
   final double? long;
   final double? lat;
