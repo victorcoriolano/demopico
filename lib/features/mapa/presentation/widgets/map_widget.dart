@@ -32,7 +32,7 @@ class MapWidgetState extends State<MapWidget> {
     });
   }
   Set<Marker> marcadores = <Marker>{};
-  String _locationMessage = "Aguardando localização...";//pra que isso ????
+  String _locationMessage = "Aguardando localização...";
   late GoogleMapController mapController;
   LatLng _center = LatLng(-23.548546, -46.9400143);
   // Inicializa o centro do mapa

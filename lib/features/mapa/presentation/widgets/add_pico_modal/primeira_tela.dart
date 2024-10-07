@@ -11,7 +11,7 @@ class EspecificidadeScreen extends StatefulWidget {
 class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
   // Variáveis para armazenar o valor selecionado do dropdown e a modalidade escolhida
   String selectedModalidade = 'Skate';
-   String dropdownValue = 'Pico de Rua';
+  String dropdownValue = 'Pico de Rua';
 
   // Mapa que define as utilidades para cada modalidade
   Map<String, List<String>> utilidadesPorModalidade = {
