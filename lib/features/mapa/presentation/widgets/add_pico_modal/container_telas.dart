@@ -1,3 +1,4 @@
+import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/primeira_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/quarta_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/segunda_tela.dart';
@@ -13,6 +14,19 @@ class ContainerTelas extends StatefulWidget {
 
 class _ContainerTelasState extends State<ContainerTelas> {
   int _currentIndex = 0;
+/*   final pico = Pico(
+    nota: nota, 
+    numeroAvaliacoes: numeroAvaliacoes, 
+    long: long, 
+    lat: lat, 
+    description: description, 
+    atributos: atributos, 
+    fotoPico: fotoPico, 
+    obstaculos: obstaculos, 
+    utilidades: utilidades, 
+    userCreator: userCreator, 
+    urlIdPico: urlIdPico, 
+    picoName: picoName); */
 
   final List<Widget> _screens = [
     EspecificidadeScreen(), // Página 1
@@ -52,7 +66,7 @@ class _ContainerTelasState extends State<ContainerTelas> {
                 Expanded(
                   child: _screens[_currentIndex], // Exibe o widget atual
                 ),
-                 ElevatedButton(
+                ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF8B0000), // Cor do botão
                     foregroundColor: Colors.white,

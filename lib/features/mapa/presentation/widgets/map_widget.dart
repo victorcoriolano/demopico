@@ -102,11 +102,11 @@ class MapWidgetState extends State<MapWidget> {
       myLocationButtonEnabled: true,
       tiltGesturesEnabled: true,
       markers: marcadores,
-      onLongPress: (argument) => simulaCriarPico(argument), //simulação de criar pico em passando a latlang
+      //onLongPress: (argument) => simulaCriarPico(argument), simulação de criar pico em passando a latlang
     );
   }
   
-  simulaCriarPico(LatLng argument) {
+/*   simulaCriarPico(LatLng argument) {
     final Pico pico = Pico(
       nota: 0, 
       numeroAvaliacoes: 0, 
@@ -122,7 +122,7 @@ class MapWidgetState extends State<MapWidget> {
       picoName: 'picoName2');
     _controller.createSpot(pico, context
     );
-  }
+  } */
   
 
 
