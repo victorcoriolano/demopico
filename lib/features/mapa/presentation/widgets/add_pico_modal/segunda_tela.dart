@@ -39,13 +39,12 @@ class _SegundaTelaState extends State<SegundaTela> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // Imagem no topo
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0),
-                    child: Image.asset(
-                      'lib/assets/addPico2.png',
-                      height: screenHeight * 0.2, // Ajuste dinâmico para a imagem (aumentada para 20%)
+                   Center(
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: Image.asset('assets/images/progresso2.png', ),
+                      ),
                     ),
-                  ),
 
                   // Widget de cada atributo com descrição abaixo dos ícones
                   buildAtributo(

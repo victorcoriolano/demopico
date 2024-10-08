@@ -14,7 +14,12 @@ class QuartaTela extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center, // Centraliza o conteúdo na coluna
                 children: [
                   // Exibir imagem do topo
-                  Image.asset('lib/assets/addPico4.png', height: 100),
+               Center(
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: Image.asset('assets/images/progresso4.png', ),
+                      ),
+                    ),
                   const SizedBox(height: 20), // Espaço entre a imagem e o texto
                   // Texto para o campo de entrada do nome do pico
                   const Text(
@@ -32,7 +37,7 @@ class QuartaTela extends StatelessWidget {
                       border: OutlineInputBorder(), // Borda do campo
                     ),
                   ),
-                  const SizedBox(height: 20), // Espaço entre os campos
+                  const SizedBox(height: 50), // Espaço entre os campos
                   // Texto para o campo de descrição
                   const Text(
                     'FALE UM POUCO SOBRE:',

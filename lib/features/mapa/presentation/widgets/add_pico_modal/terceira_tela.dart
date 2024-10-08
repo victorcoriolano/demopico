@@ -17,13 +17,12 @@ class TerceiraTela extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center, // Centraliza o conteúdo na coluna
                 children: [
                   // Imagem do topo
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20.0, bottom: 20.0), // Espaçamento acima e abaixo da imagem
-                    child: Image.asset(
-                      'lib/assets/addPico3.png', // Caminho da imagem
-                      height: screenHeight * 0.2, // Altura da imagem como 20% da altura da tela
+                  Center(
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: Image.asset('assets/images/progresso3.png', ),
+                      ),
                     ),
-                  ),
                   // Título da seção
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20.0), // Espaçamento vertical para o título

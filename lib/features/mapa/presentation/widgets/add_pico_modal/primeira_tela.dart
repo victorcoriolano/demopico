@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'segunda_tela.dart'; // Importando a segunda tela
 
 class EspecificidadeScreen extends StatefulWidget {
   const EspecificidadeScreen({super.key});
@@ -55,9 +54,11 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
             children: [
               
                     // Imagem do topo
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 10.0),
-                      child: Image.asset('lib/assets/addPico1.png', height: 105),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: Image.asset('assets/images/progresso1.png', ),
+                      ),
                     ),
                     // Título da seção de modalidades
                     const Text(
