@@ -56,7 +56,7 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
                     // Imagem do topo
                     Center(
                       child: Padding(
-                        padding: const EdgeInsets.only(bottom: 10.0),
+                        padding: const EdgeInsets.only(bottom: 0),
                         child: Image.asset('assets/images/progresso1.png', ),
                       ),
                     ),
@@ -69,7 +69,7 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
                         color: Color(0xFF8B0000),
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 25),
                     // Botões para seleção da modalidade
                     ModalidadeButtons(
                       onSelected: (String modalidade) {
@@ -100,6 +100,7 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
                       child:Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: DropdownButton<String>(
+                          
                                 menuWidth: 400,  
                                 dropdownColor: Colors.white,         
                                 value: dropdownValue,

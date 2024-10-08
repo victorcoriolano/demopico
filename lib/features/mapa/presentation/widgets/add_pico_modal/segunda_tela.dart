@@ -1,3 +1,4 @@
+import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
 import 'package:flutter/material.dart';
 import 'terceira_tela.dart'; // Importando a terceira tela
 
@@ -109,14 +110,15 @@ class _SegundaTelaState extends State<SegundaTela> {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 0.0,), // Ajustado para um espaçamento menor
               child: IconButton(
+        
                 icon: Image.asset(
-                  'lib/assets/iconPico.png', // Substitua pelo caminho da sua imagem
+                'assets/images/iconPico.png', // Substitua pelo caminho da sua imagem
                   color: index < valor ? Color(0xFF8B0000) : Colors.grey[300], // Altera a cor do ícone baseado na avaliação
                 ),
-                iconSize: 50, // Tamanho aumentado para 50
+                iconSize: 2, // Tamanho aumentado para 50
                 onPressed: () {
                   onChanged(index + 1); // Atualiza o valor do atributo
-                },
+                } 
               ),
             );
           }),
