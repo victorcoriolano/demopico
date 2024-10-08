@@ -39,3 +39,7 @@ flutter:
       - assets/images/containerLogin.jpg
       - assets/images/containerCadastro.jpg
       - assets/images/iconPico.png
+      - assets/images/progresso1.png
+      - assets/images/progresso2.png
+      - assets/images/progresso3.png
+      - assets/images/progresso4.png
