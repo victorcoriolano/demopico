@@ -46,6 +46,7 @@ class FirebaseServiceMap implements SpotRepository{
 
 @override
   Future<List<Pico>> showAllPico() async {
+    try {
     QuerySnapshot snapshot = await _firebaseFirestore.collection('spots').get();
     return snapshot.docs.map((doc) {
       final data = doc.data() as Map<String, dynamic>;
@@ -66,5 +67,9 @@ class FirebaseServiceMap implements SpotRepository{
         picoName: data['name'],
       );
     }).toList();
+    } on Exception catch (e) {
+      print(e);
+      return [];
+    }
   }
 }

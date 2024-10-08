@@ -1,7 +1,6 @@
-import 'package:demopico/core/common/inject_dependencies.dart';
 import 'package:demopico/features/mapa/data/services/maps_service_singleton.dart';
-import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
+import 'package:demopico/features/mapa/presentation/widgets/add_pico_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -17,11 +16,20 @@ class MapWidget extends StatefulWidget {
 }
 
 class MapWidgetState extends State<MapWidget> {
+  Set<Marker> markers = {};
+  /* @override
+  void initState() {
+    super.initState();
+    loadPico();
+  } */
 
+  void loadPico() async {
+    markers = await context.read<SpotControllerProvider>().turnsPicoToMarker(context);
+  }
 
   String _locationMessage = "Aguardando localização...";
   late GoogleMapController mapController;
-  LatLng _center = LatLng(-23.548546, -46.9400143);
+  LatLng _center = const LatLng(-23.548546, -46.9400143);
   // Inicializa o centro do mapa
 
   // Função para verificar permissões
@@ -80,10 +88,12 @@ class MapWidgetState extends State<MapWidget> {
         return GoogleMap ( 
           onMapCreated: (GoogleMapController controller) {
             MapsServiceSingleton().setController(controller);
+            _getLocation();
+            loadPico();
           },
           zoomControlsEnabled: false, 
           initialCameraPosition:CameraPosition(
-            target: _center,
+            target: _center ,
             zoom: 15.0,
           ),
           scrollGesturesEnabled: true,
@@ -91,10 +101,12 @@ class MapWidgetState extends State<MapWidget> {
           myLocationEnabled: true,
           myLocationButtonEnabled: true,
           tiltGesturesEnabled: true,
-          markers: provider.markers,
+          markers: markers,
           //onLongPress: (argument) => simulaCriarPico(argument), simulação de criar pico em passando a latlang
         );
-      }
+      },
+      // chamando o button de adicionar pico no mapa poder pegar a  localizaçãp 
+      child: const AddPicoWidget(), 
     );
   }
   
