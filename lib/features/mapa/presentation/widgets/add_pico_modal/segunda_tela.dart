@@ -42,7 +42,8 @@ class _SegundaTelaState extends State<SegundaTela> {
                   // Imagem no topo
                    Center(
                       child: Padding(
-                        padding: const EdgeInsets.only(bottom: 10.0),
+                       
+                        padding: const EdgeInsets.all(12.0),
                         child: Image.asset('assets/images/progresso2.png', ),
                       ),
                     ),
@@ -105,22 +106,31 @@ class _SegundaTelaState extends State<SegundaTela> {
 
         // Avaliação por imagens customizadas
         Row(
-          mainAxisAlignment: MainAxisAlignment.center, // Centraliza os ícones
+          mainAxisAlignment: MainAxisAlignment.center,
+           // Centraliza os ícones
           children: List.generate(5, (index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 0.0,), // Ajustado para um espaçamento menor
-              child: IconButton(
-        
-                icon: Image.asset(
-                'assets/images/iconPico.png', // Substitua pelo caminho da sua imagem
-                  color: index < valor ? Color(0xFF8B0000) : Colors.grey[300], // Altera a cor do ícone baseado na avaliação
-                ),
-                iconSize: 2, // Tamanho aumentado para 50
-                onPressed: () {
-                  onChanged(index + 1); // Atualiza o valor do atributo
-                } 
-              ),
-            );
+           // Ajustado para um espaçamento menor
+           return SizedBox(
+            width:70
+            ,
+               child: Container(
+                margin: EdgeInsets.only(bottom: 10, top: 5),
+                 child: IconButton(
+                      icon: Image.asset( 
+                      'assets/images/iconPico.png', // Substitua pelo caminho da sua imagem
+                        color: index < valor ? Color(0xFF8B0000) : Colors.grey[300], // Altera a cor do ícone baseado na avaliação
+                      ),
+                      iconSize: 10, // Tamanho aumentado para 50
+                      onPressed: () {
+                        onChanged(index + 1); // Atualiza o valor do atributo
+                      } ,
+                     ),
+               ),
+       
+      );
+      
+          
+          
           }),
         ),
 
@@ -133,7 +143,7 @@ class _SegundaTelaState extends State<SegundaTela> {
           ),
         ),
 
-        SizedBox(height: 7),
+        SizedBox(height: 30),
       ],
     );
   }

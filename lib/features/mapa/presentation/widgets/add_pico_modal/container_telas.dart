@@ -60,11 +60,10 @@ class _ContainerTelasState extends State<ContainerTelas> {
               width: MediaQuery.of(context).size.width * 0.95,
               height: MediaQuery.of(context).size.height * 0.95,
               child: Container(
-                
                 width: double.infinity,
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color:Colors.grey[200],
+                  color: Colors.grey[200],
                   borderRadius:
                       BorderRadius.circular(12), // Arredondamento das bordas
                   border: Border.all(
@@ -78,56 +77,57 @@ class _ContainerTelasState extends State<ContainerTelas> {
                         child: _screens[_currentIndex], // Exibe o widget atual
                       ),
                       SizedBox(height: 10),
-                      
                       if (!(_currentIndex == 0))
-  ElevatedButton(
-    style: ElevatedButton.styleFrom(
-      backgroundColor: Color(0xFF8B0000), // Cor do botão
-      foregroundColor: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-    ),
-    onPressed: () {
-      _backScreen(); // Chama a função para mudar a tela
-    },
-    child: Text('VOLTAR', style: TextStyle(fontSize: 15)),
-  ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFF8B0000), // Cor do botão
+                            foregroundColor: Colors.white,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 50, vertical: 15),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          onPressed: () {
+                            _backScreen(); // Chama a função para mudar a tela
+                          },
+                          child: Text('VOLTAR', style: TextStyle(fontSize: 15)),
+                        ),
                       SizedBox(height: 10),
                       if (_currentIndex == 3)
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF8B0000), // Cor do botão
-                          foregroundColor: Colors.white,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 50, vertical: 15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFF8B0000), // Cor do botão
+                            foregroundColor: Colors.white,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 50, vertical: 15),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                           ),
-                        ),
-                        onPressed: () {
-                          _nextScreen(); // Chama a função para mudar a tela
-                        },
-                        child:
-                            Text('POSTAR PICO', style: TextStyle(fontSize: 15)),
-                      )else
-                       ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF8B0000), // Cor do botão
-                          foregroundColor: Colors.white,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 50, vertical: 15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                          onPressed: () {
+                            _nextScreen(); // Chama a função para mudar a tela
+                          },
+                          child: Text('POSTAR PICO',
+                              style: TextStyle(fontSize: 15)),
+                        )
+                      else
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFF8B0000), // Cor do botão
+                            foregroundColor: Colors.white,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 50, vertical: 15),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                           ),
+                          onPressed: () {
+                            _nextScreen(); // Chama a função para mudar a tela
+                          },
+                          child: Text('PROSSEGUIR',
+                              style: TextStyle(fontSize: 15)),
                         ),
-                        onPressed: () {
-                          _nextScreen(); // Chama a função para mudar a tela
-                        },
-                        child:
-                            Text('PROSSEGUIR', style: TextStyle(fontSize: 15)),
-                      ),
                     ],
                   ),
                 ),
