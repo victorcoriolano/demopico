@@ -30,19 +30,11 @@ class _SegundaTelaState extends State<SegundaTela> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+    backgroundColor: Colors.white,
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Container(
-            width: screenWidth * 0.9, // Ajuste relativo à largura da tela
-            padding: EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Color(0xFF8B0000), width: 3),
-            ),
+      
             child: SingleChildScrollView(
+              
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -86,53 +78,12 @@ class _SegundaTelaState extends State<SegundaTela> {
                     atributos['Kick-Out']!,
                     (valor) => setAtributo('Kick-Out', valor),
                   ),
-
-                  SizedBox(height: 20),
-
-                  // Botão de voltar
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF8B0000), // Mesma cor que o botão "Prosseguir"
-                      foregroundColor: Colors.white,
-                      padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    onPressed: () {
-                      // Voltar para a tela anterior
-                      Navigator.pop(context);
-                    },
-                    child: Text('VOLTAR', style: TextStyle(fontSize: 15)),
-                  ),
-
-                  SizedBox(height: 10), // Espaçamento entre os botões
-
                   // Botão de prosseguir
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF8B0000), // Mesma cor
-                      foregroundColor: Colors.white,
-                      padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    onPressed: () {
-                      // Navegar para a Terceira Tela
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => TerceiraTela()),
-                      );
-                    },
-                    child: Text('PROSSEGUIR', style: TextStyle(fontSize: 15)),
-                  ),
+                
                 ],
               ),
             ),
-          ),
-        ),
-      ),
+          )
     );
   }
 
