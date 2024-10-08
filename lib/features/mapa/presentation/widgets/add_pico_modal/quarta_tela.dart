@@ -37,7 +37,7 @@ class QuartaTela extends StatelessWidget {
                       border: OutlineInputBorder(), // Borda do campo
                     ),
                   ),
-                  const SizedBox(height: 20), // Espaço entre os campos
+                  const SizedBox(height: 50), // Espaço entre os campos
                   // Texto para o campo de descrição
                   const Text(
                     'FALE UM POUCO SOBRE:',
