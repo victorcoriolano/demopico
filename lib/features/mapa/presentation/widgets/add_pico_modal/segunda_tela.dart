@@ -30,7 +30,7 @@ class _SegundaTelaState extends State<SegundaTela> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-    backgroundColor: Colors.white,
+      backgroundColor: Colors.grey[200],
       body: Center(
       
             child: SingleChildScrollView(

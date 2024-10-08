@@ -60,10 +60,11 @@ class _ContainerTelasState extends State<ContainerTelas> {
               width: MediaQuery.of(context).size.width * 0.95,
               height: MediaQuery.of(context).size.height * 0.95,
               child: Container(
+                
                 width: double.infinity,
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color:Colors.grey[200],
                   borderRadius:
                       BorderRadius.circular(12), // Arredondamento das bordas
                   border: Border.all(

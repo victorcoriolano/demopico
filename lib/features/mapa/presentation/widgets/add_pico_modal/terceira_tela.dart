@@ -9,7 +9,7 @@ class TerceiraTela extends StatelessWidget {
 
     return Scaffold(
       // Cor de fundo da tela
-      backgroundColor: Color.fromRGBO(255, 255, 255, 1),
+     backgroundColor: Colors.grey[200],
       body: Center(
       
             child: SingleChildScrollView( // Permite rolagem se o conteúdo for muito grande
@@ -44,11 +44,14 @@ class TerceiraTela extends StatelessWidget {
                       ),
                       itemCount: 15, // Total de 15 caixas
                       itemBuilder: (context, index) {
-                        return Container(
-                          height: 20, // Altura das caixas
-                          padding: EdgeInsets.all(0), // Sem padding
-                          decoration: BoxDecoration(
-                            color: Colors.brown[400], // Cor das caixas
+                        return Padding(
+                          padding: EdgeInsets.all(14),
+                          child: Container(
+                            height: 20, // Altura das caixas
+                            padding: EdgeInsets.all(0), // Sem padding
+                            decoration: BoxDecoration(
+                              color: Colors.brown[400], // Cor das caixas
+                            ),
                           ),
                         );
                       },

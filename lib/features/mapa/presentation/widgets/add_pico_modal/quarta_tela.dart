@@ -7,19 +7,9 @@ class QuartaTela extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200], // Cor de fundo da tela
+      backgroundColor: Colors.grey[200],
       body: SingleChildScrollView( // Permite rolagem do conteúdo
         child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0), // Padding em torno do contêiner
-            child: Container(
-              width: 350, // Largura fixa do contêiner
-              padding: const EdgeInsets.all(16), // Padding interno do contêiner
-              decoration: BoxDecoration(
-                color: Colors.white, // Cor de fundo do contêiner
-                borderRadius: BorderRadius.circular(12), // Bordas arredondadas
-                border: Border.all(color: Color(0xFF8B0000), width: 3), // Borda na mesma cor dos botões
-              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center, // Centraliza o conteúdo na coluna
                 children: [
@@ -74,43 +64,12 @@ class QuartaTela extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20), // Espaço entre o botão de anexar e os outros botões
-                  // Botão de voltar
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF8B0000), // Cor do botão de voltar
-                      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15), // Padding do botão
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10), // Bordas arredondadas
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context); // Função para voltar à tela anterior
-                    },
-                    child: const Text('VOLTAR', style: TextStyle(fontSize: 16)), // Texto do botão
-                  ),
-                  const SizedBox(height: 20), // Espaço entre os botões
-                  // Botão para adicionar pico
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF8B0000), // Cor do botão
-                      padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15), // Padding do botão
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10), // Bordas arredondadas
-                      ),
-                    ),
-                    onPressed: () {
-                      // Função para adicionar pico (placeholder)
-                      print("Pico adicionado");
-                    },
-                    child: Text('ADICIONAR PICO', style: TextStyle(fontSize: 16)), // Texto do botão
-                  ),
+                  
                 ],
               ),
             ),
           ),
-        ),
-      ),
+        
     );
   }
 }
