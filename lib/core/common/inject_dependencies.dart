@@ -63,7 +63,7 @@ Future<void> init() async {
   serviceLocator.registerLazySingleton(() => ShowAllPico(serviceLocator()));
 
   //registrando o controller e injetoando dependencia
-  serviceLocator.registerLazySingleton(() => SpotController(serviceLocator(), serviceLocator()));
+  serviceLocator.registerLazySingleton(() => SpotControllerProvider(serviceLocator(), serviceLocator()));
 
 
   //instancia da entidade pico que será criada 

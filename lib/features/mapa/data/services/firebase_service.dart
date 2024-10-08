@@ -34,6 +34,8 @@ class FirebaseServiceMap implements SpotRepository{
       'nota': pico.nota,
       'avaliacoes': pico.numeroAvaliacoes,
       'criador': pico.userCreator,
+      'modalidade': pico.modalidade,
+      'tipo': pico.tipoPico,
     });
   }
 
@@ -48,6 +50,8 @@ class FirebaseServiceMap implements SpotRepository{
     return snapshot.docs.map((doc) {
       final data = doc.data() as Map<String, dynamic>;
       return Pico(
+        tipoPico: data['tipo'],
+        modalidade: data['modalidade'],
         nota: data['nota'],
         numeroAvaliacoes: data['avaliacoes'],
         long: data['longitude'],

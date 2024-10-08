@@ -5,7 +5,8 @@ import 'package:demopico/features/mapa/presentation/controllers/spot_controller.
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:permission_handler/permission_handler.dart'; // Importa o permission_handler
+import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart'; // Importa o permission_handler
 
 class MapWidget extends StatefulWidget {
 
@@ -17,21 +18,7 @@ class MapWidget extends StatefulWidget {
 
 class MapWidgetState extends State<MapWidget> {
 
-  final _controller = serviceLocator<SpotController>();
 
-  @override
-  void initState() {
-    super.initState();
-    loadPico();//carregar os marker do bd quando o widget iniciar
-  }
-
-  Future<void> loadPico() async {
-    await _controller.showAllPico(context);
-    setState(() {
-      marcadores.addAll(_controller.markers);
-    });
-  }
-  Set<Marker> marcadores = <Marker>{};
   String _locationMessage = "Aguardando localização...";
   late GoogleMapController mapController;
   LatLng _center = LatLng(-23.548546, -46.9400143);
@@ -87,22 +74,27 @@ class MapWidgetState extends State<MapWidget> {
   }
   @override
   Widget build(BuildContext context) {
-    return  GoogleMap ( 
-      onMapCreated: (GoogleMapController controller) {
-          MapsServiceSingleton().setController(controller);
-      },
-      zoomControlsEnabled: false, 
-      initialCameraPosition:CameraPosition(
-        target: _center,
-        zoom: 15.0,
-      ),
-      scrollGesturesEnabled: true,
-      rotateGesturesEnabled: true,
-      myLocationEnabled: true,
-      myLocationButtonEnabled: true,
-      tiltGesturesEnabled: true,
-      markers: marcadores,
-      //onLongPress: (argument) => simulaCriarPico(argument), simulação de criar pico em passando a latlang
+    // consome os dados do provider para manter a tela atualizada
+    return  Consumer<SpotControllerProvider>(
+      builder: (context, provider, child) {
+        return GoogleMap ( 
+          onMapCreated: (GoogleMapController controller) {
+            MapsServiceSingleton().setController(controller);
+          },
+          zoomControlsEnabled: false, 
+          initialCameraPosition:CameraPosition(
+            target: _center,
+            zoom: 15.0,
+          ),
+          scrollGesturesEnabled: true,
+          rotateGesturesEnabled: true,
+          myLocationEnabled: true,
+          myLocationButtonEnabled: true,
+          tiltGesturesEnabled: true,
+          markers: provider.markers,
+          //onLongPress: (argument) => simulaCriarPico(argument), simulação de criar pico em passando a latlang
+        );
+      }
     );
   }
   

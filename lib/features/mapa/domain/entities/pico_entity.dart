@@ -2,6 +2,8 @@ import 'dart:io';
 
 class Pico {
   final String urlIdPico;
+  final String modalidade;
+  final String tipoPico;
   final String picoName;
   final String? description;
   final double? long;
@@ -16,7 +18,9 @@ class Pico {
   // final Map<Comentarios>
 
   Pico(
-    {required this.nota,
+    {required this.modalidade,
+    required this.tipoPico,
+    required this.nota,
     required this.numeroAvaliacoes,
     required this.long, required this.lat, 
     required this.description,
