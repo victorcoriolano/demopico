@@ -9,17 +9,9 @@ class TerceiraTela extends StatelessWidget {
 
     return Scaffold(
       // Cor de fundo da tela
-      backgroundColor: Color.fromRGBO(238, 238, 238, 1),
+      backgroundColor: Color.fromRGBO(255, 255, 255, 1),
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0), // Padding em torno do contêiner
-          child: Container(
-            // Estilo do contêiner
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12), // Bordas arredondadas
-              color: Colors.white, // Cor de fundo para o contêiner
-              border: Border.all(color: Color(0xFF8B0000), width: 3), // Borda vermelha (mesma cor dos botões)
-            ),
+      
             child: SingleChildScrollView( // Permite rolagem se o conteúdo for muito grande
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center, // Centraliza o conteúdo na coluna
@@ -63,51 +55,19 @@ class TerceiraTela extends StatelessWidget {
                     ),
                   ),
                   // Botão de voltar
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center, // Centraliza os botões
-                    children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF8B0000), // Cor do botão "VOLTAR"
-                          foregroundColor: Colors.white, // Cor do texto do botão
-                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15), // Padding do botão
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)), // Bordas arredondadas
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context); // Voltar para a tela anterior
-                        },
-                        child: Text('VOLTAR', style: TextStyle(fontSize: 15)), // Texto do botão
-                      ),
-                    ],
-                  ),
+                  
                   SizedBox(height: 10), // Espaço de 10 pixels entre os botões
                   // Botão de prosseguir
                   Padding(
                     padding: const EdgeInsets.only(bottom: 20.0), // Adiciona um padding embaixo do botão
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center, // Centraliza os botões
-                      children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFF8B0000), // Cor do botão "PROSSEGUIR"
-                            foregroundColor: Colors.white, // Cor do texto do botão
-                            padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15), // Padding do botão
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)), // Bordas arredondadas
-                          ),
-                          onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => QuartaTela())); // Navega para a QuartaTela
-                          },
-                          child: Text('PROSSEGUIR', style: TextStyle(fontSize: 15)), // Texto do botão
-                        ),
-                      ],
-                    ),
+                    
                   ),
                 ],
               ),
             ),
           ),
-        ),
-      ),
+       
+
     );
   }
 }
