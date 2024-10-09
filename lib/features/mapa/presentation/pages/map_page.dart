@@ -1,4 +1,5 @@
 import 'package:demopico/core/common/inject_dependencies.dart';
+import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_widget.dart';
 import 'package:demopico/features/mapa/presentation/widgets/map_widget.dart';
@@ -15,6 +16,7 @@ class MapPage extends StatelessWidget { // convertendo pra stl pq eh imutalvel
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => serviceLocator<SpotControllerProvider>()),
+        ChangeNotifierProvider(create: (_) => AddPicoControllerProvider()),
       ],
       child: const Scaffold(
         appBar: TopSideMapWidget(),

@@ -1,27 +1,66 @@
 
-import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:flutter/material.dart';
 
 class  AddPicoControllerProvider extends ChangeNotifier {
-  List<String> utilidades = [];
   Map<String, int> atributos = {};
   List<String> obstaculos = [];
   String nomePico = '';
   String descricao = '';
-  String modalidade = 'Skate';
+  String selectedModalidade = 'Skate';
   double nota = 0.0;
   int numAval = 0;
-  double lat = 0.0;
-  double long = 0.0;
+  String tipo = 'Pico de Rua';
 
-  late Pico pico;
+  Map<String, List<String>> utilidadesPorModalidade = {
+    'Skate': ['Água', 'Teto', 'Banheiro', 'Suave f1', 'Público / Gratuito'],
+    'Parkour': ['Água', 'Banheiro', 'Mecânicas Próximas', 'Ar Livre'],
+    'BMX': ['Água'],
+  };
+
+  List<String> utilidadesAtuais = [];
+  Map<String, bool> utilidadesSelecionadas = {};
+
   
-  // notificar o estado de modalidade, tipo e utilidades
-  void modalidadeTipoUtilidade(List<String> utilidades, String typeSpot, String modalidade){
-
+  AddPicoControllerProvider() {
+    // definindo o estado inicial de cada page
+    _atualizarUtilidades();
+    atributos  = {
+      'Chão': 4,
+      'Iluminação': 3,
+      'Policiamento': 4,
+      'Movimento': 3,
+      'Kick-Out': 4,
+    };
+  }
+// notificar o estado de modalidade, tipo e utilidades
+void atualizarModalidade(String modalidade) {
+    selectedModalidade = modalidade;
+    _atualizarUtilidades();
+    notifyListeners();
   }
 
+  void atualizarDropdown(String novoValor) {
+    tipo = novoValor;
+    notifyListeners();
+  }
+
+  void selecionarUtilidade(String utilidade, bool isSelected) {
+    utilidadesSelecionadas[utilidade] = isSelected;
+    notifyListeners();
+  }
+
+  void _atualizarUtilidades() {
+    utilidadesAtuais = utilidadesPorModalidade[selectedModalidade] ?? [];
+    utilidadesSelecionadas.clear();
+    for (var utilidade in utilidadesAtuais) {
+      utilidadesSelecionadas[utilidade] = false;
+    }
+  }
   // notificar o estado de atributos
+  void atualizarAtributo(String atributo, int value){
+    atributos[atributo] = value;
+    notifyListeners();
+  }
 
   // notificar o estaddo de obstáculos 
 

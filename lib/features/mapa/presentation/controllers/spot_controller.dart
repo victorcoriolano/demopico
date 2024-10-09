@@ -18,14 +18,13 @@ class SpotControllerProvider extends ChangeNotifier{
   //método para chamar o caso de uso criar pico que irá execultar a lógica de criar o pico
   Future<void> createSpot(Pico pico, BuildContext context) async {
     final marker = picoMarker(pico, context);
+    markers.add(marker);
     try{
       await createSpotUseCase.createSpot(pico);
     } catch (e){
       print('Erro ao criar pico: $e');
     }
     //chama a função de apresentar pico para atualizar a tela com o novo pico 
-    markers.add(marker);
-    notifyListeners();
   }
 
   Future<Set<Marker>> turnsPicoToMarker(BuildContext context) async {

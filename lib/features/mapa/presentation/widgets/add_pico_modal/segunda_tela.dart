@@ -1,5 +1,7 @@
+import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'terceira_tela.dart'; // Importando a terceira tela
 
 class SegundaTela extends StatefulWidget {
@@ -9,7 +11,7 @@ class SegundaTela extends StatefulWidget {
 
 class _SegundaTelaState extends State<SegundaTela> {
   // Variáveis para armazenar a avaliação de cada atributo (0 a 5)
-  Map<String, int> atributos = {
+/*   Map<String, int> atributos = {
     'Chão': 4,
     'Iluminação': 3,
     'Policiamento': 4,
@@ -22,7 +24,7 @@ class _SegundaTelaState extends State<SegundaTela> {
     setState(() {
       atributos[atributo] = valor; // Atualiza o valor do atributo selecionado
     });
-  }
+  } */
 
   @override
   Widget build(BuildContext context) {
@@ -30,60 +32,63 @@ class _SegundaTelaState extends State<SegundaTela> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      backgroundColor: Colors.grey[200],
-      body: Center(
-      
-            child: SingleChildScrollView(
-              
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // Imagem no topo
-                   Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 10.0),
-                        child: Image.asset('assets/images/progresso2.png', ),
-                      ),
-                    ),
-
-                  // Widget de cada atributo com descrição abaixo dos ícones
-                  buildAtributo(
-                    'Chão',
-                    'Liso / Plaza',
-                    atributos['Chão']!,
-                    (valor) => setAtributo('Chão', valor),
-                  ),
-                  buildAtributo(
-                    'Iluminação',
-                    'Clarinho',
-                    atributos['Iluminação']!,
-                    (valor) => setAtributo('Iluminação', valor),
-                  ),
-                  buildAtributo(
-                    'Policiamento',
-                    'Paloso',
-                    atributos['Policiamento']!,
-                    (valor) => setAtributo('Policiamento', valor),
-                  ),
-                  buildAtributo(
-                    'Movimento',
-                    'Cheio',
-                    atributos['Movimento']!,
-                    (valor) => setAtributo('Movimento', valor),
-                  ),
-                  buildAtributo(
-                    'Kick-Out',
-                    'Bem Capaz',
-                    atributos['Kick-Out']!,
-                    (valor) => setAtributo('Kick-Out', valor),
-                  ),
-                  // Botão de prosseguir
+    return Consumer<AddPicoControllerProvider>(
+      builder: (context, provider, child) => 
+      Scaffold(
+        backgroundColor: Colors.grey[200],
+        body: Center(
+        
+              child: SingleChildScrollView(
                 
-                ],
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // Imagem no topo
+                    Center(
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: Image.asset('assets/images/progresso2.png', ),
+                        ),
+                      ),
+      
+                    // Widget de cada atributo com descrição abaixo dos ícones
+                    buildAtributo(
+                      'Chão',
+                      'Liso / Plaza',
+                      provider.atributos['Chão']!,
+                      (valor) => provider.atualizarAtributo('Chão', valor),
+                    ),
+                    buildAtributo(
+                      'Iluminação',
+                      'Clarinho',
+                      provider.atributos['Iluminação']!,
+                      (valor) => provider.atualizarAtributo('Iluminação', valor),
+                    ),
+                    buildAtributo(
+                      'Policiamento',
+                      'Paloso',
+                      provider.atributos['Policiamento']!,
+                      (valor) => provider.atualizarAtributo('Policiamento', valor),
+                    ),
+                    buildAtributo(
+                      'Movimento',
+                      'Cheio',
+                      provider.atributos['Movimento']!,
+                      (valor) => provider.atualizarAtributo('Movimento', valor),
+                    ),
+                    buildAtributo(
+                      'Kick-Out',
+                      'Bem Capaz',
+                      provider.atributos['Kick-Out']!,
+                      (valor) => provider.atualizarAtributo('Kick-Out', valor),
+                    ),
+                    // Botão de prosseguir
+                  
+                  ],
+                ),
               ),
-            ),
-          )
+            )
+      ),
     );
   }
 
@@ -95,27 +100,29 @@ class _SegundaTelaState extends State<SegundaTela> {
         // Nome do atributo
         Text(
           '$titulo:',
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
         ),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
 
         // Avaliação por imagens customizadas
         Row(
           mainAxisAlignment: MainAxisAlignment.center, // Centraliza os ícones
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: List.generate(5, (index) {
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 0.0,), // Ajustado para um espaçamento menor
+              padding: const EdgeInsets.all(0.0), // Ajustado para um espaçamento menor
               child: IconButton(
-        
                 icon: Image.asset(
+                  height: 60.0,// diminuindo o tamanho do icon para n ficar dando erro
+                  width: 45.0,
                 'assets/images/iconPico.png', // Substitua pelo caminho da sua imagem
-                  color: index < valor ? Color(0xFF8B0000) : Colors.grey[300], // Altera a cor do ícone baseado na avaliação
+                  color: index < valor ? Color(0xFF8B0000) : Colors.grey[350], // Altera a cor do ícone baseado na avaliação
                 ),
-                iconSize: 2, // Tamanho aumentado para 50
+                iconSize: 5, // Tamanho aumentado para 50
                 onPressed: () {
                   onChanged(index + 1); // Atualiza o valor do atributo
                 } 
