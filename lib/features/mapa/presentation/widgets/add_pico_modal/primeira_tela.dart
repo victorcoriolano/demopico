@@ -14,7 +14,7 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
 
   // Mapa que define as utilidades para cada modalidade
   Map<String, List<String>> utilidadesPorModalidade = {
-    'Skate': ['Água', 'Teto', 'Banheiro', 'Suave f1', 'Público / Gratuito'],
+    'Skate': ['Água', 'Teto', 'Banheiro', 'Suave Arcadiar', 'Público / Gratuito'],
     'Parkour': ['Água', 'Banheiro', 'Mecânicas Próximas', 'Ar Livre'],
     'BMX': ['Água'],
   };
