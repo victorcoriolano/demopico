@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'quarta_tela.dart';
 
 class TerceiraTela extends StatelessWidget {
   @override

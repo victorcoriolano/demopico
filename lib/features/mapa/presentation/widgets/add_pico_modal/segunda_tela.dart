@@ -1,8 +1,6 @@
 import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
-import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'terceira_tela.dart'; // Importando a terceira tela
 
 class SegundaTela extends StatefulWidget {
   @override
@@ -29,9 +27,9 @@ class _SegundaTelaState extends State<SegundaTela> {
   @override
   Widget build(BuildContext context) {
     // Obter o tamanho da tela
-    final screenHeight = MediaQuery.of(context).size.height;
+/*     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-
+ */
     return Consumer<AddPicoControllerProvider>(
       builder: (context, provider, child) => 
       Scaffold(

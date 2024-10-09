@@ -90,6 +90,7 @@ class MapWidgetState extends State<MapWidget> {
             MapsServiceSingleton().setController(controller);
             _getLocation();
             loadPico();
+            print(_locationMessage);
           },
           zoomControlsEnabled: false, 
           initialCameraPosition:CameraPosition(

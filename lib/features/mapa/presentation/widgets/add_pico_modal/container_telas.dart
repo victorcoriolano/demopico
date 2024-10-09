@@ -1,4 +1,3 @@
-import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/primeira_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/quarta_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/segunda_tela.dart';
@@ -49,30 +48,28 @@ class _ContainerTelasState extends State<ContainerTelas> {
                 width: MediaQuery.of(context).size.width * 0.95,
                 height: MediaQuery.of(context).size.height * 0.95,
                 child: Container(
-                  
-                  width: double.infinity,
+                width: double.infinity,
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                color:Colors.grey[200],
+                borderRadius:
+                    BorderRadius.circular(12), // Arredondamento das bordas
+                border: Border.all(
+                    color: Color(0xFF8B0000), width: 3), // Borda vermelha
+                ),                  child: Padding(
                   padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                  color:Colors.grey[200],
-                  borderRadius:
-                      BorderRadius.circular(12), // Arredondamento das bordas
-                  border: Border.all(
-                      color: Color(0xFF8B0000), width: 3), // Borda vermelha
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: _screens[_currentIndex], // Exibe o widget atual
-                        ),
-                        SizedBox(height: 10),
-                        
-                        if (!(_currentIndex == 0))
-        ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Color(0xFF8B0000), // Cor do botão
-        foregroundColor: Colors.white,
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: _screens[_currentIndex], // Exibe o widget atual
+                      ),
+                      SizedBox(height: 10),
+                      
+                      if (!(_currentIndex == 0))
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF8B0000), // Cor do botão
+                          foregroundColor: Colors.white,
         padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
