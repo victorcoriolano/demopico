@@ -151,7 +151,7 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
                               title: Text(utilidade), // Nome da utilidade
                               value: value.utilidadesSelecionadas[utilidade], // Valor do checkbox
                               onChanged: (bool? valor) {
-                                value.selecionarUtilidade(utilidade, valor!);;
+                                value.selecionarUtilidade(utilidade, valor!);
                               },
                               controlAffinity: ListTileControlAffinity.leading,
                             );

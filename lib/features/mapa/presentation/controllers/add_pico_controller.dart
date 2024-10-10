@@ -81,9 +81,39 @@ void atualizarModalidade(String modalidade) {
 
   // validação 
 
-  /* bool validarPrimeiraPágina(){
-    return true;
-  } */
+  bool validarNome() {
+    return nomePico.isNotEmpty;
+  }
+  bool validarDescription() {
+    return descricao.isNotEmpty;
+  }
+
+  bool validarAtributos() {
+    return atributos.isNotEmpty && atributos.values.every((value) => value >= 1);
+  }
+  bool validarObstaculos() {
+    return obstaculos.isNotEmpty;
+  }
+
+  bool validarPagina1() {
+    return utilidadesSelecionadas.values.contains(true);
+  }
+
+  // Função que valida tudo de uma vez
+  bool validarPaginaAtual(int paginaAtual) {
+    switch (paginaAtual) {
+      case 0: // validação da primeira página
+        return validarPagina1();
+      case 1: // atributos
+        return validarAtributos();
+      case 2: // obstáculos
+        return validarObstaculos();
+      case 3:
+        return validarNome() && validarDescription();
+      default:
+        return true;
+    }
+  }
 
   
 
