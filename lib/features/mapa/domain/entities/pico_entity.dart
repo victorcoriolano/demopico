@@ -5,6 +5,7 @@ class Pico {
   final String modalidade;
   final String tipoPico;
   final String picoName;
+  final String imgUrl;// link mostrar imagem 
   final String? description;
   final double? long;
   final double? lat;
@@ -18,7 +19,9 @@ class Pico {
   // final Map<Comentarios>
 
   Pico(
-    {required this.modalidade,
+    {
+      required this.imgUrl,
+      required this.modalidade,
     required this.tipoPico,
     required this.nota,
     required this.numeroAvaliacoes,
