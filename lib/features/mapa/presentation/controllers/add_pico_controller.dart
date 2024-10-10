@@ -1,7 +1,8 @@
 
+import 'package:demopico/features/user/presentation/widgets/validator.dart';
 import 'package:flutter/material.dart';
 
-class  AddPicoControllerProvider extends ChangeNotifier {
+class  AddPicoControllerProvider extends ChangeNotifier with Validators {
   Map<String, int> atributos = {};
   List<String> obstaculos = [];
   String nomePico = '';
@@ -63,8 +64,26 @@ void atualizarModalidade(String modalidade) {
   }
 
   // notificar o estaddo de obstáculos 
+  void atualizarObstaculos(String obstaculo){
+    obstaculos.add(obstaculo);
+    notifyListeners();
+  }
 
-  // notificar o estado de nome e descrição e anexar imagem
+  // notificar o estado de nome e descrição 
+  void atualizarNome(String novoNome){
+    nomePico = novoNome;
+    notifyListeners();
+  }
+  void atualizarDescricao(String novoDesc){
+    descricao = novoDesc;
+    notifyListeners();
+  }
+
+  // validação 
+
+  /* bool validarPrimeiraPágina(){
+    return true;
+  } */
 
   
 

@@ -12,6 +12,7 @@ class TerceiraTela extends StatelessWidget {
               "Transição", "Megaramp", "Miniramp", "Escada", "Jump",
               "Barreira newjersey", "45° graus", "Gap", "Bowl zinho", 
               "Bowl zão", "Banco"];
+
     final listaIcon = [
       Icons.delete_outline_sharp, //icons para lixeira
       Icons.fire_hydrant_alt_sharp, // icon para o hidrante
@@ -90,7 +91,12 @@ class TerceiraTela extends StatelessWidget {
                           child: IconButton(
                             icon: Icon(listaIcon[index]), //mostra os icones dos respectivos obstáculos 
                             onPressed: () {
-                              provider.obstaculos.add(listaObstaculos[index]);
+                              // se tiver na lista remove se não tiver adiciona
+                              if(provider.obstaculos.contains(listaObstaculos[index])){
+                                provider.obstaculos.remove(listaObstaculos[index]);
+                              }else{
+                                provider.atualizarObstaculos(listaObstaculos[index]);
+                              }
                               print(provider.obstaculos);
                             },
                           ),
