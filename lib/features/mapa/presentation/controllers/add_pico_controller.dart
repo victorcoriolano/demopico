@@ -11,6 +11,12 @@ class  AddPicoControllerProvider extends ChangeNotifier with Validators {
   double nota = 0.0;
   int numAval = 0;
   String tipo = 'Pico de Rua';
+  List<String> utilidades = [];
+
+
+  //variaveis de mensagem de erro 
+  String? nomePicoErro;
+  String? descricaoErro;
 
   Map<String, List<String>> utilidadesPorModalidade = {
     'Skate': ['Água', 'Teto', 'Banheiro', 'Suave f1', 'Público / Gratuito'],
@@ -60,8 +66,10 @@ void atualizarModalidade(String modalidade) {
   // notificar o estado de atributos
   void atualizarAtributo(String atributo, int value){
     atributos[atributo] = value;
+
     notifyListeners();
   }
+  
 
   // notificar o estaddo de obstáculos 
   void atualizarObstaculos(String obstaculo){
@@ -80,14 +88,6 @@ void atualizarModalidade(String modalidade) {
   }
 
   // validação 
-
-  bool validarNome() {
-    return nomePico.isNotEmpty;
-  }
-  bool validarDescription() {
-    return descricao.isNotEmpty;
-  }
-
   bool validarAtributos() {
     return atributos.isNotEmpty && atributos.values.every((value) => value >= 1);
   }
@@ -109,10 +109,38 @@ void atualizarModalidade(String modalidade) {
       case 2: // obstáculos
         return validarObstaculos();
       case 3:
-        return validarNome() && validarDescription();
+        return validarFormulario();
       default:
         return true;
     }
+  }
+
+    bool validarNomePico() {
+    if (nomePico.isEmpty) {
+      nomePicoErro = "Preencha este campo";
+      notifyListeners();
+      return false;
+    }
+    nomePicoErro = null;
+    notifyListeners();
+    return true;
+  }
+
+  bool validarDescricao() {
+    if (descricao.isEmpty) {
+      descricaoErro = "Preencha este campo";
+      notifyListeners();
+      return false;
+    }
+    descricaoErro = null;
+    notifyListeners();
+    return true;
+  }
+
+  bool validarFormulario() {
+    final nomeValido = validarNomePico();
+    final descricaoValida = validarDescricao();
+    return nomeValido && descricaoValida;
   }
 
   

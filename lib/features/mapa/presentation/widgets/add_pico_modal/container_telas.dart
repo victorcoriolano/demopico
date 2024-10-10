@@ -1,3 +1,4 @@
+import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/primeira_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/quarta_tela.dart';
@@ -100,6 +101,23 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                   ),
                                   onPressed: () {
                                     //criarPico(); // função para criar o pico 
+                                    if(provider.validarFormulario()){
+                                      final pico = Pico(
+                                        modalidade: provider.selectedModalidade, 
+                                        tipoPico: provider.tipo, 
+                                        nota: 0.0, 
+                                        numeroAvaliacoes: 0, 
+                                        long: 0.0, lat: 0.0, 
+                                        description: provider.descricao, 
+                                        atributos: provider.atributos, 
+                                        fotoPico: null, 
+                                        obstaculos: provider.obstaculos, 
+                                        utilidades: provider.utilidades, 
+                                        userCreator: null, 
+                                        urlIdPico: 'urlIdPico', 
+                                        picoName: provider.nomePico);
+                                      print(pico.utilidades);
+                                    }
                                   },
                                   child:
                                     Text('POSTAR PICO', style: TextStyle(fontSize: 15)),

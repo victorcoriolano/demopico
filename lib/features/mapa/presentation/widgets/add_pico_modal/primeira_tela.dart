@@ -142,16 +142,21 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         // Lista de utilidades com checkboxes
                         Column(
                           children: value.utilidadesAtuais.map((utilidade) {
                             return CheckboxListTile(
-                              contentPadding: EdgeInsets.all(0),
+                              contentPadding: const EdgeInsets.all(0),
                               title: Text(utilidade), // Nome da utilidade
                               value: value.utilidadesSelecionadas[utilidade], // Valor do checkbox
                               onChanged: (bool? valor) {
                                 value.selecionarUtilidade(utilidade, valor!);
+                                if(valor == true){
+                                  value.utilidades.add(utilidade);
+                                } else {
+                                  value.utilidades.remove(utilidade);
+                                }
                               },
                               controlAffinity: ListTileControlAffinity.leading,
                             );

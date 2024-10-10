@@ -48,11 +48,12 @@ class _QuartaTelaState extends State<QuartaTela>  {
                 ),
                 // Campo de texto para o nome do pico
                 TextFormField(
-                  decoration: const InputDecoration(
+                  decoration:  InputDecoration(
                     hintText: 'Escreva aqui...', // Texto de sugestão
-                    border: OutlineInputBorder(), // Borda do campo
+                    border: const OutlineInputBorder(), // Borda do campo
+                    errorText: provider.nomePicoErro,
                   ),
-                  validator: (value) => provider.validarDescription() ? null : "preencha este campo",
+                  onChanged: (value) => provider.atualizarNome(value),
                 ),
                 const SizedBox(height: 50), // Espaço entre os campos
                 // Texto para o campo de descrição
@@ -67,11 +68,12 @@ class _QuartaTelaState extends State<QuartaTela>  {
                 // Campo de texto para a descrição do pico
                 TextFormField(
                   maxLines: 5, // Permite múltiplas linhas
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     hintText: 'Escreva aqui...', // Texto de sugestão
-                    border: OutlineInputBorder(), // Borda do campo
+                    border: const OutlineInputBorder(), // Borda do campo
+                    errorText: provider.descricaoErro,
                   ),
-                  validator: (value) => provider.validarDescription() ? null : "preencha este campo",//validação
+                  onChanged: (value) => provider.atualizarDescricao(value),
                 ),
                 const SizedBox(height: 20), // Espaço entre os campos
                 // Botão para anexar imagens
