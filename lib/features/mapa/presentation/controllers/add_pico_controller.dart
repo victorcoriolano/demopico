@@ -1,6 +1,9 @@
 
+import 'dart:io';
+
 import 'package:demopico/features/user/presentation/widgets/validator.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class  AddPicoControllerProvider extends ChangeNotifier with Validators {
   Map<String, int> atributos = {};
@@ -12,6 +15,25 @@ class  AddPicoControllerProvider extends ChangeNotifier with Validators {
   int numAval = 0;
   String tipo = 'Pico de Rua';
   List<String> utilidades = [];
+  File? fotoPico;
+
+  final pegadorImage = ImagePicker();
+
+  Future<void> selecionarImag() async {
+    try {
+      //tenta pegar imgem da galeria 
+      final img = await pegadorImage.pickImage(source: ImageSource.gallery);
+
+      if(img != null){
+        // chamar o método para subir o pico no firebase 
+        fotoPico = File(img.path);
+      }
+
+
+    }on Exception catch (e) {
+      // TODO
+    }
+  }
 
 
   //variaveis de mensagem de erro 
