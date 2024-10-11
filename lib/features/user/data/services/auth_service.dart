@@ -2,13 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:demopico/core/errors/failure_server.dart';
 import 'package:demopico/features/user/data/models/user_credentials.dart';
+import 'package:demopico/features/user/data/models/user_model.dart';
 import 'package:demopico/features/user/data/repositories/user_repository.dart';
 import 'package:demopico/features/user/data/services/firebase_service.dart';
 import 'package:demopico/features/user/domain/entities/user.dart';
 import 'package:demopico/features/user/domain/interfaces/auth_interface.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide User;
+
 class AuthService implements AuthInterface {
-  
   final FirebaseService firebaseService;
   final FirebaseFirestore firebaseFirestore;
   AuthService({required this.firebaseService, required this.firebaseFirestore});
@@ -39,7 +40,8 @@ class AuthService implements AuthInterface {
       CredentialsRepository.usersCredentials
           .add(UserCredentials.fromFirebase(userModel));
       return right(userModel);
-    } on FirebaseAuthException catch (e) { //por que que a senha estaria errada aqui ? sendo que é pra registrar kkkkk
+    } on FirebaseAuthException catch (e) {
+      //por que que a senha estaria errada aqui ? sendo que é pra registrar kkkkk
       if (e.code == 'user-not-found') {
         return left(UserNotFoundFailure());
       } else if (e.code == 'wrong-password') {
