@@ -123,8 +123,10 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                         picoName: provider.nomePico);
                                       try{
                                         serviceLocator<SpotControllerProvider>().createSpot(pico, context);
+                                        Navigator.pop(context);
                                       }on Exception catch(e){
                                         print(e);
+                                        Navigator.pop(context);
                                       }
                                     }
                                   },

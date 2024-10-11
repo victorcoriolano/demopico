@@ -31,7 +31,7 @@ class MapWidgetState extends State<MapWidget> {
 
   String _locationMessage = "Aguardando localização...";
   late GoogleMapController mapController;
-  LatLng _center = const LatLng(-23.548546, -46.9400143);
+  LatLng _center = LatLng(-23.548546, -46.9400143);
   // Inicializa o centro do mapa
 
   // Função para verificar permissões
@@ -54,8 +54,7 @@ class MapWidgetState extends State<MapWidget> {
   // Função para obter a localização
   Future<void> _getLocation() async {
     bool permissionGranted = await _handleLocationPermission();
-    if (!permissionGranted) return;
-
+    if (permissionGranted) {
     Position position;
     try {
       // Configurações específicas para Android, iOS e Web
@@ -80,20 +79,20 @@ class MapWidgetState extends State<MapWidget> {
       setState(() {
         _locationMessage = "Erro ao obter localização: $e";
       });
-    }
+    }}
   }
   @override
   Widget build(BuildContext context) {
     // consome os dados do provider para manter a tela atualizada
     return  Consumer<AddPicoControllerProvider>(
-      builder: (context, provider, child) {
-        return 
-        GoogleMap ( 
-        onMapCreated: (GoogleMapController controller) {
+      builder: (context, provider, child) =>
+      GoogleMap ( 
+        onMapCreated: (GoogleMapController controller) async {
           MapsServiceSingleton().setController(controller);
           loadPico();
-          _getLocation();
+          await _getLocation();
           provider.atualizarLocalizacao(_center);
+          print(_center);
           print(_locationMessage);
         },
         zoomControlsEnabled: false, 
@@ -116,14 +115,7 @@ class MapWidgetState extends State<MapWidget> {
             ),
           ),
         ), 
-        );
-      },
-      // chamando o button de adicionar pico no mapa poder pegar a  localizaçãp 
-      /* child: Stack(
-        children:[
-          Center(child: AddPicoWidget(argument: _center,))
-        ], 
-      ),  */
+      ),
     );
   }
   
