@@ -103,11 +103,11 @@ class MapWidgetState extends State<MapWidget> {
           myLocationButtonEnabled: true,
           tiltGesturesEnabled: true,
           markers: markers,
-          //onLongPress: (argument) => simulaCriarPico(argument), simulação de criar pico em passando a latlang
+          onLongPress: (argument) => AddPicoWidget(argument: argument,), //simulação de criar pico em passando a latlang
         );
       },
       // chamando o button de adicionar pico no mapa poder pegar a  localizaçãp 
-      child: const AddPicoWidget(), 
+      child: AddPicoWidget(argument: _center,), 
     );
   }
   

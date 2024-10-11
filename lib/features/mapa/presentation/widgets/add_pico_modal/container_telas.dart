@@ -1,5 +1,7 @@
+import 'package:demopico/core/common/inject_dependencies.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
+import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/primeira_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/quarta_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/segunda_tela.dart';
@@ -8,7 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ContainerTelas extends StatefulWidget {
-  const ContainerTelas({super.key});
+  final double lat;
+  final double long;
+  const ContainerTelas({super.key, required this.lat, required this.long});
 
   @override
   _ContainerTelasState createState() => _ContainerTelasState();
@@ -108,16 +112,20 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                         tipoPico: provider.tipo, 
                                         nota: 0.0, 
                                         numeroAvaliacoes: 0, 
-                                        long: 0.0, lat: 0.0, 
+                                        long: widget.long, lat: widget.lat, 
                                         description: provider.descricao, 
                                         atributos: provider.atributos, 
-                                        fotoPico: null, 
+                                        fotoPico: provider.fotoPico, 
                                         obstaculos: provider.obstaculos, 
                                         utilidades: provider.utilidades, 
                                         userCreator: null, 
                                         urlIdPico: 'urlIdPico', 
                                         picoName: provider.nomePico);
-                                      print(pico.utilidades);
+                                      try{
+                                        serviceLocator<SpotControllerProvider>().createSpot(pico, context);
+                                      }on Exception catch(e){
+                                        print(e);
+                                      }
                                     }
                                   },
                                   child:

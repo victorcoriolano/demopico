@@ -1,8 +1,10 @@
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/container_telas.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class AddPicoWidget extends StatefulWidget {
-  const AddPicoWidget({super.key});
+  final LatLng argument;
+  const AddPicoWidget({super.key, required this.argument});
   
   @override
   AddPicoWidgetState createState() => AddPicoWidgetState();
@@ -25,8 +27,11 @@ class AddPicoWidgetState extends State<AddPicoWidget> {
             },
             child: Container(
               color: Colors.transparent, // Permite detectar cliques fora
-              child: const Center(
-                child: ContainerTelas(),
+              child: Center(
+                child: ContainerTelas(
+                  lat: widget.argument.latitude, 
+                  long: widget.argument.longitude,
+                ),
               ),
             ),
           ),

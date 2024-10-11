@@ -79,8 +79,9 @@ class _QuartaTelaState extends State<QuartaTela>  {
                 const SizedBox(height: 20), // Espaço entre os campos
                 // Botão para anexar imagens
                 GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     // Função para anexar imagem (placeholder)
+                    await provider.selecionarImag();
                     print("Anexar imagens");
                   },
                   child: const Column(
@@ -95,24 +96,6 @@ class _QuartaTelaState extends State<QuartaTela>  {
                     ],
                   ),
                 ),
-                ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF8B0000), // Cor do botão
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 50, 
-                            vertical: 15,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),       
-                        ),
-                        onPressed: () {
-                          
-                        },
-                        child:
-                          Text('POSTAR PICO', style: TextStyle(fontSize: 15)),
-                        ),
               ],
             ),
           ),

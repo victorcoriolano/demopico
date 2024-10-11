@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:demopico/features/user/presentation/widgets/validator.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -15,6 +16,7 @@ class  AddPicoControllerProvider extends ChangeNotifier with Validators {
   int numAval = 0;
   String tipo = 'Pico de Rua';
   List<String> utilidades = [];
+  String urlImage = '';
   File? fotoPico;
 
   final pegadorImage = ImagePicker();
@@ -26,12 +28,24 @@ class  AddPicoControllerProvider extends ChangeNotifier with Validators {
 
       if(img != null){
         // chamar o método para subir o pico no firebase 
-        fotoPico = File(img.path);
+        testeSubindoImg(File(img.path)) ;
       }
-
-
     }on Exception catch (e) {
-      // TODO
+      print("Erro ao subir imagem $e");
+      return null;
+    }
+  }
+  //teste teste test teste teste teste teste teste 
+  Future<void> testeSubindoImg(File? img) async {
+    try{
+      final ref = FirebaseStorage.instance
+          .ref()
+          .child('spots_images')
+          .child('images/teste.jpg');
+      await ref.putFile(img!);
+      urlImage = await ref.getDownloadURL();
+    }on Exception catch (e){
+      print("Erro ao subir por storage: $e");
     }
   }
 
