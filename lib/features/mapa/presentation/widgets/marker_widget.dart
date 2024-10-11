@@ -8,7 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 Marker picoMarker(Pico spot, BuildContext context){
   return Marker(
-    markerId: MarkerId(spot.urlIdPico),
+    markerId: MarkerId(spot.picoName),
     position: LatLng(spot.lat!, spot.long!),
     onTap: () => _showPicoModal(context, spot),
     infoWindow: InfoWindow(

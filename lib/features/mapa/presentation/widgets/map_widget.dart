@@ -25,7 +25,7 @@ class MapWidgetState extends State<MapWidget> {
     loadPico();
   } */
 
-  void loadPico() async {
+  Future<void> loadPico() async {
     markers = await context.read<SpotControllerProvider>().turnsPicoToMarker(context);
   }
 
@@ -74,6 +74,7 @@ class MapWidgetState extends State<MapWidget> {
             "Latitude: ${position.latitude}, Longitude: ${position.longitude}";
         _center = LatLng(position.latitude, position.longitude); // Atualiza o centro com a nova localização
         mapController.animateCamera(CameraUpdate.newLatLng(_center)); // Move o mapa para a nova localização
+        print("pegando location");
       });
     } catch (e) {
       setState(() {
@@ -88,8 +89,8 @@ class MapWidgetState extends State<MapWidget> {
       builder: (context, provider, child) =>
       GoogleMap ( 
         onMapCreated: (GoogleMapController controller) async {
-          MapsServiceSingleton().setController(controller);
-          loadPico();
+          mapController = controller;
+          await loadPico();
           await _getLocation();
           provider.atualizarLocalizacao(_center);
           print(_center);
