@@ -2,22 +2,23 @@
 class User{
   final String? id;
   final String? vulgo;
-  final String email;
+  final String? email;
   final String? senha;
   final bool isColetivo;
   
   
 
   User({
-    required this.id,
-    required this.vulgo, 
-    required this.email, 
-    required this.senha, 
+    this.id,
+    this.vulgo, 
+    this.email, 
+    this.senha, 
     this.isColetivo = false,
     });
-
+/*
+mover essa lógica pro form validator
   bool isValidEmail() {
-    return email.contains('@');
+    return email!.contains('@');
   }
 
   bool isValidSenha(){
@@ -27,4 +28,5 @@ class User{
   bool isValidVulgo(){
     return vulgo!.length <= 15;// regra de negocia
   }
+  */
 }

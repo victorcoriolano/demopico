@@ -9,9 +9,11 @@ class FirebaseService implements FirebaseInterface {
   FirebaseService(this.firebaseAuth, this.firebaseFirestore);
 
 //getters
-  Stream<User?> get authState => FirebaseAuth.instance.authStateChanges();
+  Stream<User?> get authState => firebaseAuth.authStateChanges();
+  
+  Stream<User?> get userInstanceChanges => firebaseAuth.userChanges();
 
-  Stream<User?> get userInstanceChanges => FirebaseAuth.instance.userChanges();
+  User? get currentUser => firebaseAuth.currentUser;
 
 //métodos de leitura e escrita
 
@@ -73,5 +75,10 @@ class FirebaseService implements FirebaseInterface {
     } else {
       return null;
     }
+  }
+
+  //Serviço de logout
+  void logOut() async{
+    await firebaseAuth.signOut();
   }
 }
