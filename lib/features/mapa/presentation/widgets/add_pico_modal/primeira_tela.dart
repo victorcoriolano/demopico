@@ -1,7 +1,9 @@
+import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
 import 'package:flutter/material.dart';
-import 'segunda_tela.dart'; // Importando a segunda tela
+import 'package:provider/provider.dart';
 
 class EspecificidadeScreen extends StatefulWidget {
+
   const EspecificidadeScreen({super.key});
 
   @override
@@ -10,8 +12,8 @@ class EspecificidadeScreen extends StatefulWidget {
 
 class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
   // Variáveis para armazenar o valor selecionado do dropdown e a modalidade escolhida
-  String? dropdownValue = 'none';
-  String selectedModalidade = 'Skate';
+  /*  String selectedModalidade = 'Skate';
+  String dropdownValue = 'Pico de Rua';
 
   // Mapa que define as utilidades para cada modalidade
   Map<String, List<String>> utilidadesPorModalidade = {
@@ -41,156 +43,136 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
       utilidadesAtuais = utilidadesPorModalidade[modalidade] ?? []; // Atualiza as utilidades atuais
       utilidadesSelecionadas.clear(); // Limpa as seleções anteriores
       // Preenche novamente o mapa de utilidades selecionadas
-      utilidadesAtuais.forEach((utilidade) {
+      utilidadesAtuais.map((utilidade) {
         utilidadesSelecionadas[utilidade] = false;
       });
     });
-  }
+  } */
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[200], // Cor de fundo da tela
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Container(
-            width: 350, // Largura do contêiner principal
-            padding: EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12), // Arredondamento das bordas
-              border: Border.all(color: Color(0xFF8B0000), width: 3), // Borda vermelha
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Imagem do topo
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  child: Image.asset('lib/assets/addPico1.png', height: 105),
-                ),
-                // Título da seção de modalidades
-                Text(
-                  'Modalidade',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                SizedBox(height: 8),
-                // Botões para seleção da modalidade
-                ModalidadeButtons(
-                  onSelected: (String modalidade) {
-                    atualizarUtilidades(modalidade); // Atualiza utilidades ao selecionar uma modalidade
-                  },
-                  selectedModalidade: selectedModalidade,
-                ),
-                SizedBox(height: 20),
-                // Título da seção de tipo de pico
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Tipo de Pico:',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 8),
-                // Dropdown para seleção do tipo de pico
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.grey),
-                  ),
-                  child: DropdownButton<String>(
-                    value: dropdownValue,
-                    isExpanded: true,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        dropdownValue = newValue!; // Atualiza o valor do dropdown
-                      });
-                    },
-                    items: <String>['none', 'Pico 1', 'Pico 2']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(
-                          value,
-                          style: TextStyle(fontSize: 13),
+    return  Consumer<AddPicoControllerProvider>(
+      builder: (context, value, child) => SingleChildScrollView(
+        child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min, // Para o dialog ajustar o tamanho ao conteúdo
+                children: [
+                        // Imagem do topo
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 0),
+                            child: Image.asset('assets/images/progresso1.png', ),
+                          ),
                         ),
-                      );
-                    }).toList(),
-                    underline: SizedBox(),
-                  ),
-                ),
-                SizedBox(height: 10),
-                // Título da seção de utilidades
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'UTILIDADES',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF8B0000),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10),
-                // Lista de utilidades com checkboxes
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: utilidadesAtuais.map((utilidade) {
-                        return CheckboxListTile(
-                          title: Text(utilidade), // Nome da utilidade
-                          value: utilidadesSelecionadas[utilidade], // Valor do checkbox
-                          onChanged: (bool? value) {
-                            setState(() {
-                              utilidadesSelecionadas[utilidade] = value!; // Atualiza seleção
-                            });
+                        // Título da seção de modalidades
+                        const Text(
+                          'MODALIDADE',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF8B0000),
+                          ),
+                        ),
+                        const SizedBox(height: 25),
+                        // Botões para seleção da modalidade
+                        ModalidadeButtons(
+                          onSelected: (String modalidade) {
+                            value.atualizarModalidade(modalidade); // Atualiza utilidades ao selecionar uma modalidade
                           },
-                          controlAffinity: ListTileControlAffinity.leading,
-                        );
-                      }).toList(),
+                          selectedModalidade: value.selectedModalidade,
+                        ),
+                        const SizedBox(height: 20),
+                        // Título da seção de tipo de pico
+                        const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'TIPO DE PICO:',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                          color: Color(0xFF8B0000),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        // Dropdown para seleção do tipo de pico
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.grey),
+                          ),
+                          child:Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            child: DropdownButton<String>(
+                                    menuWidth: 400,  
+                                    dropdownColor: Colors.white,         
+                                    value: value.tipo,
+                                    isExpanded: true,
+                                    onChanged: (String? newValue) {
+                                      value.atualizarDropdown(newValue!);
+                                    },
+                                    items: <String>['Pico de Rua', 'Half', 'Bowl', 'Street', 'SkatePark']
+                                        .map<DropdownMenuItem<String>>((String value) {
+                                      return DropdownMenuItem<String>(
+                                        
+                                        value: value,
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(horizontal: 10),
+                                          child: Text(
+                                            value,
+                                            style: TextStyle(fontSize: 15,   color: Color.fromARGB(255, 0, 0, 0),),
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                              underline: SizedBox(),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 40),
+                        // Título da seção de utilidades
+                        const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'UTILIDADES',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF8B0000),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        // Lista de utilidades com checkboxes
+                        Column(
+                          children: value.utilidadesAtuais.map((utilidade) {
+                            return CheckboxListTile(
+                              contentPadding: const EdgeInsets.all(0),
+                              title: Text(utilidade), // Nome da utilidade
+                              value: value.utilidadesSelecionadas[utilidade], // Valor do checkbox
+                              onChanged: (bool? valor) {
+                                value.selecionarUtilidade(utilidade, valor!);
+                                if(valor == true){
+                                  value.utilidades.add(utilidade);
+                                } else {
+                                  value.utilidades.remove(utilidade);
+                                }
+                              },
+                              controlAffinity: ListTileControlAffinity.leading,
+                            );
+                          }).toList(),
+                        ),
+                        SizedBox(height: 20),
+                        // Botão de prosseguir
+                      
+                      ],
                     ),
-                  ),
-                ),
-                SizedBox(height: 20),
-                // Botão de prosseguir
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF8B0000), // Cor do botão
-                    foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  onPressed: () {
-                    // Navega para a segunda tela
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SegundaTela()),
-                    );
-                  },
-                  child: Text('PROSSEGUIR', style: TextStyle(fontSize: 15)),
-                ),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }
 }
+
+
 
 // Widget para os botões de modalidade
 class ModalidadeButtons extends StatelessWidget {
@@ -221,9 +203,9 @@ class ModalidadeButtons extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: isSelected ? Color(0xFF8B0000) : Colors.grey[300], // Cor do botão
         foregroundColor: isSelected ? Colors.white : Colors.black,
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 25),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30), // Bordas arredondadas
+          borderRadius: BorderRadius.circular(20), // Bordas arredondadas
         ),
       ),
       onPressed: () {

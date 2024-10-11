@@ -24,6 +24,8 @@ dependencies:
   geolocator: ^13.0.1
   permission_handler: ^11.3.1
   get_it: ^7.7.0
+  firebase_storage: ^12.3.2
+  image_picker: ^1.1.2
   
 
 dev_dependencies:
@@ -37,3 +39,8 @@ flutter:
       - assets/images/skatepico-icon.png
       - assets/images/containerLogin.jpg
       - assets/images/containerCadastro.jpg
+      - assets/images/iconPico.png
+      - assets/images/progresso1.png
+      - assets/images/progresso2.png
+      - assets/images/progresso3.png
+      - assets/images/progresso4.png

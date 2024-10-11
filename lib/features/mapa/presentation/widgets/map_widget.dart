@@ -1,24 +1,35 @@
-import 'package:demopico/features/mapa/domain/entities/marker_maps_entity.dart';
 import 'package:demopico/features/mapa/data/services/maps_service_singleton.dart';
+import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
+import 'package:demopico/features/mapa/presentation/widgets/add_pico_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-import '../../domain/entities/pico_entity.dart'; // Importa o permission_handler
+import 'package:provider/provider.dart'; // Importa o permission_handler
 
 class MapWidget extends StatefulWidget {
- MapWidget({super.key, required List<Pico> markers, });
-   
+
+  const MapWidget({super.key,});
 
   @override
   MapWidgetState createState() => MapWidgetState();
 }
 
 class MapWidgetState extends State<MapWidget> {
+  Set<Marker> markers = {};
+  /* @override
+  void initState() {
+    super.initState();
+    loadPico();
+  } */
+
+  void loadPico() async {
+    markers = await context.read<SpotControllerProvider>().turnsPicoToMarker(context);
+  }
+
   String _locationMessage = "Aguardando localização...";
   late GoogleMapController mapController;
-  LatLng _center = const LatLng(0, 0);
+  LatLng _center = const LatLng(-23.548546, -46.9400143);
   // Inicializa o centro do mapa
 
   // Função para verificar permissões
@@ -71,31 +82,54 @@ class MapWidgetState extends State<MapWidget> {
   }
   @override
   Widget build(BuildContext context) {
-    return  GoogleMap( 
-      onMapCreated: (GoogleMapController controller) {
-          MapsServiceSingleton().setController(controller);
+    // consome os dados do provider para manter a tela atualizada
+    return  Consumer<SpotControllerProvider>(
+      builder: (context, provider, child) {
+        return GoogleMap ( 
+          onMapCreated: (GoogleMapController controller) {
+            MapsServiceSingleton().setController(controller);
+            _getLocation();
+            loadPico();
+            print(_locationMessage);
+          },
+          zoomControlsEnabled: false, 
+          initialCameraPosition:CameraPosition(
+            target: _center ,
+            zoom: 15.0,
+          ),
+          scrollGesturesEnabled: true,
+          rotateGesturesEnabled: true,
+          myLocationEnabled: true,
+          myLocationButtonEnabled: true,
+          tiltGesturesEnabled: true,
+          markers: markers,
+          onLongPress: (argument) => AddPicoWidget(argument: argument,), //simulação de criar pico em passando a latlang
+        );
       },
-      zoomControlsEnabled: false, 
-      initialCameraPosition:CameraPosition(
-        target: _center,
-        zoom: 20.0,
-      ),
-      scrollGesturesEnabled: true,
-      rotateGesturesEnabled: true,
-      myLocationEnabled: true,
-      myLocationButtonEnabled: true,
-      tiltGesturesEnabled: true,
-      markers: _createMarkers(),
+      // chamando o button de adicionar pico no mapa poder pegar a  localizaçãp 
+      child: AddPicoWidget(argument: _center,), 
     );
   }
-    Set<Marker> _createMarkers(List<Pico> markersData) {
-  return markersData.map((markerData) {
-    return Marker(
-      markerId: MarkerId(markerData.urlIdPico),
-      position: LatLng(markerData.lat, markerData.long),
- );}).toSet();
-
-}
   
+/*   simulaCriarPico(LatLng argument) {
+    final Pico pico = Pico(
+      nota: 0, 
+      numeroAvaliacoes: 0, 
+      long: argument.longitude, 
+      lat: argument.latitude, 
+      description: "testando criar a partir de uma latlang do mapa", 
+      atributos: {}, 
+      fotoPico: null, 
+      obstaculos: [], 
+      utilidades: [], 
+      userCreator: 'userCreator', 
+      urlIdPico: '', 
+      picoName: 'picoName2');
+    _controller.createSpot(pico, context
+    );
+  } */
+  
+
+
 }
 
