@@ -24,7 +24,7 @@ class MapPage extends StatelessWidget { // convertendo pra stl pq eh imutalvel
         body: Stack(
           children: [
             MapWidget(),
-            AddPicoWidget(argument: LatLng(-23.548546, -46.9400143)),
+            AddPicoWidget(),
           ],
         ),
       ),

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:demopico/features/user/presentation/widgets/validator.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
 class  AddPicoControllerProvider extends ChangeNotifier with Validators {
@@ -18,6 +19,8 @@ class  AddPicoControllerProvider extends ChangeNotifier with Validators {
   List<String> utilidades = [];
   String urlImage = '';
   File? fotoPico;
+  double lat = 0.0;
+  double long = 0.0;
 
   final pegadorImage = ImagePicker();
 
@@ -47,6 +50,10 @@ class  AddPicoControllerProvider extends ChangeNotifier with Validators {
     }on Exception catch (e){
       print("Erro ao subir por storage: $e");
     }
+  }
+  void atualizarLocalizacao(LatLng localizacao){
+    lat = localizacao.latitude;
+    long = localizacao.longitude;
   }
 
 

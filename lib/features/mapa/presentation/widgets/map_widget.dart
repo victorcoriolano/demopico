@@ -1,5 +1,7 @@
 import 'package:demopico/features/mapa/data/services/maps_service_singleton.dart';
+import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
+import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/container_telas.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -83,31 +85,45 @@ class MapWidgetState extends State<MapWidget> {
   @override
   Widget build(BuildContext context) {
     // consome os dados do provider para manter a tela atualizada
-    return  Consumer<SpotControllerProvider>(
+    return  Consumer<AddPicoControllerProvider>(
       builder: (context, provider, child) {
-        return GoogleMap ( 
-          onMapCreated: (GoogleMapController controller) {
-            MapsServiceSingleton().setController(controller);
-            _getLocation();
-            loadPico();
-            print(_locationMessage);
-          },
-          zoomControlsEnabled: false, 
-          initialCameraPosition:CameraPosition(
-            target: _center ,
-            zoom: 15.0,
+        return 
+        GoogleMap ( 
+        onMapCreated: (GoogleMapController controller) {
+          MapsServiceSingleton().setController(controller);
+          loadPico();
+          _getLocation();
+          provider.atualizarLocalizacao(_center);
+          print(_locationMessage);
+        },
+        zoomControlsEnabled: false, 
+        initialCameraPosition:CameraPosition(
+          target: _center ,
+          zoom: 15.0,
+        ),
+        scrollGesturesEnabled: true,
+        rotateGesturesEnabled: true,
+        myLocationEnabled: true,
+        myLocationButtonEnabled: true,
+        tiltGesturesEnabled: true,
+        markers: markers,
+        onLongPress: (argument) => Navigator.push(
+          context, 
+          MaterialPageRoute(
+            builder: (context) => ContainerTelas(
+              lat: argument.latitude,
+              long: argument.longitude,
+            ),
           ),
-          scrollGesturesEnabled: true,
-          rotateGesturesEnabled: true,
-          myLocationEnabled: true,
-          myLocationButtonEnabled: true,
-          tiltGesturesEnabled: true,
-          markers: markers,
-          onLongPress: (argument) => AddPicoWidget(argument: argument,), //simulação de criar pico em passando a latlang
+        ), 
         );
       },
       // chamando o button de adicionar pico no mapa poder pegar a  localizaçãp 
-      child: AddPicoWidget(argument: _center,), 
+      /* child: Stack(
+        children:[
+          Center(child: AddPicoWidget(argument: _center,))
+        ], 
+      ),  */
     );
   }
   
