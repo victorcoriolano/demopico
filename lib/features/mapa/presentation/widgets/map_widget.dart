@@ -1,8 +1,6 @@
-import 'package:demopico/features/mapa/data/services/maps_service_singleton.dart';
 import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/container_telas.dart';
-import 'package:demopico/features/mapa/presentation/widgets/add_pico_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -19,11 +17,6 @@ class MapWidget extends StatefulWidget {
 
 class MapWidgetState extends State<MapWidget> {
   Set<Marker> markers = {};
-  /* @override
-  void initState() {
-    super.initState();
-    loadPico();
-  } */
 
   Future<void> loadPico() async {
     markers = await context.read<SpotControllerProvider>().turnsPicoToMarker(context);
@@ -119,26 +112,5 @@ class MapWidgetState extends State<MapWidget> {
       ),
     );
   }
-  
-/*   simulaCriarPico(LatLng argument) {
-    final Pico pico = Pico(
-      nota: 0, 
-      numeroAvaliacoes: 0, 
-      long: argument.longitude, 
-      lat: argument.latitude, 
-      description: "testando criar a partir de uma latlang do mapa", 
-      atributos: {}, 
-      fotoPico: null, 
-      obstaculos: [], 
-      utilidades: [], 
-      userCreator: 'userCreator', 
-      urlIdPico: '', 
-      picoName: 'picoName2');
-    _controller.createSpot(pico, context
-    );
-  } */
-  
-
-
 }
 

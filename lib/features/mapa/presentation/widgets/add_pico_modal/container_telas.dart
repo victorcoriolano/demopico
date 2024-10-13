@@ -55,12 +55,12 @@ class _ContainerTelasState extends State<ContainerTelas> {
                 color: Colors.black54, // Fundo semitransparente
                 child: Center(
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                     width: MediaQuery.of(context).size.width * 0.95,
                     height: MediaQuery.of(context).size.height * 0.95,
                     child: Container(
                       width: double.infinity,
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                       color:Colors.grey[200],
                       borderRadius:
@@ -69,19 +69,19 @@ class _ContainerTelasState extends State<ContainerTelas> {
                         color: Color(0xFF8B0000), width: 3), // Borda vermelha
                       ),
                       child: Padding(
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         child: Column(
                           children: [
                             Expanded(
                               child: _screens[_currentIndex], // Exibe o widget atual
                             ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             if (!(_currentIndex == 0))
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Color(0xFF8B0000), // Cor do botão
                                   foregroundColor: Colors.white,
-                                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),
                                   ),
@@ -91,20 +91,21 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                 },
                                 child: const Text('VOLTAR', style: TextStyle(fontSize: 15)),
                               ),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               if (_currentIndex == 3)
                                 ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Color(0xFF8B0000), // Cor do botão
+                                    backgroundColor: const Color(0xFF8B0000), // Cor do botão
                                     foregroundColor: Colors.white,
-                                    padding: EdgeInsets.symmetric(
-                                    horizontal: 50, vertical: 15),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 50, vertical: 15
+                                    ),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                   ),
                                   onPressed: () {
-                                    //criarPico(); // função para criar o pico 
+                                    // função para criar o pico 
                                     if(provider.validarFormulario()){
                                       final pico = Pico(
                                         imgUrl: provider.urlImage,
@@ -126,12 +127,12 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                         Navigator.pop(context);
                                       }on Exception catch(e){
                                         print(e);
-                                        Navigator.pop(context);
+                                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("#criar pico não foi de first try!!!")));
                                       }
                                     }
                                   },
                                   child:
-                                    Text('POSTAR PICO', style: TextStyle(fontSize: 15)),
+                                    const Text('POSTAR PICO', style: TextStyle(fontSize: 15)),
                                   )else
                                     ElevatedButton(
                                       style: ElevatedButton.styleFrom(

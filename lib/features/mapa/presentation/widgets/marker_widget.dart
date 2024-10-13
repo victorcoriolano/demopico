@@ -20,6 +20,7 @@ Marker picoMarker(Pico spot, BuildContext context){
 
 void _showPicoModal(BuildContext context, Pico pico) {
   print('Chamando modal para: ${pico.picoName}'); // Adicione isto para depuração
+  print('Imagem url: ${pico.imgUrl}');
   showModalBottomSheet(
     backgroundColor: Colors.transparent,
     context: context,

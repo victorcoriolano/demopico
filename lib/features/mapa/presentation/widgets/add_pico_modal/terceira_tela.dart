@@ -68,6 +68,25 @@ class TerceiraTela extends StatelessWidget {
                         color: Colors.black), // Estilo do texto
                   ),
                 ),
+                // conteiner pra demostrar os obstáculos selecionados 
+                Visibility(
+                  visible: provider.obstaculos.isNotEmpty,
+                  child: SizedBox(
+                  height: 50,
+                  child: Wrap(
+                    spacing: 8,
+                    runSpacing: 4,
+                    children: provider.obstaculos.map((obstaculo) {
+                      return Chip(
+                        label: Text(obstaculo),
+                        onDeleted: () {
+                          provider.removerObstaculo(obstaculo);
+                        },
+                      );
+                    }).toList(),
+                  ),
+                  ),
+                ),
                 // Container para o Grid de obstáculos
                 SizedBox(
                   height: screenHeight * 0.5, // Altura fixa do contêiner do Grid

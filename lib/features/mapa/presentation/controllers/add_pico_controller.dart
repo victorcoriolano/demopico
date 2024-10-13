@@ -119,6 +119,11 @@ void atualizarModalidade(String modalidade) {
     obstaculos.add(obstaculo);
     notifyListeners();
   }
+  //método pra remover dos selecionados
+  void removerObstaculo(String obstaculo) {
+    obstaculos.remove(obstaculo);
+    notifyListeners();
+  }
 
   // notificar o estado de nome e descrição 
   void atualizarNome(String novoNome){

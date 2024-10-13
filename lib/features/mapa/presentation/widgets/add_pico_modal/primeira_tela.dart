@@ -11,44 +11,6 @@ class EspecificidadeScreen extends StatefulWidget {
 }
 
 class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
-  // Variáveis para armazenar o valor selecionado do dropdown e a modalidade escolhida
-  /*  String selectedModalidade = 'Skate';
-  String dropdownValue = 'Pico de Rua';
-
-  // Mapa que define as utilidades para cada modalidade
-  Map<String, List<String>> utilidadesPorModalidade = {
-    'Skate': ['Água', 'Teto', 'Banheiro', 'Suave f1', 'Público / Gratuito'],
-    'Parkour': ['Água', 'Banheiro', 'Mecânicas Próximas', 'Ar Livre'],
-    'BMX': ['Água'],
-  };
-
-  List<String> utilidadesAtuais = []; // Lista de utilidades atuais da modalidade selecionada
-  Map<String, bool> utilidadesSelecionadas = {}; // Mapa para rastrear quais utilidades estão selecionadas
-
-  @override
-  void initState() {
-    super.initState();
-    // Inicializa as utilidades para a modalidade selecionada
-    utilidadesAtuais = utilidadesPorModalidade[selectedModalidade] ?? [];
-    // Preenche o mapa de utilidades selecionadas como false inicialmente
-    utilidadesAtuais.forEach((utilidade) {
-      utilidadesSelecionadas[utilidade] = false;
-    });
-  }
-
-  // Função para atualizar as utilidades com base na modalidade selecionada
-  void atualizarUtilidades(String modalidade) {
-    setState(() {
-      selectedModalidade = modalidade; // Atualiza a modalidade selecionada
-      utilidadesAtuais = utilidadesPorModalidade[modalidade] ?? []; // Atualiza as utilidades atuais
-      utilidadesSelecionadas.clear(); // Limpa as seleções anteriores
-      // Preenche novamente o mapa de utilidades selecionadas
-      utilidadesAtuais.map((utilidade) {
-        utilidadesSelecionadas[utilidade] = false;
-      });
-    });
-  } */
-
   @override
   Widget build(BuildContext context) {
     return  Consumer<AddPicoControllerProvider>(
@@ -102,7 +64,7 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
                             border: Border.all(color: Colors.grey),
                           ),
                           child:Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: DropdownButton<String>(
                                     menuWidth: 400,  
                                     dropdownColor: Colors.white,         
@@ -162,17 +124,12 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
                             );
                           }).toList(),
                         ),
-                        SizedBox(height: 20),
-                        // Botão de prosseguir
-                      
                       ],
                     ),
       ),
     );
   }
 }
-
-
 
 // Widget para os botões de modalidade
 class ModalidadeButtons extends StatelessWidget {

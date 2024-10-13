@@ -26,10 +26,7 @@ class _SegundaTelaState extends State<SegundaTela> {
 
   @override
   Widget build(BuildContext context) {
-    // Obter o tamanho da tela
-/*     final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
- */
+
     return Consumer<AddPicoControllerProvider>(
       builder: (context, provider, child) => 
       Scaffold(
@@ -80,8 +77,6 @@ class _SegundaTelaState extends State<SegundaTela> {
                       provider.atributos['Kick-Out']!,
                       (valor) => provider.atualizarAtributo('Kick-Out', valor),
                     ),
-                    // Botão de prosseguir
-                  
                   ],
                 ),
               ),
