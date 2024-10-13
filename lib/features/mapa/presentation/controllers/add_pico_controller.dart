@@ -31,11 +31,11 @@ class  AddPicoControllerProvider extends ChangeNotifier with Validators {
 
       if(img != null){
         // chamar o método para subir o pico no firebase 
+        //fotoPico = File(img.path);
         testeSubindoImg(File(img.path)) ;
       }
     }on Exception catch (e) {
       print("Erro ao subir imagem $e");
-      return null;
     }
   }
   //teste teste test teste teste teste teste teste 
@@ -44,13 +44,14 @@ class  AddPicoControllerProvider extends ChangeNotifier with Validators {
       final ref = FirebaseStorage.instance
           .ref()
           .child('spots_images')
-          .child('images/teste.jpg');
+          .child('images/$nomePico.jpg');
       await ref.putFile(img!);
       urlImage = await ref.getDownloadURL();
     }on Exception catch (e){
       print("Erro ao subir por storage: $e");
     }
   }
+  
   void atualizarLocalizacao(LatLng localizacao){
     lat = localizacao.latitude;
     long = localizacao.longitude;
