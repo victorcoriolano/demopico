@@ -27,7 +27,7 @@ class FirebaseServiceMap implements SpotRepository{
       'description': pico.description,
       'latitude': pico.lat,
       'longitude': pico.long,
-      'imageUrl': imageUrl, // subindo no bd o link da imagem
+      'imageUrl': pico.imgUrl, // subindo no bd o link da imagem
       'utilidades': pico.utilidades,
       'atributos': pico.atributos,
       'obstaculos': pico.obstaculos,
@@ -49,23 +49,23 @@ class FirebaseServiceMap implements SpotRepository{
     try {
     QuerySnapshot snapshot = await _firebaseFirestore.collection('spots').get();
     return snapshot.docs.map((doc) {
-      final data = doc.data() as Map<String, dynamic>;
+      //final data = doc.data() ;//as Map<String, dynamic>;
       return Pico(
-        imgUrl: data['imageUrl'],
-        tipoPico: data['tipo'],
-        modalidade: data['modalidade'],
-        nota: data['nota'],
-        numeroAvaliacoes: data['avaliacoes'],
-        long: data['longitude'],
-        lat: data['latitude'],
-        description: data['description'],
-        atributos: data['atributos'],
+        imgUrl: doc['imageUrl'],
+        tipoPico: doc['tipo'],
+        modalidade: doc['modalidade'],
+        nota: doc['nota'],
+        numeroAvaliacoes: doc['avaliacoes'],
+        long: doc['longitude'],
+        lat: doc['latitude'],
+        description: doc['description'],
+        atributos: doc['atributos'],
         fotoPico: null,// vou inserir a imagem diretamente no código usando o image.network
-        obstaculos: data['obstaculos'],
-        utilidades: data['utilidades'],
-        userCreator: data['criador'],
-        urlIdPico: '',
-        picoName: data['name'],
+        obstaculos: doc['obstaculos'],
+        utilidades: doc['utilidades'],
+        userCreator: doc['criador'],
+        urlIdPico: doc.id,
+        picoName: doc['name'],
       );
     }).toList();
     } on Exception catch (e) {

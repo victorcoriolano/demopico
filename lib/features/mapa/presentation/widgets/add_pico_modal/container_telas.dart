@@ -107,7 +107,7 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                     //criarPico(); // função para criar o pico 
                                     if(provider.validarFormulario()){
                                       final pico = Pico(
-                                        imgUrl: '',//na criação do pico o link da imagem é nulo
+                                        imgUrl: provider.urlImage,
                                         modalidade: provider.selectedModalidade, 
                                         tipoPico: provider.tipo, 
                                         nota: 0.0, 
@@ -119,7 +119,7 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                         obstaculos: provider.obstaculos, 
                                         utilidades: provider.utilidades, 
                                         userCreator: null, 
-                                        urlIdPico: 'urlIdPico', 
+                                        urlIdPico: 'anonimo', 
                                         picoName: provider.nomePico);
                                       try{
                                         serviceLocator<SpotControllerProvider>().createSpot(pico, context);
