@@ -31,10 +31,11 @@ class SpotControllerProvider extends ChangeNotifier{
     // pegando o spot do use case e transformando em um marker
     try {
       List<Pico> spots = await showAllPicoUseCase.executa();
+      print(spots);
       return spots.map((spot) {
         return picoMarker(spot, context); // marker separado 
       }).toSet();
-    } catch (e) {
+    } on Exception catch (e) {
       print('Erro ao buscar spots: $e');
       return {};
     }
@@ -45,20 +46,9 @@ class SpotControllerProvider extends ChangeNotifier{
     try {
       final Set<Marker> spots = await turnsPicoToMarker(context);
       markers.addAll(spots); // adiciona os spots ao markers 
-    } catch (e) {
+    } on Exception catch (e) {
       print('Erro ao carregar markers: $e');
     }
   }
-
-  // métodos de gerenciamento de estado para a modal
-
-  // notificar o estado de modalidade, tipo e utilidades
-
-  // notificar o estado de atributos
-
-  // notificar o estaddo de obstáculos 
-
-  // notificar o estado de nome e descrição e anexar imagem
-
 
 }

@@ -20,6 +20,7 @@ class MapWidgetState extends State<MapWidget> {
 
   Future<void> loadPico() async {
     markers = await context.read<SpotControllerProvider>().turnsPicoToMarker(context);
+    print(markers);
   }
 
   String _locationMessage = "Aguardando localização...";
@@ -89,7 +90,7 @@ class MapWidgetState extends State<MapWidget> {
           print(_center);
           print(_locationMessage);
         },
-        zoomControlsEnabled: false, 
+        zoomControlsEnabled: true, 
         initialCameraPosition:CameraPosition(
           target: _center ,
           zoom: 15.0,
@@ -100,7 +101,7 @@ class MapWidgetState extends State<MapWidget> {
         myLocationButtonEnabled: true,
         tiltGesturesEnabled: true,
         markers: markers,
-        onLongPress: (argument) => Navigator.push(
+        /* onLongPress: (argument) => Navigator.push(
           context, 
           MaterialPageRoute(
             builder: (context) => ContainerTelas(
@@ -108,7 +109,7 @@ class MapWidgetState extends State<MapWidget> {
               long: argument.longitude,
             ),
           ),
-        ), 
+        ),  */
       ),
     );
   }

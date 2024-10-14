@@ -58,6 +58,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                           Text('Você pode adicionar mais informações aqui.'),
                     ),
                     // Adicione outros elementos conforme necessário
+                    FloatingActionButton(onPressed: Navigator.of(context).pop)
                   ],
                 ),
               );

@@ -46,31 +46,31 @@ class FirebaseServiceMap implements SpotRepository{
 
 @override
   Future<List<Pico>> showAllPico() async {
-    try {
+  try {
     QuerySnapshot snapshot = await _firebaseFirestore.collection('spots').get();
     return snapshot.docs.map((doc) {
-      //final data = doc.data() ;//as Map<String, dynamic>;
+      final data = doc.data() as Map<String, dynamic>; // deixa o map aq quieto pq ele tem q dar baum
       return Pico(
-        imgUrl: doc['imageUrl'],
-        tipoPico: doc['tipo'],
-        modalidade: doc['modalidade'],
-        nota: doc['nota'],
-        numeroAvaliacoes: doc['avaliacoes'],
-        long: doc['longitude'],
-        lat: doc['latitude'],
-        description: doc['description'],
-        atributos: doc['atributos'],
-        fotoPico: null,// vou inserir a imagem diretamente no código usando o image.network
-        obstaculos: doc['obstaculos'],
-        utilidades: doc['utilidades'],
-        userCreator: doc['criador'],
+        imgUrl: data['imageUrl'] as String,
+        tipoPico: data['tipo'] as String,
+        modalidade: data['modalidade'] as String,
+        nota: (data['nota'] as num).toDouble(), // vai dar boum
+        numeroAvaliacoes: data['avaliacoes'] as int,
+        long: (data['longitude'] as num).toDouble(), // tem q dar boaum
+        lat: (data['latitude'] as num).toDouble(), //  precisa dar buams
+        description: data['description'] as String,
+        atributos: data['atributos'] as Map<String, dynamic>,
+        fotoPico: null, // vou inserir a imagem diretamente no código usando o image.network
+        obstaculos: data['obstaculos'] as List<dynamic>,
+        utilidades: data['utilidades'] as List<dynamic>,
+        userCreator: data['criador'],
         urlIdPico: doc.id,
-        picoName: doc['name'],
+        picoName: data['name'] as String,
       );
     }).toList();
-    } on Exception catch (e) {
-      print(e);
-      return [];
-    }
+  } catch (e) {
+    print("Erro no firebase $e");
+    return [];
   }
+}
 }

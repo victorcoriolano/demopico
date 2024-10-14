@@ -71,11 +71,9 @@ class TerceiraTela extends StatelessWidget {
                 // conteiner pra demostrar os obstáculos selecionados 
                 Visibility(
                   visible: provider.obstaculos.isNotEmpty,
-                  child: SizedBox(
-                  height: 50,
                   child: Wrap(
-                    spacing: 8,
-                    runSpacing: 4,
+                    spacing: 6,
+                    runSpacing: 3,
                     children: provider.obstaculos.map((obstaculo) {
                       return Chip(
                         label: Text(obstaculo),
@@ -84,7 +82,6 @@ class TerceiraTela extends StatelessWidget {
                         },
                       );
                     }).toList(),
-                  ),
                   ),
                 ),
                 // Container para o Grid de obstáculos

@@ -7,8 +7,8 @@ class Pico {
   final String picoName;
   final String imgUrl;// link mostrar imagem 
   final String? description;
-  final double? long;
-  final double? lat;
+  final double long;
+  final double lat;
   final String? userCreator; // id do usuário que for criar
   final File? fotoPico;
   final List<dynamic>? utilidades; // utilidades do tipo água, banheiro etc

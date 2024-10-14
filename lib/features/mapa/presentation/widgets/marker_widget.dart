@@ -7,13 +7,13 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 //marker separado da lógica
 
 Marker picoMarker(Pico spot, BuildContext context){
-  return Marker(
+    return Marker(
     markerId: MarkerId(spot.picoName),
-    position: LatLng(spot.lat!, spot.long!),
+    position: LatLng(spot.lat, spot.long),
     onTap: () => _showPicoModal(context, spot),
     infoWindow: InfoWindow(
       title: spot.picoName,
-      snippet: spot.description,
+      snippet: spot.tipoPico,
     ),
   );
 }
