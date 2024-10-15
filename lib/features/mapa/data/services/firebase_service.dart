@@ -51,7 +51,7 @@ class FirebaseServiceMap implements SpotRepository{
     return snapshot.docs.map((doc) {
       final data = doc.data() as Map<String, dynamic>; // deixa o map aq quieto pq ele tem q dar baum
       return Pico(
-        imgUrl: data['imageUrl'] as String,
+        imgUrl: data['imageUrl'] as List<String>,
         tipoPico: data['tipo'] as String,
         modalidade: data['modalidade'] as String,
         nota: (data['nota'] as num).toDouble(), // vai dar boum

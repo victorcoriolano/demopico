@@ -17,7 +17,7 @@ class  AddPicoControllerProvider extends ChangeNotifier with Validators {
   int numAval = 0;
   String tipo = 'Pico de Rua';
   List<String> utilidades = [];
-  String urlImage = '';
+  List<String> urlImage = [];
   File? fotoPico;
   double lat = 0.0;
   double long = 0.0;
@@ -46,9 +46,10 @@ class  AddPicoControllerProvider extends ChangeNotifier with Validators {
           .child('spots_images')
           .child('images/$nomePico.jpg');
       await ref.putFile(img!);
-      urlImage = await ref.getDownloadURL();
+      urlImage.add(await ref.getDownloadURL());
+      print(urlImage);
     }on Exception catch (e){
-      print("Erro ao subir por storage: $e");
+      print("Erro ao subir imagem pro storage: $e");
     }
   }
   
@@ -110,7 +111,6 @@ void atualizarModalidade(String modalidade) {
   // notificar o estado de atributos
   void atualizarAtributo(String atributo, int value){
     atributos[atributo] = value;
-
     notifyListeners();
   }
   
@@ -164,7 +164,11 @@ void atualizarModalidade(String modalidade) {
     }
   }
 
-    bool validarNomePico() {
+  bool imagensIsNotEmpty() {
+    return urlImage.isNotEmpty;
+  }
+
+  bool validarNomePico() {
     if (nomePico.isEmpty) {
       nomePicoErro = "Preencha este campo";
       notifyListeners();
@@ -189,7 +193,8 @@ void atualizarModalidade(String modalidade) {
   bool validarFormulario() {
     final nomeValido = validarNomePico();
     final descricaoValida = validarDescricao();
-    return nomeValido && descricaoValida;
+    final validarImagens = imagensIsNotEmpty();
+    return nomeValido && descricaoValida && validarImagens;
   }
 
   

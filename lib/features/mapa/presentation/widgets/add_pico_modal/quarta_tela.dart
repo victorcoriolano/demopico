@@ -84,15 +84,19 @@ class _QuartaTelaState extends State<QuartaTela>  {
                     await provider.selecionarImag();
                     print("Anexar imagens");
                   },
-                  child: const Column(
+                  child: Column(
                     children: [
-                      Icon(Icons.cloud_upload,
+                      const Icon(Icons.cloud_upload,
                           size: 50, color: Colors.black), // Ícone de upload
-                      Text(
+                      const Text(
                         'ANEXAR IMAGENS',
                         style:
                           TextStyle(fontSize: 16),// Texto abaixo do ícone
                       ), 
+                      Visibility(
+                        visible: provider.urlImage.isNotEmpty,
+                        child: Text("colocar a imagem"),
+                      ),
                     ],
                   ),
                 ),

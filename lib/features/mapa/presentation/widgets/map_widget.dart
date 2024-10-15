@@ -1,3 +1,4 @@
+import 'package:demopico/core/common/inject_dependencies.dart';
 import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/container_telas.dart';
@@ -19,8 +20,7 @@ class MapWidgetState extends State<MapWidget> {
   Set<Marker> markers = {};
 
   Future<void> loadPico() async {
-    markers = await context.read<SpotControllerProvider>().turnsPicoToMarker(context);
-    print(markers);
+    markers = await serviceLocator<SpotControllerProvider>().turnsPicoToMarker(context);
   }
 
   String _locationMessage = "Aguardando localização...";
@@ -101,7 +101,7 @@ class MapWidgetState extends State<MapWidget> {
         myLocationButtonEnabled: true,
         tiltGesturesEnabled: true,
         markers: markers,
-        /* onLongPress: (argument) => Navigator.push(
+        onLongPress: (argument) => Navigator.push(
           context, 
           MaterialPageRoute(
             builder: (context) => ContainerTelas(
@@ -109,7 +109,7 @@ class MapWidgetState extends State<MapWidget> {
               long: argument.longitude,
             ),
           ),
-        ),  */
+        ), 
       ),
     );
   }
