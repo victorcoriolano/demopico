@@ -1,9 +1,11 @@
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
+import 'package:demopico/features/mapa/domain/interfaces/spot_repository.dart';
+import 'package:demopico/features/mapa/domain/use%20cases/show_all_pico.dart';
 import 'package:flutter/material.dart';
 
 class ShowPicoWidget extends StatefulWidget {
-  final Pico pico;
-
+  final Pico pico; 
+  
   const ShowPicoWidget({super.key, required this.pico});
 
   @override
@@ -11,18 +13,26 @@ class ShowPicoWidget extends StatefulWidget {
 }
 
 class _ShowPicoWidgetState extends State<ShowPicoWidget> {
-  List<String> images = [
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTIZccfNPnqalhrWev-Xo7uBhkor57_rKbkw&usqp=CAU",
-    "https://wallpaperaccess.com/full/2637581.jpg",
-    "https://images.wallpapersden.com/image/download/purple-sunrise-4k-vaporwave_bGplZmiUmZqaraWkpJRmbmdlrWZlbWU.jpg",
-    "https://uhdwallpapers.org/uploads/converted/20/01/14/the-mandalorian-5k-1920x1080_477555-mm-90.jpg"
-  ];
+  List<String> images = [];
+
+  void _loadPicos() {
+    setState(() {
+      images = widget.pico.imgUrl.cast<String>(); //url pico
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPicos(); // carregar img
+  }
+
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      initialChildSize: 0.2, // Tamanho inicial do painel (20%)
-      minChildSize: 0.0, // Tamanho mínimo ao deslizar para baixo
-      maxChildSize: 0.95, // Tamanho máximo ao deslizar para cima
+      initialChildSize: 0.2, // 
+      minChildSize: 0.0, 
+      maxChildSize: 0.95, 
       builder: (BuildContext context, ScrollController scrollController) {
         return Container(
           decoration: const BoxDecoration(
@@ -45,24 +55,25 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                   Container(
                     width: double.infinity,
                     height: 250,
-                    child: PageView.builder(
-                      itemCount: images.length,
-                      pageSnapping: true,
-                      itemBuilder: (context, pagePosition) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.vertical(top: Radius.circular(30)),
-                          ),
-                          clipBehavior: Clip
-                              .hardEdge, // Adiciona o clipping para respeitar o borderRadius
-                          child: Image.network(
-                            images[pagePosition],
-                            fit: BoxFit.cover, // Ajusta a imagem
-                          ),
-                        );
-                      },
-                    ),
+                    child: images.isNotEmpty
+                        ? PageView.builder(
+                            itemCount: images.length,
+                            pageSnapping: true,
+                            itemBuilder: (context, pagePosition) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(30)),
+                                ),
+                                clipBehavior: Clip.hardEdge,
+                                child: Image.network(
+                                  images[pagePosition],
+                                  fit: BoxFit.cover, // Ajusta a imagem
+                                ),
+                              );
+                            },
+                          )
+                        : Center(child: Text('Sem imagens disponíveis')), // Se não houver imagens
                   ),
                   Align(
                     alignment: Alignment.center,
@@ -79,15 +90,23 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                 ],
               ),
 
-              const ListTile(
-                title: Text('Detalhes do Local'),
-                subtitle: Text('Informações do local clicado no mapa'),
+              ListTile(
+                title: Text(widget.pico.picoName), 
+         
               ),
-              const ListTile(
-                title: Text('Mais detalhes'),
-                subtitle: Text('Você pode adicionar mais informações aqui.'),
+              ListTile(
+                title: Text('Nota'),
+                subtitle: Text('Nota: ${widget.pico.nota.toString()}'),
               ),
-              // Adicione outros elementos conforme necessário
+              ListTile(
+                title: Text('Modalidade'),
+                subtitle: Text(widget.pico.modalidade), 
+              ),
+              ListTile(
+                title: Text('Tipo do Pico'),
+                subtitle: Text(widget.pico.tipoPico), 
+              ),
+            
             ],
           ),
         );
