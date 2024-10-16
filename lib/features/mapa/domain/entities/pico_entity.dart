@@ -5,7 +5,7 @@ class Pico {
   final String modalidade;
   final String tipoPico;
   final String picoName;
-  final List<String> imgUrl;// link mostrar imagem 
+  final List<dynamic> imgUrl;// link mostrar imagem 
   final String? description;
   final double long;
   final double lat;
