@@ -101,15 +101,20 @@ class MapWidgetState extends State<MapWidget> {
         myLocationButtonEnabled: true,
         tiltGesturesEnabled: true,
         markers: markers,
-        onLongPress: (argument) => Navigator.push(
-          context, 
-          MaterialPageRoute(
-            builder: (context) => ContainerTelas(
-              lat: argument.latitude,
-              long: argument.longitude,
-            ),
-          ),
-        ), 
+        onLongPress: (argument) => showModalBottomSheet(
+      context: context,
+      
+      isScrollControlled: true, 
+      builder: (context) => SizedBox(
+        height: MediaQuery.of(context).size.height * 0.88, // Define a altura do modal
+        child: ContainerTelas(
+          lat: argument.latitude,
+          long: argument.longitude,
+        ),
+      ),
+    ),
+
+
       ),
     );
   }

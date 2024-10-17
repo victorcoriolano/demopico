@@ -47,7 +47,7 @@ class  AddPicoControllerProvider extends ChangeNotifier with Validators {
           .child('images/$nomePico.jpg');
       await ref.putFile(img!);
       urlImage.add(await ref.getDownloadURL());
-      print(urlImage);
+      print('${urlImage} KJJJ');
     }on Exception catch (e){
       print("Erro ao subir imagem pro storage: $e");
     }
@@ -64,7 +64,7 @@ class  AddPicoControllerProvider extends ChangeNotifier with Validators {
   String? descricaoErro;
 
   Map<String, List<String>> utilidadesPorModalidade = {
-    'Skate': ['Água', 'Teto', 'Banheiro', 'Suave f1', 'Público / Gratuito'],
+    'Skate': ['Água', 'Teto', 'Banheiro', 'Suave Arcadiar', 'Público / Gratuito'],
     'Parkour': ['Água', 'Banheiro', 'Mecânicas Próximas', 'Ar Livre'],
     'BMX': ['Água'],
   };
@@ -77,10 +77,10 @@ class  AddPicoControllerProvider extends ChangeNotifier with Validators {
     // definindo o estado inicial de cada page
     _atualizarUtilidades();
     atributos  = {
-      'Chão': 4,
+      'Chão': 2,
       'Iluminação': 3,
-      'Policiamento': 4,
-      'Movimento': 3,
+      'Policiamento': 5,
+      'Movimento': 1,
       'Kick-Out': 4,
     };
   }

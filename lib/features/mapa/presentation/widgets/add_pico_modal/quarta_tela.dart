@@ -47,6 +47,7 @@ class _QuartaTelaState extends State<QuartaTela>  {
                     color: Colors.black,
                   ),
                 ),
+                 const SizedBox(height: 10),
                 // Campo de texto para o nome do pico
                 TextFormField(
                   decoration:  InputDecoration(
@@ -66,6 +67,7 @@ class _QuartaTelaState extends State<QuartaTela>  {
                     color: Colors.black,
                   ),
                 ),
+                 const SizedBox(height: 10),
                 // Campo de texto para a descrição do pico
                 TextFormField(
                   maxLines: 5, // Permite múltiplas linhas
@@ -76,26 +78,29 @@ class _QuartaTelaState extends State<QuartaTela>  {
                   ),
                   onChanged: (value) => provider.atualizarDescricao(value),
                 ),
-                const SizedBox(height: 20), // Espaço entre os campos
+                const SizedBox(height: 45), // Espaço entre os campos
                 // Botão para anexar imagens
                 GestureDetector(
                   onTap: () async {
                     // Função para anexar imagem (placeholder)
                     await provider.selecionarImag();
-                    print("Anexar imagens");
+                    print("ANEXAR IMAGENS");
                   },
                   child: Column(
                     children: [
                       const Icon(Icons.cloud_upload,
-                          size: 50, color: Colors.black), // Ícone de upload
+                          size: 62, color: Colors.black), // Ícone de upload
                       const Text(
                         'ANEXAR IMAGENS',
                         style:
                           TextStyle(fontSize: 16),// Texto abaixo do ícone
                       ), 
-                      Visibility(
-                        visible: provider.urlImage.isNotEmpty,
-                        child: Text("colocar a imagem"),
+                      Container(
+                        margin: EdgeInsets.only(top: 5),
+                        child: Visibility(
+                          visible: provider.urlImage.isNotEmpty,
+                          child: Text("imagem selecionada com sucesso"),
+                        ),
                       ),
                     ],
                   ),

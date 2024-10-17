@@ -16,7 +16,7 @@ class TerceiraTela extends StatelessWidget {
     final listaIcon = [
       Icons.delete_outline_sharp, //icons para lixeira
       Icons.fire_hydrant_alt_sharp, // icon para o hidrante
-      Icons.skateboarding, 
+   Icons.skateboarding, 
       Icons.skateboarding, 
       Icons.skateboarding, 
       Icons.skateboarding, 
@@ -35,6 +35,8 @@ class TerceiraTela extends StatelessWidget {
       Icons.skateboarding, 
       Icons.skateboarding, 
     ];
+ 
+
     return Consumer<AddPicoControllerProvider>(
       builder: (context, provider, child) => 
       Scaffold(
@@ -69,19 +71,22 @@ class TerceiraTela extends StatelessWidget {
                   ),
                 ),
                 // conteiner pra demostrar os obstáculos selecionados 
-                Visibility(
-                  visible: provider.obstaculos.isNotEmpty,
-                  child: Wrap(
-                    spacing: 6,
-                    runSpacing: 3,
-                    children: provider.obstaculos.map((obstaculo) {
-                      return Chip(
-                        label: Text(obstaculo),
-                        onDeleted: () {
-                          provider.removerObstaculo(obstaculo);
-                        },
-                      );
-                    }).toList(),
+                Container(
+                  margin: EdgeInsets.only(bottom: 20),
+                  child: Visibility(
+                    visible: provider.obstaculos.isNotEmpty,
+                    child: Wrap(
+                      spacing: 6,
+                      runSpacing: 3,
+                      children: provider.obstaculos.map((obstaculo) {
+                        return Chip(
+                          label: Text(obstaculo),
+                          onDeleted: () {
+                            provider.removerObstaculo(obstaculo);
+                          },
+                        );
+                      }).toList(),
+                    ),
                   ),
                 ),
                 // Container para o Grid de obstáculos
@@ -96,27 +101,29 @@ class TerceiraTela extends StatelessWidget {
                     ),
                     itemCount: listaObstaculos.length, // Total de 15 caixas
                     itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: Container(
-                          height: 20, // Altura das caixas
-                          padding: EdgeInsets.all(0), // Sem padding
-                          decoration: BoxDecoration(
-                            color: Colors.brown[300], // Cor das caixas
+                      return 
+                         Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: Container(
+                            height: 20, // Altura das caixas
+                            padding: EdgeInsets.all(0), // Sem padding
+                            child: IconButton(
+                              color: const Color.fromARGB(255, 45, 45, 45),
+                              iconSize: 36,
+                              icon: Icon(listaIcon[index],), 
+                              //mostra os icones dos respectivos obstáculos 
+                              onPressed: () {
+                                // se tiver na lista remove se não tiver adiciona
+                                if(provider.obstaculos.contains(listaObstaculos[index])){
+                                  provider.obstaculos.remove(listaObstaculos[index]);
+                                }else{
+                                  provider.atualizarObstaculos(listaObstaculos[index]);
+                                }
+                                print(provider.obstaculos);
+                              },
+                            ),
                           ),
-                          child: IconButton(
-                            icon: Icon(listaIcon[index]), //mostra os icones dos respectivos obstáculos 
-                            onPressed: () {
-                              // se tiver na lista remove se não tiver adiciona
-                              if(provider.obstaculos.contains(listaObstaculos[index])){
-                                provider.obstaculos.remove(listaObstaculos[index]);
-                              }else{
-                                provider.atualizarObstaculos(listaObstaculos[index]);
-                              }
-                              print(provider.obstaculos);
-                            },
-                          ),
-                        ),
+                        
                       );
                     },
                   ),
