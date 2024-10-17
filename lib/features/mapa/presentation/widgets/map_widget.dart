@@ -106,7 +106,8 @@ class MapWidgetState extends State<MapWidget> {
       
       isScrollControlled: true, 
       builder: (context) => SizedBox(
-        height: MediaQuery.of(context).size.height * 0.88, // Define a altura do modal
+        height: MediaQuery.of(context).size.height * 0.868
+        , // Define a altura do modal
         child: ContainerTelas(
           lat: argument.latitude,
           long: argument.longitude,
