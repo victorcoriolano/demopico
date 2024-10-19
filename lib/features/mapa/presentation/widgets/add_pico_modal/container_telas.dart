@@ -12,7 +12,12 @@ import 'package:provider/provider.dart';
 class ContainerTelas extends StatefulWidget {
   final double lat;
   final double long;
-  const ContainerTelas({super.key, required this.lat, required this.long});
+  final bool expanded;
+  const ContainerTelas(
+      {super.key,
+      required this.lat,
+      required this.long,
+      required this.expanded});
 
   @override
   _ContainerTelasState createState() => _ContainerTelasState();
@@ -20,7 +25,7 @@ class ContainerTelas extends StatefulWidget {
 
 class _ContainerTelasState extends State<ContainerTelas> {
   int _currentIndex = 0;
-
+  
 
   final List<Widget> _screens = [
     EspecificidadeScreen(), // Página 1
@@ -46,130 +51,143 @@ class _ContainerTelasState extends State<ContainerTelas> {
   @override
   Widget build(BuildContext context) {
     return Consumer<AddPicoControllerProvider>(
-      builder: (context, provider, child) => 
-      Scaffold(
+      builder: (context, provider, child) => Scaffold(
         body: Stack(// colocando stack para funcionar direito o positionaded
-          children: 
-          [ 
-            Positioned.fill(
-              child: Container(
-                  color: Colors.black54, // Fundo semitransparente
-                  child: Center(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                      width: MediaQuery.of(context).size.width * 0.95,
-                      height: MediaQuery.of(context).size.height * 0.95,
-                      child: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                        color:Colors.grey[200],
-                        borderRadius:
-                          BorderRadius.circular(12), // Arredondamento das bordas
-                        border: Border.all(
+            children: [
+          Positioned.fill(
+            child: Container(
+              color: Colors.black54, // Fundo semitransparente
+              child: Center(
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                  width: MediaQuery.of(context).size.width * 0.95,
+                  height: MediaQuery.of(context).size.height * 0.95,
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(
+                          12), // Arredondamento das bordas
+                      border: Border.all(
                           color: Color(0xFF8B0000), width: 3), // Borda vermelha
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Column(
-                            children: [
-                              Expanded(
-                                child: _screens[_currentIndex], // Exibe o widget atual
-                              ),
-                              const SizedBox(height: 10),
-                              if (!(_currentIndex == 0))
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Color(0xFF8B0000), // Cor do botão
-                                    foregroundColor: Colors.white,
-                                    padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    _backScreen(); // Chama a função para mudar a tela
-                                  },
-                                  child: const Text('VOLTAR', style: TextStyle(fontSize: 15)),
-                                ),
-                                const SizedBox(height: 10),
-                                if (_currentIndex == 3)
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color(0xFF8B0000), // Cor do botão
-                                      foregroundColor: Colors.white,
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 50, vertical: 15
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      // função para criar o pico 
-                                      if(provider.validarFormulario()){
-                                        final pico = Pico(
-                                          imgUrl: provider.urlImage,
-                                          modalidade: provider.selectedModalidade, 
-                                          tipoPico: provider.tipo, 
-                                          nota: 0.0, 
-                                          numeroAvaliacoes: 0, 
-                                          long: widget.long, lat: widget.lat, 
-                                          description: provider.descricao, 
-                                          atributos: provider.atributos, 
-                                          fotoPico: null, 
-                                          obstaculos: provider.obstaculos, 
-                                          utilidades: provider.utilidades, 
-                                          userCreator: null, 
-                                          urlIdPico: 'anonimo', 
-                                          picoName: provider.nomePico);
-                                        try{
-                                          serviceLocator<SpotControllerProvider>().createSpot(pico, context);
-                                          Navigator.pop(context);
-                                        }on Exception catch(e){
-                                          print('Erro na boca do balção: $e');
-                                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Preencha todos os campos ou insira alguma imagem")));
-                                        }
-                                      }
-                                    },
-                                    child:
-                                      const Text('POSTAR PICO', style: TextStyle(fontSize: 15)),
-                                    )else
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Color(0xFF8B0000), // Cor do botão
-                                          foregroundColor: Colors.white,
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 50, vertical: 15,
-                                          ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10),
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                          print(provider.utilidadesSelecionadas);
-                                          // chama a proxima página somente se tiver validada
-                                          if(provider.validarPaginaAtual(_currentIndex)){
-                                            _nextScreen(); // Chama a função para mudar a tela
-                                          }else{
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              const SnackBar(content: Text("Preenche todos as informações"))
-                                            );
-                                          }
-                                          
-                                        },
-                                        child: const Text('PROSSEGUIR', style: TextStyle(fontSize: 15)),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        children: [
+                         
+                          Expanded(
+                            child:
+                                _screens[_currentIndex], // Exibe o widget atual
                           ),
+                          const SizedBox(height: 10),
+                          if (!(_currentIndex == 0))
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    Color(0xFF8B0000), // Cor do botão
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 50, vertical: 15),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              onPressed: () {
+                                _backScreen(); // Chama a função para mudar a tela
+                              },
+                              child: const Text('VOLTAR',
+                                  style: TextStyle(fontSize: 15)),
+                            ),
+                          const SizedBox(height: 10),
+                          if (_currentIndex == 3)
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    const Color(0xFF8B0000), // Cor do botão
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 50, vertical: 15),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              onPressed: () {
+                                // função para criar o pico
+                                if (provider.validarFormulario()) {
+                                  final pico = Pico(
+                                      imgUrl: provider.urlImage,
+                                      modalidade: provider.selectedModalidade,
+                                      tipoPico: provider.tipo,
+                                      nota: 0.0,
+                                      numeroAvaliacoes: 0,
+                                      long: widget.long,
+                                      lat: widget.lat,
+                                      description: provider.descricao,
+                                      atributos: provider.atributos,
+                                      fotoPico: null,
+                                      obstaculos: provider.obstaculos,
+                                      utilidades: provider.utilidades,
+                                      userCreator: null,
+                                      urlIdPico: 'anonimo',
+                                      picoName: provider.nomePico);
+                                  try {
+                                    serviceLocator<SpotControllerProvider>()
+                                        .createSpot(pico, context);
+                                    Navigator.pop(context);
+                                  } on Exception catch (e) {
+                                    print('Erro na boca do balção: $e');
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content: Text(
+                                                "Preencha todos os campos ou insira alguma imagem")));
+                                  }
+                                }
+                              },
+                              child: const Text('POSTAR PICO',
+                                  style: TextStyle(fontSize: 15)),
+                            )
+                          else
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    Color(0xFF8B0000), // Cor do botão
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 50,
+                                  vertical: 15,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              onPressed: () {
+                                print(provider.utilidadesSelecionadas);
+                                // chama a proxima página somente se tiver validada
+                                if (provider
+                                    .validarPaginaAtual(_currentIndex)) {
+                                  _nextScreen(); // Chama a função para mudar a tela
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              "Preenche todos as informações")));
+                                }
+                              },
+                              child: const Text('PROSSEGUIR',
+                                  style: TextStyle(fontSize: 15)),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ),
-          ]
-        ),
+          ),
+        ]),
       ),
     );
   }

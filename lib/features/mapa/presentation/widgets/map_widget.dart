@@ -18,7 +18,7 @@ class MapWidget extends StatefulWidget {
 
 class MapWidgetState extends State<MapWidget> {
   Set<Marker> markers = {};
-
+    bool _isExpanded = false;
   Future<void> loadPico() async {
     markers = await serviceLocator<SpotControllerProvider>().turnsPicoToMarker(context);
   }
@@ -109,6 +109,7 @@ class MapWidgetState extends State<MapWidget> {
         height: MediaQuery.of(context).size.height * 0.868
         , // Define a altura do modal
         child: ContainerTelas(
+          expanded: _isExpanded,
           lat: argument.latitude,
           long: argument.longitude,
         ),

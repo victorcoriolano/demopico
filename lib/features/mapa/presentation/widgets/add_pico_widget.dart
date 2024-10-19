@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AddPicoWidget extends StatefulWidget {
-  
-  const AddPicoWidget({super.key,});
-  
+  const AddPicoWidget({
+    super.key,
+  });
+
   @override
   AddPicoWidgetState createState() => AddPicoWidgetState();
 }
@@ -14,32 +15,36 @@ class AddPicoWidget extends StatefulWidget {
 class AddPicoWidgetState extends State<AddPicoWidget> {
   bool _isExpanded = false;
 
-  
-
   @override
   Widget build(BuildContext context) {
     return Consumer<AddPicoControllerProvider>(
-      builder: (context, provider, child) => 
-      Stack(
+      builder: (context, provider, child) => Stack(
         children: [
-          if (_isExpanded)
-            GestureDetector(
-              onTap: () {
-                // Fecha o container quando clicar fora
-                setState(() {
-                  _isExpanded = false;
-                });
-              },
-              child: Container(
-                color: Colors.transparent, // Permite detectar cliques fora
-                child: Center(
-                  child: ContainerTelas(
-                    lat: provider.lat,
-                    long: provider.long,
+         if(_isExpanded)
+         Stack(
+          alignment: Alignment.topRight,
+           children: [ 
+
+            Center(
+                    child: ContainerTelas(
+                      lat: provider.lat,
+                      long: provider.long,
+                      expanded: _isExpanded ,
+                    ),
                   ),
-                ),
-              ),
-            ),
+                  IconButton(
+                              icon: Icon(Icons.close,
+                                  color: const Color.fromARGB(255, 0, 0, 0)),
+                                  iconSize: 36, // Cor branca para o botão "X"
+                              onPressed: () {
+                                setState(() {
+                                  _isExpanded =
+                                      !_isExpanded; // Alterna a exibição do widget
+                                });
+                              },
+                            ),
+                     ]
+         ),
           if (!_isExpanded)
             Positioned(
               bottom: 40.0,
@@ -65,7 +70,8 @@ class AddPicoWidgetState extends State<AddPicoWidget> {
                     ),
                     onPressed: () {
                       setState(() {
-                        _isExpanded = !_isExpanded; // Alterna a exibição do widget
+                        _isExpanded =
+                            !_isExpanded; // Alterna a exibição do widget
                       });
                     },
                     child: SizedBox.expand(
@@ -74,7 +80,8 @@ class AddPicoWidgetState extends State<AddPicoWidget> {
                         children: [
                           Container(
                             decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(16.0)),
                               color: Color(0xFFBB271A),
                             ),
                             width: 44,
@@ -82,7 +89,8 @@ class AddPicoWidgetState extends State<AddPicoWidget> {
                           ),
                           Container(
                             decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(16.0)),
                               color: Color(0xFFBB271A),
                             ),
                             width: 8,
