@@ -22,7 +22,7 @@ class AddPicoWidgetState extends State<AddPicoWidget> {
         children: [
          if(_isExpanded)
          Stack(
-          alignment: Alignment.topRight,
+          alignment:Alignment.topRight,
            children: [ 
 
             Center(
@@ -32,17 +32,21 @@ class AddPicoWidgetState extends State<AddPicoWidget> {
                       expanded: _isExpanded ,
                     ),
                   ),
-                  IconButton(
-                              icon: Icon(Icons.close,
-                                  color: const Color.fromARGB(255, 0, 0, 0)),
-                                  iconSize: 36, // Cor branca para o botão "X"
-                              onPressed: () {
-                                setState(() {
-                                  _isExpanded =
-                                      !_isExpanded; // Alterna a exibição do widget
-                                });
-                              },
-                            ),
+                  Padding(
+                    padding: EdgeInsets.all(20
+                    ),
+                    child: IconButton(
+                                icon: Icon(Icons.close,
+                                    color: const Color.fromARGB(255, 0, 0, 0)),
+                                    iconSize: 36, // Cor branca para o botão "X"
+                                onPressed: () {
+                                  setState(() {
+                                    _isExpanded =
+                                        !_isExpanded; // Alterna a exibição do widget
+                                  });
+                                },
+                              ),
+                  ),
                      ]
          ),
           if (!_isExpanded)
