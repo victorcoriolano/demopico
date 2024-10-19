@@ -19,13 +19,22 @@ Marker picoMarker(Pico spot, BuildContext context){
 }
 
 void _showPicoModal(BuildContext context, Pico pico) {
-  print('Chamando modal para: ${pico.picoName}'); // Adicione isto para depuração
+  print('Chamando modal para: ${pico.picoName}');
   print('Imagem url: ${pico.imgUrl}');
+
   showModalBottomSheet(
-    backgroundColor: Colors.transparent,
     context: context,
-    builder: (BuildContext context) {
-      return ShowPicoWidget(pico: pico); // Exibe seu widget aqui
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent, // Transparência para o fundo
+    builder: (context) {
+      return DraggableScrollableSheet(
+        initialChildSize: 0.4, 
+        minChildSize: 0.2, 
+        maxChildSize: 0.86, 
+        builder: (BuildContext context, ScrollController scrollController) {
+          return ShowPicoWidget(pico: pico, scrollController: scrollController);
+        },
+      );
     },
   );
 }
