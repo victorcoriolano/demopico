@@ -47,8 +47,8 @@ class AddPicoWidgetState extends State<AddPicoWidget> {
                                 },
                               ),
                   ),
-                     ]
-         ),
+                    ]
+        ),
           if (!_isExpanded)
             Positioned(
               bottom: 40.0,

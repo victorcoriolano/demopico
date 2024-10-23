@@ -3,14 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/core/domain/entities/user_profile.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/interfaces/spot_repository.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+//import 'package:firebase_storage/firebase_storage.dart';
 
 class FirebaseServiceMap implements SpotRepository{
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
   @override
   Future<void> createSpot(Pico pico) async {
-    String imageUrl = '';
+    /* String imageUrl = '';
       // upload da imagem para o Storage
       if(pico.fotoPico != null){
       final ref = FirebaseStorage.instance
@@ -20,7 +20,7 @@ class FirebaseServiceMap implements SpotRepository{
       await ref.putFile(pico.fotoPico!);
       imageUrl = await ref.getDownloadURL();//pegando a url da imagem pra subir no bd
       }
-
+ */
     // Salvando os dados no Firestore
     await _firebaseFirestore.collection('spots').add({
       'name': pico.picoName,
