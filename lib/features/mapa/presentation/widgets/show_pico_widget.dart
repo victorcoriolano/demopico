@@ -1,6 +1,4 @@
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
-import 'package:demopico/features/mapa/domain/interfaces/spot_repository.dart';
-import 'package:demopico/features/mapa/domain/use%20cases/show_all_pico.dart';
 import 'package:flutter/material.dart';
 import 'package:icon_decoration/icon_decoration.dart';
 
@@ -61,7 +59,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                             alignment: Alignment.topRight,
                             children: [
                               Container(
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   borderRadius: BorderRadius.vertical(
                                       top: Radius.circular(30)),
                                 ),
@@ -73,12 +71,13 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                 ),
                               ),
                               IconButton(
-                                icon: DecoratedIcon(
-                                    icon: Icon(Icons.close,
-                                        color: Color.fromARGB(
-                                            255, 243, 243, 243)),decoration: IconDecoration(border: IconBorder(width: 1.5)),
-                                            ),
-                                padding: EdgeInsets.only(top: 10, right: 10),
+                                icon: const DecoratedIcon(
+                                    icon: Icon(
+                                      Icons.close,
+                                      color: Color.fromARGB(255, 243, 243, 243)
+                                    ),
+                                    decoration: IconDecoration(border: IconBorder(width: 1.5)),),
+                                padding: const EdgeInsets.only(top: 10, right: 10),
                                 iconSize: 36,
                                 
                                 onPressed: () {
@@ -90,14 +89,14 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                           );
                         },
                       )
-                    : Center(
+                    : const Center(
                         child: Text(
-                            'Sem imagens disponíveis')), // Se não houver imagens
+                            'Sem imagens disponíveis'),), // Se não houver imagens
               ),
               Align(
                 alignment: Alignment.center,
                 child: Container(
-                  margin: EdgeInsets.only(top: 10),
+                  margin: const EdgeInsets.only(top: 10),
                   height: 5,
                   width: 80,
                   decoration: BoxDecoration(
