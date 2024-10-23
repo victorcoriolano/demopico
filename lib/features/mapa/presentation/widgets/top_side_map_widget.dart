@@ -30,9 +30,40 @@ Widget build(BuildContext context) {
           ),
         ),
         SizedBox(width: 10), // Espaçamento entre a barra de busca e os ícones
-        IconButton(
-          icon: Icon(Icons.filter_list, color: Colors.white, size: 30,),
-          onPressed: () {},
+        PopupMenuButton<String>(
+          icon: const Icon(Icons.filter_list, color: Colors.white,),
+          tooltip: "Filtrar por proximidade",
+          onSelected: (String value) {},
+          color: Colors.white,
+          itemBuilder: (BuildContext context) {
+            return <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'proximidade',
+                child: ListTile(
+                  leading: Icon(Icons.podcasts),
+                  title: Text("Filtrar por proximidade"),
+                ),
+              ),
+              const PopupMenuItem<String>(
+                value: 'pista',
+                child: ListTile(
+                  leading: Icon(Icons.skateboarding),
+                  title: Text("Filtrar por pista"),
+                ),
+              ),
+              const PopupMenuItem<String>(
+                value: 'pico',
+                child: ListTile(
+                  leading: Icon(Icons.terrain),
+                  title: Text("Filtrar por pico"),
+                ),
+              ),
+              const PopupMenuDivider(),
+              PopupMenuItem(
+                child: TextButton(onPressed: () {}, child: const Text("Filtrar por atributos"),)
+              ),
+            ];
+          },
         ),
         /* IconButton(
           icon: Icon(Icons.settings, color: Colors.white,size: 30),
