@@ -106,7 +106,6 @@ class MapWidgetState extends State<MapWidget> {
             myLocationButtonEnabled: true,
             tiltGesturesEnabled: true,
             markers: markers,
-            
             onLongPress: (argument) => showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,

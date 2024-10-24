@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/core/domain/entities/user_profile.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/interfaces/spot_repository.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 //import 'package:firebase_storage/firebase_storage.dart';
 
 class FirebaseServiceMap implements SpotRepository{
@@ -22,6 +23,7 @@ class FirebaseServiceMap implements SpotRepository{
       }
  */
     // Salvando os dados no Firestore
+    LatLng location = LatLng(pico.lat, pico.long);
     await _firebaseFirestore.collection('spots').add({
       'name': pico.picoName,
       'description': pico.description,
@@ -36,6 +38,7 @@ class FirebaseServiceMap implements SpotRepository{
       'criador': pico.userCreator,
       'modalidade': pico.modalidade,
       'tipo': pico.tipoPico,
+      'geolocation': location,
     });
   }
 
@@ -73,4 +76,5 @@ class FirebaseServiceMap implements SpotRepository{
     return [];
   }
 }
+
 }
