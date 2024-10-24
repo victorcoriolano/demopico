@@ -1,6 +1,8 @@
 import 'package:demopico/app/home_page.dart';
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
 import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
+import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
+import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
 import 'package:demopico/features/user/data/services/auth_service.dart';
 import 'package:demopico/core/common/inject_dependencies.dart';
@@ -25,6 +27,8 @@ class MyAppWidget extends StatelessWidget {
           initialData: null,
         ),
         ChangeNotifierProvider(create: (_) => AddPicoControllerProvider()),
+        ChangeNotifierProvider(create: (_) => MapControllerProvider()),
+        ChangeNotifierProvider(create: (_) => serviceLocator<SpotControllerProvider>()),
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,

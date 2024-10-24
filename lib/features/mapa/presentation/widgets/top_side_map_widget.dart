@@ -1,10 +1,34 @@
+import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
+import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 
 class TopSideMapWidget extends StatelessWidget implements PreferredSizeWidget {
   const TopSideMapWidget({super.key});
+
+  
 @override
 Widget build(BuildContext context) {
+  final provider = Provider.of<MapControllerProvider>(context, listen: false);
+  final markerProvider = Provider.of<SpotControllerProvider>(context, listen: false);
   final _buscarController = TextEditingController();
+  final Set<Marker> markers = markerProvider.markers;
+
+  void searchPico(String name, BuildContext context) {
+    final Marker? marker = markers.firstWhere(
+      (marker) => marker.markerId.value == name,
+      //orElse: () => null,
+    );
+
+  if (marker != null) {
+    // Pega o controller do Provider e centraliza o mapa
+    provider.reajustarCameraPosition(marker.position);
+    
+  } else {
+    print('Pico não encontrado');
+  }
+}
   return AppBar(
     automaticallyImplyLeading: false, // resolvendo bug de aparecer seta
     toolbarHeight: 100, // Ajuste a altura da AppBar se necessário
@@ -22,7 +46,10 @@ Widget build(BuildContext context) {
                 hintText: 'Buscar Picos',
                 prefixIcon: IconButton( // transformando em iconButton para execultar a lógica de pesquisar 
                   icon: const Icon(Icons.search, color: Colors.grey), 
-                  onPressed: () {}, 
+                  onPressed: () {
+                    final picoName = _buscarController.text.toString();
+                    searchPico(picoName, context);
+                  }, 
                 ), 
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),

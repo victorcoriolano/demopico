@@ -53,7 +53,7 @@ class  AddPicoControllerProvider extends ChangeNotifier with Validators {
     }
   }
   
-  void atualizarLocalizacao(LatLng localizacao){
+  void pegarLocalizacao(LatLng localizacao){
     lat = localizacao.latitude;
     long = localizacao.longitude;
   }

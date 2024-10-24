@@ -51,10 +51,5 @@ class SpotControllerProvider extends ChangeNotifier{
     }
   }
 
-  void getPicoForName(String name){
-    if(markers.isNotEmpty){
-      //
-    }
-  }
 
 }
