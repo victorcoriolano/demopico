@@ -10,7 +10,7 @@ Marker picoMarker(Pico spot, BuildContext context){
     return Marker(
     markerId: MarkerId(spot.picoName),
     position: LatLng(spot.lat, spot.long),
-    onTap: () => _showPicoModal(context, spot),
+    onTap: () => showPicoModal(context, spot),
     infoWindow: InfoWindow(
       title: spot.picoName,
       snippet: spot.tipoPico,
@@ -18,7 +18,7 @@ Marker picoMarker(Pico spot, BuildContext context){
   );
 }
 
-void _showPicoModal(BuildContext context, Pico pico) {
+void showPicoModal(BuildContext context, Pico pico) {
   print('Chamando modal para: ${pico.picoName}');
   print('Imagem url: ${pico.imgUrl}');
 

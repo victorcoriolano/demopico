@@ -11,6 +11,7 @@ class SpotControllerProvider extends ChangeNotifier{
   final ShowAllPico showAllPicoUseCase;
   
   Set<Marker> markers = {};//lista vazia de markers para adicionar os picos 
+  List<Pico> spots = [];
 
   SpotControllerProvider(this.createSpotUseCase, this.showAllPicoUseCase);
   
@@ -30,7 +31,7 @@ class SpotControllerProvider extends ChangeNotifier{
   Future<Set<Marker>> turnsPicoToMarker(BuildContext context) async {
     // pegando o spot do use case e transformando em um marker
     try {
-      List<Pico> spots = await showAllPicoUseCase.executa();
+      spots = await showAllPicoUseCase.executa();
       print(spots);
       return spots.map((spot) {
         return picoMarker(spot, context); // marker separado 
