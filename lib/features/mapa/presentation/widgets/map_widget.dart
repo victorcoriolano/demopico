@@ -15,20 +15,21 @@ class MapWidget extends StatefulWidget {
 }
 
 class MapWidgetState extends State<MapWidget> {
-
   @override
   Widget build(BuildContext context) {
-    final spotProvider = Provider.of<SpotControllerProvider>(context, listen: true);
-    final mapProvider = Provider.of<MapControllerProvider>(context, listen: true);
+    final spotProvider =
+        Provider.of<SpotControllerProvider>(context, listen: true);
+    final mapProvider =
+        Provider.of<MapControllerProvider>(context, listen: true);
     // consome os dados do provider para manter a tela atualizada
     return GoogleMap(
       onMapCreated: (GoogleMapController controller) async {
-      mapProvider.setGoogleMapController(controller);
-      await spotProvider.showAllPico(context);
-      await mapProvider.getLocation();
-              
-      print(mapProvider.center);
-      print(mapProvider.locationMessage);
+        mapProvider.setGoogleMapController(controller);
+        await spotProvider.showAllPico(context);
+        await mapProvider.getLocation();
+
+        print(mapProvider.center);
+        print(mapProvider.locationMessage);
       },
       zoomControlsEnabled: true,
       initialCameraPosition: CameraPosition(
@@ -44,22 +45,22 @@ class MapWidgetState extends State<MapWidget> {
       onLongPress: (argument) => showModalBottomSheet(
         context: context,
         isScrollControlled: true,
-        builder: (context) =>  SizedBox(
-          height: MediaQuery.of(context).size.height * 0.868, // Define a altura do modal
+        builder: (context) => SizedBox(
+          height: MediaQuery.of(context).size.height *
+              0.868, // Define a altura do modal
           child: Stack(
-          alignment: Alignment.topRight,
-          children: [
-            ContainerTelas(
-              expanded: false,
-              lat: argument.latitude,
-              long: argument.longitude,
-            ),
-            Padding(
-              padding: EdgeInsets.all(20),
-              child: IconButton(
-                icon: const Icon(
-                  Icons.close,
-                  color: Color.fromARGB(255, 0, 0, 0)),
+            alignment: Alignment.topRight,
+            children: [
+              ContainerTelas(
+                expanded: false,
+                lat: argument.latitude,
+                long: argument.longitude,
+              ),
+              Padding(
+                padding: EdgeInsets.all(20),
+                child: IconButton(
+                  icon: const Icon(Icons.close,
+                      color: Color.fromARGB(255, 0, 0, 0)),
                   iconSize: 36, // Cor branca para o botão "X"
                   onPressed: () {
                     setState(() {

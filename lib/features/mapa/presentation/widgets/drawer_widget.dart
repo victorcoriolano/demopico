@@ -74,8 +74,8 @@ class MenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: Color(0xFF8B0000)), // Ícone do item
-      title: Text(text, style: TextStyle(color: Colors.black)), // Texto do item em preto
+      leading: Icon(icon, color: const Color(0xFF8B0000)), // Ícone do item
+      title: Text(text, style: const TextStyle(color: Colors.black)), // Texto do item em preto
       onTap: onPressed, // Ação a ser realizada ao pressionar o item
     );
   }

@@ -72,14 +72,15 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                               ),
                               IconButton(
                                 icon: const DecoratedIcon(
-                                    icon: Icon(
-                                      Icons.close,
-                                      color: Color.fromARGB(255, 243, 243, 243)
-                                    ),
-                                    decoration: IconDecoration(border: IconBorder(width: 1.5)),),
-                                padding: const EdgeInsets.only(top: 10, right: 10),
+                                  icon: Icon(Icons.close,
+                                      color:
+                                          Color.fromARGB(255, 243, 243, 243)),
+                                  decoration: IconDecoration(
+                                      border: IconBorder(width: 1.5)),
+                                ),
+                                padding:
+                                    const EdgeInsets.only(top: 10, right: 10),
                                 iconSize: 36,
-                                
                                 onPressed: () {
                                   Navigator.pop(
                                       context); // Retorna para a tela anterior
@@ -90,8 +91,8 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                         },
                       )
                     : const Center(
-                        child: Text(
-                            'Sem imagens disponíveis'),), // Se não houver imagens
+                        child: Text('Sem imagens disponíveis'),
+                    ), // Se não houver imagens
               ),
               Align(
                 alignment: Alignment.center,
@@ -107,7 +108,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
               ),
             ],
           ),
-          
+
           ListTile(
             title: Text(widget.pico.picoName),
           ),

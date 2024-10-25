@@ -20,35 +20,32 @@ class AddPicoWidgetState extends State<AddPicoWidget> {
     return Consumer<AddPicoControllerProvider>(
       builder: (context, provider, child) => Stack(
         children: [
-         if(_isExpanded)
-         Stack(
-          alignment:Alignment.topRight,
-           children: [ 
-
-            Center(
-                    child: ContainerTelas(
-                      lat: provider.lat,
-                      long: provider.long,
-                      expanded: _isExpanded ,
-                    ),
+          if (_isExpanded)
+            Stack(alignment: Alignment.topRight, children: [
+              Center(
+                child: ContainerTelas(
+                  lat: provider.lat,
+                  long: provider.long,
+                  expanded: _isExpanded,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.close,
+                    color: const Color.fromARGB(255, 0, 0, 0),
                   ),
-                  Padding(
-                    padding: EdgeInsets.all(20
-                    ),
-                    child: IconButton(
-                                icon: Icon(Icons.close,
-                                    color: const Color.fromARGB(255, 0, 0, 0)),
-                                    iconSize: 36, // Cor branca para o botão "X"
-                                onPressed: () {
-                                  setState(() {
-                                    _isExpanded =
-                                        !_isExpanded; // Alterna a exibição do widget
-                                  });
-                                },
-                              ),
-                  ),
-                    ]
-        ),
+                  iconSize: 36, // Cor branca para o botão "X"
+                  onPressed: () {
+                    setState(() {
+                      _isExpanded =
+                          !_isExpanded; // Alterna a exibição do widget
+                    });
+                  },
+                ),
+              ),
+            ]),
           if (!_isExpanded)
             Positioned(
               bottom: 40.0,
