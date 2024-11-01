@@ -43,7 +43,7 @@ class TopSideMapWidget extends StatelessWidget implements PreferredSizeWidget {
       } on Exception catch (e) {
         print(e);
       } catch (e) {
-        print("Erro fudidassa");
+        print("Erro fudidassa: $e");
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: const Text(
@@ -52,6 +52,10 @@ class TopSideMapWidget extends StatelessWidget implements PreferredSizeWidget {
           ),
         );
       }
+    }
+    void searchingPico(String word){
+      word = word.toLowerCase();
+      
     }
 
     return AppBar(

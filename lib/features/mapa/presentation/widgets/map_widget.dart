@@ -1,3 +1,4 @@
+import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/container_telas.dart';
@@ -21,13 +22,14 @@ class MapWidgetState extends State<MapWidget> {
         Provider.of<SpotControllerProvider>(context, listen: true);
     final mapProvider =
         Provider.of<MapControllerProvider>(context, listen: true);
+    final providerAdd = Provider.of<AddPicoControllerProvider>(context);
     // consome os dados do provider para manter a tela atualizada
     return GoogleMap(
       onMapCreated: (GoogleMapController controller) async {
         mapProvider.setGoogleMapController(controller);
         await spotProvider.showAllPico(context);
         await mapProvider.getLocation();
-
+        providerAdd.pegarLocalizacao(mapProvider.center);
         print(mapProvider.center);
         print(mapProvider.locationMessage);
       },

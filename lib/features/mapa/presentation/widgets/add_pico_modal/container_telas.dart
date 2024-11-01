@@ -114,9 +114,9 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
-                              onPressed: () {
+                              onPressed: () async {
                                 // função para criar o pico
-                                if (provider.validarFormulario()) {
+                                if (provider.validarFormulario())  {
                                   final pico = Pico(
                                       imgUrl: provider.urlImage,
                                       modalidade: provider.selectedModalidade,
@@ -133,8 +133,8 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                       userCreator: null,
                                       urlIdPico: 'anonimo',
                                       picoName: provider.nomePico);
-                                  try {
-                                    serviceLocator<SpotControllerProvider>()
+                                  try  {
+                                    await serviceLocator<SpotControllerProvider>()
                                         .createSpot(pico, context);
                                     Navigator.pop(context);
                                   } on Exception catch (e) {
@@ -143,6 +143,8 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                         const SnackBar(
                                             content: Text(
                                                 "Preencha todos os campos ou insira alguma imagem")));
+                                  } catch (e) {
+                                    print("Erro desconhecido: $e");
                                   }
                                 }
                               },

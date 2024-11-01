@@ -27,6 +27,7 @@ class AddPicoWidgetState extends State<AddPicoWidget> {
                   lat: provider.lat,
                   long: provider.long,
                   expanded: _isExpanded,
+                  
                 ),
               ),
               Padding(
