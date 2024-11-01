@@ -11,27 +11,27 @@ class TopSideMapWidget extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<MapControllerProvider>(context, listen: false);
+    final provider = Provider.of<MapControllerProvider>(context, listen: true);
     final spotProvider =
-        Provider.of<SpotControllerProvider>(context, listen: false);
+        Provider.of<SpotControllerProvider>(context, listen: true);
     final _buscarController = TextEditingController();
-    final Set<Marker> markers = spotProvider.markers;
-    //final namesPico = markers
+
+
 
     void searchPico(String name) {
       try {
-        final Marker? marker = markers.firstWhere(
-          (marker) => marker.markerId.value == name,
-          //orElse: () => null,
-        );
-        // Procurando o pico no provider para mostrar suas informações
-        Pico? picoPesquisado =
-            spotProvider.spots.firstWhere((pico) => name == pico.picoName);
+        List<Pico> picosPesquisados = spotProvider.pesquisandoPico(name);
 
-        if (marker != null) {
+        if (spotProvider.encontrouPico(name)) {
+          Marker markerEncontrado = spotProvider.markerEncontrado!;
           // Pega o controller do Provider e centraliza o mapa
-          provider.reajustarCameraPosition(marker.position);
-          showPicoModal(context, picoPesquisado);
+          provider.reajustarCameraPosition(markerEncontrado.position);
+          showPicoModal(
+            context,
+            picosPesquisados.firstWhere(
+              (pico) => pico.picoName == markerEncontrado.markerId.value,
+            ),
+          );
         } else {
           print('Pico não encontrado');
           ScaffoldMessenger.of(context).showSnackBar(
@@ -53,10 +53,7 @@ class TopSideMapWidget extends StatelessWidget implements PreferredSizeWidget {
         );
       }
     }
-    void searchingPico(String word){
-      word = word.toLowerCase();
-      
-    }
+  
 
     return AppBar(
       automaticallyImplyLeading: false, // resolvendo bug de aparecer seta
@@ -70,6 +67,11 @@ class TopSideMapWidget extends StatelessWidget implements PreferredSizeWidget {
             child: SizedBox(
               height: 42, // Altura do campo de busca
               child: TextField(
+                //list builder para mostrar os picos pesquisados
+                onChanged: (value) {
+                  spotProvider.pesquisandoPico(value);
+                },
+                onSubmitted: (value) => searchPico(value),
                 controller: _buscarController,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(
@@ -93,6 +95,7 @@ class TopSideMapWidget extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
           ),
+          
           const SizedBox(
               width: 10), // Espaçamento entre a barra de busca e os ícones
           PopupMenuButton<String>(
