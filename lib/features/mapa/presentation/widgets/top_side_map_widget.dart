@@ -7,15 +7,16 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 class TopSideMapWidget extends StatelessWidget implements PreferredSizeWidget {
-  const TopSideMapWidget({super.key});
+  TopSideMapWidget({super.key});
+  final TextEditingController _buscarController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<MapControllerProvider>(context, listen: true);
     final spotProvider =
         Provider.of<SpotControllerProvider>(context, listen: true);
-    final _buscarController = TextEditingController();
-
+    
 
 
     void searchPico(String name) {
@@ -70,6 +71,9 @@ class TopSideMapWidget extends StatelessWidget implements PreferredSizeWidget {
                 //list builder para mostrar os picos pesquisados
                 onChanged: (value) {
                   spotProvider.pesquisandoPico(value);
+                  if(spotProvider.picosPesquisados.isNotEmpty){
+                    //mostrarPicos();
+                  }
                 },
                 onSubmitted: (value) => searchPico(value),
                 controller: _buscarController,
@@ -128,6 +132,7 @@ class TopSideMapWidget extends StatelessWidget implements PreferredSizeWidget {
                     leading: Icon(Icons.terrain),
                     title: Text("Filtrar por pico"),
                   ),
+                  
                 ),
                 const PopupMenuDivider(),
                 PopupMenuItem(
@@ -138,12 +143,7 @@ class TopSideMapWidget extends StatelessWidget implements PreferredSizeWidget {
               ];
             },
           ),
-          /* IconButton(
-          icon: Icon(Icons.settings, color: Colors.white,size: 30),
-          onPressed: () {
-            Scaffold.of(context).openEndDrawer();
-          },
-        ), */
+          
         ],
       ),
       actions: [
@@ -158,7 +158,6 @@ class TopSideMapWidget extends StatelessWidget implements PreferredSizeWidget {
       ],
     );
   }
-
   @override
   Size get preferredSize => const Size.fromHeight(80);
 }
