@@ -21,7 +21,7 @@ Marker picoMarker(Pico spot, BuildContext context){
 void showPicoModal(BuildContext context, Pico pico) {
   print('Chamando modal para: ${pico.picoName}');
   print('Imagem url: ${pico.imgUrl}');
-
+  
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
