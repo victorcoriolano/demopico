@@ -28,7 +28,7 @@ void showPicoModal(BuildContext context, Pico pico) {
     backgroundColor: Colors.transparent, // Transparência para o fundo
     builder: (context) {
       return DraggableScrollableSheet(
-        initialChildSize: 0.4, 
+        initialChildSize: 0.6, 
         minChildSize: 0.2, 
         maxChildSize: 0.86, 
         builder: (BuildContext context, ScrollController scrollController) {

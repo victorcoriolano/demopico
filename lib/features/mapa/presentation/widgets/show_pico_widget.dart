@@ -1,6 +1,7 @@
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:icon_decoration/icon_decoration.dart';
+import 'package:flutter/src/rendering/box.dart';
 
 class ShowPicoWidget extends StatefulWidget {
   final Pico pico;
@@ -41,11 +42,8 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
           ),
         ],
       ),
-      child: ListView(
-        controller: widget.scrollController,
-        children: [
-          // Barra de arrastar
-          Stack(
+      child:  Column(
+        children: [ Stack(
             children: [
               Container(
                 width: double.infinity,
@@ -92,7 +90,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                       )
                     : const Center(
                         child: Text('Sem imagens disponíveis'),
-                    ), // Se não houver imagens
+                      ), // Se não houver imagens
               ),
               Align(
                 alignment: Alignment.center,
@@ -108,21 +106,135 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
               ),
             ],
           ),
+          Expanded(
+            child: ListView(
+              controller: widget.scrollController,
+              children: [
+                // Barra de arrastar
+               
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Cabeçalho com estrelas e avaliação
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Barra de avaliação com quadrados
+                          Row(
+                            children: List.generate(widget.pico.obstaculos!.length, (index) {
+                              return Icon(Icons.square,
+                                  color: index < 3 ? Colors.blue : Colors.grey);
+                            }),
+                          ),
+                          // Avaliação com estrelas
+                          Row(
+                            children: [
+                              Text(
+                                "5.0",
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(width: 8),
+                              Row(
+                                children: List.generate(5, (index) {
+                                  return Icon(Icons.star, color: Colors.black);
+                                }),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 16),
+                  
+                      // Informações do local e descrição
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 25,
+                            child: Icon(Icons.person, size:35,),
+                          ),
+                          SizedBox(width: 8),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.pico.picoName.toUpperCase(),
+                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                              Text(
+                                "Devsk8",
+                                style: TextStyle(color: Colors.grey, fontSize: 15),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 16),
+                  
+                      // Comentário
+                      Text(
+                         widget.pico.description ?? '',
 
-          ListTile(
-            title: Text(widget.pico.picoName),
-          ),
-          ListTile(
-            title: Text('Nota'),
-            subtitle: Text('Nota: ${widget.pico.nota.toString()}'),
-          ),
-          ListTile(
-            title: Text('Modalidade'),
-            subtitle: Text(widget.pico.modalidade),
-          ),
-          ListTile(
-            title: Text('Tipo do Pico'),
-            subtitle: Text(widget.pico.tipoPico),
+                        style: TextStyle(color: Colors.red, fontSize: 14),
+                      ),
+                      SizedBox(height: 16),
+                  
+  
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:  Color(0xFF8B0000),
+                              padding:
+                                  EdgeInsets.symmetric(horizontal: 40, vertical: 7),
+                            ),
+                            onPressed: () {},
+                            child: Text("ABRIR DISCUSSÃO", style: TextStyle(color: Colors.white, fontSize: 15, ),),
+                          ),
+                          Column(
+                            children: [
+                              Text("245 avaliações",
+                                  style: TextStyle(color: Colors.grey, fontSize: 12)),
+                              Row(
+                                children: [
+                                  IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(Icons.thumb_up),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(Icons.thumb_down),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 16),
+                  
+                      // Ícones à direita (salvar, sinalizar, etc.)
+                      Align(
+                        alignment: Alignment.center,
+      
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,                    
+                          children: [
+                            IconButton(
+                                onPressed: () {}, icon: Icon(Icons.bookmark_border), iconSize: 30,),
+                            IconButton(onPressed: () {}, icon: Icon(Icons.flag), iconSize: 30),
+                            IconButton(onPressed: () {}, icon: Icon(Icons.navigation), iconSize: 30),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ],
       ),
