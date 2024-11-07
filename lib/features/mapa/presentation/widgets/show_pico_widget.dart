@@ -130,17 +130,30 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                           Row(
                             children: [
                         
-                              Text(
-                               widget.pico.nota.toString(),
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(width: 8),
-                              Row(
-                                children: List.generate(5, (index) {
-                                  return Icon(Icons.star, color: Colors.black);
-                                }),
-                              ),
+                            Row(
+  children: [
+    Text(
+      widget.pico.nota.toString(),
+      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+    ),
+    SizedBox(width: 8),
+    Row(
+      children: List.generate(5, (index) {
+        if (index < widget.pico.nota!.floor()) {
+          // Estrela cheia
+          return Icon(Icons.star, color: Colors.black);
+        } else if (index == widget.pico.nota!.floor() && (widget.pico.nota! % 1) >= 0.5) {
+          // Meia estrela se a parte decimal for >= 0.5
+          return Icon(Icons.star_half, color: Colors.black);
+        } else {
+          // Estrela vazia
+          return Icon(Icons.star, color: Colors.grey);
+        }
+      }),
+    ),
+  ],
+),
+
                             ],
                           ),
                         ],
