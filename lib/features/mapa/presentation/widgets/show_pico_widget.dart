@@ -117,11 +117,9 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Cabeçalho com estrelas e avaliação
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          // Barra de avaliação com quadrados
                           Row(
                             children: List.generate(widget.pico.obstaculos!.length, (index) {
                               return Icon(Icons.square,
@@ -131,8 +129,9 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                           // Avaliação com estrelas
                           Row(
                             children: [
+                        
                               Text(
-                                "5.0",
+                               widget.pico.nota.toString(),
                                 style: TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.bold),
                               ),
@@ -196,8 +195,8 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                           ),
                           Column(
                             children: [
-                              Text("245 avaliações",
-                                  style: TextStyle(color: Colors.grey, fontSize: 12)),
+                              Text(' ${widget.pico.numeroAvaliacoes.toString()} avaliações',
+                                  style: TextStyle(color: const Color.fromARGB(255, 93, 93, 93), fontSize: 12)),
                               Row(
                                 children: [
                                   IconButton(
