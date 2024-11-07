@@ -54,14 +54,13 @@ class SpotControllerProvider extends ChangeNotifier {
     }
   }
 
-  List<Pico> pesquisandoPico(String word) {
+  void pesquisandoPico(String word) {
     word = word.toLowerCase();
     picosPesquisados = spots
-        .where((argument) => argument.picoName.toLowerCase().contains(word))
+        .where((argument) => argument.picoName.toLowerCase().contains(word.toLowerCase()))
         .toList();
     print("Ó os pico aq ó : $picosPesquisados");
     notifyListeners();
-    return picosPesquisados;
   }
 
   bool encontrouPico(String word) {
