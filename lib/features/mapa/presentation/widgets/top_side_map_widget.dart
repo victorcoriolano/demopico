@@ -146,7 +146,9 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
           PopupMenuButton<String>(
             icon: const Icon(Icons.filter_list, color: Colors.white),
             tooltip: "Filtrar por proximidade",
-            onSelected: (String value) {},
+            onSelected: (String value) {
+              
+            },
             color: Colors.white,
             itemBuilder: (BuildContext context) {
               return <PopupMenuEntry<String>>[

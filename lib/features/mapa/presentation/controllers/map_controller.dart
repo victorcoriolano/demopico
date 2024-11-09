@@ -7,6 +7,8 @@ class MapControllerProvider extends ChangeNotifier{
   GoogleMapController? _mapController;
   LatLng center = const LatLng(-23.548546, -46.9400143);// Inicializa o centro do mapa
   String locationMessage = '';
+  MapType myMapType = MapType.normal;
+  double zoomInicial = 15.0;
 
   GoogleMapController? get mapController => _mapController;
 
@@ -19,6 +21,17 @@ class MapControllerProvider extends ChangeNotifier{
     if(_mapController != null){
       _mapController!.animateCamera(CameraUpdate.newLatLng(position));
     }
+  }
+
+  void setZoom(double zoomLevel) { //alterar o zoom
+    zoomInicial = zoomLevel;
+    _mapController!.animateCamera(CameraUpdate.zoomTo(zoomLevel));
+    notifyListeners();
+  }
+
+  void setMapType(MapType mapType) { //alterar o tipo do mapa
+    myMapType = mapType;
+    notifyListeners();
   }
 
   // Função para verificar permissões

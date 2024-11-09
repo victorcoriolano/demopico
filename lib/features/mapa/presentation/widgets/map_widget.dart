@@ -33,11 +33,12 @@ class MapWidgetState extends State<MapWidget> {
         print(mapProvider.center);
         print(mapProvider.locationMessage);
       },
-      zoomControlsEnabled: true,
+      zoomControlsEnabled: false,
       initialCameraPosition: CameraPosition(
         target: mapProvider.center,
-        zoom: 15.0,
+        zoom: mapProvider.zoomInicial,
       ),
+      mapType: mapProvider.myMapType,
       scrollGesturesEnabled: true,
       rotateGesturesEnabled: true,
       myLocationEnabled: true,
