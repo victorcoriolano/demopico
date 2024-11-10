@@ -6,8 +6,12 @@ import 'package:icon_decoration/icon_decoration.dart';
 class ShowPicoWidget extends StatefulWidget {
   final Pico pico;
   final ScrollController scrollController;
+  final Map<String, int>? atributos;
   const ShowPicoWidget(
-      {super.key, required this.pico, required this.scrollController});
+      {super.key,
+      required this.pico,
+      required this.scrollController,
+      this.atributos});
 
   @override
   State<ShowPicoWidget> createState() => _ShowPicoWidgetState();
@@ -26,6 +30,18 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
   void initState() {
     super.initState();
     _loadPicos(); // carregar img
+  }
+
+  Widget buildAttributeIcons(int value) {
+    return Row(
+      children: List.generate(5, (index) {
+        return Icon(
+          Icons.circle,
+          color: index < value ? Colors.red : Colors.grey,
+          size: 20,
+        );
+      }),
+    );
   }
 
   @override
@@ -170,26 +186,41 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                       // Informações do local e descrição
                       Row(
                         children: [
-                          const CircleAvatar(
-                            radius: 25,
-                            child: Icon(
-                              Icons.person,
-                              size: 35,
+                          Container(
+                            width: 52,
+                            height: 52,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: const Color.fromARGB(
+                                    255, 205, 23, 23), // Cor da borda
+                                width: 0.5, // Largura da borda
+                              ),
+                            ),
+                            child: CircleAvatar(
+                              foregroundColor:
+                                  Color.fromARGB(255, 255, 255, 255),
+                              backgroundColor: Color.fromARGB(255, 169, 41, 41),
+                              radius: 25,
+                              child: Icon(
+                                Icons.person,
+                                size: 38,
+                              ),
                             ),
                           ),
-                          SizedBox(width: 8),
+                          SizedBox(width: 10),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 widget.pico.picoName.toUpperCase(),
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 16),
+                                    fontWeight: FontWeight.bold, fontSize: 18),
                               ),
                               Text(
                                 "Devsk8",
                                 style:
-                                    TextStyle(color: Colors.grey, fontSize: 15),
+                                    TextStyle(color: Colors.grey, fontSize: 16),
                               ),
                             ],
                           ),
@@ -198,9 +229,15 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                       SizedBox(height: 16),
 
                       // Comentário
-                      Text(
-                        widget.pico.description ?? '',
-                        style: TextStyle(color: Colors.red, fontSize: 14),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 5),
+                        child: Text(
+                          widget.pico.description ?? '',
+                          style: TextStyle(
+                              color: Color(0xFF8B0000),
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
                       SizedBox(height: 16),
 
@@ -248,6 +285,39 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                       ),
                       SizedBox(height: 16),
 
+               
+                       Container(
+                         decoration: BoxDecoration(
+                                   border: Border.all(),
+                                 ),
+                                 padding: EdgeInsets.symmetric(vertical: 10),
+                         child: Column(
+                           children: [
+                             for (var entry in widget.pico.atributos!.entries) 
+                               Container(
+                                 padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                 margin: const EdgeInsets.symmetric(vertical: 4.0), // Adicionando margem se necessário
+                                 child: Center(
+                                   child: Row(
+                                     mainAxisAlignment: MainAxisAlignment.center,
+                                     children: [
+                                       Text(
+                                         "${entry.key.toUpperCase()}: ",
+                                         style: TextStyle(
+                                           fontWeight: FontWeight.bold,
+                                           fontSize: 16,
+                                         ),
+                                         textAlign: TextAlign.start,
+                                       ),
+                                       buildAttributeIcons(entry.value),
+                                     ],
+                                   ),
+                                 ),
+                               ),
+                           ],
+                         ),
+                       )
+,
                       // Ícones à direita (salvar, sinalizar, etc.)
                       Align(
                         alignment: Alignment.center,
