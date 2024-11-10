@@ -145,32 +145,53 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
           const SizedBox(width: 10),
           PopupMenuButton<String>(
             icon: const Icon(Icons.filter_list, color: Colors.white),
-            tooltip: "Filtrar por proximidade",
+            tooltip: "Filtrar picos",
             onSelected: (String value) {
-              
+              spotProvider.filtrarPicosPorTipo(value, context);
             },
             color: Colors.white,
             itemBuilder: (BuildContext context) {
               return <PopupMenuEntry<String>>[
                 const PopupMenuItem<String>(
-                  value: 'proximidade',
+                  value: null,
                   child: ListTile(
                     leading: Icon(Icons.podcasts),
-                    title: Text("Filtrar por proximidade"),
+                    title: Text("Mostrar todos"),
                   ),
                 ),
                 const PopupMenuItem<String>(
-                  value: 'pista',
+                  value: 'SkatePark',
                   child: ListTile(
                     leading: Icon(Icons.skateboarding),
-                    title: Text("Filtrar por pista"),
+                    title: Text("Filtrar por SkatePark"),
                   ),
                 ),
                 const PopupMenuItem<String>(
-                  value: 'pico',
+                  value: 'Pico de Rua',
                   child: ListTile(
                     leading: Icon(Icons.terrain),
-                    title: Text("Filtrar por pico"),
+                    title: Text("Filtrar por Pico de rua"),
+                  ),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'Half',
+                  child: ListTile(
+                    leading: Icon(Icons.auto_graph),
+                    title: Text("Filtrar por Half"),
+                  ),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'Bowl',
+                  child: ListTile(
+                    leading: Icon(Icons.bubble_chart_rounded),
+                    title: Text("Filtrar por Bowl"),
+                  ),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'Street',
+                  child: ListTile(
+                    leading: Icon(Icons.location_city),
+                    title: Text("Filtrar por Street"),
                   ),
                 ),
                 const PopupMenuDivider(),

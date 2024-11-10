@@ -30,27 +30,14 @@ class SpotControllerProvider extends ChangeNotifier {
     //chama a função de apresentar pico para atualizar a tela com o novo pico
   }
 
-  Future<Set<Marker>> turnsPicoToMarker(BuildContext context) async {
-    // pegando o spot do use case e transformando em um marker
-    try {
-      spots = await showAllPicoUseCase.executa();
-      print(spots);
-      return spots.map((spot) {
-        return picoMarker(spot, context); // marker separado
-      }).toSet();
-    } on Exception catch (e) {
-      print('Erro ao buscar spots: $e');
-      return {};
-    }
-  }
-
-  //método de mostrar os picos a partir dos picos salvos no bd
+  //refatorando o código 
   Future<void> showAllPico(BuildContext context) async {
     try {
-      final Set<Marker> spots = await turnsPicoToMarker(context);
-      markers.addAll(spots); // adiciona os spots ao markers
-    } on Exception catch (e) {
-      print('Erro ao carregar markers: $e');
+      spots = await showAllPicoUseCase.executa();
+      markers = spots.map((spot) => picoMarker(spot, context)).toSet();
+      notifyListeners();
+    } catch (e) {
+      print('Errilhos ao carregar markers: $e');
     }
   }
 
@@ -69,5 +56,20 @@ class SpotControllerProvider extends ChangeNotifier {
         );
     if (markerEncontrado == null) return false;
     return true;
+  }
+
+  String? tipoSelecionado;
+
+  void filtrarPicosPorTipo(String? tipo, BuildContext context) {
+    tipoSelecionado = tipo;
+
+    // Filtra os picos com base no tipo selecionado
+    final picosFiltrados = tipo == null
+        ? spots // Exibe todos os spots se o tipo for nulo
+        : spots.where((pico) => pico.tipoPico == tipo).toList();
+
+    // Atualiza os markers apenas com os filtrados
+    markers = picosFiltrados.map((pico) => picoMarker(pico, context)).toSet();
+    notifyListeners();
   }
 }

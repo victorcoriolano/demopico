@@ -6,7 +6,6 @@ class ShowAllPico {
   ShowAllPico(this.spotRepository);
 
     Future<List<Pico>> executa() async {
-    // pegando o spot do banco de dados e transformando em um marker
     try {
       List<Pico> spots = await spotRepository.showAllPico();
       return spots;

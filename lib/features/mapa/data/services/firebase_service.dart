@@ -81,5 +81,4 @@ class FirebaseServiceMap implements SpotRepository{
     return [];
   }
 }
-
 }
