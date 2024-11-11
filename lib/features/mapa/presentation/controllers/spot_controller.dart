@@ -3,7 +3,6 @@ import 'package:demopico/features/mapa/domain/use%20cases/create_spot.dart';
 import 'package:demopico/features/mapa/domain/use%20cases/show_all_pico.dart';
 import 'package:demopico/features/mapa/presentation/widgets/marker_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class SpotControllerProvider extends ChangeNotifier {
@@ -50,13 +49,7 @@ class SpotControllerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool encontrouPico(String word) {
-    markerEncontrado = markers.toList().firstWhereOrNull(
-          (marker) => marker.markerId.value.contains(word),
-        );
-    if (markerEncontrado == null) return false;
-    return true;
-  }
+
 
   String? tipoSelecionado;
 

@@ -3,6 +3,7 @@ import 'package:demopico/features/mapa/presentation/controllers/map_controller.d
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/widgets/marker_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -48,8 +49,7 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
                 return ListTile(
                   title: Text(pico.picoName),
                   onTap: () {
-                    searchPico(pico.picoName);
-                    overlayEntry?.remove(); // Fecha o overlay ao selecionar um pico
+                    encontrouPico(pico.picoName);
                     return;
                   },
                 );
@@ -59,51 +59,58 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
         ),
       ),
     );
-
     Overlay.of(context).insert(overlayEntry!);
   }
 
-  void searchPico(String name) {
-    final spotProvider = Provider.of<SpotControllerProvider>(context, listen: true);
-    final provider = Provider.of<MapControllerProvider>(context, listen: true);
+  void removeOverlay(){
+    overlayEntry?.remove();
+    overlayEntry?.dispose();
+    overlayEntry = null;
+  }
 
-    try {
-      spotProvider.pesquisandoPico(name);
+  @override
+  void dispose() {
+    removeOverlay();
+    _buscarController.dispose();
+    super.dispose();
+  }
 
-      if (spotProvider.encontrouPico(name)) {
-        Marker markerEncontrado = spotProvider.markerEncontrado!;
-        provider.reajustarCameraPosition(markerEncontrado.position);
-        showPicoModal(
-          context,
-          spotProvider.picosPesquisados.firstWhere(
-            (pico) => pico.picoName == markerEncontrado.markerId.value,
-          ),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Pico não encontrado"),
-          ),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text(
-              "Erro ao procurar pico! Deseja procurar na lista de picos?"),
-          action: SnackBarAction(label: "sim", onPressed: () {}),
+  void encontrouPico(String namePico) {
+    final spotProvider =
+        Provider.of<SpotControllerProvider>(context, listen: false);
+    final provider = Provider.of<MapControllerProvider>(context, listen: false);
+    Marker? markerEncontrado = spotProvider.markers
+        .toList()
+        .firstWhereOrNull((markers) => markers.markerId.value == namePico);
+    if (markerEncontrado != null) {
+      removeOverlay();
+      provider.reajustarCameraPosition(markerEncontrado.position);
+      showPicoModal(
+        context,
+        spotProvider.picosPesquisados.firstWhere(
+          (pico) => pico.picoName == markerEncontrado.markerId.value,
         ),
       );
+    } else {
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Pico não encontrado"),
+        ),
+      );
+      removeOverlay();
     }
+    _buscarController.clear();
   }
 
   @override
   Widget build(BuildContext context) {
-    final spotProvider = Provider.of<SpotControllerProvider>(context);
+    final spotProvider = Provider.of<SpotControllerProvider>(context, listen: true);
+    List<Pico> picos = spotProvider.picosPesquisados;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Exibe ou atualiza o overlay com a lista de picos pesquisados
-      showPicosOverlay(context, spotProvider.picosPesquisados);
+      showPicosOverlay(context, picos);
     });
 
     return AppBar(
@@ -120,7 +127,7 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
                 onChanged: (value) {
                   spotProvider.pesquisandoPico(value);
                 },
-                onSubmitted: (value) => searchPico(value),
+                onSubmitted: (value) => encontrouPico(value),
                 controller: _buscarController,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(vertical: 10),
@@ -129,7 +136,7 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
                     icon: const Icon(Icons.search, color: Colors.grey),
                     onPressed: () {
                       final picoName = _buscarController.text.toString();
-                      searchPico(picoName);
+                      encontrouPico(picoName);
                     },
                   ),
                   border: OutlineInputBorder(
@@ -217,12 +224,5 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
         ),
       ],
     );
-  }
-
-  @override
-  void dispose() {
-    overlayEntry?.remove();
-    _buscarController.dispose();
-    super.dispose();
   }
 }
