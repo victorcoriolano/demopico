@@ -1,7 +1,5 @@
-import 'package:demopico/core/common/inject_dependencies.dart';
 import 'package:demopico/features/profile/presentation/pages/user_page.dart';
-import 'package:demopico/features/user/data/services/auth_service.dart';
-import 'package:demopico/features/user/presentation/controllers/provider_auth.dart';
+
 import 'package:demopico/features/user/presentation/controllers/register_controller.dart';
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
 import 'package:demopico/features/user/presentation/widgets/dropdown.dart';

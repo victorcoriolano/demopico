@@ -62,7 +62,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
         children: [
           Stack(
             children: [
-              Container(
+              SizedBox(
                 width: double.infinity,
                 height: 270,
                 child: images.isNotEmpty
@@ -130,7 +130,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                 // Barra de arrastar
 
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -151,26 +151,26 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                 children: [
                                   Text(
                                     widget.pico.nota.toString(),
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  SizedBox(width: 8),
+                                  const SizedBox(width: 8),
                                   Row(
                                     children: List.generate(5, (index) {
                                       if (index < widget.pico.nota!.floor()) {
                                         // Estrela cheia
-                                        return Icon(Icons.star,
+                                        return const Icon(Icons.star,
                                             color: Colors.black);
                                       } else if (index ==
                                               widget.pico.nota!.floor() &&
                                           (widget.pico.nota! % 1) >= 0.5) {
                                         // Meia estrela se a parte decimal for >= 0.5
-                                        return Icon(Icons.star_half,
+                                        return const Icon(Icons.star_half,
                                             color: Colors.black);
                                       } else {
                                         // Estrela vazia
-                                        return Icon(Icons.star,
+                                        return const Icon(Icons.star,
                                             color: Colors.grey);
                                       }
                                     }),
@@ -181,7 +181,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
                       // Informações do local e descrição
                       Row(
@@ -197,7 +197,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                 width: 0.5, // Largura da borda
                               ),
                             ),
-                            child: CircleAvatar(
+                            child: const CircleAvatar(
                               foregroundColor:
                                   Color.fromARGB(255, 255, 255, 255),
                               backgroundColor: Color.fromARGB(255, 169, 41, 41),
@@ -208,16 +208,16 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                               ),
                             ),
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 widget.pico.picoName.toUpperCase(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 18),
                               ),
-                              Text(
+                              const Text(
                                 "Devsk8",
                                 style:
                                     TextStyle(color: Colors.grey, fontSize: 16),
@@ -226,32 +226,32 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
                       // Comentário
                       Container(
-                        margin: EdgeInsets.symmetric(horizontal: 5),
+                        margin: const EdgeInsets.symmetric(horizontal: 5),
                         child: Text(
                           widget.pico.description ?? '',
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Color(0xFF8B0000),
                               fontSize: 14,
                               fontWeight: FontWeight.bold),
                         ),
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFF8B0000),
-                              padding: EdgeInsets.symmetric(
+                              backgroundColor: const Color(0xFF8B0000),
+                              padding: const EdgeInsets.symmetric(
                                   horizontal: 40, vertical: 7),
                             ),
                             onPressed: () {},
-                            child: Text(
+                            child: const Text(
                               "ABRIR DISCUSSÃO",
                               style: TextStyle(
                                 color: Colors.white,
@@ -263,19 +263,19 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                             children: [
                               Text(
                                   ' ${widget.pico.numeroAvaliacoes.toString()} avaliações',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color:
-                                          const Color.fromARGB(255, 93, 93, 93),
+                                          Color.fromARGB(255, 93, 93, 93),
                                       fontSize: 12)),
                               Row(
                                 children: [
                                   IconButton(
                                     onPressed: () {},
-                                    icon: Icon(Icons.thumb_up),
+                                    icon: const Icon(Icons.thumb_up),
                                   ),
                                   IconButton(
                                     onPressed: () {},
-                                    icon: Icon(Icons.thumb_down),
+                                    icon: const Icon(Icons.thumb_down),
                                   ),
                                 ],
                               ),
@@ -283,14 +283,14 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
                
                        Container(
                          decoration: BoxDecoration(
                                    border: Border.all(),
                                  ),
-                                 padding: EdgeInsets.symmetric(vertical: 10),
+                                 padding: const EdgeInsets.symmetric(vertical: 10),
                          child: Column(
                            children: [
                              for (var entry in widget.pico.atributos!.entries) 
@@ -303,7 +303,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                      children: [
                                        Text(
                                          "${entry.key.toUpperCase()}: ",
-                                         style: TextStyle(
+                                         style: const TextStyle(
                                            fontWeight: FontWeight.bold,
                                            fontSize: 16,
                                          ),
@@ -326,16 +326,16 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                           children: [
                             IconButton(
                               onPressed: () {},
-                              icon: Icon(Icons.bookmark_border),
+                              icon: const Icon(Icons.bookmark_border),
                               iconSize: 30,
                             ),
                             IconButton(
                                 onPressed: () {},
-                                icon: Icon(Icons.flag),
+                                icon: const Icon(Icons.flag),
                                 iconSize: 30),
                             IconButton(
                                 onPressed: () {},
-                                icon: Icon(Icons.navigation),
+                                icon: const Icon(Icons.navigation),
                                 iconSize: 30),
                           ],
                         ),

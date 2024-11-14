@@ -11,9 +11,9 @@ class MapPage extends StatelessWidget { // convertendo pra stl pq eh imutalvel
   @override
   Widget build(BuildContext context) {
     return 
-      Scaffold(
+      const Scaffold(
         appBar: TopSideMapWidget(), 
-        body: const Stack(
+        body: Stack(
           children: [
             MapWidget(),
             AddPicoWidget(),

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class TerceiraTela extends StatelessWidget {
+  const TerceiraTela({super.key});
+
   @override
   Widget build(BuildContext context) {
     // Obtém a altura da tela
@@ -60,7 +62,7 @@ class TerceiraTela extends StatelessWidget {
                 ),
                 // Título da seção
                 const Padding(
-                  padding: const EdgeInsets.symmetric(
+                  padding: EdgeInsets.symmetric(
                       vertical: 20.0), // Espaçamento vertical para o título
                   child: Text(
                     'OBSTÁCULOS', // Texto do título
@@ -72,7 +74,7 @@ class TerceiraTela extends StatelessWidget {
                 ),
                 // conteiner pra demostrar os obstáculos selecionados 
                 Container(
-                  margin: EdgeInsets.only(bottom: 20),
+                  margin: const EdgeInsets.only(bottom: 20),
                   child: Visibility(
                     visible: provider.obstaculos.isNotEmpty,
                     child: Wrap(
@@ -106,7 +108,7 @@ class TerceiraTela extends StatelessWidget {
                           padding: const EdgeInsets.all(5),
                           child: Container(
                             height: 20, // Altura das caixas
-                            padding: EdgeInsets.all(0), // Sem padding
+                            padding: const EdgeInsets.all(0), // Sem padding
                             child: IconButton(
                               color: const Color.fromARGB(255, 45, 45, 45),
                               iconSize: 36,

@@ -60,7 +60,7 @@ class MapWidgetState extends State<MapWidget> {
                 long: argument.longitude,
               ),
               Padding(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 child: IconButton(
                   icon: const Icon(Icons.close,
                       color: Color.fromARGB(255, 0, 0, 0)),

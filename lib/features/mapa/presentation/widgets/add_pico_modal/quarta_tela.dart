@@ -96,10 +96,10 @@ class _QuartaTelaState extends State<QuartaTela>  {
                           TextStyle(fontSize: 16),// Texto abaixo do ícone
                       ), 
                       Container(
-                        margin: EdgeInsets.only(top: 5),
+                        margin: const EdgeInsets.only(top: 5),
                         child: Visibility(
                           visible: provider.urlImage.isNotEmpty,
-                          child: Text("imagem selecionada com sucesso"),
+                          child: const Text("imagem selecionada com sucesso"),
                         ),
                       ),
                     ],

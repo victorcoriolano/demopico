@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SegundaTela extends StatefulWidget {
+  const SegundaTela({super.key});
+
   @override
   _SegundaTelaState createState() => _SegundaTelaState();
 }
@@ -113,7 +115,7 @@ class _SegundaTelaState extends State<SegundaTela> {
                   height: 60.0,// diminuindo o tamanho do icon para n ficar dando erro
                   width: 45.0,
                 'assets/images/iconPico.png', // Substitua pelo caminho da sua imagem
-                  color: index < valor ? Color(0xFF8B0000) : Colors.grey[350], // Altera a cor do ícone baseado na avaliação
+                  color: index < valor ? const Color(0xFF8B0000) : Colors.grey[350], // Altera a cor do ícone baseado na avaliação
                 ),
                 iconSize: 5, // Tamanho aumentado para 50
                 onPressed: () {
@@ -127,13 +129,13 @@ class _SegundaTelaState extends State<SegundaTela> {
         // Descrição abaixo dos ícones
         Text(
           descricao,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 13,
             color: Colors.black54,
           ),
         ),
 
-        SizedBox(height: 7),
+        const SizedBox(height: 7),
       ],
     );
   }

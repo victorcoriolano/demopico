@@ -16,7 +16,7 @@ class _MyDrawerState extends State<MyDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
       child: Container(
-        padding: EdgeInsets.all(16.0), // Espaçamento interno do menu
+        padding: const EdgeInsets.all(16.0), // Espaçamento interno do menu
         color: Colors.white, // Cor de fundo do Drawer
         child: ListView(
           padding: EdgeInsets.zero, // Remove o padding padrão
@@ -134,7 +134,7 @@ class MenuItem extends StatelessWidget {
   final VoidCallback onPressed; // Função a ser chamada ao pressionar o item
 
   // Construtor do MenuItem
-  MenuItem({
+  const MenuItem({super.key, 
     required this.icon,
     required this.text,
     required this.onPressed,

@@ -47,7 +47,7 @@ class  AddPicoControllerProvider extends ChangeNotifier with Validators {
           .child('images/$nomePico.jpg');
       await ref.putFile(img!);
       urlImage.add(await ref.getDownloadURL());
-      print('${urlImage} KJJJ');
+      print('$urlImage KJJJ');
     }on Exception catch (e){
       print("Erro ao subir imagem pro storage: $e");
     }

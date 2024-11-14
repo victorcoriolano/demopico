@@ -148,7 +148,7 @@ class ModalidadeButtons extends StatelessWidget {
   final Function(String) onSelected; // Callback para seleção da modalidade
   final String selectedModalidade; // Modalidade selecionada
 
-  ModalidadeButtons({required this.onSelected, required this.selectedModalidade});
+  const ModalidadeButtons({super.key, required this.onSelected, required this.selectedModalidade});
 
   @override
   Widget build(BuildContext context) {
@@ -170,7 +170,7 @@ class ModalidadeButtons extends StatelessWidget {
     bool isSelected = selectedModalidade == modalidade; // Verifica se a modalidade está selecionada
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        backgroundColor: isSelected ? Color(0xFF8B0000) : Colors.grey[300], // Cor do botão
+        backgroundColor: isSelected ? const Color(0xFF8B0000) : Colors.grey[300], // Cor do botão
         foregroundColor: isSelected ? Colors.white : Colors.black,
         padding: const EdgeInsets.symmetric(horizontal: 25),
         shape: RoundedRectangleBorder(
@@ -180,7 +180,7 @@ class ModalidadeButtons extends StatelessWidget {
       onPressed: () {
         onSelected(modalidade); // Chama o callback com a modalidade selecionada
       },
-      child: Text(modalidade, style: TextStyle(fontSize: 15)),
+      child: Text(modalidade, style: const TextStyle(fontSize: 15)),
     );
   }
 }

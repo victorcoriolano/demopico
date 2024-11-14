@@ -28,10 +28,10 @@ class _ContainerTelasState extends State<ContainerTelas> {
   
 
   final List<Widget> _screens = [
-    EspecificidadeScreen(), // Página 1
-    SegundaTela(), // Página 2
-    TerceiraTela(), // Página 3
-    QuartaTela(), // Página 4
+    const EspecificidadeScreen(), // Página 1
+    const SegundaTela(), // Página 2
+    const TerceiraTela(), // Página 3
+    const QuartaTela(), // Página 4
   ];
 
   void _nextScreen() {
@@ -71,7 +71,7 @@ class _ContainerTelasState extends State<ContainerTelas> {
                       borderRadius: BorderRadius.circular(
                           12), // Arredondamento das bordas
                       border: Border.all(
-                          color: Color(0xFF8B0000), width: 3), // Borda vermelha
+                          color: const Color(0xFF8B0000), width: 3), // Borda vermelha
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(10),
@@ -87,7 +87,7 @@ class _ContainerTelasState extends State<ContainerTelas> {
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
-                                    Color(0xFF8B0000), // Cor do botão
+                                    const Color(0xFF8B0000), // Cor do botão
                                 foregroundColor: Colors.white,
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 50, vertical: 15),
@@ -155,7 +155,7 @@ class _ContainerTelasState extends State<ContainerTelas> {
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
-                                    Color(0xFF8B0000), // Cor do botão
+                                    const Color(0xFF8B0000), // Cor do botão
                                 foregroundColor: Colors.white,
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 50,

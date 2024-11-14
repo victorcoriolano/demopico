@@ -1,6 +1,5 @@
 import 'package:demopico/app/home_page.dart';
 import 'package:demopico/core/errors/failure_server.dart';
-import 'package:demopico/features/profile/presentation/pages/user_page.dart';
 import 'package:demopico/features/user/data/services/firebase_service.dart';
 import 'package:demopico/features/user/presentation/controllers/login_controller.dart';
 import 'package:demopico/features/user/presentation/pages/register_page.dart';

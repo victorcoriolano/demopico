@@ -35,7 +35,7 @@ class AddPicoWidgetState extends State<AddPicoWidget> {
                 child: IconButton(
                   icon: const Icon(
                     Icons.close,
-                    color: const Color.fromARGB(255, 0, 0, 0),
+                    color: Color.fromARGB(255, 0, 0, 0),
                   ),
                   iconSize: 36, // Cor branca para o botão "X"
                   onPressed: () {

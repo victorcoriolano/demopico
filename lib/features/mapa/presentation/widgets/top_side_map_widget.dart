@@ -26,7 +26,7 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
     // Remove o overlay anterior, se ainda estiver ativo
     overlayEntry?.remove();
 
-    if (picosPesquisados.isEmpty) {overlayEntry?.remove(); return;};
+    if (picosPesquisados.isEmpty) {overlayEntry?.remove(); return;}
 
     overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
@@ -112,7 +112,7 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
       // Exibe ou atualiza o overlay com a lista de picos pesquisados
       showPicosOverlay(context, picos);
     });
-
+    
     return AppBar(
       automaticallyImplyLeading: false,
       toolbarHeight: 100,
