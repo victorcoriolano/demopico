@@ -44,12 +44,12 @@ class SpotControllerProvider extends ChangeNotifier {
   void pesquisandoPico(String word) {
     word = word.toLowerCase();
     picosPesquisados = spots
-        .where((argument) => argument.picoName.toLowerCase().contains(word.toLowerCase()))
+        .where((argument) =>
+            argument.picoName.toLowerCase().contains(word.toLowerCase()))
         .toList();
     print("Ó os pico aq ó : $picosPesquisados");
     notifyListeners();
   }
-
 
 /*   Métodos para filtrar */
   List<Pico> picosFiltrados = [];
@@ -57,7 +57,6 @@ class SpotControllerProvider extends ChangeNotifier {
 
   void filtrarPicosPorTipo(String? tipo, BuildContext context) {
     tipoSelecionado = tipo;
-    
 
     // Filtra os picos com base no tipo selecionado
     picosFiltrados = tipo == null
@@ -68,23 +67,43 @@ class SpotControllerProvider extends ChangeNotifier {
     markers = picosFiltrados.map((pico) => picoMarker(pico, context)).toSet();
     notifyListeners();
   }
-  List<String> utilidadeFiltrar = ['Água', 'Teto', 'Banheiro', 'Suave Arcadiar', 'Público / Gratuito'];
+
+  List<String> utilidades = [
+    'Água',
+    'Teto',
+    'Banheiro',
+    'Suave Arcadiar',
+    'Público / Gratuito'
+  ];
+  Map<String, bool> utilidadeFiltrar = {
+    'Água': false,
+    'Teto': false,
+    'Banheiro': false,
+    'Suave Arcadiar': false,
+    'Público / Gratuito': false
+  };
   List<String> utilidadesSelecionadas = [];
 
-  void filtrarPorUtilidade(List<String>? utilidades, BuildContext context){
-    picosFiltrados = utilidades == null 
-      ? spots
-      : spots.where((pico) => pico.utilidades!.contains(utilidades)).toList();
-    
+  void filtrarPorUtilidade(BuildContext context) {
+    utilidadesSelecionadas = utilidadeFiltrar.entries
+      .where((entry) => entry.value) // Filtra apenas as utilidades selecionadas
+      .map((entry) => entry.key) // Pega o nome das utilidades
+      .toList();
+    if (utilidadesSelecionadas.isEmpty) {
+      picosFiltrados = spots;
+    } else {
+      picosFiltrados = spots.where((pico) {
+        return utilidadesSelecionadas
+            .any((utilidade) => pico.utilidades?.contains(utilidade) ?? false);
+      }).toList();
+    }
+
     markers = picosFiltrados.map((pico) => picoMarker(pico, context)).toSet();
     notifyListeners();
   }
 
-  void adicionarUtilidade(String utilidade){
-    utilidadesSelecionadas.add(utilidade);
-  }
-  
-  void removerUtilidades(String utilidade){
-    utilidadesSelecionadas.remove(utilidade);
+  void selecionarUtilidade(String utilidade, bool isSelected) {
+    utilidadeFiltrar[utilidade] = isSelected;
+    notifyListeners();
   }
 }

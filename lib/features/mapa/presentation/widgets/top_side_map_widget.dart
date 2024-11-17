@@ -235,20 +235,34 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Consumer<SpotControllerProvider>
-        (
+        return Consumer<SpotControllerProvider>(
           builder: (BuildContext context, SpotControllerProvider provider, Widget? child) => AlertDialog(
             title: const Text("Selecione os atributos"),
-            content: Wrap(
-              alignment: WrapAlignment.spaceBetween,
-              children: provider.utilidadeFiltrar.map((utilidade) => 
-                Chip(
-                  label: Text(utilidade),
-                  onDeleted: () => provider.removerUtilidades(utilidade),
-                ),
-              ).toList(),
+            content: Column(
+              children: provider.utilidades.map((utilidade) {
+                return CheckboxListTile(
+                  title: Text(utilidade),
+                  value: provider.utilidadeFiltrar[utilidade], 
+                  onChanged: (bool? value) { 
+                    provider.selecionarUtilidade(utilidade, value!);
+                    if(value == true){
+                      provider.utilidadesSelecionadas.add(utilidade);
+                    }else{
+                      provider.utilidadesSelecionadas.remove(utilidade);
+                    }
+                  },
+                );
+              }).toList(),
             ),
-            
+            actions: [
+              TextButton(
+                onPressed: (){
+                  provider.filtrarPorUtilidade(context);
+                  Navigator.pop(context);
+                }, 
+                child: const Text("Filtrar"),
+              ),
+            ],
           ), 
         );
       },
