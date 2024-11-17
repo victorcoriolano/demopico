@@ -154,7 +154,12 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
             icon: const Icon(Icons.filter_list, color: Colors.white),
             tooltip: "Filtrar picos",
             onSelected: (String value) {
-              spotProvider.filtrarPicosPorTipo(value, context);
+              if(value == 'Atributo'){
+                mostrarAtributos(context);
+              }else{
+                spotProvider.filtrarPicosPorTipo(value, context);
+              }
+              
             },
             color: Colors.white,
             itemBuilder: (BuildContext context) {
@@ -202,10 +207,10 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
                   ),
                 ),
                 const PopupMenuDivider(),
-                PopupMenuItem(
-                  child: TextButton(
-                    onPressed: () {},
-                    child: const Text("Filtrar por atributos"),
+                const PopupMenuItem(
+                  value: 'Atributo',
+                  child: ListTile(
+                    title: Text("Filtrar por Atributos"),
                   ),
                 ),
               ];
@@ -223,6 +228,30 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
           ),
         ),
       ],
+    );
+  }
+  
+  Future<void> mostrarAtributos(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Consumer<SpotControllerProvider>
+        (
+          builder: (BuildContext context, SpotControllerProvider provider, Widget? child) => AlertDialog(
+            title: const Text("Selecione os atributos"),
+            content: Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              children: provider.utilidadeFiltrar.map((utilidade) => 
+                Chip(
+                  label: Text(utilidade),
+                  onDeleted: () => provider.removerUtilidades(utilidade),
+                ),
+              ).toList(),
+            ),
+            
+          ), 
+        );
+      },
     );
   }
 }

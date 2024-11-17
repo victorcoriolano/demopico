@@ -104,7 +104,7 @@ class TerceiraTela extends StatelessWidget {
                     itemCount: listaObstaculos.length, // Total de 15 caixas
                     itemBuilder: (context, index) {
                       return 
-                         Padding(
+                        Padding(
                           padding: const EdgeInsets.all(5),
                           child: Container(
                             height: 20, // Altura das caixas

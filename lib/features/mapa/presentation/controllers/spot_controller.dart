@@ -29,7 +29,7 @@ class SpotControllerProvider extends ChangeNotifier {
     //chama a função de apresentar pico para atualizar a tela com o novo pico
   }
 
-  //refatorando o código 
+  //Mostrar picos na tela com base no use case
   Future<void> showAllPico(BuildContext context) async {
     try {
       spots = await showAllPicoUseCase.executa();
@@ -40,6 +40,7 @@ class SpotControllerProvider extends ChangeNotifier {
     }
   }
 
+  //Método pra pesquisar pico
   void pesquisandoPico(String word) {
     word = word.toLowerCase();
     picosPesquisados = spots
@@ -50,19 +51,40 @@ class SpotControllerProvider extends ChangeNotifier {
   }
 
 
-
+/*   Métodos para filtrar */
+  List<Pico> picosFiltrados = [];
   String? tipoSelecionado;
 
   void filtrarPicosPorTipo(String? tipo, BuildContext context) {
     tipoSelecionado = tipo;
+    
 
     // Filtra os picos com base no tipo selecionado
-    final picosFiltrados = tipo == null
+    picosFiltrados = tipo == null
         ? spots // Exibe todos os spots se o tipo for nulo
         : spots.where((pico) => pico.tipoPico == tipo).toList();
 
     // Atualiza os markers apenas com os filtrados
     markers = picosFiltrados.map((pico) => picoMarker(pico, context)).toSet();
     notifyListeners();
+  }
+  List<String> utilidadeFiltrar = ['Água', 'Teto', 'Banheiro', 'Suave Arcadiar', 'Público / Gratuito'];
+  List<String> utilidadesSelecionadas = [];
+
+  void filtrarPorUtilidade(List<String>? utilidades, BuildContext context){
+    picosFiltrados = utilidades == null 
+      ? spots
+      : spots.where((pico) => pico.utilidades!.contains(utilidades)).toList();
+    
+    markers = picosFiltrados.map((pico) => picoMarker(pico, context)).toSet();
+    notifyListeners();
+  }
+
+  void adicionarUtilidade(String utilidade){
+    utilidadesSelecionadas.add(utilidade);
+  }
+  
+  void removerUtilidades(String utilidade){
+    utilidadesSelecionadas.remove(utilidade);
   }
 }
