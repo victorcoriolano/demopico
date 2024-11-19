@@ -154,7 +154,7 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
             icon: const Icon(Icons.filter_list, color: Colors.white),
             tooltip: "Filtrar picos",
             onSelected: (String value) {
-              if(value == 'Atributo'){
+              if(value == 'Utilidades'){
                 mostrarAtributos(context);
               }else{
                 spotProvider.filtrarPicosPorTipo(value, context);
@@ -208,9 +208,21 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
                 ),
                 const PopupMenuDivider(),
                 const PopupMenuItem(
-                  value: 'Atributo',
+                  value: 'Utilidades',
                   child: ListTile(
-                    title: Text("Filtrar por Atributos"),
+                    title: Text("Filtrar por Utilidades"),
+                  ),
+                ),
+                const PopupMenuDivider(),
+                PopupMenuItem(
+                  child: DropdownMenu(
+                    hintText: 'Modalidade',
+                    onSelected: (value) => spotProvider.filtrarModalidade(value, context),
+                    dropdownMenuEntries: const [
+                      DropdownMenuEntry(value: 'Skate', label: 'Skate'),
+                      DropdownMenuEntry(value: 'Parkuor', label: 'Parkuor'),
+                      DropdownMenuEntry(value: 'BMX', label: 'BMX'),
+                    ],
                   ),
                 ),
               ];
@@ -237,7 +249,7 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
       builder: (BuildContext context) {
         return Consumer<SpotControllerProvider>(
           builder: (BuildContext context, SpotControllerProvider provider, Widget? child) => AlertDialog(
-            title: const Text("Selecione os atributos"),
+            title: const Text("Selecione as Utilidades"),
             content: Column(
               children: provider.utilidades.map((utilidade) {
                 return CheckboxListTile(

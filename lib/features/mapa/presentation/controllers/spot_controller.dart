@@ -106,4 +106,10 @@ class SpotControllerProvider extends ChangeNotifier {
     utilidadeFiltrar[utilidade] = isSelected;
     notifyListeners();
   }
+
+  void filtrarModalidade(String? modalidade, BuildContext context){
+    picosFiltrados = modalidade == null ? spots : spots.where((pico) => pico.modalidade == modalidade ).toList();
+    markers = picosFiltrados.map((pico) => picoMarker(pico, context)).toSet();
+    notifyListeners();
+  }
 }
