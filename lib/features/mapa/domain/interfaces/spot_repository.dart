@@ -6,4 +6,5 @@ abstract class SpotRepository {
   Future<void> createSpot(Pico pico);
   void saveSpot(Pico pico, LoggedUser user);
   Future<List<Pico>> showAllPico();
+  Future<void> salvarNota(int avaliacoes, double nota);
 }

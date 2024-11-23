@@ -81,4 +81,10 @@ class FirebaseServiceMap implements SpotRepository{
     return [];
   }
 }
+
+  @override
+  Future<void> salvarNota(int avaliacoes, double nota) {
+    // TODO: implement salvarNota
+    throw UnimplementedError();
+  }
 }
