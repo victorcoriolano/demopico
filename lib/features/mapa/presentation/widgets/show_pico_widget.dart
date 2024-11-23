@@ -35,10 +35,10 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
   Widget buildAttributeIcons(int value) {
     return Row(
       children: List.generate(5, (index) {
-        return Icon(
-          Icons.circle,
-          color: index < value ? Colors.red : Colors.grey,
-          size: 20,
+        return Image.asset(
+          'assets/images/iconPico.png',
+          color: index < value ? const Color.fromARGB(255, 169, 41, 41) : Colors.grey,
+          width: 28,
         );
       }),
     );
@@ -284,22 +284,20 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                         ],
                       ),
                       const SizedBox(height: 16),
-
-               
                        Container(
                          decoration: BoxDecoration(
-                                   border: Border.all(),
+                                   border: Border.all(width: 2, color: const Color.fromARGB(216, 0, 0, 0)),
                                  ),
-                                 padding: const EdgeInsets.symmetric(vertical: 10),
                          child: Column(
                            children: [
                              for (var entry in widget.pico.atributos!.entries) 
                                Container(
-                                 padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                 margin: const EdgeInsets.symmetric(vertical: 4.0), // Adicionando margem se necessário
+                                 padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                                 margin: const EdgeInsets.symmetric(vertical: 4.0),
+                                  // Adicionando margem se necessário
                                  child: Center(
                                    child: Row(
-                                     mainAxisAlignment: MainAxisAlignment.center,
+                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                      children: [
                                        Text(
                                          "${entry.key.toUpperCase()}: ",
