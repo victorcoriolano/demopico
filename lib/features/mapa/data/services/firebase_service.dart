@@ -83,8 +83,26 @@ class FirebaseServiceMap implements SpotRepository{
 }
 
   @override
-  Future<void> salvarNota(int avaliacoes, double nota) {
-    // TODO: implement salvarNota
-    throw UnimplementedError();
+  Future<void> salvarNota(int avaliacoes, double nota, String picoName) async {
+    try {
+      final snapshot = await _firebaseFirestore
+          .collection('spots')
+          .where('name', isEqualTo: picoName)
+          .limit(1)
+          .get();
+
+      if (snapshot.docs.isNotEmpty) {
+        final picoReference = snapshot.docs.first.id;
+        await _firebaseFirestore.collection('spots').doc(picoReference).update({
+          'nota': nota,
+          'avaliacoes': avaliacoes,
+        });
+      } else {
+        throw Exception("Piquerson: '$picoName' não encontrado.");
+      }
+    } catch (e) {
+      print("Erro ao salvar a nota: $e");
+    }
   }
+
 }

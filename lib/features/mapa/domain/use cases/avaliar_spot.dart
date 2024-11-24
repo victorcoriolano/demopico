@@ -1,3 +1,4 @@
+import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/interfaces/spot_repository.dart';
 
 class AvaliarSpot {
@@ -5,7 +6,7 @@ class AvaliarSpot {
 
   AvaliarSpot(firebaseNotaRepository, {required this.notaRepository});
 
-  Future<void> executar(List<double> notas) async {
+  Future<void> executar(List<double> notas, Pico pico) async {
     // Lógica de negócio: calcular média
     if (notas.isEmpty) {
       throw Exception("A lista de notas está vazia.");
@@ -15,6 +16,6 @@ class AvaliarSpot {
   
 
     // Salvar no repositório (camada de dados)
-    await notaRepository.salvarNota(avaliacoes, media);
+    await notaRepository.salvarNota(avaliacoes, media, pico.picoName);
   }
 }
