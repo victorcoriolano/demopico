@@ -1,5 +1,6 @@
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:icon_decoration/icon_decoration.dart';
 //import 'package:flutter/src/rendering/box.dart';
 
@@ -262,59 +263,56 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                           Column(
                             children: [
                               Text(
-                                  ' ${widget.pico.numeroAvaliacoes.toString()} avaliações',
-                                  style: const TextStyle(
-                                      color:
-                                          Color.fromARGB(255, 93, 93, 93),
-                                      fontSize: 12)),
-                              Row(
-                                children: [
-                                  IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(Icons.thumb_up),
-                                  ),
-                                  IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(Icons.thumb_down),
-                                  ),
-                                ],
+                                ' ${widget.pico.numeroAvaliacoes.toString()} avaliações',
+                                style: const TextStyle(
+                                    color: Color.fromARGB(255, 93, 93, 93),
+                                    fontSize: 12),
+                              ),
+                              TextButton(
+                                onPressed: () => avaliarPico(context),
+                                child: const Text('Avaliar pico'),
                               ),
                             ],
                           ),
                         ],
                       ),
                       const SizedBox(height: 16),
-                       Container(
-                         decoration: BoxDecoration(
-                                   border: Border.all(width: 2, color: const Color.fromARGB(216, 0, 0, 0)),
-                                 ),
-                         child: Column(
-                           children: [
-                             for (var entry in widget.pico.atributos!.entries) 
-                               Container(
-                                 padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
-                                 margin: const EdgeInsets.symmetric(vertical: 4.0),
-                                  // Adicionando margem se necessário
-                                 child: Center(
-                                   child: Row(
-                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                     children: [
-                                       Text(
-                                         "${entry.key.toUpperCase()}: ",
-                                         style: const TextStyle(
-                                           fontWeight: FontWeight.bold,
-                                           fontSize: 16,
-                                         ),
-                                         textAlign: TextAlign.start,
-                                       ),
-                                       buildAttributeIcons(entry.value),
-                                     ],
-                                   ),
-                                 ),
-                               ),
-                           ],
-                         ),
-                       )
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              width: 2,
+                              color: const Color.fromARGB(216, 0, 0, 0)),
+                        ),
+                        child: Column(
+                          children: [
+                            for (var entry in widget.pico.atributos!.entries)
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 25),
+                                margin:
+                                    const EdgeInsets.symmetric(vertical: 4.0),
+                                // Adicionando margem se necessário
+                                child: Center(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "${entry.key.toUpperCase()}: ",
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                      buildAttributeIcons(entry.value),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      )
 ,
                       // Ícones à direita (salvar, sinalizar, etc.)
                       Align(
@@ -347,5 +345,79 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
         ],
       ),
     );
+  }
+  
+  Future<void> avaliarPico(BuildContext context) async {
+    double nota = 0;
+    String mensagem = "";
+
+    await showDialog(
+      context: context,
+      builder: (
+        context,
+      ) {
+        return StatefulBuilder(
+          builder: (context, setState){
+            return AlertDialog(
+            title: Text("Avaliar Pico"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(mensagem),
+                SizedBox(height: 10),
+                RatingBar.builder(
+                  initialRating: 0,
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  allowHalfRating: true,
+                  itemCount: 5,
+                  itemBuilder: (context, _) => const Icon(
+                    Icons.star,
+                    color: Colors.amber,
+                  ),
+                  onRatingUpdate: (rating) {
+                    setState(() {
+                          nota =  rating; // Atualiza a nota com base no índice
+                          mensagem = getMensagemPico(nota);
+                        });
+                  },
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("Cancelar"),
+              ),
+              TextButton(
+                onPressed: () {
+                  mensagem = getMensagemPico(nota);
+                  Navigator.of(context).pop();
+                },
+                child: const Text("Avaliar"),
+              ),
+            ],
+          );
+          }
+        );
+      },
+    );
+    if (nota > 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Nota: $nota - $mensagem")),
+      );
+    }
+  }
+
+  String getMensagemPico(double nota) {
+    if (nota >= 4.0) {
+      return "Pico muito marreta!";
+    } else if (nota >= 2.5) {
+      return "Pico marretinha!";
+    } else {
+      return "Pico legal!";
+    }
   }
 }
