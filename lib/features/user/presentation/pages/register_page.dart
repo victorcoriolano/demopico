@@ -10,6 +10,21 @@ class RegisterPage extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: const AssetImage('assets/images/containerCadastro.jpg'),
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.2), // Ajuste a opacidade aqui
+                  BlendMode.darken,
+                ),
+              ),
+            ),
+          ),
+          const Center(
+            child: RegisterForm(),
+          ),
           Positioned(
             top: 16,
             left: 16,
@@ -22,21 +37,6 @@ class RegisterPage extends StatelessWidget {
               onPressed: () {
                 Get.back(); // Navega para a tela anterior
               },
-            ),
-          ),
-          const Center(
-            child: RegisterForm(),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: const AssetImage('assets/images/containerCadastro.jpg'),
-                fit: BoxFit.cover,
-                colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.2), // Ajuste a opacidade aqui
-                  BlendMode.darken,
-                ),
-              ),
             ),
           ),
         ],
