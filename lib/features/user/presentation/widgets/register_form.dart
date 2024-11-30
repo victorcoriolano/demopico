@@ -1,6 +1,6 @@
 import 'package:demopico/features/profile/presentation/pages/user_page.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_controller.dart';
 
-import 'package:demopico/features/user/presentation/controllers/register_controller.dart';
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
 import 'package:demopico/features/user/presentation/widgets/dropdown.dart';
 import 'package:demopico/features/user/presentation/widgets/textfield_decoration.dart';
@@ -20,7 +20,7 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
   final TextEditingController _senhaController2 = TextEditingController();
-  final RegisterController _controller = RegisterController();
+  final AuthController _controller = AuthController();
   final _formkey = GlobalKey<FormState>();
   String _tipoConta = '';
   bool isColetivo = false;
@@ -147,9 +147,8 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                   String vulgo = _vulgoCadastro.text.trim();
                   String email = _emailController.text.trim();
                   String password = _senhaController.text.trim();
-                  final registrar = await _controller.registrarUserNoFireStore(email, vulgo);
-                  final registrarNoFirestore = await _controller.registrarUserNoFirebase(email, password, vulgo, isColetivo);
-                  if(registrar == true && registrarNoFirestore == true){
+                  final registrarNoFirebase = await _controller.signUp(email, password, vulgo, isColetivo);
+                  if(registrarNoFirebase == true){
                     Get.to(() => const UserPage());
                   }else{
                     print("deu mel");

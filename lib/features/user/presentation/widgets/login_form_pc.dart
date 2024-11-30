@@ -1,7 +1,6 @@
 import 'package:demopico/app/home_page.dart';
 import 'package:demopico/core/errors/failure_server.dart';
-import 'package:demopico/features/user/data/services/firebase_service.dart';
-import 'package:demopico/features/user/presentation/controllers/login_controller.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_controller.dart';
 import 'package:demopico/features/user/presentation/pages/register_page.dart';
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
 import 'package:demopico/features/user/presentation/widgets/textfield_decoration.dart';
@@ -18,9 +17,9 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> with Validators {
-  
   final TextEditingController _vulgoController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
+  final _authController = AuthController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +36,7 @@ class _LoginFormState extends State<LoginForm> with Validators {
                 child: Image(
                   image: AssetImage('assets/images/skatepico-icon.png'),
                 )),
+
             const SizedBox(
               height: 30,
             ),
@@ -49,9 +49,11 @@ class _LoginFormState extends State<LoginForm> with Validators {
                 fontSize: 30,
               ),
             ),
+
             const SizedBox(
               height: 30,
             ),
+
             //email ou vulgo
             TextFormField(
               decoration: customTextField("E-mail ou vulgo"),
@@ -115,20 +117,19 @@ class _LoginFormState extends State<LoginForm> with Validators {
             ElevatedButton(
               onPressed: () async {
                 if (FormFieldValidator.toString().isNotEmpty ||
-                  _vulgoController.text.isNotEmpty &&
-                  _senhaController.text.isNotEmpty) {
+                    _vulgoController.text.isNotEmpty &&
+                        _senhaController.text.isNotEmpty) {
                   String vulgo = _vulgoController.text.trim();
                   String password = _senhaController.text.trim();
                   bool loginSuccess;
-                  
-    
+
                   if (vulgo.contains("@")) {
-                    await serviceLocator<FirebaseService>().login(vulgo, password);
+                    await _authController.login(vulgo, password);
                     loginSuccess = true;
                   } else {
-                    loginSuccess = await serviceLocator<LoginController>().loginByVulgo(vulgo, password);
+                    loginSuccess = await _authController.login(vulgo, password);
                   }
-    
+
                   setState(() {
                     if (loginSuccess) {
                       Get.to(() => const HomePage());
@@ -140,7 +141,6 @@ class _LoginFormState extends State<LoginForm> with Validators {
                   showSnackbar('default');
                 }
               },
-
               style: buttonStyle(),
               child: const Text(
                 "Entrar",

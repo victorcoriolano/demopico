@@ -1,10 +1,11 @@
 
 import 'package:demopico/core/domain/entities/user_profile.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
+import 'package:demopico/features/user/data/models/loggeduser.dart';
 
 abstract class SpotRepository {
   Future<void> createSpot(Pico pico);
-  void saveSpot(Pico pico, LoggedUser user);
+  void saveSpot(Pico pico, LoggedUserModel user);
   Future<List<Pico>> showAllPico();
   Future<void> salvarNota(int avaliacoes, double nota, String picoName);
 }

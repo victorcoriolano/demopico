@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/core/domain/entities/user_profile.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/interfaces/spot_repository.dart';
+import 'package:demopico/features/user/data/models/loggeduser.dart';
 //import 'package:firebase_storage/firebase_storage.dart';
 
 class FirebaseServiceMap implements SpotRepository{
@@ -48,7 +49,7 @@ class FirebaseServiceMap implements SpotRepository{
   }
 
   @override
-  void saveSpot(Pico pico, LoggedUser user) {
+  void saveSpot(Pico pico, LoggedUserModel user) {
     // implementar o método de salvar
   }
 
