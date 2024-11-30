@@ -1,5 +1,6 @@
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:icon_decoration/icon_decoration.dart';
 //import 'package:flutter/src/rendering/box.dart';
 
@@ -351,59 +352,69 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
     String mensagem = "";
 
     await showDialog(
-      context: context, 
-      builder: (context) {
+      context: context,
+      builder: (
+        context,
+      ) {
         return StatefulBuilder(
-          builder: (context, setState) {
+          builder: (context, setState){
             return AlertDialog(
-              title: Text("Avaliar Pico"),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(mensagem),
-                  SizedBox(height: 10,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(5, (index) {
-                      return IconButton(
-                        onPressed: () {
-                          setState((){
-                            nota= index+1.0;
-                            mensagem = getMensagemPico(nota);
-                          });
-                        }, 
-                        icon: Icon(
-                          Icons.star, 
-                          color: index < nota? Colors.amber : Colors.grey,),);
-                    }),
+            title: Text("Avaliar Pico"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(mensagem),
+                SizedBox(height: 10),
+                RatingBar.builder(
+                  initialRating: 0,
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  allowHalfRating: true,
+                  itemCount: 5,
+                  itemBuilder: (context, _) => const Icon(
+                    Icons.star,
+                    color: Colors.amber,
                   ),
-                ],
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  }, 
-                  child: const Text("Cancelar"),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
+                  onRatingUpdate: (rating) {
+                    setState(() {
+                          nota =  rating; // Atualiza a nota com base no índice
+                          mensagem = getMensagemPico(nota);
+                        });
                   },
-                  child: const Text("Avaliar"),
                 ),
               ],
-            );
-            
-          },
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("Cancelar"),
+              ),
+              TextButton(
+                onPressed: () {
+                  mensagem = getMensagemPico(nota);
+                  Navigator.of(context).pop();
+                },
+                child: const Text("Avaliar"),
+              ),
+            ],
+          );
+          }
         );
       },
     );
+    if (nota > 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Nota: $nota - $mensagem")),
+      );
+    }
   }
+
   String getMensagemPico(double nota) {
-    if (nota >= 4.5) {
+    if (nota >= 4.0) {
       return "Pico muito marreta!";
-    } else if (nota >= 3) {
+    } else if (nota >= 2.5) {
       return "Pico marretinha!";
     } else {
       return "Pico legal!";

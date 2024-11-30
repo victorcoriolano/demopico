@@ -27,6 +27,7 @@ dependencies:
   firebase_storage: ^12.3.2
   image_picker: ^1.1.2
   icon_decoration: ^2.0.2
+  flutter_rating_bar: ^4.0.0
 
 dev_dependencies:
   flutter_test:
