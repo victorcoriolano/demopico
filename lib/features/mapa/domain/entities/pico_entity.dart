@@ -14,8 +14,8 @@ class Pico {
   final List<dynamic>? utilidades; // utilidades do tipo água, banheiro etc
   final Map<String, dynamic>? atributos;
   final List<dynamic>? obstaculos;
-  final double? nota;
-  final int? numeroAvaliacoes;
+  double? nota;
+  int? numeroAvaliacoes;
   // final Map<Comentarios>
 
   Pico(

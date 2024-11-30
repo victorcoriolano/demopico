@@ -1,4 +1,3 @@
-import 'package:demopico/core/domain/entities/user_profile.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/interfaces/spot_repository.dart';
 import 'package:demopico/features/user/data/models/loggeduser.dart';

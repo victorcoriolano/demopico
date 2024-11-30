@@ -1,4 +1,5 @@
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
+import 'package:demopico/features/mapa/domain/use%20cases/avaliar_spot.dart';
 import 'package:demopico/features/mapa/domain/use%20cases/create_spot.dart';
 import 'package:demopico/features/mapa/domain/use%20cases/show_all_pico.dart';
 import 'package:demopico/features/mapa/presentation/widgets/marker_widget.dart';
@@ -8,13 +9,15 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class SpotControllerProvider extends ChangeNotifier {
   final CreateSpot createSpotUseCase;
   final ShowAllPico showAllPicoUseCase;
+  final AvaliarSpot avaliarUseCase;
 
   Set<Marker> markers = {}; //lista vazia de markers para adicionar os picos
   List<Pico> spots = [];
   List<Pico> picosPesquisados = [];
   Marker? markerEncontrado;
+  List<double> avaliacoes = [];
 
-  SpotControllerProvider(this.createSpotUseCase, this.showAllPicoUseCase);
+  SpotControllerProvider(this.createSpotUseCase, this.showAllPicoUseCase, this.avaliarUseCase);
 
   //método para chamar o caso de uso criar pico que irá execultar a lógica de criar o pico
   Future<void> createSpot(Pico pico, BuildContext context) async {
@@ -111,5 +114,11 @@ class SpotControllerProvider extends ChangeNotifier {
     picosFiltrados = modalidade == null ? spots : spots.where((pico) => pico.modalidade == modalidade ).toList();
     markers = picosFiltrados.map((pico) => picoMarker(pico, context)).toSet();
     notifyListeners();
+  }
+
+  //método avaliar pico
+  Future<void> avaliarPico(Pico pico) async{
+    
+    
   }
 }

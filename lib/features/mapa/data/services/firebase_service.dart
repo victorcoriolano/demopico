@@ -1,6 +1,5 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:demopico/core/domain/entities/user_profile.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/interfaces/spot_repository.dart';
 import 'package:demopico/features/user/data/models/loggeduser.dart';
@@ -84,22 +83,22 @@ class FirebaseServiceMap implements SpotRepository{
 }
 
   @override
-  Future<void> salvarNota(int avaliacoes, double nota, String picoName) async {
+  Future<void> salvarNota(Pico pico) async {
     try {
       final snapshot = await _firebaseFirestore
           .collection('spots')
-          .where('name', isEqualTo: picoName)
+          .where('name', isEqualTo: pico.picoName)
           .limit(1)
           .get();
 
       if (snapshot.docs.isNotEmpty) {
         final picoReference = snapshot.docs.first.id;
         await _firebaseFirestore.collection('spots').doc(picoReference).update({
-          'nota': nota,
-          'avaliacoes': avaliacoes,
+          'nota': pico.nota,
+          'avaliacoes': pico.numeroAvaliacoes,
         });
       } else {
-        throw Exception("Piquerson: '$picoName' não encontrado.");
+        throw Exception("Piquerson: '${pico.picoName}' não encontrado.");
       }
     } catch (e) {
       print("Erro ao salvar a nota: $e");
