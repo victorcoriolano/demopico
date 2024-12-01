@@ -1,7 +1,9 @@
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
+import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:icon_decoration/icon_decoration.dart';
+import 'package:provider/provider.dart';
 //import 'package:flutter/src/rendering/box.dart';
 
 class ShowPicoWidget extends StatefulWidget {
@@ -151,7 +153,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                               Row(
                                 children: [
                                   Text(
-                                    widget.pico.nota.toString(),
+                                    widget.pico.nota!.toStringAsFixed(2),
                                     style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold),
@@ -269,7 +271,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                     fontSize: 12),
                               ),
                               TextButton(
-                                onPressed: () => avaliarPico(context),
+                                onPressed: () => avaliarPico(context, widget.pico),
                                 child: const Text('Avaliar pico'),
                               ),
                             ],
@@ -347,9 +349,10 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
     );
   }
   
-  Future<void> avaliarPico(BuildContext context) async {
+  Future<void> avaliarPico(BuildContext context, Pico pico) async {
     double nota = 0;
     String mensagem = "";
+    final provider = context.read<SpotControllerProvider>();
 
     await showDialog(
       context: context,
@@ -392,7 +395,9 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                 child: const Text("Cancelar"),
               ),
               TextButton(
-                onPressed: () {
+                onPressed: () async
+                {
+                  await provider.avaliarPico(pico, nota);
                   Navigator.of(context).pop();
                 },
                 child: const Text("Avaliar"),

@@ -27,12 +27,12 @@ class  AddPicoControllerProvider extends ChangeNotifier with Validators {
   Future<void> selecionarImag() async {
     try {
       //tenta pegar imgem da galeria 
-      final img = await pegadorImage.pickImage(source: ImageSource.gallery);
+      final img = await pegadorImage.pickMultiImage(limit: 3,);
 
-      if(img != null){
+      if(img.isNotEmpty){
         // chamar o método para subir o pico no firebase 
         //fotoPico = File(img.path);
-        testeSubindoImg(File(img.path)) ;
+        img.map((foto) => testeSubindoImg(File(foto.path)));
       }
     }on Exception catch (e) {
       print("Erro ao subir imagem $e");

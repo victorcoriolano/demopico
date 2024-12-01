@@ -44,6 +44,4 @@ class LoggedUserModel extends UserM {
   String get getIsColetivo => super.isColetivo.toString();
 
   String get getDescription => super.description as String;
-
-  
 }

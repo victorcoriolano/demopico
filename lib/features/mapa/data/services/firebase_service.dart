@@ -101,7 +101,9 @@ class FirebaseServiceMap implements SpotRepository{
         throw Exception("Piquerson: '${pico.picoName}' não encontrado.");
       }
     } catch (e) {
+      
       print("Erro ao salvar a nota: $e");
+      throw Exception("Erro inesperado: $e");
     }
   }
 

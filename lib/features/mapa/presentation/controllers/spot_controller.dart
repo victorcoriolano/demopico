@@ -135,8 +135,22 @@ class SpotControllerProvider extends ChangeNotifier {
   }
 
   //método avaliar pico
-  Future<void> avaliarPico(Pico pico) async{
-    
-    
+  Future<void> avaliarPico(Pico pico, double novaNota) async {
+  try {
+    // Use case para avaliar e obter o pico atualizado
+    final picoAtualizado = await avaliarUseCase.executar(novaNota, pico);
+
+    // Encontrar o índice do pico a ser atualizado
+    final index = spots.indexWhere((picos) => picos.picoName == pico.picoName);
+
+    if (index != -1) {
+      spots[index] = picoAtualizado;
+      notifyListeners();
+    } else {
+      print("Pico não encontrado na lista.");
+    }
+  } catch (e) {
+    print("Erro ao salvar a avaliação: $e");
   }
+}
 }
