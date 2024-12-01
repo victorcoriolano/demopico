@@ -3,10 +3,11 @@ import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/presentation/widgets/show_pico_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:widget_to_marker/widget_to_marker.dart';
 
 //marker separado da lógica
 
-Marker picoMarker(Pico spot, BuildContext context){
+Future<Marker> picoMarker(Pico spot, BuildContext context, ) async {
     return Marker(
     markerId: MarkerId(spot.picoName),
     position: LatLng(spot.lat, spot.long),
@@ -15,6 +16,11 @@ Marker picoMarker(Pico spot, BuildContext context){
       title: spot.picoName,
       snippet: spot.tipoPico,
     ),
+    icon: await TextOnImage(
+        text: "Hello World",
+      ).toBitmapDescriptor(
+         logicalSize: const Size(150, 150), imageSize: const Size(150, 150)
+      ),
   );
 }
 
@@ -37,4 +43,30 @@ void showPicoModal(BuildContext context, Pico pico) {
       );
     },
   );
+}
+class TextOnImage extends StatelessWidget {
+  const TextOnImage({
+    super.key,
+    required this.text,
+  });
+  final String text;
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        const Image(
+          image: AssetImage(
+            "assets/images/Location.png",
+          ),
+          height: 150,
+          width: 150,
+        ),
+        Text(
+          text,
+          style: TextStyle(color: Colors.black),
+        )
+      ],
+    );
+  }
 }

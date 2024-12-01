@@ -797,6 +797,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+  widget_to_marker:
+    dependency: "direct main"
+    description:
+      name: widget_to_marker
+      sha256: badc36f23c76f3ca9d43d7780058096be774adf0f661bdb6eb6f6b893f648ab9
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.6"
 sdks:
   dart: ">=3.5.2 <4.0.0"
   flutter: ">=3.24.0"
