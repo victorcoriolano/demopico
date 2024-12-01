@@ -78,7 +78,7 @@ class _QuartaTelaState extends State<QuartaTela>  {
                   ),
                   onChanged: (value) => provider.atualizarDescricao(value),
                 ),
-                const SizedBox(height: 45), // Espaço entre os campos
+                const SizedBox(height: 30), // Espaço entre os campos
                 // Botão para anexar imagens
                 GestureDetector(
                   onTap: () async {
