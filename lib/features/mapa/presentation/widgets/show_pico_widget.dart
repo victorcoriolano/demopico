@@ -2,7 +2,7 @@ import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:icon_decoration/icon_decoration.dart';
+
 import 'package:provider/provider.dart';
 //import 'package:flutter/src/rendering/box.dart';
 
@@ -10,6 +10,7 @@ class ShowPicoWidget extends StatefulWidget {
   final Pico pico;
   final ScrollController scrollController;
   final Map<String, int>? atributos;
+  
   const ShowPicoWidget(
       {super.key,
       required this.pico,
@@ -19,7 +20,7 @@ class ShowPicoWidget extends StatefulWidget {
   @override
   State<ShowPicoWidget> createState() => _ShowPicoWidgetState();
 }
-
+   int _currentPage = 0;
 class _ShowPicoWidgetState extends State<ShowPicoWidget> {
   List<String> images = [];
 
@@ -49,6 +50,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -65,53 +67,81 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
         children: [
           Stack(
             children: [
-              SizedBox(
-                width: double.infinity,
-                height: 270,
-                child: images.isNotEmpty
-                    ? PageView.builder(
-                        itemCount: images.length,
-                        pageSnapping: true,
-                        itemBuilder: (context, pagePosition) {
-                          return Stack(
-                            alignment: Alignment.topRight,
-                            children: [
-                              Container(
-                                decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(30)),
-                                ),
-                                clipBehavior: Clip.hardEdge,
-                                child: Image.network(
-                                  images[pagePosition],
-                                  fit: BoxFit.cover,
-                                  width: double.infinity, // Ajusta a imagem
-                                ),
-                              ),
-                              IconButton(
-                                icon: const DecoratedIcon(
-                                  icon: Icon(Icons.close,
-                                      color:
-                                          Color.fromARGB(255, 243, 243, 243)),
-                                  decoration: IconDecoration(
-                                      border: IconBorder(width: 1.5)),
-                                ),
-                                padding:
-                                    const EdgeInsets.only(top: 10, right: 10),
-                                iconSize: 36,
-                                onPressed: () {
-                                  Navigator.pop(
-                                      context); // Retorna para a tela anterior
-                                },
-                              )
-                            ],
-                          );
-                        },
-                      )
-                    : const Center(
-                        child: Text('Sem imagens disponíveis'),
-                      ), // Se não houver imagens
-              ),
+   SizedBox(
+      width: double.infinity,
+      height: 300, // Altura ajustada para incluir o indicador
+      child: images.isNotEmpty
+          ? Stack(
+              children: [
+                PageView.builder(
+                  itemCount: images.length,
+                  onPageChanged: (int page) {
+                    setState(() {
+                      _currentPage = page; // Atualiza a página atual
+                    });
+                  },
+                  itemBuilder: (context, pagePosition) {
+                    return Stack(
+                      alignment: Alignment.topRight,
+                      children: [
+                        Container(
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(30)),
+                          ),
+                          clipBehavior: Clip.hardEdge,
+                          child: Image.network(
+                            images[pagePosition],
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.close,
+                            color: Color.fromARGB(255, 243, 243, 243),
+                          ),
+                          padding: const EdgeInsets.only(top: 10, right: 10),
+                          iconSize: 36,
+                          onPressed: () {
+                            Navigator.pop(context); // Retorna para a tela anterior
+                          },
+                        )
+                      ],
+                    );
+                  },
+                ),
+                Positioned(
+                  bottom: 10, // Posição do indicador
+                  left: 0,
+                  right: 0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(images.length, (index) {
+                      return Container(
+                        margin: EdgeInsets.symmetric(horizontal:5),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          margin: const EdgeInsets.symmetric(horizontal: 4),
+                          width: _currentPage == index ? 12 : 8,
+                          height: _currentPage == index ? 12 : 8,
+                          decoration: BoxDecoration(
+                            color: _currentPage == index
+                                ? Colors.white
+                                : Colors.white54,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                ),
+              ],
+            )
+          : const Center(
+              child: Text('Sem imagens disponíveis'),
+            ),
+    ),
               Align(
                 alignment: Alignment.center,
                 child: Container(
