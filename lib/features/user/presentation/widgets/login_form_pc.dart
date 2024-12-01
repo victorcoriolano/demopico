@@ -7,7 +7,6 @@ import 'package:demopico/features/user/presentation/widgets/textfield_decoration
 import 'package:demopico/features/user/presentation/widgets/form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../core/common/inject_dependencies.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});

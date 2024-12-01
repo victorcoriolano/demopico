@@ -6,7 +6,6 @@ import 'package:demopico/features/user/data/services/auth_service.dart';
 import 'package:demopico/features/user/presentation/controllers/database_notifier_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 class UserPage extends StatefulWidget {
