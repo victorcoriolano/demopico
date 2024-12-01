@@ -12,14 +12,10 @@ Future<Marker> picoMarker(Pico spot, BuildContext context, ) async {
     markerId: MarkerId(spot.picoName),
     position: LatLng(spot.lat, spot.long),
     onTap: () => showPicoModal(context, spot),
-    infoWindow: InfoWindow(
-      title: spot.picoName,
-      snippet: spot.tipoPico,
-    ),
-    icon: await TextOnImage(
-        text: "Hello World",
+    icon: await const TextOnImage(
+      text: '',
       ).toBitmapDescriptor(
-         logicalSize: const Size(150, 150), imageSize: const Size(150, 150)
+         logicalSize: const Size(150, 150), imageSize: const Size(120, 150)
       ),
   );
 }
@@ -59,8 +55,8 @@ class TextOnImage extends StatelessWidget {
           image: AssetImage(
             "assets/images/Location.png",
           ),
-          height: 150,
-          width: 150,
+          height: 350,
+          width: 350,
         ),
         Text(
           text,
