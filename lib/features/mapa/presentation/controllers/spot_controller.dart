@@ -23,12 +23,14 @@ class SpotControllerProvider extends ChangeNotifier {
   Future<void> createSpot(Pico pico, BuildContext context) async {
     try {
       // Gera o marker assíncrono
-      final marker = await picoMarker(pico, context);
+/*       final marker = await picoMarker(pico, context);
       markers.add(marker);
-      notifyListeners();
+      notifyListeners(); */
 
       // Salva o pico no backend
       await createSpotUseCase.createSpot(pico);
+      
+      notifyListeners();
     } catch (e) {
       print('Erro ao criar pico: $e');
     }

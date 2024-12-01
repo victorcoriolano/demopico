@@ -1,6 +1,4 @@
-
 import 'dart:io';
-
 import 'package:demopico/features/user/presentation/widgets/validator.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +20,8 @@ class  AddPicoControllerProvider extends ChangeNotifier with Validators {
   double lat = 0.0;
   double long = 0.0;
 
+  List<XFile> fotos = [];
+
   final pegadorImage = ImagePicker();
 
   Future<void> selecionarImag() async {
@@ -29,9 +29,10 @@ class  AddPicoControllerProvider extends ChangeNotifier with Validators {
       //tenta pegar imgem da galeria 
       final img = await pegadorImage.pickMultiImage(limit: 3,);
 
-      if(img.isNotEmpty){
+      if(img.isNotEmpty) {
         // chamar o método para subir o pico no firebase 
         //fotoPico = File(img.path);
+        fotos.addAll(img);
         img.map((foto) => testeSubindoImg(File(foto.path)));
       }
     }on Exception catch (e) {
@@ -197,7 +198,21 @@ void atualizarModalidade(String modalidade) {
     return nomeValido && descricaoValida && validarImagens;
   }
 
-  
+  @override
+  void dispose() {
+    atributos.clear();
+    obstaculos.clear();
+    nomePico = '';
+    descricao = '';
+    selectedModalidade = 'Skate';
+    nota = 0.0;
+    numAval = 0;
+    tipo = 'Pico de Rua';
+    utilidades.clear();
+    urlImage.clear();
+    fotoPico = null;
+    super.dispose();
+  }
 
 
 }
