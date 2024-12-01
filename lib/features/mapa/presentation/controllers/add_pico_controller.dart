@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:demopico/features/user/presentation/widgets/validator.dart';
@@ -7,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
-class  AddPicoControllerProvider extends ChangeNotifier with Validators {
+class AddPicoControllerProvider extends ChangeNotifier with Validators {
   Map<String, int> atributos = {};
   List<String> obstaculos = [];
   String nomePico = '';
@@ -21,50 +20,82 @@ class  AddPicoControllerProvider extends ChangeNotifier with Validators {
   File? fotoPico;
   double lat = 0.0;
   double long = 0.0;
-
+  List<File?> images = [];
   final pegadorImage = ImagePicker();
 
   Future<void> selecionarImag() async {
-    try {
-      //tenta pegar imgem da galeria 
-      final img = await pegadorImage.pickMultiImage(limit: 3,);
+          images.clear();
+    urlImage.clear();
+  try {
+    // Reseta a lista de imagens antes de selecionar novas
 
-      if(img.isNotEmpty){
-        // chamar o método para subir o pico no firebase 
-        //fotoPico = File(img.path);
-        img.map((foto) => testeSubindoImg(File(foto.path)));
+    // Pega múltiplas imagens da galeria (limite de 3)
+    final imgs = await pegadorImage.pickMultiImage(
+      limit: 3,
+    );
+    if (imgs.isNotEmpty) {
+      for (var img in imgs) {
+        images.add(File(img.path));
       }
-    }on Exception catch (e) {
-      print("Erro ao subir imagem $e");
+      // Chama o método para subir as imagens
+  
+      await testeSubindoImg(images);
     }
+  } on Exception catch (e) {
+       print(" to no catch");
+    print("Erro ao subir imagem $e");
   }
-  //teste teste test teste teste teste teste teste 
-  Future<void> testeSubindoImg(File? img) async {
-    try{
+}
+
+  Future<void> testeSubindoImg(List<File?> imgs) async {
+  try {
+    for (var img in imgs) {
+      // Gera um nome único para cada imagem
+      final uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
       final ref = FirebaseStorage.instance
           .ref()
           .child('spots_images')
-          .child('images/$nomePico.jpg');
-      await ref.putFile(img!);
-      urlImage.add(await ref.getDownloadURL());
-      print('$urlImage KJJJ');
-    }on Exception catch (e){
-      print("Erro ao subir imagem pro storage: $e");
+          .child('images/$nomePico$uniqueName.jpg');
+
+      print('Enviando imagem: ${img!.path}');
+
+      // Faz o upload da imagem
+      await ref.putFile(img);
+
+      // Adiciona a URL de download à lista
+      final downloadURL = await ref.getDownloadURL();
+      urlImage.add(downloadURL);
+
+      print('URL gerada: $downloadURL');
     }
+    
+  urlImage.clear;
+    print('Lista final de URLs: $urlImage');
+  } on Exception catch (e) {
+    print("Erro ao subir imagem pro storage: $e");
   }
-  
-  void pegarLocalizacao(LatLng localizacao){
+}
+
+
+
+
+  void pegarLocalizacao(LatLng localizacao) {
     lat = localizacao.latitude;
     long = localizacao.longitude;
   }
 
-
-  //variaveis de mensagem de erro 
+  //variaveis de mensagem de erro
   String? nomePicoErro;
   String? descricaoErro;
 
   Map<String, List<String>> utilidadesPorModalidade = {
-    'Skate': ['Água', 'Teto', 'Banheiro', 'Suave Arcadiar', 'Público / Gratuito'],
+    'Skate': [
+      'Água',
+      'Teto',
+      'Banheiro',
+      'Suave Arcadiar',
+      'Público / Gratuito'
+    ],
     'Parkour': ['Água', 'Banheiro', 'Mecânicas Próximas', 'Ar Livre'],
     'BMX': ['Água'],
   };
@@ -72,11 +103,10 @@ class  AddPicoControllerProvider extends ChangeNotifier with Validators {
   List<String> utilidadesAtuais = [];
   Map<String, bool> utilidadesSelecionadas = {};
 
-  
   AddPicoControllerProvider() {
     // definindo o estado inicial de cada page
     _atualizarUtilidades();
-    atributos  = {
+    atributos = {
       'Chão': 2,
       'Iluminação': 3,
       'Policiamento': 5,
@@ -85,7 +115,7 @@ class  AddPicoControllerProvider extends ChangeNotifier with Validators {
     };
   }
 // notificar o estado de modalidade, tipo e utilidades
-void atualizarModalidade(String modalidade) {
+  void atualizarModalidade(String modalidade) {
     selectedModalidade = modalidade;
     _atualizarUtilidades();
     notifyListeners();
@@ -108,38 +138,42 @@ void atualizarModalidade(String modalidade) {
       utilidadesSelecionadas[utilidade] = false;
     }
   }
+
   // notificar o estado de atributos
-  void atualizarAtributo(String atributo, int value){
+  void atualizarAtributo(String atributo, int value) {
     atributos[atributo] = value;
     notifyListeners();
   }
-  
 
-  // notificar o estaddo de obstáculos 
-  void atualizarObstaculos(String obstaculo){
+  // notificar o estaddo de obstáculos
+  void atualizarObstaculos(String obstaculo) {
     obstaculos.add(obstaculo);
     notifyListeners();
   }
+
   //método pra remover dos selecionados
   void removerObstaculo(String obstaculo) {
     obstaculos.remove(obstaculo);
     notifyListeners();
   }
 
-  // notificar o estado de nome e descrição 
-  void atualizarNome(String novoNome){
+  // notificar o estado de nome e descrição
+  void atualizarNome(String novoNome) {
     nomePico = novoNome;
     notifyListeners();
   }
-  void atualizarDescricao(String novoDesc){
+
+  void atualizarDescricao(String novoDesc) {
     descricao = novoDesc;
     notifyListeners();
   }
 
-  // validação 
+  // validação
   bool validarAtributos() {
-    return atributos.isNotEmpty && atributos.values.every((value) => value >= 1);
+    return atributos.isNotEmpty &&
+        atributos.values.every((value) => value >= 1);
   }
+
   bool validarObstaculos() {
     return obstaculos.isNotEmpty;
   }
@@ -196,8 +230,4 @@ void atualizarModalidade(String modalidade) {
     final validarImagens = imagensIsNotEmpty();
     return nomeValido && descricaoValida && validarImagens;
   }
-
-  
-
-
 }
