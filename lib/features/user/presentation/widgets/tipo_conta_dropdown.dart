@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 
 class TipoContaDropdownButton extends StatefulWidget {
   final Function(String) onChanged; // Callback para notificar a seleção
+  final String? Function(String?)? validator;
 
-  const TipoContaDropdownButton({super.key, required this.onChanged});
+  const TipoContaDropdownButton({super.key, required this.onChanged, required this.validator});
 
   @override
   State<TipoContaDropdownButton> createState() => _TipoContaDropdownButtonState();
@@ -32,6 +33,7 @@ class _TipoContaDropdownButtonState extends State<TipoContaDropdownButton> {
       dropdownColor: const Color.fromARGB(255, 139, 0, 0),
       value: _selectedValue,
       items: _items,
+      validator: widget.validator,
       onChanged: (String? newValue) {
         setState(() {
           _selectedValue = newValue;

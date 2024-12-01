@@ -1,5 +1,6 @@
-import 'package:demopico/core/common/inject_dependencies.dart';
-import 'package:demopico/features/user/data/services/auth_service_v2.dart';
+import 'dart:math';
+
+import 'package:demopico/features/user/data/services/auth_service.dart';
 
 class AuthController {
   final _authService = AuthService();
@@ -17,9 +18,16 @@ class AuthController {
     }
   }
 
-  Future<bool> signUp(String inputName, String inputEmail, String inputPassword,
-      bool isColetivo) async {
-    return await _authService.signUp(
-        inputName, inputEmail, inputPassword, isColetivo);
+  Future<bool> signUp(
+      {required String inputName,
+      required String inputEmail,
+      required String inputPassword,
+      required bool isColetivo}) async {
+    await _authService
+        .signUp(inputName, inputEmail, inputPassword, isColetivo)
+        .then((value) => print(value))
+        .whenComplete(() => print('finalizado'));
+    bool result = await _authService.login(inputEmail, inputPassword);
+    return result;
   }
 }
