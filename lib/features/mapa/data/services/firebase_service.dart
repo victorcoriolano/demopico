@@ -55,7 +55,7 @@ class FirebaseServiceMap implements SpotRepository{
 @override
   Future<List<Pico>> showAllPico() async {
   try {
-    QuerySnapshot snapshot = await _firebaseFirestore.collection('spots').get();
+    QuerySnapshot snapshot = await _firebaseFirestore.collection('spots').get(const GetOptions(source: Source.server));
     return snapshot.docs.map((doc) {
       final data = doc.data() as Map<String, dynamic>; // deixa o map aq quieto pq ele tem q dar baum
       return Pico(
@@ -101,7 +101,9 @@ class FirebaseServiceMap implements SpotRepository{
         throw Exception("Piquerson: '${pico.picoName}' não encontrado.");
       }
     } catch (e) {
+      
       print("Erro ao salvar a nota: $e");
+      throw Exception("Erro inesperado: $e");
     }
   }
 

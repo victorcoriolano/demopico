@@ -6,7 +6,7 @@ class AvaliarSpot {
 
   AvaliarSpot(this.notaRepository);
 
-  Future<void> executar(double novaNota, Pico pico) async {
+  Future<Pico> executar(double novaNota, Pico pico) async {
     double novaMedia;
     int novoTotalAvaliacoes;
 
@@ -26,5 +26,6 @@ class AvaliarSpot {
     pico.numeroAvaliacoes = novoTotalAvaliacoes;
     
     await notaRepository.salvarNota(pico);
+    return pico;
   }
 }

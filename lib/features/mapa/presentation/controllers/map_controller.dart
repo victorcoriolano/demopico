@@ -5,10 +5,10 @@ import 'package:permission_handler/permission_handler.dart';
 
 class MapControllerProvider extends ChangeNotifier{
   GoogleMapController? _mapController;
-  LatLng center = const LatLng(-23.548546, -46.9400143);// Inicializa o centro do mapa
+  LatLng center = const LatLng(-23.550104, -46.633953);// Inicializa o centro do mapa
   String locationMessage = '';
   MapType myMapType = MapType.normal;
-  double zoomInicial = 15.0;
+  double zoomInicial = 12;
 
   GoogleMapController? get mapController => _mapController;
 
