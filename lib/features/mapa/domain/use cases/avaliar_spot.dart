@@ -2,20 +2,29 @@ import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/interfaces/spot_repository.dart';
 
 class AvaliarSpot {
-    final SpotRepository notaRepository;
+  final SpotRepository notaRepository;
 
-  AvaliarSpot(firebaseNotaRepository, {required this.notaRepository});
+  AvaliarSpot(this.notaRepository);
 
-  Future<void> executar(List<double> notas, Pico pico) async {
-    // Lógica de negócio: calcular média
-    if (notas.isEmpty) {
-      throw Exception("A lista de notas está vazia.");
+  Future<void> executar(double novaNota, Pico pico) async {
+    double novaMedia;
+    int novoTotalAvaliacoes;
+
+    if (pico.numeroAvaliacoes == 0) {
+      // Primeira avaliação
+      novaMedia = novaNota;
+      novoTotalAvaliacoes = 1;
+    } else {
+      // Atualiza média com base nas avaliações existentes
+      novaMedia = ((pico.nota! * pico.numeroAvaliacoes!) + novaNota) /
+          (pico.numeroAvaliacoes! + 1);
+      novoTotalAvaliacoes = pico.numeroAvaliacoes! + 1;
     }
-    final media = notas.reduce((a, b) => a + b) / notas.length;
-    final avaliacoes = notas.length;
-  
 
-    // Salvar no repositório (camada de dados)
-    await notaRepository.salvarNota(avaliacoes, media, pico.picoName);
+    // Atualizar no repositório
+    pico.nota = novaMedia;
+    pico.numeroAvaliacoes = novoTotalAvaliacoes;
+    
+    await notaRepository.salvarNota(pico);
   }
 }

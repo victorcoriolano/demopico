@@ -359,7 +359,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
         return StatefulBuilder(
           builder: (context, setState){
             return AlertDialog(
-            title: Text("Avaliar Pico"),
+            title: const Text("Avaliar Pico"),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -393,7 +393,6 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
               ),
               TextButton(
                 onPressed: () {
-                  mensagem = getMensagemPico(nota);
                   Navigator.of(context).pop();
                 },
                 child: const Text("Avaliar"),
@@ -404,11 +403,6 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
         );
       },
     );
-    if (nota > 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Nota: $nota - $mensagem")),
-      );
-    }
   }
 
   String getMensagemPico(double nota) {

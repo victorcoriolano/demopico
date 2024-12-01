@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/mapa/data/services/firebase_service.dart';
 import 'package:demopico/features/mapa/domain/interfaces/spot_repository.dart';
+import 'package:demopico/features/mapa/domain/use%20cases/avaliar_spot.dart';
 import 'package:demopico/features/mapa/domain/use%20cases/create_spot.dart';
 import 'package:demopico/features/mapa/domain/use%20cases/show_all_pico.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
@@ -46,10 +47,11 @@ Future<void> init() async {
   //não precisa de várias instancias eu acho
   serviceLocator.registerLazySingleton(() => CreateSpot(serviceLocator()));
   serviceLocator.registerLazySingleton(() => ShowAllPico(serviceLocator()));
+  serviceLocator.registerLazySingleton(() => AvaliarSpot(serviceLocator()));
 
   //registrando o controller e injetoando dependencia
   serviceLocator.registerFactory(
-      () => SpotControllerProvider(serviceLocator(), serviceLocator()));
+      () => SpotControllerProvider(serviceLocator(), serviceLocator(), serviceLocator()));
 
   //instancia da entidade pico que será criada
 }
