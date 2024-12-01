@@ -1,8 +1,8 @@
 import 'package:demopico/features/hub/presentation/widgets/communique_tile.dart';
 import 'package:demopico/features/hub/presentation/widgets/input_box.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
-import 'package:demopico/features/user/data/services/auth_service_v2.dart';
-import 'package:demopico/features/user/data/services/database_provider.dart';
+import 'package:demopico/features/user/data/services/auth_service.dart';
+import 'package:demopico/features/user/presentation/controllers/database_notifier_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
