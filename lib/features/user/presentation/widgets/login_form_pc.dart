@@ -4,10 +4,9 @@ import 'package:demopico/features/user/presentation/controllers/auth_controller.
 import 'package:demopico/features/user/presentation/pages/register_page.dart';
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
 import 'package:demopico/features/user/presentation/widgets/textfield_decoration.dart';
-import 'package:demopico/features/user/presentation/widgets/validator.dart';
+import 'package:demopico/features/user/presentation/widgets/form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../core/common/inject_dependencies.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});

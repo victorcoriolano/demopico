@@ -1,4 +1,3 @@
-import 'package:demopico/features/user/data/models/loggeduser.dart';
 import 'package:demopico/features/user/data/models/user.dart';
 import 'package:demopico/features/user/data/repositories/auth_enum.dart';
 import 'package:demopico/features/user/data/repositories/sign_methods.dart';
@@ -25,6 +24,8 @@ class AuthService {
   UserM? userFromFirebaseUser(User? user) {
     return user != null
         ? UserM(
+            name: user.displayName,
+            email: user.email,
             description: 'Edite para atualizar sua bio',
             id: user.uid,
             picosAdicionados: '0',
@@ -33,8 +34,7 @@ class AuthService {
             conexoes: '0',
             dob: todayDate,
             authEnumState: AuthEnumState.notDetermined,
-            pictureUrl:
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/640px-User_icon_2.svg.png',
+            pictureUrl: null,
           )
         : null;
   }
@@ -57,35 +57,40 @@ class AuthService {
     try {
       UserCredential authResult = await auth.createUserWithEmailAndPassword(
           email: inputEmail, password: inputPassword);
-
+      print('pegando usercredential do authresult');
       User? signedInUser = authResult.user;
-
-      //cria um user model de acordo com a nova conta criada
-      UserM? localUser = userFromFirebaseUser(signedInUser);
+      print('pegando signedinuser do authresult.user');
 
       //verifica se ele é válido, seta os estados de auth e cria o user no db
-      if (signedInUser != null && localUser!.id != null) {
+      if (signedInUser != null && signedInUser.uid.isNotEmpty) {
+        signedInUser.updateDisplayName(inputName);
+        print('atualizando displayname');
+        //cria um user model de acordo com a nova conta criada
+        UserM? localUser = userFromFirebaseUser(signedInUser);
         //atualização da model temporaria
-        localUser.isColetivo = isColetivo;
-        localUser.signMethod = SignMethods.email;
-        localUser.email = inputEmail;
-        localUser.name = inputName;
-        //usando updateprofile pra ter acesso ao nome do user e etc
-        await signedInUser.updateProfile(
-            displayName: inputName, photoURL: localUser.pictureUrl);
-        //atualização da model local e adiciona o user no repository
-        _localUser = localUser;
-        //setter da variavel de estado de autenticação
-        _localUser!.authEnumState = AuthEnumState.loggedIn;
-        setAuthenticated = true;
-        //cria o user no db
-        LoggedUserModel(user: _localUser!);
-        await dbService.addUserDetailsToFirestore(newUser: _localUser!);
-        return true;
+        if (localUser != null) {
+          print('local user nao e null');
+          localUser.isColetivo = isColetivo;
+          localUser.signMethod = SignMethods.email;
+          localUser.email = inputEmail;
+          localUser.name = inputName;
+          //atualização da model local e adiciona o user no repository
+          _localUser = localUser;
+          await dbService
+              .addUserDetailsToFirestore(newUser: _localUser!)
+              .whenComplete(
+                  () => print('finalizado o adduserdetailstofirestore'));
+          return true;
+        } else {
+          print('local user null');
+        }
+      } else {
+        print('signedinuser null');
       }
       return false;
     } catch (e) {
-      _localUser!.authEnumState = AuthEnumState.notLoggedIn;
+      print('EXCEPTION NO TRY DO METODO SIGN UP');
+      print(e);
       return false;
     }
   }
@@ -99,11 +104,13 @@ class AuthService {
       UserCredential authResult = await auth.signInWithEmailAndPassword(
           email: email, password: password);
       User? signedUser = authResult.user;
-      _localUser = userFromFirebaseUser(signedUser);
-      _localUser!.authEnumState = AuthEnumState.loggedIn;
-      setAuthenticated = true;
-      return true;
+      if (signedUser != null) {
+        auth.userChanges();
+        return true;
+      }
+      return false;
     } catch (e) {
+      print('erro no login authservice: $e');
       return false;
     }
   }
@@ -114,6 +121,7 @@ class AuthService {
     } catch (e) {
       if (kDebugMode) {
         print(e.toString());
-      }}
+      }
+    }
   }
 }

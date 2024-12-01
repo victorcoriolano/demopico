@@ -4,8 +4,8 @@ import 'package:demopico/features/mapa/presentation/controllers/add_pico_control
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
-import 'package:demopico/features/user/data/services/auth_service_v2.dart';
-import 'package:demopico/features/user/data/services/database_provider.dart';
+import 'package:demopico/features/user/data/services/auth_service.dart';
+import 'package:demopico/features/user/presentation/controllers/database_notifier_provider.dart';
 import 'package:demopico/core/common/inject_dependencies.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

@@ -4,13 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:demopico/features/user/data/models/user.dart';
 import 'package:demopico/features/user/data/services/auth_service.dart';
-import 'package:demopico/features/user/presentation/widgets/login_form_pc.dart';
 import 'package:flutter/foundation.dart';
 
-class DatabaseService {
-  static DatabaseService? _instance;
-  static DatabaseService get instance {
-    _instance ??= DatabaseService();
+class HubService {
+  static HubService? _instance;
+  static HubService get instance {
+    _instance ??= HubService();
     return _instance!;
   }
 
@@ -26,13 +25,10 @@ class DatabaseService {
 ////////////////////////////
   Future<void> addUserDetailsToFirestore({required UserM newUser}) async {
     String uid = newUser.id!;
-    print('entrou no adduser');
+
     final mappedUser = newUser.toJsonMap();
-    await firestore
-        .collection('users')
-        .doc(uid)
-        .set(mappedUser)
-        .whenComplete(() => print('User added'));
+
+    await firestore.collection('users').doc(uid).set(mappedUser);
   }
 
 /////////////////////////////////////////////////////

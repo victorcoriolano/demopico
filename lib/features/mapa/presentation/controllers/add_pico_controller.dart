@@ -1,5 +1,6 @@
 import 'dart:io';
-import 'package:demopico/features/user/presentation/widgets/validator.dart';
+
+import 'package:demopico/features/user/presentation/widgets/form_validator.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';

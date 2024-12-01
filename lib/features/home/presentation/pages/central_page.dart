@@ -1,7 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+import 'package:demopico/app/auth_wrapper.dart';
 import 'package:demopico/features/home/presentation/widgets/events_bottom_sheet.dart';
 import 'package:demopico/features/home/presentation/widgets/hub_upper_sheet.dart';
-import 'package:demopico/features/user/presentation/pages/login_page.dart';
+import 'package:demopico/features/user/data/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -96,12 +97,18 @@ class CentralPage extends StatelessWidget {
                       Spacer(),
                       GestureDetector(
                           onTap: () => Get.to(
-                                LoginPage(),
-                                transition: Transition.circularReveal,
+                                AuthWrapper(),
+                                transition: Transition.rightToLeftWithFade,
                                 duration: const Duration(milliseconds: 600),
                                 curve: Curves.fastEaseInToSlowEaseOut,
                               ),
-                          child: Icon(Icons.supervised_user_circle, size: 64)),
+                          child: AuthService().currentUser?.photoURL == null
+                              ? Icon(Icons.supervised_user_circle, size: 64)
+                              : CircleAvatar(
+                                  radius: 32,
+                                  backgroundImage: NetworkImage(
+                                      AuthService().currentUser!.photoURL!),
+                                  backgroundColor: Colors.transparent)),
                     ]),
                   ),
                 ),
