@@ -409,9 +409,10 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                             children: [
                               IconButton(
                                 onPressed: () async { 
+                                  print("clicou em salvar");
                                   if(user != null){
-                                    final salvar = provider.savePico(widget.pico, user!);
-                                    if(await salvar){
+                                    final salvar = await provider.savePico(widget.pico, user!);
+                                    if(salvar){
                                       if(context.mounted){
                                         ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
@@ -428,8 +429,10 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                       
                                     }
                                   }else{
+                                    print("user nulo");
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
+                                        duration: const Duration(seconds: 5),
                                         content: const Text("Usuário não logado! Faça login para salvar pico"),
                                         action: SnackBarAction(
                                           label: "fazer login", 

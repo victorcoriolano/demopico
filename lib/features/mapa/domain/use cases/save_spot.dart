@@ -19,9 +19,13 @@ class SaveSpot {
   Future<List<Pico>> executeUseCase(String idUser) async {
     try {
       final picsosSalvos = await spotRepository.getSavePico(idUser);
+      print(picsosSalvos);
       if (picsosSalvos.isNotEmpty) {
+        print("Deu bom: $picsosSalvos");
         return picsosSalvos;
+        
       } else {
+        print("Deu Ruim");
         return [];
       }
     } catch (e) {

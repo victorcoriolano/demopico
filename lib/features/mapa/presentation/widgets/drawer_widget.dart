@@ -1,6 +1,7 @@
 import 'package:demopico/app/home_page.dart';
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
-import 'package:demopico/features/mapa/presentation/controllers/spot_save_controller.dart';
+import 'package:demopico/features/mapa/presentation/pages/save_pico_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -13,33 +14,10 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
-  Future<void> abrirModalPicosSalvos(BuildContext context) {
-    return showDialog(
+  final user = FirebaseAuth.instance.currentUser;
+  
+  
 
-      context: context,
-      builder: (BuildContext context) {
-        return Consumer<SpotSaveController>(
-          builder: (context, provider, child) => AlertDialog(
-            title: const Text('Seus picos Salvos'),
-            content: Center(
-              child: ListView.builder(
-                itemCount: provider.picosSalvos.length,
-                itemBuilder: (context, index) => Text(provider.picosSalvos[index].picoName),
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('Fechar'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -66,6 +44,12 @@ class _MyDrawerState extends State<MyDrawer> {
               onPressed: () {
                 // Ação ao clicar (adicione a funcionalidade necessária)
                 Navigator.of(context).pop(); // Fecha o Drawer
+                if(user != null){
+                  Navigator.push(context, MaterialPageRoute(builder: (_) =>  SavePicoPage(userID: user!.uid)));
+                }else {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Faça login para ver seus picos salvos")));
+                }
+                
               },
             ),
             // Botão Histórico

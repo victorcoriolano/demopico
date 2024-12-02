@@ -6,6 +6,7 @@ import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/prime
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/quarta_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/segunda_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/terceira_tela.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -47,6 +48,8 @@ class _ContainerTelasState extends State<ContainerTelas> {
           (_currentIndex - 1) % _screens.length; // Muda para o próximo índice
     });
   }
+
+  final user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -114,6 +117,47 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                 ),
                               ),
                               onPressed: () async {
+                                if(user != null){
+                                  if (provider.validarFormulario())  {
+                                  final pico = Pico(
+                                      imgUrl: provider.urlImage,
+                                      modalidade: provider.selectedModalidade,
+                                      tipoPico: provider.tipo,
+                                      nota: 0.0,
+                                      numeroAvaliacoes: 0,
+                                      long: widget.long,
+                                      lat: widget.lat,
+                                      description: provider.descricao,
+                                      atributos: provider.atributos,
+                                      fotoPico: null,
+                                      obstaculos: provider.obstaculos,
+                                      utilidades: provider.utilidades,
+                                      userCreator: user!.uid,
+                                      urlIdPico: 'anonimo',
+                                      picoName: provider.nomePico);
+                                  try  {
+                                    await serviceLocator<SpotControllerProvider>()
+                                        .createSpot(pico, context);
+                                    if(context.mounted){
+                                      serviceLocator<SpotControllerProvider>().showAllPico(context);
+                                      provider.dispose();
+                                      Navigator.pop(context);
+                                    }
+                                    
+                                  } on Exception catch (e) {
+                                    print('Erro na boca do balção: $e');
+                                    if(context.mounted){
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content: Text(
+                                                "Preencha todos os campos ou insira alguma imagem")));
+                                    }
+                                    
+                                  } catch (e) {
+                                    print("Erro desconhecido: $e");
+                                  }
+                                }
+                                }
                                 // função para criar o pico
                                 if (provider.validarFormulario())  {
                                   final pico = Pico(
