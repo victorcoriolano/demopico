@@ -6,7 +6,12 @@ class SaveSpot {
   final SpotRepository spotRepository;
   SaveSpot(this.spotRepository);
 
-  void saveSpot(Pico pico, LoggedUserModel user) {
-    spotRepository.saveSpot(pico, user);
+  Future<void> saveSpot(Pico pico, LoggedUserModel user) async {
+    try{
+      await spotRepository.saveSpot(pico, user);
+    }catch (e){
+      print(e);
+    }
+
   }
 }

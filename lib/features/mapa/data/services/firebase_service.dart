@@ -49,21 +49,33 @@ class FirebaseServiceMap implements SpotRepository{
 
   @override
   Future<void> saveSpot(Pico pico, LoggedUserModel user) async {
-    
-    // pegar o id pelo nome
-    final snapshot  = await _firebaseFirestore.collection('spots')
-      .where("name", isEqualTo: pico.picoName)
-      .limit(1).get();
-    String? idPico = snapshot.docs.first.id;
-    final userid = user.id;
-    if(userid != null && idPico != null){
-      await _firebaseFirestore.collection("picosFavoritos").add({
-        
-      });
+  try {
+    final snapshot = await _firebaseFirestore
+        .collection('spots')
+        .where("name", isEqualTo: pico.picoName)
+        .limit(1)
+        .get();
+
+    if (snapshot.docs.isEmpty) {
+      throw Exception("Pico não encontrado");
     }
-    
-    
+
+    final spotRef = snapshot.docs.first.reference; 
+    final userId = user.id;
+
+    if (userId != null) {
+      await _firebaseFirestore.collection("picosFavoritos").add({
+        'idUser': userId,
+        'spotRef': spotRef, 
+      });
+    } else {
+      print("Não foi possível salvar pico: Usuário não identificado");
+    }
+  } catch (e) {
+    throw Exception("Erro ao salvar pico: $e");
   }
+}
+
 
 @override
   Future<List<Pico>> showAllPico() async {
@@ -119,5 +131,30 @@ class FirebaseServiceMap implements SpotRepository{
       throw Exception("Erro inesperado: $e");
     }
   }
+  
+  @override
+  Future<List<Pico>> getSavePico(String idUser) async {
+    try {
+      final snapshotListPico = await _firebaseFirestore
+          .collection("picosFavoritos")
+          .where("idUser", isEqualTo: idUser)
+          .get();
+
+      if (snapshotListPico.docs.isNotEmpty) {
+        final picos = await Future.wait(snapshotListPico.docs.map((doc) async {
+          final spotRef = doc['spotRef'] as DocumentReference;
+          final spotSnapshot = await spotRef.get();
+          return Pico.fromJson(spotSnapshot.data() as Map<String, dynamic>);
+        }));
+        return picos;
+      }else{
+        print("Salvos não encontrados");
+        return [];
+      }
+    } catch (e) {
+      return [];
+    }
+  }
+
 
 }

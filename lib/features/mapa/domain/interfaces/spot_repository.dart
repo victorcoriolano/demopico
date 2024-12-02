@@ -5,6 +5,7 @@ import 'package:demopico/features/user/data/models/loggeduser.dart';
 abstract class SpotRepository {
   Future<void> createSpot(Pico pico);
   Future<void> saveSpot(Pico pico, LoggedUserModel user);
+  Future<List<Pico>> getSavePico(String idUser);
   Future<List<Pico>> showAllPico();
   Future<void> salvarNota(Pico pico);
 }
