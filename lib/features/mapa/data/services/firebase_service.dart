@@ -64,7 +64,7 @@ class FirebaseServiceMap implements SpotRepository{
     final userId = user.id;
 
     if (userId != null) {
-      await _firebaseFirestore.collection("picosFavoritos").add({
+      await _firebaseFirestore.collection("picosFavoritados").doc("$userId-${pico.picoName}").set({
         'idUser': userId,
         'spotRef': spotRef, 
       });
@@ -153,6 +153,19 @@ class FirebaseServiceMap implements SpotRepository{
       }
     } catch (e) {
       return [];
+    }
+  }
+  
+  @override
+  Future<void> deleteSave(String userId, String picoName) async {
+    try {
+      await _firebaseFirestore
+          .collection("picosFavoritados")
+          .doc("$userId-$picoName")
+          .delete();
+    } catch (e) {
+      // TODO
+      throw Exception(e);
     }
   }
 
