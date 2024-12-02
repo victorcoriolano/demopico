@@ -1,12 +1,12 @@
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/interfaces/spot_repository.dart';
-import 'package:demopico/features/user/data/models/loggeduser.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SaveSpot {
   final SpotRepository spotRepository;
   SaveSpot(this.spotRepository);
 
-  Future<bool> saveSpot(Pico pico, LoggedUserModel user) async {
+  Future<bool> saveSpot(Pico pico, User user) async {
     try{
       await spotRepository.saveSpot(pico, user);
       return true;

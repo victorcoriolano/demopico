@@ -1,6 +1,6 @@
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/use%20cases/save_spot.dart';
-import 'package:demopico/features/user/data/models/loggeduser.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SpotSaveController extends ChangeNotifier {
@@ -8,7 +8,7 @@ class SpotSaveController extends ChangeNotifier {
   SpotSaveController(this.saveSpot);
 
   final List<Pico> picosSalvos = [];
-  Future<void> savePico(Pico pico, LoggedUserModel user)async{
+  Future<void> savePico(Pico pico, User user)async{
     final salvar  = await saveSpot.saveSpot(pico, user);
     if(salvar){
       picosSalvos.add(pico);

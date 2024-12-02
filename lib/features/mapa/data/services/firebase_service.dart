@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/interfaces/spot_repository.dart';
 import 'package:demopico/features/user/data/models/loggeduser.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:firebase_storage/firebase_storage.dart';
 
 class FirebaseServiceMap implements SpotRepository{
@@ -48,7 +49,7 @@ class FirebaseServiceMap implements SpotRepository{
   }
 
   @override
-  Future<void> saveSpot(Pico pico, LoggedUserModel user) async {
+  Future<void> saveSpot(Pico pico, User user) async {
   try {
     final snapshot = await _firebaseFirestore
         .collection('spots')
@@ -61,7 +62,7 @@ class FirebaseServiceMap implements SpotRepository{
     }
 
     final spotRef = snapshot.docs.first.reference; 
-    final userId = user.id;
+    final userId = user.uid;
 
     if (userId != null) {
       await _firebaseFirestore.collection("picosFavoritados").doc("$userId-${pico.picoName}").set({

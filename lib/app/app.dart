@@ -31,6 +31,7 @@ class MyAppWidget extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => MapControllerProvider()),
         ChangeNotifierProvider(create: (_) => serviceLocator<SpotControllerProvider>()),
         ChangeNotifierProvider(create: (_) => DatabaseProvider()),
+        
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,

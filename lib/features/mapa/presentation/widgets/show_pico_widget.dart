@@ -1,7 +1,12 @@
+import 'package:demopico/core/common/inject_dependencies.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
+import 'package:demopico/features/mapa/presentation/controllers/spot_save_controller.dart';
+import 'package:demopico/features/user/presentation/pages/login_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:get/get.dart';
 
 import 'package:provider/provider.dart';
 //import 'package:flutter/src/rendering/box.dart';
@@ -25,6 +30,8 @@ int _currentPage = 0;
 
 class _ShowPicoWidgetState extends State<ShowPicoWidget> {
   List<String> images = [];
+
+  final provider = serviceLocator<SpotSaveController>();
 
   void _loadPicos() {
     setState(() {
@@ -59,8 +66,12 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
     ]);
   }
 
+  final user = FirebaseAuth.instance.currentUser;
+
+
   @override
   Widget build(BuildContext context) {
+    
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -335,7 +346,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                 onPressed: () =>
                                     avaliarPico(context, widget.pico),
                                 style: OutlinedButton.styleFrom(
-                                  side: BorderSide(
+                                  side: const BorderSide(
                                       color:
                                           Color(0xFF8B0000)), // Borda vermelha
                                   backgroundColor: Colors.white, // Fundo branco
@@ -397,8 +408,27 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               IconButton(
-                                onPressed: () {},
+                                onPressed: () { 
+                                  if(user != null){
+                                    provider.savePico(widget.pico, user!);
+                                  }else{
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: const Text("Usuário não logado! Faça login para salvar pico"),
+                                        action: SnackBarAction(
+                                          label: "fazer login", 
+                                          onPressed: () {
+                                            Get.to(() => const LoginPage());
+                                          }
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  
+
+                                },
                                 icon: const Icon(Icons.bookmark_border),
+                                tooltip: "Salvar Pico",
                                 iconSize: 35,
                               ),
                               IconButton(
