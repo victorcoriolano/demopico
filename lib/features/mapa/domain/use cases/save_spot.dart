@@ -12,6 +12,20 @@ class SaveSpot {
     }catch (e){
       print(e);
     }
+  }
 
+  Future<List<Pico>> executeUseCase(String idUser)async{
+    try {
+    final picsosSalvos =  await spotRepository.getSavePico(idUser);
+    if(picsosSalvos.isNotEmpty){
+    return picsosSalvos;
+  } else{
+    return [];
+  }
+} catch (e) {
+  print("Erro na exception(pegar pico salvo): $e");
+  return [];
+}
+    
   }
 }
