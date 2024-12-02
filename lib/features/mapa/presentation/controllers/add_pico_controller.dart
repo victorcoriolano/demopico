@@ -20,7 +20,7 @@ class AddPicoControllerProvider extends ChangeNotifier with Validators {
   File? fotoPico;
   double lat = 0.0;
   double long = 0.0;
-  List<File?> images = [];
+List<File?> images = [];
   final pegadorImage = ImagePicker();
 
   Future<void> selecionarImag() async {
@@ -75,7 +75,6 @@ class AddPicoControllerProvider extends ChangeNotifier with Validators {
     print("Erro ao subir imagem pro storage: $e");
   }
 }
-
 
 
 
@@ -230,4 +229,23 @@ class AddPicoControllerProvider extends ChangeNotifier with Validators {
     final validarImagens = imagensIsNotEmpty();
     return nomeValido && descricaoValida && validarImagens;
   }
+  @override
+  void dispose() {
+    atributos.clear();
+    obstaculos.clear();
+    nomePico = '';
+    descricao = '';
+    selectedModalidade = 'Skate';
+    nota = 0.0;
+    numAval = 0;
+    tipo = 'Pico de Rua';
+    utilidades.clear();
+    urlImage.clear();
+    fotoPico = null;
+    super.dispose();
+  }
+
+
+
+
 }

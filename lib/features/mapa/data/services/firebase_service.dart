@@ -48,8 +48,21 @@ class FirebaseServiceMap implements SpotRepository{
   }
 
   @override
-  void saveSpot(Pico pico, LoggedUserModel user) {
-    // implementar o método de salvar
+  Future<void> saveSpot(Pico pico, LoggedUserModel user) async {
+    
+    // pegar o id pelo nome
+    final snapshot  = await _firebaseFirestore.collection('spots')
+      .where("name", isEqualTo: pico.picoName)
+      .limit(1).get();
+    String? idPico = snapshot.docs.first.id;
+    final userid = user.id;
+    if(userid != null && idPico != null){
+      await _firebaseFirestore.collection("picosFavoritos").add({
+        
+      });
+    }
+    
+    
   }
 
 @override

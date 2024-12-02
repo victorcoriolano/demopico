@@ -67,7 +67,7 @@ class _QuartaTelaState extends State<QuartaTela>  {
                     color: Colors.black,
                   ),
                 ),
-                 const SizedBox(height: 10),
+                const SizedBox(height: 10),
                 // Campo de texto para a descrição do pico
                 TextFormField(
                   maxLines: 5, // Permite múltiplas linhas
