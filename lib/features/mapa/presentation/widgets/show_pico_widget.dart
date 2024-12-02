@@ -68,10 +68,8 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
 
   final user = FirebaseAuth.instance.currentUser;
 
-
   @override
   Widget build(BuildContext context) {
-    
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -206,7 +204,6 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                        
                               Column(
                                 children: [
                                   Row(
@@ -218,41 +215,40 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                             fontWeight: FontWeight.bold),
                                       ),
                                       const SizedBox(width: 8),
-                                  Row(
-                                    children: List.generate(5, (index) {
-                                      if (index < widget.pico.nota!.floor()) {
-                                        // Estrela cheia
-                                        return const Icon(Icons.star,
-                                            color: Colors.black);
-                                      } else if (index ==
-                                              widget.pico.nota!.floor() &&
-                                          (widget.pico.nota! % 1) >= 0.5) {
-                                        // Meia estrela se a parte decimal for >= 0.5
-                                        return const Icon(Icons.star_half,
-                                            color: Colors.black);
-                                      } else {
-                                        // Estrela vazia
-                                        return const Icon(Icons.star,
-                                            color: Colors.grey);
-                                      }
-                                    }),
-                                  ),
+                                      Row(
+                                        children: List.generate(5, (index) {
+                                          if (index <
+                                              widget.pico.nota!.floor()) {
+                                            // Estrela cheia
+                                            return const Icon(Icons.star,
+                                                color: Colors.black);
+                                          } else if (index ==
+                                                  widget.pico.nota!.floor() &&
+                                              (widget.pico.nota! % 1) >= 0.5) {
+                                            // Meia estrela se a parte decimal for >= 0.5
+                                            return const Icon(Icons.star_half,
+                                                color: Colors.black);
+                                          } else {
+                                            // Estrela vazia
+                                            return const Icon(Icons.star,
+                                                color: Colors.grey);
+                                          }
+                                        }),
+                                      ),
                                     ],
                                   ),
-                                  
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Container(
                                         margin: EdgeInsets.only(top: 5),
-                                        child:
-                                            Text(
-                                              ' ${widget.pico.numeroAvaliacoes.toString()} avaliações',
-                                              style: const TextStyle(
-                                                  color:
-                                                      Color.fromARGB(255, 93, 93, 93),
-                                                  fontSize: 12),
-                                            ),
+                                        child: Text(
+                                          ' ${widget.pico.numeroAvaliacoes.toString()} avaliações',
+                                          style: const TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 93, 93, 93),
+                                              fontSize: 12),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -266,60 +262,82 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
 
                       // Informações do local e descrição
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            width: 52,
-                            height: 52,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: const Color.fromARGB(
-                                    255, 205, 23, 23), // Cor da borda
-                                width: 0.5, // Largura da borda
-                              ),
-                            ),
-                            child: const CircleAvatar(
-                              foregroundColor:
-                                  Color.fromARGB(255, 255, 255, 255),
-                              backgroundColor: Color.fromARGB(255, 169, 41, 41),
-                              radius: 25,
-                              child: Icon(
-                                Icons.person,
-                                size: 38,
-                              ),
+                          // Foto e Nome
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(
+                                maxWidth: 80), // Largura máxima definida
+                            child: Column(
+                              children: [
+                                Container(
+                                  width: 52,
+                                  height: 52,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: const Color.fromARGB(
+                                          255, 205, 23, 23), // Cor da borda
+                                      width: 0.5, // Largura da borda
+                                    ),
+                                  ),
+                                  child: const CircleAvatar(
+                                    foregroundColor:
+                                        Color.fromARGB(255, 255, 255, 255),
+                                    backgroundColor:
+                                        Color.fromARGB(255, 169, 41, 41),
+                                    radius: 25,
+                                    child: Icon(
+                                      Icons.person,
+                                      size: 38,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 5),
+                                Text(
+                                  "SK8DEV", // Nome fixo abaixo da foto
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    color: Color.fromARGB(255, 93, 93, 93),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          const SizedBox(width: 10),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                widget.pico.picoName.toUpperCase(),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 18),
-                              ),
-                              const Text(
-                                "Devsk8",
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 16),
-                              ),
-                            ],
+                          const SizedBox(width: 15),
+
+                          // Nome do local e descrição
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.pico.picoName
+                                      .toUpperCase(), // Nome do local
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                const SizedBox(height: 5),
+                                Text(
+                                  widget.pico.description ??
+                                      '', // Descrição do local
+                                  style: const TextStyle(
+                                    color: Color(0xFF8B0000),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 10),
 
-                      // Comentário
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 5),
-                        child: Text(
-                          widget.pico.description ?? '',
-                          style: const TextStyle(
-                              color: Color(0xFF8B0000),
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
                       const SizedBox(height: 16),
 
                       Row(
@@ -408,40 +426,36 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               IconButton(
-                                onPressed: () async { 
-                                  if(user != null){
-                                    final salvar = provider.savePico(widget.pico, user!);
-                                    if(await salvar){
-                                      if(context.mounted){
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: const Text("Pico Salvo"),
-                                        action: SnackBarAction(
-                                          label: "Ver pico salvo", 
-                                          onPressed: () {
-                                            
-                                          }
-                                        ),
-                                      ),
-                                    );
+                                onPressed: () async {
+                                  if (user != null) {
+                                    final salvar =
+                                        provider.savePico(widget.pico, user!);
+                                    if (await salvar) {
+                                      if (context.mounted) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: const Text("Pico Salvo"),
+                                            action: SnackBarAction(
+                                                label: "Ver pico salvo",
+                                                onPressed: () {}),
+                                          ),
+                                        );
                                       }
-                                      
                                     }
-                                  }else{
+                                  } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                        content: const Text("Usuário não logado! Faça login para salvar pico"),
+                                        content: const Text(
+                                            "Usuário não logado! Faça login para salvar pico"),
                                         action: SnackBarAction(
-                                          label: "fazer login", 
-                                          onPressed: () {
-                                            Get.to(() => const LoginPage());
-                                          }
-                                        ),
+                                            label: "fazer login",
+                                            onPressed: () {
+                                              Get.to(() => const LoginPage());
+                                            }),
                                       ),
                                     );
                                   }
-                                  
-
                                 },
                                 icon: const Icon(Icons.bookmark_border),
                                 tooltip: "Salvar Pico",
