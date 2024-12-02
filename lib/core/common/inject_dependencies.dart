@@ -3,8 +3,10 @@ import 'package:demopico/features/mapa/data/services/firebase_service.dart';
 import 'package:demopico/features/mapa/domain/interfaces/spot_repository.dart';
 import 'package:demopico/features/mapa/domain/use%20cases/avaliar_spot.dart';
 import 'package:demopico/features/mapa/domain/use%20cases/create_spot.dart';
+import 'package:demopico/features/mapa/domain/use%20cases/save_spot.dart';
 import 'package:demopico/features/mapa/domain/use%20cases/show_all_pico.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
+import 'package:demopico/features/mapa/presentation/controllers/spot_save_controller.dart';
 import 'package:demopico/features/user/data/services/auth_service.dart';
 import 'package:demopico/features/user/presentation/controllers/database_notifier_provider.dart';
 import 'package:demopico/features/user/data/services/database_service.dart';
@@ -48,10 +50,13 @@ Future<void> init() async {
   serviceLocator.registerLazySingleton(() => CreateSpot(serviceLocator()));
   serviceLocator.registerLazySingleton(() => ShowAllPico(serviceLocator()));
   serviceLocator.registerLazySingleton(() => AvaliarSpot(serviceLocator()));
+  serviceLocator.registerLazySingleton(() => SaveSpot(serviceLocator()));
 
   //registrando o controller e injetoando dependencia
-  serviceLocator.registerFactory(
+  serviceLocator.registerLazySingleton(
       () => SpotControllerProvider(serviceLocator(), serviceLocator(), serviceLocator()));
+
+  serviceLocator.registerLazySingleton(() => SpotSaveController(serviceLocator()));
 
   //instancia da entidade pico que será criada
 }
