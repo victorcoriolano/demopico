@@ -8,15 +8,19 @@ class SpotSaveController extends ChangeNotifier {
   SpotSaveController(this.saveSpot);
 
   final List<Pico> picosSalvos = [];
-  Future<void> savePico(Pico pico, User user)async{
+  Future<bool> savePico(Pico pico, User user)async{
     final salvar  = await saveSpot.saveSpot(pico, user);
     if(salvar){
       picosSalvos.add(pico);
+      notifyListeners();
+      return true;
     }else{
       print("Não foi possivel salvar");
+      notifyListeners();
+      return false;
     }
     
-    notifyListeners();
+    
   }
 
   Future<void> getPicosSalvos(String idUser)async{

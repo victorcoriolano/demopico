@@ -408,9 +408,25 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               IconButton(
-                                onPressed: () { 
+                                onPressed: () async { 
                                   if(user != null){
-                                    provider.savePico(widget.pico, user!);
+                                    final salvar = provider.savePico(widget.pico, user!);
+                                    if(await salvar){
+                                      if(context.mounted){
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: const Text("Pico Salvo"),
+                                        action: SnackBarAction(
+                                          label: "Ver pico salvo", 
+                                          onPressed: () {
+                                            
+                                          }
+                                        ),
+                                      ),
+                                    );
+                                      }
+                                      
+                                    }
                                   }else{
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
