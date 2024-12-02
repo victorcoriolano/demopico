@@ -39,6 +39,12 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
     });
   }
 
+    void dispose() {
+    // Resetando o valor de _currentPage antes de fechar a página
+    _currentPage = 0;
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -46,7 +52,8 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
   }
 
   Widget buildAttributeIcons(int value) {
-    return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+    return Column(mainAxisAlignment: MainAxisAlignment.start, 
+    children: [
       Row(
         children: [
           // Gerando 5 ícones
@@ -261,138 +268,146 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                       const SizedBox(height: 16),
 
                       // Informações do local e descrição
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Foto e Nome
-                          ConstrainedBox(
-                            constraints: const BoxConstraints(
-                                maxWidth: 80), // Largura máxima definida
-                            child: Column(
-                              children: [
-                                Container(
-                                  width: 52,
-                                  height: 52,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: const Color.fromARGB(
-                                          255, 205, 23, 23), // Cor da borda
-                                      width: 0.5, // Largura da borda
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal:8.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Foto e Nome
+                            ConstrainedBox(
+                              constraints: const BoxConstraints(
+                                  maxWidth: 80), // Largura máxima definida
+                              child: Column(
+                                children: [
+                                  Container(
+                                    width: 52,
+                                    height: 52,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: const Color.fromARGB(
+                                            255, 205, 23, 23), // Cor da borda
+                                        width: 0.5, // Largura da borda
+                                      ),
+                                    ),
+                                    child: const CircleAvatar(
+                                      foregroundColor:
+                                          Color.fromARGB(255, 255, 255, 255),
+                                      backgroundColor:
+                                          Color.fromARGB(255, 169, 41, 41),
+                                      radius: 25,
+                                      child: Icon(
+                                        Icons.person,
+                                        size: 38,
+                                      ),
                                     ),
                                   ),
-                                  child: const CircleAvatar(
-                                    foregroundColor:
-                                        Color.fromARGB(255, 255, 255, 255),
-                                    backgroundColor:
-                                        Color.fromARGB(255, 169, 41, 41),
-                                    radius: 25,
-                                    child: Icon(
-                                      Icons.person,
-                                      size: 38,
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    "SK8DEV", // Nome fixo abaixo da foto
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      color: Color.fromARGB(255, 93, 93, 93),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 15),
+                        
+                            // Nome do local e descrição
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    widget.pico.picoName
+                                        .toUpperCase(), // Nome do local
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    widget.pico.description ??
+                                        '', // Descrição do local
+                                    style: const TextStyle(
+                                      color: Color(0xFF8B0000),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 25),
+
+
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 3.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF8B0000),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 50, vertical: 10),
+                              ),
+                              onPressed: () {},
+                              child: const Text(
+                                "ABRIR DISCUSSÃO",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                          fontWeight: FontWeight.bold,
                                 ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  "SK8DEV", // Nome fixo abaixo da foto
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    color: Color.fromARGB(255, 93, 93, 93),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Column(
+                              children: [
+                                OutlinedButton(
+                                  onPressed: () =>
+                                      avaliarPico(context, widget.pico),
+                                  style: OutlinedButton.styleFrom(
+                                    side: const BorderSide(
+                                        color:
+                                            Color(0xFF8B0000)), // Borda vermelha
+                                    backgroundColor: Colors.white, // Fundo branco
+                                  ),
+                                  child: const Text(
+                                    'AVALIAR PICO',
+                                    style: TextStyle(
+                                      color: Color(0xFF8B0000), // Texto vermelho
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12
+                                    ),
                                   ),
                                 ),
                               ],
-                            ),
-                          ),
-                          const SizedBox(width: 15),
-
-                          // Nome do local e descrição
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  widget.pico.picoName
-                                      .toUpperCase(), // Nome do local
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  widget.pico.description ??
-                                      '', // Descrição do local
-                                  style: const TextStyle(
-                                    color: Color(0xFF8B0000),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                            )
+                          ],
+                        ),
                       ),
-                      const SizedBox(height: 10),
-
-                      const SizedBox(height: 16),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF8B0000),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 40, vertical: 7),
-                            ),
-                            onPressed: () {},
-                            child: const Text(
-                              "ABRIR DISCUSSÃO",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ),
-                          Column(
-                            children: [
-                              OutlinedButton(
-                                onPressed: () =>
-                                    avaliarPico(context, widget.pico),
-                                style: OutlinedButton.styleFrom(
-                                  side: const BorderSide(
-                                      color:
-                                          Color(0xFF8B0000)), // Borda vermelha
-                                  backgroundColor: Colors.white, // Fundo branco
-                                ),
-                                child: const Text(
-                                  'AVALIAR PICO',
-                                  style: TextStyle(
-                                    color: Color(0xFF8B0000), // Texto vermelho
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 9),
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(
-                              width: 2,
-                              color: const Color.fromARGB(216, 0, 0, 0)),
+                              width: 0,
+                              color: const Color.fromARGB(0, 70, 70, 70)),
                         ),
                         child: Column(
                           children: [
                             for (var entry in widget.pico.atributos!.entries)
                               Container(
                                 padding: const EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 25),
+                                    vertical: 10, horizontal: 8),
                                 margin:
                                     const EdgeInsets.symmetric(vertical: 4.0),
                                 // Adicionando margem se necessário
