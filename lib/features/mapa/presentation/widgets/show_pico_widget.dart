@@ -351,7 +351,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18,
                                         ),
-                                        textAlign: TextAlign.start,
+                                        textAlign: TextAlign.start, 
                                       ),
                                       buildAttributeIcons(entry.value),
                                     ],
@@ -457,11 +457,17 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
 
   String getMensagemPico(double nota) {
     if (nota >= 4.0) {
-      return "Pico muito marreta!";
-    } else if (nota >= 2.5) {
-      return "Pico marretinha!";
-    } else {
-      return "Pico legal!";
+      return "Muito Marreta!";
+    } else if (nota >= 3.5) {
+      return "Suave pra Marreta!";
+    }else if (nota  >= 2.5){
+      return "Da pra andar";
+    }
+    else if (nota  >= 1.5){
+      return "Meio ruim";
+    }
+    else {
+      return "Horrivel!";
     }
   }
 }
