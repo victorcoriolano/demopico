@@ -56,7 +56,6 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
           // Substitua por qualquer texto ou valor desejado
         ],
       ),
-      Text('Algum texto aqui'),
     ]);
   }
 
@@ -178,7 +177,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
 
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -194,16 +193,20 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                           ),
                           // Avaliação com estrelas
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Row(
+                        
+                              Column(
                                 children: [
-                                  Text(
-                                    widget.pico.nota!.toStringAsFixed(2),
-                                    style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  const SizedBox(width: 8),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        widget.pico.nota!.toStringAsFixed(2),
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      const SizedBox(width: 8),
                                   Row(
                                     children: List.generate(5, (index) {
                                       if (index < widget.pico.nota!.floor()) {
@@ -222,6 +225,25 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                             color: Colors.grey);
                                       }
                                     }),
+                                  ),
+                                    ],
+                                  ),
+                                  
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.only(top: 5),
+                                        child:
+                                            Text(
+                                              ' ${widget.pico.numeroAvaliacoes.toString()} avaliações',
+                                              style: const TextStyle(
+                                                  color:
+                                                      Color.fromARGB(255, 93, 93, 93),
+                                                  fontSize: 12),
+                                            ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
@@ -309,19 +331,24 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                           ),
                           Column(
                             children: [
-                              Text(
-                                ' ${widget.pico.numeroAvaliacoes.toString()} avaliações',
-                                style: const TextStyle(
-                                    color: Color.fromARGB(255, 93, 93, 93),
-                                    fontSize: 12),
-                              ),
-                              TextButton(
+                              OutlinedButton(
                                 onPressed: () =>
                                     avaliarPico(context, widget.pico),
-                                child: const Text('Avaliar pico'),
+                                style: OutlinedButton.styleFrom(
+                                  side: BorderSide(
+                                      color:
+                                          Color(0xFF8B0000)), // Borda vermelha
+                                  backgroundColor: Colors.white, // Fundo branco
+                                ),
+                                child: const Text(
+                                  'AVALIAR PICO',
+                                  style: TextStyle(
+                                    color: Color(0xFF8B0000), // Texto vermelho
+                                  ),
+                                ),
                               ),
                             ],
-                          ),
+                          )
                         ],
                       ),
                       const SizedBox(height: 16),
@@ -351,7 +378,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18,
                                         ),
-                                        textAlign: TextAlign.start, 
+                                        textAlign: TextAlign.start,
                                       ),
                                       buildAttributeIcons(entry.value),
                                     ],
@@ -409,7 +436,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
       ) {
         return StatefulBuilder(builder: (context, setState) {
           return AlertDialog(
-            title: const Text("Avaliar Pico"),
+            title: const Text("AVALIAR PICO"),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -460,13 +487,11 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
       return "Muito Marreta!";
     } else if (nota >= 3.5) {
       return "Suave pra Marreta!";
-    }else if (nota  >= 2.5){
+    } else if (nota >= 2.5) {
       return "Da pra andar";
-    }
-    else if (nota  >= 1.5){
+    } else if (nota >= 1.5) {
       return "Meio ruim";
-    }
-    else {
+    } else {
       return "Horrivel!";
     }
   }
