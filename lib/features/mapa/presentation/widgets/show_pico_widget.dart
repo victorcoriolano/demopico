@@ -10,7 +10,7 @@ class ShowPicoWidget extends StatefulWidget {
   final Pico pico;
   final ScrollController scrollController;
   final Map<String, int>? atributos;
-  
+
   const ShowPicoWidget(
       {super.key,
       required this.pico,
@@ -20,7 +20,9 @@ class ShowPicoWidget extends StatefulWidget {
   @override
   State<ShowPicoWidget> createState() => _ShowPicoWidgetState();
 }
-   int _currentPage = 0;
+
+int _currentPage = 0;
+
 class _ShowPicoWidgetState extends State<ShowPicoWidget> {
   List<String> images = [];
 
@@ -37,20 +39,29 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
   }
 
   Widget buildAttributeIcons(int value) {
-    return Row(
-      children: List.generate(5, (index) {
-        return Image.asset(
-          'assets/images/iconPico.png',
-          color: index < value ? const Color.fromARGB(255, 169, 41, 41) : Colors.grey,
-          width: 28,
-        );
-      }),
-    );
+    return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+      Row(
+        children: [
+          // Gerando 5 ícones
+          ...List.generate(5, (index) {
+            return Image.asset(
+              'assets/images/iconPico.png',
+              color: index < value
+                  ? const Color.fromARGB(255, 169, 41, 41)
+                  : Colors.grey,
+              width: 28,
+            );
+          }),
+          // Adicionando o texto
+          // Substitua por qualquer texto ou valor desejado
+        ],
+      ),
+      Text('Algum texto aqui'),
+    ]);
   }
 
   @override
   Widget build(BuildContext context) {
-    
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -67,81 +78,84 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
         children: [
           Stack(
             children: [
-   SizedBox(
-      width: double.infinity,
-      height: 300, // Altura ajustada para incluir o indicador
-      child: images.isNotEmpty
-          ? Stack(
-              children: [
-                PageView.builder(
-                  itemCount: images.length,
-                  onPageChanged: (int page) {
-                    setState(() {
-                      _currentPage = page; // Atualiza a página atual
-                    });
-                  },
-                  itemBuilder: (context, pagePosition) {
-                    return Stack(
-                      alignment: Alignment.topRight,
-                      children: [
-                        Container(
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(30)),
+              SizedBox(
+                width: double.infinity,
+                height: 300, // Altura ajustada para incluir o indicador
+                child: images.isNotEmpty
+                    ? Stack(
+                        children: [
+                          PageView.builder(
+                            itemCount: images.length,
+                            onPageChanged: (int page) {
+                              setState(() {
+                                _currentPage = page; // Atualiza a página atual
+                              });
+                            },
+                            itemBuilder: (context, pagePosition) {
+                              return Stack(
+                                alignment: Alignment.topRight,
+                                children: [
+                                  Container(
+                                    decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(30)),
+                                    ),
+                                    clipBehavior: Clip.hardEdge,
+                                    child: Image.network(
+                                      images[pagePosition],
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(
+                                      Icons.close,
+                                      color: Color.fromARGB(255, 243, 243, 243),
+                                    ),
+                                    padding: const EdgeInsets.only(
+                                        top: 10, right: 10),
+                                    iconSize: 36,
+                                    onPressed: () {
+                                      Navigator.pop(
+                                          context); // Retorna para a tela anterior
+                                    },
+                                  )
+                                ],
+                              );
+                            },
                           ),
-                          clipBehavior: Clip.hardEdge,
-                          child: Image.network(
-                            images[pagePosition],
-                            fit: BoxFit.cover,
-                            width: double.infinity,
+                          Positioned(
+                            bottom: 10, // Posição do indicador
+                            left: 0,
+                            right: 0,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: List.generate(images.length, (index) {
+                                return Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 5),
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 300),
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 4),
+                                    width: _currentPage == index ? 12 : 8,
+                                    height: _currentPage == index ? 12 : 8,
+                                    decoration: BoxDecoration(
+                                      color: _currentPage == index
+                                          ? Colors.white
+                                          : Colors.white54,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                );
+                              }),
+                            ),
                           ),
-                        ),
-                        IconButton(
-                          icon: const Icon(
-                            Icons.close,
-                            color: Color.fromARGB(255, 243, 243, 243),
-                          ),
-                          padding: const EdgeInsets.only(top: 10, right: 10),
-                          iconSize: 36,
-                          onPressed: () {
-                            Navigator.pop(context); // Retorna para a tela anterior
-                          },
-                        )
-                      ],
-                    );
-                  },
-                ),
-                Positioned(
-                  bottom: 10, // Posição do indicador
-                  left: 0,
-                  right: 0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(images.length, (index) {
-                      return Container(
-                        margin: EdgeInsets.symmetric(horizontal:5),
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 300),
-                          margin: const EdgeInsets.symmetric(horizontal: 4),
-                          width: _currentPage == index ? 12 : 8,
-                          height: _currentPage == index ? 12 : 8,
-                          decoration: BoxDecoration(
-                            color: _currentPage == index
-                                ? Colors.white
-                                : Colors.white54,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      );
-                    }),
-                  ),
-                ),
-              ],
-            )
-          : const Center(
-              child: Text('Sem imagens disponíveis'),
-            ),
-    ),
+                        ],
+                      )
+                    : const Center(
+                        child: Text('Sem imagens disponíveis'),
+                      ),
+              ),
               Align(
                 alignment: Alignment.center,
                 child: Container(
@@ -163,7 +177,8 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                 // Barra de arrastar
 
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -301,7 +316,8 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                     fontSize: 12),
                               ),
                               TextButton(
-                                onPressed: () => avaliarPico(context, widget.pico),
+                                onPressed: () =>
+                                    avaliarPico(context, widget.pico),
                                 child: const Text('Avaliar pico'),
                               ),
                             ],
@@ -333,7 +349,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                         "${entry.key.toUpperCase()}: ",
                                         style: const TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 16,
+                                          fontSize: 18,
                                         ),
                                         textAlign: TextAlign.start,
                                       ),
@@ -344,28 +360,30 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                               ),
                           ],
                         ),
-                      )
-,
+                      ),
                       // Ícones à direita (salvar, sinalizar, etc.)
-                      Align(
-                        alignment: Alignment.center,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.bookmark_border),
-                              iconSize: 30,
-                            ),
-                            IconButton(
+                      Container(
+                        margin: EdgeInsets.only(top: 15),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              IconButton(
                                 onPressed: () {},
-                                icon: const Icon(Icons.flag),
-                                iconSize: 30),
-                            IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.navigation),
-                                iconSize: 30),
-                          ],
+                                icon: const Icon(Icons.bookmark_border),
+                                iconSize: 35,
+                              ),
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(Icons.flag),
+                                  iconSize: 35),
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(Icons.share_rounded),
+                                  iconSize: 35),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -378,7 +396,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
       ),
     );
   }
-  
+
   Future<void> avaliarPico(BuildContext context, Pico pico) async {
     double nota = 0;
     String mensagem = "";
@@ -389,9 +407,8 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
       builder: (
         context,
       ) {
-        return StatefulBuilder(
-          builder: (context, setState){
-            return AlertDialog(
+        return StatefulBuilder(builder: (context, setState) {
+          return AlertDialog(
             title: const Text("Avaliar Pico"),
             content: Column(
               mainAxisSize: MainAxisSize.min,
@@ -410,9 +427,9 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                   ),
                   onRatingUpdate: (rating) {
                     setState(() {
-                          nota =  rating; // Atualiza a nota com base no índice
-                          mensagem = getMensagemPico(nota);
-                        });
+                      nota = rating; // Atualiza a nota com base no índice
+                      mensagem = getMensagemPico(nota);
+                    });
                   },
                 ),
               ],
@@ -425,8 +442,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                 child: const Text("Cancelar"),
               ),
               TextButton(
-                onPressed: () async
-                {
+                onPressed: () async {
                   await provider.avaliarPico(pico, nota);
                   Navigator.of(context).pop();
                 },
@@ -434,8 +450,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
               ),
             ],
           );
-          }
-        );
+        });
       },
     );
   }
