@@ -181,7 +181,7 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                         .createSpot(pico, context);
                                     if(context.mounted){
                                       serviceLocator<SpotControllerProvider>().showAllPico(context);
-                                      provider.dispose();
+                                      provider.limpar();
                                       Navigator.pop(context);
                                     }
                                     

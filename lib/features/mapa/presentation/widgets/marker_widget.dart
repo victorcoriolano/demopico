@@ -13,7 +13,7 @@ Future<Marker> picoMarker(Pico? spot, BuildContext context, ) async {
   markerId: MarkerId(spot!.picoName),
   position: LatLng(spot.lat, spot.long),
   onTap: () {
-  showPicoModal(Navigator.of(context).context, spot);
+  showPicoModal(context, spot);
 
   },
   icon: await const TextOnImage(
@@ -31,6 +31,7 @@ Future<Marker> picoMarker(Pico? spot, BuildContext context, ) async {
 void showPicoModal(BuildContext context, Pico pico) {
   print('Chamando modal para: ${pico.picoName}');
   print('Imagem url: ${pico.imgUrl}');
+  print("Contexto: $context");
   
   try {
   showModalBottomSheet(

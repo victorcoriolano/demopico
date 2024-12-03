@@ -32,6 +32,7 @@ class SpotControllerProvider extends ChangeNotifier {
       await createSpotUseCase.createSpot(pico);
       if(context.mounted){
         await showAllPico(context).whenComplete(() => print("Pico postado"));
+        
       }
       
 
@@ -72,27 +73,28 @@ class SpotControllerProvider extends ChangeNotifier {
 
   Future<void> filtrarPicosPorTipo(String? tipo, BuildContext context) async {
     print(tipo);
+    print("Lista de spots antes da filtragem: $spots");
 
     // Filtra os picos com base no tipo selecionado
     if (tipo == 'todos') {
       picosFiltrados.clear();
       picosFiltrados = spots;
       print("Picos filtrados: $picosFiltrados");
-      notifyListeners();
+      
     } else {
       picosFiltrados.clear();
       picosFiltrados
           .addAll(spots.where((pico) => pico.tipoPico == tipo).toList());
       print("Picos filtrados: $picosFiltrados");
-      notifyListeners();
+      
     }
 
     // Atualiza os markers com processamento assíncrono
-    markers = (await Future.wait(picosFiltrados.map((pico) async {
-      final marker = await picoMarker(pico, context);
-      return marker;
-    })))
-        .toSet();
+    markers.clear();
+    final markerFutures = picosFiltrados.map((pico) => picoMarker(pico, context));
+    markers = (await Future.wait(markerFutures)).toSet();
+    print(markers.firstOrNull ?? "Nwnhum marker encontrado");
+
     notifyListeners();
   }
 
@@ -129,11 +131,10 @@ class SpotControllerProvider extends ChangeNotifier {
     }
 
     // Atualiza os markers com os picos filtrados
-    markers = (await Future.wait(picosFiltrados.map((pico) async {
-      final marker = await picoMarker(pico, context);
-      return marker;
-    })))
-        .toSet();
+        markers.clear();
+    final markerFutures = picosFiltrados.map((pico) => picoMarker(pico, context));
+    markers = (await Future.wait(markerFutures)).toSet();
+    print(markers.firstOrNull ?? "Nwnhum marker encontrado");
 
     notifyListeners();
   }
@@ -153,13 +154,12 @@ class SpotControllerProvider extends ChangeNotifier {
           spots.where((pico) => pico.modalidade == modalidade).toList();
 
       // Atualiza os markers com os picos filtrados
-      markers = (await Future.wait(picosFiltrados.map((pico) async {
-        final marker = await picoMarker(pico, context);
-        return marker;
-      })))
-          .toSet();
+          markers.clear();
+    final markerFutures = picosFiltrados.map((pico) => picoMarker(pico, context));
+    markers = (await Future.wait(markerFutures)).toSet();
+    print(markers.firstOrNull ?? "Nwnhum marker encontrado");
 
-      notifyListeners();
+    notifyListeners();
     }
   }
 
