@@ -67,7 +67,7 @@ class _SavePicoPageState extends State<SavePicoPage> {
                   ),
                   title: Text(
                     pico.picoName,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),

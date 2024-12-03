@@ -10,20 +10,19 @@ class HistoricoController extends ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  HistoricoController(this.useCase);
-
-  Future<void> carregarHistorico() async {
-    _isLoading = true;
-    notifyListeners();
-
-    final historicoCarregado = await useCase.execultaCarregar();
-    if (historicoCarregado != null) {
-      _historico = historicoCarregado;
-    }
-
-    _isLoading = false;
-    notifyListeners();
+  HistoricoController(this.useCase ){
+    carregarHistoricoInicial();
   }
+
+void carregarHistoricoInicial() async {
+  _isLoading = true;
+  notifyListeners();
+
+  _historico = await useCase.execultaCarregar() ?? [];
+  _isLoading = false;
+  notifyListeners();
+}
+
 
 
   Future<void> salvarNoHistorico(String name, double lat, double long) async {
@@ -31,36 +30,42 @@ class HistoricoController extends ChangeNotifier {
     notifyListeners();
 
     await useCase.execultaSalvar(name, lat, long);
-    await carregarHistorico();
 
     _isLoading = false;
     notifyListeners();
   }
 
 
-  Future<void> limparHistorico() async {
-    _isLoading = true;
-    notifyListeners();
+Future<void> limparHistorico() async {
+  _isLoading = true;
+  notifyListeners();
 
-    await useCase.execultaLimpar();
-    _historico = []; 
+  await useCase.execultaLimpar();
 
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    _historico.clear();
     _isLoading = false;
     notifyListeners();
-  }
+  });
+}
+
 
 
   Future<void> apagarItem(String nomeItem) async {
-    _isLoading = true;
-    notifyListeners();
+  _isLoading = true;
+  notifyListeners();
 
-    final sucesso = await useCase.execultaApagar(nomeItem);
-    if (sucesso) {
-
-      _historico.removeWhere((item) => item['name'] == nomeItem);
-    }
-
+  final sucesso = await useCase.execultaApagar(nomeItem);
+  if (sucesso) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _historico.removeWhere((item) => item['nome'] == nomeItem);
+      _isLoading = false;
+      notifyListeners();
+    });
+  } else {
     _isLoading = false;
     notifyListeners();
   }
+}
+
 }
