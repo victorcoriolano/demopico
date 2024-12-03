@@ -48,7 +48,9 @@ class SpotSaveController extends ChangeNotifier {
   Future<bool> deleteSave(String namePico, String userId) async{
     try{
       await saveSpot.deleteSaveSpot(userId, namePico);
-
+      final index = picosSalvos.indexWhere((picoSalvo) => picoSalvo.picoName == namePico);
+      picosSalvos.removeAt(index);
+      notifyListeners();
       print("object deleted sucess");
       return true;
     }catch (e){
