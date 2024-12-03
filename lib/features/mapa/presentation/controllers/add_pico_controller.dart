@@ -229,8 +229,8 @@ List<File?> images = [];
     final validarImagens = imagensIsNotEmpty();
     return nomeValido && descricaoValida && validarImagens;
   }
-  @override
-  void dispose() {
+  
+  void limpar() {
     atributos.clear();
     obstaculos.clear();
     nomePico = '';
@@ -241,8 +241,8 @@ List<File?> images = [];
     tipo = 'Pico de Rua';
     utilidades.clear();
     urlImage.clear();
-    fotoPico = null;
-    super.dispose();
+    notifyListeners();
+    
   }
 
 

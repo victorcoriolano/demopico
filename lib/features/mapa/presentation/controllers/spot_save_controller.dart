@@ -7,7 +7,7 @@ class SpotSaveController extends ChangeNotifier {
   final SaveSpot saveSpot;
   SpotSaveController(this.saveSpot);
 
-  final List<Pico> picosSalvos = [];
+  List<Pico> picosSalvos = [];
   Future<bool> savePico(Pico pico, User user)async{
     final salvar  = await saveSpot.saveSpot(pico, user);
     if(salvar){
@@ -23,8 +23,37 @@ class SpotSaveController extends ChangeNotifier {
     
   }
 
-  Future<void> getPicosSalvos(String idUser)async{
-    final listPicoFromDB = await saveSpot.executeUseCase(idUser);
-    picosSalvos.addAll(listPicoFromDB);
+  Future<bool> getPicosSalvos(String idUser)async{
+    try {
+  picosSalvos = await saveSpot.executeUseCase(idUser);
+  print("Picos salvos: $picosSalvos");
+  if(picosSalvos.isNotEmpty){
+      
+  return true;
+  }else{
+    print("Nenhum pico encontrado para ester user");
+    return false;
+  }
+
+} on Exception catch (e) {
+  // TODO
+  print("Erro ao pegar picos salvos: $e");
+  return false;
+}catch (e){
+  print("Erro sla: $e");
+  return false;
+}
+  }
+
+  Future<bool> deleteSave(String namePico, String userId) async{
+    try{
+      await saveSpot.deleteSaveSpot(userId, namePico);
+
+      print("object deleted sucess");
+      return true;
+    }catch (e){
+      print("Erro ao del: $e");
+      return false;
+    }
   }
 }

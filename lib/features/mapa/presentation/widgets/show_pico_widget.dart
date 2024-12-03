@@ -275,6 +275,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          
                           // Foto e Nome
                           ConstrainedBox(
                             constraints: const BoxConstraints(
@@ -306,7 +307,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                 ),
                                 const SizedBox(height: 5),
                                 Text(
-                                  "SK8DEV", // Nome fixo abaixo da foto
+                                  widget.pico.userCreator ?? "ANÔNIMO", // Nome fixo abaixo da foto
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
                                     color: Color.fromARGB(255, 93, 93, 93),
@@ -348,7 +349,19 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                         ],
                       ),
                       const SizedBox(height: 25),
-
+                      
+                      // Comentário
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Text(
+                          widget.pico.description ?? '',
+                          style: const TextStyle(
+                              color: Color(0xFF8B0000),
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
 
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -439,28 +452,32 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               IconButton(
-                                onPressed: () async {
-                                  if (user != null) {
-                                    final salvar =
-                                        provider.savePico(widget.pico, user!);
-                                    if (await salvar) {
-                                      if (context.mounted) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: const Text("Pico Salvo"),
-                                            action: SnackBarAction(
-                                                label: "Ver pico salvo",
-                                                onPressed: () {}),
-                                          ),
-                                        );
+                                
+                                onPressed: () async { 
+                                  print("clicou em salvar");
+                                  if(user != null){
+                                    final salvar = provider.savePico(widget.pico, user!);
+                                    if(await salvar){
+                                      if(context.mounted){
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: const Text("Pico Salvo"),
+                                        action: SnackBarAction(
+                                          label: "Ver pico salvo", 
+                                          onPressed: () {
+                                            
+                                          }
+                                        ),
+                                      ),
+                                    );
                                       }
                                     }
-                                  } else {
+                                  }else{
+                                    print("user nulo");
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                        content: const Text(
-                                            "Usuário não logado! Faça login para salvar pico"),
+                                        duration: const Duration(seconds: 5),
+                                        content: const Text("Usuário não logado! Faça login para salvar pico"),
                                         action: SnackBarAction(
                                             label: "fazer login",
                                             onPressed: () {

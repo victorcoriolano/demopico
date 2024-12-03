@@ -61,7 +61,7 @@ class _HubPageState extends State<HubPage> {
         body: Stack(
           children: [
             Positioned(
-                top: 145,
+                top: 60,
                 left: context.width / 2 - 50,
                 right: context.width / 2 - 50,
                 child: const Center(
@@ -121,7 +121,7 @@ class _HubPageState extends State<HubPage> {
                                 excludeFromSemantics: true,
                                 onTapCancel: null,
                                 onDoubleTapCancel: null,
-                                onDoubleTap: () {
+                                onTap: () {
                                   setState(() {
                                     isChoosingType = false;
                                   });

@@ -115,8 +115,8 @@ class _InputBoxState extends State<InputBox> {
               icon: const Icon(Icons.send_rounded),
               iconSize: 30,
               onPressed: () async {
-                print('tapped');
-                await sendAction(postController.text);
+                await sendAction(postController.text)
+                    .then((value) => print(value));
                 postController.clear();
                 await Future.delayed(const Duration(milliseconds: 300));
                 return;

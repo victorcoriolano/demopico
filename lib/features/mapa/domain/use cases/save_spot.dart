@@ -19,9 +19,13 @@ class SaveSpot {
   Future<List<Pico>> executeUseCase(String idUser) async {
     try {
       final picsosSalvos = await spotRepository.getSavePico(idUser);
+      print(picsosSalvos);
       if (picsosSalvos.isNotEmpty) {
+        print("Deu bom: $picsosSalvos");
         return picsosSalvos;
+        
       } else {
+        print("Deu Ruim");
         return [];
       }
     } catch (e) {
@@ -30,13 +34,13 @@ class SaveSpot {
     }
   }
 
-  Future<bool> deleteSaveSpot(String idUser, String namePico)async{
+  Future<void> deleteSaveSpot(String idUser, String namePico)async{
     try{
       await spotRepository.deleteSave(idUser, namePico);
-      return true;
+      
     }catch (e){
       print("Erro ao deletar pico salvo: $e");
-      return false;
+      
     }
   }
 }
