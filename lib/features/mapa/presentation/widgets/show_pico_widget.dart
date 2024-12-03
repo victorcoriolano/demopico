@@ -118,7 +118,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
             children: [
               SizedBox(
                 width: double.infinity,
-                height: 300, // Altura ajustada para incluir o indicador
+                height: 250, // Altura ajustada para incluir o indicador
                 child: images.isNotEmpty
                     ? Stack(
                         children: [
@@ -175,8 +175,8 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                     duration: const Duration(milliseconds: 300),
                                     margin: const EdgeInsets.symmetric(
                                         horizontal: 4),
-                                    width: _currentPage == index ? 12 : 8,
-                                    height: _currentPage == index ? 12 : 8,
+                                    width: _currentPage == index ? 10 : 6,
+                                    height: _currentPage == index ? 10 : 6,
                                     decoration: BoxDecoration(
                                       color: _currentPage == index
                                           ? Colors.white
