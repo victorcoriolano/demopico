@@ -50,6 +50,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
     "Hidrante": "assets/images/icons/hidrante.png",
     "Parede": "assets/images/icons/wallObstaculo.png",
     "Bowl zinho": "assets/images/icons/bowl.png",
+    "Lixeira": "assets/images/icons/lixeira.png",
   };
 
   final provider = serviceLocator<SpotSaveController>();
