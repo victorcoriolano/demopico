@@ -1,4 +1,5 @@
 import 'package:demopico/app/home_page.dart';
+import 'package:demopico/features/mapa/presentation/controllers/historico_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/pages/historico_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/save_pico_page.dart';
@@ -60,7 +61,13 @@ class _MyDrawerState extends State<MyDrawer> {
               onPressed: () {
                 // Ação ao clicar (adicione a funcionalidade necessária)
                 Navigator.of(context).pop(); // Fecha o Drawer
-                Navigator.of(context).push(MaterialPageRoute(builder: (_) => const HistoricoPage()));
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) {
+                      final provider = context.read<HistoricoController>();
+                      provider.carregarHistoricoInicial();
+                      return const HistoricoPage();
+                    } ));
               },
             ),
             // Botão Home
