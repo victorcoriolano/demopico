@@ -1,19 +1,21 @@
+import 'package:demopico/features/mapa/domain/interfaces/historico_interface.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class HistoricoStorage {
+class HistoricoStorage implements HistoricoInterface {
   static const String _historicoKey = 'historico_picos';
 
-  Future<void> salvarPico(String nome, double latitude, double longitude) async {
+  @override
+  Future<void> salvarNoHistorico(String nome, double latitude, double longitude) async {
     final prefs = await SharedPreferences.getInstance();
 
     final historico = prefs.getStringList(_historicoKey) ?? [];
 
     historico.add('$nome,$latitude,$longitude');
 
-
     await prefs.setStringList(_historicoKey, historico);
   }
 
+  @override
   Future<List<Map<String, dynamic>>> carregarHistorico() async {
     final prefs = await SharedPreferences.getInstance();
 
@@ -28,6 +30,7 @@ class HistoricoStorage {
     }).toList();
   }
 
+  @override
   Future<void> deleteEntry(String nome) async {
     final prefs = await SharedPreferences.getInstance();
 
@@ -40,6 +43,7 @@ class HistoricoStorage {
 
   }
 
+  @override
   Future<void> limparHistorico() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_historicoKey);
