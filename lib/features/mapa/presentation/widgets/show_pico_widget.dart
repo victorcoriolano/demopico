@@ -15,6 +15,7 @@ class ShowPicoWidget extends StatefulWidget {
   final Pico pico;
   final ScrollController scrollController;
   final Map<String, int>? atributos;
+  
 
   const ShowPicoWidget(
       {super.key,
@@ -27,18 +28,20 @@ class ShowPicoWidget extends StatefulWidget {
 }
 
 int _currentPage = 0;
-
 class _ShowPicoWidgetState extends State<ShowPicoWidget> {
   List<String> images = [];
-
+  Map<String, String> obstaculoIcon = {
+  
+  };
   final provider = serviceLocator<SpotSaveController>();
-
+  
   void _loadPicos() {
     setState(() {
       images = widget.pico.imgUrl.cast<String>(); //url pico
     });
   }
 
+  @override
     void dispose() {
     // Resetando o valor de _currentPage antes de fechar a página
     _currentPage = 0;
@@ -49,6 +52,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
   void initState() {
     super.initState();
     _loadPicos(); // carregar img
+    print(provider);
   }
 
   Widget buildAttributeIcons(int value) {
