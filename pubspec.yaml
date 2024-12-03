@@ -29,6 +29,7 @@ dependencies:
   icon_decoration: ^2.0.2
   flutter_rating_bar: ^4.0.0
   widget_to_marker: ^1.0.6
+  shared_preferences: ^2.3.3
 
 dev_dependencies:
   flutter_test:
