@@ -30,11 +30,30 @@ class ShowPicoWidget extends StatefulWidget {
 int _currentPage = 0;
 class _ShowPicoWidgetState extends State<ShowPicoWidget> {
   List<String> images = [];
-  Map<String, String> obstaculoIcon = {
-  
-  };
+ final Map<String, String> obstaculosMap = {
+  "45° graus": "assets/images/icons/45graus.png",
+  "Barreira newjersey": "assets/images/icons/barreira.png",
+  "Bowl zão": "assets/images/icons/bowl.png",
+  "Banco": "assets/images/icons/cadeira.png",
+  "Corrimão": "assets/images/icons/corrimao.png",
+  "Escada": "assets/images/icons/escada.png",
+  "Funbox": "assets/images/icons/funbox.png",
+  "Gap": "assets/images/icons/gap.png",
+  "Jump": "assets/images/icons/jump.png",
+  "Megaramp": "assets/images/icons/megaramp.png",
+  "Miniramp": "assets/images/icons/miniramp.png",
+  "Pirâmide": "assets/images/icons/piramede.png",
+  "Quarter": "assets/images/icons/quarter.png",
+  "Spine": "assets/images/icons/spine.png",
+  "Stepper": "assets/images/icons/stepper.png",
+  "Transição": "assets/images/icons/transição.png",
+  "Hidrante": "assets/images/icons/hidrante.png",
+  "Parede": "assets/images/icons/wallObstaculo.png",
+  "Bowl zinho": "assets/images/icons/bowl.png",
+};
+
   final provider = serviceLocator<SpotSaveController>();
-  
+               
   void _loadPicos() {
     setState(() {
       images = widget.pico.imgUrl.cast<String>(); //url pico
@@ -52,7 +71,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
   void initState() {
     super.initState();
     _loadPicos(); // carregar img
-    print(provider);
+    print("aq e pa  ${widget.pico.obstaculos} ");
   }
 
   Widget buildAttributeIcons(int value) {
@@ -204,13 +223,27 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            children: List.generate(
-                                widget.pico.obstaculos!.length, (index) {
-                              return Icon(Icons.square,
-                                  color: index < 3 ? Colors.blue : Colors.grey);
-                            }),
-                          ),
+                        Row(
+  children: List.generate(widget.pico.obstaculos!.length, (index) {
+    String obstaculo = widget.pico.obstaculos![index];
+    String? iconPath = obstaculosMap[obstaculo]; // Busca o caminho do ícone no Map
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4.0), // Ajuste opcional de espaçamento
+      child: iconPath != null
+          ? Image.asset(
+              iconPath,
+              width: 40, // Largura da imagem
+              height: 40, // Altura da imagem
+            )
+          : Icon(
+              Icons.error, // Ícone padrão caso o obstáculo não exista no Map
+              color: Colors.red,
+            ),
+    );
+  }),
+),
+
                           // Avaliação com estrelas
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
@@ -350,18 +383,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                       ),
                       const SizedBox(height: 25),
                       
-                      // Comentário
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 5),
-                        child: Text(
-                          widget.pico.description ?? '',
-                          style: const TextStyle(
-                              color: Color(0xFF8B0000),
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
+                   
 
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
