@@ -14,68 +14,75 @@ class MapWidget extends StatefulWidget {
   @override
   MapWidgetState createState() => MapWidgetState();
 }
-
+final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 class MapWidgetState extends State<MapWidget> {
+
+
   @override
   Widget build(BuildContext context) {
+    
     final spotProvider =
         Provider.of<SpotControllerProvider>(context, listen: true);
     final mapProvider =
         Provider.of<MapControllerProvider>(context, listen: true);
     final providerAdd = Provider.of<AddPicoControllerProvider>(context);
     // consome os dados do provider para manter a tela atualizada
-    return GoogleMap(
-      onMapCreated: (GoogleMapController controller) async {
-        mapProvider.setGoogleMapController(controller);
-        await spotProvider.showAllPico(context);
-        await mapProvider.getLocation();
-        providerAdd.pegarLocalizacao(mapProvider.center);
-        print(mapProvider.center);
-        print(mapProvider.locationMessage);
-      },
-      zoomControlsEnabled: false,
-      initialCameraPosition: CameraPosition(
-        target: mapProvider.center,
-        zoom: mapProvider.zoomInicial,
-      ),
-      mapType: mapProvider.myMapType,
-      scrollGesturesEnabled: true,
-      rotateGesturesEnabled: true,
-      myLocationEnabled: true,
-      myLocationButtonEnabled: true,
-      tiltGesturesEnabled: true,
-      markers: spotProvider.markers,
-      onLongPress: (argument) => showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        builder: (context) => SizedBox(
-          height: MediaQuery.of(context).size.height *
-              0.868, // Define a altura do modal
-          child: Stack(
-            alignment: Alignment.topRight,
-            children: [
-              ContainerTelas(
-                expanded: false,
-                lat: argument.latitude,
-                long: argument.longitude,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: IconButton(
-                  icon: const Icon(Icons.close,
-                      color: Color.fromARGB(255, 0, 0, 0)),
-                  iconSize: 36, // Cor branca para o botão "X"
-                  onPressed: () {
-                    setState(() {
-                      Navigator.pop(context);
-                    });
-                  },
+    return Scaffold(
+      key: scaffoldKey,
+      body: GoogleMap(
+        onMapCreated: (GoogleMapController controller) async {
+          mapProvider.setGoogleMapController(controller);
+          await spotProvider.showAllPico(context);
+          await mapProvider.getLocation();
+          providerAdd.pegarLocalizacao(mapProvider.center);
+          print(mapProvider.center);
+          print(mapProvider.locationMessage);
+        },
+        zoomControlsEnabled: false,
+        initialCameraPosition: CameraPosition(
+          target: mapProvider.center,
+          zoom: mapProvider.zoomInicial,
+        ),
+        mapType: mapProvider.myMapType,
+        scrollGesturesEnabled: true,
+        rotateGesturesEnabled: true,
+        myLocationEnabled: true,
+        myLocationButtonEnabled: true,
+        tiltGesturesEnabled: true,
+        markers: spotProvider.markers,
+        onLongPress: (argument) => showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          builder: (context) => SizedBox(
+            height: MediaQuery.of(context).size.height *
+                0.868, // Define a altura do modal
+            child: Stack(
+              alignment: Alignment.topRight,
+              children: [
+                ContainerTelas(
+                  expanded: false,
+                  lat: argument.latitude,
+                  long: argument.longitude,
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: IconButton(
+                    icon: const Icon(Icons.close,
+                        color: Color.fromARGB(255, 0, 0, 0)),
+                    iconSize: 36, // Cor branca para o botão "X"
+                    onPressed: () {
+                      setState(() {
+                        Navigator.pop(context);
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
+
 }

@@ -1,5 +1,6 @@
 
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
+import 'package:demopico/features/mapa/presentation/widgets/map_widget.dart';
 import 'package:demopico/features/mapa/presentation/widgets/show_pico_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -13,7 +14,8 @@ Future<Marker> picoMarker(Pico? spot, BuildContext context, ) async {
   markerId: MarkerId(spot!.picoName),
   position: LatLng(spot.lat, spot.long),
   onTap: () {
-  showPicoModal(context, spot);
+    final contextCerto = scaffoldKey.currentContext!;
+    showPicoModal(contextCerto, spot);
 
   },
   icon: await const TextOnImage(
