@@ -45,12 +45,15 @@ class SpotSaveController extends ChangeNotifier {
 }
   }
 
-  Future<void> deleteSave(String namePico, String userId) async{
+  Future<bool> deleteSave(String namePico, String userId) async{
     try{
       await saveSpot.deleteSaveSpot(userId, namePico);
+
       print("object deleted sucess");
+      return true;
     }catch (e){
       print("Erro ao del: $e");
+      return false;
     }
   }
 }

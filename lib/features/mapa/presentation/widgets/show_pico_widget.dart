@@ -303,7 +303,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                 ),
                                 const SizedBox(height: 5),
                                 Text(
-                                  "SK8DEV", // Nome fixo abaixo da foto
+                                  widget.pico.userCreator ?? "ANÔNIMO", // Nome fixo abaixo da foto
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
                                     color: Color.fromARGB(255, 93, 93, 93),

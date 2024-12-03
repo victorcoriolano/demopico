@@ -7,23 +7,32 @@ import 'package:widget_to_marker/widget_to_marker.dart';
 
 //marker separado da lógica
 
-Future<Marker> picoMarker(Pico spot, BuildContext context, ) async {
-    return Marker(
-    markerId: MarkerId(spot.picoName),
-    position: LatLng(spot.lat, spot.long),
-    onTap: () => showPicoModal(context, spot),
-    icon: await const TextOnImage(
-      text: '',
-      ).toBitmapDescriptor(
-         logicalSize: const Size(150, 150), imageSize: const Size(120, 150)
-      ),
-  );
+Future<Marker> picoMarker(Pico? spot, BuildContext context, ) async {
+/*     if (spot != null) { */
+  return Marker(
+  markerId: MarkerId(spot!.picoName),
+  position: LatLng(spot.lat, spot.long),
+  onTap: () {
+  showPicoModal(Navigator.of(context).context, spot);
+
+  },
+  icon: await const TextOnImage(
+    text: '',
+    ).toBitmapDescriptor(
+      logicalSize: const Size(150, 150), imageSize: const Size(120, 150)
+    ),
+    );
+/* }else{
+  print("Informações pico não encontrado");
+  return null;
+} */
 }
 
 void showPicoModal(BuildContext context, Pico pico) {
   print('Chamando modal para: ${pico.picoName}');
   print('Imagem url: ${pico.imgUrl}');
   
+  try {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -39,6 +48,10 @@ void showPicoModal(BuildContext context, Pico pico) {
       );
     },
   );
+}  catch (e) {
+  // TODO
+  print("Erro ao mostrar o botton sheet: $e ");
+}
 }
 class TextOnImage extends StatelessWidget {
   const TextOnImage({

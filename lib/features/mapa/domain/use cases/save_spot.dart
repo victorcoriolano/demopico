@@ -34,13 +34,13 @@ class SaveSpot {
     }
   }
 
-  Future<bool> deleteSaveSpot(String idUser, String namePico)async{
+  Future<void> deleteSaveSpot(String idUser, String namePico)async{
     try{
       await spotRepository.deleteSave(idUser, namePico);
-      return true;
+      
     }catch (e){
       print("Erro ao deletar pico salvo: $e");
-      return false;
+      
     }
   }
 }

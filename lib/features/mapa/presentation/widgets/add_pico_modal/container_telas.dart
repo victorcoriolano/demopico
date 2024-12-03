@@ -132,7 +132,7 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                       fotoPico: null,
                                       obstaculos: provider.obstaculos,
                                       utilidades: provider.utilidades,
-                                      userCreator: user!.uid,
+                                      userCreator: user!.displayName ?? user!.email,
                                       urlIdPico: 'anonimo',
                                       picoName: provider.nomePico);
                                   try  {

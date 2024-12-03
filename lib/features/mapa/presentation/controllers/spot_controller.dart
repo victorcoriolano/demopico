@@ -17,7 +17,8 @@ class SpotControllerProvider extends ChangeNotifier {
   Marker? markerEncontrado;
   List<double> avaliacoes = [];
 
-  SpotControllerProvider(this.createSpotUseCase, this.showAllPicoUseCase, this.avaliarUseCase);
+  SpotControllerProvider(
+      this.createSpotUseCase, this.showAllPicoUseCase, this.avaliarUseCase);
 
   // Método para criar um pico e adicionar o marker
   Future<void> createSpot(Pico pico, BuildContext context) async {
@@ -29,7 +30,11 @@ class SpotControllerProvider extends ChangeNotifier {
 
       // Salva o pico no backend
       await createSpotUseCase.createSpot(pico);
+      if(context.mounted){
+        await showAllPico(context).whenComplete(() => print("Pico postado"));
+      }
       
+
       notifyListeners();
     } catch (e) {
       print('Erro ao criar pico: $e');
@@ -64,30 +69,30 @@ class SpotControllerProvider extends ChangeNotifier {
 
   /*   Métodos para filtrar */
   List<Pico> picosFiltrados = [];
-  String? tipoSelecionado;
 
   Future<void> filtrarPicosPorTipo(String? tipo, BuildContext context) async {
-    tipoSelecionado = tipo;
     print(tipo);
 
     // Filtra os picos com base no tipo selecionado
-    if(tipo != 'todos'){
+    if (tipo == 'todos') {
       picosFiltrados.clear();
-      picosFiltrados = spots.where((pico) => pico.tipoPico == tipo).toList();
+      picosFiltrados = spots;
+      print("Picos filtrados: $picosFiltrados");
+      notifyListeners();
+    } else {
+      picosFiltrados.clear();
+      picosFiltrados
+          .addAll(spots.where((pico) => pico.tipoPico == tipo).toList());
       print("Picos filtrados: $picosFiltrados");
       notifyListeners();
     }
-    else{
-      picosFiltrados.clear();
-      picosFiltrados.addAll(spots);
-      print("Picos filtrados: $picosFiltrados");
-      notifyListeners();
-    }
-    
 
     // Atualiza os markers com processamento assíncrono
-    final markerFutures = picosFiltrados.map((pico) => picoMarker(pico, context));
-    markers = (await Future.wait(markerFutures)).toSet();
+    markers = (await Future.wait(picosFiltrados.map((pico) async {
+      final marker = await picoMarker(pico, context);
+      return marker;
+    })))
+        .toSet();
     notifyListeners();
   }
 
@@ -109,7 +114,8 @@ class SpotControllerProvider extends ChangeNotifier {
 
   Future<void> filtrarPorUtilidade(BuildContext context) async {
     utilidadesSelecionadas = utilidadeFiltrar.entries
-        .where((entry) => entry.value) // Filtra apenas as utilidades selecionadas
+        .where(
+            (entry) => entry.value) // Filtra apenas as utilidades selecionadas
         .map((entry) => entry.key) // Pega o nome das utilidades
         .toList();
 
@@ -123,8 +129,11 @@ class SpotControllerProvider extends ChangeNotifier {
     }
 
     // Atualiza os markers com os picos filtrados
-    final markerFutures = picosFiltrados.map((pico) => picoMarker(pico, context));
-    markers = (await Future.wait(markerFutures)).toSet();
+    markers = (await Future.wait(picosFiltrados.map((pico) async {
+      final marker = await picoMarker(pico, context);
+      return marker;
+    })))
+        .toSet();
 
     notifyListeners();
   }
@@ -134,35 +143,44 @@ class SpotControllerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> filtrarModalidade(String? modalidade, BuildContext context) async {
-    picosFiltrados = modalidade == null
-        ? spots
-        : spots.where((pico) => pico.modalidade == modalidade).toList();
+  Future<void> filtrarModalidade(
+      String? modalidade, BuildContext context) async {
+    if (modalidade == null || modalidade.isEmpty) {
+      print("Modalidade não definida, mostrando todos.");
+      picosFiltrados = spots;
+    } else {
+      picosFiltrados =
+          spots.where((pico) => pico.modalidade == modalidade).toList();
 
-    // Atualiza os markers com os picos filtrados
-    final markerFutures = picosFiltrados.map((pico) => picoMarker(pico, context));
-    markers = (await Future.wait(markerFutures)).toSet();
+      // Atualiza os markers com os picos filtrados
+      markers = (await Future.wait(picosFiltrados.map((pico) async {
+        final marker = await picoMarker(pico, context);
+        return marker;
+      })))
+          .toSet();
 
-    notifyListeners();
+      notifyListeners();
+    }
   }
 
   //método avaliar pico
   Future<void> avaliarPico(Pico pico, double novaNota) async {
-  try {
-    // Use case para avaliar e obter o pico atualizado
-    final picoAtualizado = await avaliarUseCase.executar(novaNota, pico);
+    try {
+      // Use case para avaliar e obter o pico atualizado
+      final picoAtualizado = await avaliarUseCase.executar(novaNota, pico);
 
-    // Encontrar o índice do pico a ser atualizado
-    final index = spots.indexWhere((picos) => picos.picoName == pico.picoName);
+      // Encontrar o índice do pico a ser atualizado
+      final index =
+          spots.indexWhere((picos) => picos.picoName == pico.picoName);
 
-    if (index != -1) {
-      spots[index] = picoAtualizado;
-      notifyListeners();
-    } else {
-      print("Pico não encontrado na lista.");
+      if (index != -1) {
+        spots[index] = picoAtualizado;
+        notifyListeners();
+      } else {
+        print("Pico não encontrado na lista.");
+      }
+    } catch (e) {
+      print("Erro ao salvar a avaliação: $e");
     }
-  } catch (e) {
-    print("Erro ao salvar a avaliação: $e");
   }
-}
 }

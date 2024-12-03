@@ -74,7 +74,7 @@ class _SavePicoPageState extends State<SavePicoPage> {
                   ),
                   subtitle: Text(
                     pico.userCreator ?? 'Anônimmo', 
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14,
                       color: Colors.grey,
                     ),
@@ -86,16 +86,30 @@ class _SavePicoPageState extends State<SavePicoPage> {
                         tooltip: "Localização no mapa",
                         icon: const Icon(Icons.location_on, color: Colors.blue),
                         onPressed: () {
-                          
+                          mapProvider.reajustarCameraPosition(LatLng(pico.lat, pico.long));
                           Navigator.pop(context);
                         },
                       ),
                       IconButton(
                         tooltip: "Deletar Pico",
                         icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () {
-                          
-                          provider.deleteSave(pico.picoName, widget.userID);
+                        onPressed: () async {
+                          final deletar =  await provider.deleteSave(pico.picoName, widget.userID);
+                          if(context.mounted){
+                            if(deletar){
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("Pico ${pico.picoName} removido dos excluidos"),
+                                ),
+                              );
+                            }else{
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("Não foi possivel remover: ${pico.picoName} "),
+                                ),
+                              );
+                            }
+                          }
                         },
                       ),
                     ],
