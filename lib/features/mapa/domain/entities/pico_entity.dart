@@ -35,5 +35,45 @@ class Pico {
     required this.urlIdPico,
     required this.picoName,
   });
+
+    factory Pico.fromJson(Map<String, dynamic> json) {
+    return Pico(
+      urlIdPico: json['urlIdPico'] as String,
+      modalidade: json['modalidade'] as String,
+      tipoPico: json['tipoPico'] as String,
+      picoName: json['picoName'] as String,
+      imgUrl: List<dynamic>.from(json['imgUrl'] ?? []),
+      description: json['description'] as String?,
+      long: (json['long'] as num).toDouble(),
+      lat: (json['lat'] as num).toDouble(),
+      userCreator: json['userCreator'] as String?,
+      fotoPico: null, 
+      utilidades: json['utilidades'] != null ? List<dynamic>.from(json['utilidades']) : [],
+      atributos: json['atributos'] as Map<String, dynamic>?,
+      obstaculos: json['obstaculos'] != null ? List<dynamic>.from(json['obstaculos']) : [],
+      nota: json['nota'] != null ? (json['nota'] as num).toDouble() : null,
+      numeroAvaliacoes: json['numeroAvaliacoes'] as int?,
+    );
+  }
+
+  /// Converte um objeto Pico em um Map (Firestore ou JSON)
+  Map<String, dynamic> toMap() {
+    return {
+      'urlIdPico': urlIdPico,
+      'modalidade': modalidade,
+      'tipoPico': tipoPico,
+      'picoName': picoName,
+      'imgUrl': imgUrl,
+      'description': description,
+      'long': long,
+      'lat': lat,
+      'userCreator': userCreator,
+      'utilidades': utilidades,
+      'atributos': atributos,
+      'obstaculos': obstaculos,
+      'nota': nota,
+      'numeroAvaliacoes': numeroAvaliacoes,
+    };
+  }
 }
 

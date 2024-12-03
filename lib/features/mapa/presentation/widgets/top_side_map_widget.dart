@@ -81,7 +81,7 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
     final provider = Provider.of<MapControllerProvider>(context, listen: false);
     Marker? markerEncontrado = spotProvider.markers
         .toList()
-        .firstWhereOrNull((markers) => markers.markerId.value == namePico);
+        .firstWhereOrNull((markers) => markers.markerId.value.toLowerCase() == namePico.toLowerCase());
     if (markerEncontrado != null) {
       removeOverlay();
       provider.reajustarCameraPosition(markerEncontrado.position);
@@ -123,11 +123,12 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
           Expanded(
             child: SizedBox(
               height: 42,
-              child: TextField(
+              child: TextFormField(
                 onChanged: (value) {
                   spotProvider.pesquisandoPico(value);
                 },
-                onSubmitted: (value) => encontrouPico(value),
+                onFieldSubmitted: (value) => encontrouPico(value),
+                
                 controller: _buscarController,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(vertical: 10),
@@ -153,19 +154,19 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
           PopupMenuButton<String>(
             icon: const Icon(Icons.filter_list, color: Colors.white),
             tooltip: "Filtrar picos",
-            onSelected: (String value) {
+            onSelected: (String? value) {
               if(value == 'Utilidades'){
                 mostrarAtributos(context);
-              }else{
+              }else if(value != 'Modalidade'){
+                print(value);
                 spotProvider.filtrarPicosPorTipo(value, context);
               }
-              
             },
             color: Colors.white,
             itemBuilder: (BuildContext context) {
               return <PopupMenuEntry<String>>[
                 const PopupMenuItem<String>(
-                  value: null,
+                  value: 'todos',
                   child: ListTile(
                     leading: Icon(Icons.podcasts),
                     title: Text("Mostrar todos"),
@@ -215,6 +216,7 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
                 ),
                 const PopupMenuDivider(),
                 PopupMenuItem(
+                  value: "Modalidade",
                   child: DropdownMenu(
                     hintText: 'Modalidade',
                     onSelected: (value) => spotProvider.filtrarModalidade(value, context),
@@ -256,7 +258,7 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
                   title: Text(utilidade),
                   value: provider.utilidadeFiltrar[utilidade], 
                   onChanged: (bool? value) { 
-                    provider.selecionarUtilidade(utilidade, value!);
+                    provider.selecionarUtilidade(utilidade, value);
                     if(value == true){
                       provider.utilidadesSelecionadas.add(utilidade);
                     }else{

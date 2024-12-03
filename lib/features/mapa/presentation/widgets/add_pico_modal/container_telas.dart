@@ -77,7 +77,6 @@ class _ContainerTelasState extends State<ContainerTelas> {
                       padding: const EdgeInsets.all(10),
                       child: Column(
                         children: [
-                         
                           Expanded(
                             child:
                                 _screens[_currentIndex], // Exibe o widget atual
@@ -136,13 +135,21 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                   try  {
                                     await serviceLocator<SpotControllerProvider>()
                                         .createSpot(pico, context);
-                                    Navigator.pop(context);
+                                    if(context.mounted){
+                                      serviceLocator<SpotControllerProvider>().showAllPico(context);
+                                      provider.dispose();
+                                      Navigator.pop(context);
+                                    }
+                                    
                                   } on Exception catch (e) {
                                     print('Erro na boca do balção: $e');
-                                    ScaffoldMessenger.of(context).showSnackBar(
+                                    if(context.mounted){
+                                      ScaffoldMessenger.of(context).showSnackBar(
                                         const SnackBar(
                                             content: Text(
                                                 "Preencha todos os campos ou insira alguma imagem")));
+                                    }
+                                    
                                   } catch (e) {
                                     print("Erro desconhecido: $e");
                                   }
@@ -175,7 +182,7 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                           content: Text(
-                                              "Preenche todos as informações")));
+                                              "Preenche todos as informações"),),);
                                 }
                               },
                               child: const Text('PROSSEGUIR',

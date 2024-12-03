@@ -10,15 +10,99 @@ class SegundaTela extends StatefulWidget {
 }
 
 class _SegundaTelaState extends State<SegundaTela> {
-  // Variáveis para armazenar a avaliação de cada atributo (0 a 5)
-/*   Map<String, int> atributos = {
-    'Chão': 4,
-    'Iluminação': 3,
-    'Policiamento': 4,
-    'Movimento': 3,
-    'Kick-Out': 4,
-  };
+  // Função para mapear os valores de 1 a 5 para a descrição do atributo 'Chão'
+  String obterDescricaoChao(int nota) {
+    switch (nota) {
+      case 5:
+        return 'Patinete';
+      case 4:
+        return 'Lisinho';
+      case 3:
+        return 'Suave';
+      case 2:
+        return 'Pedrinhas';
+      case 1:
+        return 'Esburacado';
+      default:
+        return 'Descrição Indefinida';
+    }
+  }
 
+// Função para mapear os valores de 1 a 5 para a descrição do atributo 'Iluminação'
+  String obterDescricaoIluminacao(int nota) {
+    switch (nota) {
+      case 5:
+        return 'Muito Claro';
+      case 4:
+        return 'Clarinho';
+      case 3:
+        return 'Razoável';
+      case 2:
+        return 'Pouca Luz';
+      case 1:
+        return 'Escuro';
+      default:
+        return 'Descrição Indefinida';
+    }
+  }
+
+// Função para mapear os valores de 1 a 5 para a descrição do atributo 'Policiamento'
+  String obterDescricaoPoliciamento(int nota) {
+    switch (nota) {
+      case 5:
+        return 'Opressão';
+      case 4:
+        return 'Boqueta';
+      case 3:
+        return 'Pala';
+      case 2:
+        return 'Toma Cuidado';
+      case 1:
+        return 'Suave';
+      default:
+        return 'Descrição Indefinida';
+    }
+  }
+
+// Função para mapear os valores de 1 a 5 para a descrição do atributo 'Movimento'
+  String obterDescricaoMovimento(int nota) {
+    switch (nota) {
+      case 5:
+        return 'Muito Cheio';
+      case 4:
+        return 'Cheio';
+      case 3:
+        return 'Médio';
+      case 2:
+        return 'Calmo';
+      case 1:
+        return 'Vazio';
+      default:
+        return 'Descrição Indefinida';
+    }
+  }
+
+// Função para mapear os valores de 1 a 5 para a descrição do atributo 'Kick-Out'
+  String obterDescricaoKickOut(int nota) {
+    switch (nota) {
+      case 5:
+        return 'Muito Capaz';
+      case 4:
+        return 'Bem Capaz';
+      case 3:
+        return 'Moderado';
+      case 2:
+        return 'Improvável';
+      case 1:
+        return 'Impossível';
+      default:
+        return 'Descrição Indefinida';
+    }
+  }
+
+  // Variáveis para armazenar a avaliação de cada atributo (0 a 5)
+
+/*
   // Função para definir o valor de cada atributo
   void setAtributo(String atributo, int valor) {
     setState(() {
@@ -28,67 +112,80 @@ class _SegundaTelaState extends State<SegundaTela> {
 
   @override
   Widget build(BuildContext context) {
-
     return Consumer<AddPicoControllerProvider>(
-      builder: (context, provider, child) => 
-      Scaffold(
-        backgroundColor: Colors.grey[200],
-        body: Center(
-        
-              child: SingleChildScrollView(
-                
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // Imagem no topo
-                    Center(
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 10.0),
-                          child: Image.asset('assets/images/progresso2.png', ),
-                        ),
+      builder: (context, provider, child) => Scaffold(
+          backgroundColor: Colors.grey[200],
+          body: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Imagem no topo
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: Image.asset(
+                        'assets/images/progresso2.png',
                       ),
-      
-                    // Widget de cada atributo com descrição abaixo dos ícones
-                    buildAtributo(
-                      'Chão',
-                      'Liso / Plaza',
+                    ),
+                  ),
+
+                  // Widget de cada atributo com descrição abaixo dos ícones
+                  Container(
+                    margin: EdgeInsets.only(top:10, bottom: 25),
+                    child: buildAtributo(
+                      'CHÃO',
+                      obterDescricaoChao(provider.atributos['Chão']!),
                       provider.atributos['Chão']!,
                       (valor) => provider.atualizarAtributo('Chão', valor),
                     ),
-                    buildAtributo(
-                      'Iluminação',
-                      'Clarinho',
-                      provider.atributos['Iluminação']!,
-                      (valor) => provider.atualizarAtributo('Iluminação', valor),
-                    ),
-                    buildAtributo(
-                      'Policiamento',
-                      'Paloso',
+                  ),
+
+                  buildAtributo(
+                    'ILUMINAÇÃO',
+                    obterDescricaoIluminacao(provider.atributos['Iluminação']!),
+                    provider.atributos['Iluminação']!,
+                    (valor) => provider.atualizarAtributo('Iluminação', valor),
+                  ),
+
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 25),
+                    child: buildAtributo(
+                      'POLICIAMENTO',
+                      obterDescricaoPoliciamento(
+                          provider.atributos['Policiamento']!),
                       provider.atributos['Policiamento']!,
-                      (valor) => provider.atualizarAtributo('Policiamento', valor),
+                      (valor) =>
+                          provider.atualizarAtributo('Policiamento', valor),
                     ),
-                    buildAtributo(
-                      'Movimento',
-                      'Cheio',
-                      provider.atributos['Movimento']!,
-                      (valor) => provider.atualizarAtributo('Movimento', valor),
-                    ),
-                    buildAtributo(
-                      'Kick-Out',
-                      'Bem Capaz',
+                  ),
+
+                  buildAtributo(
+                    'MOVIMENTO',
+                    obterDescricaoMovimento(provider.atributos['Movimento']!),
+                    provider.atributos['Movimento']!,
+                    (valor) => provider.atualizarAtributo('Movimento', valor),
+                  ),
+
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 25),
+                    child: buildAtributo(
+                      'KICK-OUT',
+                      obterDescricaoKickOut(provider.atributos['Kick-Out']!),
                       provider.atributos['Kick-Out']!,
                       (valor) => provider.atualizarAtributo('Kick-Out', valor),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            )
-      ),
+            ),
+          )),
     );
   }
 
   // Widget para construir cada linha de atributo
-  Widget buildAtributo(String titulo, String descricao, int valor, Function(int) onChanged) {
+  Widget buildAtributo(
+      String titulo, String descricao, int valor, Function(int) onChanged) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center, // Centraliza os itens
       children: [
@@ -109,19 +206,23 @@ class _SegundaTelaState extends State<SegundaTela> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: List.generate(5, (index) {
             return Padding(
-              padding: const EdgeInsets.all(0.0), // Ajustado para um espaçamento menor
+              padding: const EdgeInsets.all(
+                  0.0), // Ajustado para um espaçamento menor
               child: IconButton(
-                icon: Image.asset(
-                  height: 60.0,// diminuindo o tamanho do icon para n ficar dando erro
-                  width: 45.0,
-                'assets/images/iconPico.png', // Substitua pelo caminho da sua imagem
-                  color: index < valor ? const Color(0xFF8B0000) : Colors.grey[350], // Altera a cor do ícone baseado na avaliação
-                ),
-                iconSize: 5, // Tamanho aumentado para 50
-                onPressed: () {
-                  onChanged(index + 1); // Atualiza o valor do atributo
-                } 
-              ),
+                  icon: Image.asset(
+                    height:
+                        40.0, // diminuindo o tamanho do icon para n ficar dando erro
+                    width: 42.0,
+                    'assets/images/iconPico.png', // Substitua pelo caminho da sua imagem
+                    color: index < valor
+                        ? const Color(0xFF8B0000)
+                        : Colors.grey[
+                            350], // Altera a cor do ícone baseado na avaliação
+                  ),
+            
+                  onPressed: () {
+                    onChanged(index + 1); // Atualiza o valor do atributo
+                  }),
             );
           }),
         ),

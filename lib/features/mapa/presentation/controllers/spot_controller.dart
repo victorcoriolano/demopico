@@ -23,12 +23,14 @@ class SpotControllerProvider extends ChangeNotifier {
   Future<void> createSpot(Pico pico, BuildContext context) async {
     try {
       // Gera o marker assíncrono
-      final marker = await picoMarker(pico, context);
+/*       final marker = await picoMarker(pico, context);
       markers.add(marker);
-      notifyListeners();
+      notifyListeners(); */
 
       // Salva o pico no backend
       await createSpotUseCase.createSpot(pico);
+      
+      notifyListeners();
     } catch (e) {
       print('Erro ao criar pico: $e');
     }
@@ -66,16 +68,26 @@ class SpotControllerProvider extends ChangeNotifier {
 
   Future<void> filtrarPicosPorTipo(String? tipo, BuildContext context) async {
     tipoSelecionado = tipo;
+    print(tipo);
 
     // Filtra os picos com base no tipo selecionado
-    picosFiltrados = tipo == null
-        ? spots // Exibe todos os spots se o tipo for nulo
-        : spots.where((pico) => pico.tipoPico == tipo).toList();
+    if(tipo != 'todos'){
+      picosFiltrados.clear();
+      picosFiltrados = spots.where((pico) => pico.tipoPico == tipo).toList();
+      print("Picos filtrados: $picosFiltrados");
+      notifyListeners();
+    }
+    else{
+      picosFiltrados.clear();
+      picosFiltrados.addAll(spots);
+      print("Picos filtrados: $picosFiltrados");
+      notifyListeners();
+    }
+    
 
     // Atualiza os markers com processamento assíncrono
     final markerFutures = picosFiltrados.map((pico) => picoMarker(pico, context));
     markers = (await Future.wait(markerFutures)).toSet();
-
     notifyListeners();
   }
 
@@ -117,8 +129,8 @@ class SpotControllerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void selecionarUtilidade(String utilidade, bool isSelected) {
-    utilidadeFiltrar[utilidade] = isSelected;
+  void selecionarUtilidade(String utilidade, bool? isSelected) {
+    utilidadeFiltrar[utilidade] = isSelected!;
     notifyListeners();
   }
 
