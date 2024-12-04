@@ -1,7 +1,6 @@
 
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/presentation/controllers/historico_controller.dart';
-import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/widgets/map_widget.dart';
 import 'package:demopico/features/mapa/presentation/widgets/show_pico_widget.dart';
 import 'package:flutter/material.dart';
@@ -17,10 +16,12 @@ Future<Marker> picoMarker(Pico? spot, BuildContext context, ) async {
   markerId: MarkerId(spot!.picoName),
   position: LatLng(spot.lat, spot.long),
   onTap: () {
-    final contextCerto = scaffoldKey.currentContext!;
-    showPicoModal(contextCerto, spot);
-
-    
+    final contextCerto = scaffoldKey.currentContext;
+    if(contextCerto != null){
+      showPicoModal(contextCerto, spot);
+    }else {
+      print("Context errado: $contextCerto");
+    }
 
   },
   icon: await const TextOnImage(

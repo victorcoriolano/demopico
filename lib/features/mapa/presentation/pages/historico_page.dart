@@ -1,8 +1,6 @@
 import 'package:demopico/features/mapa/presentation/controllers/historico_controller.dart';
-import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 

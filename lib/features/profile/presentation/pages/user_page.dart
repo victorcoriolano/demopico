@@ -127,7 +127,7 @@ class _UserPageState extends State<UserPage> {
                     children: [
                       Text('${user?.conexoes} \n Seguidores',
                           textAlign: TextAlign.center),
-                      Text('${user?.picosAdicionados}\n Contribuições',
+                      Text('${(user?.picosAdicionados).toString()}\n Contribuições',
                           textAlign: TextAlign.center),
                     ],
                   ),

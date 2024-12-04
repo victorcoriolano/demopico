@@ -28,7 +28,7 @@ class AuthService {
             email: user.email,
             description: 'Edite para atualizar sua bio',
             id: user.uid,
-            picosAdicionados: '0',
+            picosAdicionados: 0,
             picosSalvos: '0',
             location: null,
             conexoes: '0',
