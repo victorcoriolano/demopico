@@ -1,4 +1,5 @@
 import 'package:demopico/app/home_page.dart';
+import 'package:demopico/features/hub/data/infra/database_notifier_provider.dart';
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
 import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
@@ -31,7 +32,7 @@ class MyAppWidget extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => MapControllerProvider()),
         ChangeNotifierProvider(create: (_) => serviceLocator<SpotControllerProvider>()),
         ChangeNotifierProvider(create: (_) => DatabaseProvider()),
-        
+        ChangeNotifierProvider(create: (_) => HubProvider()),
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,

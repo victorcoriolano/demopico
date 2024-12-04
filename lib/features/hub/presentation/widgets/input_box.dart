@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class InputBox extends StatefulWidget {
   final Future<bool> Function(String) sendAction;
@@ -115,9 +116,16 @@ class _InputBoxState extends State<InputBox> {
               icon: const Icon(Icons.send_rounded),
               iconSize: 30,
               onPressed: () async {
-                await sendAction(postController.text)
-                    .then((value) => print(value));
-                postController.clear();
+                try {
+                  await sendAction(postController.text)
+                      .then((value) => value ? null : throw Exception());
+                  postController.clear();
+                } on Exception catch (_) {
+                  Get.snackbar('Erro de Usuário',
+                      'Por favor, entre para fazer uma publicação',
+                      backgroundColor: const Color.fromARGB(255, 122, 49, 49),
+                      snackPosition: SnackPosition.BOTTOM);
+                }
                 await Future.delayed(const Duration(milliseconds: 300));
                 return;
               },

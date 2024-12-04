@@ -16,6 +16,7 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
+  late final authService = AuthService();
   late final databaseProvider =
       Provider.of<DatabaseProvider>(context, listen: false);
 
@@ -33,9 +34,10 @@ class _UserPageState extends State<UserPage> {
   }
 
   Future<void> loadUser() async {
-    currentUserId = AuthService().currentUser?.uid;
+    currentUserId = authService.currentUser?.uid;
 
     if (currentUserId == null) {
+      print('user uid ao entrar na page nulo');
       setState(() {
         _isLoading = true;
         showDialog(
@@ -91,8 +93,87 @@ class _UserPageState extends State<UserPage> {
                       ),
                       IconButton(
                         onPressed: () {
-                          //Aplicar funcionalidade de settings
-                          null;
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Configurações',
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 18)),
+                                  content: SizedBox(
+                                    height: 200,
+                                    width: 100,
+                                    child: ListView(
+                                      shrinkWrap: true,
+                                      itemExtent: 50,
+                                      children: [
+                                        ListTile(
+                                            title: const Text(
+                                                'Sobre o Aplicativo'),
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const AboutPage()));
+                                            }),
+                                        ListTile(
+                                            title: const Text('Fazer Logout'),
+                                            onTap: () {
+                                              showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return AlertDialog(
+                                                        title: const Text(
+                                                            'Logout'),
+                                                        content: const Text(
+                                                            'Tem certeza que deseja sair da sua conta?'),
+                                                        actions: [
+                                                          TextButton(
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                              },
+                                                              child: const Text(
+                                                                'Cancelar',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .black),
+                                                              )),
+                                                          TextButton(
+                                                              child: const Text(
+                                                                  'Sair'),
+                                                              onPressed:
+                                                                  () async {
+                                                                await authService
+                                                                    .logout()
+                                                                    .whenComplete(() => Get.offAll(
+                                                                        () =>
+                                                                            const HomePage(),
+                                                                        transition:
+                                                                            Transition.rightToLeftWithFade));
+                                                              })
+                                                        ]);
+                                                  });
+                                            })
+                                      ],
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text(
+                                          'Voltar',
+                                          style: TextStyle(color: Colors.black),
+                                        )),
+                                  ],
+                                );
+                              });
                         },
                         icon: const Icon(Icons.settings),
                         iconSize: 35,
@@ -275,6 +356,40 @@ class _UserPageState extends State<UserPage> {
                   const Spacer(),
                 ],
               ),
+      )),
+    );
+  }
+}
+
+class AboutPage extends StatelessWidget {
+  const AboutPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+          foregroundColor: Colors.white,
+          title: const Text('Sobre'),
+          titleTextStyle: const TextStyle(color: Colors.black),
+          iconTheme: const IconThemeData(color: Colors.black)),
+      body: const Center(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text('Sobre:'),
+          SizedBox(height: 30),
+          Text(
+              'Aplicativo de Geomídia para localização de pontos de interesse.'),
+          Text('Desenvolvido em 2024'),
+          SizedBox(height: 30),
+          Text('Elenco de desenvolvedores:'),
+          Text(
+              'Gabriel Pires, Arthur Selingin, Enzo Hiroshi, Victor Coriolano'),
+          Text('Contato:'),
+          Text('Email: picoskatepico@gmail.com'),
+          Text('Todos os Direitos Reservados.')
+        ],
       )),
     );
   }
