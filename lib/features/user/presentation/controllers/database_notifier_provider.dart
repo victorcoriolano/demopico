@@ -16,9 +16,6 @@ class DatabaseProvider extends ChangeNotifier {
   Future<void> updateUserBio(String newBio) =>
       _db.updateUserBioInFirebase(newBio);
 
-  Future<void> updateUserImg(String newImg) =>
-  _db.updateUserImgInFirebase(newImg);  
-
   List<Communique> _allCommuniques = [];
 
   List<Communique> get allCommuniques => _allCommuniques;

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:demopico/features/user/data/models/user.dart';
 import 'package:demopico/features/user/data/services/auth_service.dart';
+import 'package:demopico/features/user/presentation/widgets/login_form_pc.dart';
 import 'package:flutter/foundation.dart';
 
 class DatabaseService {
@@ -126,20 +127,6 @@ Future<void> atualizarContribuicoes() async {
     }
   }
 
-  Future<void> updateUserImgInFirebase(String newImg) async {
-    print("OIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII ${newImg}");
-    String uid = auth.currentUser!.uid;
-    try {
-      await firestore
-          .collection('users')
-          .doc(uid)
-          .update({'pictureUrl': newImg});
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    }
-  }
 ////////////////
 ////////////////
 // Postar no hub
