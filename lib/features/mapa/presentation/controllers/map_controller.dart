@@ -9,6 +9,7 @@ class MapControllerProvider extends ChangeNotifier{
   String locationMessage = '';
   MapType myMapType = MapType.normal;
   double zoomInicial = 12;
+  //BuildContext? context;
 
   GoogleMapController? get mapController => _mapController;
 
@@ -16,10 +17,15 @@ class MapControllerProvider extends ChangeNotifier{
     _mapController = controller;
     notifyListeners();
   }
+/* 
+    void registerScaffoldState(GlobalKey<ScaffoldState> scaffoldKey) {
+    context = scaffoldKey.currentContext;
+  } */
 
   void reajustarCameraPosition(LatLng position){ //movendo a camera position
     if(_mapController != null){
       _mapController!.animateCamera(CameraUpdate.newLatLng(position));
+      
     }
   }
 

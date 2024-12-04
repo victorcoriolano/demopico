@@ -1,6 +1,7 @@
 
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/presentation/controllers/historico_controller.dart';
+import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/widgets/map_widget.dart';
 import 'package:demopico/features/mapa/presentation/widgets/show_pico_widget.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,8 @@ Future<Marker> picoMarker(Pico? spot, BuildContext context, ) async {
   onTap: () {
     final contextCerto = scaffoldKey.currentContext!;
     showPicoModal(contextCerto, spot);
+
+    
 
   },
   icon: await const TextOnImage(
@@ -39,7 +42,7 @@ void showPicoModal(BuildContext context, Pico pico) {
   // salvando no histórico 
   final provider = context.read<HistoricoController>();
   provider.salvarNoHistorico(pico.picoName, pico.lat, pico.long);
-  
+
   try {
   showModalBottomSheet(
     context: context,

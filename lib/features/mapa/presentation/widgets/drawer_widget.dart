@@ -1,5 +1,4 @@
 import 'package:demopico/app/home_page.dart';
-import 'package:demopico/features/mapa/presentation/controllers/historico_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/pages/historico_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/save_pico_page.dart';
@@ -49,7 +48,13 @@ class _MyDrawerState extends State<MyDrawer> {
                 if(user != null){
                   Navigator.push(context, MaterialPageRoute(builder: (_) =>  SavePicoPage(userID: user!.uid)));
                 }else {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Faça login para ver seus picos salvos")));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        "Faça login para ver seus picos salvos",
+                      ),
+                    ),
+                  );
                 }
                 
               },
@@ -64,8 +69,6 @@ class _MyDrawerState extends State<MyDrawer> {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (_) {
-                      final provider = context.read<HistoricoController>();
-                      provider.carregarHistoricoInicial();
                       return const HistoricoPage();
                     } ));
               },
