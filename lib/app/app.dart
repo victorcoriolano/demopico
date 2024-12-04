@@ -1,9 +1,14 @@
 import 'package:demopico/app/home_page.dart';
 import 'package:demopico/features/hub/data/infra/database_notifier_provider.dart';
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
+import 'package:demopico/features/mapa/data/services/historico_storage.dart';
+import 'package:demopico/features/mapa/domain/use%20cases/historico_use_case.dart';
+import 'package:demopico/features/mapa/domain/use%20cases/save_spot.dart';
 import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
+import 'package:demopico/features/mapa/presentation/controllers/historico_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
+import 'package:demopico/features/mapa/presentation/controllers/spot_save_controller.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
 import 'package:demopico/features/user/data/services/auth_service.dart';
 import 'package:demopico/features/user/presentation/controllers/database_notifier_provider.dart';
@@ -32,7 +37,10 @@ class MyAppWidget extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => MapControllerProvider()),
         ChangeNotifierProvider(create: (_) => serviceLocator<SpotControllerProvider>()),
         ChangeNotifierProvider(create: (_) => DatabaseProvider()),
+                ChangeNotifierProvider(create: (_) => SpotSaveController(serviceLocator<SaveSpot>())),
+        ChangeNotifierProvider(create: (_) => HistoricoController(HistoricoUseCase(HistoricoStorage()))),
         ChangeNotifierProvider(create: (_) => HubProvider()),
+        
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,

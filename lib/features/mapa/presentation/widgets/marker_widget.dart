@@ -1,29 +1,46 @@
 
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
+import 'package:demopico/features/mapa/presentation/controllers/historico_controller.dart';
+import 'package:demopico/features/mapa/presentation/widgets/map_widget.dart';
 import 'package:demopico/features/mapa/presentation/widgets/show_pico_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:widget_to_marker/widget_to_marker.dart';
 
 //marker separado da lógica
 
-Future<Marker> picoMarker(Pico spot, BuildContext context, ) async {
-    return Marker(
-    markerId: MarkerId(spot.picoName),
-    position: LatLng(spot.lat, spot.long),
-    onTap: () => showPicoModal(context, spot),
-    icon: await const TextOnImage(
-      text: '',
-      ).toBitmapDescriptor(
-         logicalSize: const Size(150, 150), imageSize: const Size(120, 150)
-      ),
-  );
+Future<Marker> picoMarker(Pico? spot, BuildContext context, ) async {
+/*     if (spot != null) { */
+  return Marker(
+  markerId: MarkerId(spot!.picoName),
+  position: LatLng(spot.lat, spot.long),
+  onTap: () {
+    final contextCerto = scaffoldKey.currentContext!;
+    showPicoModal(contextCerto, spot);
+
+  },
+  icon: await const TextOnImage(
+    text: '',
+    ).toBitmapDescriptor(
+      logicalSize: const Size(150, 150), imageSize: const Size(120, 150)
+    ),
+    );
+/* }else{
+  print("Informações pico não encontrado");
+  return null;
+} */
 }
 
 void showPicoModal(BuildContext context, Pico pico) {
   print('Chamando modal para: ${pico.picoName}');
   print('Imagem url: ${pico.imgUrl}');
+  print("Contexto: $context");
+  // salvando no histórico 
+  final provider = context.read<HistoricoController>();
+  provider.salvarNoHistorico(pico.picoName, pico.lat, pico.long);
   
+  try {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -39,6 +56,10 @@ void showPicoModal(BuildContext context, Pico pico) {
       );
     },
   );
+}  catch (e) {
+  // TODO
+  print("Erro ao mostrar o botton sheet: $e ");
+}
 }
 class TextOnImage extends StatelessWidget {
   const TextOnImage({
@@ -66,3 +87,5 @@ class TextOnImage extends StatelessWidget {
     );
   }
 }
+
+

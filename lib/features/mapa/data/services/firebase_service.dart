@@ -133,18 +133,21 @@ class FirebaseServiceMap implements SpotRepository{
   }
   
   @override
-  Future<List<Pico>> getSavePico(String idUser) async {
+  Future<List<Pico>> getSavePico(String iduser) async {
     try {
       final snapshotListPico = await _firebaseFirestore
-          .collection("picosFavoritos")
-          .where("idUser", isEqualTo: idUser)
+          .collection("picosFavoritados")
+          .where("idUser", isEqualTo: iduser)
           .get();
 
       if (snapshotListPico.docs.isNotEmpty) {
+        print("o os salvos aqui ò: ${snapshotListPico.docs}");
         final picos = await Future.wait(snapshotListPico.docs.map((doc) async {
           final spotRef = doc['spotRef'] as DocumentReference;
           final spotSnapshot = await spotRef.get();
+          print("O o pico aqui ó: ${spotSnapshot.data()}");
           return Pico.fromJson(spotSnapshot.data() as Map<String, dynamic>);
+          
         }));
         return picos;
       }else{

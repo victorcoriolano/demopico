@@ -155,10 +155,11 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
             icon: const Icon(Icons.filter_list, color: Colors.white),
             tooltip: "Filtrar picos",
             onSelected: (String? value) {
-              if(value == 'Utilidades'){
+              if (value == 'Utilidades') {
                 mostrarAtributos(context);
-              }else if(value != 'Modalidade'){
-                print(value);
+              } else if (value == 'Modalidade') {
+                print("Filtrar por utilidades");
+              } else {
                 spotProvider.filtrarPicosPorTipo(value, context);
               }
             },

@@ -15,7 +15,6 @@ class ShowPicoWidget extends StatefulWidget {
   final Pico pico;
   final ScrollController scrollController;
   final Map<String, int>? atributos;
-  
 
   const ShowPicoWidget(
       {super.key,
@@ -28,13 +27,34 @@ class ShowPicoWidget extends StatefulWidget {
 }
 
 int _currentPage = 0;
+
 class _ShowPicoWidgetState extends State<ShowPicoWidget> {
   List<String> images = [];
-  Map<String, String> obstaculoIcon = {
-  
+  final Map<String, String> obstaculosMap = {
+    "45° graus": "assets/images/icons/45graus.png",
+    "Barreira newjersey": "assets/images/icons/barreira.png",
+    "Bowl zão": "assets/images/icons/bowl.png",
+    "Banco": "assets/images/icons/cadeira.png",
+    "Corrimão": "assets/images/icons/corrimao.png",
+    "Escada": "assets/images/icons/escada.png",
+    "Funbox": "assets/images/icons/funbox.png",
+    "Gap": "assets/images/icons/gap.png",
+    "Jump": "assets/images/icons/jump.png",
+    "Megaramp": "assets/images/icons/megaramp.png",
+    "Miniramp": "assets/images/icons/miniramp.png",
+    "Pirâmide": "assets/images/icons/piramede.png",
+    "Quarter": "assets/images/icons/quarter.png",
+    "Spine": "assets/images/icons/spine.png",
+    "Stepper": "assets/images/icons/stepper.png",
+    "Transição": "assets/images/icons/transição.png",
+    "Hidrante": "assets/images/icons/hidrante.png",
+    "Parede": "assets/images/icons/wallObstaculo.png",
+    "Bowl zinho": "assets/images/icons/bowl.png",
+    "Lixeira": "assets/images/icons/lixeira.png",
   };
+
   final provider = serviceLocator<SpotSaveController>();
-  
+
   void _loadPicos() {
     setState(() {
       images = widget.pico.imgUrl.cast<String>(); //url pico
@@ -42,7 +62,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
   }
 
   @override
-    void dispose() {
+  void dispose() {
     // Resetando o valor de _currentPage antes de fechar a página
     _currentPage = 0;
     super.dispose();
@@ -52,12 +72,11 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
   void initState() {
     super.initState();
     _loadPicos(); // carregar img
-    print(provider);
+    print("aq e pa  ${widget.pico.obstaculos} ");
   }
 
   Widget buildAttributeIcons(int value) {
-    return Column(mainAxisAlignment: MainAxisAlignment.start, 
-    children: [
+    return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
       Row(
         children: [
           // Gerando 5 ícones
@@ -99,7 +118,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
             children: [
               SizedBox(
                 width: double.infinity,
-                height: 300, // Altura ajustada para incluir o indicador
+                height: 250, // Altura ajustada para incluir o indicador
                 child: images.isNotEmpty
                     ? Stack(
                         children: [
@@ -156,8 +175,8 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                     duration: const Duration(milliseconds: 300),
                                     margin: const EdgeInsets.symmetric(
                                         horizontal: 4),
-                                    width: _currentPage == index ? 12 : 8,
-                                    height: _currentPage == index ? 12 : 8,
+                                    width: _currentPage == index ? 10 : 6,
+                                    height: _currentPage == index ? 10 : 6,
                                     decoration: BoxDecoration(
                                       color: _currentPage == index
                                           ? Colors.white
@@ -207,10 +226,29 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                           Row(
                             children: List.generate(
                                 widget.pico.obstaculos!.length, (index) {
-                              return Icon(Icons.square,
-                                  color: index < 3 ? Colors.blue : Colors.grey);
+                              String obstaculo = widget.pico.obstaculos![index];
+                              String? iconPath = obstaculosMap[
+                                  obstaculo]; // Busca o caminho do ícone no Map
+
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal:
+                                        4.0), // Ajuste opcional de espaçamento
+                                child: iconPath != null
+                                    ? Image.asset(
+                                        iconPath,
+                                        width: 40, // Largura da imagem
+                                        height: 40, // Altura da imagem
+                                      )
+                                    : Icon(
+                                        Icons
+                                            .error, // Ícone padrão caso o obstáculo não exista no Map
+                                        color: Colors.red,
+                                      ),
+                              );
                             }),
                           ),
+
                           // Avaliação com estrelas
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
@@ -306,11 +344,12 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                 ),
                                 const SizedBox(height: 5),
                                 Text(
-                                  "SK8DEV", // Nome fixo abaixo da foto
+                                  widget.pico.userCreator ??
+                                      "ANÔNIMO", // Nome fixo abaixo da foto
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
                                     color: Color.fromARGB(255, 93, 93, 93),
-                                    fontSize: 16,
+                                    fontSize: 12,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -318,7 +357,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                             ),
                           ),
                           const SizedBox(width: 15),
-                      
+
                           // Nome do local e descrição
                           Expanded(
                             child: Column(
@@ -329,7 +368,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                       .toUpperCase(), // Nome do local
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 18,
+                                    fontSize: 19,
                                   ),
                                 ),
                                 const SizedBox(height: 5),
@@ -338,7 +377,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                       '', // Descrição do local
                                   style: const TextStyle(
                                     color: Color(0xFF8B0000),
-                                    fontSize: 14,
+                                    fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -348,7 +387,6 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                         ],
                       ),
                       const SizedBox(height: 25),
-
 
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -365,7 +403,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 15,
-                                        fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
@@ -383,10 +421,10 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                 child: const Text(
                                   'AVALIAR PICO',
                                   style: TextStyle(
-                                    color: Color(0xFF8B0000), // Texto vermelho
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 12
-                                  ),
+                                      color:
+                                          Color(0xFF8B0000), // Texto vermelho
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12),
                                 ),
                               ),
                             ],
@@ -440,6 +478,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                             children: [
                               IconButton(
                                 onPressed: () async {
+                                  print("clicou em salvar");
                                   if (user != null) {
                                     final salvar =
                                         provider.savePico(widget.pico, user!);
@@ -457,8 +496,10 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                       }
                                     }
                                   } else {
+                                    print("user nulo");
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
+                                        duration: const Duration(seconds: 5),
                                         content: const Text(
                                             "Usuário não logado! Faça login para salvar pico"),
                                         action: SnackBarAction(

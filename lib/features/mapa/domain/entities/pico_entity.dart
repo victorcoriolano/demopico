@@ -1,7 +1,7 @@
 import 'dart:io';
 
 class Pico {
-  final String urlIdPico;
+  final String? urlIdPico;
   final String modalidade;
   final String tipoPico;
   final String picoName;
@@ -38,21 +38,21 @@ class Pico {
 
     factory Pico.fromJson(Map<String, dynamic> json) {
     return Pico(
-      urlIdPico: json['urlIdPico'] as String,
-      modalidade: json['modalidade'] as String,
-      tipoPico: json['tipoPico'] as String,
-      picoName: json['picoName'] as String,
-      imgUrl: List<dynamic>.from(json['imgUrl'] ?? []),
-      description: json['description'] as String?,
-      long: (json['long'] as num).toDouble(),
-      lat: (json['lat'] as num).toDouble(),
-      userCreator: json['userCreator'] as String?,
-      fotoPico: null, 
-      utilidades: json['utilidades'] != null ? List<dynamic>.from(json['utilidades']) : [],
-      atributos: json['atributos'] as Map<String, dynamic>?,
-      obstaculos: json['obstaculos'] != null ? List<dynamic>.from(json['obstaculos']) : [],
-      nota: json['nota'] != null ? (json['nota'] as num).toDouble() : null,
-      numeroAvaliacoes: json['numeroAvaliacoes'] as int?,
+        imgUrl: json['imageUrl'] as List<dynamic>,
+        tipoPico: json['tipo'] as String,
+        modalidade: json['modalidade'] as String,
+        nota: (json['nota'] as num).toDouble(), // vai dar boum
+        numeroAvaliacoes: json['avaliacoes'] as int,
+        long: (json['longitude'] as num).toDouble(), // tem q dar boaum
+        lat: (json['latitude'] as num).toDouble(), //  precisa dar buams
+        description: json['description'] as String,
+        atributos: json['atributos'] as Map<String, dynamic>,
+        fotoPico: null, // vou inserir a imagem diretamente no código usando o image.network
+        obstaculos: json['obstaculos'] as List<dynamic>,
+        utilidades: json['utilidades'] as List<dynamic>,
+        userCreator: json['criador'],
+        urlIdPico: null,
+        picoName: json['name'] as String,
     );
   }
 

@@ -57,20 +57,17 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                     child: Image(
                       image: AssetImage('assets/images/skatepico-icon.png'),
                     )),
-                const SizedBox(
-                  height: 20,
-                ),
-
+             
                 const Text(
                   "Bem vindo ao PICO!",
                   style: TextStyle(
                     fontWeight: FontWeight.normal,
                     color: Colors.white,
-                    fontSize: 30,
+                    fontSize: 25,
                   ),
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 40,
                 ),
 
                 // vulgo
