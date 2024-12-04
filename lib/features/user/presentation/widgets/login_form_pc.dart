@@ -1,5 +1,6 @@
 import 'package:demopico/app/home_page.dart';
 import 'package:demopico/core/errors/failure_server.dart';
+import 'package:demopico/features/user/data/services/auth_service.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_controller.dart';
 import 'package:demopico/features/user/presentation/pages/register_page.dart';
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
@@ -19,6 +20,7 @@ class _LoginFormState extends State<LoginForm> with Validators {
   final TextEditingController _vulgoController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
   final _authController = AuthController();
+  final auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -123,10 +125,18 @@ class _LoginFormState extends State<LoginForm> with Validators {
                   bool loginSuccess;
 
                   if (vulgo.contains("@")) {
-                    await _authController.login(vulgo, password);
+                    await auth.login(vulgo, password);
                     loginSuccess = true;
                   } else {
-                    loginSuccess = await _authController.login(vulgo, password);
+                    try{
+                      await auth.login(vulgo, password);
+                      loginSuccess = true;
+                    }catch (e){
+                      print("Erro ao fazer login: $e");
+                      loginSuccess = false;
+                    }
+                      
+                      
                   }
 
                   setState(() {

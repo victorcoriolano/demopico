@@ -16,8 +16,12 @@ Future<Marker> picoMarker(Pico? spot, BuildContext context, ) async {
   markerId: MarkerId(spot!.picoName),
   position: LatLng(spot.lat, spot.long),
   onTap: () {
-    final contextCerto = scaffoldKey.currentContext!;
-    showPicoModal(contextCerto, spot);
+    final contextCerto = scaffoldKey.currentContext;
+    if(contextCerto != null){
+      showPicoModal(contextCerto, spot);
+    }else {
+      print("Context errado: $contextCerto");
+    }
 
   },
   icon: await const TextOnImage(
@@ -39,7 +43,7 @@ void showPicoModal(BuildContext context, Pico pico) {
   // salvando no histórico 
   final provider = context.read<HistoricoController>();
   provider.salvarNoHistorico(pico.picoName, pico.lat, pico.long);
-  
+
   try {
   showModalBottomSheet(
     context: context,

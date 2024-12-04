@@ -6,6 +6,7 @@ import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/prime
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/quarta_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/segunda_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/terceira_tela.dart';
+import 'package:demopico/features/user/data/services/database_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -118,6 +119,8 @@ class _ContainerTelasState extends State<ContainerTelas> {
                               ),
                               onPressed: () async {
                                 if(user != null){
+                                  final DatabaseService  dataUser = DatabaseService();
+                                  dataUser.atualizarContribuicoes();
                                   if (provider.validarFormulario())  {
                                   final pico = Pico(
                                       imgUrl: provider.urlImage,
@@ -133,7 +136,6 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                       obstaculos: provider.obstaculos,
                                       utilidades: provider.utilidades,
                                       userCreator: user!.displayName ?? user!.email,
-                                      urlIdPico: 'anonimo',
                                       picoName: provider.nomePico);
                                   try  {
                                     await serviceLocator<SpotControllerProvider>()
@@ -173,8 +175,7 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                       fotoPico: null,
                                       obstaculos: provider.obstaculos,
                                       utilidades: provider.utilidades,
-                                      userCreator: null,
-                                      urlIdPico: 'anonimo',
+                                      userCreator: "Anônimo",
                                       picoName: provider.nomePico);
                                   try  {
                                     await serviceLocator<SpotControllerProvider>()

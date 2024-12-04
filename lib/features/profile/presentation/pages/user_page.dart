@@ -18,6 +18,7 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
+  late final authService = AuthService();
   late final databaseProvider =
       Provider.of<DatabaseProvider>(context, listen: false);
 
@@ -35,9 +36,10 @@ class _UserPageState extends State<UserPage> {
   }
 
   Future<void> loadUser() async {
-    currentUserId = AuthService().currentUser?.uid;
+    currentUserId = authService.currentUser?.uid;
 
     if (currentUserId == null) {
+      print('user uid ao entrar na page nulo');
       setState(() {
         _isLoading = true;
         showDialog(
@@ -307,6 +309,40 @@ class _UserPageState extends State<UserPage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class AboutPage extends StatelessWidget {
+  const AboutPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+          foregroundColor: Colors.white,
+          title: const Text('Sobre'),
+          titleTextStyle: const TextStyle(color: Colors.black),
+          iconTheme: const IconThemeData(color: Colors.black)),
+      body: const Center(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text('Sobre:'),
+          SizedBox(height: 30),
+          Text(
+              'Aplicativo de Geomídia para localização de pontos de interesse.'),
+          Text('Desenvolvido em 2024'),
+          SizedBox(height: 30),
+          Text('Elenco de desenvolvedores:'),
+          Text(
+              'Gabriel Pires, Arthur Selingin, Enzo Hiroshi, Victor Coriolano'),
+          Text('Contato:'),
+          Text('Email: picoskatepico@gmail.com'),
+          Text('Todos os Direitos Reservados.')
+        ],
+      )),
     );
   }
 }

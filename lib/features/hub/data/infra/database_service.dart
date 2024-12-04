@@ -110,14 +110,14 @@ class HubService {
     try {
       String? uid = auth.currentUser?.uid;
       String? name = auth.currentUser?.displayName;
-
+      print('$uid, $name');
       if (name == null && uid == null) {
         if (kDebugMode) {
           print('erro em pegar name e uid do auth current user');
         }
       } else {
         UserM? user = await getUserDetailsFromFirestore(uid);
-
+        print(user.toString());
         if (user != null) {
           Communique newCommunique = Communique(
             id: Random(27345).toString(),
@@ -130,9 +130,9 @@ class HubService {
             likedBy: [],
             type: type,
           );
-
+          print(newCommunique);
           Map<String, dynamic> newPostMap = newCommunique.toJsonMap();
-
+          print(newPostMap);
           await firestore.collection('communique').add(newPostMap);
         }
       }

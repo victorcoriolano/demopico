@@ -43,6 +43,7 @@ class DatabaseService {
           await firestore.collection('users').doc(uid).get();
 
       if (userSnapshot.exists) {
+        print(UserM.fromDocument(userSnapshot));
         return UserM.fromDocument(userSnapshot);
       } else {
         return null;
@@ -89,6 +90,25 @@ class DatabaseService {
     }
   }
 
+Future<void> atualizarContribuicoes() async {
+  final id = auth.currentUser?.uid ?? 'User not found';
+  final reference = firestore.collection("users");
+
+  if (id != 'User not found') {
+    try {
+      await reference.doc(id).update({
+        'picosAdicionados': FieldValue.increment(1),
+      });
+      print('Contribuição atualizada com sucesso!');
+    } catch (e) {
+      print('Erro ao atualizar contribuições: $e');
+    }
+  } else {
+    print('Usuário não encontrado.');
+  }
+}
+
+
 //////////////////////////
 ///////////////////////////
 /////////////////////////////
@@ -127,6 +147,9 @@ class DatabaseService {
     try {
       String? uid = auth.currentUser?.uid;
       String? name = auth.currentUser?.displayName;
+      print('começo do posthub no databaseservice');
+      print(uid);
+      print(name);
 
       if (name == null && uid == null) {
         if (kDebugMode) {
@@ -134,8 +157,10 @@ class DatabaseService {
         }
       } else {
         UserM? user = await getUserDetailsFromFirestore(uid);
+        print(user.toString());
 
         if (user != null) {
+          print('user nao e nulo');
           Communique newCommunique = Communique(
             id: Random(27345).toString(),
             uid: uid!,
@@ -147,10 +172,13 @@ class DatabaseService {
             likedBy: [],
             type: type,
           );
-
+          print(newCommunique);
           Map<String, dynamic> newPostMap = newCommunique.toJsonMap();
 
-          await firestore.collection('communique').add(newPostMap);
+          await firestore
+              .collection('communique')
+              .add(newPostMap)
+              .whenComplete(() => print('postado no firestore'));
         }
       }
     } on FirebaseException catch (e) {
@@ -159,6 +187,8 @@ class DatabaseService {
         print(e.message);
         print(e.stackTrace);
       }
+    } catch (e){
+      print("Erro não esperado: $e");
     }
   }
 // Deletar do hub
@@ -170,7 +200,8 @@ class DatabaseService {
           .collection('communique')
           .orderBy('timestamp', descending: true)
           .get();
-
+      print(
+          '${querySnapshot.metadata} ${querySnapshot.docs.length} ${querySnapshot.docs.firstOrNull?.data()}');
       return querySnapshot.docs
           .map((doc) => Communique.fromDocument(doc))
           .toList();
