@@ -1,8 +1,11 @@
 import 'package:demopico/core/common/inject_dependencies.dart';
+import 'package:demopico/core/common/widgets/denunciar_widget.dart';
+import 'package:demopico/core/domain/entities/denuncia_model.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_save_controller.dart';
 import 'package:demopico/features/mapa/presentation/pages/comment_page.dart';
+import 'package:demopico/features/mapa/presentation/pages/save_pico_page.dart';
 import 'package:demopico/features/user/presentation/pages/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -493,7 +496,9 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                             content: const Text("Pico Salvo"),
                                             action: SnackBarAction(
                                                 label: "Ver pico salvo",
-                                                onPressed: () {}),
+                                                onPressed: () {
+                                                  Navigator.push(context, MaterialPageRoute(builder: (_) => SavePicoPage(userID: user!.uid)));
+                                                }),
                                           ),
                                         );
                                       }
@@ -519,7 +524,10 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                 iconSize: 35,
                               ),
                               IconButton(
-                                  onPressed: () {},
+                                tooltip: "Denunciar Pico",
+                                  onPressed: () {
+                                    denunciarPico(context,user!.uid, widget.pico.urlIdPico!);
+                                  },
                                   icon: const Icon(Icons.flag),
                                   iconSize: 35),
                               IconButton(
@@ -558,7 +566,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(mensagem),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 RatingBar.builder(
                   initialRating: 0,
                   minRating: 1,
@@ -611,5 +619,16 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
     } else {
       return "Horrivel!";
     }
+  }
+  
+  Future<void> denunciarPico(BuildContext context, String? urlIdPico, String idPico) {
+    return showDialog(
+      context: context, 
+      builder: (context) => DenunciaDialog(
+        idUser: urlIdPico, // Substituir pelo ID do usuário logado
+        typePublication: TypePublication.pico, // Tipo de publicação
+        idPub: idPico,
+      ),
+    );
   }
 }
