@@ -5,8 +5,13 @@ class AuthController {
   final _authService = AuthService();
 
   Future<bool> login(String email, String password) async {
-    return await _authService.login(email, password);
-  }
+    try{
+      return await _authService.loginIn(email, password);
+    }catch(e){
+      return false;
+    }
+    }
+    
 
   Future<bool> logout() async {
     try {
@@ -26,7 +31,7 @@ class AuthController {
         .signUp(inputName, inputEmail, inputPassword, isColetivo)
         .then((value) => print(value))
         .whenComplete(() => print('finalizado'));
-    bool result = await _authService.login(inputEmail, inputPassword);
+    bool result = await _authService.loginIn(inputEmail, inputPassword);
     return result;
   }
 }
