@@ -103,13 +103,22 @@ class AuthService {
     try {
       UserCredential authResult = await auth.signInWithEmailAndPassword(
           email: email, password: password);
+      print(authResult.additionalUserInfo);
       User? signedUser = authResult.user;
+      print(signedUser?.metadata);
       if (signedUser != null) {
+        print(signedUser.uid);
+        UserM? firestoreUser =
+            await dbService.getUserDetailsFromFirestore(signedUser.uid);
+        auth.currentUser!.updateDisplayName(firestoreUser!.name);
+        auth.currentUser!.updatePhotoURL(firestoreUser.pictureUrl);
+        print(firestoreUser.toString());
         auth.userChanges();
         return true;
       }
       return false;
     } catch (e) {
+      print(e.toString());
       print('erro no login authservice: $e');
       return false;
     }

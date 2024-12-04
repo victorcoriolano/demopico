@@ -1,11 +1,14 @@
+import 'package:demopico/features/hub/data/infra/database_notifier_provider.dart';
 import 'package:demopico/features/hub/presentation/widgets/communique_tile.dart';
 import 'package:demopico/features/hub/presentation/widgets/input_box.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:demopico/features/user/data/services/auth_service.dart';
 import 'package:demopico/features/user/presentation/controllers/database_notifier_provider.dart';
+import 'package:demopico/features/user/presentation/pages/login_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class HubPage extends StatefulWidget {
@@ -18,17 +21,25 @@ class HubPage extends StatefulWidget {
 class _HubPageState extends State<HubPage> {
   final authService = AuthService();
 
-  late final db = Provider.of<DatabaseProvider>(context, listen: false);
-  late final listenDb = Provider.of<DatabaseProvider>(context);
+  late final db = Provider.of<HubProvider>(context, listen: false);
+  late final listenDb = Provider.of<HubProvider>(context);
   bool _isEvent = false;
   bool _isDonation = false;
   bool isChoosingType = false;
 
   Future<bool> _tryPost(String text) async {
     try {
-      await db.postHubCommunique(text, _chooseType());
+      print('entrou no trypost');
+      print(authService.currentUser!.displayName);
+      await db
+          .postHubCommunique(text, _chooseType())
+          .whenComplete(() => print('terminou o await'));
+      print('depois do await');
       return true;
     } catch (e) {
+      print(e);
+      print('saiu do try catch erro: ${e.toString()} ');
+      print(e.runtimeType);
       return false;
     }
   }
@@ -60,6 +71,15 @@ class _HubPageState extends State<HubPage> {
         backgroundColor: const Color.fromARGB(255, 238, 238, 238),
         body: Stack(
           children: [
+            Positioned(
+                left: 12,
+                top: 55,
+                child: IconButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    icon: const Icon(Icons.arrow_left,
+                        color: Colors.black, size: 38))),
             Positioned(
                 top: 60,
                 left: context.width / 2 - 50,
@@ -265,6 +285,6 @@ class _HubPageState extends State<HubPage> {
 }
 
 extension on BuildContext {
-  get height => MediaQuery.of(this).size.height;
-  get width => MediaQuery.of(this).size.width;
+  get heighte => MediaQuery.of(this).size.height;
+  get widthe => MediaQuery.of(this).size.width;
 }

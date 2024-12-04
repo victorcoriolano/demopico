@@ -1,4 +1,5 @@
 import 'package:demopico/app/home_page.dart';
+import 'package:demopico/features/hub/data/infra/database_notifier_provider.dart';
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
 import 'package:demopico/features/mapa/data/services/historico_storage.dart';
 import 'package:demopico/features/mapa/domain/use%20cases/historico_use_case.dart';
@@ -36,8 +37,9 @@ class MyAppWidget extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => MapControllerProvider()),
         ChangeNotifierProvider(create: (_) => serviceLocator<SpotControllerProvider>()),
         ChangeNotifierProvider(create: (_) => DatabaseProvider()),
-        ChangeNotifierProvider(create: (_) => SpotSaveController(serviceLocator<SaveSpot>())),
+                ChangeNotifierProvider(create: (_) => SpotSaveController(serviceLocator<SaveSpot>())),
         ChangeNotifierProvider(create: (_) => HistoricoController(HistoricoUseCase(HistoricoStorage()))),
+        ChangeNotifierProvider(create: (_) => HubProvider()),
         
       ],
       child: GetMaterialApp(

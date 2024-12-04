@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:demopico/features/user/data/models/user.dart';
 import 'package:demopico/features/user/data/services/auth_service.dart';
-import 'package:demopico/features/user/presentation/widgets/login_form_pc.dart';
 import 'package:flutter/foundation.dart';
 
 class DatabaseService {
@@ -44,6 +43,7 @@ class DatabaseService {
           await firestore.collection('users').doc(uid).get();
 
       if (userSnapshot.exists) {
+        print(UserM.fromDocument(userSnapshot));
         return UserM.fromDocument(userSnapshot);
       } else {
         return null;
@@ -133,6 +133,9 @@ Future<void> atualizarContribuicoes() async {
     try {
       String? uid = auth.currentUser?.uid;
       String? name = auth.currentUser?.displayName;
+      print('começo do posthub no databaseservice');
+      print(uid);
+      print(name);
 
       if (name == null && uid == null) {
         if (kDebugMode) {
@@ -140,8 +143,10 @@ Future<void> atualizarContribuicoes() async {
         }
       } else {
         UserM? user = await getUserDetailsFromFirestore(uid);
+        print(user.toString());
 
         if (user != null) {
+          print('user nao e nulo');
           Communique newCommunique = Communique(
             id: Random(27345).toString(),
             uid: uid!,
@@ -153,10 +158,13 @@ Future<void> atualizarContribuicoes() async {
             likedBy: [],
             type: type,
           );
-
+          print(newCommunique);
           Map<String, dynamic> newPostMap = newCommunique.toJsonMap();
 
-          await firestore.collection('communique').add(newPostMap);
+          await firestore
+              .collection('communique')
+              .add(newPostMap)
+              .whenComplete(() => print('postado no firestore'));
         }
       }
     } on FirebaseException catch (e) {
@@ -178,7 +186,8 @@ Future<void> atualizarContribuicoes() async {
           .collection('communique')
           .orderBy('timestamp', descending: true)
           .get();
-
+      print(
+          '${querySnapshot.metadata} ${querySnapshot.docs.length} ${querySnapshot.docs.firstOrNull?.data()}');
       return querySnapshot.docs
           .map((doc) => Communique.fromDocument(doc))
           .toList();
