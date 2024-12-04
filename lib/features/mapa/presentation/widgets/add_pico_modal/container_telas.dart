@@ -136,7 +136,6 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                       obstaculos: provider.obstaculos,
                                       utilidades: provider.utilidades,
                                       userCreator: user!.displayName ?? user!.email,
-                                      urlIdPico: 'anonimo',
                                       picoName: provider.nomePico);
                                   try  {
                                     await serviceLocator<SpotControllerProvider>()
@@ -176,8 +175,7 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                       fotoPico: null,
                                       obstaculos: provider.obstaculos,
                                       utilidades: provider.utilidades,
-                                      userCreator: null,
-                                      urlIdPico: 'anonimo',
+                                      userCreator: "Anônimo",
                                       picoName: provider.nomePico);
                                   try  {
                                     await serviceLocator<SpotControllerProvider>()

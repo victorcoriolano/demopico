@@ -2,6 +2,7 @@ import 'package:demopico/core/common/inject_dependencies.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_save_controller.dart';
+import 'package:demopico/features/mapa/presentation/pages/comment_page.dart';
 import 'package:demopico/features/user/presentation/pages/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -397,7 +398,9 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 50, vertical: 10),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(builder: (_) => CommentPage(picoId: widget.pico.urlIdPico!,)));
+                            },
                             child: const Text(
                               "ABRIR DISCUSSÃO",
                               style: TextStyle(
