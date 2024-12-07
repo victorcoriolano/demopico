@@ -1,6 +1,8 @@
 enum TypePublication {
   pico,
   anuncio,
+  perfil,
+  comentario,
 }
 
 class DenunciaModel {
