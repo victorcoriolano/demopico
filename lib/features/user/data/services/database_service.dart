@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:demopico/features/user/data/models/user.dart';
 import 'package:demopico/features/user/data/services/auth_service.dart';
+import 'package:demopico/features/user/presentation/widgets/login_form_pc.dart';
 import 'package:flutter/foundation.dart';
 
 class DatabaseService {
@@ -90,6 +91,25 @@ class DatabaseService {
     }
   }
 
+Future<void> atualizarContribuicoes() async {
+  final id = auth.currentUser?.uid ?? 'User not found';
+  final reference = firestore.collection("users");
+
+  if (id != 'User not found') {
+    try {
+      await reference.doc(id).update({
+        'picosAdicionados': FieldValue.increment(1),
+      });
+      print('Contribuição atualizada com sucesso!');
+    } catch (e) {
+      print('Erro ao atualizar contribuições: $e');
+    }
+  } else {
+    print('Usuário não encontrado.');
+  }
+}
+
+
 //////////////////////////
 ///////////////////////////
 /////////////////////////////
@@ -154,6 +174,8 @@ class DatabaseService {
         print(e.message);
         print(e.stackTrace);
       }
+    } catch (e){
+      print("Erro não esperado: $e");
     }
   }
 // Deletar do hub

@@ -93,87 +93,8 @@ class _UserPageState extends State<UserPage> {
                       ),
                       IconButton(
                         onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text('Configurações',
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 18)),
-                                  content: SizedBox(
-                                    height: 200,
-                                    width: 100,
-                                    child: ListView(
-                                      shrinkWrap: true,
-                                      itemExtent: 50,
-                                      children: [
-                                        ListTile(
-                                            title: const Text(
-                                                'Sobre o Aplicativo'),
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                              Navigator.pushReplacement(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          const AboutPage()));
-                                            }),
-                                        ListTile(
-                                            title: const Text('Fazer Logout'),
-                                            onTap: () {
-                                              showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return AlertDialog(
-                                                        title: const Text(
-                                                            'Logout'),
-                                                        content: const Text(
-                                                            'Tem certeza que deseja sair da sua conta?'),
-                                                        actions: [
-                                                          TextButton(
-                                                              onPressed: () {
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
-                                                              },
-                                                              child: const Text(
-                                                                'Cancelar',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .black),
-                                                              )),
-                                                          TextButton(
-                                                              child: const Text(
-                                                                  'Sair'),
-                                                              onPressed:
-                                                                  () async {
-                                                                await authService
-                                                                    .logout()
-                                                                    .whenComplete(() => Get.offAll(
-                                                                        () =>
-                                                                            const HomePage(),
-                                                                        transition:
-                                                                            Transition.rightToLeftWithFade));
-                                                              })
-                                                        ]);
-                                                  });
-                                            })
-                                      ],
-                                    ),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text(
-                                          'Voltar',
-                                          style: TextStyle(color: Colors.black),
-                                        )),
-                                  ],
-                                );
-                              });
+                          //Aplicar funcionalidade de settings
+                          null;
                         },
                         icon: const Icon(Icons.settings),
                         iconSize: 35,

@@ -3,6 +3,7 @@ import 'package:demopico/features/user/data/repositories/auth_enum.dart';
 import 'package:demopico/features/user/data/repositories/sign_methods.dart';
 import 'package:demopico/features/user/data/services/database_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 
 class AuthService {
@@ -28,7 +29,7 @@ class AuthService {
             email: user.email,
             description: 'Edite para atualizar sua bio',
             id: user.uid,
-            picosAdicionados: '0',
+            picosAdicionados: 0,
             picosSalvos: '0',
             location: null,
             conexoes: '0',
@@ -98,21 +99,25 @@ class AuthService {
 ////////////////////
   /// LOGIN
 ////////////////////
+///
+///
+///
 
-  Future<bool> login(String email, String password) async {
+  Future<bool> loginIn(String email, String password) async {
     try {
-      UserCredential authResult = await auth.signInWithEmailAndPassword(
+      print("Tentou fazer login");
+      final authResult = await auth.signInWithEmailAndPassword(
           email: email, password: password);
       print(authResult.additionalUserInfo);
       User? signedUser = authResult.user;
       print(signedUser?.metadata);
       if (signedUser != null) {
         print(signedUser.uid);
-        UserM? firestoreUser =
+/*         UserM? firestoreUser =
             await dbService.getUserDetailsFromFirestore(signedUser.uid);
         auth.currentUser!.updateDisplayName(firestoreUser!.name);
         auth.currentUser!.updatePhotoURL(firestoreUser.pictureUrl);
-        print(firestoreUser.toString());
+        print(firestoreUser.toString()); */
         auth.userChanges();
         return true;
       }
@@ -122,6 +127,11 @@ class AuthService {
       print('erro no login authservice: $e');
       return false;
     }
+  }
+
+  Future<void> login(String email, String senha)async{
+    final auth = FirebaseAuth.instance;
+    await auth.signInWithEmailAndPassword(email: email, password: senha);
   }
 
   Future<void> logout() async {

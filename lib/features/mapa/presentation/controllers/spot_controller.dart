@@ -3,6 +3,8 @@ import 'package:demopico/features/mapa/domain/use%20cases/avaliar_spot.dart';
 import 'package:demopico/features/mapa/domain/use%20cases/create_spot.dart';
 import 'package:demopico/features/mapa/domain/use%20cases/show_all_pico.dart';
 import 'package:demopico/features/mapa/presentation/widgets/marker_widget.dart';
+import 'package:demopico/features/user/data/services/database_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -14,8 +16,10 @@ class SpotControllerProvider extends ChangeNotifier {
   Set<Marker> markers = {}; // Conjunto vazio de markers
   List<Pico> spots = [];
   List<Pico> picosPesquisados = [];
+  List<Pico>? myPicos;
   Marker? markerEncontrado;
   List<double> avaliacoes = [];
+  final user = FirebaseAuth.instance.currentUser;
 
   SpotControllerProvider(
       this.createSpotUseCase, this.showAllPicoUseCase, this.avaliarUseCase);
@@ -46,6 +50,11 @@ class SpotControllerProvider extends ChangeNotifier {
   Future<void> showAllPico(BuildContext context) async {
     try {
       spots = await showAllPicoUseCase.executa();
+      if(user != null){
+        myPicos = spots.where((pico) => pico.userCreator == user!.displayName).toList();
+        print(myPicos);
+        
+      }
 
       // Converte os picos em markers (processamento assíncrono)
       final markerFutures = spots.map((spot) => picoMarker(spot, context));
@@ -183,4 +192,6 @@ class SpotControllerProvider extends ChangeNotifier {
       print("Erro ao salvar a avaliação: $e");
     }
   }
+  
+
 }

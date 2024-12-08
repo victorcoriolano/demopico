@@ -32,7 +32,7 @@ class Pico {
     required this.obstaculos,
     required this.utilidades,
     required this.userCreator,
-    required this.urlIdPico,
+    this.urlIdPico,
     required this.picoName,
   });
 

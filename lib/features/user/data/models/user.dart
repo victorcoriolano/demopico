@@ -14,7 +14,7 @@ class UserM {
   String? location;
   String? dob;
   String? conexoes;
-  String? picosAdicionados;
+  int? picosAdicionados;
   String? picosSalvos;
   SignMethods? signMethod;
   AuthEnumState? authEnumState = AuthEnumState.notLoggedIn;
@@ -46,7 +46,7 @@ class UserM {
     data['dob'] = dob;
     data['conexoes'] = conexoes;
     data['picosAdicionados'] = picosAdicionados;
-    data['picosSalvos'] = picosSalvos;
+    data['picosSalvos'] = picosSalvos as num;
     data['isColetivo'] = isColetivo;
     data['signMethod'] = signMethod.toString();
     data['email'] = email;
