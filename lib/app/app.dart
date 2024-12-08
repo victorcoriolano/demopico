@@ -46,7 +46,9 @@ class MyAppWidget extends StatelessWidget {
             create: (_) =>
                 HistoricoController(HistoricoUseCase(HistoricoStorage()))),
         ChangeNotifierProvider(create: (_) => HubProvider()),
-        ChangeNotifierProvider(create: (_) => CommentController(CommentSpotUC(CommentRepository()))),
+        ChangeNotifierProvider(
+            create: (_) =>
+                CommentController(CommentSpotUC(CommentRepository()))),
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
