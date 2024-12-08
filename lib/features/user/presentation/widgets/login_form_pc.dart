@@ -47,7 +47,7 @@ class _LoginFormState extends State<LoginForm> with Validators {
               style: TextStyle(
                 fontWeight: FontWeight.normal,
                 color: Colors.white,
-                fontSize: 30,
+                fontSize: 25,
               ),
             ),
 
@@ -68,7 +68,7 @@ class _LoginFormState extends State<LoginForm> with Validators {
             ),
 
             const SizedBox(
-              height: 30,
+              height: 20,
             ),
             //senha
             TextFormField(
@@ -125,18 +125,16 @@ class _LoginFormState extends State<LoginForm> with Validators {
                   bool loginSuccess;
 
                   if (vulgo.contains("@")) {
-                    await auth.login(vulgo, password);
+                    await _authController.login(vulgo, password);
                     loginSuccess = true;
                   } else {
-                    try{
-                      await auth.login(vulgo, password);
+                    try {
+                      await _authController.login(vulgo, password);
                       loginSuccess = true;
-                    }catch (e){
+                    } catch (e) {
                       print("Erro ao fazer login: $e");
                       loginSuccess = false;
                     }
-                      
-                      
                   }
 
                   setState(() {

@@ -89,14 +89,100 @@ class _UserPageState extends State<UserPage> {
                               transition: Transition.leftToRight);
                         },
                         icon: const Icon(Icons.arrow_left),
+                        splashRadius: 0.5,
+                        tooltip: "Voltar",
+                        splashColor: null,
+                        focusColor: null,
+                        hoverColor: null,
                         iconSize: 60,
                       ),
                       IconButton(
                         onPressed: () {
                           //Aplicar funcionalidade de settings
-                          null;
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Configurações',
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 18)),
+                                  content: SizedBox(
+                                    height: 200,
+                                    width: 100,
+                                    child: ListView(
+                                      shrinkWrap: true,
+                                      itemExtent: 50,
+                                      children: [
+                                        ListTile(
+                                            title: const Text(
+                                                'Sobre o Aplicativo'),
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const AboutPage()));
+                                            }),
+                                        ListTile(
+                                            title: const Text('Fazer Logout'),
+                                            onTap: () {
+                                              showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return AlertDialog(
+                                                        title: const Text(
+                                                            'Logout'),
+                                                        content: const Text(
+                                                            'Tem certeza que deseja sair da sua conta?'),
+                                                        actions: [
+                                                          TextButton(
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                              },
+                                                              child: const Text(
+                                                                'Cancelar',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .black),
+                                                              )),
+                                                          TextButton(
+                                                              child: const Text(
+                                                                  'Sair'),
+                                                              onPressed:
+                                                                  () async {
+                                                                await authService
+                                                                    .logout()
+                                                                    .whenComplete(() => Get.offAll(
+                                                                        () =>
+                                                                            const HomePage(),
+                                                                        transition:
+                                                                            Transition.rightToLeftWithFade));
+                                                              })
+                                                        ]);
+                                                  });
+                                            })
+                                      ],
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text(
+                                          'Voltar',
+                                          style: TextStyle(color: Colors.black),
+                                        )),
+                                  ],
+                                );
+                              });
                         },
                         icon: const Icon(Icons.settings),
+                        tooltip: "Configurações",
                         iconSize: 35,
                       )
                     ],
@@ -107,6 +193,9 @@ class _UserPageState extends State<UserPage> {
                               radius: 50,
                               backgroundImage: null,
                               backgroundColor: Colors.grey.shade200,
+                              foregroundImage: NetworkImage(
+                                user!.pictureUrl!,
+                              ),
                             )
                           : const IconButton.filled(
                               onPressed: null,
@@ -301,8 +390,7 @@ class AboutPage extends StatelessWidget {
           Text('Sobre:'),
           SizedBox(height: 30),
           Text(
-              'Aplicativo de Geomídia para localização de pontos de interesse.'),
-          Text('Desenvolvido em 2024'),
+              "Desenvolvido em 2024 \n Aplicativo de Geomídia para localização de pontos de interesse."),
           SizedBox(height: 30),
           Text('Elenco de desenvolvedores:'),
           Text(

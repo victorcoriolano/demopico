@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -91,24 +92,23 @@ class DatabaseService {
     }
   }
 
-Future<void> atualizarContribuicoes() async {
-  final id = auth.currentUser?.uid ?? 'User not found';
-  final reference = firestore.collection("users");
+  Future<void> atualizarContribuicoes() async {
+    final id = auth.currentUser?.uid ?? 'User not found';
+    final reference = firestore.collection("users");
 
-  if (id != 'User not found') {
-    try {
-      await reference.doc(id).update({
-        'picosAdicionados': FieldValue.increment(1),
-      });
-      print('Contribuição atualizada com sucesso!');
-    } catch (e) {
-      print('Erro ao atualizar contribuições: $e');
+    if (id != 'User not found') {
+      try {
+        await reference.doc(id).update({
+          'picosAdicionados': FieldValue.increment(1),
+        });
+        print('Contribuição atualizada com sucesso!');
+      } catch (e) {
+        print('Erro ao atualizar contribuições: $e');
+      }
+    } else {
+      print('Usuário não encontrado.');
     }
-  } else {
-    print('Usuário não encontrado.');
   }
-}
-
 
 //////////////////////////
 ///////////////////////////
@@ -162,10 +162,7 @@ Future<void> atualizarContribuicoes() async {
           print(newCommunique);
           Map<String, dynamic> newPostMap = newCommunique.toJsonMap();
 
-          await firestore
-              .collection('communique')
-              .add(newPostMap)
-              .whenComplete(() => print('postado no firestore'));
+          await firestore.collection('communique').add(newPostMap);
         }
       }
     } on FirebaseException catch (e) {
@@ -174,7 +171,7 @@ Future<void> atualizarContribuicoes() async {
         print(e.message);
         print(e.stackTrace);
       }
-    } catch (e){
+    } catch (e) {
       print("Erro não esperado: $e");
     }
   }

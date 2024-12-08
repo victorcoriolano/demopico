@@ -103,7 +103,7 @@ class AuthService {
 ///
 ///
 
-  Future<bool> loginIn(String email, String password) async {
+  Future<bool> login(String email, String password) async {
     try {
       print("Tentou fazer login");
       final authResult = await auth.signInWithEmailAndPassword(
@@ -113,11 +113,11 @@ class AuthService {
       print(signedUser?.metadata);
       if (signedUser != null) {
         print(signedUser.uid);
-/*         UserM? firestoreUser =
+        UserM? firestoreUser =
             await dbService.getUserDetailsFromFirestore(signedUser.uid);
         auth.currentUser!.updateDisplayName(firestoreUser!.name);
         auth.currentUser!.updatePhotoURL(firestoreUser.pictureUrl);
-        print(firestoreUser.toString()); */
+        print(firestoreUser.toString());
         auth.userChanges();
         return true;
       }
@@ -127,11 +127,6 @@ class AuthService {
       print('erro no login authservice: $e');
       return false;
     }
-  }
-
-  Future<void> login(String email, String senha)async{
-    final auth = FirebaseAuth.instance;
-    await auth.signInWithEmailAndPassword(email: email, password: senha);
   }
 
   Future<void> logout() async {

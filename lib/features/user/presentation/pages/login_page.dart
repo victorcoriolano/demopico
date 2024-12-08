@@ -1,3 +1,5 @@
+import 'package:demopico/app/auth_wrapper.dart';
+import 'package:demopico/app/home_page.dart';
 import 'package:demopico/features/user/presentation/widgets/login_form_pc.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,22 +24,25 @@ class LoginPage extends StatelessWidget {
               ),
             ),
           ),
+          const Center(
+            child: LoginForm(),
+          ),
           Positioned(
-            top: 16,
-            left: 16,
+            top: 36,
+            left: 12,
             child: IconButton(
               icon: const Icon(
                 Icons.arrow_left,
                 color: Colors.white,
-                size: 40,
+                size: 50,
               ),
               onPressed: () {
-                Get.back(); // Navega para a tela anterior
+                Get.off(() => const AuthWrapper());
+                Get.to(() => const HomePage(),
+                    transition: Transition
+                        .leftToRightWithFade); // Navega para a tela anterior
               },
             ),
-          ),
-          const Center(
-            child: LoginForm(),
           ),
         ],
       ),
