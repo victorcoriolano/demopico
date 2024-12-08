@@ -29,18 +29,20 @@ class MyAppWidget extends StatelessWidget {
           create: (_) => serviceLocator<AuthService>(),
         ),
         StreamProvider(
-          create: (_) =>
-              serviceLocator<AuthService>().getAuthStateChanges(),
+          create: (_) => serviceLocator<AuthService>().getAuthStateChanges(),
           initialData: null,
         ),
         ChangeNotifierProvider(create: (_) => AddPicoControllerProvider()),
         ChangeNotifierProvider(create: (_) => MapControllerProvider()),
-        ChangeNotifierProvider(create: (_) => serviceLocator<SpotControllerProvider>()),
+        ChangeNotifierProvider(
+            create: (_) => serviceLocator<SpotControllerProvider>()),
         ChangeNotifierProvider(create: (_) => DatabaseProvider()),
-                ChangeNotifierProvider(create: (_) => SpotSaveController(serviceLocator<SaveSpot>())),
-        ChangeNotifierProvider(create: (_) => HistoricoController(HistoricoUseCase(HistoricoStorage()))),
+        ChangeNotifierProvider(
+            create: (_) => SpotSaveController(serviceLocator<SaveSpot>())),
+        ChangeNotifierProvider(
+            create: (_) =>
+                HistoricoController(HistoricoUseCase(HistoricoStorage()))),
         ChangeNotifierProvider(create: (_) => HubProvider()),
-        
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
