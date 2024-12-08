@@ -3,7 +3,6 @@ import 'package:demopico/features/user/data/repositories/auth_enum.dart';
 import 'package:demopico/features/user/data/repositories/sign_methods.dart';
 import 'package:demopico/features/user/data/services/database_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 
 class AuthService {
