@@ -125,6 +125,21 @@ class DatabaseService {
     }
   }
 
+  Future<void> updateUserImgInFirebase(String newImg) async {
+    print("OIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII ${newImg}");
+    String uid = auth.currentUser!.uid;
+    try {
+      await firestore
+          .collection('users')
+          .doc(uid)
+          .update({'pictureUrl': newImg});
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
 ////////////////
 ////////////////
 // Postar no hub
