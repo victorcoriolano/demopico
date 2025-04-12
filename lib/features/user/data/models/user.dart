@@ -63,7 +63,7 @@ class UserM {
       return 'String data was not reached.';
     }
   }
-
+  
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
