@@ -86,22 +86,6 @@ class HubService {
     }
   }
 
-//////////////////////////
-///////////////////////////
-/////////////////////////////
-  Future<void> updateUserBioInFirebase(String newBio) async {
-    String uid = auth.currentUser!.uid;
-    try {
-      await firestore
-          .collection('users')
-          .doc(uid)
-          .update({'description': newBio});
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    }
-  }
 
 ////////////////
 ////////////////
