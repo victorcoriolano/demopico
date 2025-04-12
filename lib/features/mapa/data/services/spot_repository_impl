@@ -1,0 +1,13 @@
+presentation/ui/spot_page (Instanciar SpotViewModel de forma dinâmica(dentro das funções) <- ! )
+
+provider faz a ponte
+
+presentation/controllers/ controllers (Instanciar SpotService de forma dinâmica(dentro das funções) <- ! )
+
+infrastructure/infra_services/ SpotService (Instanciar SpotUseCase de forma dinâmica(dentro das funções) <- ! )
+
+applciation/app_usecases/ SpotUseCase (Instanciar SpotRepositoryImpl de forma dinâmica(dentro das funções) <- ! )
+
+application/app_services/ SpotRepositoryImpl implements ISpotRepository
+
+domain/interfaces/ ISpotRepository 
