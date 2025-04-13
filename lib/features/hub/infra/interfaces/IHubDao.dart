@@ -1,7 +1,7 @@
 abstract class IHubDao{
-  Future<bool> create(Object obj);
+  Future<void> create(Object obj);
   Future<Object?> getObjById(String id);
   Future<List<Object>> getAllObj();
-  Future<bool> updateObj(Object obj);
-  Future<bool> deleteObj(String id);
+  Future<void> updateObj(Object obj);
+  Future<void> deleteObj(String id);
 }
