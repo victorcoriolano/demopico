@@ -3,10 +3,11 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:demopico/features/user/data/models/user.dart';
-import 'package:demopico/features/user/data/services/auth_service.dart';
+import 'package:demopico/features/user/data/services/userService.dart';
 import 'package:flutter/foundation.dart';
 
 class HubService {
+  final UserService userService = UserService();
   static HubService? _instance;
 
   static HubService get instance {
@@ -20,69 +21,39 @@ class HubService {
     return _firestore!;
   }
 
-  AuthService auth = AuthService();
-
-  Future<UserM?> getUserDetailsFromFirestore(String? uid) async {
-    try {
-      DocumentSnapshot userSnapshot =
-          await firestore.collection('users').doc(uid).get();
-
-      if (userSnapshot.exists) {
-        return UserM.fromDocument(userSnapshot);
-      } else {
-        return null;
-      }
-    } on FirebaseException catch (e) {
-      if (kDebugMode) {
-        print(e.code);
-        print(e.message);
-        print(e.stackTrace);
-      }
-    }
-    return null;
-  }
-
+  
 ////////////////
 ////////////////
 // Postar no hub
-  Future<void> postHubCommuniqueToFirebase(String text, type) async {
-    try {
-      String? uid = auth.currentUser?.uid;
-      String? name = auth.currentUser?.displayName;
-      print('$uid, $name');
-      if (name == null && uid == null) {
-        if (kDebugMode) {
-          print('erro em pegar name e uid do auth current user');
-        }
-      } else {
-        UserM? user = await getUserDetailsFromFirestore(uid);
-        print(user.toString());
-        if (user != null) {
-          Communique newCommunique = Communique(
-            id: Random(27345).toString(),
-            uid: uid!,
-            vulgo: user.name!,
-            pictureUrl: user.pictureUrl ?? '',
-            text: text,
-            timestamp: DateTime.now().toString(),
-            likeCount: 0,
-            likedBy: [],
-            type: type,
-          );
-          print(newCommunique);
-          Map<String, dynamic> newPostMap = newCommunique.toJsonMap();
-          print(newPostMap);
-          await firestore.collection('communique').add(newPostMap);
-        }
-      }
-    } on FirebaseException catch (e) {
+ Future<void> postHubCommuniqueToFirebase(String text, type) async {
+  try {
+    UserM? user = await userService.getCurrentUser();
+    if (user != null) {
+      Communique newCommunique = Communique(
+        id: Random(27345).toString(),
+        uid: user.id!,
+        vulgo: user.name!,
+        pictureUrl: user.pictureUrl ?? '',
+        text: text,
+        timestamp: DateTime.now().toString(),
+        likeCount: 0,
+        likedBy: [],
+        type: type,
+      );
+      await firestore.collection('communique').add(newCommunique.toJsonMap());
+    } else {
       if (kDebugMode) {
-        print(e.code);
-        print(e.message);
-        print(e.stackTrace);
+        print('Usuário não encontrado.');
       }
     }
+  } on FirebaseException catch (e) {
+    if (kDebugMode) {
+      print(e.code);
+      print(e.message);
+      print(e.stackTrace);
+    }
   }
+}
 // Deletar do hub
 
 // Pegar o hub
