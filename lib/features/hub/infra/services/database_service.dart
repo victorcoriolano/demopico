@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 
 class HubService {
   static HubService? _instance;
+
   static HubService get instance {
     _instance ??= HubService();
     return _instance!;
@@ -20,20 +21,7 @@ class HubService {
   }
 
   AuthService auth = AuthService();
-////////////////////////////
-////////////////////////////
-////////////////////////////
-  Future<void> addUserDetailsToFirestore({required UserM newUser}) async {
-    String uid = newUser.id!;
 
-    final mappedUser = newUser.toJsonMap();
-
-    await firestore.collection('users').doc(uid).set(mappedUser);
-  }
-
-/////////////////////////////////////////////////////
-/////////////////////////////////////////////////////
-/////////////////////////////////////////////////////
   Future<UserM?> getUserDetailsFromFirestore(String? uid) async {
     try {
       DocumentSnapshot userSnapshot =
@@ -53,39 +41,6 @@ class HubService {
     }
     return null;
   }
-
-//Serviço GET ID by USERNAME
-  Future<String?> getIDByVulgo(
-    String vulgo,
-  ) async {
-    QuerySnapshot idSnapshot = await firestore
-        .collection("users_email_vulgo")
-        .where('vulgo', isEqualTo: vulgo)
-        .get();
-    if (idSnapshot.docs.isNotEmpty) {
-      return idSnapshot.docs.first.id;
-    } else {
-      return null;
-    }
-  }
-
-  //Serviço GET EMAIL by ID
-  Future<String?> getEmailByID(String id) async {
-    DocumentSnapshot emailSnapshot =
-        await firestore.collection("user_email_vulgo").doc(id).get();
-    if (emailSnapshot.exists) {
-      Map<String, dynamic>? data =
-          emailSnapshot.data() as Map<String, dynamic>?;
-      if (data != null && data.containsKey('email')) {
-        return data['email'] as String;
-      } else {
-        return null;
-      }
-    } else {
-      return null;
-    }
-  }
-
 
 ////////////////
 ////////////////
