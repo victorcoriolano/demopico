@@ -1,9 +1,7 @@
-import 'package:demopico/features/hub/domain/entities/communique.dart';
-
 abstract class IHubDao{
-  Future<void> insertCommunique(Communique communique);
-  Future<Communique?> getCommuniqueById(String id);
-  Future<List<Communique>> getAllCommuniques();
-  Future<void> updateCommunique(Communique communique);
-  Future<void> deleteCommunique(String id);
+  Future<bool> create(Object obj);
+  Future<Object?> getObjById(String id);
+  Future<List<Object>> getAllObj();
+  Future<bool> updateObj(Object obj);
+  Future<bool> deleteObj(String id);
 }
