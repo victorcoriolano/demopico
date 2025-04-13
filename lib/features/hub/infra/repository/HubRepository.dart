@@ -1,11 +1,14 @@
+import 'package:demopico/features/hub/infra/daos/HubFirebaseDAO.dart';
 import 'package:demopico/features/hub/infra/interfaces/IHubRepository.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
 
 class HubRepository implements IHubRepository{
+  final HubFirebaseDAO dao;
+  HubRepository({required this.dao});
+
   @override
-  Future<void> createCommunique(Communique communique) {
-    // TODO: implement createCommunique
-    throw UnimplementedError();
+  Future<void> createCommunique(Communique communique) async {
+    await dao.create(communique);
   }
 
   @override
