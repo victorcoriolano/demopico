@@ -1,7 +1,5 @@
 import 'package:demopico/features/hub/infra/services/database_service.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
-import 'package:demopico/features/user/data/models/user.dart';
-import 'package:demopico/features/user/data/services/userService.dart';
 import 'package:flutter/material.dart';
 
 class HubProvider extends ChangeNotifier {
