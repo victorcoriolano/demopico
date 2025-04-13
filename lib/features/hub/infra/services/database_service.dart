@@ -2,16 +2,23 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
+import 'package:demopico/features/hub/infra/daos/HubFirebaseDAO.dart';
+import 'package:demopico/features/hub/infra/repository/HubRepository.dart';
 import 'package:demopico/features/user/data/models/user.dart';
 import 'package:demopico/features/user/data/services/userService.dart';
 import 'package:flutter/foundation.dart';
 
 class HubService {
-  final UserService userService = UserService();
+
+  final UserService userService;
+  final HubRepository hubRepository; 
+  
   static HubService? _instance;
 
+  HubService({required this.userService, required this.hubRepository});
+
   static HubService get instance {
-    _instance ??= HubService();
+    _instance ??= HubService(userService: UserService(), hubRepository: HubRepository(dao: HubFirebaseDAO()));
     return _instance!;
   }
 
@@ -40,7 +47,7 @@ class HubService {
         likedBy: [],
         type: type,
       );
-      await firestore.collection('communique').add(newCommunique.toJsonMap());
+      await hubRepository.createCommunique(newCommunique);
     } else {
       if (kDebugMode) {
         print('Usuário não encontrado.');
