@@ -1,4 +1,4 @@
-import 'package:demopico/features/hub/infra/repository/IHubRepository.dart';
+import 'package:demopico/features/hub/infra/interfaces/IHubRepository.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
 
 class HubRepository implements IHubRepository{
