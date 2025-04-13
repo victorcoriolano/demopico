@@ -1,5 +1,5 @@
 import 'package:demopico/app/home_page.dart';
-import 'package:demopico/features/hub/infra/providers/database_notifier_provider.dart';
+import 'package:demopico/features/hub/presentation/providers/database_notifier_provider.dart';
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
 import 'package:demopico/features/mapa/data/services/comment_data_service.dart';
 import 'package:demopico/features/mapa/data/services/historico_storage.dart';
