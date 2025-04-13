@@ -1,14 +1,25 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:demopico/features/hub/infra/interfaces/IHubDao.dart';
 
-class HubFireabseDAO implements IHubDao{
+class HubFirebaseDAO implements IHubDao{
+
+  final FirebaseFirestore firestore;
+  HubFirebaseDAO({FirebaseFirestore? firestore})
+      : firestore = firestore ?? FirebaseFirestore.instance;
+  
   @override
-  Future<bool> create(Object obj) {
-    // TODO: implement create
-    throw UnimplementedError();
+  Future<void> create(Object obj) async {
+    // Fazendo o cast 
+    if (obj is Communique) {
+      await firestore.collection('communique').add(obj.toJsonMap());
+    } else {
+      throw Exception('Objeto inválido, espera-se um Communique.');
+    }
   }
 
   @override
-  Future<bool> deleteObj(String id) {
+  Future<void> deleteObj(String id) {
     // TODO: implement deleteObj
     throw UnimplementedError();
   }
@@ -26,7 +37,7 @@ class HubFireabseDAO implements IHubDao{
   }
 
   @override
-  Future<bool> updateObj(Object obj) {
+  Future<void> updateObj(Object obj) {
     // TODO: implement updateObj
     throw UnimplementedError();
   }
