@@ -1,4 +1,4 @@
-import 'package:demopico/features/hub/infra/providers/database_notifier_provider.dart';
+import 'package:demopico/features/hub/presentation/providers/database_notifier_provider.dart';
 import 'package:demopico/features/hub/presentation/widgets/communique_tile.dart';
 import 'package:demopico/features/hub/presentation/widgets/input_box.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
