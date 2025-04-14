@@ -9,7 +9,7 @@ class AvaliarSpot {
   Future<Pico> executar(double novaNota, Pico pico) async {
     double novaMedia;
     int novoTotalAvaliacoes;
-
+    
     if (pico.numeroAvaliacoes == 0) {
       // Primeira avaliação
       novaMedia = novaNota;
@@ -24,7 +24,7 @@ class AvaliarSpot {
     // Atualizar no repositório
     pico.nota = novaMedia;
     pico.numeroAvaliacoes = novoTotalAvaliacoes;
-    
+
     await notaRepository.salvarNota(pico);
     return pico;
   }
