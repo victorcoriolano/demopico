@@ -11,7 +11,7 @@ class DenunciaUseCase {
       await denunciarService.salvarDenuncia(denuncia);
 
     }catch (e){
-      print("Erro aou denunciar: $e");
+      print("Erro ao denunciar: $e");
     }
   }
 }

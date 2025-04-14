@@ -20,7 +20,8 @@ class AddPicoControllerProvider extends ChangeNotifier with Validators {
   File? fotoPico;
   double lat = 0.0;
   double long = 0.0;
-List<File?> images = [];
+  List<File?> images = [];
+
   final pegadorImage = ImagePicker();
 
   Future<void> selecionarImag() async {
@@ -244,8 +245,4 @@ List<File?> images = [];
     notifyListeners();
     
   }
-
-
-
-
 }
