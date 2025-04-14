@@ -31,12 +31,6 @@ class HubFirebaseDAO implements IHubDao{
   }
 
   @override
-  Future<Object?> getObjById(String id) {
-    // TODO: implement getObjById
-    throw UnimplementedError();
-  }
-
-  @override
   Future<void> updateObj(Object obj) {
     // TODO: implement updateObj
     throw UnimplementedError();
