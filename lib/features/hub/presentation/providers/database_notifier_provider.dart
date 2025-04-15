@@ -1,4 +1,4 @@
-import 'package:demopico/features/hub/infra/services/database_service.dart';
+import 'package:demopico/features/hub/infra/services/HubService.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:flutter/material.dart';
 
@@ -10,11 +10,6 @@ class HubProvider extends ChangeNotifier {
   void notify() {
     notifyListeners();
   }
-
-
-//codiigo de doido que n acho q serve pra nada
-//    Future<UserM?> retrieveUserProfileData(String uid) =>
-  //    _userService.getUserDetailsFromFirestore(uid);
 
 
   List<Communique> _allCommuniques = [];

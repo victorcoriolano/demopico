@@ -4,6 +4,7 @@ import 'package:demopico/features/hub/domain/entities/communique.dart';
 
 class HubRepository implements IHubRepository{
   final HubFirebaseDAO dao;
+
   HubRepository({required this.dao});
 
   @override
@@ -22,13 +23,7 @@ class HubRepository implements IHubRepository{
     // TODO: implement listCommuniques
     throw UnimplementedError();
   }
-
-  @override
-  Future<Communique?> readCommunique(String id) {
-    // TODO: implement readCommunique
-    throw UnimplementedError();
-  }
-
+  
   @override
   Future<void> updateCommunique(Communique communique) {
     // TODO: implement updateCommunique
