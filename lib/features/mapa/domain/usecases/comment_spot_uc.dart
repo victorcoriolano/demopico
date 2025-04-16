@@ -1,4 +1,4 @@
-import 'package:demopico/features/mapa/data/services/comment_data_service.dart';
+import 'package:demopico/features/mapa/data/repository/comment_repository.dart';
 import 'package:demopico/features/mapa/domain/entities/comment.dart';
 
 class CommentSpotUC {

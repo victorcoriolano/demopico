@@ -1,21 +1,22 @@
+import 'package:demopico/features/mapa/data/models/pico_model.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
-import 'package:demopico/features/mapa/domain/use%20cases/avaliar_spot.dart';
-import 'package:demopico/features/mapa/domain/use%20cases/create_spot.dart';
-import 'package:demopico/features/mapa/domain/use%20cases/show_all_pico.dart';
+import 'package:demopico/features/mapa/domain/usecases/avaliar_spot_uc.dart';
+import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
+import 'package:demopico/features/mapa/domain/usecases/list_spot_uc.dart';
 import 'package:demopico/features/mapa/presentation/widgets/marker_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class SpotControllerProvider extends ChangeNotifier {
-  final CreateSpot createSpotUseCase;
-  final ShowAllPico showAllPicoUseCase;
-  final AvaliarSpot avaliarUseCase;
+  final CreateSpotUc createSpotUseCase;
+  final ListSpotUc showAllPicoUseCase;
+  final AvaliarSpotUc avaliarUseCase;
 
   Set<Marker> markers = {}; // Conjunto vazio de markers
   List<Pico> spots = [];
   List<Pico> picosPesquisados = [];
-  List<Pico>? myPicos;
+  List<Pico> myPicos = [];
   Marker? markerEncontrado;
   List<double> avaliacoes = [];
   final user = FirebaseAuth.instance.currentUser;
@@ -26,13 +27,10 @@ class SpotControllerProvider extends ChangeNotifier {
   // Método para criar um pico e adicionar o marker
   Future<void> createSpot(Pico pico, BuildContext context) async {
     try {
-      // Gera o marker assíncrono
-/*       final marker = await picoMarker(pico, context);
-      markers.add(marker);
-      notifyListeners(); */
+
 
       // Salva o pico no backend
-      await createSpotUseCase.createSpot(pico);
+      await createSpotUseCase.createSpot(pico as PicoModel);
       if(context.mounted){
         await showAllPico(context).whenComplete(() => print("Pico postado"));
         
@@ -165,7 +163,7 @@ class SpotControllerProvider extends ChangeNotifier {
           markers.clear();
     final markerFutures = picosFiltrados.map((pico) => picoMarker(pico, context));
     markers = (await Future.wait(markerFutures)).toSet();
-    print(markers.firstOrNull ?? "Nwnhum marker encontrado");
+    print(markers.firstOrNull ?? "Nenhum marker encontrado");
 
     notifyListeners();
     }
@@ -175,7 +173,7 @@ class SpotControllerProvider extends ChangeNotifier {
   Future<void> avaliarPico(Pico pico, double novaNota) async {
     try {
       // Use case para avaliar e obter o pico atualizado
-      final picoAtualizado = await avaliarUseCase.executar(novaNota, pico);
+      final picoAtualizado = await avaliarUseCase.executar(novaNota, pico as PicoModel);
 
       // Encontrar o índice do pico a ser atualizado
       final index =

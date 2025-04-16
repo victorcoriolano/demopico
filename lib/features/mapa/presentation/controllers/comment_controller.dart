@@ -1,5 +1,5 @@
 import 'package:demopico/features/mapa/domain/entities/comment.dart';
-import 'package:demopico/features/mapa/domain/use%20cases/comment_spot.dart';
+import 'package:demopico/features/mapa/domain/usecases/comment_spot_uc.dart';
 import 'package:flutter/material.dart';
 
 class CommentController extends ChangeNotifier {

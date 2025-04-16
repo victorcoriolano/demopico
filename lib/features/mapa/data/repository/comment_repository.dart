@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/mapa/domain/entities/comment.dart';
-import 'package:demopico/features/mapa/domain/interfaces/comment_interface.dart';
+import 'package:demopico/features/mapa/domain/interfaces/i_comment_repository.dart';
 
-class CommentRepository implements CommentRepositoryInterface{
+class CommentRepository implements ICommentRepository{
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override

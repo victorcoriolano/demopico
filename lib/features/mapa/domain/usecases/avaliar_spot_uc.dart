@@ -1,12 +1,12 @@
-import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
-import 'package:demopico/features/mapa/domain/interfaces/spot_repository.dart';
+import 'package:demopico/features/mapa/domain/interfaces/i_spot_repository.dart';
+import 'package:demopico/features/mapa/data/models/pico_model.dart';
 
-class AvaliarSpot {
-  final SpotRepository notaRepository;
+class AvaliarSpotUc {
+  final ISpotRepository notaRepository;
 
-  AvaliarSpot(this.notaRepository);
+  AvaliarSpotUc(this.notaRepository);
 
-  Future<Pico> executar(double novaNota, Pico pico) async {
+  Future<PicoModel> executar(double novaNota, PicoModel pico) async {
     double novaMedia;
     int novoTotalAvaliacoes;
     

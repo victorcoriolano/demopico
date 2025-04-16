@@ -1,8 +1,8 @@
-import 'package:demopico/features/mapa/domain/use%20cases/historico_use_case.dart';
+import 'package:demopico/features/mapa/domain/usecases/save_history_spot_uc.dart';
 import 'package:flutter/material.dart';
 
 class HistoricoController extends ChangeNotifier {
-  final HistoricoUseCase useCase;
+  final SaveHistoryUc useCase;
 
   List<Map<String, dynamic>> _historico = [];
   List<Map<String, dynamic>> get historico => _historico;
@@ -10,20 +10,18 @@ class HistoricoController extends ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  HistoricoController(this.useCase ){
+  HistoricoController(this.useCase) {
     carregarHistoricoInicial();
   }
 
-void carregarHistoricoInicial() async {
-  _isLoading = true;
-  notifyListeners();
+  void carregarHistoricoInicial() async {
+    _isLoading = true;
+    notifyListeners();
 
-  _historico = await useCase.execultaCarregar() ?? [];
-  _isLoading = false;
-  notifyListeners();
-}
-
-
+    _historico = await useCase.execultaCarregar() ?? [];
+    _isLoading = false;
+    notifyListeners();
+  }
 
   Future<void> salvarNoHistorico(String name, double lat, double long) async {
     _isLoading = true;
@@ -35,37 +33,38 @@ void carregarHistoricoInicial() async {
     notifyListeners();
   }
 
-
-Future<void> limparHistorico() async {
-  _isLoading = true;
-  notifyListeners();
-
-  await useCase.execultaLimpar();
-
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    _historico.clear();
-    _isLoading = false;
+  Future<void> limparHistorico() async {
+    _isLoading = true;
     notifyListeners();
-  });
-}
 
+    await useCase.execultaLimpar();
 
-
-  Future<void> apagarItem(String nomeItem) async {
-  _isLoading = true;
-  notifyListeners();
-
-  final sucesso = await useCase.execultaApagar(nomeItem);
-  if (sucesso) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _historico.removeWhere((item) => item['nome'] == nomeItem);
+      _historico.clear();
       _isLoading = false;
       notifyListeners();
     });
-  } else {
-    _isLoading = false;
-    notifyListeners();
   }
-}
 
+  Future<void> apagarItem(String nomeItem) async {
+    _isLoading = true;
+    notifyListeners();
+
+    final sucesso = await useCase.execultaApagar(nomeItem);
+    if (sucesso) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _historico.removeWhere((item) => item['nome'] == nomeItem);
+        _isLoading = false;
+        notifyListeners();
+      });
+    } else {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 }

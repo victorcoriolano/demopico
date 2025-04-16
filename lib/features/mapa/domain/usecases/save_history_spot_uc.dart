@@ -1,8 +1,8 @@
-import 'package:demopico/features/mapa/domain/interfaces/historico_interface.dart';
+import 'package:demopico/features/mapa/domain/interfaces/i_history_repository.dart';
 
-class HistoricoUseCase {
-  final HistoricoInterface historicoInterface;
-  HistoricoUseCase(this.historicoInterface);
+class SaveHistoryUc {
+  final IHistoryRepository historicoInterface;
+  SaveHistoryUc(this.historicoInterface);
 
   Future<void> execultaSalvar(String name, double lat, double long) async {
     try{

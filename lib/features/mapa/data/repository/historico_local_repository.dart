@@ -1,7 +1,7 @@
-import 'package:demopico/features/mapa/domain/interfaces/historico_interface.dart';
+import 'package:demopico/features/mapa/domain/interfaces/i_history_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class HistoricoStorage implements HistoricoInterface {
+class HistoricoLocalRepository implements IHistoryRepository {
   static const String _historicoKey = 'historico_picos';
 
   @override

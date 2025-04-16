@@ -1,11 +1,13 @@
 import 'package:demopico/core/common/inject_dependencies.dart';
 import 'package:demopico/core/common/widgets/denunciar_widget.dart';
 import 'package:demopico/core/domain/entities/denuncia_model.dart';
+import 'package:demopico/features/mapa/data/models/pico_model.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_save_controller.dart';
 import 'package:demopico/features/mapa/presentation/pages/comment_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/save_pico_page.dart';
+import 'package:demopico/features/user/data/models/user.dart';
 import 'package:demopico/features/user/presentation/pages/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -100,7 +102,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
     ]);
   }
 
-  final user = FirebaseAuth.instance.currentUser;
+  final user = UserM();
 
   @override
   Widget build(BuildContext context) {
@@ -497,7 +499,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                             action: SnackBarAction(
                                                 label: "Ver pico salvo",
                                                 onPressed: () {
-                                                  Navigator.push(context, MaterialPageRoute(builder: (_) => SavePicoPage(userID: user!.uid)));
+                                                  Navigator.push(context, MaterialPageRoute(builder: (_) => SavePicoPage(userID: user.id ?? "",)));
                                                 }),
                                           ),
                                         );
@@ -526,7 +528,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                               IconButton(
                                 tooltip: "Denunciar Pico",
                                   onPressed: () {
-                                    denunciarPico(context,user!.uid, widget.pico.urlIdPico!);
+                                    denunciarPico(context,user!.id, widget.pico.urlIdPico!);
                                   },
                                   icon: const Icon(Icons.flag),
                                   iconSize: 35),

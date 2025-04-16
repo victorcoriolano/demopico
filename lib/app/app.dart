@@ -4,17 +4,12 @@ import 'package:demopico/features/hub/infra/repository/HubRepository.dart';
 import 'package:demopico/features/hub/infra/services/HubService.dart';
 import 'package:demopico/features/hub/presentation/providers/database_notifier_provider.dart';
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
-import 'package:demopico/features/mapa/data/services/comment_data_service.dart';
-import 'package:demopico/features/mapa/data/services/historico_storage.dart';
-import 'package:demopico/features/mapa/domain/use%20cases/comment_spot.dart';
-import 'package:demopico/features/mapa/domain/use%20cases/historico_use_case.dart';
-import 'package:demopico/features/mapa/domain/use%20cases/save_spot.dart';
+import 'package:demopico/features/mapa/data/repository/comment_repository.dart';
+import 'package:demopico/features/mapa/domain/usecases/comment_spot_uc.dart';
 import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/comment_controller.dart';
-import 'package:demopico/features/mapa/presentation/controllers/historico_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
-import 'package:demopico/features/mapa/presentation/controllers/spot_save_controller.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
 import 'package:demopico/features/user/data/services/auth_service.dart';
 import 'package:demopico/features/user/data/services/userService.dart';
@@ -44,11 +39,8 @@ class MyAppWidget extends StatelessWidget {
         ChangeNotifierProvider(
             create: (_) => serviceLocator<SpotControllerProvider>()),
         ChangeNotifierProvider(create: (_) => DatabaseProvider()),
-        ChangeNotifierProvider(
-            create: (_) => SpotSaveController(serviceLocator<SaveSpot>())),
-        ChangeNotifierProvider(
-            create: (_) =>
-                HistoricoController(HistoricoUseCase(HistoricoStorage()))),
+        
+        
         ChangeNotifierProvider(create: (_) => HubProvider(hubService: HubService(userService: UserService(), hubRepository: HubRepository(dao: HubFirebaseDAO())))),
         ChangeNotifierProvider(
             create: (_) =>

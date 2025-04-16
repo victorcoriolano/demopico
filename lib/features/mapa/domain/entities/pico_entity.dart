@@ -35,45 +35,5 @@ class Pico {
     this.urlIdPico,
     required this.picoName,
   });
-
-    factory Pico.fromJson(Map<String, dynamic> json) {
-    return Pico(
-        imgUrl: json['imageUrl'] as List<dynamic>,
-        tipoPico: json['tipo'] as String,
-        modalidade: json['modalidade'] as String,
-        nota: (json['nota'] as num).toDouble(), // vai dar boum
-        numeroAvaliacoes: json['avaliacoes'] as int,
-        long: (json['longitude'] as num).toDouble(), // tem q dar boaum
-        lat: (json['latitude'] as num).toDouble(), //  precisa dar buams
-        description: json['description'] as String,
-        atributos: json['atributos'] as Map<String, dynamic>,
-        fotoPico: null, // vou inserir a imagem diretamente no código usando o image.network
-        obstaculos: json['obstaculos'] as List<dynamic>,
-        utilidades: json['utilidades'] as List<dynamic>,
-        userCreator: json['criador'],
-        urlIdPico: null,
-        picoName: json['name'] as String,
-    );
-  }
-
-  /// Converte um objeto Pico em um Map (Firestore ou JSON)
-  Map<String, dynamic> toMap() {
-    return {
-      'urlIdPico': urlIdPico,
-      'modalidade': modalidade,
-      'tipoPico': tipoPico,
-      'picoName': picoName,
-      'imgUrl': imgUrl,
-      'description': description,
-      'long': long,
-      'lat': lat,
-      'userCreator': userCreator,
-      'utilidades': utilidades,
-      'atributos': atributos,
-      'obstaculos': obstaculos,
-      'nota': nota,
-      'numeroAvaliacoes': numeroAvaliacoes,
-    };
-  }
 }
 
