@@ -1,10 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:demopico/features/mapa/data/repository/firebase_repository_map.dart';
-import 'package:demopico/features/mapa/domain/interfaces/i_spot_repository.dart';
-import 'package:demopico/features/mapa/domain/usecases/avaliar_spot_uc.dart';
-import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
-import 'package:demopico/features/mapa/domain/usecases/save_spot_uc.dart';
-import 'package:demopico/features/mapa/domain/usecases/list_spot_uc.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_save_controller.dart';
 import 'package:demopico/features/user/data/services/auth_service.dart';
@@ -41,12 +35,12 @@ Future<void> init() async {
   //injeção de dependencia para o mapa
   //registrando o service do mapa no get it
 
-
   //registrando o controller e injetoando dependencia
-  serviceLocator.registerLazySingleton(
-      () => SpotControllerProvider(serviceLocator(), serviceLocator(), serviceLocator()));
+  serviceLocator.registerLazySingleton(() => SpotControllerProvider(
+      serviceLocator(), serviceLocator(), serviceLocator()));
 
-  serviceLocator.registerLazySingleton(() => SpotSaveController(serviceLocator()));
+  serviceLocator
+      .registerLazySingleton(() => SpotSaveController(serviceLocator()));
 
   //instancia da entidade pico que será criada
 }

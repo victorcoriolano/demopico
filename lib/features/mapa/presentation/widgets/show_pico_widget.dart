@@ -1,18 +1,14 @@
 import 'package:demopico/core/common/inject_dependencies.dart';
 import 'package:demopico/core/common/widgets/denunciar_widget.dart';
 import 'package:demopico/core/domain/entities/denuncia_model.dart';
-import 'package:demopico/features/mapa/data/models/pico_model.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_save_controller.dart';
 import 'package:demopico/features/mapa/presentation/pages/comment_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/save_pico_page.dart';
 import 'package:demopico/features/user/data/models/user.dart';
-import 'package:demopico/features/user/presentation/pages/login_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:get/get.dart';
 
 import 'package:provider/provider.dart';
 //import 'package:flutter/src/rendering/box.dart';
@@ -176,7 +172,8 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: List.generate(images.length, (index) {
                                 return Container(
-                                  margin: EdgeInsets.symmetric(horizontal: 5),
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 5),
                                   child: AnimatedContainer(
                                     duration: const Duration(milliseconds: 300),
                                     margin: const EdgeInsets.symmetric(
@@ -246,7 +243,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                         width: 40, // Largura da imagem
                                         height: 40, // Altura da imagem
                                       )
-                                    : Icon(
+                                    : const Icon(
                                         Icons
                                             .error, // Ícone padrão caso o obstáculo não exista no Map
                                         color: Colors.red,
@@ -296,7 +293,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Container(
-                                        margin: EdgeInsets.only(top: 5),
+                                        margin: const EdgeInsets.only(top: 5),
                                         child: Text(
                                           ' ${widget.pico.numeroAvaliacoes.toString()} avaliações',
                                           style: const TextStyle(
@@ -404,7 +401,10 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                   horizontal: 50, vertical: 10),
                             ),
                             onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(builder: (_) => CommentPage(picoId: widget.pico.urlIdPico!,)));
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (_) => CommentPage(
+                                        picoId: widget.pico.urlIdPico!,
+                                      )));
                             },
                             child: const Text(
                               "ABRIR DISCUSSÃO",
@@ -478,7 +478,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                       ),
                       // Ícones à direita (salvar, sinalizar, etc.)
                       Container(
-                        margin: EdgeInsets.only(top: 15),
+                        margin: const EdgeInsets.only(top: 15),
                         child: Align(
                           alignment: Alignment.center,
                           child: Row(
@@ -487,38 +487,29 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                               IconButton(
                                 onPressed: () async {
                                   print("clicou em salvar");
-                                  if (user != null) {
-                                    final salvar =
-                                        provider.savePico(widget.pico, user!);
-                                    if (await salvar) {
-                                      if (context.mounted) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: const Text("Pico Salvo"),
-                                            action: SnackBarAction(
-                                                label: "Ver pico salvo",
-                                                onPressed: () {
-                                                  Navigator.push(context, MaterialPageRoute(builder: (_) => SavePicoPage(userID: user.id ?? "",)));
-                                                }),
-                                          ),
-                                        );
-                                      }
+                                  final salvar =
+                                      provider.savePico(widget.pico, user);
+                                  if (await salvar) {
+                                    if (context.mounted) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: const Text("Pico Salvo"),
+                                          action: SnackBarAction(
+                                              label: "Ver pico salvo",
+                                              onPressed: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (_) =>
+                                                            SavePicoPage(
+                                                              userID:
+                                                                  user.id ?? "",
+                                                            )));
+                                              }),
+                                        ),
+                                      );
                                     }
-                                  } else {
-                                    print("user nulo");
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        duration: const Duration(seconds: 5),
-                                        content: const Text(
-                                            "Usuário não logado! Faça login para salvar pico"),
-                                        action: SnackBarAction(
-                                            label: "fazer login",
-                                            onPressed: () {
-                                              Get.to(() => const LoginPage());
-                                            }),
-                                      ),
-                                    );
                                   }
                                 },
                                 icon: const Icon(Icons.bookmark_border),
@@ -526,9 +517,10 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                 iconSize: 35,
                               ),
                               IconButton(
-                                tooltip: "Denunciar Pico",
+                                  tooltip: "Denunciar Pico",
                                   onPressed: () {
-                                    denunciarPico(context,user!.id, widget.pico.urlIdPico!);
+                                    denunciarPico(context, user.id,
+                                        widget.pico.urlIdPico!);
                                   },
                                   icon: const Icon(Icons.flag),
                                   iconSize: 35),
@@ -622,10 +614,11 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
       return "Horrivel!";
     }
   }
-  
-  Future<void> denunciarPico(BuildContext context, String? urlIdPico, String idPico) {
+
+  Future<void> denunciarPico(
+      BuildContext context, String? urlIdPico, String idPico) {
     return showDialog(
-      context: context, 
+      context: context,
       builder: (context) => DenunciaDialog(
         idUser: urlIdPico, // Substituir pelo ID do usuário logado
         typePublication: TypePublication.pico, // Tipo de publicação
