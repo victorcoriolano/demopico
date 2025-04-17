@@ -1,4 +1,4 @@
-import 'package:demopico/features/hub/infra/services/HubService.dart';
+import 'package:demopico/features/hub/infra/services/hubService.dart';
 
 class PostarComunicado {
   HubService hubService;
