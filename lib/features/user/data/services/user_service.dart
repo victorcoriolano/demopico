@@ -1,16 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demopico/features/external/datasources/firestore.dart';
 import 'package:demopico/features/user/data/models/user.dart';
 import 'package:demopico/features/user/data/services/auth_service.dart';
 import 'package:flutter/foundation.dart';
 
 class UserService {
-  FirebaseFirestore? _firestore;
-  FirebaseFirestore get firestore {
-    _firestore ??= FirebaseFirestore.instance;
-    return _firestore!;
+
+  static UserService? _userService;
+  final Firestore firestore;
+
+  //falta transforme vc como isntancia unica 
+  final AuthService auth = AuthService();
+
+  UserService get getInstance{
+    _userService ??= UserService(firestore: firestore); 
+    return _userService!;
   }
 
-  final AuthService auth = AuthService();
+  UserService({required this.firestore});
+
 
   Future<UserM?> getCurrentUser() async {
     String? uid = auth.currentUser?.uid;
@@ -21,7 +29,7 @@ class UserService {
   Future<UserM?> getUserDetailsFromFirestore(String? uid) async {
     try {
       DocumentSnapshot userSnapshot =
-          await firestore.collection('users').doc(uid).get();
+          await firestore.getInstance.collection('users').doc(uid).get();
 
       if (userSnapshot.exists) {
         return UserM.fromDocument(userSnapshot);

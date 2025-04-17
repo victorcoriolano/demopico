@@ -2,29 +2,24 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/external/datasources/firestore.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
+import 'package:demopico/features/hub/infra/interfaces/i_hub_repository.dart';
 import 'package:demopico/features/hub/infra/repository/hub_repository.dart';
 import 'package:demopico/features/user/data/models/user.dart';
-import 'package:demopico/features/user/data/services/userService.dart';
+import 'package:demopico/features/user/data/services/user_service.dart';
 import 'package:flutter/foundation.dart';
 
 class HubService {
 
+  static HubService? _hubService;
   final UserService userService;
-  final HubRepository hubRepository; 
-  
-  static HubService? _instance;
+  final IHubRepository iHubRepository; 
 
-  HubService({required this.userService, required this.hubRepository});
 
-  static HubService get instance {
-    _instance ??= HubService(userService: UserService(), hubRepository: HubRepository(firestore: Firestore()));
-    return _instance!;
-  }
+  HubService({required this.userService, required this.iHubRepository});
 
-  FirebaseFirestore? _firestore;
-  FirebaseFirestore get firestore {
-    _firestore ??= FirebaseFirestore.instance;
-    return _firestore!;
+   HubService get getInstance {
+    _hubService ??= HubService(userService: userService, iHubRepository: HubRepository(firestore: Firestore()));
+    return _hubService!;
   }
 
   
@@ -46,7 +41,7 @@ class HubService {
         likedBy: [],
         type: type,
       );
-      await hubRepository.createCommunique(newCommunique);
+      await iHubRepository.createCommunique(newCommunique);
     } else {
       if (kDebugMode) {
         print('Usuário não encontrado.');
@@ -63,17 +58,11 @@ class HubService {
 // Deletar do hub
 
 // Pegar o hub
-  Future<List<Communique>> getAllCommuniques() async {
+  Future<List<Communique?>> getAllCommuniques() async {
     try {
-      QuerySnapshot querySnapshot = await firestore
-          .collection('communique')
-          .orderBy('timestamp', descending: true)
-          .get();
-
-      return querySnapshot.docs
-          .map((doc) => Communique.fromDocument(doc))
-          .toList();
+      return  await iHubRepository.listCommuniques();
     } catch (e) {
+      Exception("Não foi possível pegar todos comunicados");
       if (kDebugMode) {
         print(e);
       }
