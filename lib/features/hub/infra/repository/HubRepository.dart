@@ -8,8 +8,8 @@ class HubRepository implements IHubRepository{
   HubRepository({required this.dao});
 
   @override
-  Future<void> createCommunique(Communique communique) async {
-    await dao.create(communique);
+  Future<void> createCommunique(Object obj) async {
+    await dao.create(obj);
   }
 
   @override
@@ -19,15 +19,18 @@ class HubRepository implements IHubRepository{
   }
 
   @override
-  Future<List<Communique>> listCommuniques() {
-    // TODO: implement listCommuniques
-    throw UnimplementedError();
-  }
-  
-  @override
-  Future<void> updateCommunique(Communique communique) {
+  Future<List<Communique>?> listCommuniques() async {
+    Future<List<Communique>?> lista  = await dao.getAllObj() as Future<List<Communique>?>;
+    return lista;
+    }
+    
+      @override
+      Future<void> updateCommunique(Object obj) {
     // TODO: implement updateCommunique
     throw UnimplementedError();
+      }
+    
+   
   }
+  
 
-}

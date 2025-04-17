@@ -1,4 +1,4 @@
-import 'package:demopico/features/hub/infra/services/HubService.dart';
+import 'package:demopico/features/hub/infra/services/hubService.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +10,6 @@ class HubProvider extends ChangeNotifier {
   void notify() {
     notifyListeners();
   }
-
 
   List<Communique> _allCommuniques = [];
 

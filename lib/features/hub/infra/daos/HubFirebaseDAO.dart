@@ -25,10 +25,21 @@ class HubFirebaseDAO implements IHubDao{
   }
 
   @override
-  Future<List<Object>> getAllObj() {
-    // TODO: implement getAllObj
-    throw UnimplementedError();
-  }
+  Future<List<Object>> getAllObj() async {
+    try{
+
+       QuerySnapshot querySnapshot = await firestore
+          .collection('communique')
+          .orderBy('timestamp', descending: true)
+          .get();
+
+      return querySnapshot.docs
+          .map((doc) => Communique.fromDocument(doc))
+          .toList();
+    }catch(e){
+      throw Error();
+    }
+        }
 
   @override
   Future<void> updateObj(Object obj) {
