@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/external/datasources/firestore.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
-import 'package:demopico/features/hub/infra/repository/HubRepository.dart';
+import 'package:demopico/features/hub/infra/repository/hub_repository.dart';
 import 'package:demopico/features/user/data/models/user.dart';
 import 'package:demopico/features/user/data/services/userService.dart';
 import 'package:flutter/foundation.dart';
