@@ -4,8 +4,9 @@ import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:flutter/material.dart';
 
 class HubProvider extends ChangeNotifier {
-   PostarComunicado postarComunicado; 
-    ListarComunicado listarComunicado;
+  PostarComunicado postarComunicado; 
+  ListarComunicado listarComunicado;
+
   HubProvider({required this.postarComunicado, required this.listarComunicado});
 
   void notify() {

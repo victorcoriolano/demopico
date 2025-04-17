@@ -7,8 +7,8 @@ class HubRepository implements IHubRepository{
   
   static HubRepository? _hubRepository;
   final Firestore firestore;
-  HubRepository({required this.firestore});
 
+  HubRepository({required this.firestore});
   
    HubRepository  get getInstance {
     _hubRepository ??= HubRepository(firestore: firestore);
