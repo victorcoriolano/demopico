@@ -1,36 +1,46 @@
-import 'package:demopico/features/hub/infra/daos/HubFirebaseDAO.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demopico/features/external/datasources/firestore.dart';
 import 'package:demopico/features/hub/infra/interfaces/IHubRepository.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
 
 class HubRepository implements IHubRepository{
-  final HubFirebaseDAO dao;
-
-  HubRepository({required this.dao});
-
-  @override
-  Future<void> createCommunique(Object obj) async {
-    await dao.create(obj);
-  }
+ 
+    final Firestore firestore;
+    HubRepository({required this.firestore});
 
   @override
-  Future<void> deleteCommunique(String id) {
-    // TODO: implement deleteCommunique
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<Communique>?> listCommuniques() async {
-    Future<List<Communique>?> lista  = await dao.getAllObj() as Future<List<Communique>?>;
-    return lista;
+  Future<void> createCommunique(Communique communique) async {
+      try{
+        firestore.getInstance.collection('communique').add(communique.toJsonMap());
+      }
+     catch(e) {
+      throw Exception('Error ao criar comunicado');
     }
-    
+  }
       @override
-      Future<void> updateCommunique(Object obj) {
-    // TODO: implement updateCommunique
+      Future<void> deleteCommunique(String id) {
+    // TODO: implement deleteCommunique
     throw UnimplementedError();
       }
     
-   
-  }
-  
+      @override
+      Future<List<Communique?>> listCommuniques()async {
+        try{
+         QuerySnapshot querySnapshot = await firestore.getInstance
+          .collection('communique')
+          .orderBy('timestamp', descending: true)
+          .get();
 
+      return querySnapshot.docs.map((doc) => Communique.fromDocument(doc)).toList();
+        }catch(e){
+          throw Exception('Não foi possível listar os comunicados');
+        }
+      }
+    
+      @override
+      Future<void> updateCommunique(Communique communique) {
+    // TODO: implement updateCommunique
+    throw UnimplementedError();
+      }
+  }
+    
