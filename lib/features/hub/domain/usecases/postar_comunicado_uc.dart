@@ -6,7 +6,7 @@ class PostarComunicado {
 
   Future<void> postar(text, type) async {
     if (text.isEmpty || type.isEmpty) {
-      throw Exception('Texto e tipo são obrigatórios');
+      throw Exception('Texto e tipo são obrigatórios') as FormatException;
     }
     await hubService.postHubCommuniqueToFirebase(text, type);
   }
