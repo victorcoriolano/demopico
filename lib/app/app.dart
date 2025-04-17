@@ -1,6 +1,8 @@
 import 'package:demopico/app/home_page.dart';
-import 'package:demopico/features/hub/infra/daos/HubFirebaseDAO.dart';
-import 'package:demopico/features/hub/infra/repository/HubRepository.dart';
+import 'package:demopico/features/external/datasources/firestore.dart';
+import 'package:demopico/features/hub/domain/usecases/listar_comunicados_uc.dart';
+import 'package:demopico/features/hub/domain/usecases/postar_comunicado_uc.dart';
+import 'package:demopico/features/hub/infra/repository/hub_repository.dart';
 import 'package:demopico/features/hub/infra/services/hub_service.dart';
 import 'package:demopico/features/hub/presentation/providers/hub_provider.dart';
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
@@ -17,7 +19,7 @@ import 'package:demopico/features/mapa/presentation/controllers/spot_controller.
 import 'package:demopico/features/mapa/presentation/controllers/spot_save_controller.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
 import 'package:demopico/features/user/data/services/auth_service.dart';
-import 'package:demopico/features/user/data/services/userService.dart';
+import 'package:demopico/features/user/data/services/user_service.dart';
 import 'package:demopico/features/user/presentation/controllers/database_notifier_provider.dart';
 import 'package:demopico/core/common/inject_dependencies.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +51,21 @@ class MyAppWidget extends StatelessWidget {
         ChangeNotifierProvider(
             create: (_) =>
                 HistoricoController(HistoricoUseCase(HistoricoStorage()))),
-        ChangeNotifierProvider(create: (_) => HubProvider(hubService: HubService(userService: UserService(), hubRepository: HubRepository(dao: HubFirebaseDAO())))),
+        ChangeNotifierProvider(
+          create: (_) => HubProvider(
+            postarComunicado: PostarComunicado(
+              hubService: HubService(
+                userService: UserService(firestore: Firestore()),
+                iHubRepository: HubRepository(firestore: Firestore()),
+              ),
+            ),
+            listarComunicado: ListarComunicado(
+                hubService: HubService(
+              userService: UserService(firestore: Firestore()),
+              iHubRepository: HubRepository(firestore: Firestore()),
+            )),
+          ),
+        ),
         ChangeNotifierProvider(
             create: (_) =>
                 CommentController(CommentSpotUC(CommentRepository()))),
