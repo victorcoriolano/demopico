@@ -4,10 +4,17 @@ import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:demopico/features/hub/infra/interfaces/i_hub_repository.dart';
 
 class HubRepository implements IHubRepository{
- 
-    final Firestore firestore;
-    HubRepository({required this.firestore});
+  
+  static HubRepository? _hubRepository;
+  final Firestore firestore;
+  HubRepository({required this.firestore});
 
+  
+   HubRepository  get getInstance {
+    _hubRepository ??= HubRepository(firestore: firestore);
+    return _hubRepository!;
+  }
+  
   @override
   Future<void> createCommunique(Communique communique) async {
       try{
