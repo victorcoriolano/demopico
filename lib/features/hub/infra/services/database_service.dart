@@ -62,6 +62,8 @@ class HubService {
 // Pegar o hub
   Future<List<Communique>> getAllCommuniques() async {
     try {
+      Firestore firelibrary = Firestore();
+      FirebaseFirestore firestore = firelibrary.firestore;
       QuerySnapshot querySnapshot = await firestore
           .collection('communique')
           .orderBy('timestamp', descending: true)

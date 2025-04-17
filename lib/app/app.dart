@@ -1,7 +1,7 @@
 import 'package:demopico/app/home_page.dart';
 import 'package:demopico/features/hub/infra/daos/HubFirebaseDAO.dart';
 import 'package:demopico/features/hub/infra/repository/HubRepository.dart';
-import 'package:demopico/features/hub/infra/services/HubService.dart';
+import 'package:demopico/features/hub/infra/services/hubService.dart';
 import 'package:demopico/features/hub/presentation/providers/database_notifier_provider.dart';
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
 import 'package:demopico/features/mapa/data/services/comment_data_service.dart';
