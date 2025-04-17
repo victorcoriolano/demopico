@@ -1,7 +1,9 @@
-import 'package:demopico/features/hub/domain/usecases/ListarComunicados_uc.dart';
-import 'package:demopico/features/hub/domain/usecases/postarComunicado_uc.dart';
+
+
 import 'package:demopico/features/hub/domain/entities/communique.dart';
-import 'package:flutter/material.dart';
+import 'package:demopico/features/hub/domain/usecases/listar_comunicados_uc.dart';
+import 'package:demopico/features/hub/domain/usecases/postar_comunicado_uc.dart';
+import 'package:flutter/foundation.dart';
 
 class HubProvider extends ChangeNotifier {
   PostarComunicado postarComunicado; 

@@ -1,20 +1,19 @@
 import 'package:demopico/app/home_page.dart';
-import 'package:demopico/features/hub/infra/daos/HubFirebaseDAO.dart';
-import 'package:demopico/features/hub/infra/repository/HubRepository.dart';
-import 'package:demopico/features/hub/infra/services/hubService.dart';
-import 'package:demopico/features/hub/presentation/providers/database_notifier_provider.dart';
+
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
-import 'package:demopico/features/mapa/data/repository/comment_repository.dart';
-import 'package:demopico/features/mapa/domain/usecases/comment_spot_uc.dart';
+
+import 'package:demopico/features/mapa/data/repository/firebase_storage_save_file_repository.dart';
+import 'package:demopico/features/mapa/data/repository/image_picker_repository.dart';
+import 'package:demopico/features/mapa/domain/usecases/pick_image_uc.dart';
+import 'package:demopico/features/mapa/domain/usecases/save_image_uc.dart';
 import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
-import 'package:demopico/features/mapa/presentation/controllers/comment_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
 import 'package:demopico/features/user/data/services/auth_service.dart';
-import 'package:demopico/features/user/data/services/userService.dart';
 import 'package:demopico/features/user/presentation/controllers/database_notifier_provider.dart';
 import 'package:demopico/core/common/inject_dependencies.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -34,17 +33,11 @@ class MyAppWidget extends StatelessWidget {
           create: (_) => serviceLocator<AuthService>().getAuthStateChanges(),
           initialData: null,
         ),
-        ChangeNotifierProvider(create: (_) => AddPicoControllerProvider()),
+        ChangeNotifierProvider(create: (_) => AddPicoProvider(PickImageUC(ImagePickerRepository()), SaveImageUC(FiresbaseStorageSaveImageRepository(FirebaseStorage.instance)))),  
         ChangeNotifierProvider(create: (_) => MapControllerProvider()),
         ChangeNotifierProvider(
             create: (_) => serviceLocator<SpotControllerProvider>()),
         ChangeNotifierProvider(create: (_) => DatabaseProvider()),
-        
-        
-        ChangeNotifierProvider(create: (_) => HubProvider(hubService: HubService(userService: UserService(), hubRepository: HubRepository(dao: HubFirebaseDAO())))),
-        ChangeNotifierProvider(
-            create: (_) =>
-                CommentController(CommentSpotUC(CommentRepository()))),
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
