@@ -1,10 +1,10 @@
-import 'package:demopico/features/hub/infra/services/database_service.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:demopico/features/user/data/models/user.dart';
+import 'package:demopico/features/user/data/services/database_service.dart';
 import 'package:flutter/material.dart';
 
 class HubProvider extends ChangeNotifier {
-  final _db = HubService();
+  final _db = DatabaseService();
 
   void notify() {
     notifyListeners();
