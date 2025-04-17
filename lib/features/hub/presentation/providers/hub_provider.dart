@@ -6,9 +6,8 @@ import 'package:demopico/features/hub/domain/usecases/postar_comunicado_uc.dart'
 import 'package:flutter/foundation.dart';
 
 class HubProvider extends ChangeNotifier {
-  PostarComunicado postarComunicado; 
+  PostarComunicado postarComunicado;
   ListarComunicado listarComunicado;
-
   HubProvider({required this.postarComunicado, required this.listarComunicado});
 
   void notify() {

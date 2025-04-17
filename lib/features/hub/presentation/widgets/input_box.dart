@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -97,16 +98,6 @@ class _InputBoxState extends State<InputBox> {
                 : const Color.fromARGB(255, 0, 0, 0),
             iconSize: 45,
             onPressed: chooseAction,
-            /*() async {
-              print('tapped');
-              // choose post type
-              setState(() {
-                isTapped = !isTapped;
-                chooseAction;
-              });
-              await Future.delayed(const Duration(milliseconds: 300));
-              return;
-            }*/
           ),
         ),
         Positioned(
@@ -117,14 +108,29 @@ class _InputBoxState extends State<InputBox> {
               iconSize: 30,
               onPressed: () async {
                 try {
-                  await sendAction(postController.text)
-                      .then((value) => value ? null : throw Exception());
+                  await sendAction(postController.text).then(
+                      (value) => value == true ? null : throw Exception());
                   postController.clear();
                 } on Exception catch (_) {
-                  Get.snackbar('Erro de Usuário',
-                      'Por favor, entre para fazer uma publicação',
-                      backgroundColor: const Color.fromARGB(255, 122, 49, 49),
-                      snackPosition: SnackPosition.BOTTOM);
+                  if (Exception is FirebaseAuthException) {
+                    Get.snackbar('Erro de Usuário',
+                        'Por favor, entre para fazer uma publicação',
+                        backgroundColor: const Color.fromARGB(255, 122, 49, 49),
+                        snackPosition: SnackPosition.BOTTOM);
+                  }
+                  if (Exception is FormatException) {
+                    Get.snackbar('Erro de Formato',
+                        'O texto e o tipo da publicação são obrigatórios.',
+                        backgroundColor: const Color.fromARGB(255, 122, 49, 49),
+                        snackPosition: SnackPosition.BOTTOM);
+                  }
+                  if (Exception is FirebaseException ||
+                      Exception is UnimplementedError) {
+                    Get.snackbar('Erro Inesperado',
+                        'Um erro inesperado aconteceu. Por favor, tente novamente.',
+                        backgroundColor: const Color.fromARGB(255, 122, 49, 49),
+                        snackPosition: SnackPosition.BOTTOM);
+                  }
                 }
                 await Future.delayed(const Duration(milliseconds: 300));
                 return;

@@ -5,7 +5,7 @@ class ListarComunicado{
   HubService hubService;
   ListarComunicado({required this.hubService});
 
-  Future<List<Communique?>> listar() async{
+  Future<List<Communique>> listar() async{
    return await hubService.getInstance.getAllCommuniques();
   }
 }

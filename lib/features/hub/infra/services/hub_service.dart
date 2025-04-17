@@ -22,9 +22,6 @@ class HubService {
     return _hubService!;
   }
 
-  
-////////////////
-////////////////
 // Postar no hub
  Future<void> postHubCommuniqueToFirebase(String text, type) async {
   try {
@@ -58,7 +55,7 @@ class HubService {
 // Deletar do hub
 
 // Pegar o hub
-  Future<List<Communique?>> getAllCommuniques() async {
+  Future<List<Communique>> getAllCommuniques() async {
     try {
       return  await iHubRepository.listCommuniques();
     } catch (e) {

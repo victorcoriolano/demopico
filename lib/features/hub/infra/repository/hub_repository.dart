@@ -5,7 +5,7 @@ import 'package:demopico/features/hub/infra/interfaces/i_hub_repository.dart';
 
 class HubRepository implements IHubRepository{
   
-  static HubRepository? _hubRepository;
+  HubRepository? _hubRepository;
   final Firestore firestore;
 
   HubRepository({required this.firestore});
@@ -31,7 +31,7 @@ class HubRepository implements IHubRepository{
       }
     
       @override
-      Future<List<Communique?>> listCommuniques()async {
+      Future<List<Communique>> listCommuniques()async {
         try{
          QuerySnapshot querySnapshot = await firestore.getInstance
           .collection('communique')

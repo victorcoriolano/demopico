@@ -29,10 +29,7 @@ class _HubPageState extends State<HubPage> {
     try {
       print('entrou no trypost');
       print(authService.currentUser!.displayName);
-      await db
-          .postHubCommunique(text, _chooseType())
-          .whenComplete(() => print('terminou o await'));
-      print('depois do await');
+      await db.postHubCommunique(text, _chooseType());
       return true;
     } catch (e) {
       print(e);
