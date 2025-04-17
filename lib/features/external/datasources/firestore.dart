@@ -7,4 +7,5 @@ class Firestore {
     _firestore ??= FirebaseFirestore.instance;
     return _firestore!;
   }
-}
+
+} 
