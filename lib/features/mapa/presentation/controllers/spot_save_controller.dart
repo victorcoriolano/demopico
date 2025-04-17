@@ -8,52 +8,49 @@ class SpotSaveController extends ChangeNotifier {
   SpotSaveController(this.saveSpot);
 
   List<Pico> picosSalvos = [];
-  Future<bool> savePico(Pico pico, UserM user)async{
-    final salvar  = await saveSpot.saveSpot(pico, user);
-    if(salvar){
+  Future<bool> savePico(Pico pico, UserM user) async {
+    final salvar = await saveSpot.saveSpot(pico, user);
+    if (salvar) {
       picosSalvos.add(pico);
       notifyListeners();
       return true;
-    }else{
+    } else {
       print("Não foi possivel salvar");
       notifyListeners();
       return false;
     }
-    
-    
   }
 
-  Future<bool> getPicosSalvos(String idUser)async{
+  Future<bool> getPicosSalvos(String idUser) async {
     try {
-  picosSalvos = await saveSpot.listPicoUC(idUser);
-  print("Picos salvos: $picosSalvos");
-  if(picosSalvos.isNotEmpty){
-      
-  return true;
-  }else{
-    print("Nenhum pico encontrado para ester user");
-    return false;
+      picosSalvos = await saveSpot.listPicoUC(idUser);
+      print("Picos salvos: $picosSalvos");
+      if (picosSalvos.isNotEmpty) {
+        return true;
+      } else {
+        print("Nenhum pico encontrado para ester user");
+        return false;
+      }
+    } on Exception catch (e) {
+      // TODO
+      print("Erro ao pegar picos salvos: $e");
+      return false;
+    } catch (e) {
+      print("Erro sla: $e");
+      return false;
+    }
   }
 
-} on Exception catch (e) {
-  // TODO
-  print("Erro ao pegar picos salvos: $e");
-  return false;
-}catch (e){
-  print("Erro sla: $e");
-  return false;
-}
-  }
-
-  Future<bool> deleteSave(String namePico, String userId) async{
-    try{
+  Future<bool> deleteSave(String namePico, String userId) async {
+    try {
       await saveSpot.deleteSaveSpot(userId, namePico);
-      final index = picosSalvos.indexWhere((picoSalvo) => picoSalvo.picoName == namePico);
+      final index =
+          picosSalvos.indexWhere((picoSalvo) => picoSalvo.picoName == namePico);
       picosSalvos.removeAt(index);
       notifyListeners();
       print("object deleted sucess");
       return true;
-    }catch (e){
+    } catch (e) {
       print("Erro ao del: $e");
       return false;
     }

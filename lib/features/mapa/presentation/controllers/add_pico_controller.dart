@@ -1,12 +1,21 @@
 import 'dart:io';
 
+import 'package:demopico/features/mapa/domain/usecases/pick_image_uc.dart';
+import 'package:demopico/features/mapa/domain/usecases/save_image_uc.dart';
 import 'package:demopico/features/user/presentation/widgets/form_validator.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
-class AddPicoControllerProvider extends ChangeNotifier with Validators {
+class AddPicoProvider extends ChangeNotifier with Validators {
+  //instanciando casos de uso
+  final PickImageUC pickImageUC;
+  final SaveImageUC saveImageUC;
+
+  AddPicoProvider(this.pickImageUC, this.saveImageUC);
+
+  bool loadingImagens = false;
   Map<String, int> atributos = {};
   List<String> obstaculos = [];
   String nomePico = '';
@@ -43,7 +52,7 @@ class AddPicoControllerProvider extends ChangeNotifier with Validators {
       await testeSubindoImg(images);
     }
   } on Exception catch (e) {
-       print(" to no catch");
+      print(" to no catch");
     print("Erro ao subir imagem $e");
   }
 }

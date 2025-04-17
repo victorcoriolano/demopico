@@ -17,7 +17,7 @@ class _QuartaTelaState extends State<QuartaTela>  {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AddPicoControllerProvider>(
+    return Consumer<AddPicoProvider>(
       builder: (context, provider, child) => 
       Scaffold(
         backgroundColor: Colors.grey[200],

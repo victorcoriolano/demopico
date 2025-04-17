@@ -54,7 +54,7 @@ class _ContainerTelasState extends State<ContainerTelas> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AddPicoControllerProvider>(
+    return Consumer<AddPicoProvider>(
       builder: (context, provider, child) => Scaffold(
         body: Stack(// colocando stack para funcionar direito o positionaded
             children: [

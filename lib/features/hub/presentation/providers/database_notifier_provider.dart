@@ -1,12 +1,13 @@
+import 'package:demopico/features/hub/domain/usecases/ListarComunicados_uc.dart';
 import 'package:demopico/features/hub/domain/usecases/postarComunicado_uc.dart';
-import 'package:demopico/features/hub/infra/services/hubService.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:flutter/material.dart';
 
 class HubProvider extends ChangeNotifier {
-   PostarComunicado postarComunicado; 
+  PostarComunicado postarComunicado; 
+  ListarComunicado listarComunicado;
 
-  HubProvider({required this.postarComunicado, required this.});
+  HubProvider({required this.postarComunicado, required this.listarComunicado});
 
   void notify() {
     notifyListeners();
@@ -22,7 +23,7 @@ class HubProvider extends ChangeNotifier {
   }
 
   Future<void> getAllCommuniques() async {
-    final allCommuniquesFromDb = await hubService.getAllCommuniques();
+    final allCommuniquesFromDb = await listarComunicado.getAllCommuniques();
     _allCommuniques = allCommuniquesFromDb;
     notifyListeners();
   }

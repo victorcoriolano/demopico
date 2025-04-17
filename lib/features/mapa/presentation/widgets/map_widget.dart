@@ -24,7 +24,7 @@ class MapWidgetState extends State<MapWidget> {
         Provider.of<SpotControllerProvider>(context, listen: true);
     final mapProvider =
         Provider.of<MapControllerProvider>(context, listen: true);
-    final providerAdd = Provider.of<AddPicoControllerProvider>(context);
+    final providerAdd = Provider.of<AddPicoProvider>(context);
     // consome os dados do provider para manter a tela atualizada
     return Scaffold(
       key: scaffoldKey,

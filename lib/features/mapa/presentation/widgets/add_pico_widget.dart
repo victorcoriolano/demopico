@@ -17,7 +17,7 @@ class AddPicoWidgetState extends State<AddPicoWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AddPicoControllerProvider>(
+    return Consumer<AddPicoProvider>(
       builder: (context, provider, child) => Stack(
         children: [
           if (_isExpanded)

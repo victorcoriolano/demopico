@@ -53,7 +53,7 @@ class TerceiraTela extends StatelessWidget {
       "assets/images/icons/bowl.png", // Bowl zinho
     ];
 
-    return Consumer<AddPicoControllerProvider>(
+    return Consumer<AddPicoProvider>(
       builder: (context, provider, child) => Scaffold(
         // Cor de fundo da tela
         backgroundColor: Colors.grey[200],

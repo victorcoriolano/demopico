@@ -13,7 +13,7 @@ class EspecificidadeScreen extends StatefulWidget {
 class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<AddPicoControllerProvider>(
+    return Consumer<AddPicoProvider>(
       builder: (context, value, child) => SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
