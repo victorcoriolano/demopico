@@ -1,8 +1,7 @@
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demopico/features/external/datasources/firestore.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
-import 'package:demopico/features/hub/infra/daos/HubFirebaseDAO.dart';
 import 'package:demopico/features/hub/infra/repository/HubRepository.dart';
 import 'package:demopico/features/user/data/models/user.dart';
 import 'package:demopico/features/user/data/services/userService.dart';
@@ -18,7 +17,7 @@ class HubService {
   HubService({required this.userService, required this.hubRepository});
 
   static HubService get instance {
-    _instance ??= HubService(userService: UserService(), hubRepository: HubRepository(dao: HubFirebaseDAO()));
+    _instance ??= HubService(userService: UserService(), hubRepository: HubRepository(firestore: Firestore()));
     return _instance!;
   }
 
