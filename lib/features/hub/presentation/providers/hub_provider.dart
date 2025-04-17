@@ -25,8 +25,8 @@ class HubProvider extends ChangeNotifier {
   }
 
   Future<void> getAllCommuniques() async {
-    final allCommuniquesFromDb = await listarComunicado.getAllCommuniques();
-    _allCommuniques = allCommuniquesFromDb;
+    final allCommuniquesFromDb = await listarComunicado.listar();
+    _allCommuniques = allCommuniquesFromDb.nonNulls.toList();
     notifyListeners();
   }
 }
