@@ -30,8 +30,10 @@ dependencies:
   flutter_rating_bar: ^4.0.0
   widget_to_marker: ^1.0.6
   shared_preferences: ^2.3.3
+  
 
 dev_dependencies:
+  mockito: ^5.4.4
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
@@ -40,6 +42,7 @@ dev_dependencies:
   flutter_driver:
       sdk: flutter
   test: ^1.25.7
+  build_runner: ^2.4.13
 
 flutter:
     uses-material-design: true
