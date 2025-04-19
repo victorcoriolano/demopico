@@ -1,5 +1,4 @@
-import 'package:demopico/features/mapa/domain/interfaces/i_spot_repository.dart';
-import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
+
 import 'package:test/test.dart';
 
 void main() {
