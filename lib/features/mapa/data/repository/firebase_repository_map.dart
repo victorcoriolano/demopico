@@ -47,22 +47,22 @@ class FirebaseRepositoryMap implements ISpotRepository {
   }
 
   @override
-  Future<void> salvarNota(Pico pico) async {
+  Future<PicoModel> salvarNota(Pico pico) async {
     try {
-      final snapshot = await _firebaseFirestore
+      final snapshotRef = _firebaseFirestore
           .collection('spots')
-          .where('name', isEqualTo: pico.picoName)
-          .limit(1)
-          .get();
-
-      if (snapshot.docs.isNotEmpty) {
-        final picoReference = snapshot.docs.first.id;
-        await _firebaseFirestore.collection('spots').doc(picoReference).update({
+          .doc(pico.id);
+          
+      final snapshot = await snapshotRef.get();
+      if (snapshot.exists) {
+        await snapshot.reference.update({
           'nota': pico.nota,
           'avaliacoes': pico.numeroAvaliacoes,
         });
+        final newData = await snapshotRef.get();
+        return PicoModel.fromJson(newData.data()!, newData.id);
       } else {
-        throw Exception("Piquerson: '${pico.picoName}' não encontrado.");
+        throw Exception("Piquerson: '${pico.picoName}' não encontrado no banco de dados.");
       }
     } catch (e) {
       print("Erro ao salvar a nota: $e");

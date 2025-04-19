@@ -67,4 +67,37 @@ class PicoModel extends Pico {
     if (identical(this, other)) return true;
     return false;
   }
+
+  PicoModel copyWith({
+    List<String>? imgUrls,
+    String? tipoPico,
+    String? modalidade,
+    double? nota,
+    int? numeroAvaliacoes,
+    double? long,
+    double? lat,
+    String? description,
+    Map<String, int>? atributos,
+    List<String>? obstaculos,
+    List<String>? utilidades,
+    String? userCreator,
+    String? picoName,
+  }){
+    return PicoModel(
+      imgUrls: imgUrls ?? this.imgUrls,
+      tipoPico: tipoPico ?? this.tipoPico,
+      modalidade: modalidade ?? this.modalidade,
+      nota: nota ?? this.nota,
+      numeroAvaliacoes: numeroAvaliacoes ?? this.numeroAvaliacoes,
+      long: long ?? this.long,
+      lat: lat ?? this.lat,
+      description: description ?? this.description,
+      atributos: atributos ?? this.atributos,
+      obstaculos: obstaculos ?? this.obstaculos,
+      utilidades: utilidades ?? this.utilidades,
+      userCreator: userCreator ?? this.userCreator,
+      picoName: picoName ?? this.picoName,
+      id: id,
+    );
+  }
 }

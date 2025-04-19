@@ -1,5 +1,7 @@
 
 
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/mapa/data/models/pico_model.dart';
 import 'package:demopico/features/mapa/data/repository/firebase_repository_map.dart';
@@ -8,10 +10,6 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import 'spot_repository_test.mocks.dart';
-
-
-
-
 
 
 //cirando anotação para criar o mock
@@ -54,6 +52,7 @@ void main() {
       userCreator: "user123",
       picoName: "Pico Legal",
     );
+    final testPicoNotaNova = testPico.copyWith(nota: 5, numeroAvaliacoes: 11);
     
     //setando os mocks para utilizar nos testes
     setUp((){
@@ -97,7 +96,45 @@ void main() {
       final resul = await repositoryMap.showAllPico();
       expect(resul, isA<List<PicoModel>>());
     });
+
+    test("deve atualizar a nota do pico", () async {
+      when(mockFirestore.collection("spots")).thenReturn(mockCollection);
+      when(mockCollection.doc('1')).thenReturn(mockDocRef);
+      when(mockDocRef.get(any)).thenAnswer((_) async => mockDocSnapshot);
+      when(mockDocSnapshot.data()).thenReturn(testPicoNotaNova.toJson());
+      when(mockDocSnapshot.exists).thenReturn(true);
+      when(mockDocSnapshot.reference).thenReturn(mockDocRef);
+      when(mockDocRef.update({"nota": 5.0, 'avaliacoes': 11})).thenAnswer((_) async {});
+
+      final result = await repositoryMap.salvarNota(testPicoNotaNova);
+      expect(result, isA<PicoModel>());
+      expect(result.nota, 5.0);
+      expect(result.numeroAvaliacoes, 11);
+    });
+
+    
+  test("deve deletar um pico", () async{
+    when(mockFirestore.collection("spots")).thenReturn(mockCollection);
+    when(mockCollection.doc('1')).thenReturn(mockDocRef);
+    when(mockDocRef.delete()).thenAnswer((_) async {});
+    when(mockDocRef.get(any)).thenAnswer((_) async {
+      final snapshotDeleted = MockDocumentSnapshot();
+      when(snapshotDeleted.exists).thenReturn(false);
+      return snapshotDeleted;
+    });
+
+    await repositoryMap.deleteSpot("1");
+    
+    verify(mockDocRef.delete()).called(1);
+    expect(mockDocRef.delete(), completes);
+
+    //verificando se o pico foi deletado
+    final snapshotDel = await mockDocRef.get();
+    expect(snapshotDel.exists, isFalse);
   });
+  });
+
+
   
 }
 
