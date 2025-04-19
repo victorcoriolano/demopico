@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/mapa/data/models/pico_model.dart';
-import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_save_spot_repository.dart';
 import 'package:demopico/features/user/data/models/user.dart';
 
@@ -17,13 +16,12 @@ class FirebaseSaveSpotRepository implements ISaveSpotRepository {
           .doc("$userId-$picoName")
           .delete();
     } catch (e) {
-      // TODO
-      throw Exception(e);
+      throw Exception("Erro ao deletar o pico favoritado: $e");
     }
   }
 
   @override
-  Future<List<Pico>> listSavePico(String idUser) async {
+  Future<List<PicoModel>> listSavePico(String idUser) async {
     try {
       final snapshotListPico = await _firebaseFirestore
           .collection("picosFavoritados")
@@ -38,7 +36,7 @@ class FirebaseSaveSpotRepository implements ISaveSpotRepository {
               final spotRef = doc['spotRef'] as DocumentReference;
               final spotSnapshot = await spotRef.get();
               return PicoModel.fromJson(
-                  spotSnapshot.data() as Map<String, dynamic>);
+                  spotSnapshot.data() as Map<String, dynamic>, spotSnapshot.id);
             },
           ),
         );

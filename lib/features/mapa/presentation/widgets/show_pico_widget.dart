@@ -59,7 +59,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
 
   void _loadPicos() {
     setState(() {
-      images = widget.pico.imgUrl.cast<String>(); //url pico
+      images = widget.pico.imgUrls.cast<String>(); //url pico
     });
   }
 
@@ -403,7 +403,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (_) => CommentPage(
-                                        picoId: widget.pico.urlIdPico!,
+                                        picoId: widget.pico.id,
                                       )));
                             },
                             child: const Text(
@@ -520,7 +520,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                   tooltip: "Denunciar Pico",
                                   onPressed: () {
                                     denunciarPico(context, user.id,
-                                        widget.pico.urlIdPico!);
+                                        widget.pico.id);
                                   },
                                   icon: const Icon(Icons.flag),
                                   iconSize: 35),

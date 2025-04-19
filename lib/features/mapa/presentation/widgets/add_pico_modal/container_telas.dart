@@ -123,7 +123,8 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                   dataUser.atualizarContribuicoes();
                                   if (provider.validarFormulario())  {
                                   final pico = Pico(
-                                      imgUrl: provider.urlImage,
+                                      id: '',// passando o id vazio para o id ser gerado automaticamente
+                                      imgUrls: provider.urlImage,
                                       modalidade: provider.selectedModalidade,
                                       tipoPico: provider.tipo,
                                       nota: 0.0,
@@ -132,7 +133,6 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                       lat: widget.lat,
                                       description: provider.descricao,
                                       atributos: provider.atributos,
-                                      fotoPico: null,
                                       obstaculos: provider.obstaculos,
                                       utilidades: provider.utilidades,
                                       userCreator: user!.displayName ?? user!.email,
@@ -163,7 +163,8 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                 // função para criar o pico
                                 if (provider.validarFormulario())  {
                                   final pico = Pico(
-                                      imgUrl: provider.urlImage,
+                                      id: '',// passando o id vazio para o id ser gerado automaticamente
+                                      imgUrls: provider.urlImage,
                                       modalidade: provider.selectedModalidade,
                                       tipoPico: provider.tipo,
                                       nota: 0.0,
@@ -172,10 +173,9 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                       lat: widget.lat,
                                       description: provider.descricao,
                                       atributos: provider.atributos,
-                                      fotoPico: null,
                                       obstaculos: provider.obstaculos,
                                       utilidades: provider.utilidades,
-                                      userCreator: "Anônimo",
+                                      userCreator: "Não identificado",
                                       picoName: provider.nomePico);
                                   try  {
                                     await serviceLocator<SpotControllerProvider>()

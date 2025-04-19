@@ -38,7 +38,7 @@ Future<Marker> picoMarker(Pico? spot, BuildContext context, ) async {
 
 void showPicoModal(BuildContext context, Pico pico) {
   print('Chamando modal para: ${pico.picoName}');
-  print('Imagem url: ${pico.imgUrl}');
+  print('Imagem url: ${pico.imgUrls}');
   print("Contexto: $context");
   // salvando no histórico 
   final provider = context.read<HistoricoController>();
