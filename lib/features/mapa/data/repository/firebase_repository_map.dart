@@ -65,7 +65,6 @@ class FirebaseRepositoryMap implements ISpotRepository {
         throw Exception("Piquerson: '${pico.picoName}' não encontrado no banco de dados.");
       }
     } catch (e) {
-      print("Erro ao salvar a nota: $e");
       throw Exception("Erro inesperado: $e");
     }
   }

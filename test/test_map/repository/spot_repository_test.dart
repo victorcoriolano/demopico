@@ -16,6 +16,7 @@ import 'spot_repository_test.mocks.dart';
   MockSpec<QuerySnapshot<Map<String, dynamic>>>(),
   MockSpec<QueryDocumentSnapshot<Map<String, dynamic>>>(),
 ])
+
 void main() {
   group("Deve testar a interação com o firebase ", () {
     //variáveis mockadas para utilizar nos testes

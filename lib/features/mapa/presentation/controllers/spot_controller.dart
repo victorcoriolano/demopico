@@ -132,7 +132,7 @@ class SpotControllerProvider extends ChangeNotifier {
     } else {
       picosFiltrados = spots.where((pico) {
         return utilidadesSelecionadas
-            .any((utilidade) => pico.utilidades?.contains(utilidade) ?? false);
+            .any((utilidade) => pico.utilidades.contains(utilidade) ?? false);
       }).toList();
     }
 

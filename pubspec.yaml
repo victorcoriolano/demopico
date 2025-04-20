@@ -43,6 +43,7 @@ dev_dependencies:
       sdk: flutter
   test: ^1.25.7
   build_runner: ^2.4.13
+  mocktail: ^1.0.4
 
 flutter:
     uses-material-design: true

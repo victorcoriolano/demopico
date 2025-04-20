@@ -5,17 +5,18 @@ class CreateSpotUc {
   final ISpotRepository spotRepository;
 
   CreateSpotUc(this.spotRepository);
-  Future<bool> createSpot(PicoModel pico) async {
+
+  Future<PicoModel?> createSpot(PicoModel pico) async {
     try {
-      await spotRepository.createSpot(pico);
-      return true;
+      final picoCriado = await spotRepository.createSpot(pico);
+      if(picoCriado != null){
+        return picoCriado;
+      }
+      throw Exception("Pico retornou null");
     } on Exception catch (e) {
-      print('Erro ao criar pico: $e');
-      return false;
+      rethrow;
     } catch (e) {
-      print('Erro ao criar desconhecido: $e');
-      return false;
+      throw Exception("Erro inesperado criar piquerson: $e ");
     }
   }
-
 }
