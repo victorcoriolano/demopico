@@ -1,5 +1,5 @@
 import 'package:demopico/features/mapa/domain/interfaces/i_spot_repository.dart';
-import 'package:demopico/features/mapa/data/models/pico_model.dart';
+import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 
 class CreateSpotUc {
   final ISpotRepository spotRepository;
@@ -7,6 +7,8 @@ class CreateSpotUc {
   CreateSpotUc(this.spotRepository);
 
   Future<PicoModel?> createSpot(PicoModel pico) async {
+
+    
     try {
       final picoCriado = await spotRepository.createSpot(pico);
       if(picoCriado != null){
@@ -14,7 +16,7 @@ class CreateSpotUc {
       }
       throw Exception("Pico retornou null");
     } on Exception catch (e) {
-      rethrow;
+      throw Exception("Erro ao criar piquerson: $e ");
     } catch (e) {
       throw Exception("Erro inesperado criar piquerson: $e ");
     }

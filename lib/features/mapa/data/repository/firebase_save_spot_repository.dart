@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:demopico/features/mapa/data/models/pico_model.dart';
+import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_save_spot_repository.dart';
 import 'package:demopico/features/user/data/models/user.dart';
 
@@ -80,4 +80,5 @@ class FirebaseSaveSpotRepository implements ISaveSpotRepository {
       throw Exception("Erro desconhecido ao salvar pico: $e");
     }
   }
+  
 }

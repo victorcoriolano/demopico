@@ -140,11 +140,7 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                   try  {
                                     await serviceLocator<SpotControllerProvider>()
                                         .createSpot(pico, context);
-                                    if(context.mounted){
-                                      serviceLocator<SpotControllerProvider>().showAllPico(context);
-                                      provider.dispose();
-                                      Navigator.pop(context);
-                                    }
+                                    
                                     
                                   } on Exception catch (e) {
                                     print('Erro na boca do balção: $e');
@@ -181,7 +177,7 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                     await serviceLocator<SpotControllerProvider>()
                                         .createSpot(pico, context);
                                     if(context.mounted){
-                                      serviceLocator<SpotControllerProvider>().showAllPico(context);
+                                      serviceLocator<SpotControllerProvider>().loadSpotsFromDB(context);
                                       provider.limpar();
                                       Navigator.pop(context);
                                     }

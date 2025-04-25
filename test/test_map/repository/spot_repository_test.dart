@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:demopico/features/mapa/data/models/pico_model.dart';
+import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 import 'package:demopico/features/mapa/data/repository/firebase_repository_map.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';

@@ -45,19 +45,19 @@ class PicoModel extends Pico {
 
   Map<String, dynamic> toJson() {
     return {
-      'imageUrls': imgUrls,
-      'tipo': tipoPico,
-      'modalidade': modalidade,
-      'nota': nota,
-      'avaliacoes': numeroAvaliacoes,
-      'longitude': long,
-      'latitude': lat,
-      'description': description,
-      'atributos': atributos,
-      'obstaculos': obstaculos,
-      'utilidades': utilidades,
-      'userCreator': userCreator,
-      'picoName': picoName,
+      'imageUrls': super.imgUrls,
+      'tipo': super.tipoPico,
+      'modalidade': super.modalidade,
+      'nota': super.nota,
+      'avaliacoes': super.numeroAvaliacoes,
+      'longitude': super.long,
+      'latitude': super.lat,
+      'description': super.description,
+      'atributos': super.atributos,
+      'obstaculos': super.obstaculos,
+      'utilidades': super.utilidades,
+      'userCreator': super.userCreator,
+      'picoName': super.picoName,
     };
   }
 

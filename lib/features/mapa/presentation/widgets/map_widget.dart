@@ -19,6 +19,8 @@ class MapWidgetState extends State<MapWidget> {
  
   @override
   Widget build(BuildContext context) {
+
+    
     
     final spotProvider =
         Provider.of<SpotControllerProvider>(context, listen: true);
@@ -31,7 +33,7 @@ class MapWidgetState extends State<MapWidget> {
       body: GoogleMap(
         onMapCreated: (GoogleMapController controller) async {
           mapProvider.setGoogleMapController(controller);
-          await spotProvider.showAllPico(context);
+          await spotProvider.loadSpotsFromDB(context);
           await mapProvider.getLocation();
           providerAdd.pegarLocalizacao(mapProvider.center);
           print(mapProvider.center);

@@ -1,3 +1,4 @@
+import 'package:demopico/features/mapa/domain/entities/filters.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
@@ -159,9 +160,15 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
                 mostrarAtributos(context);
               } else if (value == 'Modalidade') {
                 print("Filtrar por utilidades");
-              } else {
-                spotProvider.filtrarPicosPorTipo(value, context);
-              }
+              } else if (value == 'todos'){
+                spotProvider.loadSpotsFromDB(context);
+              } 
+              
+                Filters filterTipo = Filters(
+                  tipo: value
+                );
+                spotProvider.loadSpotsFromDB(context, filterTipo);
+              
             },
             color: Colors.white,
             itemBuilder: (BuildContext context) {
@@ -220,7 +227,12 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
                   value: "Modalidade",
                   child: DropdownMenu(
                     hintText: 'Modalidade',
-                    onSelected: (value) => spotProvider.filtrarModalidade(value, context),
+                    onSelected: (value) {
+                      Filters filterModalidade = Filters(
+                        modalidade: value
+                      );
+                      spotProvider.loadSpotsFromDB(context, filterModalidade);
+                    },
                     dropdownMenuEntries: const [
                       DropdownMenuEntry(value: 'Skate', label: 'Skate'),
                       DropdownMenuEntry(value: 'Parkuor', label: 'Parkuor'),
@@ -272,7 +284,10 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
             actions: [
               TextButton(
                 onPressed: (){
-                  provider.filtrarPorUtilidade(context);
+                  Filters filterUtilidades = Filters(
+                    utilidades: provider.utilidadesSelecionadas
+                  );  
+                  provider.loadSpotsFromDB(context, filterUtilidades);
                   Navigator.pop(context);
                 }, 
                 child: const Text("Filtrar"),

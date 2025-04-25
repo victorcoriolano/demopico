@@ -1,4 +1,4 @@
-import 'package:demopico/features/mapa/data/models/pico_model.dart';
+import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 import 'package:demopico/features/user/data/models/user.dart';
 
 abstract class ISaveSpotRepository {

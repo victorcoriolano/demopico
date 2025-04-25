@@ -1,5 +1,5 @@
 
-import 'package:demopico/features/mapa/data/models/pico_model.dart';
+import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 import 'package:demopico/features/mapa/data/repository/firebase_repository_map.dart';
 import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
 import 'package:mocktail/mocktail.dart';
@@ -39,6 +39,21 @@ void main() {
         expect(result, isA<PicoModel>());
         expect(result!.id, "1");
       });
+
+      test("deve propagar exception do repository", () async {
+        final mockRepository = MockPicoRepository();
+        final useCase = CreateSpotUc(mockRepository);
+        final mockPico = MockPico();
+
+        when(() => mockRepository.createSpot(mockPico)).thenThrow(Exception("Erro ao criar pico"));
+        
+
+        expect(
+          () async => await useCase.createSpot(mockPico),
+          throwsException,
+        );
+      });
     });
 
-}
+
+ }

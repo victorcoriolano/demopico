@@ -30,10 +30,6 @@ Future<Marker> picoMarker(Pico? spot, BuildContext context, ) async {
       logicalSize: const Size(150, 150), imageSize: const Size(120, 150)
     ),
     );
-/* }else{
-  print("Informações pico não encontrado");
-  return null;
-} */
 }
 
 void showPicoModal(BuildContext context, Pico pico) {

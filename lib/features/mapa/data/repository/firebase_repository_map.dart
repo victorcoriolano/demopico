@@ -1,7 +1,9 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demopico/features/mapa/domain/entities/filters.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_spot_repository.dart';
-import 'package:demopico/features/mapa/data/models/pico_model.dart';
+import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 
 class FirebaseRepositoryMap implements ISpotRepository {
   final FirebaseFirestore _firebaseFirestore;
@@ -29,22 +31,8 @@ class FirebaseRepositoryMap implements ISpotRepository {
     }
   }
 
-  @override
-  Future<List<PicoModel>> showAllPico() async {
-    try {
-      QuerySnapshot snapshot = await _firebaseFirestore
-          .collection('spots')
-          .get(const GetOptions(source: Source.server));
-      return snapshot.docs.map((doc) {
-        final data = doc.data() as Map<String,
-            dynamic>; // deixa o map aq quieto pq ele tem q dar baum
-        return PicoModel.fromJson(data, doc.id);
-      }).toList();
-    } catch (e) {
-      print("Erro no firebase $e");
-      return [];
-    }
-  }
+  
+
 
   @override
   Future<PicoModel> salvarNota(Pico pico) async {
@@ -76,5 +64,33 @@ class FirebaseRepositoryMap implements ISpotRepository {
     } catch (e) {
       throw Exception("Erro ao deletar o pico: $e");
     }
+  }
+
+  @override
+  Stream<List<PicoModel>> loadSpots(Filters? filtro) {
+    //https://firebase.google.com/docs/firestore/query-data/queries?hl=pt-br#dart_4
+
+    Query querySnapshot = _firebaseFirestore.collection("spots");
+    if(filtro != null && filtro.hasActivateFilters){
+      if(filtro.atributos!.isNotEmpty){
+        querySnapshot = querySnapshot.where("atributos", arrayContains: filtro.atributos);
+      }
+
+      if(filtro.utilidades!.isNotEmpty){
+        querySnapshot = querySnapshot.where("utilidades", arrayContainsAny: filtro.utilidades);
+      }
+
+      if(filtro.modalidade != null){
+        querySnapshot = querySnapshot.where("modalidade", isEqualTo: filtro.modalidade);
+      }
+      if(filtro.tipo != null){
+        querySnapshot = querySnapshot.where("tipoPico", isEqualTo: filtro.tipo);
+      }
+    }
+    return querySnapshot.snapshots().map((snapshot) => 
+      snapshot.docs.map((doc) => 
+        PicoModel.fromJson(doc.data() as Map<String, dynamic>, doc.id))
+          .toList()
+    );
   }
 }
