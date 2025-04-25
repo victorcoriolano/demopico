@@ -86,8 +86,8 @@ void main() {
       when(mockQueryDocSnapshot.data()).thenReturn(testPico.toJson());
       when(mockQueryDocSnapshot.id).thenReturn("1");
 
-      final resul = await repositoryMap.showAllPico();
-      expect(resul, isA<List<PicoModel>>());
+      final resul = repositoryMap.loadSpots(null);
+      expect(resul, isA<Stream<List<PicoModel>>>());
     });
 
     test("deve atualizar a nota do pico", () async {
