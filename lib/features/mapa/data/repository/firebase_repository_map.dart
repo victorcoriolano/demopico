@@ -68,7 +68,6 @@ class FirebaseRepositoryMap implements ISpotRepository {
 
   @override
   Stream<List<PicoModel>> loadSpots([Filters? filtro]) {
-    //https://firebase.google.com/docs/firestore/query-data/queries?hl=pt-br#dart_4
 
     final query = executeQuery(filtro);
     return query.snapshots().map(

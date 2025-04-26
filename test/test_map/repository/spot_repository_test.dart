@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 import 'package:demopico/features/mapa/data/repository/firebase_repository_map.dart';
@@ -16,7 +18,6 @@ import 'spot_repository_test.mocks.dart';
   MockSpec<QuerySnapshot<Map<String, dynamic>>>(),
   MockSpec<QueryDocumentSnapshot<Map<String, dynamic>>>(),
 ])
-
 void main() {
   group("Deve testar a interação com o firebase ", () {
     //variáveis mockadas para utilizar nos testes
@@ -79,12 +80,30 @@ void main() {
       expect(result.picoName, "Pico Legal");
     });
 
-    test("deve criar uma stream e retornar todos os picos do firebase", () async {
+    test("deve criar uma stream e retornar todos os picos do firebase",
+        () async {
+      final controllerStream =
+          StreamController<QuerySnapshot<Map<String, dynamic>>>();
+      controllerStream.add(mockQuerySnapshot);
       when(mockFirestore.collection("spots")).thenReturn(mockCollection);
+      when(mockCollection.snapshots())
+          .thenAnswer((_) => controllerStream.stream);
 
+      when(mockQuerySnapshot.docs).thenReturn([mockQueryDocSnapshot]);
+      when(mockQueryDocSnapshot.data()).thenReturn(testPico.toJson());
 
-      final resul = repositoryMap.loadSpots(null);
+      final resul = repositoryMap.loadSpots();
+      controllerStream.add(mockQuerySnapshot);
+
       expect(resul, isA<Stream<List<PicoModel>>>());
+
+      await expectLater(
+        resul,
+        emits(isA<List<PicoModel>>().having(
+            (picos) => picos.first.picoName, 'picoName', testPico.picoName)),
+      );
+
+      await controllerStream.close();
     });
 
     test("deve atualizar a nota do pico", () async {
@@ -123,9 +142,12 @@ void main() {
       expect(snapshotDel.exists, isFalse);
     });
 
-    test('deve lançar uma exceção quando o documento não existir depois da criação', () async {
+    test(
+        'deve lançar uma exceção quando o documento não existir depois da criação',
+        () async {
       when(mockFirestore.collection('spots')).thenReturn(mockCollection);
-      when(mockCollection.add(testPico.toJson())).thenAnswer((_) async => mockDocRef);
+      when(mockCollection.add(testPico.toJson()))
+          .thenAnswer((_) async => mockDocRef);
       when(mockDocSnapshot.exists).thenReturn(false);
       when(mockDocSnapshot.data()).thenReturn(null);
       when(mockDocRef.get()).thenAnswer((_) async => mockDocSnapshot);
@@ -133,18 +155,22 @@ void main() {
       expect(() => repositoryMap.createSpot(testPico), throwsException);
     });
 
-     test('deve lançar uma exceção quando o firebase lançar um erro', () async {
+    test('deve lançar uma exceção quando o firebase lançar um erro', () async {
       when(mockFirestore.collection('spots')).thenReturn(mockCollection);
-      when(mockCollection.add(testPico.toJson())).thenThrow(FirebaseException(plugin: 'test'));
+      when(mockCollection.add(testPico.toJson()))
+          .thenThrow(FirebaseException(plugin: 'test'));
 
       expect(() => repositoryMap.createSpot(testPico), throwsException);
     });
 
-    test('deve lança uma exceção quando o documento existir mais os dados forem nulos', () async {
+    test(
+        'deve lança uma exceção quando o documento existir mais os dados forem nulos',
+        () async {
       when(mockFirestore.collection('spots')).thenReturn(mockCollection);
-      when(mockCollection.add(testPico.toJson())).thenAnswer((_) async => mockDocRef);
-      when(mockDocSnapshot.exists).thenReturn(true);//domento existe
-      when(mockDocSnapshot.data()).thenReturn(null);//dados nulos
+      when(mockCollection.add(testPico.toJson()))
+          .thenAnswer((_) async => mockDocRef);
+      when(mockDocSnapshot.exists).thenReturn(true); //domento existe
+      when(mockDocSnapshot.data()).thenReturn(null); //dados nulos
       when(mockDocRef.get()).thenAnswer((_) async => mockDocSnapshot);
 
       expect(() => repositoryMap.createSpot(testPico), throwsException);
@@ -152,13 +178,10 @@ void main() {
 
     test('deve saber lidar com erros inesperados', () async {
       when(mockFirestore.collection('spots')).thenReturn(mockCollection);
-      when(mockCollection.add(testPico.toJson())).thenThrow(Exception('Unexpected error'));
+      when(mockCollection.add(testPico.toJson()))
+          .thenThrow(Exception('Unexpected error'));
 
       expect(() => repositoryMap.createSpot(testPico), throwsException);
     });
   });
-
-
 }
-
-
