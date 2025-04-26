@@ -70,27 +70,38 @@ class FirebaseRepositoryMap implements ISpotRepository {
   Stream<List<PicoModel>> loadSpots([Filters? filtro]) {
     //https://firebase.google.com/docs/firestore/query-data/queries?hl=pt-br#dart_4
 
+    final query = executeQuery(filtro);
+    return query.snapshots().map(
+      (snapshot) => snapshot.docs.map(
+        (doc) => PicoModel.fromJson(
+          doc.data() as Map<String, dynamic>, 
+          doc.id)
+      ).toList()
+    );
+
+    
+  }
+
+
+  Query executeQuery([Filters? filtro]) {
     Query querySnapshot = _firebaseFirestore.collection("spots");
+
     if(filtro != null && filtro.hasActivateFilters){
       if(filtro.atributos!.isNotEmpty){
-        querySnapshot = querySnapshot.where("atributos", arrayContains: filtro.atributos);
+        return querySnapshot.where("atributos", arrayContains: filtro.atributos);
       }
 
       if(filtro.utilidades!.isNotEmpty){
-        querySnapshot = querySnapshot.where("utilidades", arrayContainsAny: filtro.utilidades);
+        return querySnapshot.where("utilidades", arrayContainsAny: filtro.utilidades);
       }
 
       if(filtro.modalidade != null){
-        querySnapshot = querySnapshot.where("modalidade", isEqualTo: filtro.modalidade);
+        return querySnapshot.where("modalidade", isEqualTo: filtro.modalidade);
       }
       if(filtro.tipo != null){
-        querySnapshot = querySnapshot.where("tipoPico", isEqualTo: filtro.tipo);
+        return querySnapshot.where("tipoPico", isEqualTo: filtro.tipo);
       }
     }
-    return querySnapshot.snapshots().map((snapshot) => 
-      snapshot.docs.map((doc) => 
-        PicoModel.fromJson(doc.data() as Map<String, dynamic>, doc.id))
-          .toList()
-    );
+    return querySnapshot;
   }
 }

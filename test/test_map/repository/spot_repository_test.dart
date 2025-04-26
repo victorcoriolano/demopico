@@ -79,12 +79,9 @@ void main() {
       expect(result.picoName, "Pico Legal");
     });
 
-    test("deve pegar todos os picos do firebase", () async {
+    test("deve criar uma stream e retornar todos os picos do firebase", () async {
       when(mockFirestore.collection("spots")).thenReturn(mockCollection);
-      when(mockCollection.get(any)).thenAnswer((_) async => mockQuerySnapshot);
-      when(mockQuerySnapshot.docs).thenReturn([mockQueryDocSnapshot]);
-      when(mockQueryDocSnapshot.data()).thenReturn(testPico.toJson());
-      when(mockQueryDocSnapshot.id).thenReturn("1");
+
 
       final resul = repositoryMap.loadSpots(null);
       expect(resul, isA<Stream<List<PicoModel>>>());
