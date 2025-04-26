@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:demopico/features/mapa/domain/interfaces/i_save_image_repository.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-class FiresbaseStorageSaveImageRepository implements ISaveImageRepository {
+class ServiceFirebaseStorageImages implements ISaveImageRepository {
   FirebaseStorage bdInstance;
 
-  FiresbaseStorageSaveImageRepository(this.bdInstance);
+  ServiceFirebaseStorageImages(this.bdInstance);
 
   @override
   Future<List<String>> saveFiles(List<File> files) async {

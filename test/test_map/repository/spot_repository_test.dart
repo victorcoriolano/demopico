@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
-import 'package:demopico/features/mapa/data/repository/firebase_repository_map.dart';
+import 'package:demopico/features/mapa/data/repository/service_firebase_spots.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -18,6 +18,8 @@ import 'spot_repository_test.mocks.dart';
   MockSpec<QuerySnapshot<Map<String, dynamic>>>(),
   MockSpec<QueryDocumentSnapshot<Map<String, dynamic>>>(),
 ])
+
+
 void main() {
   group("Deve testar a interação com o firebase ", () {
     //variáveis mockadas para utilizar nos testes
@@ -25,7 +27,7 @@ void main() {
     late MockCollectionReference mockCollection;
     late MockDocumentReference mockDocRef;
     late MockDocumentSnapshot mockDocSnapshot;
-    late FirebaseRepositoryMap repositoryMap;
+    late ServiceFirebaseSpots repositoryMap;
     late MockQuerySnapshot mockQuerySnapshot;
     late MockQueryDocumentSnapshot mockQueryDocSnapshot;
 
@@ -56,7 +58,7 @@ void main() {
       mockQuerySnapshot = MockQuerySnapshot();
       mockQueryDocSnapshot = MockQueryDocumentSnapshot();
 
-      repositoryMap = FirebaseRepositoryMap(mockFirestore);
+      repositoryMap = ServiceFirebaseSpots(mockFirestore);
     });
 
     //testando criar pico

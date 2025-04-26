@@ -1,8 +1,8 @@
-import 'package:demopico/features/mapa/data/repository/comment_repository.dart';
+import 'package:demopico/features/mapa/data/repository/service_firebase_comment.dart';
 import 'package:demopico/features/mapa/domain/entities/comment.dart';
 
 class CommentSpotUC {
-  final CommentRepository commentRepository;
+  final ServiceFirebaseComment commentRepository;
 
   CommentSpotUC(this.commentRepository);
 

@@ -3,10 +3,10 @@ import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_save_spot_repository.dart';
 import 'package:demopico/features/user/data/models/user.dart';
 
-class FirebaseSaveSpotRepository implements ISaveSpotRepository {
+class ServiceFirebaseSaveSpot implements ISaveSpotRepository {
   final FirebaseFirestore _firebaseFirestore;
 
-  FirebaseSaveSpotRepository(this._firebaseFirestore);
+  ServiceFirebaseSaveSpot(this._firebaseFirestore);
 
   @override
   Future<void> deleteSave(String userId, String picoName) async {

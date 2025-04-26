@@ -5,11 +5,11 @@ import 'package:demopico/features/hub/infra/repository/hub_repository.dart';
 
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
 import 'package:demopico/features/hub/presentation/providers/hub_provider.dart';
-import 'package:demopico/features/mapa/data/repository/comment_repository.dart';
+import 'package:demopico/features/mapa/data/repository/service_firebase_comment.dart';
 
-import 'package:demopico/features/mapa/data/repository/firebase_storage_save_file_repository.dart';
-import 'package:demopico/features/mapa/data/repository/historico_local_repository.dart';
-import 'package:demopico/features/mapa/data/repository/image_picker_repository.dart';
+import 'package:demopico/features/mapa/data/repository/service_firebase_storage_images.dart';
+import 'package:demopico/features/mapa/data/repository/service_local_historico.dart';
+import 'package:demopico/features/mapa/data/repository/service_image_picker.dart';
 import 'package:demopico/features/mapa/domain/usecases/comment_spot_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/pick_image_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/save_history_spot_uc.dart';
@@ -50,8 +50,8 @@ class MyAppWidget extends StatelessWidget {
         ),
         ChangeNotifierProvider(
             create: (_) => AddPicoProvider(
-                PickImageUC(ImagePickerRepository()),
-                SaveImageUC(FiresbaseStorageSaveImageRepository(
+                PickImageUC(ServiceImagePicker()),
+                SaveImageUC(ServiceFirebaseStorageImages(
                     FirebaseStorage.instance)))),
         ChangeNotifierProvider(create: (_) => MapControllerProvider()),
         ChangeNotifierProvider(
@@ -89,7 +89,7 @@ class MyAppWidget extends StatelessWidget {
                             HubRepository(firestore: firestoreInstance))))),
         ChangeNotifierProvider(
             create: (_) =>
-                CommentController(CommentSpotUC(CommentRepository()))),
+                CommentController(CommentSpotUC(ServiceFirebaseComment()))),
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
