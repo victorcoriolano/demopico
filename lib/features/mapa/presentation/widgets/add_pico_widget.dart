@@ -24,10 +24,8 @@ class AddPicoWidgetState extends State<AddPicoWidget> {
             Stack(alignment: Alignment.topRight, children: [
               Center(
                 child: ContainerTelas(
-                  lat: provider.lat,
-                  long: provider.long,
+                  latlang: provider.latlang!,
                   expanded: _isExpanded,
-                  
                 ),
               ),
               Padding(

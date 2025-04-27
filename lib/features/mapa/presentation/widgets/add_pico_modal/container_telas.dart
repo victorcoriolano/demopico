@@ -1,5 +1,4 @@
 import 'package:demopico/core/common/inject_dependencies.dart';
-import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/primeira_tela.dart';
@@ -9,20 +8,19 @@ import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/terce
 import 'package:demopico/features/user/data/services/database_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 class ContainerTelas extends StatefulWidget {
-  final double lat;
-  final double long;
+  final LatLng latlang;
   final bool expanded;
   const ContainerTelas(
       {super.key,
-      required this.lat,
-      required this.long,
+      required this.latlang,
       required this.expanded});
 
   @override
-  _ContainerTelasState createState() => _ContainerTelasState();
+  State<ContainerTelas> createState() => _ContainerTelasState();
 }
 
 class _ContainerTelasState extends State<ContainerTelas> {
@@ -120,81 +118,23 @@ class _ContainerTelasState extends State<ContainerTelas> {
                               onPressed: () async {
                                 if(user != null){
                                   final DatabaseService  dataUser = DatabaseService();
-                                  dataUser.atualizarContribuicoes();
-                                  if (provider.validarFormulario())  {
-                                  final pico = Pico(
-                                      id: '',// passando o id vazio para o id ser gerado automaticamente
-                                      imgUrls: provider.urlImage,
-                                      modalidade: provider.selectedModalidade,
-                                      tipoPico: provider.tipo,
-                                      nota: 0.0,
-                                      numeroAvaliacoes: 0,
-                                      long: widget.long,
-                                      lat: widget.lat,
-                                      description: provider.descricao,
-                                      atributos: provider.atributos,
-                                      obstaculos: provider.obstaculos,
-                                      utilidades: provider.utilidades,
-                                      userCreator: user!.displayName ?? user!.email,
-                                      picoName: provider.nomePico);
-                                  try  {
-                                    await serviceLocator<SpotControllerProvider>()
-                                        .createSpot(pico, context);
-                                    
-                                    
-                                  } on Exception catch (e) {
-                                    print('Erro na boca do balção: $e');
-                                    if(context.mounted){
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                            content: Text(
-                                                "Preencha todos os campos ou insira alguma imagem")));
-                                    }
-                                    
-                                  } catch (e) {
-                                    print("Erro desconhecido: $e");
-                                  }
-                                }
+                                  dataUser.atualizarContribuicoes();//autualiza contribuições
+
                                 }
                                 // função para criar o pico
                                 if (provider.validarFormulario())  {
-                                  final pico = Pico(
-                                      id: '',// passando o id vazio para o id ser gerado automaticamente
-                                      imgUrls: provider.urlImage,
-                                      modalidade: provider.selectedModalidade,
-                                      tipoPico: provider.tipo,
-                                      nota: 0.0,
-                                      numeroAvaliacoes: 0,
-                                      long: widget.long,
-                                      lat: widget.lat,
-                                      description: provider.descricao,
-                                      atributos: provider.atributos,
-                                      obstaculos: provider.obstaculos,
-                                      utilidades: provider.utilidades,
-                                      userCreator: "Não identificado",
-                                      picoName: provider.nomePico);
-                                  try  {
                                     await serviceLocator<SpotControllerProvider>()
-                                        .createSpot(pico, context);
-                                    if(context.mounted){
-                                      serviceLocator<SpotControllerProvider>().loadSpotsFromDB(context);
-                                      provider.limpar();
-                                      Navigator.pop(context);
-                                    }
-                                    
-                                  } on Exception catch (e) {
-                                    print('Erro na boca do balção: $e');
-                                    if(context.mounted){
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                            content: Text(
-                                                "Preencha todos os campos ou insira alguma imagem")));
-                                    }
-                                    
-                                  } catch (e) {
-                                    print("Erro desconhecido: $e");
-                                  }
+                                        .createSpot(provider.getInfoPico(user));
+                                } else {
+                                  // Exibe um alerta de erro
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'Preencha todos os campos corretamente'),
+                                    ),
+                                  );
                                 }
+
                               },
                               child: const Text('POSTAR PICO',
                                   style: TextStyle(fontSize: 15)),

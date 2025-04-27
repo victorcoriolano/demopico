@@ -27,7 +27,7 @@ class PicoModel extends Pico {
   factory PicoModel.fromJson(Map<String, dynamic> json, String id) {
     return PicoModel(
       id: id,
-      imgUrls: json['imgUrls'] ?? [],
+      imgUrls: json['imgUrl'] ?? [],
       tipoPico: json['tipo'] ?? _padrao,
       modalidade: json['modalidade'] ?? _padrao,
       nota: (json['nota'] as num).toDouble(),
@@ -45,7 +45,7 @@ class PicoModel extends Pico {
 
   Map<String, dynamic> toJson() {
     return {
-      'imageUrls': super.imgUrls,
+      'imageUrl': super.imgUrls,
       'tipo': super.tipoPico,
       'modalidade': super.modalidade,
       'nota': super.nota,

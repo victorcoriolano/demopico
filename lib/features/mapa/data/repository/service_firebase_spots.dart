@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/mapa/domain/entities/filters.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
@@ -31,16 +30,11 @@ class ServiceFirebaseSpots implements ISpotRepository {
     }
   }
 
-  
-
-
   @override
   Future<PicoModel> salvarNota(Pico pico) async {
     try {
-      final snapshotRef = _firebaseFirestore
-          .collection('spots')
-          .doc(pico.id);
-          
+      final snapshotRef = _firebaseFirestore.collection('spots').doc(pico.id);
+
       final snapshot = await snapshotRef.get();
       if (snapshot.exists) {
         await snapshot.reference.update({
@@ -50,7 +44,8 @@ class ServiceFirebaseSpots implements ISpotRepository {
         final newData = await snapshotRef.get();
         return PicoModel.fromJson(newData.data()!, newData.id);
       } else {
-        throw Exception("Piquerson: '${pico.picoName}' não encontrado no banco de dados.");
+        throw Exception(
+            "Piquerson: '${pico.picoName}' não encontrado no banco de dados.");
       }
     } catch (e) {
       throw Exception("Erro inesperado: $e");
@@ -58,7 +53,7 @@ class ServiceFirebaseSpots implements ISpotRepository {
   }
 
   @override
-  Future<void> deleteSpot(String id) async{
+  Future<void> deleteSpot(String id) async {
     try {
       await _firebaseFirestore.collection('spots').doc(id).delete();
     } catch (e) {
@@ -68,37 +63,37 @@ class ServiceFirebaseSpots implements ISpotRepository {
 
   @override
   Stream<List<PicoModel>> loadSpots([Filters? filtro]) {
-
     final query = executeQuery(filtro);
-    return query.snapshots().map(
-      (snapshot) => snapshot.docs.map(
-        (doc) => PicoModel.fromJson(
-          doc.data() as Map<String, dynamic>, 
-          doc.id)
-      ).toList()
-    );
-
-    
+    try {
+      return query.snapshots().map((snapshot) => snapshot.docs
+          .map((doc) =>
+              PicoModel.fromJson(doc.data() as Map<String, dynamic>, doc.id))
+          .toList());
+    } on Exception catch (e) {
+      // TODO
+      throw Exception("Erro ao carregar os piquersons: $e");
+    }
   }
-
 
   Query executeQuery([Filters? filtro]) {
     Query querySnapshot = _firebaseFirestore.collection("spots");
 
-    if(filtro != null && filtro.hasActivateFilters){
-      if(filtro.atributos!.isNotEmpty){
-        return querySnapshot.where("atributos", arrayContains: filtro.atributos);
+    if (filtro != null && filtro.hasActivateFilters) {
+      if (filtro.atributos!.isNotEmpty) {
+        querySnapshot = querySnapshot.where("atributos",
+            arrayContains: filtro.atributos);
       }
 
-      if(filtro.utilidades!.isNotEmpty){
-        return querySnapshot.where("utilidades", arrayContainsAny: filtro.utilidades);
+      if (filtro.utilidades!.isNotEmpty) {
+        querySnapshot = querySnapshot.where("utilidades",
+            arrayContainsAny: filtro.utilidades);
       }
 
-      if(filtro.modalidade != null){
-        return querySnapshot.where("modalidade", isEqualTo: filtro.modalidade);
+      if (filtro.modalidade != null) {
+        querySnapshot = querySnapshot.where("modalidade", isEqualTo: filtro.modalidade);
       }
-      if(filtro.tipo != null){
-        return querySnapshot.where("tipoPico", isEqualTo: filtro.tipo);
+      if (filtro.tipo != null) {
+        querySnapshot = querySnapshot.where("tipoPico", isEqualTo: filtro.tipo);
       }
     }
     return querySnapshot;

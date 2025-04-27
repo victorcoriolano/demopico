@@ -2,7 +2,6 @@ import 'package:demopico/features/mapa/domain/entities/filters.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
-import 'package:demopico/features/mapa/presentation/widgets/marker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -77,21 +76,15 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
   }
 
   void encontrouPico(String namePico) {
-    final spotProvider =
-        Provider.of<SpotControllerProvider>(context, listen: false);
+    
     final provider = Provider.of<MapControllerProvider>(context, listen: false);
-    Marker? markerEncontrado = spotProvider.markers
+    Marker? markerEncontrado = provider.markers
         .toList()
         .firstWhereOrNull((markers) => markers.markerId.value.toLowerCase() == namePico.toLowerCase());
     if (markerEncontrado != null) {
       removeOverlay();
       provider.reajustarCameraPosition(markerEncontrado.position);
-      showPicoModal(
-        context,
-        spotProvider.picosPesquisados.firstWhere(
-          (pico) => pico.picoName == markerEncontrado.markerId.value,
-        ),
-      );
+      
     } else {
       
       ScaffoldMessenger.of(context).showSnackBar(
@@ -161,14 +154,13 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
               } else if (value == 'Modalidade') {
                 print("Filtrar por utilidades");
               } else if (value == 'todos'){
-                spotProvider.loadSpotsFromDB(context);
+                spotProvider.aplicarFiltro();
               } 
               
-                Filters filterTipo = Filters(
-                  tipo: value
-                );
-                spotProvider.loadSpotsFromDB(context, filterTipo);
-              
+              Filters filterTipo = Filters(
+                tipo: value
+              );
+              spotProvider.aplicarFiltro(filterTipo);
             },
             color: Colors.white,
             itemBuilder: (BuildContext context) {
@@ -231,7 +223,7 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
                       Filters filterModalidade = Filters(
                         modalidade: value
                       );
-                      spotProvider.loadSpotsFromDB(context, filterModalidade);
+                      spotProvider.aplicarFiltro(filterModalidade);
                     },
                     dropdownMenuEntries: const [
                       DropdownMenuEntry(value: 'Skate', label: 'Skate'),
@@ -284,10 +276,10 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
             actions: [
               TextButton(
                 onPressed: (){
-                  Filters filterUtilidades = Filters(
+                  var filtro = Filters(
                     utilidades: provider.utilidadesSelecionadas
-                  );  
-                  provider.loadSpotsFromDB(context, filterUtilidades);
+                  );
+                  provider.aplicarFiltro(filtro);
                   Navigator.pop(context);
                 }, 
                 child: const Text("Filtrar"),

@@ -1,8 +1,11 @@
 import 'dart:io';
 
+import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/usecases/pick_image_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/save_image_uc.dart';
+import 'package:demopico/features/user/data/models/user.dart';
 import 'package:demopico/features/user/presentation/widgets/form_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -27,8 +30,7 @@ class AddPicoProvider extends ChangeNotifier with Validators {
   List<String> utilidades = [];
   List<String> urlImage = [];
   File? fotoPico;
-  double lat = 0.0;
-  double long = 0.0;
+  LatLng? latlang;
   List<File?> images = [];
 
   final pegadorImage = ImagePicker();
@@ -89,8 +91,7 @@ class AddPicoProvider extends ChangeNotifier with Validators {
 
 
   void pegarLocalizacao(LatLng localizacao) {
-    lat = localizacao.latitude;
-    long = localizacao.longitude;
+    latlang = localizacao;
   }
 
   //variaveis de mensagem de erro
@@ -252,6 +253,24 @@ class AddPicoProvider extends ChangeNotifier with Validators {
     utilidades.clear();
     urlImage.clear();
     notifyListeners();
-    
+  }
+
+  Pico getInfoPico(User? userCriador){
+    return Pico(
+      id: "",
+      picoName: nomePico,
+      description: descricao,
+      nota: nota,
+      numeroAvaliacoes: numAval,
+      tipoPico: tipo,
+      utilidades: utilidades,
+      imgUrls: urlImage,
+      lat: latlang!.latitude,
+      long: latlang!.longitude,
+      atributos: atributos,
+      modalidade: selectedModalidade,
+      userCreator: userCriador?.displayName ?? "Anônimo",
+      obstaculos: obstaculos,
+    );
   }
 }

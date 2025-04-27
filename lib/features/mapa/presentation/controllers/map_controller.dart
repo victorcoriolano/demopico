@@ -1,3 +1,5 @@
+import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
+import 'package:demopico/features/mapa/presentation/view_services/marker_service.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -9,18 +11,19 @@ class MapControllerProvider extends ChangeNotifier{
   String locationMessage = '';
   MapType myMapType = MapType.normal;
   double zoomInicial = 12;
-  //BuildContext? context;
+  Set<Marker> markers = {}; //lista de marcadore que serão adicionados no mapa
+
+
+  final MarkerService _markerService = MarkerService();
+  
 
   GoogleMapController? get mapController => _mapController;
 
-  void setGoogleMapController(GoogleMapController controller){ //setando o controller
+  //setando o controller para manipular em qualquer lugar do código
+  void setGoogleMapController(GoogleMapController controller){ 
     _mapController = controller;
     notifyListeners();
   }
-/* 
-    void registerScaffoldState(GlobalKey<ScaffoldState> scaffoldKey) {
-    context = scaffoldKey.currentContext;
-  } */
 
   void reajustarCameraPosition(LatLng position){ //movendo a camera position
     if(_mapController != null){
@@ -86,4 +89,20 @@ class MapControllerProvider extends ChangeNotifier{
     }
   }
 
+  Future<void> loadMarkersIcons(List<Pico> picos,) async {
+    await _markerService.preloadIcons(picos);
+  }
+
+  void createMarkers(List<Pico> picos){
+    markers.clear();
+    for (var pico in picos) {
+      markers.add(Marker(
+        markerId: MarkerId(pico.id),
+        position: LatLng(pico.lat, pico.long),
+        icon: _markerService.markerIcons[pico.picoName]!,
+        infoWindow: InfoWindow(title: pico.picoName),
+      ));
+    }
+    notifyListeners();
+  }
 }

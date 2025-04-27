@@ -35,7 +35,7 @@ void main() {
       id: "1",
       imgUrls: ["url"],
       tipoPico: "rua",
-      modalidade: "street",
+      modalidade: "Skate",
       nota: 4.5,
       numeroAvaliacoes: 10,
       long: -46.57421,
@@ -47,6 +47,24 @@ void main() {
       userCreator: "user123",
       picoName: "Pico Legal",
     );
+
+    final testPico2 = PicoModel(
+      id: "1",
+      imgUrls: ["url"],
+      tipoPico: "rua",
+      modalidade: "BMX",
+      nota: 4.5,
+      numeroAvaliacoes: 10,
+      long: -46.57421,
+      lat: -23.55052,
+      description: "Teste",
+      atributos: {"teste": 2},
+      obstaculos: ["corrimão"],
+      utilidades: ["banheiro"],
+      userCreator: "user123",
+      picoName: "Pico Legal",
+    );
+    
     final testPicoNotaNova = testPico.copyWith(nota: 5, numeroAvaliacoes: 11);
 
     //setando os mocks para utilizar nos testes
@@ -107,6 +125,34 @@ void main() {
 
       await controllerStream.close();
     });
+
+    test("deve criar uma stream e retornar os picos filtrados do firebase",
+        () async {
+      final controllerStream =
+          StreamController<QuerySnapshot<Map<String, dynamic>>>();
+
+      controllerStream.add(mockQuerySnapshot);
+      when(mockFirestore.collection("spots")).thenReturn(mockCollection);
+      when(mockCollection.snapshots())
+          .thenAnswer((_) => controllerStream.stream);
+
+      when(mockQuerySnapshot.docs).thenReturn([mockQueryDocSnapshot]);
+      when(mockQueryDocSnapshot.data()).thenReturn(testPico.toJson());
+
+      final resul = repositoryMap.loadSpots();
+      controllerStream.add(mockQuerySnapshot);
+
+      expect(resul, isA<Stream<List<PicoModel>>>());
+
+      await expectLater(
+        resul,
+        emits(isA<List<PicoModel>>().having(
+            (picos) => picos.first.picoName, 'picoName', testPico.picoName)),
+      );
+
+      await controllerStream.close();
+    });    
+
 
     test("deve atualizar a nota do pico", () async {
       when(mockFirestore.collection("spots")).thenReturn(mockCollection);

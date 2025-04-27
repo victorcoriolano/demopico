@@ -1,34 +1,63 @@
 
+import 'dart:async';
+
 import 'package:demopico/features/mapa/domain/entities/filters.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/usecases/avaliar_spot_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/load_spot_uc.dart';
-import 'package:demopico/features/mapa/presentation/widgets/marker_widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class SpotControllerProvider extends ChangeNotifier {
   final CreateSpotUc createSpotUseCase;
   final LoadSpotUc showAllPicoUseCase;
   final AvaliarSpotUc avaliarUseCase;
 
-  Set<Marker> markers = {}; // Conjunto vazio de markers
   List<Pico> spots = [];
   List<Pico> picosPesquisados = [];
   List<Pico> myPicos = [];
-  Marker? markerEncontrado;
-  List<double> avaliacoes = [];
-  final user = FirebaseAuth.instance.currentUser;
-  bool isLoading = false;
+  Filters? filtrosAtivos;
+
+  StreamSubscription? spotsSubscription;
 
   SpotControllerProvider(
-      this.createSpotUseCase, this.showAllPicoUseCase, this.avaliarUseCase);
+    this.createSpotUseCase, 
+    this.showAllPicoUseCase, 
+    this.avaliarUseCase,
+  );
+
+  //inicializa o controller carregando os spots do banco 
+  void initialize(){
+    _loadSpots();
+  }
+
+  //cria um stream para ouvir os spots do banco de dados 
+  void _loadSpots(){
+    spotsSubscription?.cancel();
+    spotsSubscription = showAllPicoUseCase.loadSpots(filtrosAtivos).listen((spots) { 
+      myPicos = spots;
+      notifyListeners();
+    });
+  }
+
+  //aplica os filtros e reacria o stream com os novos filtros 
+  void aplicarFiltro([Filters? filtros]){
+    filtrosAtivos = filtros;
+    _loadSpots();
+  }
+
+  //cancela a subscription da stream 
+  @override
+  void dispose() {
+    spotsSubscription?.cancel();
+    super.dispose();
+  }
+
+  
 
   // Método para criar um pico e adicionar o marker
-  Future<void> createSpot(Pico pico, BuildContext context) async {
+  Future<void> createSpot(Pico pico) async {
     try {
       // Salva o pico no backend
       final picoCriado = await createSpotUseCase.createSpot(pico as PicoModel);
@@ -38,29 +67,6 @@ class SpotControllerProvider extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       print('Erro ao criar pico: $e');
-    }
-  }
-
-
-  // Método para exibir todos os picos no mapa
-  Future<void> loadSpotsFromDB(BuildContext context, [Filters? filtro]) async {
-    try {
-      
-      var picos =  showAllPicoUseCase.loadSpots(filtro);
-      picos.listen((picos) {
-        spots = picos;
-        notifyListeners();
-      });
-      
-      // Converte os picos em markers (processamento assíncrono)
-      final markerFutures =  spots.map((spot) => picoMarker(spot, context));
-      markers = (await Future.wait(markerFutures)).toSet();
-
-      
-
-      notifyListeners();
-    } catch (e) {
-      print('Erro ao carregar markers: $e');
     }
   }
 
@@ -111,17 +117,13 @@ class SpotControllerProvider extends ChangeNotifier {
       // Encontrar o índice do pico a ser atualizado
       final index =
           spots.indexWhere((picos) => picos.picoName == pico.picoName);
-
-      if (index != -1) {
-        spots[index] = picoAtualizado;
-        notifyListeners();
-      } else {
-        print("Pico não encontrado na lista.");
-      }
+          
+      // Atualizar o pico na lista
+      spots[index] = picoAtualizado;
+      notifyListeners();
+      
     } catch (e) {
       print("Erro ao salvar a avaliação: $e");
     }
   }
-  
-
 }
