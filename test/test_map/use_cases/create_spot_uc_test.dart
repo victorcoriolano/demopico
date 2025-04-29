@@ -1,6 +1,6 @@
 
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
-import 'package:demopico/features/mapa/data/repository/service_firebase_spots.dart';
+import 'package:demopico/features/mapa/data/services/service_firebase_spots.dart';
 import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
