@@ -1,4 +1,5 @@
 import 'package:demopico/app/home_page.dart';
+import 'package:demopico/features/external/datasources/firestore.dart';
 import 'package:demopico/features/hub/domain/usecases/listar_comunicados_uc.dart';
 import 'package:demopico/features/hub/domain/usecases/postar_comunicado_uc.dart';
 import 'package:demopico/features/hub/infra/repository/hub_repository.dart';
@@ -75,6 +76,11 @@ class MyAppWidget extends StatelessWidget {
             )),
           ),
         ),
+        ChangeNotifierProvider(create: (_) => HomeProvider( listarComunicado: ListarComunicado(
+                hubService: HubService(
+              userService: UserService(firestore: Firestore()),
+              iHubRepository: HubRepository(firestore: Firestore()),
+            )),)),
         ChangeNotifierProvider(
             create: (_) => HubProvider(
                 postarComunicado: PostarComunicado(
