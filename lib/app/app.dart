@@ -1,5 +1,6 @@
 import 'package:demopico/app/home_page.dart';
 import 'package:demopico/features/external/datasources/firestore.dart';
+import 'package:demopico/features/home/provider/home_provider.dart';
 import 'package:demopico/features/hub/domain/usecases/listar_comunicados_uc.dart';
 import 'package:demopico/features/hub/domain/usecases/postar_comunicado_uc.dart';
 import 'package:demopico/features/hub/infra/repository/hub_repository.dart';
@@ -29,8 +30,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-
-import '../features/external/datasources/firestore.dart';
 import '../features/hub/infra/services/hub_service.dart';
 
 class MyAppWidget extends StatelessWidget {
