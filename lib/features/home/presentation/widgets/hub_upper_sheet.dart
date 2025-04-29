@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
 
+import 'package:demopico/features/home/provider/home_provider.dart';
+import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
 import 'package:demopico/features/home/presentation/widgets/efemero_scroll_text.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 const double minHeight = 90;
 const double iconStartSize = 44;
@@ -26,6 +29,8 @@ class HubUpperSheet extends StatefulWidget {
 class _HubUpperSheetState extends State<HubUpperSheet>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  late final listenProvider = Provider.of<HomeProvider>(context);
+  late final db = Provider.of<HomeProvider>(context, listen: false);
 
   //método base
   double lerp(double min, double max) =>
@@ -45,6 +50,10 @@ class _HubUpperSheetState extends State<HubUpperSheet>
     return lerp(index * (iconsHorizontalSpacing + iconStartSize), 0);
   }
 
+  Future<void> _loadAllPosts() async {
+    await db.getAllCommuniques();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -52,16 +61,29 @@ class _HubUpperSheetState extends State<HubUpperSheet>
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
+  
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+    _loadAllPosts(); // chama uma vez
+  });
   }
+
 
   @override
   void dispose() {
     _controller.dispose();
+    _loadAllPosts();
     super.dispose();
   }
 
+ 
+
+  
+
   @override
   Widget build(BuildContext context) {
+    final communiques = listenProvider.allCommuniques.last;
+  
+
     return AnimatedBuilder(
         animation: _controller,
         builder: (context, child) {
@@ -101,8 +123,7 @@ class _HubUpperSheetState extends State<HubUpperSheet>
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                  text:
-                                      'Lorem ipsum is a placeholder text commonly used to demonstrate the visual form'),
+                                  text: "${communiques!.vulgo}: ${communiques.text}"),
                               Positioned(
                                 child: Align(
                                   alignment: Alignment.bottomCenter,
