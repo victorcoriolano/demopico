@@ -1,11 +1,11 @@
 import 'package:demopico/features/hub/domain/entities/communique.dart';
-import 'package:demopico/features/hub/infra/services/hub_service.dart';
+import 'package:demopico/features/hub/infra/interfaces/i_hub_repository.dart';
 
 class ListarComunicado{
-  HubService hubService;
-  ListarComunicado({required this.hubService});
+  IHubRepository iHubRepository;
+  ListarComunicado({required this.iHubRepository});
 
   Future<List<Communique>> listar() async{
-   return await hubService.getInstance.getAllCommuniques();
+   return await iHubRepository.getAllCommuniques();
   }
 }

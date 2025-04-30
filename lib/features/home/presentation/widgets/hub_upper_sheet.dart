@@ -51,7 +51,7 @@ class _HubUpperSheetState extends State<HubUpperSheet>
   }
 
   Future<void> _loadAllPosts() async {
-    await db.getAllCommuniques();
+    await db.getAllCommuniques();                                                                                                                                                                                                                               
   }
 
   @override

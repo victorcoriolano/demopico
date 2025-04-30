@@ -12,8 +12,8 @@ class UserService {
   //falta transforme vc como isntancia unica 
   final AuthService auth = AuthService();
 
-  UserService get getInstance{
-    _userService ??= UserService(firestore: firestore); 
+  static UserService get getInstance{
+    _userService ??= UserService(firestore: Firestore()); 
     return _userService!;
   }
 

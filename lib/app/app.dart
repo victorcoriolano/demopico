@@ -3,7 +3,7 @@ import 'package:demopico/features/external/datasources/firestore.dart';
 import 'package:demopico/features/home/provider/home_provider.dart';
 import 'package:demopico/features/hub/domain/usecases/listar_comunicados_uc.dart';
 import 'package:demopico/features/hub/domain/usecases/postar_comunicado_uc.dart';
-import 'package:demopico/features/hub/infra/repository/hub_repository.dart';
+import 'package:demopico/features/hub/infra/services/hub_service.dart';
 
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
 import 'package:demopico/features/hub/presentation/providers/hub_provider.dart';
@@ -30,7 +30,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import '../features/hub/infra/services/hub_service.dart';
+import '../features/hub/infra/repository/hub_repository.dart';
 
 class MyAppWidget extends StatelessWidget {
   MyAppWidget({super.key});
@@ -62,36 +62,13 @@ class MyAppWidget extends StatelessWidget {
                 HistoricoController(SaveHistoryUc(HistoricoLocalRepository()))),
         ChangeNotifierProvider(
           create: (_) => HubProvider(
-            postarComunicado: PostarComunicado(
-              hubService: HubService(
-                userService: UserService(firestore: Firestore()),
-                iHubRepository: HubRepository(firestore: Firestore()),
-              ),
-            ),
-            listarComunicado: ListarComunicado(
-                hubService: HubService(
-              userService: UserService(firestore: Firestore()),
-              iHubRepository: HubRepository(firestore: Firestore()),
-            )),
+            postarComunicado: PostarComunicado(iHubRepository: HubRepository.getInstance),
+            listarComunicado: ListarComunicado(iHubRepository: HubRepository.getInstance),
           ),
         ),
-        ChangeNotifierProvider(create: (_) => HomeProvider( listarComunicado: ListarComunicado(
-                hubService: HubService(
-              userService: UserService(firestore: Firestore()),
-              iHubRepository: HubRepository(firestore: Firestore()),
-            )),)),
-        ChangeNotifierProvider(
-            create: (_) => HubProvider(
-                postarComunicado: PostarComunicado(
-                    hubService: HubService(
-                        userService: UserService(firestore: Firestore()),
-                        iHubRepository:
-                            HubRepository(firestore: firestoreInstance))),
-                listarComunicado: ListarComunicado(
-                    hubService: HubService(
-                        userService: UserService(firestore: Firestore()),
-                        iHubRepository:
-                            HubRepository(firestore: firestoreInstance))))),
+        ChangeNotifierProvider(create: (_) => HomeProvider( 
+                  listarComunicado: ListarComunicado(iHubRepository: HubRepository.getInstance),
+        )),
         ChangeNotifierProvider(
             create: (_) =>
                 CommentController(CommentSpotUC(CommentRepository()))),
