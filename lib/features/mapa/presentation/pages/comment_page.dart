@@ -28,16 +28,16 @@ class _CommentPageState extends State<CommentPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Comentários'),
+        title: const Text('Comentários'),
       ),
       body: Column(
         children: [
           if (commentController.isLoading)
-            Center(child: CircularProgressIndicator())
+            const Center(child: CircularProgressIndicator())
           else if (commentController.error != null)
             Center(child: Text(commentController.error!))
           else if (commentController.comments.isEmpty)
-            Center(child: Text('Nenhum comentário ainda. Seja o primeiro!'))
+            const Center(child: Text('Nenhum comentário ainda. Seja o primeiro!'))
           else
             Expanded(
               child: ListView.builder(
@@ -58,7 +58,7 @@ class _CommentPageState extends State<CommentPage> {
               decoration: InputDecoration(
                 labelText: 'Adicionar comentário',
                 suffixIcon: IconButton(
-                  icon: Icon(Icons.send),
+                  icon: const Icon(Icons.send),
                   onPressed: () {
                     final content = _controller.text;
                     if (content.isNotEmpty) {
