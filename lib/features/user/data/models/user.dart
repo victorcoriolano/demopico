@@ -14,7 +14,7 @@ class UserM {
   String? location;
   String? dob;
   String? conexoes;
-  int? picosAdicionados;
+  String? picosAdicionados;
   String? picosSalvos;
   SignMethods? signMethod;
   AuthEnumState? authEnumState = AuthEnumState.notLoggedIn;
