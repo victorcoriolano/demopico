@@ -3,12 +3,9 @@ import 'package:demopico/features/external/datasources/firestore.dart';
 import 'package:demopico/features/home/provider/home_provider.dart';
 import 'package:demopico/features/hub/domain/usecases/listar_comunicados_uc.dart';
 import 'package:demopico/features/hub/domain/usecases/postar_comunicado_uc.dart';
-import 'package:demopico/features/hub/infra/services/hub_service.dart';
-
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
 import 'package:demopico/features/hub/presentation/providers/hub_provider.dart';
 import 'package:demopico/features/mapa/data/repository/comment_repository.dart';
-
 import 'package:demopico/features/mapa/data/repository/firebase_storage_save_file_repository.dart';
 import 'package:demopico/features/mapa/data/repository/historico_local_repository.dart';
 import 'package:demopico/features/mapa/data/repository/image_picker_repository.dart';
@@ -23,7 +20,6 @@ import 'package:demopico/features/mapa/presentation/controllers/map_controller.d
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
 import 'package:demopico/features/user/data/services/auth_service.dart';
-import 'package:demopico/features/user/data/services/user_service.dart';
 import 'package:demopico/features/user/presentation/controllers/database_notifier_provider.dart';
 import 'package:demopico/core/common/inject_dependencies.dart';
 import 'package:firebase_storage/firebase_storage.dart';

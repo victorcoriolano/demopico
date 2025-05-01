@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
 
 import 'package:demopico/features/home/provider/home_provider.dart';
-import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
 import 'package:demopico/features/home/presentation/widgets/efemero_scroll_text.dart';
 import 'package:flutter/material.dart';
