@@ -1,5 +1,5 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-import 'package:demopico/app/auth_wrapper.dart';
+import 'package:demopico/core/app/auth_wrapper.dart';
 import 'package:demopico/features/home/presentation/widgets/events_bottom_sheet.dart';
 import 'package:demopico/features/home/presentation/widgets/hub_upper_sheet.dart';
 import 'package:demopico/features/user/data/services/auth_service.dart';

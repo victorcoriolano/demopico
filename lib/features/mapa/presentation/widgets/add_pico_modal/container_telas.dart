@@ -1,4 +1,4 @@
-import 'package:demopico/core/common/inject_dependencies.dart';
+import 'package:demopico/core/common/utils/inject_dependencies.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
