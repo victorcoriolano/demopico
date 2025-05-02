@@ -30,9 +30,11 @@ class HubRepository implements IHubRepository {
   Future<void> postHubCommuniqueToFirebase(String text, dynamic type) async {
     try {
       final user = await userService.getCurrentUser();
+      final id = FirebaseFirestore.instance.collection('comunicados').doc().id;
+
       if (user != null) {
         final newCommunique = Communique(
-          id: Random(27345).toString(),
+          id: id,
           uid: user.id!,
           vulgo: user.name!,
           pictureUrl: user.pictureUrl ?? '',
