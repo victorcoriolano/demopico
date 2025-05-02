@@ -1,6 +1,6 @@
 
 import 'package:demopico/core/common/denunciar/denunciar_service_firebase.dart';
-import 'package:demopico/core/common/denunciar/denuncia_model.dart';
+import 'package:demopico/core/domain/entities/denuncia_model.dart';
 
 class DenunciaUseCase {
   final DenunciarServiceFirebase denunciarService;

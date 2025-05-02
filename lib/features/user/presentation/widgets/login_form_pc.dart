@@ -1,4 +1,4 @@
-import 'package:demopico/core/app/home_page.dart';
+import 'package:demopico/app/home_page.dart';
 import 'package:demopico/core/errors/failure_server.dart';
 import 'package:demopico/features/user/data/services/auth_service.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_controller.dart';

@@ -1,4 +1,4 @@
-import 'package:demopico/core/app/home_page.dart';
+import 'package:demopico/app/home_page.dart';
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/pages/historico_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/save_pico_page.dart';

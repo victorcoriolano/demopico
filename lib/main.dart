@@ -1,5 +1,5 @@
-import 'package:demopico/core/app/app.dart';
-import 'package:demopico/core/common/utils/inject_dependencies.dart';
+import 'package:demopico/app/app.dart';
+import 'package:demopico/core/common/inject_dependencies.dart';
 import 'package:demopico/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
