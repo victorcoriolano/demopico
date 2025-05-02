@@ -50,7 +50,7 @@ class _HubUpperSheetState extends State<HubUpperSheet>
   }
 
   Future<void> _loadAllPosts() async {
-    await db.getAllCommuniques();                                                                                                                                                                                                                               
+    await db.getAllCommuniques();
   }
 
   @override
@@ -60,12 +60,11 @@ class _HubUpperSheetState extends State<HubUpperSheet>
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
-  
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-    _loadAllPosts(); // chama uma vez
-  });
-  }
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadAllPosts(); // chama uma vez
+    });
+  }
 
   @override
   void dispose() {
@@ -74,14 +73,9 @@ class _HubUpperSheetState extends State<HubUpperSheet>
     super.dispose();
   }
 
- 
-
-  
-
   @override
   Widget build(BuildContext context) {
-    final communiques = listenProvider.allCommuniques.last;
-  
+    final communiques = listenProvider.allCommuniques.firstOrNull;
 
     return AnimatedBuilder(
         animation: _controller,
@@ -122,7 +116,9 @@ class _HubUpperSheetState extends State<HubUpperSheet>
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                  text: "${communiques!.vulgo}: ${communiques.text}"),
+                                  text: communiques != null
+                                      ? "${communiques.vulgo}: ${communiques.text}"
+                                      : "Sem comunicados"),
                               Positioned(
                                 child: Align(
                                   alignment: Alignment.bottomCenter,
