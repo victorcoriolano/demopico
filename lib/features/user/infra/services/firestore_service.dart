@@ -1,86 +1,92 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demopico/features/external/datasources/firestore.dart';
+import 'package:demopico/features/user/domain/interfaces/i_database_service.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
-import 'package:demopico/features/user/infra/services/auth_service.dart';
-import 'package:flutter/foundation.dart';
 
-class FirestoreService {
 
+class FirestoreService implements IDatabaseService {
+  
   static FirestoreService? _firestoreService;
   static FirestoreService get instance {
-  _firestoreService ??= FirestoreService();
+    _firestoreService ??=
+        FirestoreService(firebaseFirestore: Firestore().getInstance);
     return _firestoreService!;
   }
 
-  FirebaseFirestore? _firestore;
-  FirebaseFirestore get firestore {
-    _firestore ??= FirebaseFirestore.instance;
-    return _firestore!;
+  final FirebaseFirestore firebaseFirestore;
+
+  FirestoreService({
+    required this.firebaseFirestore,
+  });
+
+  @override
+  Future<void> addUserDetails(UserM newUser) async {
+    try {
+      String uid = newUser.id!;
+      final mappedUser = newUser.toJsonMap();
+      await firebaseFirestore.collection('users').doc(uid).set(mappedUser);
+    } on FirebaseException {
+      Exception("Não foi possivel criar a conta devido a um erro no banco");
+    } catch (e) {
+      Exception("Não foi possivel criar a conta, tente novamente.");
+    }
   }
 
-  AuthService auth = AuthService();
-
-  Future<void> addUserDetailsToFirestore(UserM newUser) async {
-    String uid = newUser.id!;
-    final mappedUser = newUser.toJsonMap();
-    await firestore
-        .collection('users')
-        .doc(uid)
-        .set(mappedUser);
-  }
-
-
-  Future<UserM?> getUserDetailsFromFirestore(String? uid) async {
+  @override
+  Future<UserM?> getUserDetails(String uid) async {
     try {
       DocumentSnapshot userSnapshot =
-          await firestore.collection('users').doc(uid).get();
+          await firebaseFirestore.collection('users').doc(uid).get();
 
-      if (userSnapshot.exists) {
-        return UserM.fromDocument(userSnapshot);
-      } else {
-        return null;
+      if (!userSnapshot.exists) {
+        throw Exception("Usuario não existe");
       }
-    } on FirebaseException catch (e) {
-      if (kDebugMode) {
-        print(e.code);
-        print(e.message);
-        print(e.stackTrace);
-      }
+      UserM user = UserM.fromDocument(userSnapshot);
+      return user;
+    } on FirebaseException {
+      Exception("Erro no banco, tente novamente mais tarde");
+      return null;
+    } catch (e) {
+      Exception("Não foi possivel pegar o email");
+      return null;
     }
-    return null;
   }
 
-//Serviço GET ID by USERNAME
-  Future<String?> getIDByVulgo(
-    String vulgo,
-  ) async {
-    QuerySnapshot idSnapshot = await firestore
+  @override
+  Future<String?> getEmailByUserID(String uid) async {
+    try {
+      UserM? user = await getUserDetails(uid);
+      if (user == null) throw Exception();
+      return user.email;
+    } catch (e) {
+      Exception("Não foi possivel pegar o email");
+      return null;
+    }
+  }
+
+  @override
+  Future<String?> getUserIDByVulgo(String vulgo) async {
+    try{
+         QuerySnapshot idSnapshot = await firebaseFirestore
         .collection("users_email_vulgo")
         .where('vulgo', isEqualTo: vulgo)
         .get();
-    if (idSnapshot.docs.isNotEmpty) {
-      return idSnapshot.docs.first.id;
-    } else {
+    if (!idSnapshot.docs.isNotEmpty) {
+      throw Exception("Não existe nenhum usuario com um id como este");
+    } 
+     return idSnapshot.docs.first.id;
+    }on FirebaseException{
+       throw Exception("Falha ao tentar acessar o banco, tente novamente mais tarde");
+    }catch(e){
+      Exception("Falha ao tentar buscar o usuario");
       return null;
     }
   }
 
-  //Serviço GET EMAIL by ID
-  Future<String?> getEmailByID(String id) async {
-    DocumentSnapshot emailSnapshot =
-        await firestore.collection("user_email_vulgo").doc(id).get();
-    if (emailSnapshot.exists) {
-      Map<String, dynamic>? data =
-          emailSnapshot.data() as Map<String, dynamic>?;
-      if (data != null && data.containsKey('email')) {
-        return data['email'] as String;
-      } else {
-        return null;
-      }
-    } else {
-      return null;
-    }
-  }
 
+
+
+/*
   Future<void> atualizarContribuicoes() async {
     final id = auth.currentUser?.uid ?? 'User not found';
     final reference = firestore.collection("users");
@@ -130,5 +136,5 @@ class FirestoreService {
       }
     }
   }
-
+  */
 }
