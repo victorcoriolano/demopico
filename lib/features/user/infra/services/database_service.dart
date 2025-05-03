@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/infra/services/auth_service.dart';
 import 'package:flutter/foundation.dart';
@@ -140,73 +137,4 @@ class DatabaseService {
     }
   }
 
-////////////////
-////////////////
-// Postar no hub
-  Future<void> postHubCommuniqueToFirebase(String text, type) async {
-    try {
-      String? uid = auth.currentUser?.uid;
-      String? name = auth.currentUser?.displayName;
-      print('começo do posthub no databaseservice');
-      print(uid);
-      print(name);
-
-      if (name == null && uid == null) {
-        if (kDebugMode) {
-          print('erro em pegar name e uid do auth current user');
-        }
-      } else {
-        UserM? user = await getUserDetailsFromFirestore(uid);
-        print(user.toString());
-
-        if (user != null) {
-          print('user nao e nulo');
-          Communique newCommunique = Communique(
-            id: Random(27345).toString(),
-            uid: uid!,
-            vulgo: user.name!,
-            pictureUrl: user.pictureUrl ?? '',
-            text: text,
-            timestamp: DateTime.now().toString(),
-            likeCount: 0,
-            likedBy: [],
-            type: type,
-          );
-          print(newCommunique);
-          Map<String, dynamic> newPostMap = newCommunique.toJsonMap();
-
-          await firestore.collection('communique').add(newPostMap);
-        }
-      }
-    } on FirebaseException catch (e) {
-      if (kDebugMode) {
-        print(e.code);
-        print(e.message);
-        print(e.stackTrace);
-      }
-    } catch (e) {
-      print("Erro não esperado: $e");
-    }
-  }
-// Deletar do hub
-
-// Pegar o hub
-  Future<List<Communique>> getAllCommuniques() async {
-    try {
-      QuerySnapshot querySnapshot = await firestore
-          .collection('communique')
-          .orderBy('timestamp', descending: true)
-          .get();
-      print(
-          '${querySnapshot.metadata} ${querySnapshot.docs.length} ${querySnapshot.docs.firstOrNull?.data()}');
-      return querySnapshot.docs
-          .map((doc) => Communique.fromDocument(doc))
-          .toList();
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-      return [];
-    }
-  }
 }
