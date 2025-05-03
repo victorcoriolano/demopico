@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:demopico/app/auth_wrapper.dart';
+import 'package:demopico/core/app/auth_wrapper.dart';
 import 'package:demopico/features/home/presentation/pages/central_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
 import 'package:flutter/material.dart';
