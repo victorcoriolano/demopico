@@ -1,5 +1,5 @@
 import 'package:demopico/features/hub/domain/entities/communique.dart';
-import 'package:demopico/features/hub/infra/interfaces/i_hub_repository.dart';
+import 'package:demopico/features/hub/domain/interfaces/i_hub_repository.dart';
 
 class ListarComunicado{
   IHubRepository iHubRepository;

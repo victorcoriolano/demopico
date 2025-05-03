@@ -1,4 +1,4 @@
-import 'package:demopico/features/hub/infra/interfaces/i_hub_repository.dart';
+import 'package:demopico/features/hub/domain/interfaces/i_hub_repository.dart';
 import 'package:demopico/features/hub/infra/repository/hub_repository.dart';
 
 class PostarComunicado {

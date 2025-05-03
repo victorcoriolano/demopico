@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/external/datasources/firestore.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
-import 'package:demopico/features/hub/infra/interfaces/i_hub_repository.dart';
-import 'package:demopico/features/hub/infra/interfaces/i_hub_service.dart';
+import 'package:demopico/features/hub/domain/interfaces/i_hub_repository.dart';
+import 'package:demopico/features/hub/domain/interfaces/i_hub_service.dart';
 import 'package:demopico/features/hub/infra/services/hub_service.dart';
 import 'package:demopico/features/user/infra/services/user_service.dart';
 import 'package:flutter/foundation.dart';
