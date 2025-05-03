@@ -3,11 +3,12 @@ import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/infra/services/auth_service.dart';
 import 'package:flutter/foundation.dart';
 
-class DatabaseService {
-  static DatabaseService? _instance;
-  static DatabaseService get instance {
-    _instance ??= DatabaseService();
-    return _instance!;
+class FirestoreService {
+
+  static FirestoreService? _firestoreService;
+  static FirestoreService get instance {
+  _firestoreService ??= FirestoreService();
+    return _firestoreService!;
   }
 
   FirebaseFirestore? _firestore;
@@ -17,30 +18,23 @@ class DatabaseService {
   }
 
   AuthService auth = AuthService();
-////////////////////////////
-////////////////////////////
-////////////////////////////
-  Future<void> addUserDetailsToFirestore({required UserM newUser}) async {
+
+  Future<void> addUserDetailsToFirestore(UserM newUser) async {
     String uid = newUser.id!;
-    print('entrou no adduser');
     final mappedUser = newUser.toJsonMap();
     await firestore
         .collection('users')
         .doc(uid)
-        .set(mappedUser)
-        .whenComplete(() => print('User added'));
+        .set(mappedUser);
   }
 
-/////////////////////////////////////////////////////
-/////////////////////////////////////////////////////
-/////////////////////////////////////////////////////
+
   Future<UserM?> getUserDetailsFromFirestore(String? uid) async {
     try {
       DocumentSnapshot userSnapshot =
           await firestore.collection('users').doc(uid).get();
 
       if (userSnapshot.exists) {
-        print(UserM.fromDocument(userSnapshot));
         return UserM.fromDocument(userSnapshot);
       } else {
         return null;
