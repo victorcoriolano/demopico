@@ -37,7 +37,7 @@ class ServiceFirebaseStorageImages implements ISaveImageRepository {
         case 'storage/unauthorized':
           throw Exception("Erro de autorização: $e");
         case 'storage/retry-limit-exceeded':
-          throw Exception("Falha de rede, tente novamente");
+          throw Exception("Limite excedido");
         default:
           throw Exception("Erro no Firebase: ${e.message}");
       }

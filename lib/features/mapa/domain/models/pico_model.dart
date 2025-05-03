@@ -25,23 +25,25 @@ class PicoModel extends Pico {
       
 
   factory PicoModel.fromJson(Map<String, dynamic> json, String id) {
-    return PicoModel(
-      id: id,
-      imgUrls: json['imgUrl'] ?? [],
-      tipoPico: json['tipo'] ?? _padrao,
-      modalidade: json['modalidade'] ?? _padrao,
-      nota: (json['nota'] as num).toDouble(),
-      numeroAvaliacoes: json['avaliacoes'] ?? 0,
-      long: json['longitude'] ?? 0.0,
-      lat: (json['latitude'] as num).toDouble(),
-      description: json['description'] ?? _padrao,
-      atributos: json['atributos'] ?? {},
-      obstaculos: json['obstaculos'] ?? [],
-      utilidades: json['utilidades'] ?? [],
-      userCreator: json['userCreator'] ?? _padrao,
-      picoName: json['picoName'] ?? _padrao,
-    );
-  }
+  return PicoModel(
+    id: id,
+    imgUrls: List<String>.from(json['imgUrl'] ?? []),
+    tipoPico: json['tipo'] ?? _padrao,
+    modalidade: json['modalidade'] ?? _padrao,
+    nota: (json['nota'] as num?)?.toDouble() ?? 0.0,
+    numeroAvaliacoes: json['avaliacoes'] ?? 0,
+    long: (json['longitude'] as num?)?.toDouble() ?? 0.0,
+    lat: (json['latitude'] as num?)?.toDouble() ?? 0.0,
+    description: json['description'] ?? _padrao,
+    atributos: Map<String, int>.from(json['atributos'] ?? {}),
+    obstaculos: List<String>.from(json['obstaculos'] ?? []),
+    utilidades: List<String>.from(json['utilidades'] ?? []),
+    userCreator: json['userCreator'] ?? _padrao,
+    picoName: json['picoName'] ?? _padrao,
+  );
+}
+
+
 
   Map<String, dynamic> toJson() {
     return {
