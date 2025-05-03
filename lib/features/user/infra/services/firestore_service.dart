@@ -5,7 +5,7 @@ import 'package:demopico/features/user/domain/models/user.dart';
 
 
 class FirestoreService implements IDatabaseService {
-  
+
   static FirestoreService? _firestoreService;
   static FirestoreService get instance {
     _firestoreService ??=
@@ -44,8 +44,7 @@ class FirestoreService implements IDatabaseService {
       UserM user = UserM.fromDocument(userSnapshot);
       return user;
     } on FirebaseException {
-      Exception("Erro no banco, tente novamente mais tarde");
-      return null;
+     throw Exception("Erro no banco, tente novamente mais tarde");
     } catch (e) {
       Exception("Não foi possivel pegar o email");
       return null;
@@ -56,7 +55,7 @@ class FirestoreService implements IDatabaseService {
   Future<String?> getEmailByUserID(String uid) async {
     try {
       UserM? user = await getUserDetails(uid);
-      if (user == null) throw Exception();
+      if (user == null) throw Exception("Usuario não encontrado");
       return user.email;
     } catch (e) {
       Exception("Não foi possivel pegar o email");
