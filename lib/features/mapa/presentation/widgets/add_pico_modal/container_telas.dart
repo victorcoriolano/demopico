@@ -6,7 +6,7 @@ import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/prime
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/quarta_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/segunda_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/terceira_tela.dart';
-import 'package:demopico/features/user/data/services/database_service.dart';
+import 'package:demopico/features/user/infra/services/database_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

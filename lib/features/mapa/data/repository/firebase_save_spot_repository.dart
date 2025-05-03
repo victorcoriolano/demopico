@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/mapa/data/models/pico_model.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_save_spot_repository.dart';
-import 'package:demopico/features/user/data/models/user.dart';
+import 'package:demopico/features/user/domain/models/user.dart';
 
 class FirebaseSaveSpotRepository implements ISaveSpotRepository {
   final FirebaseFirestore _firebaseFirestore;

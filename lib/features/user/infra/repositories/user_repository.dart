@@ -1,4 +1,4 @@
-import 'package:demopico/features/user/data/models/user.dart';
+import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter/foundation.dart';
 
 class UserRepository {

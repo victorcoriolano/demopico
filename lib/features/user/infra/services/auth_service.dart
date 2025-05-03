@@ -1,7 +1,7 @@
-import 'package:demopico/features/user/data/models/user.dart';
-import 'package:demopico/features/user/data/repositories/auth_enum.dart';
-import 'package:demopico/features/user/data/repositories/sign_methods.dart';
-import 'package:demopico/features/user/data/services/database_service.dart';
+import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/features/user/infra/repositories/auth_enum.dart';
+import 'package:demopico/features/user/infra/repositories/sign_methods.dart';
+import 'package:demopico/features/user/infra/services/database_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 

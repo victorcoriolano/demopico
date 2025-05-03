@@ -1,8 +1,8 @@
 import 'package:demopico/core/app/home_page.dart';
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
-import 'package:demopico/features/user/data/models/user.dart';
-import 'package:demopico/features/user/data/services/auth_service.dart';
+import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/features/user/infra/services/auth_service.dart';
 import 'package:demopico/features/user/presentation/controllers/database_notifier_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

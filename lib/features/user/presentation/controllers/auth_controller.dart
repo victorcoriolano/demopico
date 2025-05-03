@@ -1,4 +1,4 @@
-import 'package:demopico/features/user/data/services/auth_service.dart';
+import 'package:demopico/features/user/infra/services/auth_service.dart';
 
 class AuthController {
   final _authService = AuthService();

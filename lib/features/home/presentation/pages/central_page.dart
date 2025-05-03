@@ -2,7 +2,7 @@
 import 'package:demopico/core/app/auth_wrapper.dart';
 import 'package:demopico/features/home/presentation/widgets/events_bottom_sheet.dart';
 import 'package:demopico/features/home/presentation/widgets/hub_upper_sheet.dart';
-import 'package:demopico/features/user/data/services/auth_service.dart';
+import 'package:demopico/features/user/infra/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

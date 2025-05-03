@@ -1,4 +1,4 @@
-import 'package:demopico/features/user/data/models/user.dart';
+import 'package:demopico/features/user/domain/models/user.dart';
 
 class LoggedUserModel extends UserM {
   LoggedUserModel.empty() : super();

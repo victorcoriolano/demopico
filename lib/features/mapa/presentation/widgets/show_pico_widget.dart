@@ -6,7 +6,7 @@ import 'package:demopico/features/mapa/presentation/controllers/spot_controller.
 import 'package:demopico/features/mapa/presentation/controllers/spot_save_controller.dart';
 import 'package:demopico/features/mapa/presentation/pages/comment_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/save_pico_page.dart';
-import 'package:demopico/features/user/data/models/user.dart';
+import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
