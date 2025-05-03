@@ -1,6 +1,6 @@
 import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
-import 'package:demopico/features/user/infra/services/database_service.dart';
+import 'package:demopico/features/user/infra/services/firestore_service.dart';
 import 'package:flutter/material.dart';
 
 class DatabaseProvider extends ChangeNotifier {

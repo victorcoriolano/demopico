@@ -1,11 +1,12 @@
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/infra/repositories/auth_enum.dart';
 import 'package:demopico/features/user/infra/repositories/sign_methods.dart';
-import 'package:demopico/features/user/infra/services/database_service.dart';
+import 'package:demopico/features/user/infra/services/firestore_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 class AuthService {
+  
   static FirebaseAuth auth = FirebaseAuth.instance;
   static DatabaseService dbService = DatabaseService.instance;
 
@@ -48,12 +49,8 @@ class AuthService {
     return auth.currentUser;
   }
 
-///////////////////////////////////
-  /// SIGN UP
-///////////////////////////////////
-  ///
-  Future<bool> signUp(String inputName, String inputEmail, String inputPassword,
-      bool isColetivo) async {
+
+  Future<bool> signUp(String inputName, String inputEmail, String inputPassword, bool isColetivo) async {
     try {
       UserCredential authResult = await auth.createUserWithEmailAndPassword(
           email: inputEmail, password: inputPassword);
@@ -95,28 +92,17 @@ class AuthService {
     }
   }
 
-////////////////////
-  /// LOGIN
-////////////////////
-///
-///
-///
-
   Future<bool> login(String email, String password) async {
     try {
-      print("Tentou fazer login");
       final authResult = await auth.signInWithEmailAndPassword(
           email: email, password: password);
-      print(authResult.additionalUserInfo);
       User? signedUser = authResult.user;
-      print(signedUser?.metadata);
+
       if (signedUser != null) {
-        print(signedUser.uid);
         UserM? firestoreUser =
             await dbService.getUserDetailsFromFirestore(signedUser.uid);
         auth.currentUser!.updateDisplayName(firestoreUser!.name);
         auth.currentUser!.updatePhotoURL(firestoreUser.pictureUrl);
-        print(firestoreUser.toString());
         auth.userChanges();
         return true;
       }
