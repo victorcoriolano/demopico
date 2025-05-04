@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/external/datasources/firestore.dart';
-import 'package:demopico/features/user/domain/interfaces/i_database_service.dart';
+import 'package:demopico/features/user/domain/interfaces/i_user_database_service.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 
-class UserFirebaseService implements IDatabaseService {
+class UserFirebaseService implements IUserDatabaseService {
   static UserFirebaseService? _userFirebaseService;
   static UserFirebaseService get instance {
     _userFirebaseService ??=
@@ -17,7 +17,7 @@ class UserFirebaseService implements IDatabaseService {
     required this.firebaseFirestore,
   });
 
-  @override
+  @override                     
   Future<void> addUserDetails(UserM newUser) async {
     try {
       String uid = newUser.id!;
