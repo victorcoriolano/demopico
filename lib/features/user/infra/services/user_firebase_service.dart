@@ -4,8 +4,9 @@ import 'package:demopico/features/user/domain/interfaces/i_user_database_service
 import 'package:demopico/features/user/domain/models/user.dart';
 
 class UserFirebaseService implements IUserDatabaseService {
+
   static UserFirebaseService? _userFirebaseService;
-  static UserFirebaseService get instance {
+  static UserFirebaseService get getInstance {
     _userFirebaseService ??=
         UserFirebaseService(firebaseFirestore: Firestore().getInstance);
     return _userFirebaseService!;
@@ -18,9 +19,8 @@ class UserFirebaseService implements IUserDatabaseService {
   });
 
   @override                     
-  Future<void> addUserDetails(UserM newUser) async {
+  Future<void> addUserDetails(UserM newUser, String uid) async {
     try {
-      String uid = newUser.id!;
       final mappedUser = newUser.toJsonMap();
       await firebaseFirestore.collection('users').doc(uid).set(mappedUser);
     } on FirebaseException {
