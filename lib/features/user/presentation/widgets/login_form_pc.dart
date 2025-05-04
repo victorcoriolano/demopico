@@ -1,6 +1,6 @@
 import 'package:demopico/core/app/home_page.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
-import 'package:demopico/features/user/infra/services/auth_service.dart';
+import 'package:demopico/features/user/infra/services/auth_firebase_service.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_controller.dart';
 import 'package:demopico/features/user/presentation/pages/register_page.dart';
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';

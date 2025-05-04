@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_save_controller.dart';
-import 'package:demopico/features/user/infra/services/auth_service.dart';
+import 'package:demopico/features/user/infra/services/auth_firebase_service.dart';
 import 'package:demopico/features/user/presentation/controllers/database_notifier_provider.dart';
 import 'package:demopico/features/user/infra/services/firestore_service.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_controller.dart';

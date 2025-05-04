@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/external/datasources/firestore.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
-import 'package:demopico/features/user/infra/services/auth_service.dart';
+import 'package:demopico/features/user/infra/services/auth_firebase_service.dart';
 import 'package:flutter/foundation.dart';
 
 class UserService {
