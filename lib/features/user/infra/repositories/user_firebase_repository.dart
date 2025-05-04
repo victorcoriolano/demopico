@@ -5,7 +5,7 @@ import 'package:demopico/features/user/infra/services/user_firebase_service.dart
 class UserFirebaseRepository implements IUserDatabaseRepository {
   static UserFirebaseRepository? _userFirebaseRepository;
 
-  UserFirebaseRepository get getInstance {
+  static UserFirebaseRepository get getInstance {
     _userFirebaseRepository ??= UserFirebaseRepository(
         userFirebaseService: UserFirebaseService.getInstance);
     return _userFirebaseRepository!;
