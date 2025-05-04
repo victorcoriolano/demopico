@@ -1,14 +1,13 @@
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/infra/repositories/auth_enum.dart';
 import 'package:demopico/features/user/infra/repositories/sign_methods.dart';
-import 'package:demopico/features/user/infra/services/firestore_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
-class AuthService {
+class AuthFirebaseService{
   
   static FirebaseAuth auth = FirebaseAuth.instance;
-  static DatabaseService dbService = DatabaseService.instance;
+  static  dbService = DatabaseService.instance;
 
   bool _isAuthenticated = false;
   bool get isAuthenticated => _isAuthenticated;
@@ -54,19 +53,15 @@ class AuthService {
     try {
       UserCredential authResult = await auth.createUserWithEmailAndPassword(
           email: inputEmail, password: inputPassword);
-      print('pegando usercredential do authresult');
       User? signedInUser = authResult.user;
-      print('pegando signedinuser do authresult.user');
 
       //verifica se ele é válido, seta os estados de auth e cria o user no db
       if (signedInUser != null && signedInUser.uid.isNotEmpty) {
         signedInUser.updateDisplayName(inputName);
-        print('atualizando displayname');
         //cria um user model de acordo com a nova conta criada
         UserM? localUser = userFromFirebaseUser(signedInUser);
         //atualização da model temporaria
         if (localUser != null) {
-          print('local user nao e null');
           localUser.isColetivo = isColetivo;
           localUser.signMethod = SignMethods.email;
           localUser.email = inputEmail;
@@ -74,9 +69,8 @@ class AuthService {
           //atualização da model local e adiciona o user no repository
           _localUser = localUser;
           await dbService
-              .addUserDetailsToFirestore(newUser: _localUser!)
-              .whenComplete(
-                  () => print('finalizado o adduserdetailstofirestore'));
+              .addUserDetailsToFirestore(newUser: _localUser!);
+             
           return true;
         } else {
           print('local user null');
