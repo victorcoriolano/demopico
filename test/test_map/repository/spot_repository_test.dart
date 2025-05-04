@@ -47,23 +47,6 @@ void main() {
       userCreator: "user123",
       picoName: "Pico Legal",
     );
-
-    final testPico2 = PicoModel(
-      id: "1",
-      imgUrls: ["url"],
-      tipoPico: "rua",
-      modalidade: "BMX",
-      nota: 4.5,
-      numeroAvaliacoes: 10,
-      long: -46.57421,
-      lat: -23.55052,
-      description: "Teste",
-      atributos: {"teste": 2},
-      obstaculos: ["corrimão"],
-      utilidades: ["banheiro"],
-      userCreator: "user123",
-      picoName: "Pico Legal",
-    );
     
     final testPicoNotaNova = testPico.copyWith(nota: 5, numeroAvaliacoes: 11);
 
@@ -117,7 +100,7 @@ void main() {
 
       expect(resul, isA<Stream<List<PicoModel>>>());
 
-      await expectLater(
+      expectLater(
         resul,
         emits(isA<List<PicoModel>>().having(
             (picos) => picos.first.picoName, 'picoName', testPico.picoName)),
@@ -164,7 +147,7 @@ void main() {
       when(mockDocRef.update({"nota": 5.0, 'avaliacoes': 11}))
           .thenAnswer((_) async {});
 
-      final result = await repositoryMap.salvarNota(testPicoNotaNova);
+      final result = await repositoryMap.updateSpot(testPicoNotaNova);
       expect(result, isA<PicoModel>());
       expect(result.nota, 5.0);
       expect(result.numeroAvaliacoes, 11);

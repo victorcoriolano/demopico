@@ -25,7 +25,7 @@ class AvaliarSpotUc {
     pico.nota = novaMedia;
     pico.numeroAvaliacoes = novoTotalAvaliacoes;
 
-    await notaRepository.salvarNota(pico);
+    await notaRepository.updateSpot(pico);
     return pico;
   }
 }

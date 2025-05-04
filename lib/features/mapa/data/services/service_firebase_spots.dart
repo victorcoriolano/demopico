@@ -31,7 +31,7 @@ class ServiceFirebaseSpots implements ISpotRepository {
   }
 
   @override
-  Future<PicoModel> salvarNota(Pico pico) async {
+  Future<PicoModel> updateSpot(Pico pico) async {
     try {
       final snapshotRef = _firebaseFirestore.collection('spots').doc(pico.id);
 
