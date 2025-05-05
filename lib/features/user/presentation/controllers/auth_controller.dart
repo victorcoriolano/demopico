@@ -20,8 +20,7 @@ class AuthController {
     }
   }
 
-  Future<bool> signUp(
-      {required String inputName,
+  Future<bool> signUp({required String inputName,
       required String inputEmail,
       required String inputPassword,
       required bool isColetivo}) async {
