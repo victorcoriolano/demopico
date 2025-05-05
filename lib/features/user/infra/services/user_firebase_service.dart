@@ -24,9 +24,9 @@ class UserFirebaseService implements IUserDatabaseService {
       final mappedUser = newUser.toJsonMap();
       await firebaseFirestore.collection('users').doc(uid).set(mappedUser);
     } on FirebaseException {
-      Exception("Não foi possivel criar a conta devido a um erro no banco");
+     throw Exception("Não foi possivel criar a conta devido a um erro no banco");
     } catch (e) {
-      Exception("Não foi possivel criar a conta, tente novamente.");
+     throw Exception("Não foi possivel criar a conta, tente novamente.");
     }
   }
 
@@ -44,8 +44,7 @@ class UserFirebaseService implements IUserDatabaseService {
     } on FirebaseException {
       throw Exception("Erro no banco, tente novamente mais tarde");
     } catch (e) {
-      Exception("Não foi possivel pegar o email");
-      return null;
+      throw Exception("Não foi possivel pegar o email");
     }
   }
 
@@ -56,8 +55,7 @@ class UserFirebaseService implements IUserDatabaseService {
       if (user == null) throw Exception("Usuario não encontrado");
       return user.email;
     } catch (e) {
-      Exception("Não foi possivel pegar o email");
-      return null;
+     throw Exception("Não foi possivel pegar o email");
     }
   }
 
@@ -68,16 +66,15 @@ class UserFirebaseService implements IUserDatabaseService {
           .collection("users_email_vulgo")
           .where('vulgo', isEqualTo: vulgo)
           .get();
-      if (!idSnapshot.docs.isNotEmpty) {
-        throw Exception("Não existe nenhum usuario com um id como este");
-      }
+      if (!idSnapshot.docs.isNotEmpty) throw Exception("Não existe nenhum usuario com um id como este");
+
       return idSnapshot.docs.first.id;
     } on FirebaseException {
       throw Exception(
           "Falha ao tentar acessar o banco, tente novamente mais tarde");
     } catch (e) {
-      Exception("Falha ao tentar buscar o usuario");
-      return null;
+      throw Exception("Falha ao tentar buscar o usuario");
+
     }
   }
 
@@ -86,7 +83,7 @@ class UserFirebaseService implements IUserDatabaseService {
     final id = auth.currentUser?.uid ?? 'User not found';
     final reference = firestore.collection("users");
 
-    if (id != 'User not found') {
+    if (id != 'User not found') { 
       try {
         await reference.doc(id).update({
           'picosAdicionados': FieldValue.increment(1),
