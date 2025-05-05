@@ -2,7 +2,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/user/infra/repositories/auth_enum.dart';
 import 'package:demopico/features/user/infra/repositories/sign_methods.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:demopico/features/user/infra/repositories/auth_enum.dart';
 
 class UserM {
   String? name;
@@ -19,6 +22,28 @@ class UserM {
   SignMethods? signMethod;
   AuthEnumState? authEnumState = AuthEnumState.notLoggedIn;
   String? email;
+
+    //transforma dados do firebase em dados na model
+  //cria um user model de acordo com a nova conta criada
+  factory UserM.userFromFirebaseAuthUser(User user, String name, bool coletivo) {
+      String todayDate ='${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}';
+    return
+        UserM(
+            name: name,
+            email: user.email,
+            description: 'Edite para atualizar sua bio',
+            id: user.uid,
+            picosAdicionados: '0',
+            picosSalvos: '0',
+            location: '',
+            conexoes: '0',
+            dob: todayDate,
+            authEnumState: AuthEnumState.notDetermined,
+            pictureUrl: '',
+            isColetivo: coletivo,
+          );
+  }
+
 
   factory UserM.fromDocument(DocumentSnapshot doc) {
     return UserM(
