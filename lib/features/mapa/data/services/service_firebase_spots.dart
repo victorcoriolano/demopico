@@ -74,7 +74,7 @@ class ServiceFirebaseSpots implements ISpotRepository {
       throw Exception("Erro ao carregar os piquersons: $e");
     }
   }
-
+  
   Query executeQuery([Filters? filtro]) {
     Query querySnapshot = _firebaseFirestore.collection("spots");
 

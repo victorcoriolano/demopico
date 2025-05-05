@@ -59,7 +59,7 @@ class MyAppWidget extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => DatabaseProvider()),
         ChangeNotifierProvider(
             create: (_) =>
-                HistoricoController(SaveHistoryUc(HistoricoLocalRepository()))),
+                HistoricoController(SaveHistoryUc(ServiceLocalHistory()))),
         ChangeNotifierProvider(
           create: (_) => HubProvider(
             postarComunicado: PostarComunicado(

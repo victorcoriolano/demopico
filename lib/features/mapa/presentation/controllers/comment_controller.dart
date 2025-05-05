@@ -23,7 +23,6 @@ class CommentController extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // Substitua por uma chamada real ao banco de dados ou API
 
       _comments = await useCase.execulte(picoId);
 

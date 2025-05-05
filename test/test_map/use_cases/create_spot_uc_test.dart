@@ -47,13 +47,10 @@ void main() {
 
         when(() => mockRepository.createSpot(mockPico)).thenThrow(Exception("Erro ao criar pico"));
         
-
         expect(
           () async => await useCase.createSpot(mockPico),
           throwsException,
         );
       });
     });
-
-
  }

@@ -29,7 +29,6 @@ class ServiceFirebaseSaveSpot implements ISaveSpotRepository {
           .get();
 
       if (snapshotListPico.docs.isNotEmpty) {
-        print("o os salvos aqui ò: ${snapshotListPico.docs}");
         final picos = await Future.wait(
           snapshotListPico.docs.map(
             (doc) async {
@@ -42,8 +41,7 @@ class ServiceFirebaseSaveSpot implements ISaveSpotRepository {
         );
         return picos;
       } else {
-        print("Salvos não encontrados");
-        return [];
+        throw Exception("Nenhum pico favoritado encontrado");
       }
     } on FirebaseException catch (e) {
       throw Exception("Erro no firevase ao salvar pico: $e");
@@ -57,15 +55,13 @@ class ServiceFirebaseSaveSpot implements ISaveSpotRepository {
     try {
       final snapshot = await _firebaseFirestore
           .collection('spots')
-          .where("id", isEqualTo: pico.picoName)
-          .limit(1)
-          .get();
+          .doc(pico.id).get();
 
-      if (snapshot.docs.isEmpty) {
+      if (!snapshot.exists) {
         throw Exception("Pico não encontrado");
       }
 
-      final spotRef = snapshot.docs.first.reference;
+      final spotRef = snapshot.reference;
       final userId = user.id;
       await _firebaseFirestore
           .collection("picosFavoritados")
