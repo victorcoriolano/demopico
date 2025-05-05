@@ -1,11 +1,10 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:demopico/features/user/infra/repositories/auth_enum.dart';
-import 'package:demopico/features/user/infra/repositories/sign_methods.dart';
-import 'package:flutter/foundation.dart';
+import 'package:demopico/features/user/domain/enums/auth_enum.dart';
+import 'package:demopico/features/user/domain/enums/sign_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:demopico/features/user/infra/repositories/auth_enum.dart';
+
 
 class UserM {
   String? name;

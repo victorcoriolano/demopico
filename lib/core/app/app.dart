@@ -19,7 +19,6 @@ import 'package:demopico/features/mapa/presentation/controllers/historico_contro
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
-import 'package:demopico/features/user/infra/services/auth_firebase_service.dart';
 import 'package:demopico/features/user/presentation/controllers/database_notifier_provider.dart';
 import 'package:demopico/core/common/inject_dependencies.dart';
 import 'package:firebase_storage/firebase_storage.dart';
