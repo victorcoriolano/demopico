@@ -5,17 +5,17 @@ import 'package:demopico/features/user/infra/repositories/user_firebase_reposito
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
-class AuthFirebaseService implements IUserAuthService {
-  static AuthFirebaseService? _authFirebaseService;
+class UserAuthFirebaseService implements IUserAuthService {
+  static UserAuthFirebaseService? _userAuthFirebaseService;
 
-  static AuthFirebaseService get getInstace {
-    _authFirebaseService ??= AuthFirebaseService(
+  static UserAuthFirebaseService get getInstace {
+    _userAuthFirebaseService ??= UserAuthFirebaseService(
         auth: FirebaseAuth.instance,
         userDatabaseRepositoryIMP: UserFirebaseRepository.getInstance);
-    return _authFirebaseService!;
+    return _userAuthFirebaseService!;
   }
 
-  AuthFirebaseService({required this.auth, required this.userDatabaseRepositoryIMP});
+  UserAuthFirebaseService({required this.auth, required this.userDatabaseRepositoryIMP});
 
   final FirebaseAuth auth;
   final IUserDatabaseRepository userDatabaseRepositoryIMP;

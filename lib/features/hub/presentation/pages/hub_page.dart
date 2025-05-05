@@ -2,7 +2,7 @@ import 'package:demopico/features/hub/presentation/providers/hub_provider.dart';
 import 'package:demopico/features/hub/presentation/widgets/communique_tile.dart';
 import 'package:demopico/features/hub/presentation/widgets/input_box.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
-import 'package:demopico/features/user/infra/services/auth_firebase_service.dart';
+import 'package:demopico/features/user/infra/services/user_auth_firebase_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
