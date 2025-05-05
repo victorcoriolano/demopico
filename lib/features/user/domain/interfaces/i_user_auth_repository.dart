@@ -1,6 +1,8 @@
+import 'package:demopico/features/user/domain/entity/user_credentials.dart';
+
 abstract class IUserAuthRepository {
-  Future<bool> signUp(String inputName, String inputEmail, String password, bool isColetivo);
-  Future<bool> loginByEmail(String email, String password);
-  Future<bool> loginByVulgo(String vulgo, String password);
+  Future<bool> signUp(UserCredentialsSignUp cadastroCredentials);
+  Future<bool> loginByEmail(UserCredentialsSignIn loginCredentials);
+  Future<bool> loginByVulgo(UserCredentialsSignIn loginCredentials);
   Future<void> logout();
 }
