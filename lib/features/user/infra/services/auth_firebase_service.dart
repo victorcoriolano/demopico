@@ -15,8 +15,7 @@ class AuthFirebaseService implements IUserAuthService {
     return _authFirebaseService!;
   }
 
-  AuthFirebaseService(
-      {required this.auth, required this.userDatabaseRepositoryIMP});
+  AuthFirebaseService({required this.auth, required this.userDatabaseRepositoryIMP});
 
   final FirebaseAuth auth;
   final IUserDatabaseRepository userDatabaseRepositoryIMP;
@@ -25,8 +24,6 @@ class AuthFirebaseService implements IUserAuthService {
   bool get isAuthenticated => _isAuthenticated;
   set setAuthenticated(bool value) => _isAuthenticated = value;
 
-  UserM? _localUser;
-  UserM? get getLocalUser => _localUser;
 
   Stream<User?> getAuthStateChanges() {
     return auth.authStateChanges();
@@ -49,9 +46,12 @@ class AuthFirebaseService implements IUserAuthService {
 
       await userDatabaseRepositoryIMP.addUserDetails(localUser);
       return true;
-    } catch (e) {
-      Exception("Erro ao criar usuario");
-      return false;
+    }on FirebaseAuthException{
+      throw Exception("Erro no sistema de autenticação");
+    }
+     catch (e) {
+     throw Exception("Erro ao criar usuario");
+      
     }
   }
 
@@ -62,9 +62,10 @@ class AuthFirebaseService implements IUserAuthService {
       User? signedUser = authResult.user;
       if (signedUser == null)throw Exception("Não foi possível fazer o login, usuario não encontrado");
       return true;
+    }on FirebaseAuthException{
+      throw Exception("Erro no sistema de autenticação");
     } catch (e) {
-      Exception("Erro ao tentar realizar o login, tente novamente");
-      return false;
+    throw  Exception("Erro ao tentar realizar o login, tente novamente");
     }
   }
 
@@ -72,10 +73,13 @@ class AuthFirebaseService implements IUserAuthService {
   Future<void> logout() async {
     try {
       await auth.signOut();
+    }on FirebaseAuthException{
+      throw Exception("Erro no sistema de autenticação");
     } catch (e) {
       if (kDebugMode) {
         print(e.toString());
       }
+      throw Exception("Não foi possível deslogar, erro desconhecido");
     }
   }
 }
