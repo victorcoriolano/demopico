@@ -1,9 +1,9 @@
-  import 'package:demopico/features/mapa/data/services/service_local_historico.dart';
+  import 'package:demopico/features/mapa/data/services/local_storage_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 //criando mocks
-class MockHistoryRepository extends Mock implements ServiceLocalHistory {}
+class MockHistoryRepository extends Mock implements LocalStorageService {}
 void main() {
   group("Deve testar o serviço de historico de spots", (){
 

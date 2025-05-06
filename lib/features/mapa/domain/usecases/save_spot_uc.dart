@@ -4,7 +4,7 @@ import 'package:demopico/features/mapa/domain/interfaces/i_save_spot_repository.
 import 'package:demopico/features/user/data/models/user.dart';
 
 class SaveSpotUc {
-  final ISaveSpotRepository spotRepository;
+  final IFavoriteSpotRepository spotRepository;
   SaveSpotUc(this.spotRepository);
 
   Future<bool> saveSpot(Pico pico, UserM? user) async {

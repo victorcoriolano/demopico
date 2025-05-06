@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
-import 'package:demopico/features/mapa/data/services/service_firebase_spots.dart';
+import 'package:demopico/features/mapa/data/services/firebase_spots_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -27,7 +27,7 @@ void main() {
     late MockCollectionReference mockCollection;
     late MockDocumentReference mockDocRef;
     late MockDocumentSnapshot mockDocSnapshot;
-    late ServiceFirebaseSpots repositoryMap;
+    late FirebaseSpotsService repositoryMap;
     late MockQuerySnapshot mockQuerySnapshot;
     late MockQueryDocumentSnapshot mockQueryDocSnapshot;
 
@@ -59,7 +59,7 @@ void main() {
       mockQuerySnapshot = MockQuerySnapshot();
       mockQueryDocSnapshot = MockQueryDocumentSnapshot();
 
-      repositoryMap = ServiceFirebaseSpots(mockFirestore);
+      repositoryMap = FirebaseSpotsService(mockFirestore);
     });
 
     //testando criar pico

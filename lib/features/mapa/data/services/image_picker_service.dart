@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:demopico/features/mapa/domain/interfaces/i_pick_image_repository.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ServiceImagePicker implements IPickImageRepository{
+class ImagePickerService implements IPickImageRepository{
 
   final _imagePicker = ImagePicker();
 

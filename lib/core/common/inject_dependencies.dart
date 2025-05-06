@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:demopico/features/mapa/data/services/service_firebase_comment.dart';
-import 'package:demopico/features/mapa/data/services/service_firebase_spots.dart';
+import 'package:demopico/features/mapa/data/services/firebase_comment_service.dart';
+import 'package:demopico/features/mapa/data/services/firebase_spots_service.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_spot_repository.dart';
 import 'package:demopico/features/mapa/domain/usecases/avaliar_spot_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
@@ -33,8 +33,8 @@ Future<void> init() async {
 
   serviceLocator.registerLazySingleton<AuthService>(() => AuthService());
 
-  serviceLocator.registerLazySingleton<ISpotRepository>(() => ServiceFirebaseSpots(serviceLocator()));
-  serviceLocator.registerLazySingleton(() => ServiceFirebaseComment());
+  serviceLocator.registerLazySingleton<ISpotRepository>(() => FirebaseSpotsService(serviceLocator()));
+  serviceLocator.registerLazySingleton(() => FirebaseCommentService(serviceLocator()));
   
 
   // Providers

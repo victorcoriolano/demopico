@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/app/home_page.dart';
 import 'package:demopico/features/hub/domain/usecases/listar_comunicados_uc.dart';
 import 'package:demopico/features/hub/domain/usecases/postar_comunicado_uc.dart';
@@ -5,11 +6,11 @@ import 'package:demopico/features/hub/infra/repository/hub_repository.dart';
 
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
 import 'package:demopico/features/hub/presentation/providers/hub_provider.dart';
-import 'package:demopico/features/mapa/data/services/service_firebase_comment.dart';
+import 'package:demopico/features/mapa/data/services/firebase_comment_service.dart';
 
-import 'package:demopico/features/mapa/data/services/service_firebase_storage_images.dart';
-import 'package:demopico/features/mapa/data/services/service_local_historico.dart';
-import 'package:demopico/features/mapa/data/services/service_image_picker.dart';
+import 'package:demopico/features/mapa/data/services/firebase_files_service.dart';
+import 'package:demopico/features/mapa/data/services/local_storage_service.dart';
+import 'package:demopico/features/mapa/data/services/image_picker_service.dart';
 import 'package:demopico/features/mapa/domain/usecases/comment_spot_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/pick_image_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/save_history_spot_uc.dart';
@@ -50,8 +51,8 @@ class MyAppWidget extends StatelessWidget {
         ),
         ChangeNotifierProvider(
             create: (_) => AddPicoProvider(
-                PickImageUC(ServiceImagePicker()),
-                SaveImageUC(ServiceFirebaseStorageImages(
+                PickImageUC(ImagePickerService()),
+                SaveImageUC(FirebaseFilesService(
                     FirebaseStorage.instance)))),
         ChangeNotifierProvider(create: (_) => MapControllerProvider()),
         ChangeNotifierProvider(
@@ -59,7 +60,7 @@ class MyAppWidget extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => DatabaseProvider()),
         ChangeNotifierProvider(
             create: (_) =>
-                HistoricoController(SaveHistoryUc(ServiceLocalHistory()))),
+                HistoricoController(SaveHistoryUc(LocalStorageService()))),
         ChangeNotifierProvider(
           create: (_) => HubProvider(
             postarComunicado: PostarComunicado(
@@ -89,7 +90,7 @@ class MyAppWidget extends StatelessWidget {
                             HubRepository(firestore: firestoreInstance))))),
         ChangeNotifierProvider(
             create: (_) =>
-                CommentController(CommentSpotUC(ServiceFirebaseComment()))),
+                CommentController(CommentSpotUC(FirebaseCommentService(serviceLocator<FirebaseFirestore>())))),
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,

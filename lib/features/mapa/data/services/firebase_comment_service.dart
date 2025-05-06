@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/mapa/domain/entities/comment.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_comment_repository.dart';
 
-class ServiceFirebaseComment implements ICommentRepository{
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+class FirebaseCommentService implements ICommentRepository{
+  final FirebaseFirestore _firestore;
+
+  FirebaseCommentService(this._firestore);
 
   @override
   Future<void> addComment(Comment comment) async {
