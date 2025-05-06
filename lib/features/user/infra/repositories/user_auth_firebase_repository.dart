@@ -23,9 +23,11 @@ class UserAuthFirebaseRepository implements IUserAuthRepository {
   }
 
   @override
-  Future<bool> loginByVulgo(UserCredentialsSignIn loginCredentials) async {
-      String email = loginCredentials.email;
+  Future<bool> loginByVulgo(UserCredentialsSignInVulgo loginCredentials) async {
+      String vulgo = loginCredentials.vulgo;
       String senha = loginCredentials.password;
+      
+
       return await userAuthServiceIMP.loginByEmail(email, senha);
   }
 

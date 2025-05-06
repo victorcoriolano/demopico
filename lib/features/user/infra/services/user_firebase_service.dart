@@ -77,6 +77,28 @@ class UserFirebaseService implements IUserDatabaseService {
 
     }
   }
+  
+  @override
+  Future<String?> getEmailByVulgo(String vulgo) async{
+       try {
+      QuerySnapshot userSnapshot = await firebaseFirestore
+          .collection("users")
+          .where('name', isEqualTo: vulgo)
+          .limit(1)
+          .get();
+      if (!userSnapshot.docs.isNotEmpty) throw Exception("Não existe nenhum usuario com um id como este");
+
+        UserM user = UserM.fromSnapshot(userSnapshot);
+
+      return user.email;
+    } on FirebaseException {
+      throw Exception(
+          "Falha ao tentar acessar o banco, tente novamente mais tarde");
+    } catch (e) {
+      throw Exception("Falha ao tentar buscar o usuario");
+
+    }
+  }
 
 /*
   Future<void> atualizarContribuicoes() async {
