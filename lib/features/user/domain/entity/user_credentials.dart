@@ -8,6 +8,16 @@ class UserCredentialsSignIn {
   });
 }
 
+class UserCredentialsSignInVulgo {
+  final String vulgo;
+  final String password;
+
+  UserCredentialsSignInVulgo({
+    required this.vulgo,
+    required this.password,
+  });
+}
+
 class UserCredentialsSignUp {
   final String nome;
   final bool isColetivo;
