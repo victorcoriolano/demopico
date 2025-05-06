@@ -60,6 +60,10 @@ class UserM {
     );
   }
 
+  factory UserM.fromSnapshot(QuerySnapshot doc){
+    return UserM(email: "email");
+  }
+
   Map<String, dynamic> toJsonMap() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['name'] = name;
