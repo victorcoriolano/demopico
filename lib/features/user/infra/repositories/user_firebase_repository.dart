@@ -35,4 +35,9 @@ class UserFirebaseRepository implements IUserDatabaseRepository {
   Future<String?> getUserIDByVulgo(String vulgo) async {
     return await userFirebaseService.getUserIDByVulgo(vulgo);
   }
+  
+  @override
+  Future<String?> getEmailByVulgo(String vulgo) async {
+   return await userFirebaseService.getEmailByVulgo(vulgo);
+}
 }
