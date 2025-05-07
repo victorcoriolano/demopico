@@ -1,21 +1,34 @@
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter/material.dart';
+import 'package:demopico/features/user/domain/usecases/pegar_dados_user_uc.dart';
 
 class UserDatabaseProvider extends ChangeNotifier {
-  
-  static UserDatabaseProvider? _userDatabaseProvider;
 
-  static UserDatabaseProvider get getInstance{
-    _userDatabaseProvider ??= UserDatabaseProvider();
+  static UserDatabaseProvider? _userDatabaseProvider;
+  static UserDatabaseProvider get getInstance {
+    _userDatabaseProvider ??= UserDatabaseProvider(pegarDadosUserUc: PegarDadosUserUc.getInstance);
     return _userDatabaseProvider!;
   }
 
-  
+  UserDatabaseProvider({required this.pegarDadosUserUc});
 
-  Future<UserM?> retrieveUserProfileData(String uid) =>
-      _db.getUserDetailsFromFirestore(uid);
+  final PegarDadosUserUc pegarDadosUserUc;
 
-  Future<void> updateUserBio(String newBio) =>
-      _db.updateUserBioInFirebase(newBio);
 
+  UserM? _user;
+  UserM? get user => _user;
+
+  Future<void> retrieveUserProfileData(String uid) async {
+    _user = await PegarDadosUserUc.getInstance.getDados(uid);
+    notifyListeners();
+  }
+
+
+  // Future<void> updateUserBio(String newBio) async {
+  //   final success = await AtualizarBioUserUc.getInstance.updateBio(_user!.id!, newBio);
+  //   if (success) {
+  //     _user!.description = newBio;
+  //     notifyListeners();
+  //   }
+  // }
 }
