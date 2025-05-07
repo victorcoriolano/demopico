@@ -1,6 +1,5 @@
 import 'package:demopico/features/mapa/domain/entities/pico_favorito.dart';
 import 'package:demopico/features/mapa/domain/models/pico_favorito_model.dart';
-import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 
 abstract class IFavoriteSpotRepository {
   //save methods

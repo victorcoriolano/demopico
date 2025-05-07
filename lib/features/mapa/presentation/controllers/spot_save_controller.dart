@@ -7,7 +7,7 @@ class SpotSaveController extends ChangeNotifier {
   final SaveSpotUc saveSpot;
   SpotSaveController(this.saveSpot);
 
-  List<SpotCardUi> picosFavoritos = [];
+  List<SpotCardUIDto> picosFavoritos = [];
   String? error;
   Future<bool> savePico(PicoFavorito picoFav) async {
     final salvar = await saveSpot.saveSpot(picoFav);

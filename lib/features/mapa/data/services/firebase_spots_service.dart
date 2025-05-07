@@ -106,7 +106,7 @@ class FirebaseSpotsService implements ISpotRepository {
       if (snapshot.data() == null) throw Exception("Dados nulos");
       return PicoModel.fromJson(snapshot.data()! , id);
     }on FirebaseException catch (e){
-      rethrow;
+      throw Exception("Erro no firebase: $e ");
     }
   }
 }

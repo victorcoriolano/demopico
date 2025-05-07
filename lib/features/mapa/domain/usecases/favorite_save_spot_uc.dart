@@ -19,7 +19,7 @@ class SaveSpotUc {
   }
   
 
-  Future<List<SpotCardUi>> listFavoriteSpot(String idUser) async {
+  Future<List<SpotCardUIDto>> listFavoriteSpot(String idUser) async {
       
       try {
         final favoritos = await spotFavRepository.listFavoriteSpot(idUser);
@@ -28,7 +28,7 @@ class SaveSpotUc {
         }
         final result = await Future.wait(favoritos.map((fav) async {
           final pico = await spotRepository.getPicoByID(fav.id); // retorna PicoModel
-          var card = SpotCardUi(picoFavoritoModel: fav, picoModel: pico);
+          var card = SpotCardUIDto(picoFavoritoModel: fav, picoModel: pico);
           return card;
         }));
         return result;
