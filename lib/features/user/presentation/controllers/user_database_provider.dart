@@ -1,12 +1,16 @@
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter/material.dart';
 
-class DatabaseProvider extends ChangeNotifier {
-  final _db = DatabaseService();
+class UserDatabaseProvider extends ChangeNotifier {
+  
+  static UserDatabaseProvider? _userDatabaseProvider;
 
-  void notify() {
-    notifyListeners();
+  static UserDatabaseProvider get getInstance{
+    _userDatabaseProvider ??= UserDatabaseProvider();
+    return _userDatabaseProvider!;
   }
+
+  
 
   Future<UserM?> retrieveUserProfileData(String uid) =>
       _db.getUserDetailsFromFirestore(uid);
