@@ -3,9 +3,9 @@ import 'package:demopico/features/hub/infra/repository/hub_repository.dart';
 
 class PostarComunicado {
 
-   PostarComunicado? _postarComunicado;
+  static PostarComunicado? _postarComunicado;
 
-  PostarComunicado get getInstance{
+ static PostarComunicado get getInstance{
     _postarComunicado ??= PostarComunicado(iHubRepository: HubRepository.getInstance);
     return _postarComunicado!;
   }
