@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_save_controller.dart';
 import 'package:demopico/features/user/presentation/controllers/database_notifier_provider.dart';
-import 'package:demopico/features/user/presentation/controllers/auth_controller.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 
@@ -20,16 +20,14 @@ Future<void> init() async {
   serviceLocator.registerLazySingleton(() => FirebaseFirestore.instance);
 
   // Services
-  serviceLocator.registerFactory<DatabaseService>(() => DatabaseService());
+ // serviceLocator.registerFactory<DatabaseService>(() => DatabaseService());
 
-  serviceLocator.registerLazySingleton<AuthService>(() => AuthService());
+ // serviceLocator.registerLazySingleton<AuthService>(() => AuthService());
 
   // Providers
   serviceLocator.registerLazySingleton(() => DatabaseProvider());
 
-  // Controllers
-  serviceLocator.registerLazySingleton<AuthController>(() => AuthController());
-
+  // Controllers  serviceLocator.registerLazySingleton<AuthController>(() => AuthController());
   //injeção de dependencia para o mapa
   //registrando o service do mapa no get it
 
