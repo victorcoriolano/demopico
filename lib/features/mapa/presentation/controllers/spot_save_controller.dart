@@ -1,8 +1,6 @@
-import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_favorito.dart';
 import 'package:demopico/features/mapa/domain/usecases/favorite_save_spot_uc.dart';
 import 'package:demopico/features/mapa/presentation/dtos/spot_cart_ui.dart';
-import 'package:demopico/features/user/data/models/user.dart';
 import 'package:flutter/material.dart';
 
 class SpotSaveController extends ChangeNotifier {
@@ -33,7 +31,7 @@ class SpotSaveController extends ChangeNotifier {
         return false;
       }
     } on Exception catch (e) {
-      error = "Um erro ao buscar picos salvos foi identificado";
+      error = "Um erro ao buscar picos salvos foi identificado: $e";
       return false;
 
     } catch (e) {
