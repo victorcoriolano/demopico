@@ -24,7 +24,7 @@ class FirebaseFavoriteSpotService implements IFavoriteSpotRepository {
   @override
   Future<PicoFavoritoModel> saveSpot(PicoFavorito picoFav) async {
     try {
-      final data = PicoFavoritoAdapter.toFirebase(picoFav);
+      final data = PicoFavoritoAdapter.toFirebase(picoFav, _firebaseFirestore);
 
       final snapshot =
           await _firebaseFirestore.collection("picosFavoritados").add(data);

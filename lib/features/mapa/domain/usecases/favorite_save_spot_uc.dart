@@ -1,7 +1,7 @@
 import 'package:demopico/features/mapa/domain/entities/pico_favorito.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_favorite_spot_repository.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_spot_repository.dart';
-import 'package:demopico/features/mapa/presentation/dtos/spot_cart_ui.dart';
+import 'package:demopico/features/mapa/presentation/dtos/spot_cart_ui_dto.dart';
 
 class SaveSpotUc {
   final IFavoriteSpotRepository spotFavRepository;

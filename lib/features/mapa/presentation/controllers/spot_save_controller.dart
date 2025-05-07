@@ -1,6 +1,6 @@
 import 'package:demopico/features/mapa/domain/entities/pico_favorito.dart';
 import 'package:demopico/features/mapa/domain/usecases/favorite_save_spot_uc.dart';
-import 'package:demopico/features/mapa/presentation/dtos/spot_cart_ui.dart';
+import 'package:demopico/features/mapa/presentation/dtos/spot_cart_ui_dto.dart';
 import 'package:flutter/material.dart';
 
 class SpotSaveController extends ChangeNotifier {

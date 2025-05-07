@@ -13,10 +13,10 @@ class PicoFavoritoAdapter {
     );
   }
 
-  static Map<String, dynamic> toFirebase(PicoFavorito picoFavorito) {
+  static Map<String, dynamic> toFirebase(PicoFavorito picoFavorito, FirebaseFirestore firebaseInstance) {
     return {
       'idUsuario': picoFavorito.idUsuario,
-      'idPico': FirebaseFirestore.instance
+      'idPico': firebaseInstance
         .collection('spots')  
         .doc(picoFavorito.idPico),
     };
