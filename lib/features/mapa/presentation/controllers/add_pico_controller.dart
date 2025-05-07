@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/usecases/pick_image_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/save_image_uc.dart';
-import 'package:demopico/features/user/data/models/user.dart';
 import 'package:demopico/features/user/presentation/widgets/form_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
