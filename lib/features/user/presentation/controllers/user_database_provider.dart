@@ -19,7 +19,7 @@ class UserDatabaseProvider extends ChangeNotifier {
   UserM? get user => _user;
 
   Future<void> retrieveUserProfileData(String uid) async {
-    _user = await PegarDadosUserUc.getInstance.getDados(uid);
+    _user = await pegarDadosUserUc.getDados(uid);
     notifyListeners();
   }
 
