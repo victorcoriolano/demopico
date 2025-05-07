@@ -24,8 +24,7 @@ Future<void> init() async {
 
  // serviceLocator.registerLazySingleton<AuthService>(() => AuthService());
 
-  // Providers
-  serviceLocator.registerLazySingleton(() => DatabaseProvider());
+  // Providers serviceLocator.registerLazySingleton(() => DatabaseProvider());
 
   // Controllers  serviceLocator.registerLazySingleton<AuthController>(() => AuthController());
   //injeção de dependencia para o mapa
