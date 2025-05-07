@@ -3,8 +3,9 @@ import 'package:demopico/features/user/domain/usecases/criar_conta_uc.dart';
 import 'package:demopico/features/user/domain/usecases/login_email_uc.dart';
 import 'package:demopico/features/user/domain/usecases/login_vulgo_uc.dart';
 import 'package:demopico/features/user/domain/usecases/logout_uc.dart';
+import 'package:flutter/material.dart';
 
-class AuthUserProvider {
+class AuthUserProvider  extends ChangeNotifier {
   static AuthUserProvider? _authUserProvider;
 
   static AuthUserProvider get getInstance {
