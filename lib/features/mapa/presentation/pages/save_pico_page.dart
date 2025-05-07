@@ -38,7 +38,7 @@ class _SavePicoPageState extends State<SavePicoPage> {
               child: CircularProgressIndicator(),
             );
           }
-          if(provider.picosSalvos.isEmpty){
+          if(provider.picosFavoritos.isEmpty){
             return const Center(child:  Text("Você não possui nenhum pico salvo"));
           }
 
@@ -46,9 +46,9 @@ class _SavePicoPageState extends State<SavePicoPage> {
             return const Center(child: Text("Algum erro aconteceu"));
           }
           return ListView.builder(
-            itemCount: provider.picosSalvos.length,
+            itemCount: provider.picosFavoritos.length,
             itemBuilder: (context, index) {
-              var pico = provider.picosSalvos[index];
+              var pico = provider.picosFavoritos[index];
               return Card(
                 margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 elevation: 5, 
@@ -66,14 +66,14 @@ class _SavePicoPageState extends State<SavePicoPage> {
                     ),
                   ),
                   title: Text(
-                    pico.picoName,
+                    pico.picoModel.picoName,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   subtitle: Text(
-                    pico.userCreator ?? 'Anônimmo', 
+                    pico.picoModel.userCreator ?? 'Anônimmo', 
                     style: const TextStyle(
                       fontSize: 14,
                       color: Colors.grey,
@@ -86,7 +86,7 @@ class _SavePicoPageState extends State<SavePicoPage> {
                         tooltip: "Localização no mapa",
                         icon: const Icon(Icons.location_on, color: Colors.blue),
                         onPressed: () {
-                          mapProvider.reajustarCameraPosition(LatLng(pico.lat, pico.long));
+                          mapProvider.reajustarCameraPosition(LatLng(pico.picoModel.lat, pico.picoModel.long));
                           Navigator.pop(context);
                         },
                       ),
@@ -94,18 +94,18 @@ class _SavePicoPageState extends State<SavePicoPage> {
                         tooltip: "Deletar Pico",
                         icon: const Icon(Icons.delete, color: Colors.red),
                         onPressed: () async {
-                          final deletar =  await provider.deleteSave(pico.picoName, widget.userID);
+                          final deletar =  await provider.deleteSave(pico.picoFavoritoModel.id);
                           if(context.mounted){
                             if(deletar){
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text("Pico ${pico.picoName} removido dos excluidos"),
+                                  content: Text("Pico ${pico.picoModel.picoName} removido com sucesso"),
                                 ),
                               );
                             }else{
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text("Não foi possivel remover: ${pico.picoName} "),
+                                  content: Text("Ocorreu um erro ao remover ${pico.picoModel.picoName} dos favoritos"),
                                 ),
                               );
                             }
@@ -115,7 +115,7 @@ class _SavePicoPageState extends State<SavePicoPage> {
                     ],
                   ),
                   onTap: () { 
-                    mapProvider.reajustarCameraPosition(LatLng(pico.lat, pico.long));
+                    mapProvider.reajustarCameraPosition(LatLng(pico.picoModel.lat, pico.picoModel.long));
                     Navigator.pop(context);
                   },
                   

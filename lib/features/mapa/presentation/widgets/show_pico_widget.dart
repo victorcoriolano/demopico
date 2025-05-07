@@ -2,6 +2,7 @@ import 'package:demopico/core/common/inject_dependencies.dart';
 import 'package:demopico/core/common/widgets/denunciar_widget.dart';
 import 'package:demopico/core/domain/entities/denuncia_model.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
+import 'package:demopico/features/mapa/domain/entities/pico_favorito.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_save_controller.dart';
 import 'package:demopico/features/mapa/presentation/pages/comment_page.dart';
@@ -509,8 +510,8 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                     IconButton(
                                       onPressed: () async {
                                         print("clicou em salvar");
-                                        final salvar = provider.savePico(
-                                            widget.pico, user);
+                                        final picoFav = PicoFavorito(idPico: widget.pico.id, idUsuario: user.id!);
+                                        final salvar = provider.savePico(picoFav);
                                         if (await salvar) {
                                           if (context.mounted) {
                                             ScaffoldMessenger.of(context)

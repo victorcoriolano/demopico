@@ -5,7 +5,7 @@ import 'package:demopico/features/mapa/domain/interfaces/i_spot_repository.dart'
 import 'package:demopico/features/mapa/domain/usecases/avaliar_spot_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/load_spot_uc.dart';
-import 'package:demopico/features/mapa/domain/usecases/save_spot_uc.dart';
+import 'package:demopico/features/mapa/domain/usecases/favorite_save_spot_uc.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_save_controller.dart';
 import 'package:demopico/features/user/data/services/auth_service.dart';
@@ -47,7 +47,7 @@ Future<void> init() async {
   //registrando o service do mapa no get it
 
   serviceLocator.registerLazySingleton(() => CreateSpotUc(serviceLocator()));
-  serviceLocator.registerLazySingleton(() => SaveSpotUc(serviceLocator()));
+  serviceLocator.registerLazySingleton(() => SaveSpotUc(serviceLocator(), serviceLocator()));
   serviceLocator.registerLazySingleton(() => LoadSpotUc(serviceLocator()));
   serviceLocator.registerLazySingleton(() => AvaliarSpotUc(serviceLocator()));
   //registrando o controller e injetoando dependencia

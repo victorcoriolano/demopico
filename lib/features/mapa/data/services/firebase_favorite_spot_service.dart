@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:demopico/features/mapa/domain/models/pico_model.dart';
-import 'package:demopico/features/mapa/domain/interfaces/i_save_spot_repository.dart';
-import 'package:demopico/features/user/data/models/user.dart';
+import 'package:demopico/features/mapa/data/adapters/pico_favorito_adapter.dart';
+import 'package:demopico/features/mapa/domain/entities/pico_favorito.dart';
+import 'package:demopico/features/mapa/domain/models/pico_favorito_model.dart';
+import 'package:demopico/features/mapa/domain/interfaces/i_favorite_spot_repository.dart';
 
 class FirebaseFavoriteSpotService implements IFavoriteSpotRepository {
   final FirebaseFirestore _firebaseFirestore;
@@ -9,11 +10,11 @@ class FirebaseFavoriteSpotService implements IFavoriteSpotRepository {
   FirebaseFavoriteSpotService(this._firebaseFirestore);
 
   @override
-  Future<void> deleteSave(String userId, String picoName) async {
+  Future<void> deleteSave(String idPicoModel) async {
     try {
       await _firebaseFirestore
           .collection("picosFavoritados")
-          .doc("$userId-$picoName")
+          .doc(idPicoModel)
           .delete();
     } catch (e) {
       throw Exception("Erro ao deletar o pico favoritado: $e");
@@ -21,28 +22,14 @@ class FirebaseFavoriteSpotService implements IFavoriteSpotRepository {
   }
 
   @override
-  Future<List<PicoModel>> listSavePico(String idUser) async {
+  Future<PicoFavoritoModel> saveSpot(PicoFavorito picoFav) async {
     try {
-      final snapshotListPico = await _firebaseFirestore
-          .collection("picosFavoritados")
-          .where("idUser", isEqualTo: idUser)
-          .get();
+      final data = PicoFavoritoAdapter.toFirebase(picoFav);
 
-      if (snapshotListPico.docs.isNotEmpty) {
-        final picos = await Future.wait(
-          snapshotListPico.docs.map(
-            (doc) async {
-              final spotRef = doc['spotRef'] as DocumentReference;
-              final spotSnapshot = await spotRef.get();
-              return PicoModel.fromJson(
-                  spotSnapshot.data() as Map<String, dynamic>, spotSnapshot.id);
-            },
-          ),
-        );
-        return picos;
-      } else {
-        throw Exception("Nenhum pico favoritado encontrado");
-      }
+      final snapshot =
+          await _firebaseFirestore.collection("picosFavoritados").add(data);
+      final docPicoFav = await snapshot.get();
+      return PicoFavoritoAdapter.fromFirebase(docPicoFav);
     } on FirebaseException catch (e) {
       throw Exception("Erro no firevase ao salvar pico: $e");
     } catch (e) {
@@ -51,30 +38,17 @@ class FirebaseFavoriteSpotService implements IFavoriteSpotRepository {
   }
 
   @override
-  Future<void> saveSpot(PicoModel pico, UserM user) async {
+  Future<List<PicoFavoritoModel>> listFavoriteSpot(String idUser) async {
     try {
       final snapshot = await _firebaseFirestore
-          .collection('spots')
-          .doc(pico.id).get();
-
-      if (!snapshot.exists) {
-        throw Exception("Pico não encontrado");
-      }
-
-      final spotRef = snapshot.reference;
-      final userId = user.id;
-      await _firebaseFirestore
           .collection("picosFavoritados")
-          .doc("$userId-${pico.picoName}")
-          .set({
-            'idUser': userId,
-            'spotRef': spotRef,
-          });
-    } on FirebaseException catch (e) {
-      throw Exception("Erro no firevase ao salvar pico: $e");
+          .where("idUsuario", isEqualTo: idUser)
+          .get();
+      return snapshot.docs.map((doc) {
+        return PicoFavoritoAdapter.fromFirebase(doc);
+      }).toList();
     } catch (e) {
-      throw Exception("Erro desconhecido ao salvar pico: $e");
+      throw Exception("Erro ao listar os picos favoritos: $e");
     }
   }
-  
 }

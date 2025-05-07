@@ -98,4 +98,15 @@ class FirebaseSpotsService implements ISpotRepository {
     }
     return querySnapshot;
   }
+  
+  @override
+  Future<PicoModel> getPicoByID(String id) async {
+    try{
+      final snapshot = await _firebaseFirestore.collection("spots").doc(id).get();
+      if (snapshot.data() == null) throw Exception("Dados nulos");
+      return PicoModel.fromJson(snapshot.data()! , id);
+    }on FirebaseException catch (e){
+      rethrow;
+    }
+  }
 }
