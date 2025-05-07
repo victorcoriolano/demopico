@@ -19,13 +19,15 @@ import 'package:demopico/features/mapa/presentation/controllers/historico_contro
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
-import 'package:demopico/features/user/presentation/controllers/database_notifier_provider.dart';
+import 'package:demopico/features/user/infra/services/user_auth_firebase_service.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/core/common/inject_dependencies.dart';
+import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import '../../features/hub/infra/repository/hub_repository.dart';
+
 
 class MyAppWidget extends StatelessWidget {
   MyAppWidget({super.key});
@@ -36,11 +38,11 @@ class MyAppWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<AuthService>(
-          create: (_) => serviceLocator<AuthService>(),
+        ChangeNotifierProvider(
+          create: (_) => AuthUserProvider.getInstance
         ),
         StreamProvider(
-          create: (_) => serviceLocator<AuthService>().getAuthStateChanges(),
+          create: (_) => UserAuthFirebaseService.getInstance.getAuthStateChanges(),
           initialData: null,
         ),
         ChangeNotifierProvider(
@@ -51,19 +53,18 @@ class MyAppWidget extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => MapControllerProvider()),
         ChangeNotifierProvider(
             create: (_) => serviceLocator<SpotControllerProvider>()),
-        ChangeNotifierProvider(create: (_) => DatabaseProvider()),
+        ChangeNotifierProvider(create: (_) => UserDatabaseProvider.getInstance),
         ChangeNotifierProvider(
             create: (_) =>
                 HistoricoController(SaveHistoryUc(HistoricoLocalRepository()))),
         ChangeNotifierProvider(
           create: (_) => HubProvider(
-            postarComunicado: PostarComunicado(iHubRepository: HubRepository.getInstance),
-            listarComunicado: ListarComunicado(iHubRepository: HubRepository.getInstance),
+            postarComunicado: PostarComunicado.getInstance,
+            listarComunicado: ListarComunicado.getInstance,
           ),
         ),
-        ChangeNotifierProvider(create: (_) => HomeProvider( 
-                  listarComunicado: ListarComunicado(iHubRepository: HubRepository.getInstance),
-        )),
+        ChangeNotifierProvider(
+            create: (_) => HomeProvider.getInstance),
         ChangeNotifierProvider(
             create: (_) =>
                 CommentController(CommentSpotUC(CommentRepository()))),
