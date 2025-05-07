@@ -1,7 +1,7 @@
 import 'package:demopico/core/app/home_page.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
-import 'package:demopico/features/user/infra/services/user_auth_firebase_service.dart';
-import 'package:demopico/features/user/presentation/controllers/auth_controller.dart';
+import 'package:demopico/features/user/domain/entity/user_credentials.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/features/user/presentation/pages/register_page.dart';
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
 import 'package:demopico/features/user/presentation/widgets/textfield_decoration.dart';
@@ -19,8 +19,8 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> with Validators {
   final TextEditingController _vulgoController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
-  final _authController = AuthController();
-  final auth = AuthService();
+
+  final _authUserProvider = AuthUserProvider.getInstance;
 
   @override
   Widget build(BuildContext context) {
@@ -122,21 +122,27 @@ class _LoginFormState extends State<LoginForm> with Validators {
                         _senhaController.text.isNotEmpty) {
                   String vulgo = _vulgoController.text.trim();
                   String password = _senhaController.text.trim();
+
                   bool loginSuccess;
 
-                  if (vulgo.contains("@")) {
-                    await _authController.login(vulgo, password);
-                    loginSuccess = true;
-                  } else {
-                    try {
-                      await _authController.login(vulgo, password);
+                  try {
+                    if (!vulgo.contains("@")) {
+                      UserCredentialsSignIn credential = UserCredentialsSignIn(
+                          email: vulgo, password: password);
+                      await _authUserProvider.loginEmail(credential);
                       loginSuccess = true;
-                    } catch (e) {
-                      print("Erro ao fazer login: $e");
-                      loginSuccess = false;
-                    }
-                  }
+                    } else {
+                      UserCredentialsSignInVulgo credential =
+                          UserCredentialsSignInVulgo(
+                              vulgo: vulgo, password: password);
 
+                      await _authUserProvider.loginVulgo(credential);
+                      loginSuccess = true;
+                    }
+                  } catch (e) {
+                    print("Erro ao fazer login: $e");
+                    loginSuccess = false;
+                  }
                   setState(() {
                     if (loginSuccess) {
                       Get.to(() => const HomePage());
