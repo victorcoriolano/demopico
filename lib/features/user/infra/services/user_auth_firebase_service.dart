@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart';
 class UserAuthFirebaseService implements IUserAuthService {
   static UserAuthFirebaseService? _userAuthFirebaseService;
 
-  static UserAuthFirebaseService get getInstace {
+  static UserAuthFirebaseService get getInstance {
     _userAuthFirebaseService ??= UserAuthFirebaseService(
         auth: FirebaseAuth.instance,
         userDatabaseRepositoryIMP: UserFirebaseRepository.getInstance);
