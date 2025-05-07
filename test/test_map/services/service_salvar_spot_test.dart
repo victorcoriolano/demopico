@@ -7,8 +7,7 @@ void main() {
       fakeFirestore = FakeFirebaseFirestore();
     });
 
-    test("Deve salvar um spot", (){
-      
+    test("Deve salvar um spot dos favoritos", (){
     });
     test("Deve retornar um lista de spot salvo", (){});
     test("Deve deletar um spot salvo", (){});
