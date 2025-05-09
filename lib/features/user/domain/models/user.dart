@@ -61,23 +61,24 @@ class UserM {
   factory UserM.fromSnapshot(QuerySnapshot doc){
     return UserM(email: "email");
   }
+Map<String, dynamic> toJsonMap() {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['name'] = name;
+  data['description'] = description;
+  data['id'] = id;
+  data['pictureUrl'] =  pictureUrl;
+  data['location'] = location;
+  data['dob'] = dob;
+  data['conexoes'] =  '0';
+  data['picosAdicionados'] = '0';
+  data['picosSalvos'] =  '0';
+  data['isColetivo'] = isColetivo;
+  data['signMethod'] = signMethod.toString().split('.').last;
+  data['email'] = email;
+  data['authEnumState'] = authEnumState.toString().split('.').last;
+  return data;
+}
 
-  Map<String, dynamic> toJsonMap() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['name'] = name;
-    data['description'] = description;
-    data['id'] = id;
-    data['pictureUrl'] = pictureUrl;
-    data['location'] = location;
-    data['dob'] = dob;
-    data['conexoes'] = conexoes;
-    data['picosAdicionados'] = picosAdicionados;
-    data['picosSalvos'] = picosSalvos as num;
-    data['isColetivo'] = isColetivo;
-    data['signMethod'] = signMethod.toString();
-    data['email'] = email;
-    return data;
-  }
 
   bool get stringify => true;
 
