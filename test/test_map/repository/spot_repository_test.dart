@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
+import '../../mocks/mocks_spots.dart';
 import 'spot_repository_test.mocks.dart';
 
 //cirando anotação para criar o mock
@@ -31,23 +32,6 @@ void main() {
     late MockQuerySnapshot mockQuerySnapshot;
     late MockQueryDocumentSnapshot mockQueryDocSnapshot;
 
-    final testPico = PicoModel(
-      id: "1",
-      imgUrls: ["url"],
-      tipoPico: "rua",
-      modalidade: "Skate",
-      nota: 4.5,
-      numeroAvaliacoes: 10,
-      long: -46.57421,
-      lat: -23.55052,
-      description: "Teste",
-      atributos: {"teste": 2},
-      obstaculos: ["corrimão"],
-      utilidades: ["banheiro"],
-      userCreator: "user123",
-      picoName: "Pico Legal",
-    );
-    
     final testPicoNotaNova = testPico.copyWith(nota: 5, numeroAvaliacoes: 11);
 
     //setando os mocks para utilizar nos testes
