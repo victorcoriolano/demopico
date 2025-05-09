@@ -16,8 +16,6 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
-
-
   UserM? user;
   String? currentUserId;
 
@@ -30,52 +28,50 @@ class _UserPageState extends State<UserPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadUser();
-    }
-  );
-}
-
-Future<void> _loadUser() async {
-  final providerAuth =
-      Provider.of<AuthUserProvider>(context, listen: false);
-  final providerDatabase =
-      Provider.of<UserDatabaseProvider>(context, listen: false); 
-
-  String? uid = providerAuth.pegarId();
-
-  if (uid == null) {
-    setState(() {
-      _isLoading = true;
     });
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Error'),
-        content: const Text('User not logged in.'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Get.to(() => const HomePage());
-            },
-            child: const Text('OK'),
-          )
-        ],
-      ),
-    );
-    return;
   }
+  
 
-  await providerDatabase.retrieveUserProfileData(uid);
-  setState(() {
-    user = providerDatabase.user;
-    _isLoading = false;
-  });
-}
+  Future<void> _loadUser() async {
+    final providerAuth = Provider.of<AuthUserProvider>(context, listen: false);
+    final providerDatabase =
+        Provider.of<UserDatabaseProvider>(context, listen: false);
+
+    String? uid = providerAuth.pegarId();
+
+    if (uid == null) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Error'),
+          content: const Text('User not logged in.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.to(() => const HomePage());
+              },
+              child: const Text('OK'),
+            )
+          ],
+        ),
+      );
+      return;
+    }
+
+    await providerDatabase.retrieveUserProfileData(uid);
+    setState(() {
+      user = providerDatabase.user;
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-       final providerAuthListen =
-      Provider.of<AuthUserProvider>(context);
+    final providerAuthListen = Provider.of<AuthUserProvider>(context);
     return Scaffold(
       body: SafeArea(
           child: Padding(
@@ -166,7 +162,7 @@ Future<void> _loadUser() async {
                                                               onPressed:
                                                                   () async {
                                                                 providerAuthListen
-                                                                    .logoutUc;
+                                                                    .logout();
                                                                 Get.offAll(
                                                                     () =>
                                                                         const HomePage(),
@@ -350,9 +346,9 @@ Future<void> _loadUser() async {
                                                       user?.description =
                                                           bioController.text;
                                                     });
-                                          //databaseProvider
-                                            //            .updateUserBio(
-                                              //              bioController.text);
+                                                    //databaseProvider
+                                                    //            .updateUserBio(
+                                                    //              bioController.text);
                                                     bioController.clear();
                                                     Navigator.of(context).pop();
                                                   }
