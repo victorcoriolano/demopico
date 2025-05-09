@@ -2,27 +2,58 @@
 import 'package:demopico/core/app/auth_wrapper.dart';
 import 'package:demopico/features/home/presentation/widgets/events_bottom_sheet.dart';
 import 'package:demopico/features/home/presentation/widgets/hub_upper_sheet.dart';
-import 'package:demopico/features/user/domain/interfaces/i_user_auth_service.dart';
-import 'package:demopico/features/user/infra/services/user_auth_firebase_service.dart';
+import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-class CentralPage extends StatelessWidget {
+class CentralPage extends StatefulWidget {
   CentralPage({super.key});
 
-  final ScrollController scrollController = ScrollController();
+  @override
+  State<CentralPage> createState() => _CentralPageState();
+}
 
-  final IUserAuthService authService =
-      UserAuthFirebaseService.getInstance;
+class _CentralPageState extends State<CentralPage> {
+  final ScrollController scrollController = ScrollController();
+  UserM? user;
 
   @override
-  Widget build(BuildContext context) {
-    final provider = Provider.of<UserDatabaseProvider>(context);
-    String userId = authService.currentUser();
-    provider.retrieveUserProfileData(userId);
-    Image? userImage = provider.user!.image;
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadUser();
+    });
+  }
+
+  Future<void> _loadUser() async {
+    final providerData = Provider.of<UserDatabaseProvider>(context);
+    final providerAuth = Provider.of<AuthUserProvider>(context);
+    String? userId = providerAuth.pegarId();
+
+    if (userId != null) {
+      await providerData.retrieveUserProfileData(userId);
+    }
+    setState(() {
+      user = providerData.user;
+    });
+    return;
+  }
+
+  @override
+  Future<Widget> build(BuildContext context) async {
+    final providerData = Provider.of<UserDatabaseProvider>(context);
+    final providerAuth = Provider.of<AuthUserProvider>(context);
+    String? userId = providerAuth.pegarId();
+    String? userImage;
+
+    if (userId != null) {
+      providerData.retrieveUserProfileData(userId);
+      UserM? user = providerData.user;
+      if (user != null) userImage = user.pictureUrl;
+    }
 
     return Scaffold(
       body: Stack(
@@ -115,10 +146,10 @@ class CentralPage extends StatelessWidget {
                               ),
                           child: userImage == null
                               ? Icon(Icons.supervised_user_circle, size: 64)
-                              : CircleAvatar(
+                              : await CircleAvatar(
                                   radius: 32,
-                                  backgroundImage:
-                                      NetworkImage(userImage.toString()),
+                                  backgroundImage: 
+                                      NetworkImage(userImage),
                                   backgroundColor: Colors.transparent)),
                     ]),
                   ),
