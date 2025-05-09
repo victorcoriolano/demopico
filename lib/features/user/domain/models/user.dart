@@ -2,14 +2,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/user/domain/enums/auth_enum.dart';
 import 'package:demopico/features/user/domain/enums/sign_methods.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 
 class UserM {
   String? name;
   String? description;
-  Image? image;
   String? id;
   String? pictureUrl;
   bool? isColetivo;
@@ -86,7 +84,7 @@ class UserM {
   @override
   String toString() {
     if (stringify) {
-      return 'User{name: $name, description: $description, image: $image, id: $id, pictureUrl: $pictureUrl, isColetivo: $isColetivo, signMethod: $signMethod, email: $email, authEnumState: $authEnumState, location: $location, dob: $dob, conexoes: $conexoes, picosAdicionados: $picosAdicionados, picosSalvos: $picosSalvos}';
+      return 'User{name: $name, description: $description, id: $id, pictureUrl: $pictureUrl, isColetivo: $isColetivo, signMethod: $signMethod, email: $email, authEnumState: $authEnumState, location: $location, dob: $dob, conexoes: $conexoes, picosAdicionados: $picosAdicionados, picosSalvos: $picosSalvos}';
     } else {
       return 'String data was not reached.';
     }
@@ -99,7 +97,6 @@ class UserM {
           runtimeType == other.runtimeType &&
           name == other.name &&
           description == other.description &&
-          image == other.image &&
           id == other.id &&
           pictureUrl == other.pictureUrl &&
           isColetivo == other.isColetivo &&
@@ -109,7 +106,6 @@ class UserM {
   int get hashCode =>
       name.hashCode ^
       description.hashCode ^
-      image.hashCode ^
       id.hashCode ^
       pictureUrl.hashCode ^
       isColetivo.hashCode ^
@@ -118,7 +114,6 @@ class UserM {
   List<Object?> get props => [
         name,
         description,
-        image,
         id,
         pictureUrl,
         isColetivo,
@@ -131,7 +126,6 @@ class UserM {
   UserM(
       {this.name,
       this.description,
-      this.image,
       this.id,
       this.pictureUrl,
       this.isColetivo,
