@@ -150,6 +150,7 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                       UserCredentialsSignIn credentialsSignIn =
                           UserCredentialsSignIn(
                               email: email, password: password);
+
                       UserCredentialsSignUp credential = UserCredentialsSignUp(
                           nome: vulgo,
                           isColetivo: isColetivo,
@@ -157,7 +158,7 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
 
                       final resultadoRegistro =
                           await _authUserProvider.signUp(credential);
-                      print(resultadoRegistro);
+            
                       if (resultadoRegistro == true) {
                         _vulgoCadastro.clear();
                         _emailController.clear();

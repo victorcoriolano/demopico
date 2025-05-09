@@ -38,7 +38,7 @@ class UserAuthFirebaseService implements IUserAuthService {
 
       if (signedInUser == null) throw Exception("O usuario não pode ser criado");
 
-      UserM localUser = UserM.userFromFirebaseAuthUser(signedInUser, inputEmail, isColetivo);
+      UserM localUser = UserM.userFromFirebaseAuthUser(signedInUser, inputName, isColetivo);
 
       await userDatabaseRepositoryIMP.addUserDetails(localUser);
       return true;

@@ -5,7 +5,6 @@ class LoggedUserModel extends UserM {
   LoggedUserModel({required UserM user}) {
     super.name = user.name;
     super.description = user.description;
-    super.image = user.image;
     super.id = user.id;
     super.pictureUrl = user.pictureUrl;
     super.isColetivo = user.isColetivo;

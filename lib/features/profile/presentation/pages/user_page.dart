@@ -16,12 +16,6 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
-  late final providerCall =
-      Provider.of<UserDatabaseProvider>(context, listen: false);
-  late final providerDatabaseListen =
-      Provider.of<UserDatabaseProvider>(context);
-  late final providerAuthListen = Provider.of<AuthUserProvider>(context);
-
   UserM? user;
   String? currentUserId;
 
@@ -31,41 +25,53 @@ class _UserPageState extends State<UserPage> {
 
   @override
   void initState() {
-    loadUser();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadUser();
+    });
   }
+  
 
-  Future<void> loadUser() async {
-    String uid = providerAuthListen.pegarId();
+  Future<void> _loadUser() async {
+    final providerAuth = Provider.of<AuthUserProvider>(context, listen: false);
+    final providerDatabase =
+        Provider.of<UserDatabaseProvider>(context, listen: false);
 
-    if (uid == '') {
+    String? uid = providerAuth.pegarId();
+
+    if (uid == null) {
       setState(() {
         _isLoading = true;
-        showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                  title: const Text('Error'),
-                  content: const Text('User not logged in.'),
-                  actions: [
-                    TextButton(
-                        onPressed: () {
-                          Get.to(() => const HomePage());
-                        },
-                        child: const Text('OK'))
-                  ],
-                ));
       });
+
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Error'),
+          content: const Text('User not logged in.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.to(() => const HomePage());
+              },
+              child: const Text('OK'),
+            )
+          ],
+        ),
+      );
       return;
     }
-    providerDatabaseListen.retrieveUserProfileData(uid);
-    user = providerDatabaseListen.user;
+
+    await providerDatabase.retrieveUserProfileData(uid);
     setState(() {
+      user = providerDatabase.user;
       _isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final providerAuthListen = Provider.of<AuthUserProvider>(context);
     return Scaffold(
       body: SafeArea(
           child: Padding(
@@ -156,7 +162,7 @@ class _UserPageState extends State<UserPage> {
                                                               onPressed:
                                                                   () async {
                                                                 providerAuthListen
-                                                                    .logoutUc;
+                                                                    .logout();
                                                                 Get.offAll(
                                                                     () =>
                                                                         const HomePage(),
@@ -340,9 +346,9 @@ class _UserPageState extends State<UserPage> {
                                                       user?.description =
                                                           bioController.text;
                                                     });
-                                          //databaseProvider
-                                            //            .updateUserBio(
-                                              //              bioController.text);
+                                                    //databaseProvider
+                                                    //            .updateUserBio(
+                                                    //              bioController.text);
                                                     bioController.clear();
                                                     Navigator.of(context).pop();
                                                   }
