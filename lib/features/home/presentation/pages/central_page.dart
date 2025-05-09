@@ -2,7 +2,7 @@
 import 'package:demopico/core/app/auth_wrapper.dart';
 import 'package:demopico/features/home/presentation/widgets/events_bottom_sheet.dart';
 import 'package:demopico/features/home/presentation/widgets/hub_upper_sheet.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/features/user/domain/interfaces/i_user_auth_service.dart';
 import 'package:demopico/features/user/infra/services/user_auth_firebase_service.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:flutter/material.dart';
@@ -13,13 +13,14 @@ class CentralPage extends StatelessWidget {
   CentralPage({super.key});
 
   final ScrollController scrollController = ScrollController();
-  final UserAuthFirebaseService authService =
+
+  final IUserAuthService authService =
       UserAuthFirebaseService.getInstance;
 
   @override
   Widget build(BuildContext context) {
-    String userId = authService.currentUser!.uid;
     final provider = Provider.of<UserDatabaseProvider>(context);
+    String userId = authService.currentUser();
     provider.retrieveUserProfileData(userId);
     Image? userImage = provider.user!.image;
 
