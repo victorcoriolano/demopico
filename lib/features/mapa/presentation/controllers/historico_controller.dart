@@ -63,8 +63,4 @@ class HistoricoController extends ChangeNotifier {
     }
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 }

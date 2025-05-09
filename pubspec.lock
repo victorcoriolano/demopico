@@ -191,7 +191,7 @@ packages:
     source: hosted
     version: "5.4.1"
   cloud_firestore_platform_interface:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: cloud_firestore_platform_interface
       sha256: "13f516263a1b2b51491f4089173d3d78b577db5bb3c235832704218720ea6328"

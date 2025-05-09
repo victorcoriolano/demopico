@@ -10,8 +10,8 @@ class SearchSpotPage extends StatefulWidget {
 class _SearchSpotPageState extends State<SearchSpotPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: const Placeholder(),
+    return const Scaffold(
+      body: Placeholder(),
     );
   }
 }

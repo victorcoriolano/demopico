@@ -132,7 +132,7 @@ class _SegundaTelaState extends State<SegundaTela> {
 
                   // Widget de cada atributo com descrição abaixo dos ícones
                   Container(
-                    margin: EdgeInsets.only(top:10, bottom: 25),
+                    margin: const EdgeInsets.only(top:10, bottom: 25),
                     child: buildAtributo(
                       'CHÃO',
                       obterDescricaoChao(provider.atributos['Chão']!),
@@ -149,7 +149,7 @@ class _SegundaTelaState extends State<SegundaTela> {
                   ),
 
                   Container(
-                    margin: EdgeInsets.symmetric(vertical: 25),
+                    margin: const EdgeInsets.symmetric(vertical: 25),
                     child: buildAtributo(
                       'POLICIAMENTO',
                       obterDescricaoPoliciamento(
@@ -168,7 +168,7 @@ class _SegundaTelaState extends State<SegundaTela> {
                   ),
 
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 25),
+                  margin: const EdgeInsets.symmetric(vertical: 25),
                     child: buildAtributo(
                       'KICK-OUT',
                       obterDescricaoKickOut(provider.atributos['Kick-Out']!),
