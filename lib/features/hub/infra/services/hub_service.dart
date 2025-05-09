@@ -10,8 +10,8 @@ class HubService implements IHubService{
 
   HubService({required this.firestore});
   
-   HubService  get getInstance {
-    _hubService ??= HubService(firestore: firestore);
+   static HubService  get getInstance {
+    _hubService ??= HubService(firestore: Firestore());
     return _hubService!;
   }
   
