@@ -1,9 +1,9 @@
-import 'package:demopico/app/home_page.dart';
+import 'package:demopico/core/app/home_page.dart';
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
-import 'package:demopico/features/user/data/models/user.dart';
-import 'package:demopico/features/user/data/services/auth_service.dart';
-import 'package:demopico/features/user/presentation/controllers/database_notifier_provider.dart';
+import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
+import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -16,9 +16,11 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
-  late final authService = AuthService();
-  late final databaseProvider =
-      Provider.of<DatabaseProvider>(context, listen: false);
+  late final providerCall =
+      Provider.of<UserDatabaseProvider>(context, listen: false);
+  late final providerDatabaseListen =
+      Provider.of<UserDatabaseProvider>(context);
+  late final providerAuthListen = Provider.of<AuthUserProvider>(context);
 
   UserM? user;
   String? currentUserId;
@@ -34,10 +36,9 @@ class _UserPageState extends State<UserPage> {
   }
 
   Future<void> loadUser() async {
-    currentUserId = authService.currentUser?.uid;
+    String uid = providerAuthListen.pegarId();
 
-    if (currentUserId == null) {
-      print('user uid ao entrar na page nulo');
+    if (uid == '') {
       setState(() {
         _isLoading = true;
         showDialog(
@@ -56,8 +57,8 @@ class _UserPageState extends State<UserPage> {
       });
       return;
     }
-
-    user = await databaseProvider.retrieveUserProfileData(currentUserId!);
+    providerDatabaseListen.retrieveUserProfileData(uid);
+    user = providerDatabaseListen.user;
     setState(() {
       _isLoading = false;
     });
@@ -154,13 +155,14 @@ class _UserPageState extends State<UserPage> {
                                                                   'Sair'),
                                                               onPressed:
                                                                   () async {
-                                                                await authService
-                                                                    .logout()
-                                                                    .whenComplete(() => Get.offAll(
-                                                                        () =>
-                                                                            const HomePage(),
-                                                                        transition:
-                                                                            Transition.rightToLeftWithFade));
+                                                                providerAuthListen
+                                                                    .logoutUc;
+                                                                Get.offAll(
+                                                                    () =>
+                                                                        const HomePage(),
+                                                                    transition:
+                                                                        Transition
+                                                                            .rightToLeftWithFade);
                                                               })
                                                         ]);
                                                   });
@@ -338,9 +340,9 @@ class _UserPageState extends State<UserPage> {
                                                       user?.description =
                                                           bioController.text;
                                                     });
-                                                    databaseProvider
-                                                        .updateUserBio(
-                                                            bioController.text);
+                                          //databaseProvider
+                                            //            .updateUserBio(
+                                              //              bioController.text);
                                                     bioController.clear();
                                                     Navigator.of(context).pop();
                                                   }

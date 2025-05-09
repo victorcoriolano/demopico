@@ -1,5 +1,6 @@
 import 'package:demopico/features/profile/presentation/pages/user_page.dart';
-import 'package:demopico/features/user/presentation/controllers/auth_controller.dart';
+import 'package:demopico/features/user/domain/entity/user_credentials.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
 import 'package:demopico/features/user/presentation/widgets/tipo_conta_dropdown.dart';
@@ -20,7 +21,7 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
   final TextEditingController _senhaController2 = TextEditingController();
-  final AuthController _controller = AuthController();
+  final AuthUserProvider _authUserProvider = AuthUserProvider.getInstance;
   final _formkey = GlobalKey<FormState>();
   String _tipoConta = '';
   bool isColetivo = false;
@@ -57,7 +58,6 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                     child: Image(
                       image: AssetImage('assets/images/skatepico-icon.png'),
                     )),
-             
                 const Text(
                   "Bem vindo ao PICO!",
                   style: TextStyle(
@@ -145,12 +145,18 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                       String vulgo = _vulgoCadastro.text.trim();
                       String email = _emailController.text.trim();
                       String password = _senhaController.text.trim();
-                      print('$email, $password, $vulgo, $isColetivo');
-                      final resultadoRegistro = await _controller.signUp(
-                          inputEmail: email,
-                          inputPassword: password,
-                          inputName: vulgo,
-                          isColetivo: isColetivo);
+                  
+
+                      UserCredentialsSignIn credentialsSignIn =
+                          UserCredentialsSignIn(
+                              email: email, password: password);
+                      UserCredentialsSignUp credential = UserCredentialsSignUp(
+                          nome: vulgo,
+                          isColetivo: isColetivo,
+                          credentials: credentialsSignIn);
+
+                      final resultadoRegistro =
+                          await _authUserProvider.signUp(credential);
                       print(resultadoRegistro);
                       if (resultadoRegistro == true) {
                         _vulgoCadastro.clear();

@@ -5,7 +5,6 @@ import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/prime
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/quarta_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/segunda_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/terceira_tela.dart';
-import 'package:demopico/features/user/data/services/database_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -25,7 +24,6 @@ class ContainerTelas extends StatefulWidget {
 
 class _ContainerTelasState extends State<ContainerTelas> {
   int _currentIndex = 0;
-  
 
   final List<Widget> _screens = [
     const EspecificidadeScreen(), // Página 1
@@ -73,7 +71,8 @@ class _ContainerTelasState extends State<ContainerTelas> {
                       borderRadius: BorderRadius.circular(
                           12), // Arredondamento das bordas
                       border: Border.all(
-                          color: const Color(0xFF8B0000), width: 3), // Borda vermelha
+                          color: const Color(0xFF8B0000),
+                          width: 3), // Borda vermelha
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(10),
@@ -116,11 +115,11 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                 ),
                               ),
                               onPressed: () async {
-                                if(user != null){
+                                /* if(user != null){
                                   final DatabaseService  dataUser = DatabaseService();
                                   dataUser.atualizarContribuicoes();//autualiza contribuições
 
-                                }
+                                } */
                                 // função para criar o pico
                                 if (provider.validarFormulario())  {
                                     await serviceLocator<SpotControllerProvider>()
@@ -161,9 +160,11 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                   _nextScreen(); // Chama a função para mudar a tela
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content: Text(
-                                              "Preenche todos as informações"),),);
+                                    const SnackBar(
+                                      content:
+                                          Text("Preenche todos as informações"),
+                                    ),
+                                  );
                                 }
                               },
                               child: const Text('PROSSEGUIR',

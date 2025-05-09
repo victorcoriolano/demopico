@@ -1,3 +1,4 @@
+
 import 'package:demopico/features/mapa/domain/interfaces/i_spot_repository.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 

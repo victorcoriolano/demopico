@@ -9,11 +9,7 @@ class HubProvider extends ChangeNotifier {
   PostarComunicado postarComunicado;
   ListarComunicado listarComunicado;
   HubProvider({required this.postarComunicado, required this.listarComunicado});
-
-  void notify() {
-    notifyListeners();
-  }
-
+  
   List<Communique> _allCommuniques = [];
 
   List<Communique> get allCommuniques => _allCommuniques;

@@ -1,18 +1,29 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-import 'package:demopico/app/auth_wrapper.dart';
+import 'package:demopico/core/app/auth_wrapper.dart';
 import 'package:demopico/features/home/presentation/widgets/events_bottom_sheet.dart';
 import 'package:demopico/features/home/presentation/widgets/hub_upper_sheet.dart';
-import 'package:demopico/features/user/data/services/auth_service.dart';
+import 'package:demopico/features/user/domain/interfaces/i_user_auth_service.dart';
+import 'package:demopico/features/user/infra/services/user_auth_firebase_service.dart';
+import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 class CentralPage extends StatelessWidget {
   CentralPage({super.key});
 
   final ScrollController scrollController = ScrollController();
 
+  final IUserAuthService authService =
+      UserAuthFirebaseService.getInstance;
+
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<UserDatabaseProvider>(context);
+    String userId = authService.currentUser();
+    provider.retrieveUserProfileData(userId);
+    Image? userImage = provider.user!.image;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -102,12 +113,12 @@ class CentralPage extends StatelessWidget {
                                 duration: const Duration(milliseconds: 600),
                                 curve: Curves.fastEaseInToSlowEaseOut,
                               ),
-                          child: AuthService().currentUser?.photoURL == null
+                          child: userImage == null
                               ? Icon(Icons.supervised_user_circle, size: 64)
                               : CircleAvatar(
                                   radius: 32,
-                                  backgroundImage: NetworkImage(
-                                      AuthService().currentUser!.photoURL!),
+                                  backgroundImage:
+                                      NetworkImage(userImage.toString()),
                                   backgroundColor: Colors.transparent)),
                     ]),
                   ),
