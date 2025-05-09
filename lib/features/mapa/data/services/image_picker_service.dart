@@ -17,7 +17,7 @@ class ImagePickerService implements IPickImageRepository{
       if(pickedFiles.isNotEmpty){
         return Future.value(pickedFiles.map((e) => File(e.path)).toList());
       }else{
-        throw ("Não foi possível selecionar a imagem", );
+        throw Exception("Nenhuma imagem foi selecionada",);
       }
     }catch(e){
       throw Exception("Erro ao selecionar a imagem: $e");
