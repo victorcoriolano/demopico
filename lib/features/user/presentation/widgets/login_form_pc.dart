@@ -126,18 +126,18 @@ class _LoginFormState extends State<LoginForm> with Validators {
                   bool loginSuccess;
 
                   try {
-                    if (!vulgo.contains("@")) {
+                    if (vulgo.contains("@")) {
                       UserCredentialsSignIn credential = UserCredentialsSignIn(
                           email: vulgo, password: password);
-                      await _authUserProvider.loginEmail(credential);
-                      loginSuccess = true;
+                      loginSuccess =
+                          await _authUserProvider.loginEmail(credential);
                     } else {
                       UserCredentialsSignInVulgo credential =
                           UserCredentialsSignInVulgo(
                               vulgo: vulgo, password: password);
 
-                      await _authUserProvider.loginVulgo(credential);
-                      loginSuccess = true;
+                      loginSuccess =
+                          await _authUserProvider.loginVulgo(credential);
                     }
                   } catch (e) {
                     print("Erro ao fazer login: $e");
