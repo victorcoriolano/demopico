@@ -22,13 +22,11 @@ Future<void> init() async {
   serviceLocator.registerLazySingleton(() => FirebaseAuth.instance);
 
   //FirebaseFirestore
-  serviceLocator.registerLazySingleton(() => FirebaseFirestore.instance);
+  serviceLocator.registerLazySingleton<FirebaseFirestore>(() => FirebaseFirestore.instance);
 
   // Services
  // serviceLocator.registerFactory<DatabaseService>(() => DatabaseService());
   //.registerFactory<DatabaseService>(() => DatabaseService());
-
-  serviceLocator.registerLazySingleton<AuthService>(() => AuthService());
 
   serviceLocator.registerLazySingleton<ISpotRepository>(() => FirebaseSpotsService(serviceLocator()));
   serviceLocator.registerLazySingleton(() => FirebaseCommentService(serviceLocator()));

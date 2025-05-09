@@ -49,7 +49,15 @@ void main() {
       expect(result[1].idPico, equals("2"));
       expect(result.length, equals(2));
     });
-    test("Deve deletar um spot salvo", () {});
-    test("Deve retornar limpar a lista de spots", () {});
+    test("Deve deletar um spot salvo", () async {
+      final service = FirebaseFavoriteSpotService(fakeFirestore);
+      String idUser = "1";
+      String idPico = "1";
+      final result = await service.saveSpot(PicoFavorito(idPico: idPico, idUsuario: idUser));
+      expect(result, equals(1));
+      service.deleteSave(idPico);
+      final resultAfterDelete = await service.listFavoriteSpot(idUser);
+      expect(resultAfterDelete.length, equals(0));
+    });
   });
 }
