@@ -16,11 +16,7 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
-  late final providerCall =
-      Provider.of<UserDatabaseProvider>(context, listen: false);
-  late final providerDatabaseListen =
-      Provider.of<UserDatabaseProvider>(context);
-  late final providerAuthListen = Provider.of<AuthUserProvider>(context);
+
 
   UserM? user;
   String? currentUserId;
@@ -31,41 +27,55 @@ class _UserPageState extends State<UserPage> {
 
   @override
   void initState() {
-    loadUser();
     super.initState();
-  }
-
-  Future<void> loadUser() async {
-    String uid = providerAuthListen.pegarId();
-
-    if (uid == '') {
-      setState(() {
-        _isLoading = true;
-        showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                  title: const Text('Error'),
-                  content: const Text('User not logged in.'),
-                  actions: [
-                    TextButton(
-                        onPressed: () {
-                          Get.to(() => const HomePage());
-                        },
-                        child: const Text('OK'))
-                  ],
-                ));
-      });
-      return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadUser();
     }
-    providerDatabaseListen.retrieveUserProfileData(uid);
-    user = providerDatabaseListen.user;
+  );
+}
+
+Future<void> _loadUser() async {
+  final providerAuth =
+      Provider.of<AuthUserProvider>(context, listen: false);
+  final providerDatabase =
+      Provider.of<UserDatabaseProvider>(context, listen: false); 
+
+  String? uid = providerAuth.pegarId();
+
+  if (uid == null) {
     setState(() {
-      _isLoading = false;
+      _isLoading = true;
     });
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Error'),
+        content: const Text('User not logged in.'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Get.to(() => const HomePage());
+            },
+            child: const Text('OK'),
+          )
+        ],
+      ),
+    );
+    return;
   }
+
+  await providerDatabase.retrieveUserProfileData(uid);
+  setState(() {
+    user = providerDatabase.user;
+    _isLoading = false;
+  });
+}
 
   @override
   Widget build(BuildContext context) {
+       final providerAuthListen =
+      Provider.of<AuthUserProvider>(context);
     return Scaffold(
       body: SafeArea(
           child: Padding(
