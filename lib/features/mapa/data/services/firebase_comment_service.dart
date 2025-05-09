@@ -3,14 +3,16 @@ import 'package:demopico/features/mapa/domain/entities/comment.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_comment_repository.dart';
 import 'package:demopico/features/mapa/domain/models/comment_model.dart';
 
-class FirebaseCommentService implements ICommentRepository{
+class FirebaseCommentService implements ICommentRepository {
   final FirebaseFirestore _firestore;
 
   FirebaseCommentService(this._firestore);
 
   @override
   Future<CommentModel> addComment(Comment comment) async {
-    final ref  = await _firestore.collection('comments').add(CommentModel.fromEntity(comment).toJson());
+    final ref = await _firestore
+        .collection('comments')
+        .add(CommentModel.fromEntity(comment).toJson());
     return ref.get().then((doc) {
       return CommentModel.fromJson(doc.data()!, doc.id);
     });
@@ -29,16 +31,16 @@ class FirebaseCommentService implements ICommentRepository{
       return CommentModel.fromJson(data, doc.id);
     }).toList();
   }
-  
+
   @override
   Future<void> deleteComment(String commentId) async {
     final ref = _firestore.collection('comments').doc(commentId);
     return await ref.delete();
   }
-  
+
   @override
-  Future<CommentModel> updateComment(CommentModel comment) async{
+  Future<CommentModel> updateComment(CommentModel comment) async {
     final ref = _firestore.collection('comments').doc(comment.id);
-    return await ref.update(comment.toJson()).then((onValue)  => comment);
-}
+    return await ref.update(comment.toJson()).then((onValue) => comment);
+  }
 }

@@ -11,6 +11,7 @@ class ImagePickerService implements IPickImageRepository{
   Future<List<File>> pickImage() async {
     try{
       final pickedFiles = await _imagePicker.pickMultiImage(
+        
         limit: 3,
       );
       if(pickedFiles.isNotEmpty){

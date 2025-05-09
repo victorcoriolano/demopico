@@ -21,15 +21,7 @@ class CommentModel extends Comment{
     );
   }
 
-  Comment toEntity() {
-    return Comment(
-      peakId: peakId,
-      userId: userId,
-      content: content,
-      timestamp: timestamp,
-    );
-  }
-
+  
   factory CommentModel.fromJson(Map<String, dynamic> json, String id) {
     return CommentModel(
       id: id,
