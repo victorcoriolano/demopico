@@ -61,11 +61,11 @@ class AuthUserProvider  extends ChangeNotifier {
     return await criarContaUc.criar(credentials);
   }
 
-  String pegarId(){
+  String? pegarId(){
     try{
       return pegarIdUsuario.pegar();
     }catch(e){
-      return '';
+      return null;
     }
     
   }
