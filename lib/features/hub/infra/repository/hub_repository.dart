@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:demopico/features/external/datasources/firestore.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:demopico/features/hub/domain/interfaces/i_hub_repository.dart';
 import 'package:demopico/features/hub/domain/interfaces/i_hub_service.dart';
