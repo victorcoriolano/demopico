@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/mapa/domain/entities/comment.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_comment_repository.dart';
+import 'package:demopico/features/mapa/domain/models/comment_model.dart';
 
 class FirebaseCommentService implements ICommentRepository{
   final FirebaseFirestore _firestore;
@@ -8,17 +9,15 @@ class FirebaseCommentService implements ICommentRepository{
   FirebaseCommentService(this._firestore);
 
   @override
-  Future<void> addComment(Comment comment) async {
-    await _firestore.collection('comments').add({
-      'peakId': comment.peakId,
-      'userId': comment.userId,
-      'content': comment.content,
-      'timestamp': comment.timestamp.toIso8601String(),
+  Future<CommentModel> addComment(Comment comment) async {
+    final ref  = await _firestore.collection('comments').add(CommentModel.fromEntity(comment).toJson());
+    return ref.get().then((doc) {
+      return CommentModel.fromJson(doc.data()!, doc.id);
     });
   }
 
   @override
-  Future<List<Comment>> getCommentsByPeak(String peakId) async {
+  Future<List<CommentModel>> getCommentsByPeak(String peakId) async {
     final querySnapshot = await _firestore
         .collection('comments')
         .where('peakId', isEqualTo: peakId)
@@ -27,13 +26,19 @@ class FirebaseCommentService implements ICommentRepository{
 
     return querySnapshot.docs.map((doc) {
       final data = doc.data();
-      return Comment(
-        id: doc.id,
-        peakId: data['peakId'],
-        userId: data['userId'],
-        content: data['content'],
-        timestamp: DateTime.parse(data['timestamp']),
-      );
+      return CommentModel.fromJson(data, doc.id);
     }).toList();
   }
+  
+  @override
+  Future<void> deleteComment(String commentId) async {
+    final ref = _firestore.collection('comments').doc(commentId);
+    return await ref.delete();
+  }
+  
+  @override
+  Future<CommentModel> updateComment(CommentModel comment) async{
+    final ref = _firestore.collection('comments').doc(comment.id);
+    return await ref.update(comment.toJson()).then((onValue)  => comment);
+}
 }
