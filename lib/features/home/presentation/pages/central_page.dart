@@ -43,7 +43,7 @@ class _CentralPageState extends State<CentralPage> {
   }
 
   @override
-  Future<Widget> build(BuildContext context) async {
+  Widget build(BuildContext context) {
     final providerData = Provider.of<UserDatabaseProvider>(context);
     final providerAuth = Provider.of<AuthUserProvider>(context);
     String? userId = providerAuth.pegarId();
@@ -146,7 +146,7 @@ class _CentralPageState extends State<CentralPage> {
                               ),
                           child: userImage == null
                               ? Icon(Icons.supervised_user_circle, size: 64)
-                              : await CircleAvatar(
+                              : CircleAvatar(
                                   radius: 32,
                                   backgroundImage: 
                                       NetworkImage(userImage),
