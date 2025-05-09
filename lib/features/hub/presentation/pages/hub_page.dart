@@ -2,7 +2,6 @@ import 'package:demopico/features/hub/presentation/providers/hub_provider.dart';
 import 'package:demopico/features/hub/presentation/widgets/communique_tile.dart';
 import 'package:demopico/features/hub/presentation/widgets/input_box.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
-import 'package:demopico/features/user/infra/services/user_auth_firebase_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +16,6 @@ class HubPage extends StatefulWidget {
 }
 
 class _HubPageState extends State<HubPage> {
-  final authService = AuthService();
-
   late final db = Provider.of<HubProvider>(context, listen: false);
   late final listenDb = Provider.of<HubProvider>(context);
   bool _isEvent = false;
@@ -27,14 +24,9 @@ class _HubPageState extends State<HubPage> {
 
   Future<bool> _tryPost(String text) async {
     try {
-      print('entrou no trypost');
-      print(authService.currentUser!.displayName);
       await db.postHubCommunique(text, _chooseType());
       return true;
     } catch (e) {
-      print(e);
-      print('saiu do try catch erro: ${e.toString()} ');
-      print(e.runtimeType);
       return false;
     }
   }
@@ -233,26 +225,6 @@ class _HubPageState extends State<HubPage> {
       ),
     );
   }
-
-  /*
-  Guardando lógica de submissão
-  actions: [
-                                  TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                        postController.clear();
-                                      },
-                                      child: const Text('Cancelar')),
-                                  TextButton(
-                                      onPressed: () async {
-                                        // Postar
-                                        _tryPost(postController.text);
-                                        Navigator.pop(context);
-                                        postController.clear();
-                                      },
-                                      child: const Text('Postar')),
-                                ],
-*/
 
   _buildPostList(List<Communique> posts) {
     return posts.isEmpty
