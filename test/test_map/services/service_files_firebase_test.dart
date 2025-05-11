@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:demopico/features/mapa/data/services/firebase_files_service.dart';
@@ -27,7 +28,7 @@ class FakeUploadTask extends Fake implements UploadTask {
 
 class MockStorageReference extends Mock implements Reference {}
 
-// ===== Teste =====
+// ===== Testes =====
 
 void main() {
   group("FirebaseFilesService", () {
@@ -60,16 +61,13 @@ void main() {
 
     test("Deve subir um arquivo e retornar URL", () async {
       when(() => mockFirebaseStorage.ref()).thenAnswer((_) => mockStorageReference);
-      print("mockStorageReference: $mockStorageReference");
 
       when(() => mockStorageReference.child("spots/${fileMock.fileName}"))
           .thenAnswer((_) => mockStorageReference);
-      print("mockStorageReference: $mockStorageReference");
       when(() => mockStorageReference.putData(
         fileMock.bytes,
         any(), // Espera um SettableMetadata
       )).thenAnswer((_) => fakeUploadTask);
-      print("mockfackupdateTask: $fakeUploadTask");
 
       when(() => mockTaskSnapshot.ref).thenReturn(mockStorageReference);
 
@@ -83,5 +81,57 @@ void main() {
       expect(result.first.fileName, equals("teste.png"));
       expect(result.first.url, equals("http://test.com"));
     });
-  });
+  
+
+
+  /// teste exceções 
+  test("Deve lançar Exception de rede (SocketException)", () async {
+  when(() => mockFirebaseStorage.ref()).thenReturn(mockStorageReference);
+  when(() => mockStorageReference.child(any())).thenReturn(mockStorageReference);
+  when(() => mockStorageReference.putData(fileMock.bytes, any()))
+      .thenThrow(const SocketException("Sem conexão"));
+
+  expect(
+    () async => await firebaseFilesService.saveFiles([fileMock]),
+    throwsA(predicate((e) => e is Exception && e.toString().contains("Falha de rede"))),
+  );
+});
+
+test("Deve lançar Exception de autorização (FirebaseException - unauthorized)", () async {
+  when(() => mockFirebaseStorage.ref()).thenReturn(mockStorageReference);
+  when(() => mockStorageReference.child(any())).thenReturn(mockStorageReference);
+  when(() => mockStorageReference.putData(fileMock.bytes, any())).thenThrow(
+    FirebaseException(plugin: 'firebase_storage', code: 'storage/unauthorized', message: 'Sem permissão'),
+  );
+
+  expect(
+    () async => await firebaseFilesService.saveFiles([fileMock]),
+    throwsA(predicate((e) => e is Exception && e.toString().contains("Erro de autorização"))),
+  );
+});
+
+test("Deve lançar Exception de limite excedido (FirebaseException - retry-limit-exceeded)", () async {
+  when(() => mockFirebaseStorage.ref()).thenReturn(mockStorageReference);
+  when(() => mockStorageReference.child(any())).thenReturn(mockStorageReference);
+  when(() => mockStorageReference.putData(fileMock.bytes, any())).thenThrow(
+    FirebaseException(plugin: 'firebase_storage', code: 'storage/retry-limit-exceeded'),
+  );
+
+  expect(
+    () async => await firebaseFilesService.saveFiles([fileMock]),
+    throwsA(predicate((e) => e is Exception && e.toString().contains("Limite excedido"))),
+  );
+});
+
+test("Deve lançar Exception desconhecida", () async {
+  when(() => mockFirebaseStorage.ref()).thenReturn(mockStorageReference);
+  when(() => mockStorageReference.child(any())).thenReturn(mockStorageReference);
+  when(() => mockStorageReference.putData(fileMock.bytes, any())).thenThrow(Exception("Erro genérico"));
+
+  expect(
+    () async => await firebaseFilesService.saveFiles([fileMock]),
+    throwsA(predicate((e) => e is Exception && e.toString().contains("Erro desconhecido"))),
+  );
+});
+});
 }
