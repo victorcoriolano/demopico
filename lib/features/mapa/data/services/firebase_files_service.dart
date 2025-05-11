@@ -18,14 +18,12 @@ class FirebaseFilesService implements ISaveImageRepository {
       for (UploadFileModel file in files) { 
 
         final docRef = bdInstance.ref().child("spots/${file.fileName}");
-        await docRef.putData(file.bytes);
-
+        final uploadTask = docRef.putData(file.bytes);
+        final snapshot = await uploadTask;
+        final snapshotUrl = await snapshot.ref.getDownloadURL();  
         
-        //pegando as urls das imagens
-        await docRef.getDownloadURL().then((value) {
-          final uploadResult = UploadResultFileModel(fileName: file.fileName, url: value);
-          urls.add(uploadResult);
-        });
+        
+        urls.add(UploadResultFileModel(fileName: file.fileName, url: snapshotUrl));
       }
       return urls;
     } on SocketException catch (e) {
@@ -41,6 +39,8 @@ class FirebaseFilesService implements ISaveImageRepository {
         default:
           throw Exception("Erro no Firebase: ${e.message}");
       }
+    } catch (e) {
+      throw Exception("Erro desconhecido: $e");
     }
   }
 }

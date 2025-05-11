@@ -2,13 +2,13 @@ import 'dart:typed_data';
 
 class UploadFileModel {
   final String fileName;
-  final String filePath;
+  final String? filePath;
   final Uint8List bytes;
   final String contentType;
 
   UploadFileModel({
     required this.fileName,
-    required this.filePath,
+    this.filePath,
     required this.bytes,
     required this.contentType,
   });
