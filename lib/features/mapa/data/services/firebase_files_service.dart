@@ -20,7 +20,8 @@ class FirebaseFilesService implements ISaveImageRepository {
         } 
 
         final docRef = bdInstance.ref().child("spots/${file.path}");
-        await docRef.putFile(file);
+        final snaptshot = await docRef.putFile(file);
+
 
         //pegando as urls das imagens
         await docRef.getDownloadURL().then((value) {
