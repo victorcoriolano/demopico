@@ -19,7 +19,7 @@ class FirebaseFilesService implements ISaveImageRepository {
           throw Exception("Arquivo ${file.path} não existe");
         } 
 
-        final docRef = bdInstance.ref().child("spots").child("files");
+        final docRef = bdInstance.ref().child("spots/${file.path}");
         await docRef.putFile(file);
 
         //pegando as urls das imagens
