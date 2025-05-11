@@ -5,5 +5,6 @@ import 'package:demopico/features/mapa/domain/models/upload_result_file_model.da
 
 abstract class ISaveImageRepository {
   Future<List<UploadResultFileModel>> saveFiles(List<UploadFileModel> files);
+  
 }
 

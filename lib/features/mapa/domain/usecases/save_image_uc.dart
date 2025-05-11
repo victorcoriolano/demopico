@@ -1,6 +1,7 @@
-import 'dart:io';
 
 import 'package:demopico/features/mapa/domain/interfaces/i_save_image_repository.dart';
+import 'package:demopico/features/mapa/domain/models/upload_file_model.dart';
+import 'package:demopico/features/mapa/domain/models/upload_result_file_model.dart';
 
 
 class SaveImageUC{
@@ -8,9 +9,9 @@ class SaveImageUC{
 
   SaveImageUC(this.isaveImageRepository);
 
-  Future<List<String>> saveImage(List<File> files) async{
+  Future<List<UploadResultFileModel>> saveImage(List<UploadFileModel> files) async{
     try{
-      List<String> urls = await isaveImageRepository.saveFiles(files);
+      List<UploadResultFileModel> urls = await isaveImageRepository.saveFiles(files);
       if(urls.isEmpty){
         throw Exception("Não foi possível salvar a imagem");
       }
