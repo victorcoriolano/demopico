@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:demopico/features/mapa/domain/interfaces/i_save_image_repository.dart';
 import 'package:demopico/features/mapa/domain/models/upload_file_model.dart';
+import 'package:demopico/features/mapa/domain/models/upload_result_file_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class FirebaseFilesService implements ISaveImageRepository {
@@ -10,23 +11,20 @@ class FirebaseFilesService implements ISaveImageRepository {
   FirebaseFilesService(this.bdInstance);
 
   @override
-  Future<List<String>> saveFiles(List<UploadFileModel> files) async {
-    List<String> urls = [];
+  Future<List<UploadResultFileModel>> saveFiles(List<UploadFileModel> files) async {
+    List<UploadResultFileModel> urls = [];
 
     try {
-      for (File file in files) {
+      for (UploadFileModel file in files) { 
 
-        if (!await file.exists()) {
-          throw Exception("Arquivo ${file.path} não existe");
-        } 
+        final docRef = bdInstance.ref().child("spots/${file.fileName}");
+        await docRef.putData(file.bytes);
 
-        final docRef = bdInstance.ref().child("spots/${file.path}");
-        final snaptshot = await docRef.putFile(file);
-
-
+        
         //pegando as urls das imagens
         await docRef.getDownloadURL().then((value) {
-          urls.add(value);
+          final uploadResult = UploadResultFileModel(fileName: file.fileName, url: value);
+          urls.add(uploadResult);
         });
       }
       return urls;
