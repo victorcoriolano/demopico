@@ -10,11 +10,11 @@ class FirebaseFavoriteSpotService implements IFavoriteSpotRepository {
   FirebaseFavoriteSpotService(this._firebaseFirestore);
 
   @override
-  Future<void> deleteSave(String idPicoModel) async {
+  Future<void> deleteSave(String idPicoFavorito) async {
     try {
       await _firebaseFirestore
           .collection("picosFavoritados")
-          .doc(idPicoModel)
+          .doc(idPicoFavorito)
           .delete();
     } catch (e) {
       throw Exception("Erro ao deletar o pico favoritado: $e");

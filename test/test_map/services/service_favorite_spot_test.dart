@@ -54,9 +54,14 @@ void main() {
       String idUser = "1";
       String idPico = "1";
       final result = await service.saveSpot(PicoFavorito(idPico: idPico, idUsuario: idUser));
-      expect(result, equals(1));
-      service.deleteSave(idPico);
+      final resultBeforeDelete = await service.listFavoriteSpot(idUser);
+
+      expect(result.idUsuario, equals("1"));
+      expect(resultBeforeDelete.length, equals(1));
+      await service.deleteSave(result.id);
+
       final resultAfterDelete = await service.listFavoriteSpot(idUser);
+      print("resultAfterDelete: $resultAfterDelete");
       expect(resultAfterDelete.length, equals(0));
     });
   });
