@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:demopico/features/mapa/domain/interfaces/i_save_image_repository.dart';
+import 'package:demopico/features/mapa/domain/models/upload_file_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class FirebaseFilesService implements ISaveImageRepository {
@@ -9,7 +10,7 @@ class FirebaseFilesService implements ISaveImageRepository {
   FirebaseFilesService(this.bdInstance);
 
   @override
-  Future<List<String>> saveFiles(List<File> files) async {
+  Future<List<String>> saveFiles(List<UploadFileModel> files) async {
     List<String> urls = [];
 
     try {
