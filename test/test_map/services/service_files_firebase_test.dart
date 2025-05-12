@@ -16,6 +16,7 @@ class MockFirebaseStorage extends Mock implements FirebaseStorage {}
 class MockTaskSnapshot extends Mock implements TaskSnapshot {}
 
 class FakeUploadTask extends Fake implements UploadTask {
+  @override
   final TaskSnapshot snapshot;
 
   FakeUploadTask({required this.snapshot});

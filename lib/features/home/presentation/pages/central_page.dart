@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class CentralPage extends StatefulWidget {
-  CentralPage({super.key});
+  const CentralPage({super.key});
 
   @override
   State<CentralPage> createState() => _CentralPageState();
