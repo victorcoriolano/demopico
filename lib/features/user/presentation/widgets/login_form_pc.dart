@@ -140,7 +140,6 @@ class _LoginFormState extends State<LoginForm> with Validators {
                           await _authUserProvider.loginVulgo(credential);
                     }
                   } catch (e) {
-                    print("Erro ao fazer login: $e");
                     loginSuccess = false;
                   }
                   setState(() {

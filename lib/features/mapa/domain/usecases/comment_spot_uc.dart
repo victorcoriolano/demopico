@@ -11,7 +11,7 @@ class CommentSpotUC {
       await commentRepository.addComment(comentario);
 
     }catch (e){
-      print("Erro aou comentera: $e");
+      throw Exception("Erro ao comentar: $e");
     }
   }
 
@@ -20,7 +20,6 @@ class CommentSpotUC {
       final listComment = await commentRepository.getCommentsByPeak(idPico);
       return listComment;
     }catch (e){
-      print("Erro aou comentera: $e");
       return [];
     }
   }

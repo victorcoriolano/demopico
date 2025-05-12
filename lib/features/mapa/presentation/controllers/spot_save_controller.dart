@@ -15,7 +15,6 @@ class SpotSaveController extends ChangeNotifier {
       notifyListeners();
       return true;
     } else {
-      print("Não foi possivel salvar");
       notifyListeners();
       return false;
     }
@@ -45,10 +44,8 @@ class SpotSaveController extends ChangeNotifier {
       await saveSpot.deleteSaveSpot(idPicoFavModel);
       
       notifyListeners();
-      print("object deleted sucess");
       return true;
     } catch (e) {
-      print("Erro ao del: $e");
       return false;
     }
   }

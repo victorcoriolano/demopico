@@ -64,11 +64,7 @@ class PicoModel extends Pico {
   }
 
 
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    return false;
-  }
+  
 
   PicoModel copyWith({
     List<String>? imgUrls,

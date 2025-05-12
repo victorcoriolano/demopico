@@ -6,7 +6,7 @@ class SegundaTela extends StatefulWidget {
   const SegundaTela({super.key});
 
   @override
-  _SegundaTelaState createState() => _SegundaTelaState();
+  State<SegundaTela> createState() => _SegundaTelaState();
 }
 
 class _SegundaTelaState extends State<SegundaTela> {

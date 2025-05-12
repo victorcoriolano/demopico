@@ -17,8 +17,8 @@ class SaveImageUC{
       }
       return urls;
     } on Exception catch(e) {
-      print("Erro ao salvar imagem no firebase: $e");
-      return [];
+      throw Exception("Erro ao salvar imagem: $e");
+      
     }
   }
 }

@@ -53,8 +53,8 @@ class AddPicoProvider extends ChangeNotifier with Validators {
       await testeSubindoImg(images);
     }
   } on Exception catch (e) {
-      print(" to no catch");
-    print("Erro ao subir imagem $e");
+     debugPrint('Erro ao selecionar imagem: $e');
+    throw Exception('Erro ao selecionar imagem: $e');
   }
 }
 
@@ -68,7 +68,7 @@ class AddPicoProvider extends ChangeNotifier with Validators {
           .child('spots_images')
           .child('images/$nomePico$uniqueName.jpg');
 
-      print('Enviando imagem: ${img!.path}');
+      debugPrint('Enviando imagem: ${img!.path}');
 
       // Faz o upload da imagem
       await ref.putFile(img);
@@ -77,13 +77,11 @@ class AddPicoProvider extends ChangeNotifier with Validators {
       final downloadURL = await ref.getDownloadURL();
       urlImage.add(downloadURL);
 
-      print('URL gerada: $downloadURL');
     }
     
   urlImage.clear;
-    print('Lista final de URLs: $urlImage');
   } on Exception catch (e) {
-    print("Erro ao subir imagem pro storage: $e");
+    throw Exception('Erro ao subir imagem: $e');
   }
 }
 
@@ -112,7 +110,7 @@ class AddPicoProvider extends ChangeNotifier with Validators {
   List<String> utilidadesAtuais = [];
   Map<String, bool> utilidadesSelecionadas = {};
 
-  AddPicoControllerProvider() {
+  addPicoControllerProvider() {
     // definindo o estado inicial de cada page
     _atualizarUtilidades();
     atributos = {

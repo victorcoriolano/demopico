@@ -9,7 +9,6 @@ class AuthWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final User? user = context.watch<User?>();
-    print(user);
     return user == null ? const LoginPage() : const UserPage();
   }
 }

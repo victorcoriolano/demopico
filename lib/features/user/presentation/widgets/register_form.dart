@@ -167,7 +167,6 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                         Get.to(() => const UserPage());
                       } else {
                         Get.snackbar('Erro', 'Falha ao registrar usuário');
-                        print("deu mel");
                       }
                       // ir pra página de perfil se der tudo certo
                     }
