@@ -153,7 +153,6 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                 ),
                               ),
                               onPressed: () {
-                                print(provider.utilidadesSelecionadas);
                                 // chama a proxima página somente se tiver validada
                                 if (provider
                                     .validarPaginaAtual(_currentIndex)) {

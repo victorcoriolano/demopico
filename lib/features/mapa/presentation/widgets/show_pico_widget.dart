@@ -73,7 +73,6 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
   void initState() {
     super.initState();
     _loadImages(); // carregar img
-    print("aq e pa  ${widget.pico.obstaculos} ");
   }
 
   Widget buildAttributeIcons(int value) {
@@ -509,7 +508,6 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                   children: [
                                     IconButton(
                                       onPressed: () async {
-                                        print("clicou em salvar");
                                         final picoFav = PicoFavorito(idPico: widget.pico.id, idUsuario: user.id!);
                                         final salvar = provider.savePico(picoFav);
                                         if (await salvar) {
@@ -614,7 +612,9 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
               TextButton(
                 onPressed: () async {
                   await provider.avaliarPico(pico, nota);
-                  Navigator.of(context).pop();
+                  if (context.mounted) {
+                    Navigator.of(context).pop();
+                  } 
                 },
                 child: const Text("Avaliar"),
               ),

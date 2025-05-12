@@ -12,7 +12,9 @@ class TopSideMapWidget extends StatefulWidget implements PreferredSizeWidget {
   const TopSideMapWidget({super.key});
 
   @override
-  _TopSideMapWidgetState createState() => _TopSideMapWidgetState();
+  State<TopSideMapWidget> createState() {
+    return _TopSideMapWidgetState();
+  }
 
   @override
   Size get preferredSize => const Size.fromHeight(80);
@@ -152,7 +154,6 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
               if (value == 'Utilidades') {
                 mostrarAtributos(context);
               } else if (value == 'Modalidade') {
-                print("Filtrar por utilidades");
               } else if (value == 'todos'){
                 spotProvider.aplicarFiltro();
               } 

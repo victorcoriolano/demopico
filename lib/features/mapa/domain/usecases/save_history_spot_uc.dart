@@ -9,7 +9,7 @@ class SaveHistoryUc {
       await historicoInterface.salvarNoHistorico(name, lat, long);
       
     }catch (e){
-      print("Erro ao salvar no histórico: $e");
+      throw Exception("Erro ao salvar no histórico: $e");
     }
   }
 
@@ -22,7 +22,6 @@ class SaveHistoryUc {
         return historico;
       }
     }catch (e){
-      print("Erro ao carregar historico: $e");
       return null;
     }
   }
@@ -31,7 +30,7 @@ class SaveHistoryUc {
     try{
       await historicoInterface.limparHistorico();
     } catch (e){
-      print("Erro ao limpar histórico: $e");
+      throw Exception("Erro ao limpar o histórico: $e");
     }
   }
 
@@ -40,7 +39,6 @@ class SaveHistoryUc {
       await historicoInterface.deleteEntry(nomeItem);
       return true;
     } catch (e){
-      print("Erro ao apagar item: $e");
       return false;
     }
   }

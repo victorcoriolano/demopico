@@ -66,7 +66,7 @@ class SpotControllerProvider extends ChangeNotifier {
 
       notifyListeners();
     } catch (e) {
-      print('Erro ao criar pico: $e');
+      throw Exception("Erro ao criar o pico: $e");
     }
   }
 
@@ -77,7 +77,6 @@ class SpotControllerProvider extends ChangeNotifier {
         .where((argument) =>
             argument.picoName.toLowerCase().contains(word.toLowerCase()))
         .toList();
-    print("Ó os pico aq ó : $picosPesquisados");
     notifyListeners();
   }
 
@@ -123,7 +122,7 @@ class SpotControllerProvider extends ChangeNotifier {
       notifyListeners();
       
     } catch (e) {
-      print("Erro ao salvar a avaliação: $e");
+      throw Exception("Erro ao avaliar o pico: $e");
     }
   }
 }

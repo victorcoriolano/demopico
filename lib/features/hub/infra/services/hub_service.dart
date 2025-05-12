@@ -26,8 +26,7 @@ class HubService implements IHubService{
   }
       @override
       Future<void> deleteCommunique(String id) {
-    // TODO: implement deleteCommunique
-    throw UnimplementedError();
+        throw UnimplementedError();
       }
     
       @override
@@ -46,8 +45,7 @@ class HubService implements IHubService{
     
       @override
       Future<void> updateCommunique(Communique communique) {
-    // TODO: implement updateCommunique
-    throw UnimplementedError();
+        throw UnimplementedError();
       }
   }
     

@@ -12,8 +12,7 @@ class PickImageUC {
       final files = await _repository.pickImage();
       return files;
     } catch (e) {
-      print("Erro ao pegar imagens: $e");
-      return [];
+      throw Exception(e);
     }
   }
 }

@@ -13,7 +13,6 @@ class SaveSpotUc {
         await spotFavRepository.saveSpot(picoFav);
         return true;
       } catch (e) {
-        print(e);
         return false;
       }
   }
@@ -34,7 +33,6 @@ class SaveSpotUc {
         return result;
        
       } catch (e) {
-        print("Erro na exception(pegar pico salvo): $e");
         return [];
       }
   }
@@ -44,8 +42,7 @@ class SaveSpotUc {
       await spotFavRepository.deleteSave(idPicoFavModel);
       
     }catch (e){
-      print("Erro ao deletar pico salvo: $e");
-      
+      throw Exception("Erro ao deletar o pico favorito: $e");
     }
   }
 }

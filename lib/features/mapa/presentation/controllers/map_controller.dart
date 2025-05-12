@@ -79,12 +79,10 @@ class MapControllerProvider extends ChangeNotifier{
         center = LatLng(position.latitude, position.longitude); // Atualiza o centro com a nova localização
         reajustarCameraPosition(center); // Move o mapa para a nova localização
         notifyListeners();
-        print(locationMessage);
       } 
       catch (e) {
           locationMessage = "Erro ao obter localização: $e";
           notifyListeners();
-          print(locationMessage);
       }
     }
   }

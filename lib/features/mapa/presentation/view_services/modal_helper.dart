@@ -35,9 +35,6 @@ class ModalHelper {
   }
 
   static void openModalInfoPico(BuildContext context, Pico pico) {
-    print('Chamando modal para: ${pico.picoName}');
-    print('Imagem url: ${pico.imgUrls}');
-    print("Contexto: $context");
     // salvando no histórico
     final provider = context.read<HistoricoController>();
     provider.salvarNoHistorico(pico.picoName, pico.lat, pico.long);
@@ -61,8 +58,7 @@ class ModalHelper {
         },
       );
     } catch (e) {
-      // TODO
-      print("Erro ao mostrar o botton sheet: $e ");
+      throw Exception('Erro ao abrir o modal: $e');
     }
   }
 }

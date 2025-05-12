@@ -70,7 +70,6 @@ class FirebaseSpotsService implements ISpotRepository {
               PicoModel.fromJson(doc.data() as Map<String, dynamic>, doc.id))
           .toList());
     } on Exception catch (e) {
-      // TODO
       throw Exception("Erro ao carregar os piquersons: $e");
     }
   }

@@ -61,7 +61,6 @@ void main() {
       await service.deleteSave(result.id);
 
       final resultAfterDelete = await service.listFavoriteSpot(idUser);
-      print("resultAfterDelete: $resultAfterDelete");
       expect(resultAfterDelete.length, equals(0));
     });
   });
