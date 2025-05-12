@@ -251,8 +251,3 @@ class _HubPageState extends State<HubPage> {
   }
 }
 
-extension on BuildContext {
-
-  get _heighte => MediaQuery.of(this).size.height;
-  get _widthe => MediaQuery.of(this).size.width;
-}
