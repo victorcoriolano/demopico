@@ -1,6 +1,21 @@
-import 'package:demopico/features/profile/infra/domain/interfaces/profile_database_service.dart';
+import 'package:demopico/features/external/datasources/firestore.dart';
+import 'package:demopico/features/profile/infra/domain/interfaces/profile_database_update_service.dart';
 
 class ProfileFirebaseService implements ProfileDatabaseService {
+
+  static ProfileFirebaseService? _profileFirebaseService;
+
+  static ProfileFirebaseService get getInstance{
+    _profileFirebaseService ??= ProfileFirebaseService(firestore: Firestore());
+    return _profileFirebaseService!;
+  }
+  ProfileFirebaseService({
+    required this.firestore
+  });
+
+   final Firestore firestore;
+
+
   @override
   Future<String> atualizarBio(String newBio, String uid) {
     // TODO: implement atualizarBio
@@ -14,9 +29,8 @@ class ProfileFirebaseService implements ProfileDatabaseService {
   }
 
   @override
-  Future<String> atualizarFoto(String newImg, String uid) {
-    // TODO: implement atualizarFoto
-    throw UnimplementedError();
+  Future<String> atualizarFoto(String newImg, String uid) async {
+      await firestore.getInstance.collection('users').doc(uid).update({'pictureUrl': newImg});
   }
 
   @override
