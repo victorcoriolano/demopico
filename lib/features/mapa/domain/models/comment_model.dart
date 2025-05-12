@@ -40,4 +40,20 @@ class CommentModel extends Comment{
       'timestamp': timestamp.toIso8601String(),
     };
   }
+
+  CommentModel copyWith({
+    String? id,
+    String? peakId,
+    String? userId,
+    String? content,
+    DateTime? timestamp,
+  }){
+    return CommentModel(
+      id: id ?? this.id,
+      peakId: peakId ?? this.peakId,
+      userId: userId ?? this.userId,
+      content: content ?? this.content,
+      timestamp: timestamp ?? this.timestamp,
+    );
+  }
 }
