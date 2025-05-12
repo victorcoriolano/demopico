@@ -6,20 +6,22 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 
 class UserM {
-  String? name;
-  String? description;
   String? id;
-  String? pictureUrl;
+  String? name;
+  String? email;
   bool? isColetivo;
-  String? location;
   String? dob;
+  SignMethods? signMethod;
+  AuthEnumState? authEnumState = AuthEnumState.notLoggedIn;
+  
+  //dados profile
+  String? description;
+  String? pictureUrl;
+  String? location;
   String? conexoes;
   String? picosAdicionados;
   String? picosSalvos;
-  SignMethods? signMethod;
-  AuthEnumState? authEnumState = AuthEnumState.notLoggedIn;
-  String? email;
-
+  
     //transforma dados do firebase em dados na model
   //cria um user model de acordo com a nova conta criada
   factory UserM.userFromFirebaseAuthUser(User user, String name, bool coletivo) {
