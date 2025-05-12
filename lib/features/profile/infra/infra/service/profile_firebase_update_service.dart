@@ -1,0 +1,44 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demopico/features/external/datasources/firestore.dart';
+import 'package:demopico/features/profile/infra/domain/interfaces/profile_database_update_service.dart';
+
+class ProfileFirebaseUpdateService implements ProfileDatabaseUpdateService {
+  static ProfileFirebaseUpdateService? _profileFirebaseUpdateService;
+
+  static ProfileFirebaseUpdateService get getInstance {
+    _profileFirebaseUpdateService ??= ProfileFirebaseUpdateService();
+    return _profileFirebaseUpdateService!;
+  }
+
+  ProfileFirebaseUpdateService();
+  final Firestore firestore = Firestore();
+
+  @override
+  void atualizarBio(String newBio, String uid) async {
+    await firestore.getInstance
+        .collection('users')
+        .doc(uid)
+        .update({'description': newBio});
+  }
+
+  @override
+  void atualizarContribuicoes(String uid) async {
+    await firestore.getInstance.collection('users').doc(uid).update({
+      'picosAdicionados': FieldValue.increment(1),
+    });
+  }
+
+  @override
+  void atualizarFoto(String newImg, String uid) async {
+    await firestore.getInstance
+        .collection('users')
+        .doc(uid)
+        .update({'pictureUrl': newImg});
+  }
+
+  @override
+  void atualizarSeguidores(String uid) async {
+    await firestore.getInstance
+        .collection('users').doc(uid).update({'conexoes': FieldValue.increment(1)});
+  }
+}
