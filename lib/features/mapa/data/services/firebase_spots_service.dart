@@ -36,7 +36,7 @@ class FirebaseSpotsService implements ISpotRepository {
       final snapshotRef = _firebaseFirestore.collection('spots').doc(pico.id);
 
       final snapshot = await snapshotRef.get();
-      
+
       if (!snapshot.exists) {
         throw Exception("Piquerson: '${pico.picoName}' não encontrado no banco de dados.");
       }

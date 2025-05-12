@@ -10,6 +10,12 @@ abstract class Failure {
   String toString() => message;
 }
 
+abstract class ServiceFirebaserFailure extends Failure {
+  ServiceFirebaserFailure({super.message = 'Service Firebase failure'});
+}
+
+
+
 class SnackBarFailure extends SnackBar {
   final String message;
   const SnackBarFailure(
@@ -54,6 +60,3 @@ class InvalidEmailFailure extends Failure {
   InvalidEmailFailure({super.message = 'Esse e-mail é inválido. '});
 }
 
-class NotSetMapController extends Failure {
-  NotSetMapController ({super.message = 'GoogleMapController não definido. Defina o controller primeiro.'});
-}
