@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/external/datasources/firestore.dart';
-import 'package:demopico/features/profile/infra/domain/interfaces/profile_database_update_service.dart';
+import 'package:demopico/features/profile/infra/domain/interfaces/i_profile_database_update_service.dart';
 
 class ProfileFirebaseUpdateService implements IProfileDatabaseUpdateService {
   static ProfileFirebaseUpdateService? _profileFirebaseUpdateService;

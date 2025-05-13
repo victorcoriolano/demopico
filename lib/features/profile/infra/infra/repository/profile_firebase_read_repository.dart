@@ -1,4 +1,4 @@
-import 'package:demopico/features/profile/infra/domain/interfaces/profile_database_read_repository.dart';
+import 'package:demopico/features/profile/infra/domain/interfaces/i_profile_database_read_repository.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_database_service.dart';
 import 'package:demopico/features/user/infra/services/user_firebase_service.dart';
 
