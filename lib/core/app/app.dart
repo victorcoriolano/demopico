@@ -29,7 +29,6 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 class MyAppWidget extends StatelessWidget {
   MyAppWidget({super.key});
 
@@ -39,36 +38,38 @@ class MyAppWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => AuthUserProvider.getInstance
-        ),
+        //providers de auth e user data
+        ChangeNotifierProvider(create: (_) => AuthUserProvider.getInstance),
         StreamProvider(
-          create: (_) => UserAuthFirebaseService.getInstance.getAuthStateChanges(),
+          create: (_) =>
+              UserAuthFirebaseService.getInstance.getAuthStateChanges(),
           initialData: null,
         ),
-        ChangeNotifierProvider(
-            create: (_) => AddPicoProvider(
-                PickImageUC(ImagePickerService()),
-                SaveImageUC(FirebaseFilesService(
-                    FirebaseStorage.instance)))),
+        ChangeNotifierProvider(create: (_) => UserDatabaseProvider.getInstance),
+
+        //provider mapa
         ChangeNotifierProvider(create: (_) => MapControllerProvider()),
         ChangeNotifierProvider(
             create: (_) => serviceLocator<SpotControllerProvider>()),
-        ChangeNotifierProvider(create: (_) => UserDatabaseProvider.getInstance),
+        ChangeNotifierProvider(
+            create: (_) => AddPicoProvider(PickImageUC(ImagePickerService()),
+                SaveImageUC(FirebaseFilesService(FirebaseStorage.instance)))),
+        ChangeNotifierProvider(
+            create: (_) => CommentController(CommentSpotUC(
+                FirebaseCommentService(serviceLocator<FirebaseFirestore>())))),
         ChangeNotifierProvider(
             create: (_) =>
                 HistoricoController(SaveHistoryUc(LocalStorageService()))),
-         ChangeNotifierProvider(
+
+        //provider hub
+        ChangeNotifierProvider(
           create: (_) => HubProvider(
             postarComunicado: PostarComunicado.getInstance,
             listarComunicado: ListarComunicado.getInstance,
           ),
         ),
-         ChangeNotifierProvider(
-            create: (_) => HomeProvider.getInstance),
-        ChangeNotifierProvider(
-            create: (_) =>
-                CommentController(CommentSpotUC(FirebaseCommentService(serviceLocator<FirebaseFirestore>())))),
+        //provider home
+        ChangeNotifierProvider(create: (_) => HomeProvider.getInstance),
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
@@ -89,5 +90,3 @@ class MyAppWidget extends StatelessWidget {
     );
   }
 }
-
-
