@@ -45,7 +45,7 @@ void main() {
       mockTaskSnapshot = MockTaskSnapshot();
       fakeUploadTask = FakeUploadTask(snapshot: mockTaskSnapshot);
       mockStorageReference = MockStorageReference();
-      firebaseFilesService = FirebaseFilesService(bdStorageInstance: mockFirebaseStorage);
+      firebaseFilesService = FirebaseFilesService(mockFirebaseStorage);
 
       fileMock = UploadFileModel(
         fileName: "teste.png",

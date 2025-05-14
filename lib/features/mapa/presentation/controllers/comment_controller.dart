@@ -4,13 +4,6 @@ import 'package:demopico/features/mapa/domain/usecases/comment_spot_uc.dart';
 import 'package:flutter/material.dart';
 
 class CommentController extends ChangeNotifier {
-  
-  static CommentController? _commentController;
-   static CommentController  get getInstance{
-    _commentController ??= CommentController(useCase: CommentSpotUC.getInstance);
-    return _commentController!;
-  } 
-
   bool _isLoading = true;
   String? _error;
   List<Comment> _comments = [];
@@ -21,7 +14,7 @@ class CommentController extends ChangeNotifier {
 
   final CommentSpotUC useCase;
 
-  CommentController({required this.useCase});
+  CommentController(this.useCase);
 
 
   // Função para carregar comentários de um servidor ou banco de dados

@@ -11,7 +11,7 @@
 
       test("dever criar um spot", () async {
         final fakeFiresore = FakeFirebaseFirestore();
-        final service = FirebaseSpotsService(firebaseFirestore: fakeFiresore);
+        final service = FirebaseSpotsService(fakeFiresore);
 
         final result = await service.createSpot(testPico3);
 
@@ -23,7 +23,7 @@
       test("deve alterar um spot", () async {
         final fakeFirestore = FakeFirebaseFirestore();
 
-        final service = FirebaseSpotsService(firebaseFirestore: fakeFirestore); 
+        final service = FirebaseSpotsService(fakeFirestore); 
         var pico = await service.createSpot(testPico);
 
         final result = await service.updateSpot(pico!.copyWith(nota: 5)); 
@@ -35,7 +35,7 @@
 
       test("deve deletar um spot", () async {
         var fake = FakeFirebaseFirestore();
-        var service = FirebaseSpotsService(firebaseFirestore: fake);
+        var service = FirebaseSpotsService(fake);
 
         final picoRef = await service.createSpot(testPico);
 
@@ -51,7 +51,7 @@
       test("deve testar se a stream de spots emite lista de spots", () async {
         final fakeFiresore = FakeFirebaseFirestore();
 
-        final service = FirebaseSpotsService(firebaseFirestore: fakeFiresore);
+        final service = FirebaseSpotsService(fakeFiresore);
 
         //criando falsos picos no bd falso
         await service.createSpot(testPico);

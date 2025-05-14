@@ -11,20 +11,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddPicoProvider extends ChangeNotifier with Validators {
-  static AddPicoProvider? _addPicoProvider;
-
-  static AddPicoProvider get getInstance {
-    _addPicoProvider ??= AddPicoProvider(
-        pickImageUC: PickImageUC.getInstance,
-        saveImageUC: SaveImageUC.getInstance);
-    return _addPicoProvider!;
-  }
-
   //instanciando casos de uso
   final PickImageUC pickImageUC;
   final SaveImageUC saveImageUC;
 
-  AddPicoProvider({required this.pickImageUC, required this.saveImageUC});
+  AddPicoProvider(this.pickImageUC, this.saveImageUC);
 
   bool loadingImagens = false;
   Map<String, int> atributos = {};
@@ -44,54 +35,57 @@ class AddPicoProvider extends ChangeNotifier with Validators {
   final pegadorImage = ImagePicker();
 
   Future<void> selecionarImag() async {
-    images.clear();
+          images.clear();
     urlImage.clear();
-    try {
-      // Reseta a lista de imagens antes de selecionar novas
+  try {
+    // Reseta a lista de imagens antes de selecionar novas
 
-      // Pega múltiplas imagens da galeria (limite de 3)
-      final imgs = await pegadorImage.pickMultiImage(
-        limit: 3,
-      );
-      if (imgs.isNotEmpty) {
-        for (var img in imgs) {
-          images.add(File(img.path));
-        }
-        // Chama o método para subir as imagens
-
-        await testeSubindoImg(images);
+    // Pega múltiplas imagens da galeria (limite de 3)
+    final imgs = await pegadorImage.pickMultiImage(
+      limit: 3,
+    );
+    if (imgs.isNotEmpty) {
+      for (var img in imgs) {
+        images.add(File(img.path));
       }
-    } on Exception catch (e) {
-      debugPrint('Erro ao selecionar imagem: $e');
-      throw Exception('Erro ao selecionar imagem: $e');
+      // Chama o método para subir as imagens
+  
+      await testeSubindoImg(images);
     }
+  } on Exception catch (e) {
+     debugPrint('Erro ao selecionar imagem: $e');
+    throw Exception('Erro ao selecionar imagem: $e');
   }
+}
 
   Future<void> testeSubindoImg(List<File?> imgs) async {
-    try {
-      for (var img in imgs) {
-        // Gera um nome único para cada imagem
-        final uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
-        final ref = FirebaseStorage.instance
-            .ref()
-            .child('spots_images')
-            .child('images/$nomePico$uniqueName.jpg');
+  try {
+    for (var img in imgs) {
+      // Gera um nome único para cada imagem
+      final uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
+      final ref = FirebaseStorage.instance
+          .ref()
+          .child('spots_images')
+          .child('images/$nomePico$uniqueName.jpg');
 
-        debugPrint('Enviando imagem: ${img!.path}');
+      debugPrint('Enviando imagem: ${img!.path}');
 
-        // Faz o upload da imagem
-        await ref.putFile(img);
+      // Faz o upload da imagem
+      await ref.putFile(img);
 
-        // Adiciona a URL de download à lista
-        final downloadURL = await ref.getDownloadURL();
-        urlImage.add(downloadURL);
-      }
+      // Adiciona a URL de download à lista
+      final downloadURL = await ref.getDownloadURL();
+      urlImage.add(downloadURL);
 
-      urlImage.clear;
-    } on Exception catch (e) {
-      throw Exception('Erro ao subir imagem: $e');
     }
+    
+  urlImage.clear;
+  } on Exception catch (e) {
+    throw Exception('Erro ao subir imagem: $e');
   }
+}
+
+
 
   void pegarLocalizacao(LatLng localizacao) {
     latlang = localizacao;
@@ -127,7 +121,6 @@ class AddPicoProvider extends ChangeNotifier with Validators {
       'Kick-Out': 4,
     };
   }
-
 // notificar o estado de modalidade, tipo e utilidades
   void atualizarModalidade(String modalidade) {
     selectedModalidade = modalidade;
@@ -244,7 +237,7 @@ class AddPicoProvider extends ChangeNotifier with Validators {
     final validarImagens = imagensIsNotEmpty();
     return nomeValido && descricaoValida && validarImagens;
   }
-
+  
   void limpar() {
     atributos.clear();
     obstaculos.clear();
@@ -259,7 +252,7 @@ class AddPicoProvider extends ChangeNotifier with Validators {
     notifyListeners();
   }
 
-  Pico getInfoPico(User? userCriador) {
+  Pico getInfoPico(User? userCriador){
     return Pico(
       id: "",
       picoName: nomePico,

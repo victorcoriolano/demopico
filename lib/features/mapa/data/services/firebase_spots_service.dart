@@ -5,23 +5,15 @@ import 'package:demopico/features/mapa/domain/interfaces/i_spot_repository.dart'
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 
 class FirebaseSpotsService implements ISpotRepository {
+  final FirebaseFirestore _firebaseFirestore;
 
-  static FirebaseSpotsService? _firebaseSpotsService;
-  
-     static FirebaseSpotsService get getInstance{
-    _firebaseSpotsService ??= FirebaseSpotsService(firebaseFirestore: FirebaseFirestore.instance);
-    return _firebaseSpotsService!;
-  } 
-
-  final FirebaseFirestore firebaseFirestore;
-
-  FirebaseSpotsService({required this.firebaseFirestore});
+  FirebaseSpotsService(this._firebaseFirestore);
 
   @override
   Future<PicoModel?> createSpot(PicoModel pico) async {
     // Salvando os dados no Firestore
     try {
-      final doc = await firebaseFirestore.collection('spots').add(
+      final doc = await _firebaseFirestore.collection('spots').add(
           pico.toJson() // convertendo o objeto PicoModel para um Map<String, dynamic>
           );
       final snapshot = await doc.get();
@@ -41,7 +33,7 @@ class FirebaseSpotsService implements ISpotRepository {
   @override
   Future<PicoModel> updateSpot(Pico pico) async {
     try {
-      final snapshotRef = firebaseFirestore.collection('spots').doc(pico.id);
+      final snapshotRef = _firebaseFirestore.collection('spots').doc(pico.id);
 
       final snapshot = await snapshotRef.get();
 
@@ -64,7 +56,7 @@ class FirebaseSpotsService implements ISpotRepository {
   @override
   Future<void> deleteSpot(String id) async {
     try {
-      await firebaseFirestore.collection('spots').doc(id).delete();
+      await _firebaseFirestore.collection('spots').doc(id).delete();
     } catch (e) {
       throw Exception("Erro ao deletar o pico: $e");
     }
@@ -84,7 +76,7 @@ class FirebaseSpotsService implements ISpotRepository {
   }
   
   Query executeQuery([Filters? filtro]) {
-    Query querySnapshot = firebaseFirestore.collection("spots");
+    Query querySnapshot = _firebaseFirestore.collection("spots");
 
     if (filtro != null && filtro.hasActivateFilters) {
       if (filtro.atributos!.isNotEmpty) {
@@ -110,7 +102,7 @@ class FirebaseSpotsService implements ISpotRepository {
   @override
   Future<PicoModel> getPicoByID(String id) async {
     try{
-      final snapshot = await firebaseFirestore.collection("spots").doc(id).get();
+      final snapshot = await _firebaseFirestore.collection("spots").doc(id).get();
       if (snapshot.data() == null) throw Exception("Dados nulos");
       return PicoModel.fromJson(snapshot.data()! , id);
     }on FirebaseException catch (e){

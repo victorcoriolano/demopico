@@ -43,7 +43,7 @@ void main() {
       mockQuerySnapshot = MockQuerySnapshot();
       mockQueryDocSnapshot = MockQueryDocumentSnapshot();
 
-      repositoryMap = FirebaseSpotsService(firebaseFirestore: mockFirestore);
+      repositoryMap = FirebaseSpotsService(mockFirestore);
     });
 
     //testando criar pico

@@ -20,7 +20,7 @@ void main() {
     });
 
     test("Deve salvar um spot dos favoritos", () async {
-      final service = FirebaseFavoriteSpotService(firebaseFirestore: fakeFirestore);
+      final service = FirebaseFavoriteSpotService(fakeFirestore);
       //criando um spot fake pra referenciar no pico favorito
 
       final result =
@@ -38,7 +38,7 @@ void main() {
     });
 
     test("Deve retornar um lista de spot salvo", () async {
-      final service = FirebaseFavoriteSpotService(firebaseFirestore: fakeFirestore);
+      final service = FirebaseFavoriteSpotService(fakeFirestore);
       String idUser = "1";
       await service.saveSpot(PicoFavorito(idPico: "1", idUsuario: "1"));
       await service.saveSpot(PicoFavorito(idPico: "2", idUsuario: "1"));
@@ -50,7 +50,7 @@ void main() {
       expect(result.length, equals(2));
     });
     test("Deve deletar um spot salvo", () async {
-      final service = FirebaseFavoriteSpotService(firebaseFirestore: fakeFirestore);
+      final service = FirebaseFavoriteSpotService(fakeFirestore);
       String idUser = "1";
       String idPico = "1";
       final result = await service.saveSpot(PicoFavorito(idPico: idPico, idUsuario: idUser));

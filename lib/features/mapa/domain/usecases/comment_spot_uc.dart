@@ -1,33 +1,27 @@
-import 'package:demopico/features/mapa/data/services/firebase_comment_service.dart';
 import 'package:demopico/features/mapa/domain/entities/comment.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_comment_repository.dart';
 
 class CommentSpotUC {
-  static CommentSpotUC? _commentSpotUC;
-  static CommentSpotUC get getInstance {
-    _commentSpotUC ??=
-        CommentSpotUC(commentRepositoryIMP: FirebaseCommentService.getInstance);
-    return _commentSpotUC!;
-  }
+  final ICommentRepository commentRepository;
 
-  final ICommentRepository commentRepositoryIMP;
+  CommentSpotUC(this.commentRepository);
 
-  CommentSpotUC({required this.commentRepositoryIMP});
+  Future<void> execulteAdd(Comment comentario)async{
+    try{
+      await commentRepository.addComment(comentario);
 
-  Future<void> execulteAdd(Comment comentario) async {
-    try {
-      await commentRepositoryIMP.addComment(comentario);
-    } catch (e) {
+    }catch (e){
       throw Exception("Erro ao comentar: $e");
     }
   }
 
-  Future<List<Comment>> execulte(String idPico) async {
-    try {
-      final listComment = await commentRepositoryIMP.getCommentsByPeak(idPico);
+    Future<List<Comment>> execulte(String idPico)async{
+    try{
+      final listComment = await commentRepository.getCommentsByPeak(idPico);
       return listComment;
-    } catch (e) {
+    }catch (e){
       return [];
     }
   }
+
 }

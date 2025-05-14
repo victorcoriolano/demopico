@@ -44,12 +44,16 @@ class NetworkFailure extends Failure {
   NetworkFailure({super.message = 'Network failure'});
 }
 
+class FirebaseFailure extends Failure {
+  FirebaseFailure({super.message =  'Erro ao acessar o banco de dados'});
+}
+
 class CacheFailure extends Failure {
   CacheFailure({super.message = 'Cache failure'});
 }
 
 class UserNotFoundFailure extends Failure {
-  UserNotFoundFailure({super.message = 'Não achamos ninguém com esse vulgo!'});
+  UserNotFoundFailure({super.message = 'Não achamos esses usuario!'});
 }
 
 class WrongPasswordFailure extends Failure {
@@ -58,5 +62,9 @@ class WrongPasswordFailure extends Failure {
 
 class InvalidEmailFailure extends Failure {
   InvalidEmailFailure({super.message = 'Esse e-mail é inválido. '});
+}
+
+class GenericErrorFailure extends Failure{
+  GenericErrorFailure({super.message = 'Não foi possivel identificar o erro'});
 }
 

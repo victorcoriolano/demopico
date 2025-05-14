@@ -6,37 +6,30 @@ import 'package:demopico/features/mapa/domain/models/upload_result_file_model.da
 import 'package:firebase_storage/firebase_storage.dart';
 
 class FirebaseFilesService implements ISaveImageRepository {
-  static FirebaseFilesService? _firebaseFilesService;
+  FirebaseStorage bdInstance;
 
-  static FirebaseFilesService get getInstance {
-    _firebaseFilesService ??=
-        FirebaseFilesService(bdStorageInstance: FirebaseStorage.instance);
-    return _firebaseFilesService!;
-  }
-
-  FirebaseStorage bdStorageInstance;
-
-  FirebaseFilesService({required this.bdStorageInstance});
+  FirebaseFilesService(this.bdInstance);
 
   @override
-  Future<List<UploadResultFileModel>> saveFiles(
-      List<UploadFileModel> files) async {
+  Future<List<UploadResultFileModel>> saveFiles(List<UploadFileModel> files) async {
     List<UploadResultFileModel> urls = [];
 
     try {
-      for (UploadFileModel file in files) {
-        final docRef = bdStorageInstance.ref().child("spots/${file.fileName}");
+      for (UploadFileModel file in files) { 
+
+        final docRef = bdInstance.ref().child("spots/${file.fileName}");
         final uploadTask = docRef.putData(file.bytes);
         final snapshot = await uploadTask;
-        final snapshotUrl = await snapshot.ref.getDownloadURL();
-
-        urls.add(
-            UploadResultFileModel(fileName: file.fileName, url: snapshotUrl));
+        final snapshotUrl = await snapshot.ref.getDownloadURL();  
+        
+        
+        urls.add(UploadResultFileModel(fileName: file.fileName, url: snapshotUrl));
       }
       return urls;
     } on SocketException catch (e) {
       //erro de internet
       throw Exception("Falha de rede: $e, tente novamente");
+      
     } on FirebaseException catch (e) {
       switch (e.code) {
         case 'storage/unauthorized':
