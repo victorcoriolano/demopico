@@ -9,6 +9,7 @@ import 'package:demopico/features/mapa/presentation/controllers/comment_controll
 import 'package:demopico/features/mapa/presentation/controllers/historico_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
+import 'package:demopico/features/mapa/presentation/controllers/spot_save_controller.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
 import 'package:demopico/features/user/infra/services/user_auth_firebase_service.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
@@ -34,6 +35,7 @@ class MyAppWidget extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AddPicoProvider.getInstance),
         ChangeNotifierProvider(
             create: (_) => MapControllerProvider.getInstance),
+        ChangeNotifierProvider(create: (_) => SpotSaveController.getInstance),
         ChangeNotifierProvider(
             create: (_) => SpotControllerProvider.getInstance),
         ChangeNotifierProvider(create: (_) => UserDatabaseProvider.getInstance),
