@@ -1,4 +1,4 @@
-abstract class IProfileDatabaseUpdateService{
+abstract class ProfileDatabaseUpdateService{
   void atualizarContribuicoes(String uid);
   void atualizarSeguidores(String uid);
   void atualizarBio(String newBio, String uid);
