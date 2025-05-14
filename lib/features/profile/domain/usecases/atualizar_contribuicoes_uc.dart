@@ -1,23 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
-import 'package:demopico/features/profile/infra/domain/interfaces/i_profile_database_read_repository.dart';
-import 'package:demopico/features/profile/infra/domain/interfaces/i_profile_database_update_repository.dart';
-import 'package:demopico/features/profile/infra/infra/repository/profile_firebase_read_repository.dart';
-import 'package:demopico/features/profile/infra/infra/repository/profile_firebase_update_repository.dart';
+import 'package:demopico/features/profile/domain/interfaces/i_profile_database_read_repository.dart';
+import 'package:demopico/features/profile/domain/interfaces/i_profile_database_update_repository.dart';
+import 'package:demopico/features/profile/infra/repository/profile_firebase_read_repository.dart';
+import 'package:demopico/features/profile/infra/repository/profile_firebase_update_repository.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter/foundation.dart';
 
-class AtualizarFotoUc {
-  static AtualizarFotoUc? _instance;
-  static AtualizarFotoUc get getInstance {
-    _instance ??= AtualizarFotoUc(
+class AtualizarContribuicoesUc {
+  static AtualizarContribuicoesUc? _instance;
+  static AtualizarContribuicoesUc get getInstance {
+    _instance ??= AtualizarContribuicoesUc(
       profileDatabaseReadRepositoryIMP: ProfileFirebaseReadRepository.getInstance,
       profileDatabaseUpdateRepositoryIMP: ProfileFirebaseUpdateRepository.getInstance,
     );
     return _instance!;
   }
 
-  AtualizarFotoUc({
+  AtualizarContribuicoesUc({
     required this.profileDatabaseReadRepositoryIMP,
     required this.profileDatabaseUpdateRepositoryIMP,
   });
@@ -25,10 +25,10 @@ class AtualizarFotoUc {
   final IProfileDatabaseReadRepository profileDatabaseReadRepositoryIMP;
   final IProfileDatabaseUpdateRepository profileDatabaseUpdateRepositoryIMP;
 
-  void atualizar(String newFoto, UserM user) {
+  void atualizar(UserM user) {
     try {
       if (user.id == null) throw UserNotFoundFailure();
-      profileDatabaseUpdateRepositoryIMP.atualizarFoto(newFoto, user);
+      profileDatabaseUpdateRepositoryIMP.atualizarContribuicoes(user);
     } on FirebaseException catch (e) {
       if (kDebugMode) print(e);
       throw FirebaseFailure();
@@ -40,7 +40,7 @@ class AtualizarFotoUc {
 
   Future<String> pegar() async {
     try {
-      return await profileDatabaseReadRepositoryIMP.pegarFoto();
+      return await profileDatabaseReadRepositoryIMP.pegarContribuicoes();
     } on FirebaseException catch (e) {
       if (kDebugMode) print(e);
       throw FirebaseFailure();
