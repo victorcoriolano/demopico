@@ -48,7 +48,6 @@ class SpotSaveController extends ChangeNotifier {
   Future<bool> deleteSave(String idPicoFavModel) async {
     try {
       await saveSpot.deleteSaveSpot(idPicoFavModel);
-
       notifyListeners();
       return true;
     } catch (e) {

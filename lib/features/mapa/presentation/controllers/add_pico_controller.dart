@@ -127,7 +127,6 @@ class AddPicoProvider extends ChangeNotifier with Validators {
       'Kick-Out': 4,
     };
   }
-
 // notificar o estado de modalidade, tipo e utilidades
   void atualizarModalidade(String modalidade) {
     selectedModalidade = modalidade;
@@ -244,7 +243,6 @@ class AddPicoProvider extends ChangeNotifier with Validators {
     final validarImagens = imagensIsNotEmpty();
     return nomeValido && descricaoValida && validarImagens;
   }
-
   void limpar() {
     atributos.clear();
     obstaculos.clear();
