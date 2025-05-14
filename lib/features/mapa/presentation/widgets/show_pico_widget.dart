@@ -54,7 +54,6 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
     "Lixeira": "assets/images/icons/lixeira.png",
   };
 
-  final provider = serviceLocator<SpotSaveController>();
 
   void _loadImages() {
     setState(() {
@@ -76,6 +75,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
   }
 
   Widget buildAttributeIcons(int value) {
+    
     return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
       Row(
         children: [
@@ -100,6 +100,8 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.read<SpotSaveController>();
+
     return DraggableScrollableSheet(
         initialChildSize: 0.6,
         minChildSize: 0.2,
