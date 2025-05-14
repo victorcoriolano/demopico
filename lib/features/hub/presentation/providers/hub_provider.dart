@@ -6,14 +6,6 @@ import 'package:demopico/features/hub/domain/usecases/postar_comunicado_uc.dart'
 import 'package:flutter/foundation.dart';
 
 class HubProvider extends ChangeNotifier {
-
-  static HubProvider? _hubProvider;
-
-  static HubProvider get getInstance{
-    _hubProvider ??= HubProvider(postarComunicado: PostarComunicado.getInstance, listarComunicado: ListarComunicado.getInstance);
-    return _hubProvider!;
-  }
-
   PostarComunicado postarComunicado;
   ListarComunicado listarComunicado;
   HubProvider({required this.postarComunicado, required this.listarComunicado});

@@ -1,11 +1,20 @@
 
+import 'package:demopico/features/mapa/data/services/firebase_spots_service.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_spot_repository.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 
 class AvaliarSpotUc {
-  final ISpotRepository notaRepository;
 
-  AvaliarSpotUc(this.notaRepository);
+  static AvaliarSpotUc? _avaliarSpotUc;
+     static AvaliarSpotUc  get getInstance{
+    _avaliarSpotUc ??= AvaliarSpotUc(notaRepositoryIMP: FirebaseSpotsService.getInstance);
+    return _avaliarSpotUc!;
+  } 
+
+
+  final ISpotRepository notaRepositoryIMP;
+
+  AvaliarSpotUc({required this.notaRepositoryIMP});
 
   Future<PicoModel> executar(double novaNota, PicoModel pico) async {
     double novaMedia;
@@ -26,7 +35,7 @@ class AvaliarSpotUc {
     pico.nota = novaMedia;
     pico.numeroAvaliacoes = novoTotalAvaliacoes;
 
-    await notaRepository.updateSpot(pico);
+    await notaRepositoryIMP.updateSpot(pico);
     return pico;
   }
 }

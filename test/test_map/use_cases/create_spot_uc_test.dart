@@ -30,7 +30,7 @@ void main() {
       test("deve retornar uma pico model ao criar pico", () async {
         //testar se o pico foi criado e retornar true
         final mockRepository =  MockPicoRepository();
-        final useCase = CreateSpotUc(mockRepository);
+        final useCase = CreateSpotUc(spotRepositoryIMP: mockRepository);
         final mockPico = MockPico();
 
         when(() => mockRepository.createSpot(mockPico)).thenAnswer((_) async => testPico);
@@ -42,7 +42,7 @@ void main() {
 
       test("deve propagar exception do repository", () async {
         final mockRepository = MockPicoRepository();
-        final useCase = CreateSpotUc(mockRepository);
+        final useCase = CreateSpotUc(spotRepositoryIMP: mockRepository);
         final mockPico = MockPico();
 
         when(() => mockRepository.createSpot(mockPico)).thenThrow(Exception("Erro ao criar pico"));
