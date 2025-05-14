@@ -6,17 +6,17 @@ import 'package:demopico/features/mapa/domain/models/comment_model.dart';
 class FirebaseCommentService implements ICommentRepository {
   static FirebaseCommentService? _firebaseCommentService;
   static FirebaseCommentService get getInstance {
-    _firebaseCommentService ??= FirebaseCommentService();
+    _firebaseCommentService ??= FirebaseCommentService(firebaseFirestore: FirebaseFirestore.instance);
     return _firebaseCommentService!;
   }
 
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore firebaseFirestore;
 
-  FirebaseCommentService();
+  FirebaseCommentService({required this.firebaseFirestore});
 
   @override
   Future<CommentModel> addComment(Comment comment) async {
-    final ref = await _firestore
+    final ref = await firebaseFirestore
         .collection('comments')
         .add(CommentModel.fromEntity(comment).toJson());
     return ref.get().then((doc) {
@@ -26,7 +26,7 @@ class FirebaseCommentService implements ICommentRepository {
 
   @override
   Future<List<CommentModel>> getCommentsByPeak(String peakId) async {
-    final querySnapshot = await _firestore
+    final querySnapshot = await firebaseFirestore
         .collection('comments')
         .where('peakId', isEqualTo: peakId)
         .orderBy('timestamp', descending: true)
@@ -40,13 +40,13 @@ class FirebaseCommentService implements ICommentRepository {
 
   @override
   Future<void> deleteComment(String commentId) async {
-    final ref = _firestore.collection('comments').doc(commentId);
+    final ref = firebaseFirestore.collection('comments').doc(commentId);
     return await ref.delete();
   }
 
   @override
   Future<CommentModel> updateComment(CommentModel comment) async {
-    final ref = _firestore.collection('comments').doc(comment.id);
+    final ref = firebaseFirestore.collection('comments').doc(comment.id);
     return await ref.update(comment.toJson()).then((onValue) => comment);
   }
 }
