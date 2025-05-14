@@ -38,4 +38,5 @@ class AvaliarSpotUc {
     await notaRepositoryIMP.updateSpot(pico);
     return pico;
   }
+  
 }
