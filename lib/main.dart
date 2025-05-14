@@ -12,5 +12,5 @@ void main() async {
   await init();
 
 
-  runApp(MyAppWidget());
+  runApp(const MyAppWidget());
 }
