@@ -8,13 +8,13 @@ import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter/foundation.dart';
 
 class AtualizarContribuicoesUc {
-  static AtualizarContribuicoesUc? _instance;
+  static AtualizarContribuicoesUc? _atualizarContribuicoesUc;
   static AtualizarContribuicoesUc get getInstance {
-    _instance ??= AtualizarContribuicoesUc(
+    _atualizarContribuicoesUc ??= AtualizarContribuicoesUc(
       profileDatabaseReadRepositoryIMP: ProfileFirebaseReadRepository.getInstance,
       profileDatabaseUpdateRepositoryIMP: ProfileFirebaseUpdateRepository.getInstance,
     );
-    return _instance!;
+    return _atualizarContribuicoesUc!;
   }
 
   AtualizarContribuicoesUc({

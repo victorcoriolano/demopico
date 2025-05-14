@@ -8,13 +8,13 @@ import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter/foundation.dart';
 
 class AtualizarBioUc {
-  static AtualizarBioUc? _instance;
+  static AtualizarBioUc? _atualizarBioUc;
   static AtualizarBioUc get getInstance {
-    _instance ??= AtualizarBioUc(
+    _atualizarBioUc ??= AtualizarBioUc(
       profileDatabaseReadRepositoryIMP: ProfileFirebaseReadRepository.getInstance,
       profileDatabaseUpdateRepositoryIMP: ProfileFirebaseUpdateRepository.getInstance,
     );
-    return _instance!;
+    return _atualizarBioUc!;
   }
 
   AtualizarBioUc({

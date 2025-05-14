@@ -8,13 +8,13 @@ import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter/foundation.dart';
 
 class AtualizarFotoUc {
-  static AtualizarFotoUc? _instance;
+  static AtualizarFotoUc? _atualizarFotoUc;
   static AtualizarFotoUc get getInstance {
-    _instance ??= AtualizarFotoUc(
+    _atualizarFotoUc ??= AtualizarFotoUc(
       profileDatabaseReadRepositoryIMP: ProfileFirebaseReadRepository.getInstance,
       profileDatabaseUpdateRepositoryIMP: ProfileFirebaseUpdateRepository.getInstance,
     );
-    return _instance!;
+    return _atualizarFotoUc!;
   }
 
   AtualizarFotoUc({
