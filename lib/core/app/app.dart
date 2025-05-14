@@ -65,11 +65,9 @@ class MyAppWidget extends StatelessWidget {
 
         //provider hub
         ChangeNotifierProvider(
-          create: (_) => HubProvider(
-            postarComunicado: PostarComunicado.getInstance,
-            listarComunicado: ListarComunicado.getInstance,
-          ),
+          create: (_) => HubProvider.getInstance
         ),
+        
         //provider home
         ChangeNotifierProvider(create: (_) => HomeProvider.getInstance),
       ],
