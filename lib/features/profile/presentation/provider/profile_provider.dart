@@ -2,8 +2,9 @@ import 'package:demopico/features/profile/domain/usecases/atualizar_bio_uc.dart'
 import 'package:demopico/features/profile/domain/usecases/atualizar_contribuicoes_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/atualizar_foto_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/atualizar_seguidores_uc.dart';
+import 'package:flutter/foundation.dart';
 
-class ProfileProvider {
+class ProfileProvider extends ChangeNotifier {
   static ProfileProvider? _profileProvider;
 
   static ProfileProvider get getInstance {

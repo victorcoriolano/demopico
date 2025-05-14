@@ -19,6 +19,7 @@ import 'package:demopico/features/mapa/data/services/image_picker_service.dart';
 import 'package:demopico/features/mapa/data/services/firebase_files_service.dart';
 import 'package:demopico/features/mapa/data/services/firebase_comment_service.dart';
 import 'package:demopico/features/mapa/data/services/local_storage_service.dart';
+import 'package:demopico/features/profile/presentation/provider/profile_provider.dart';
 import 'package:demopico/features/user/infra/services/user_auth_firebase_service.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/core/common/inject_dependencies.dart';
@@ -46,6 +47,7 @@ class MyAppWidget extends StatelessWidget {
           initialData: null,
         ),
         ChangeNotifierProvider(create: (_) => UserDatabaseProvider.getInstance),
+        ChangeNotifierProvider(create: (_) => ProfileProvider.getInstance),
 
         //provider mapa
         ChangeNotifierProvider(create: (_) => MapControllerProvider()),
