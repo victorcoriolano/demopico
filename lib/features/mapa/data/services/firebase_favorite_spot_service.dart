@@ -5,9 +5,16 @@ import 'package:demopico/features/mapa/domain/models/pico_favorito_model.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_favorite_spot_repository.dart';
 
 class FirebaseFavoriteSpotService implements IFavoriteSpotRepository {
-  final FirebaseFirestore _firebaseFirestore;
+  
+  static FirebaseFavoriteSpotService? _favoriteSpotService;
+  static FirebaseFavoriteSpotService get getInstance {
+    _favoriteSpotService ??= FirebaseFavoriteSpotService();
+    return _favoriteSpotService!;
+  }
 
-  FirebaseFavoriteSpotService(this._firebaseFirestore);
+  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+
+  FirebaseFavoriteSpotService();
 
   @override
   Future<void> deleteSave(String idPicoFavorito) async {
