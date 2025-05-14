@@ -5,14 +5,22 @@ import 'package:demopico/features/mapa/domain/models/pico_favorito_model.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_favorite_spot_repository.dart';
 
 class FirebaseFavoriteSpotService implements IFavoriteSpotRepository {
-  final FirebaseFirestore _firebaseFirestore;
 
-  FirebaseFavoriteSpotService(this._firebaseFirestore);
+  static FirebaseFavoriteSpotService? _favoriteSpotService;
+  static FirebaseFavoriteSpotService get getInstance {
+    _favoriteSpotService ??= FirebaseFavoriteSpotService(firebaseFirestore: FirebaseFirestore.instance);
+    return _favoriteSpotService!;
+  }
+    
+  FirebaseFavoriteSpotService({required this.firebaseFirestore});
+
+  final FirebaseFirestore firebaseFirestore;
+
 
   @override
   Future<void> deleteSave(String idPicoFavorito) async {
     try {
-      await _firebaseFirestore
+      await firebaseFirestore
           .collection("picosFavoritados")
           .doc(idPicoFavorito)
           .delete();
@@ -24,10 +32,10 @@ class FirebaseFavoriteSpotService implements IFavoriteSpotRepository {
   @override
   Future<PicoFavoritoModel> saveSpot(PicoFavorito picoFav) async {
     try {
-      final data = PicoFavoritoAdapter.toFirebase(picoFav, _firebaseFirestore);
+      final data = PicoFavoritoAdapter.toFirebase(picoFav, firebaseFirestore);
 
       final snapshot =
-          await _firebaseFirestore.collection("picosFavoritados").add(data);
+          await firebaseFirestore.collection("picosFavoritados").add(data);
       final docPicoFav = await snapshot.get();
       return PicoFavoritoAdapter.fromFirebase(docPicoFav);
     } on FirebaseException catch (e) {
@@ -40,7 +48,7 @@ class FirebaseFavoriteSpotService implements IFavoriteSpotRepository {
   @override
   Future<List<PicoFavoritoModel>> listFavoriteSpot(String idUser) async {
     try {
-      final snapshot = await _firebaseFirestore
+      final snapshot = await firebaseFirestore
           .collection("picosFavoritados")
           .where("idUsuario", isEqualTo: idUser)
           .get();

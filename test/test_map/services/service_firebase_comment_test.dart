@@ -13,7 +13,7 @@ void main() {
 
     setUpAll(() {
       fakeFirestore = FakeFirebaseFirestore();
-      service = FirebaseCommentService(fakeFirestore);
+      service = FirebaseCommentService(firebaseFirestore: fakeFirestore);
     });
 
     test("Deve salvar um comentário", () async {

@@ -4,8 +4,15 @@ import 'package:demopico/features/mapa/presentation/dtos/spot_cart_ui_dto.dart';
 import 'package:flutter/material.dart';
 
 class SpotSaveController extends ChangeNotifier {
+  static SpotSaveController? _spotSaveController;
+  static SpotSaveController get getInstance {
+    _spotSaveController ??=
+        SpotSaveController(saveSpot: SaveSpotUc.getInstance);
+    return _spotSaveController!;
+  }
+
   final SaveSpotUc saveSpot;
-  SpotSaveController(this.saveSpot);
+  SpotSaveController({required this.saveSpot});
 
   List<SpotCardUIDto> picosFavoritos = [];
   String? error;
@@ -32,7 +39,6 @@ class SpotSaveController extends ChangeNotifier {
     } on Exception catch (e) {
       error = "Um erro ao buscar picos salvos foi identificado: $e";
       return false;
-
     } catch (e) {
       error = "Erro ao buscar picos salvos";
       return false;
@@ -42,7 +48,6 @@ class SpotSaveController extends ChangeNotifier {
   Future<bool> deleteSave(String idPicoFavModel) async {
     try {
       await saveSpot.deleteSaveSpot(idPicoFavModel);
-      
       notifyListeners();
       return true;
     } catch (e) {
