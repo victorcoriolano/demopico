@@ -5,9 +5,17 @@ import 'package:demopico/features/mapa/domain/interfaces/i_spot_repository.dart'
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 
 class FirebaseSpotsService implements ISpotRepository {
-  final FirebaseFirestore _firebaseFirestore;
 
-  FirebaseSpotsService(this._firebaseFirestore);
+  static FirebaseSpotsService? _firebaseSpotsService;
+  
+     static FirebaseSpotsService get getInstance{
+    _firebaseSpotsService ??= FirebaseSpotsService();
+    return _firebaseSpotsService!;
+  } 
+
+  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+
+  FirebaseSpotsService();
 
   @override
   Future<PicoModel?> createSpot(PicoModel pico) async {
