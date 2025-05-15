@@ -1,5 +1,5 @@
 import 'package:demopico/core/app/home_page.dart';
-import 'package:demopico/core/common/errors/failure_server.dart';
+import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/features/user/domain/entity/user_credentials.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/features/user/presentation/pages/register_page.dart';
@@ -199,7 +199,7 @@ class _LoginFormState extends State<LoginForm> with Validators {
             SnackBar(content: Text(UserNotFoundFailure().message)));
       case 'default':
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(ServerFailure().message)));
+            .showSnackBar(const SnackBar(content: Text("Algo deu errado")));
     }
   }
 }

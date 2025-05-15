@@ -9,7 +9,7 @@ class LocalStorageService implements IHistoryRepository {
     return _localStorageService!;
   } 
 
-  static const String _historicoKey = 'historico_picos';
+   final String _historicoKey = 'historico_picos';
 
   @override
   Future<void> salvarNoHistorico(String nome, double latitude, double longitude) async {
