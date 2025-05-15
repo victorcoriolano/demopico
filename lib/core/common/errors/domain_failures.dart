@@ -19,7 +19,7 @@ class InvalidCredentialsFailure extends DomainFailure {
 }
 
 class EmailAlreadyExistsFailure extends DomainFailure {
-  EmailAlreadyExistsFailure(): super("Email de usuário já está em uso", code: 'email_already_exists');
+  EmailAlreadyExistsFailure(): super("Email de usuário já está em uso em outra conta", code: 'email_already_exists');
 }
 
 class VulgoAlreadyExistsFailure extends DomainFailure {
