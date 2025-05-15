@@ -1,17 +1,18 @@
 // Classe base para representar falhas
 import 'package:flutter/material.dart';
 
-abstract class Failure {
+abstract class Failure implements Exception {
   final String message;
+  final String? code;
+  final Exception? originalException;
 
-  Failure({this.message = 'An error occurred'});
+  Failure(this.message,{
+    this.code,
+    this.originalException,
+  });
 
   @override
-  String toString() => message;
-}
-
-abstract class ServiceFirebaserFailure extends Failure {
-  ServiceFirebaserFailure({super.message = 'Service Firebase failure'});
+  String toString() => code != null ? '$code: $message': message;
 }
 
 
@@ -34,37 +35,4 @@ class SnackBarFailure extends SnackBar {
   }
 }
 
-// Falha específica do servidor
-class ServerFailure extends Failure {
-  ServerFailure({super.message = 'Server failure'});
-}
-
-// Exemplo de outras possíveis falhas (pode expandir conforme necessário)
-class NetworkFailure extends Failure {
-  NetworkFailure({super.message = 'Network failure'});
-}
-
-class FirebaseFailure extends Failure {
-  FirebaseFailure({super.message =  'Erro ao acessar o banco de dados'});
-}
-
-class CacheFailure extends Failure {
-  CacheFailure({super.message = 'Cache failure'});
-}
-
-class UserNotFoundFailure extends Failure {
-  UserNotFoundFailure({super.message = 'Não achamos esses usuario!'});
-}
-
-class WrongPasswordFailure extends Failure {
-  WrongPasswordFailure({super.message = 'Você digitou uma senha errada!'});
-}
-
-class InvalidEmailFailure extends Failure {
-  InvalidEmailFailure({super.message = 'Esse e-mail é inválido. '});
-}
-
-class GenericErrorFailure extends Failure{
-  GenericErrorFailure({super.message = 'Não foi possivel identificar o erro'});
-}
 
