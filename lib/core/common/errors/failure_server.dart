@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 abstract class Failure implements Exception {
   final String message;
   final String? code;
+  final StackTrace? stackTrace;
   final Exception? originalException;
 
   Failure(this.message,{
     this.code,
     this.originalException,
+    this.stackTrace,
   });
 
   @override
