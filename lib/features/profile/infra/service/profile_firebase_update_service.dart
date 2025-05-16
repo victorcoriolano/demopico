@@ -7,7 +7,7 @@ class ProfileFirebaseUpdateService implements IProfileDatabaseUpdateService {
 
   static ProfileFirebaseUpdateService get getInstance {
     _profileFirebaseUpdateService ??=
-        ProfileFirebaseUpdateService(firestore: Firestore().getInstance);
+        ProfileFirebaseUpdateService(firestore: Firestore.getInstance);
     return _profileFirebaseUpdateService!;
   }
 
