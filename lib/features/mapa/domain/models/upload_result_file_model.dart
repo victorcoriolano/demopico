@@ -1,9 +1,9 @@
 class UploadResultFileModel {
-  final String fileName;
-  final String url;
+  final Stream<double> progress;
+  final Future<String> url;
 
   UploadResultFileModel({
-    required this.fileName,
+    required this.progress,
     required this.url,
   });
 }
