@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:demopico/features/mapa/data/data_sources/remote/firebase_files_service.dart';
+import 'package:demopico/features/mapa/data/data_sources/remote/firebase_file_remote_datasource.dart';
 import 'package:demopico/features/mapa/domain/models/upload_file_model.dart';
 import 'package:demopico/features/mapa/domain/models/upload_result_file_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -33,7 +33,7 @@ class MockStorageReference extends Mock implements Reference {}
 
 void main() {
   group("FirebaseFilesService", () {
-    late FirebaseFilesService firebaseFilesService;
+    late FirebaseFileRemoteDatasource firebaseFilesService;
     late MockFirebaseStorage mockFirebaseStorage;
     late FakeUploadTask fakeUploadTask;
     late MockTaskSnapshot mockTaskSnapshot;
@@ -45,7 +45,7 @@ void main() {
       mockTaskSnapshot = MockTaskSnapshot();
       fakeUploadTask = FakeUploadTask(snapshot: mockTaskSnapshot);
       mockStorageReference = MockStorageReference();
-      firebaseFilesService = FirebaseFilesService(bdStorageInstance: mockFirebaseStorage);
+      firebaseFilesService = FirebaseFileRemoteDatasource(firebaseStorage: mockFirebaseStorage);
 
       fileMock = UploadFileModel(
         fileName: "teste.png",
@@ -75,7 +75,7 @@ void main() {
       when(() => mockStorageReference.getDownloadURL())
           .thenAnswer((_) async => "http://test.com");
 
-      final result = await firebaseFilesService.saveFiles([fileMock]);
+      final result = await firebaseFilesService.uploadFile([fileMock]);
 
       expect(result, isA<List<UploadResultFileModel>>());
       expect(result.length, equals(1));
