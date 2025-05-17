@@ -1,5 +1,5 @@
 
-import 'package:demopico/features/mapa/data/services/firebase_spots_service.dart';
+import 'package:demopico/features/mapa/data/data_sources/remote/firebase_spots_service.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_spot_repository.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 

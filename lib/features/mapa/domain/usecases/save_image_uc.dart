@@ -1,5 +1,5 @@
 
-import 'package:demopico/features/mapa/data/services/firebase_files_service.dart';
+import 'package:demopico/features/mapa/data/data_sources/remote/firebase_files_service.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_save_image_repository.dart';
 import 'package:demopico/features/mapa/domain/models/upload_file_model.dart';
 import 'package:demopico/features/mapa/domain/models/upload_result_file_model.dart';

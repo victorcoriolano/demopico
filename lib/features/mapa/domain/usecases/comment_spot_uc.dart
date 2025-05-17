@@ -1,4 +1,4 @@
-import 'package:demopico/features/mapa/data/services/firebase_comment_service.dart';
+import 'package:demopico/features/mapa/data/data_sources/remote/firebase_comment_service.dart';
 import 'package:demopico/features/mapa/domain/entities/comment.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_comment_repository.dart';
 

@@ -1,4 +1,4 @@
-import 'package:demopico/features/mapa/data/services/local_storage_service.dart';
+import 'package:demopico/features/mapa/data/data_sources/local/local_storage_service.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_history_repository.dart';
 
 class SaveHistoryUc {
