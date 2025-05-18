@@ -36,12 +36,17 @@ class FirebaseUploadTask implements UploadTaskInterface {
   final UploadTask uploadTask;
 
   FirebaseUploadTask({required this.uploadTask}) {
-    uploadTask.snapshotEvents.listen((event) {
-      if (event.state == TaskState.running) {
-        final progress = event.bytesTransferred / event.totalBytes;
-        _controller.add(progress);
-      }
-    });
+    uploadTask.snapshotEvents.listen(
+      (event) {
+        if (event.state == TaskState.running) {
+          final progress = event.bytesTransferred / event.totalBytes;
+          _controller.add(progress);
+        }
+      },
+      onDone: () => _controller.close(),
+      onError: (error) => _controller.addError(error),
+      cancelOnError: true,
+    );
   }
 
   @override
