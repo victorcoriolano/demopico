@@ -1,5 +1,5 @@
 
-import 'package:demopico/features/mapa/data/services/firebase_comment_service.dart';
+import 'package:demopico/features/mapa/data/data_sources/remote/firebase_comment_service.dart';
 import 'package:demopico/features/mapa/domain/entities/comment.dart';
 import 'package:demopico/features/mapa/domain/models/comment_model.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';

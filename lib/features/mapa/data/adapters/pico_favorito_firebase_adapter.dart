@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_favorito.dart';
 import 'package:demopico/features/mapa/domain/models/pico_favorito_model.dart';
 
-class PicoFavoritoAdapter {
+class PicoFavoritoFirebaseAdapter {
   static PicoFavoritoModel fromFirebase(DocumentSnapshot doc){
     final data = doc.data() as Map<String, dynamic>;
 
