@@ -8,7 +8,7 @@ class UserFirebaseService implements IUserDatabaseService {
   static UserFirebaseService? _userFirebaseService;
   static UserFirebaseService get getInstance {
     _userFirebaseService ??=
-        UserFirebaseService(firebaseFirestore: Firestore().getInstance);
+        UserFirebaseService(firebaseFirestore: Firestore.getInstance);
     return _userFirebaseService!;
   }
 
