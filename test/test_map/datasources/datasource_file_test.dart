@@ -58,7 +58,6 @@ void main() {
       );
 
       
-
     });
 
     test("Deve subir um arquivo e retornar uma tarefa de Upload task", () async {
@@ -83,17 +82,21 @@ void main() {
       //veridicando se o resultado é uma instância de UploadTaskInterface
       expect(result, isA<List<UploadTaskInterface>>());
 
-      //verificando se o resultado contem uma stream de progresso
+      //verificando se o resultado contem uma uploadResultFileModel
       expect(result[0].upload, isA<UploadResultFileModel>());
 
-      
       
     });
 
     /// teste exceções
-    /// - quando o arquivo não é enviado
-    test("Deve lançar uma exception quando o arquivo não for selecionado", () {
+    /// - erro de internet 
+    test("Deve lançar uma exception quando houver erro de internet", () async {
       when(() => mockFirebaseStorage.ref()).thenAnswer((_) => mockStorageReference);
+      when(() => mockTaskSnapshot.state).thenReturn(TaskState.running);
+      when(() => mockTaskSnapshot.bytesTransferred).thenReturn(10);
+      when(() => mockTaskSnapshot.totalBytes).thenReturn(100);
+      when(() => mockStorageReference.child("spots/${fileMock.fileName}"))
+      .thenAnswer((_) => mockStorageReference);
       
     });
 
