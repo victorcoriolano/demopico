@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:demopico/features/mapa/data/data_sources/interfaces/upload_task_interface.dart';
 import 'package:demopico/features/mapa/data/data_sources/remote/firebase_file_remote_datasource.dart';
 import 'package:demopico/features/mapa/domain/models/upload_file_model.dart';
+import 'package:demopico/features/mapa/domain/models/upload_result_file_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -26,7 +27,6 @@ class FakeUploadTask extends Fake implements UploadTask {
   }
 
   @override
-  
   Stream<TaskSnapshot> get snapshotEvents => Stream.value(snapshot);
 }
 
@@ -84,10 +84,9 @@ void main() {
       expect(result, isA<List<UploadTaskInterface>>());
 
       //verificando se o resultado contem uma stream de progresso
-      expect(result[0].onProgress, isA<Stream<double>>());
+      expect(result[0].upload, isA<UploadResultFileModel>());
 
-      //verificando se o resultado contem uma url
-      expect(result[0].url, isA<Future<String>>());
+      
       
     });
 
