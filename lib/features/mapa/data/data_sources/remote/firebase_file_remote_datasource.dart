@@ -20,7 +20,7 @@ class FirebaseFileRemoteDatasource implements FileRemoteDataSource {
   List<UploadTaskInterface> uploadFile(List<UploadFileModel> files) {
     final tasks = files.map((file) {
       final uploadTask =
-          firebaseStorage.ref().child(file.fileName).putData(file.bytes);
+          firebaseStorage.ref().child("spots/${file.fileName}").putData(file.bytes);
       return FirebaseUploadTask(uploadTask: uploadTask);
     }).toList();
 
