@@ -65,13 +65,13 @@ class MyAppWidget extends StatelessWidget {
             postarComunicado: PostarComunicado(
               hubService: HubService(
                 userService: UserService(firestore: Firestore()),
-                iHubRepository: HubRepository(firestore: Firestore()),
+                iHubRepository: HubRepositoryImpl(firestore: Firestore()),
               ),
             ),
             listarComunicado: ListarComunicado(
                 hubService: HubService(
               userService: UserService(firestore: Firestore()),
-              iHubRepository: HubRepository(firestore: Firestore()),
+              iHubRepository: HubRepositoryImpl(firestore: Firestore()),
             )),
           ),
         ),
@@ -81,12 +81,12 @@ class MyAppWidget extends StatelessWidget {
                     hubService: HubService(
                         userService: UserService(firestore: Firestore()),
                         iHubRepository:
-                            HubRepository(firestore: firestoreInstance))),
+                            HubRepositoryImpl(firestore: firestoreInstance))),
                 listarComunicado: ListarComunicado(
                     hubService: HubService(
                         userService: UserService(firestore: Firestore()),
                         iHubRepository:
-                            HubRepository(firestore: firestoreInstance))))),
+                            HubRepositoryImpl(firestore: firestoreInstance))))),
         ChangeNotifierProvider(
             create: (_) =>
                 CommentController(CommentSpotUC(CommentRepository()))),
