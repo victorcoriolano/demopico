@@ -1,9 +1,9 @@
-import 'package:demopico/app/home_page.dart';
+import 'package:demopico/core/app/home_page.dart';
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
-import 'package:demopico/features/user/data/models/user.dart';
-import 'package:demopico/features/user/data/services/auth_service.dart';
-import 'package:demopico/features/user/presentation/controllers/database_notifier_provider.dart';
+import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
+import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -16,10 +16,6 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
-  late final authService = AuthService();
-  late final databaseProvider =
-      Provider.of<DatabaseProvider>(context, listen: false);
-
   UserM? user;
   String? currentUserId;
 
@@ -29,42 +25,53 @@ class _UserPageState extends State<UserPage> {
 
   @override
   void initState() {
-    loadUser();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadUser();
+    });
   }
+  
 
-  Future<void> loadUser() async {
-    currentUserId = authService.currentUser?.uid;
+  Future<void> _loadUser() async {
+    final providerAuth = Provider.of<AuthUserProvider>(context, listen: false);
+    final providerDatabase =
+        Provider.of<UserDatabaseProvider>(context, listen: false);
 
-    if (currentUserId == null) {
-      print('user uid ao entrar na page nulo');
+    String? uid = providerAuth.pegarId();
+
+    if (uid == null) {
       setState(() {
         _isLoading = true;
-        showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                  title: const Text('Error'),
-                  content: const Text('User not logged in.'),
-                  actions: [
-                    TextButton(
-                        onPressed: () {
-                          Get.to(() => const HomePage());
-                        },
-                        child: const Text('OK'))
-                  ],
-                ));
       });
+
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Error'),
+          content: const Text('User not logged in.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.to(() => const HomePage());
+              },
+              child: const Text('OK'),
+            )
+          ],
+        ),
+      );
       return;
     }
 
-    user = await databaseProvider.retrieveUserProfileData(currentUserId!);
+    await providerDatabase.retrieveUserProfileData(uid);
     setState(() {
+      user = providerDatabase.user;
       _isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final providerAuthListen = Provider.of<AuthUserProvider>(context);
     return Scaffold(
       body: SafeArea(
           child: Padding(
@@ -154,13 +161,14 @@ class _UserPageState extends State<UserPage> {
                                                                   'Sair'),
                                                               onPressed:
                                                                   () async {
-                                                                await authService
-                                                                    .logout()
-                                                                    .whenComplete(() => Get.offAll(
-                                                                        () =>
-                                                                            const HomePage(),
-                                                                        transition:
-                                                                            Transition.rightToLeftWithFade));
+                                                                providerAuthListen
+                                                                    .logout();
+                                                                Get.offAll(
+                                                                    () =>
+                                                                        const HomePage(),
+                                                                    transition:
+                                                                        Transition
+                                                                            .rightToLeftWithFade);
                                                               })
                                                         ]);
                                                   });
@@ -338,9 +346,9 @@ class _UserPageState extends State<UserPage> {
                                                       user?.description =
                                                           bioController.text;
                                                     });
-                                                    databaseProvider
-                                                        .updateUserBio(
-                                                            bioController.text);
+                                                    //databaseProvider
+                                                    //            .updateUserBio(
+                                                    //              bioController.text);
                                                     bioController.clear();
                                                     Navigator.of(context).pop();
                                                   }

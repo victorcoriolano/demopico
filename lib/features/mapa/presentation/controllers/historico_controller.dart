@@ -2,6 +2,12 @@ import 'package:demopico/features/mapa/domain/usecases/save_history_spot_uc.dart
 import 'package:flutter/material.dart';
 
 class HistoricoController extends ChangeNotifier {
+  static HistoricoController? _historicoController;
+  static HistoricoController get getInstance {
+    _historicoController ??= HistoricoController(useCase: SaveHistoryUc.getInstance);
+    return _historicoController!;
+  }
+
   final SaveHistoryUc useCase;
 
   List<Map<String, dynamic>> _historico = [];
@@ -10,7 +16,7 @@ class HistoricoController extends ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  HistoricoController(this.useCase) {
+  HistoricoController({required this.useCase}) {
     carregarHistoricoInicial();
   }
 
@@ -61,10 +67,5 @@ class HistoricoController extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }

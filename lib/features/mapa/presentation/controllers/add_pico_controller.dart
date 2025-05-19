@@ -1,19 +1,30 @@
 import 'dart:io';
 
+import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/usecases/pick_image_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/save_image_uc.dart';
 import 'package:demopico/features/user/presentation/widgets/form_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddPicoProvider extends ChangeNotifier with Validators {
+  static AddPicoProvider? _addPicoProvider;
+
+  static AddPicoProvider get getInstance {
+    _addPicoProvider ??= AddPicoProvider(
+        pickImageUC: PickImageUC.getInstance,
+        saveImageUC: SaveImageUC.getInstance);
+    return _addPicoProvider!;
+  }
+
   //instanciando casos de uso
   final PickImageUC pickImageUC;
   final SaveImageUC saveImageUC;
 
-  AddPicoProvider(this.pickImageUC, this.saveImageUC);
+  AddPicoProvider({required this.pickImageUC, required this.saveImageUC});
 
   bool loadingImagens = false;
   Map<String, int> atributos = {};
@@ -27,70 +38,63 @@ class AddPicoProvider extends ChangeNotifier with Validators {
   List<String> utilidades = [];
   List<String> urlImage = [];
   File? fotoPico;
-  double lat = 0.0;
-  double long = 0.0;
+  LatLng? latlang;
   List<File?> images = [];
 
   final pegadorImage = ImagePicker();
 
   Future<void> selecionarImag() async {
-          images.clear();
+    images.clear();
     urlImage.clear();
-  try {
-    // Reseta a lista de imagens antes de selecionar novas
+    try {
+      // Reseta a lista de imagens antes de selecionar novas
 
-    // Pega múltiplas imagens da galeria (limite de 3)
-    final imgs = await pegadorImage.pickMultiImage(
-      limit: 3,
-    );
-    if (imgs.isNotEmpty) {
-      for (var img in imgs) {
-        images.add(File(img.path));
+      // Pega múltiplas imagens da galeria (limite de 3)
+      final imgs = await pegadorImage.pickMultiImage(
+        limit: 3,
+      );
+      if (imgs.isNotEmpty) {
+        for (var img in imgs) {
+          images.add(File(img.path));
+        }
+        // Chama o método para subir as imagens
+
+        await testeSubindoImg(images);
       }
-      // Chama o método para subir as imagens
-  
-      await testeSubindoImg(images);
+    } on Exception catch (e) {
+      debugPrint('Erro ao selecionar imagem: $e');
+      throw Exception('Erro ao selecionar imagem: $e');
     }
-  } on Exception catch (e) {
-      print(" to no catch");
-    print("Erro ao subir imagem $e");
   }
-}
 
   Future<void> testeSubindoImg(List<File?> imgs) async {
-  try {
-    for (var img in imgs) {
-      // Gera um nome único para cada imagem
-      final uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
-      final ref = FirebaseStorage.instance
-          .ref()
-          .child('spots_images')
-          .child('images/$nomePico$uniqueName.jpg');
+    try {
+      for (var img in imgs) {
+        // Gera um nome único para cada imagem
+        final uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child('spots_images')
+            .child('images/$nomePico$uniqueName.jpg');
 
-      print('Enviando imagem: ${img!.path}');
+        debugPrint('Enviando imagem: ${img!.path}');
 
-      // Faz o upload da imagem
-      await ref.putFile(img);
+        // Faz o upload da imagem
+        await ref.putFile(img);
 
-      // Adiciona a URL de download à lista
-      final downloadURL = await ref.getDownloadURL();
-      urlImage.add(downloadURL);
+        // Adiciona a URL de download à lista
+        final downloadURL = await ref.getDownloadURL();
+        urlImage.add(downloadURL);
+      }
 
-      print('URL gerada: $downloadURL');
+      urlImage.clear;
+    } on Exception catch (e) {
+      throw Exception('Erro ao subir imagem: $e');
     }
-    
-  urlImage.clear;
-    print('Lista final de URLs: $urlImage');
-  } on Exception catch (e) {
-    print("Erro ao subir imagem pro storage: $e");
   }
-}
-
-
 
   void pegarLocalizacao(LatLng localizacao) {
-    lat = localizacao.latitude;
-    long = localizacao.longitude;
+    latlang = localizacao;
   }
 
   //variaveis de mensagem de erro
@@ -112,7 +116,7 @@ class AddPicoProvider extends ChangeNotifier with Validators {
   List<String> utilidadesAtuais = [];
   Map<String, bool> utilidadesSelecionadas = {};
 
-  AddPicoControllerProvider() {
+  addPicoControllerProvider() {
     // definindo o estado inicial de cada page
     _atualizarUtilidades();
     atributos = {
@@ -239,7 +243,6 @@ class AddPicoProvider extends ChangeNotifier with Validators {
     final validarImagens = imagensIsNotEmpty();
     return nomeValido && descricaoValida && validarImagens;
   }
-  
   void limpar() {
     atributos.clear();
     obstaculos.clear();
@@ -252,6 +255,24 @@ class AddPicoProvider extends ChangeNotifier with Validators {
     utilidades.clear();
     urlImage.clear();
     notifyListeners();
-    
+  }
+
+  Pico getInfoPico(User? userCriador) {
+    return Pico(
+      id: "",
+      picoName: nomePico,
+      description: descricao,
+      nota: nota,
+      numeroAvaliacoes: numAval,
+      tipoPico: tipo,
+      utilidades: utilidades,
+      imgUrls: urlImage,
+      lat: latlang!.latitude,
+      long: latlang!.longitude,
+      atributos: atributos,
+      modalidade: selectedModalidade,
+      userCreator: userCriador?.displayName ?? "Anônimo",
+      obstaculos: obstaculos,
+    );
   }
 }

@@ -1,33 +1,29 @@
 import 'package:demopico/core/common/inject_dependencies.dart';
-import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/primeira_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/quarta_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/segunda_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/terceira_tela.dart';
-import 'package:demopico/features/user/data/services/database_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 class ContainerTelas extends StatefulWidget {
-  final double lat;
-  final double long;
+  final LatLng latlang;
   final bool expanded;
   const ContainerTelas(
       {super.key,
-      required this.lat,
-      required this.long,
+      required this.latlang,
       required this.expanded});
 
   @override
-  _ContainerTelasState createState() => _ContainerTelasState();
+  State<ContainerTelas> createState() => _ContainerTelasState();
 }
 
 class _ContainerTelasState extends State<ContainerTelas> {
   int _currentIndex = 0;
-  
 
   final List<Widget> _screens = [
     const EspecificidadeScreen(), // Página 1
@@ -75,7 +71,8 @@ class _ContainerTelasState extends State<ContainerTelas> {
                       borderRadius: BorderRadius.circular(
                           12), // Arredondamento das bordas
                       border: Border.all(
-                          color: const Color(0xFF8B0000), width: 3), // Borda vermelha
+                          color: const Color(0xFF8B0000),
+                          width: 3), // Borda vermelha
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(10),
@@ -118,87 +115,25 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                 ),
                               ),
                               onPressed: () async {
-                                if(user != null){
+                                /* if(user != null){
                                   final DatabaseService  dataUser = DatabaseService();
-                                  dataUser.atualizarContribuicoes();
-                                  if (provider.validarFormulario())  {
-                                  final pico = Pico(
-                                      imgUrl: provider.urlImage,
-                                      modalidade: provider.selectedModalidade,
-                                      tipoPico: provider.tipo,
-                                      nota: 0.0,
-                                      numeroAvaliacoes: 0,
-                                      long: widget.long,
-                                      lat: widget.lat,
-                                      description: provider.descricao,
-                                      atributos: provider.atributos,
-                                      fotoPico: null,
-                                      obstaculos: provider.obstaculos,
-                                      utilidades: provider.utilidades,
-                                      userCreator: user!.displayName ?? user!.email,
-                                      picoName: provider.nomePico);
-                                  try  {
-                                    await serviceLocator<SpotControllerProvider>()
-                                        .createSpot(pico, context);
-                                    if(context.mounted){
-                                      serviceLocator<SpotControllerProvider>().showAllPico(context);
-                                      provider.dispose();
-                                      Navigator.pop(context);
-                                    }
-                                    
-                                  } on Exception catch (e) {
-                                    print('Erro na boca do balção: $e');
-                                    if(context.mounted){
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                            content: Text(
-                                                "Preencha todos os campos ou insira alguma imagem")));
-                                    }
-                                    
-                                  } catch (e) {
-                                    print("Erro desconhecido: $e");
-                                  }
-                                }
-                                }
+                                  dataUser.atualizarContribuicoes();//autualiza contribuições
+
+                                } */
                                 // função para criar o pico
                                 if (provider.validarFormulario())  {
-                                  final pico = Pico(
-                                      imgUrl: provider.urlImage,
-                                      modalidade: provider.selectedModalidade,
-                                      tipoPico: provider.tipo,
-                                      nota: 0.0,
-                                      numeroAvaliacoes: 0,
-                                      long: widget.long,
-                                      lat: widget.lat,
-                                      description: provider.descricao,
-                                      atributos: provider.atributos,
-                                      fotoPico: null,
-                                      obstaculos: provider.obstaculos,
-                                      utilidades: provider.utilidades,
-                                      userCreator: "Anônimo",
-                                      picoName: provider.nomePico);
-                                  try  {
                                     await serviceLocator<SpotControllerProvider>()
-                                        .createSpot(pico, context);
-                                    if(context.mounted){
-                                      serviceLocator<SpotControllerProvider>().showAllPico(context);
-                                      provider.limpar();
-                                      Navigator.pop(context);
-                                    }
-                                    
-                                  } on Exception catch (e) {
-                                    print('Erro na boca do balção: $e');
-                                    if(context.mounted){
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                            content: Text(
-                                                "Preencha todos os campos ou insira alguma imagem")));
-                                    }
-                                    
-                                  } catch (e) {
-                                    print("Erro desconhecido: $e");
-                                  }
+                                        .createSpot(provider.getInfoPico(user));
+                                } else {
+                                  // Exibe um alerta de erro
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'Preencha todos os campos corretamente'),
+                                    ),
+                                  );
                                 }
+
                               },
                               child: const Text('POSTAR PICO',
                                   style: TextStyle(fontSize: 15)),
@@ -218,16 +153,17 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                 ),
                               ),
                               onPressed: () {
-                                print(provider.utilidadesSelecionadas);
                                 // chama a proxima página somente se tiver validada
                                 if (provider
                                     .validarPaginaAtual(_currentIndex)) {
                                   _nextScreen(); // Chama a função para mudar a tela
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content: Text(
-                                              "Preenche todos as informações"),),);
+                                    const SnackBar(
+                                      content:
+                                          Text("Preenche todos as informações"),
+                                    ),
+                                  );
                                 }
                               },
                               child: const Text('PROSSEGUIR',

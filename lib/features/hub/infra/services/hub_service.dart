@@ -1,65 +1,51 @@
-import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/external/datasources/firestore.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
-import 'package:demopico/features/hub/infra/interfaces/i_hub_repository.dart';
-import 'package:demopico/features/hub/infra/repository/hub_repository.dart';
-import 'package:demopico/features/user/data/models/user.dart';
-import 'package:demopico/features/user/data/services/user_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
+import 'package:demopico/features/hub/domain/interfaces/i_hub_service.dart';
 
-class HubService {
+class HubService implements IHubService {
   static HubService? _hubService;
-  final UserService userService;
-  final IHubRepository iHubRepository;
+  final FirebaseFirestore firestore;
 
-  HubService({required this.userService, required this.iHubRepository});
+  HubService({required this.firestore});
 
-  HubService get getInstance {
-    _hubService ??= HubService(
-        userService: userService,
-        iHubRepository: HubRepositoryImpl(firestore: Firestore()));
+  static HubService get getInstance {
+    _hubService ??= HubService(firestore: Firestore.getInstance);
     return _hubService!;
   }
 
-// Postar no hub
-  Future<void> postHubCommuniqueToFirebase(String text, type) async {
-    if (text.isEmpty || type.isEmpty) {
-      throw const FormatException('Texto e tipo são obrigatórios');
-    }
-    UserM? user = await userService.getCurrentUser();
-    if (user != null) {
-      Communique newCommunique = Communique(
-        id: Random(27345).toString(),
-        uid: user.id!,
-        vulgo: user.name!,
-        pictureUrl: user.pictureUrl ?? '',
-        text: text,
-        timestamp: DateTime.now().toString(),
-        likeCount: 0,
-        likedBy: [],
-        type: type,
-      );
-      await iHubRepository.createCommunique(newCommunique);
-    } else {
-      throw FirebaseAuthException(
-          code: 'permission-denied',
-          message:
-              'É necessário estar logado! \n Redirecionando você para o menu de login...');
+  @override
+  Future<void> createCommunique(Communique communique) async {
+    try {
+      firestore.collection('communique').add(communique.toJsonMap());
+    } catch (e) {
+      throw Exception('Error ao criar comunicado');
     }
   }
-// Deletar do hub
 
-// Pegar o hub
-  Future<List<Communique>> getAllCommuniques() async {
+  @override
+  Future<void> deleteCommunique(String id) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Communique>> listCommuniques() async {
     try {
-      return await iHubRepository.listCommuniques();
+      QuerySnapshot querySnapshot = await firestore
+          .collection('communique')
+          .orderBy('timestamp', descending: true)
+          .get();
+
+      return querySnapshot.docs
+          .map((doc) => Communique.fromDocument(doc))
+          .toList();
     } catch (e) {
-      Exception("Não foi possível pegar todos comunicados");
-      if (kDebugMode) {
-        print(e);
-      }
-      return [];
+      throw Exception('Não foi possível listar os comunicados');
     }
+  }
+
+  @override
+  Future<void> updateCommunique(Communique communique) {
+    throw UnimplementedError();
   }
 }

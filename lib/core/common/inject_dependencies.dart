@@ -1,10 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
-import 'package:demopico/features/mapa/presentation/controllers/spot_save_controller.dart';
-import 'package:demopico/features/user/data/services/auth_service.dart';
-import 'package:demopico/features/user/presentation/controllers/database_notifier_provider.dart';
-import 'package:demopico/features/user/data/services/database_service.dart';
-import 'package:demopico/features/user/presentation/controllers/auth_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 
@@ -19,28 +13,32 @@ Future<void> init() async {
   serviceLocator.registerLazySingleton(() => FirebaseAuth.instance);
 
   //FirebaseFirestore
-  serviceLocator.registerLazySingleton(() => FirebaseFirestore.instance);
+  serviceLocator.registerLazySingleton<FirebaseFirestore>(() => FirebaseFirestore.instance);
 
   // Services
-  serviceLocator.registerFactory<DatabaseService>(() => DatabaseService());
+ // serviceLocator.registerFactory<DatabaseService>(() => DatabaseService());
+  //.registerFactory<DatabaseService>(() => DatabaseService());
 
-  serviceLocator.registerLazySingleton<AuthService>(() => AuthService());
+ // serviceLocator.registerLazySingleton<ISpotRepository>(() => FirebaseSpotsService(serviceLocator()));
+ // serviceLocator.registerLazySingleton(() => FirebaseCommentService(serviceLocator()));
+  
 
-  // Providers
-  serviceLocator.registerLazySingleton(() => DatabaseProvider());
+  // Providers serviceLocator.registerLazySingleton(() => DatabaseProvider());
 
-  // Controllers
-  serviceLocator.registerLazySingleton<AuthController>(() => AuthController());
-
+  // Controllers  serviceLocator.registerLazySingleton<AuthController>(() => AuthController());
   //injeção de dependencia para o mapa
   //registrando o service do mapa no get it
 
+ // serviceLocator.registerLazySingleton(() => CreateSpotUc(serviceLocator()));
+  //serviceLocator.registerLazySingleton(() => SaveSpotUc(serviceLocator(), serviceLocator()));
+ // serviceLocator.registerLazySingleton(() => LoadSpotUc(serviceLocator()));
+ // serviceLocator.registerLazySingleton(() => AvaliarSpotUc(serviceLocator()));
   //registrando o controller e injetoando dependencia
-  serviceLocator.registerLazySingleton(() => SpotControllerProvider(
-      serviceLocator(), serviceLocator(), serviceLocator()));
+//  serviceLocator.registerFactory(() => SpotControllerProvider(
+//      serviceLocator(), serviceLocator(), serviceLocator()));
 
-  serviceLocator
-      .registerLazySingleton(() => SpotSaveController(serviceLocator()));
+ // serviceLocator
+ //     .registerLazySingleton(() => SpotSaveController(serviceLocator()));
 
   //instancia da entidade pico que será criada
 }

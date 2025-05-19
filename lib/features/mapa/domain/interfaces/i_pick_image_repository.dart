@@ -1,5 +1,7 @@
-import 'dart:io';
+
+
+import 'package:demopico/features/mapa/domain/models/upload_file_model.dart';
 
 abstract interface class IPickImageRepository {
-  Future<List<File>> pickImage();
+  Future<List<UploadFileModel>> pickImage();
 }

@@ -84,7 +84,6 @@ class _QuartaTelaState extends State<QuartaTela>  {
                   onTap: () async {
                     // Função para anexar imagem (placeholder)
                     await provider.selecionarImag();
-                    print("ANEXAR IMAGENS");
                   },
                   child: Column(
                     children: [

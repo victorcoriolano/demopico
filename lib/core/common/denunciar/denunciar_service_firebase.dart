@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:demopico/core/domain/entities/denuncia_model.dart';
+import 'package:demopico/core/common/denunciar/denuncia_model.dart';
 
 class DenunciarServiceFirebase {
   final FirebaseFirestore _firestore;
@@ -11,9 +11,7 @@ class DenunciarServiceFirebase {
   Future<void> salvarDenuncia(DenunciaModel denuncia) async {
     try {
       await _firestore.collection('denuncias').add(denuncia.toMap());
-      print('Denúncia salva com sucesso!');
     } catch (e) {
-      print('Erro ao salvar denúncia: $e');
       rethrow; // Repassa o erro para quem chamou, caso queira tratar
     }
   }

@@ -134,7 +134,6 @@ class TerceiraTela extends StatelessWidget {
                                 provider.atualizarObstaculos(
                                     listaObstaculos[index]);
                               }
-                              print(provider.obstaculos);
                             },
                             child: Image.asset(
                               listaIcon[index], // Garante que é uma string

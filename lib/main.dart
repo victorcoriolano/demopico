@@ -1,4 +1,4 @@
-import 'package:demopico/app/app.dart';
+import 'package:demopico/core/app/app.dart';
 import 'package:demopico/core/common/inject_dependencies.dart';
 import 'package:demopico/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -12,5 +12,5 @@ void main() async {
   await init();
 
 
-  runApp(MyAppWidget());
+  runApp(const MyAppWidget());
 }

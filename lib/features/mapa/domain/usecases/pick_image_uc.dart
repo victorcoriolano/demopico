@@ -1,18 +1,25 @@
-import 'dart:io';
 
+import 'package:demopico/features/mapa/data/services/image_picker_service.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_pick_image_repository.dart';
+import 'package:demopico/features/mapa/domain/models/upload_file_model.dart';
 
 class PickImageUC {
-  final IPickImageRepository _repository;
+  static PickImageUC? _pickImageUC;
 
-  PickImageUC(this._repository);
+  static PickImageUC get getInstance{
+    _pickImageUC ??= PickImageUC(repositoryIMP: ImagePickerService.getInstance);
+    return _pickImageUC!;
+  } 
+  final IPickImageRepository repositoryIMP;
 
-  Future<List<File>> pegarArquivos() async {
+  PickImageUC({required this.repositoryIMP});
+
+  Future<List<UploadFileModel>> pegarArquivos() async {
     try {
-      return await _repository.pickImage();
+      final files = await repositoryIMP.pickImage();
+      return files;
     } catch (e) {
-      print("Erro ao pegar imagens: $e");
-      return [];
+      throw Exception(e);
     }
   }
 }

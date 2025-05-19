@@ -1,4 +1,4 @@
-import 'package:demopico/app/auth_wrapper.dart';
+import 'package:demopico/core/app/auth_wrapper.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:demopico/features/hub/domain/usecases/listar_comunicados_uc.dart';
 import 'package:demopico/features/hub/domain/usecases/postar_comunicado_uc.dart';
@@ -8,14 +8,18 @@ import 'package:flutter/material.dart' show Colors;
 import 'package:get/get.dart' show ExtensionSnackbar, Get, GetNavigation;
 
 class HubProvider extends ChangeNotifier {
+
+  static HubProvider? _hubProvider;
+
+  static HubProvider get getInstance{
+    _hubProvider ??= HubProvider(postarComunicado: PostarComunicado.getInstance, listarComunicado: ListarComunicado.getInstance);
+    return _hubProvider!;
+  }
+
   PostarComunicado postarComunicado;
   ListarComunicado listarComunicado;
   HubProvider({required this.postarComunicado, required this.listarComunicado});
-
-  void notify() {
-    notifyListeners();
-  }
-
+  
   List<Communique> _allCommuniques = [];
 
   List<Communique> get allCommuniques => _allCommuniques;

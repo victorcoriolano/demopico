@@ -30,16 +30,38 @@ dependencies:
   flutter_rating_bar: ^4.0.0
   widget_to_marker: ^1.0.6
   shared_preferences: ^2.3.3
+  flutter_native_splash: ^2.4.4
+
+flutter_native_splash:
+  color: "#8B0000"
+  
+  android_12:
+    image: "assets/images/logo_splash.png"
+
+    image_dark: "assets/images/logo_splash.png"
+  
 
 dev_dependencies:
+  mockito: ^5.4.4
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
+  integration_test:
+      sdk: flutter
+  flutter_driver:
+      sdk: flutter
+  test: ^1.25.7
+  build_runner: ^2.4.13
+  mocktail: ^1.0.4
+  fake_cloud_firestore: ^3.1.0
 
+  cloud_firestore_platform_interface: any
+  image_picker_platform_interface: ^2.10.1
 flutter:
     uses-material-design: true
     assets:
       - assets/images/skatepico-icon.png
+      - assets/images/logo_splash.png
       - assets/images/containerLogin.jpg
       - assets/images/containerCadastro.jpg
       - assets/images/iconPico.png

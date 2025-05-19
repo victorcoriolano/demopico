@@ -1,10 +1,11 @@
 
-import 'package:demopico/features/mapa/data/models/pico_model.dart';
+import 'package:demopico/features/mapa/domain/entities/filters.dart';
+import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 
 abstract class ISpotRepository {
-  Future<void> createSpot(PicoModel pico);
-  Future<List<PicoModel>> showAllPico();
-  Future<void> salvarNota(PicoModel pico);
-
-
+  Future<PicoModel?> createSpot(PicoModel pico);
+  Future<PicoModel> updateSpot(PicoModel pico);
+  Stream<List<PicoModel>> loadSpots([Filters? filtro]);
+  Future<PicoModel> getPicoByID(String id);
+  Future<void> deleteSpot(String id);
 }
