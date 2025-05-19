@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demopico/features/mapa/data/data_sources/remote/firebase_errors_mapper.dart';
 import 'package:demopico/features/mapa/domain/entities/filters.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_spot_repository.dart';
@@ -32,7 +33,7 @@ class FirebaseSpotsService implements ISpotRepository {
       final data = snapshot.data();
       return PicoModel.fromJson(data!, snapshot.id);
     } on FirebaseException catch (e) {
-      throw Exception("Erro no firebase: $e ");
+      throw FirebaseErrorsMapper.map(e);
     } catch (e) {
       throw Exception("Erro inesperado criar piquerson: $e ");
     }
@@ -56,8 +57,8 @@ class FirebaseSpotsService implements ISpotRepository {
         final newData = await snapshotRef.get();
         return PicoModel.fromJson(newData.data()!, newData.id);
       
-    } catch (e) {
-      throw Exception("Erro inesperado: $e");
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorsMapper.map(e);
     }
   }
 
@@ -65,8 +66,8 @@ class FirebaseSpotsService implements ISpotRepository {
   Future<void> deleteSpot(String id) async {
     try {
       await firebaseFirestore.collection('spots').doc(id).delete();
-    } catch (e) {
-      throw Exception("Erro ao deletar o pico: $e");
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorsMapper.map(e);
     }
   }
 
@@ -74,12 +75,14 @@ class FirebaseSpotsService implements ISpotRepository {
   Stream<List<PicoModel>> loadSpots([Filters? filtro]) {
     final query = executeQuery(filtro);
     try {
-      return query.snapshots().map((snapshot) => snapshot.docs
+      return query.snapshots().map(
+        (snapshot) => snapshot.docs
           .map((doc) =>
               PicoModel.fromJson(doc.data() as Map<String, dynamic>, doc.id))
-          .toList());
-    } on Exception catch (e) {
-      throw Exception("Erro ao carregar os piquersons: $e");
+          .toList(),
+        );
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorsMapper.map(e);
     }
   }
   
@@ -114,7 +117,7 @@ class FirebaseSpotsService implements ISpotRepository {
       if (snapshot.data() == null) throw Exception("Dados nulos");
       return PicoModel.fromJson(snapshot.data()! , id);
     }on FirebaseException catch (e){
-      throw Exception("Erro no firebase: $e ");
+      throw FirebaseErrorsMapper.map(e);
     }
   }
 }

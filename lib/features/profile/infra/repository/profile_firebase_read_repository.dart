@@ -1,4 +1,4 @@
-import 'package:demopico/core/common/errors/domain_failures.dart';
+import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_profile_database_read_repository.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_database_repository.dart';
 import 'package:demopico/features/user/domain/models/user.dart';

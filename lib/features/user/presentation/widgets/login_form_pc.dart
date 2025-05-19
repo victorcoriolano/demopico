@@ -1,5 +1,5 @@
 import 'package:demopico/core/app/home_page.dart';
-import 'package:demopico/core/common/errors/domain_failures.dart';
+import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/user/domain/entity/user_credentials.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/features/user/presentation/pages/register_page.dart';

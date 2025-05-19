@@ -6,18 +6,6 @@ abstract class DomainFailure extends Failure {
   });
 }
 
-class UserNotFoundFailure extends DomainFailure {
-  UserNotFoundFailure(): super("Usuário não encontrado", code: 'user_not_found');
-}
-
-class AttemptLimitExceededFailure extends DomainFailure {
-  AttemptLimitExceededFailure(): super("Limite de tentativas excedido", code: 'attempt_limit_exceeded');
-}
-
-class InvalidCredentialsFailure extends DomainFailure {
-  InvalidCredentialsFailure(): super("Credenciais inválidas", code: 'invalid_credentials');
-}
-
 class EmailAlreadyExistsFailure extends DomainFailure {
   EmailAlreadyExistsFailure(): super("Email de usuário já está em uso em outra conta", code: 'email_already_exists');
 }
@@ -30,6 +18,23 @@ class InvalidPasswordFailure extends DomainFailure {
   InvalidPasswordFailure(): super("Senha inválida", code: 'invalid_password');
 }
 
-class InvalidEmailFailure extends DomainFailure {
-  InvalidEmailFailure(): super("Email Inválido", code: 'invalid_email');
+
+class InvalidVulgoFailure extends DomainFailure {
+  InvalidVulgoFailure(): super("Vulgo Inválido", code: 'invalid_vulgo');
+}
+
+class InvalidFormatFileFailure extends DomainFailure {
+  InvalidFormatFileFailure(): super("Formato de arquivo inválido", code: 'invalid_file');
+}
+
+class  InvalidSizeFileFailure extends DomainFailure {
+  InvalidSizeFileFailure(): super("Tamanho de arquivo inválido", code: 'invalid_size_file');
+}
+
+class NoSuchFileFailure extends DomainFailure {
+  NoSuchFileFailure(): super("Arquivo não encontrado", code: 'no_such_file');
+}
+
+class NoFileSelectedFailure extends DomainFailure {
+  NoFileSelectedFailure(): super("Nenhum arquivo selecionado", code: 'no_file_selected');
 }
