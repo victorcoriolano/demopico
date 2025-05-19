@@ -33,7 +33,11 @@ class _CommuniqueTileState extends State<CommuniqueTile> {
                         Object exception, StackTrace? stackTrace) {
                   return const Align(
                       alignment: Alignment.centerLeft,
-                      child: Icon(Icons.supervised_user_circle, size: 55));
+                      child: Icon(
+                        Icons.supervised_user_circle,
+                        size: 55,
+                        color: Colors.black,
+                      ));
                 }),
               ),
               const SizedBox(height: 15),
@@ -73,15 +77,23 @@ class _CommuniqueTileState extends State<CommuniqueTile> {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Icon(Icons.flag_rounded, size: 30),
+              const Icon(
+                Icons.flag_rounded,
+                size: 30,
+                color: Colors.black,
+              ),
               const SizedBox(height: 55),
-              post.type != "normal"
-                  ? const Icon(Icons.recycling_rounded,
-                      color: Color.fromARGB(255, 128, 25, 18))
-                  : const SizedBox(
-                      height: 0,
-                      width: 0,
-                    )
+              if (post.type == 'normal') const SizedBox(),
+              if (post.type == 'doacoesEtrocas')
+                const Icon(
+                  Icons.swap_horiz_rounded,
+                  color: Colors.red,
+                ),
+              if (post.type == 'evento')
+                const Icon(
+                  Icons.event,
+                  color: Colors.yellow,
+                ),
             ],
           )
         ],
