@@ -1,30 +1,32 @@
 import 'dart:math';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/external/datasources/firestore.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:demopico/features/hub/infra/interfaces/i_hub_repository.dart';
 import 'package:demopico/features/hub/infra/repository/hub_repository.dart';
 import 'package:demopico/features/user/data/models/user.dart';
 import 'package:demopico/features/user/data/services/user_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 class HubService {
-
   static HubService? _hubService;
   final UserService userService;
-  final IHubRepository iHubRepository; 
-
+  final IHubRepository iHubRepository;
 
   HubService({required this.userService, required this.iHubRepository});
 
-   HubService get getInstance {
-    _hubService ??= HubService(userService: userService, iHubRepository: HubRepository(firestore: Firestore()));
+  HubService get getInstance {
+    _hubService ??= HubService(
+        userService: userService,
+        iHubRepository: HubRepositoryImpl(firestore: Firestore()));
     return _hubService!;
   }
 
 // Postar no hub
- Future<void> postHubCommuniqueToFirebase(String text, type) async {
-  try {
+  Future<void> postHubCommuniqueToFirebase(String text, type) async {
+    if (text.isEmpty || type.isEmpty) {
+      throw const FormatException('Texto e tipo são obrigatórios');
+    }
     UserM? user = await userService.getCurrentUser();
     if (user != null) {
       Communique newCommunique = Communique(
@@ -40,24 +42,18 @@ class HubService {
       );
       await iHubRepository.createCommunique(newCommunique);
     } else {
-      if (kDebugMode) {
-        print('Usuário não encontrado.');
-      }
-    }
-  } on FirebaseException catch (e) {
-    if (kDebugMode) {
-      print(e.code);
-      print(e.message);
-      print(e.stackTrace);
+      throw FirebaseAuthException(
+          code: 'permission-denied',
+          message:
+              'É necessário estar logado! \n Redirecionando você para o menu de login...');
     }
   }
-}
 // Deletar do hub
 
 // Pegar o hub
   Future<List<Communique>> getAllCommuniques() async {
     try {
-      return  await iHubRepository.listCommuniques();
+      return await iHubRepository.listCommuniques();
     } catch (e) {
       Exception("Não foi possível pegar todos comunicados");
       if (kDebugMode) {
