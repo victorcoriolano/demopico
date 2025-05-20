@@ -32,7 +32,7 @@ class ProfileFirebaseReadRepository implements IProfileDatabaseReadRepository {
     if (uid == null) throw UserNotFoundFailure();
     UserM? user = await userDatabaseRepository.getUserDetails(uid);
     if (user == null) throw UserNotFoundFailure();
-    return user.picosSalvos!;
+    return user.picosAdicionados!;
   }
 
   @override
