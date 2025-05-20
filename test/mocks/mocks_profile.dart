@@ -11,8 +11,8 @@ import 'package:demopico/features/user/domain/models/user.dart';
    signMethod: SignMethods.email,
    location:'',
    dob:'',
-   conexoes:'',
-   picosAdicionados:'',
+   conexoes: 0,
+   picosAdicionados: 0,
   );
 
   final testeProfileErrado = UserM(
@@ -24,7 +24,7 @@ import 'package:demopico/features/user/domain/models/user.dart';
    signMethod: SignMethods.email,
    location:'',
    dob:'',
-   conexoes:'',
-   picosAdicionados:'',
+   conexoes: 0,
+   picosAdicionados: 0,
   );
 
