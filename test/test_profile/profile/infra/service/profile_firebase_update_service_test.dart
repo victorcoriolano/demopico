@@ -1,6 +1,5 @@
 import 'package:demopico/features/profile/infra/service/profile_firebase_update_service.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
-import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
@@ -8,8 +7,6 @@ import '../../../../mocks/mocks_profile.dart';
 
 class MockProfileFirebaseUpdateService extends Mock
     implements ProfileFirebaseUpdateService {}
-
-class MockUserM extends Mock implements UserM {}
 
 void main() {
   group('Teste update profile data', () {
