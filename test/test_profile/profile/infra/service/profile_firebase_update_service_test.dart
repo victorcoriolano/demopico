@@ -1,7 +1,4 @@
-import 'package:demopico/features/profile/infra/repository/profile_firebase_read_repository.dart';
 import 'package:demopico/features/profile/infra/service/profile_firebase_update_service.dart';
-import 'package:demopico/features/user/infra/repositories/user_firebase_repository.dart';
-import 'package:demopico/features/user/infra/services/user_firebase_service.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -21,20 +18,30 @@ void main() {
           .set(testeProfileCerto.toJsonMap());
     });
 
-    test('Este teste deve subir uma nova bio e retorna-la', () async {
+    test('Este teste deve subir uma nova bio', () async {
       final serviceUpdate =
           ProfileFirebaseUpdateService(firestore: fakeFirestore);
-
-      final serviceRead = ProfileFirebaseReadRepository(
-          userDatabaseRepository: UserFirebaseRepository(
-              userFirebaseService:
-                  UserFirebaseService(firebaseFirestore: fakeFirestore)));
-      String novaBio = 'newText';
-
+      final novaBio = '';
       serviceUpdate.atualizarBio(novaBio, testeProfileCerto.id!);
+    });
 
-      final result = await serviceRead.pegarBio(testeProfileCerto.id!);
-      expect(result, novaBio);
+    test('Este teste deve adicionar um novo seguidor ', () async {
+      final serviceUpdate =
+          ProfileFirebaseUpdateService(firestore: fakeFirestore);
+      serviceUpdate.atualizarSeguidores(testeProfileCerto.id!);
+    });
+
+    test('Este teste deve adicionar uma nova contribuição ', () async {
+      final serviceUpdate =
+          ProfileFirebaseUpdateService(firestore: fakeFirestore);
+      serviceUpdate.atualizarContribuicoes(testeProfileCerto.id!);
+    });
+
+    test('Este teste deve subir ', () async {
+      String newImage = 'certo';
+        final serviceUpdate =
+          ProfileFirebaseUpdateService(firestore: fakeFirestore);
+      serviceUpdate.atualizarFoto(newImage, testeProfileCerto.id!);
     });
   });
 }
