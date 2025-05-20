@@ -1,61 +1,43 @@
 import 'package:demopico/features/profile/infra/repository/profile_firebase_read_repository.dart';
-import 'package:demopico/features/user/infra/repositories/user_firebase_repository.dart';
-import 'package:demopico/features/user/infra/services/user_firebase_service.dart';
-import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 
 import '../../../../mocks/mocks_profile.dart';
 
+class MockProfileFirebaseReadRepository extends Mock
+    implements ProfileFirebaseReadRepository {}
+
 void main() {
   group("Este group possui todas as operações de read do Profile", () {
-    late FakeFirebaseFirestore fakeFirestore;
+    late MockProfileFirebaseReadRepository fakeProfileFirebaseReadRepository;
     setUp(() async {
-      fakeFirestore = FakeFirebaseFirestore();
-
-      //criando um spot fake pra referenciar no pico favorito
-      await fakeFirestore
-          .collection("users")
-          .doc(testeProfileCerto.id)
-          .set(testeProfileCerto.toJsonMap());
+      fakeProfileFirebaseReadRepository = MockProfileFirebaseReadRepository();
     });
 
     test("Este teste deve retornar uma string de nova foto ", () async {
-      final serviceRead = ProfileFirebaseReadRepository(
-          userDatabaseRepository: UserFirebaseRepository(
-              userFirebaseService:
-                  UserFirebaseService(firebaseFirestore: fakeFirestore)));
-
-      String text = await serviceRead.pegarFoto(testeProfileCerto);
+      final repositoryRead = fakeProfileFirebaseReadRepository;
+      String text = await repositoryRead.pegarFoto(testeProfileCerto);
       expect(text, text);
     });
 
     test("Este teste deve retornar uma string de uma nova bio", () async {
-      final serviceRead = ProfileFirebaseReadRepository(
-          userDatabaseRepository: UserFirebaseRepository(
-              userFirebaseService:
-                  UserFirebaseService(firebaseFirestore: fakeFirestore)));
+      final repositoryRead = fakeProfileFirebaseReadRepository;
 
-      String text = await serviceRead.pegarBio(testeProfileCerto);
+      String text = await repositoryRead.pegarBio(testeProfileCerto);
       expect(text, text);
     });
 
     test("Este teste deve retornar um novo int de seguidor", () async {
-      final serviceRead = ProfileFirebaseReadRepository(
-          userDatabaseRepository: UserFirebaseRepository(
-              userFirebaseService:
-                  UserFirebaseService(firebaseFirestore: fakeFirestore)));
+      final repositoryRead = fakeProfileFirebaseReadRepository;
 
-      int text = await serviceRead.pegarSeguidores(testeProfileCerto);
+      int text = await repositoryRead.pegarSeguidores(testeProfileCerto);
       expect(text, text);
     });
 
     test("Este teste deve retornar um novo int de contribuições", () async {
-      final serviceRead = ProfileFirebaseReadRepository(
-          userDatabaseRepository: UserFirebaseRepository(
-              userFirebaseService:
-                  UserFirebaseService(firebaseFirestore: fakeFirestore)));
+      final repositoryRead = fakeProfileFirebaseReadRepository;
 
-      int text = await serviceRead.pegarContribuicoes(testeProfileCerto);
+      int text = await repositoryRead.pegarContribuicoes(testeProfileCerto);
       expect(text, text);
     });
   });
