@@ -62,6 +62,8 @@ class UserM {
 
   factory UserM.fromSnapshot(QuerySnapshot doc){
     return UserM(email: "email");
+
+
   }
 Map<String, dynamic> toJsonMap() {
   final Map<String, dynamic> data = <String, dynamic>{};
@@ -71,9 +73,9 @@ Map<String, dynamic> toJsonMap() {
   data['pictureUrl'] =  pictureUrl;
   data['location'] = location;
   data['dob'] = dob;
-  data['conexoes'] =  '0';
-  data['picosAdicionados'] = '0';
-  data['picosSalvos'] =  '0';
+  data['conexoes'] =  conexoes;
+  data['picosAdicionados'] = picosAdicionados;
+  data['picosSalvos'] =  picosSalvos;
   data['isColetivo'] = isColetivo;
   data['signMethod'] = signMethod.toString().split('.').last;
   data['email'] = email;
