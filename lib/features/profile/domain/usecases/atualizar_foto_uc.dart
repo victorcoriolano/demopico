@@ -38,9 +38,9 @@ class AtualizarFotoUc {
     }
   }
 
-  Future<String> pegar(String uid) async {
+  Future<String> pegar(UserM userModel) async {
     try {
-      return await profileDatabaseReadRepositoryIMP.pegarFoto(uid);
+      return await profileDatabaseReadRepositoryIMP.pegarFoto(userModel);
     } on FirebaseException catch (e) {
       if (kDebugMode) print(e);
       rethrow;

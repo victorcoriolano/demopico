@@ -38,9 +38,9 @@ class AtualizarBioUc {
     }
   }
 
-  Future<String> pegar(String uid) async {
+  Future<String> pegar(UserM userModel) async {
     try {
-      return await profileDatabaseReadRepositoryIMP.pegarBio(uid);
+      return await profileDatabaseReadRepositoryIMP.pegarBio(userModel);
     } on FirebaseException catch (e) {
       if (kDebugMode) print(e);
       rethrow;
