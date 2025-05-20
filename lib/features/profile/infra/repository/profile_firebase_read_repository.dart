@@ -4,7 +4,6 @@ import 'package:demopico/features/user/domain/interfaces/i_user_database_reposit
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/infra/repositories/user_firebase_repository.dart';
 
-
 class ProfileFirebaseReadRepository implements IProfileDatabaseReadRepository {
   static ProfileFirebaseReadRepository? _profileFirebaseReadRepository;
 
@@ -14,34 +13,41 @@ class ProfileFirebaseReadRepository implements IProfileDatabaseReadRepository {
     return _profileFirebaseReadRepository!;
   }
 
-  ProfileFirebaseReadRepository(
-      {required this.userDatabaseRepository});
+  ProfileFirebaseReadRepository({required this.userDatabaseRepository});
 
   final IUserDatabaseRepository userDatabaseRepository;
 
   @override
-  Future<String> pegarBio(String uid) async {
+  Future<String> pegarBio(UserM userModel) async {
+    String? uid = userModel.id;
+    if (uid == null) throw UserNotFoundFailure();
     UserM? user = await userDatabaseRepository.getUserDetails(uid);
     if (user == null) throw UserNotFoundFailure();
     return user.description!;
   }
 
   @override
-  Future<int> pegarContribuicoes(String uid) async {
+  Future<int> pegarContribuicoes(UserM userModel) async {
+    String? uid = userModel.id;
+    if (uid == null) throw UserNotFoundFailure();
     UserM? user = await userDatabaseRepository.getUserDetails(uid);
     if (user == null) throw UserNotFoundFailure();
     return user.picosSalvos!;
   }
 
   @override
-  Future<String> pegarFoto(String uid) async {
+  Future<String> pegarFoto(UserM userModel) async {
+    String? uid = userModel.id;
+    if (uid == null) throw UserNotFoundFailure();
     UserM? user = await userDatabaseRepository.getUserDetails(uid);
     if (user == null) throw UserNotFoundFailure();
     return user.pictureUrl!;
   }
 
   @override
-  Future<int> pegarSeguidores(String uid) async {
+  Future<int> pegarSeguidores(UserM userModel) async {
+    String? uid = userModel.id;
+    if (uid == null) throw UserNotFoundFailure();
     UserM? user = await userDatabaseRepository.getUserDetails(uid);
     if (user == null) throw UserNotFoundFailure();
     return user.conexoes!;

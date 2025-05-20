@@ -1,6 +1,8 @@
+import 'package:demopico/features/user/domain/models/user.dart';
+
 abstract class IProfileDatabaseReadRepository{  
-  Future<int> pegarContribuicoes(String uid);
-  Future<int> pegarSeguidores(String uid);
-  Future<String> pegarBio(String uid);
-  Future<String> pegarFoto(String uid);
+  Future<int> pegarContribuicoes(UserM userModel);
+  Future<int> pegarSeguidores(UserM userModel);
+  Future<String> pegarBio(UserM userModel);
+  Future<String> pegarFoto(UserM userModel);
 }
