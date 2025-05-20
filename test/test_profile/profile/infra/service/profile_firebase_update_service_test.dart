@@ -21,7 +21,7 @@ void main() {
     test('Este teste deve subir uma nova bio', () async {
       final serviceUpdate =
           ProfileFirebaseUpdateService(firestore: fakeFirestore);
-      final novaBio = '';
+      String novaBio = 'teste';
       serviceUpdate.atualizarBio(novaBio, testeProfileCerto.id!);
     });
 
@@ -38,9 +38,10 @@ void main() {
     });
 
     test('Este teste deve subir ', () async {
-      String newImage = 'certo';
-        final serviceUpdate =
+      final serviceUpdate =
           ProfileFirebaseUpdateService(firestore: fakeFirestore);
+      String newImage = 'certo';
+
       serviceUpdate.atualizarFoto(newImage, testeProfileCerto.id!);
     });
   });
