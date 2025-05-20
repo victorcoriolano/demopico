@@ -14,13 +14,12 @@ class CreateSpotUc {
 
   CreateSpotUc({required this.spotRepositoryIMP});
 
-  Future<PicoModel?> createSpot(PicoModel pico) async {
+  Future<PicoModel> createSpot(PicoModel pico) async {
     try {
       final picoCriado = await spotRepositoryIMP.createSpot(pico);
-      if (picoCriado != null) {
+      
         return picoCriado;
-      }
-      throw Exception("Pico retornou null");
+      
     } on Exception catch (e) {
       throw Exception("Erro ao criar piquerson: $e ");
     } catch (e) {

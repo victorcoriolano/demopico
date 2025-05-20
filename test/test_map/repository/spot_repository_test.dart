@@ -63,7 +63,7 @@ void main() {
 
       //verificando os resultados
       expect(result, isA<PicoModel>());
-      expect(result!.id, "1");
+      expect(result.id, "1");
       expect(result.picoName, "Pico Legal");
     });
 

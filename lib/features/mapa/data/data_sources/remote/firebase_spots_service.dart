@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/mapa/data/data_sources/remote/firebase_errors_mapper.dart';
 import 'package:demopico/features/mapa/domain/entities/filters.dart';
@@ -9,7 +11,7 @@ class FirebaseSpotsService implements ISpotRepository {
 
   static FirebaseSpotsService? _firebaseSpotsService;
   
-     static FirebaseSpotsService get getInstance{
+  static FirebaseSpotsService get getInstance{
     _firebaseSpotsService ??= FirebaseSpotsService(firebaseFirestore: FirebaseFirestore.instance);
     return _firebaseSpotsService!;
   } 
@@ -19,19 +21,16 @@ class FirebaseSpotsService implements ISpotRepository {
   FirebaseSpotsService({required this.firebaseFirestore});
 
   @override
-  Future<PicoModel?> createSpot(PicoModel pico) async {
+  Future<PicoModel> createSpot(PicoModel pico) async {
     // Salvando os dados no Firestore
     try {
       final doc = await firebaseFirestore.collection('spots').add(
           pico.toJson() // convertendo o objeto PicoModel para um Map<String, dynamic>
           );
-      final snapshot = await doc.get();
+          
+      // Retornando o objeto PicoModel com o ID gerado pelo Firestore
+      return pico.copyWith(id: doc.id);
 
-      if (!snapshot.exists && snapshot.data() == null) {
-        throw Exception("Dados não encontrados");
-      }
-      final data = snapshot.data();
-      return PicoModel.fromJson(data!, snapshot.id);
     } on FirebaseException catch (e) {
       throw FirebaseErrorsMapper.map(e);
     } catch (e) {
@@ -85,6 +84,7 @@ class FirebaseSpotsService implements ISpotRepository {
       throw FirebaseErrorsMapper.map(e);
     }
   }
+
   
   Query executeQuery([Filters? filtro]) {
     Query querySnapshot = firebaseFirestore.collection("spots");

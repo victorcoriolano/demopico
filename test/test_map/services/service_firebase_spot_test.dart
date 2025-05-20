@@ -16,7 +16,7 @@
         final result = await service.createSpot(testPico3);
 
         expect(result, isA<PicoModel?>());
-        expect(result?.picoName, equals("Pico Dhora"));
+        expect(result.picoName, equals("Pico Dhora"));
       });
 
       
@@ -26,7 +26,7 @@
         final service = FirebaseSpotsService(firebaseFirestore: fakeFirestore); 
         var pico = await service.createSpot(testPico);
 
-        final result = await service.updateSpot(pico!.copyWith(nota: 5)); 
+        final result = await service.updateSpot(pico.copyWith(nota: 5)); 
 
         expect(result.nota, equals(5)); 
 
@@ -39,9 +39,9 @@
 
         final picoRef = await service.createSpot(testPico);
 
-        expect(picoRef?.id, isNotEmpty); //pico existe
+        expect(picoRef.id, isNotEmpty); //pico existe
 
-        await service.deleteSpot(picoRef!.id);
+        await service.deleteSpot(picoRef.id);
         
         final snapshot = await fake.collection('spots').doc(picoRef.id).get();
 

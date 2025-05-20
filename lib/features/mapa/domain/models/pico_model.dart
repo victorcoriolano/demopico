@@ -67,6 +67,7 @@ class PicoModel extends Pico {
   
 
   PicoModel copyWith({
+    String? id,
     List<String>? imgUrls,
     String? tipoPico,
     String? modalidade,
@@ -95,7 +96,7 @@ class PicoModel extends Pico {
       utilidades: utilidades ?? this.utilidades,
       userCreator: userCreator ?? this.userCreator,
       picoName: picoName ?? this.picoName,
-      id: id,
+      id: id ?? this.id,
     );
   }
 }
