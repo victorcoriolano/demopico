@@ -18,9 +18,9 @@ class UserM {
   String? description;
   String? pictureUrl;
   String? location;
-  String? conexoes;
-  String? picosAdicionados;
-  String? picosSalvos;
+  int? conexoes;
+  int? picosAdicionados;
+  int? picosSalvos;
   
     //transforma dados do firebase em dados na model
   //cria um user model de acordo com a nova conta criada
@@ -32,10 +32,10 @@ class UserM {
             email: user.email,
             description: 'Edite para atualizar sua bio',
             id: user.uid,
-            picosAdicionados: '0',
-            picosSalvos: '0',
+            picosAdicionados: 0,
+            picosSalvos: 0,
             location: '',
-            conexoes: '0',
+            conexoes: 0,
             dob: todayDate,
             authEnumState: AuthEnumState.notDetermined,
             pictureUrl: '',

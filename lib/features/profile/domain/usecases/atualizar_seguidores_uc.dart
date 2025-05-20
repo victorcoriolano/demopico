@@ -38,7 +38,7 @@ class AtualizarSeguidoresUc {
     }
   }
 
-  Future<String> pegar(String uid) async {
+  Future<int> pegar(String uid) async {
     try {
       return await profileDatabaseReadRepositoryIMP.pegarSeguidores(uid);
     } on FirebaseException catch (e) {

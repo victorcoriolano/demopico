@@ -27,7 +27,7 @@ class ProfileFirebaseReadRepository implements IProfileDatabaseReadRepository {
   }
 
   @override
-  Future<String> pegarContribuicoes(String uid) async {
+  Future<int> pegarContribuicoes(String uid) async {
     UserM? user = await userDatabaseRepository.getUserDetails(uid);
     if (user == null) throw UserNotFoundFailure();
     return user.picosSalvos!;
@@ -41,7 +41,7 @@ class ProfileFirebaseReadRepository implements IProfileDatabaseReadRepository {
   }
 
   @override
-  Future<String> pegarSeguidores(String uid) async {
+  Future<int> pegarSeguidores(String uid) async {
     UserM? user = await userDatabaseRepository.getUserDetails(uid);
     if (user == null) throw UserNotFoundFailure();
     return user.conexoes!;

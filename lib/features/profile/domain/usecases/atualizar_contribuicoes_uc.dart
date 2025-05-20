@@ -38,7 +38,7 @@ class AtualizarContribuicoesUc {
     }
   }
 
-  Future<String> pegar(String uid) async {
+  Future<int> pegar(String uid) async {
     try {
       return await profileDatabaseReadRepositoryIMP.pegarContribuicoes(uid);
     } on FirebaseException catch (e) {
