@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:demopico/features/mapa/data/data_sources/remote/firebase_errors_mapper.dart';
+import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
 import 'package:demopico/features/mapa/domain/entities/filters.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_spot_repository.dart';

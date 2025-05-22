@@ -4,7 +4,7 @@ import 'package:demopico/features/mapa/data/data_sources/interfaces/upload_task_
 import 'package:demopico/features/mapa/domain/models/upload_file_model.dart';
 import 'package:demopico/features/mapa/domain/models/upload_result_file_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:demopico/features/mapa/data/data_sources/remote/firebase_errors_mapper.dart';
+import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
 
 class FirebaseFileRemoteDatasource implements FileRemoteDataSource {
   static FirebaseFileRemoteDatasource? _firebaseFileRemoteDatasource;

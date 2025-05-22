@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/mapa/data/data_sources/interfaces/spot_datasource_interface.dart';
-import 'package:demopico/features/mapa/data/data_sources/remote/firebase_errors_mapper.dart';
+import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
 import 'package:demopico/features/mapa/data/dtos/pico_model_firebase_dto.dart';
 import 'package:demopico/features/mapa/domain/entities/filters.dart';
 
