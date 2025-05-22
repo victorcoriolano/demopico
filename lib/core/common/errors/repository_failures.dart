@@ -41,6 +41,10 @@ class AccountExistsFailure extends RepositoryFailures {
   AccountExistsFailure({super.originalException}): super("Conta já existe",code: 'ACCOUNT_EXISTS');
 }
 
+class DataNotFoundFailure extends RepositoryFailures {
+  DataNotFoundFailure({super.originalException}): super("Dados não encontrados",code: 'DATA_NOT_FOUND');
+}
+
 // Pico
 class PicoNotFoundFailure extends RepositoryFailures {
   PicoNotFoundFailure({super.originalException}): super("Pico não encontrado",code: 'PICO_NOT_FOUND');
@@ -72,7 +76,7 @@ class OperationCanceledFailure extends RepositoryFailures {
 
 // Erro desconhecido
 class UnknownFailure extends RepositoryFailures {
-  UnknownFailure({super.originalException}): super("Erro desconhecido", code: 'UNKNOWN');
+  UnknownFailure({super.originalException, super.stackTrace}): super("Erro desconhecido", code: 'UNKNOWN');
 }
 
 // Internal server error 
