@@ -1,12 +1,12 @@
 
-  import 'package:demopico/features/mapa/data/data_sources/remote/firebase_spot_remote_datasource.dart';
-import 'package:demopico/features/mapa/data/data_sources/remote/firebase_spots_service.dart';
-  import 'package:demopico/features/mapa/domain/models/pico_model.dart';
-  import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
-  import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:demopico/features/mapa/data/data_sources/remote/firebase_spot_remote_datasource.dart';
+import 'package:demopico/features/mapa/data/dtos/pico_model_firebase_dto.dart';
+import 'package:demopico/features/mapa/data/mappers/mapper_dto_picomodel.dart';
+import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_test/flutter_test.dart';
 
-  import '../../mocks/mocks_spots.dart';
+import '../../mocks/mocks_spots.dart';
 
   void main() {
     group("deve testar o datasource de spots do cloud firestore", () {
@@ -14,17 +14,23 @@ import 'package:mocktail/mocktail.dart';
       late FakeFirebaseFirestore fakeFirestore;
       late FirebaseSpotRemoteDataSource dataSource;
 
-      setUp(() {
+      setUpAll(() {
         fakeFirestore = FakeFirebaseFirestore();
         dataSource = FirebaseSpotRemoteDataSource(fakeFirestore);
       });
 
-      test("dever criar um spot no datasource e retornar o id do documento", () async {
-        
+      tearDown(() {
+        fakeFirestore.clearPersistence();
+      });
 
-        final result = await dataSource.create(testPico3.toJson());
+      test("dever criar um spot no datasource e retornar um dto com id", () async {
 
-        expect(result, isA<String>());
+        final result = await dataSource.create(MapperDtoPicomodel.toDto(testPico));
+
+        expect(result, isA<PicoModelFirebaseDto>());
+        expect(result.data, isA<Map<String, dynamic>>());
+        expect(result.id, isA<String>());
+        debugPrint(result.id);
         
       });
 
@@ -37,53 +43,50 @@ import 'package:mocktail/mocktail.dart';
         var newPico = testPico
           .copyWith(
             picoName: "Pico Maneiro", 
-            description: "Teste descrição alterada")
-          .toJson();
+            description: "Teste descrição alterada");
         
-        await dataSource.update(newPico);
+        await dataSource.update(MapperDtoPicomodel.toDto(newPico));
 
-        verify(() => fakeFirestore.collection("spots").doc("1").set(newPico)).called(1);
         
+        final dadosAlterados = await dataSource.getbyID("1");
+        expect(dadosAlterados.data, newPico.toJson());
+        expect(dadosAlterados.id, equals('1') );
 
       });
 
       test("deve deletar um spot", () async {
-        var fake = FakeFirebaseFirestore();
-        var service = FirebaseSpotsService(firebaseFirestore: fake);
-
-        final picoRef = await service.createSpot(testPico);
-
-        expect(picoRef.id, isNotEmpty); //pico existe
-
-        await service.deleteSpot(picoRef.id);
         
-        final snapshot = await fake.collection('spots').doc(picoRef.id).get();
+        await fakeFirestore.collection("spots").doc("1").set(testPico.toJson());
+        
+
+        await dataSource.delete("1");
+        
+        final snapshot = await fakeFirestore.collection("spots").doc("1").get();
 
         expect(snapshot.exists, isFalse); //pico não existe
       });
 
       test("deve testar se a stream de spots emite lista de spots", () async {
-        final fakeFiresore = FakeFirebaseFirestore();
-
-        final service = FirebaseSpotsService(firebaseFirestore: fakeFiresore);
+        
 
         //criando falsos picos no bd falso
-        await service.createSpot(testPico);
-        await service.createSpot(testPico2);
+        await dataSource.create(MapperDtoPicomodel.toDto(testPico));
+        await dataSource.create(MapperDtoPicomodel.toDto(testPico2));
 
-        final stream = service.loadSpots();
+        final stream = dataSource.load();
 
         expectLater(
           stream,
           emitsInOrder([
-            isA<List<PicoModel>>()
+            isA<List<PicoModelFirebaseDto>>()
                 .having((list) => list.length, "deve ter 2 instancia", equals(2)),
-            isA<List<PicoModel>>()
+            isA<List<PicoModelFirebaseDto>>()
                 .having((list) => list.length, "deve ter 3 instancia", equals(3)),
             // Após adicionar o pico
           ]),
         );
-        await service.createSpot(testPico3);
+
+        await dataSource.create(MapperDtoPicomodel.toDto(testPico3));
       });
     });
   }

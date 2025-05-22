@@ -6,7 +6,7 @@ import 'package:demopico/features/mapa/domain/entities/filters.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_spot_repository.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 
-class SpotRepositoryImpl implements ISpotRepository{
+class SpotRepositoryImpl implements ISpotRepository {
 
   final SpotRemoteDataSource dataSource;
   SpotRepositoryImpl(this.dataSource);
@@ -44,14 +44,15 @@ class SpotRepositoryImpl implements ISpotRepository{
       });
 
     
-    }
-    
-    @override
-    Future<PicoModel> updateSpot(PicoModel pico) {
-      throw UnimplementedError();
-    }
-    
   }
+    
+  @override
+  Future<PicoModel> updateSpot(PicoModel pico) async {
+    final dto = MapperDtoPicomodel.toDto( pico);
+    await dataSource.update(  dto);
+    return  pico;
+  }
+}
 
 
   
