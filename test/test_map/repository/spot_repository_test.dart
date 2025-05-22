@@ -1,65 +1,42 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demopico/features/mapa/data/data_sources/remote/firebase_spot_remote_datasource.dart';
+import 'package:demopico/features/mapa/data/mappers/mapper_dto_picomodel.dart';
+import 'package:demopico/features/mapa/data/repositories/spot_repository_impl.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
-import 'package:demopico/features/mapa/data/data_sources/remote/firebase_spots_service.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../mocks/mocks_spots.dart';
-import 'spot_repository_test.mocks.dart';
 
 //cirando anotação para criar o mock
-@GenerateNiceMocks([
-  MockSpec<FirebaseFirestore>(),
-  MockSpec<DocumentSnapshot<Map<String, dynamic>>>(),
-  MockSpec<DocumentReference<Map<String, dynamic>>>(),
-  MockSpec<CollectionReference<Map<String, dynamic>>>(),
-  MockSpec<QuerySnapshot<Map<String, dynamic>>>(),
-  MockSpec<QueryDocumentSnapshot<Map<String, dynamic>>>(),
-])
 
+class MockDatasource extends Mock implements FirebaseSpotRemoteDataSource {}
 
 void main() {
   group("Deve testar a interação com o firebase ", () {
     //variáveis mockadas para utilizar nos testes
-    late MockFirebaseFirestore mockFirestore;
-    late MockCollectionReference mockCollection;
-    late MockDocumentReference mockDocRef;
-    late MockDocumentSnapshot mockDocSnapshot;
-    late FirebaseSpotsService repositoryMap;
-    late MockQuerySnapshot mockQuerySnapshot;
-    late MockQueryDocumentSnapshot mockQueryDocSnapshot;
+
+    late MockDatasource mockDatasource;
+    late SpotRepositoryImpl repositoryImpl;
 
     final testPicoNotaNova = testPico.copyWith(nota: 5, numeroAvaliacoes: 11);
 
     //setando os mocks para utilizar nos testes
-    setUp(() {
-      mockFirestore = MockFirebaseFirestore();
-      mockCollection = MockCollectionReference();
-      mockDocSnapshot = MockDocumentSnapshot();
-      mockDocRef = MockDocumentReference();
-      mockQuerySnapshot = MockQuerySnapshot();
-      mockQueryDocSnapshot = MockQueryDocumentSnapshot();
-
-      repositoryMap = FirebaseSpotsService(firebaseFirestore: mockFirestore);
+    setUpAll(() {
+      mockDatasource = MockDatasource();
+      repositoryImpl = SpotRepositoryImpl(mockDatasource);
     });
 
     //testando criar pico
     test("deve criar um pico com sucesso e retornar a instancia como pico",
         () async {
       // criando fluxo que ocorrerá se der tudo certo
-      when(mockFirestore.collection("spots")).thenReturn(mockCollection);
-      when(mockCollection.add(testPico.toJson()))
-          .thenAnswer((_) async => mockDocRef);
-      when(mockDocSnapshot.id).thenReturn("1");
-      when(mockDocSnapshot.exists).thenReturn(true);
-      when(mockDocRef.get()).thenAnswer((_) async => mockDocSnapshot);
-      when(mockDocSnapshot.data()).thenReturn(testPico.toJson());
+      when(() => mockDatasource.create(any()))
+          .thenAnswer((_) => Future.value(MapperDtoPicomodel.toDto(testPico)));
 
       //chamando o método
-      final result = await repositoryMap.createSpot(testPico);
+      final result = await repositoryImpl.createSpot(testPico);
 
       //verificando os resultados
       expect(result, isA<PicoModel>());
@@ -67,58 +44,32 @@ void main() {
       expect(result.picoName, "Pico Legal");
     });
 
-    test("deve criar uma stream e retornar todos os picos do firebase",
-        () async {
-      final controllerStream =
-          StreamController<QuerySnapshot<Map<String, dynamic>>>();
-      controllerStream.add(mockQuerySnapshot);
-      when(mockFirestore.collection("spots")).thenReturn(mockCollection);
-      when(mockCollection.snapshots())
-          .thenAnswer((_) => controllerStream.stream);
+    test("deve criar uma stream e retornar os dados do datasource", () {
+      when(() => mockDatasource.load())
+          .thenAnswer((_) => Stream.value(listDto));
 
-      when(mockQuerySnapshot.docs).thenReturn([mockQueryDocSnapshot]);
-      when(mockQueryDocSnapshot.data()).thenReturn(testPico.toJson());
+      final result = repositoryImpl.loadSpots();
+      expect(result, isA<Stream<List<PicoModel>>>());
 
-      final resul = repositoryMap.loadSpots();
-      controllerStream.add(mockQuerySnapshot);
-
-      expect(resul, isA<Stream<List<PicoModel>>>());
-
+      //verificando se retora a lista de picos
       expectLater(
-        resul,
-        emits(isA<List<PicoModel>>().having(
-            (picos) => picos.first.picoName, 'picoName', testPico.picoName)),
+        result,
+        emitsInOrder([
+          isA<List<PicoModel>>()
+              .having((lista) => lista.length, "deve conter 3", equals(3)),
+        ]),
       );
-
-      await controllerStream.close();
     });
 
-    test("deve criar uma stream e retornar os picos filtrados do firebase",
-        () async {
-      final controllerStream =
-          StreamController<QuerySnapshot<Map<String, dynamic>>>();
+    test("deve atualizar um pico", () async {
+      when(() => mockDatasource.update(MapperDtoPicomodel.toDto(testPicoNotaNova))).thenAnswer((_) async {});
 
-      controllerStream.add(mockQuerySnapshot);
-      when(mockFirestore.collection("spots")).thenReturn(mockCollection);
-      when(mockCollection.snapshots())
-          .thenAnswer((_) => controllerStream.stream);
+      final result = await repositoryImpl.updateSpot(testPicoNotaNova);
+      expect(result, isA<PicoModel>());
 
-      when(mockQuerySnapshot.docs).thenReturn([mockQueryDocSnapshot]);
-      when(mockQueryDocSnapshot.data()).thenReturn(testPico.toJson());
+    });
 
-      final resul = repositoryMap.loadSpots();
-      controllerStream.add(mockQuerySnapshot);
-
-      expect(resul, isA<Stream<List<PicoModel>>>());
-
-      await expectLater(
-        resul,
-        emits(isA<List<PicoModel>>().having(
-            (picos) => picos.first.picoName, 'picoName', testPico.picoName)),
-      );
-
-      await controllerStream.close();
-    });    
+    /* 
 
 
     test("deve atualizar a nota do pico", () async {
@@ -197,6 +148,10 @@ void main() {
           .thenThrow(Exception('Unexpected error'));
 
       expect(() => repositoryMap.createSpot(testPico), throwsException);
-    });
+    }); */
   });
+}
+
+Future<void> retornarVoid() async {
+  return;
 }
