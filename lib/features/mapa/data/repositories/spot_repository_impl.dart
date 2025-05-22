@@ -49,7 +49,7 @@ class SpotRepositoryImpl implements ISpotRepository {
   @override
   Future<PicoModel> updateSpot(PicoModel pico) async {
     final dto = MapperDtoPicomodel.toDto( pico);
-    await dataSource.update(  dto);
+    await dataSource.update(dto);
     return  pico;
   }
 }
