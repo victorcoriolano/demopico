@@ -11,24 +11,24 @@ class AtualizarFotoUc {
   static AtualizarFotoUc? _atualizarFotoUc;
   static AtualizarFotoUc get getInstance {
     _atualizarFotoUc ??= AtualizarFotoUc(
-      profileDatabaseReadRepositoryIMP: ProfileFirebaseReadRepository.getInstance,
-      profileDatabaseUpdateRepositoryIMP: ProfileFirebaseUpdateRepository.getInstance,
+      profileReadRepositoryIMP: ProfileReadRepository.getInstance,
+      profileUpdateRepositoryIMP: ProfileUpdateRepository.getInstance,
     );
     return _atualizarFotoUc!;
   }
 
   AtualizarFotoUc({
-    required this.profileDatabaseReadRepositoryIMP,
-    required this.profileDatabaseUpdateRepositoryIMP,
+    required this.profileReadRepositoryIMP,
+    required this.profileUpdateRepositoryIMP,
   });
 
-  final IProfileDatabaseReadRepository profileDatabaseReadRepositoryIMP;
-  final IProfileDatabaseUpdateRepository profileDatabaseUpdateRepositoryIMP;
+  final IProfileReadRepository profileReadRepositoryIMP;
+  final IProfileUpdateRepository profileUpdateRepositoryIMP;
 
   void atualizar(String newFoto, UserM user) {
     try {
       if (user.id == null) throw UserNotFoundFailure();
-      profileDatabaseUpdateRepositoryIMP.atualizarFoto(newFoto, user);
+      profileUpdateRepositoryIMP.atualizarFoto(newFoto, user);
     } on FirebaseException catch (e) {
       if (kDebugMode) print(e);
       rethrow;
@@ -40,7 +40,7 @@ class AtualizarFotoUc {
 
   Future<String> pegar(UserM userModel) async {
     try {
-      return await profileDatabaseReadRepositoryIMP.pegarFoto(userModel);
+      return await profileReadRepositoryIMP.pegarFoto(userModel);
     } on FirebaseException catch (e) {
       if (kDebugMode) print(e);
       rethrow;

@@ -11,24 +11,24 @@ class AtualizarSeguidoresUc {
   static AtualizarSeguidoresUc? _atualizarSeguidoresUc;
   static AtualizarSeguidoresUc get getInstance {
     _atualizarSeguidoresUc ??= AtualizarSeguidoresUc(
-        profileDatabaseReadRepositoryIMP:
-            ProfileFirebaseReadRepository.getInstance,
-        profileDatabaseUpdateRepositoryIMP:
-            ProfileFirebaseUpdateRepository.getInstance);
+        profileReadRepositoryIMP:
+            ProfileReadRepository.getInstance,
+        profileUpdateRepositoryIMP:
+            ProfileUpdateRepository.getInstance);
     return _atualizarSeguidoresUc!;
   }
 
   AtualizarSeguidoresUc(
-      {required this.profileDatabaseReadRepositoryIMP,
-      required this.profileDatabaseUpdateRepositoryIMP});
+      {required this.profileReadRepositoryIMP,
+      required this.profileUpdateRepositoryIMP});
 
-  final IProfileDatabaseReadRepository profileDatabaseReadRepositoryIMP;
-  final IProfileDatabaseUpdateRepository profileDatabaseUpdateRepositoryIMP;
+  final IProfileReadRepository profileReadRepositoryIMP;
+  final IProfileUpdateRepository profileUpdateRepositoryIMP;
 
   void atualizar(UserM user) {
     try {
       if (user.id == null) throw UserNotFoundFailure();
-      profileDatabaseUpdateRepositoryIMP.atualizarSeguidores(user);
+      profileUpdateRepositoryIMP.atualizarSeguidores(user);
     } on FirebaseException catch (e) {
       if (kDebugMode) print(e);
       rethrow;
@@ -40,7 +40,7 @@ class AtualizarSeguidoresUc {
 
   Future<int> pegar(UserM userModel) async {
     try {
-      return await profileDatabaseReadRepositoryIMP.pegarSeguidores(userModel);
+      return await profileReadRepositoryIMP.pegarSeguidores(userModel);
     } on FirebaseException catch (e) {
       if (kDebugMode) print(e);
       rethrow;

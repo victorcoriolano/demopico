@@ -11,24 +11,24 @@ class AtualizarBioUc {
   static AtualizarBioUc? _atualizarBioUc;
   static AtualizarBioUc get getInstance {
     _atualizarBioUc ??= AtualizarBioUc(
-      profileDatabaseReadRepositoryIMP: ProfileFirebaseReadRepository.getInstance,
-      profileDatabaseUpdateRepositoryIMP: ProfileFirebaseUpdateRepository.getInstance,
+      profileReadRepositoryIMP: ProfileReadRepository.getInstance,
+      profileUpdateRepositoryIMP: ProfileUpdateRepository.getInstance,
     );
     return _atualizarBioUc!;
   }
 
   AtualizarBioUc({
-    required this.profileDatabaseReadRepositoryIMP,
-    required this.profileDatabaseUpdateRepositoryIMP,
+    required this.profileReadRepositoryIMP,
+    required this.profileUpdateRepositoryIMP,
   });
 
-  final IProfileDatabaseReadRepository profileDatabaseReadRepositoryIMP;
-  final IProfileDatabaseUpdateRepository profileDatabaseUpdateRepositoryIMP;
+  final IProfileReadRepository profileReadRepositoryIMP;
+  final IProfileUpdateRepository profileUpdateRepositoryIMP;
 
   void atualizar(String newBio, UserM user) {
     try {
       if (user.id == null) throw UserNotFoundFailure();
-      profileDatabaseUpdateRepositoryIMP.atualizarBio(newBio , user);
+      profileUpdateRepositoryIMP.atualizarBio(newBio , user);
     } on FirebaseException catch (e) {
       if (kDebugMode) print(e);
       rethrow;
@@ -40,7 +40,7 @@ class AtualizarBioUc {
 
   Future<String> pegar(UserM userModel) async {
     try {
-      return await profileDatabaseReadRepositoryIMP.pegarBio(userModel);
+      return await profileReadRepositoryIMP.pegarBio(userModel);
     } on FirebaseException catch (e) {
       if (kDebugMode) print(e);
       rethrow;

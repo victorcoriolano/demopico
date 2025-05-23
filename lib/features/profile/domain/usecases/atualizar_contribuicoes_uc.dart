@@ -11,24 +11,24 @@ class AtualizarContribuicoesUc {
   static AtualizarContribuicoesUc? _atualizarContribuicoesUc;
   static AtualizarContribuicoesUc get getInstance {
     _atualizarContribuicoesUc ??= AtualizarContribuicoesUc(
-      profileDatabaseReadRepositoryIMP: ProfileFirebaseReadRepository.getInstance,
-      profileDatabaseUpdateRepositoryIMP: ProfileFirebaseUpdateRepository.getInstance,
+      profileReadRepositoryIMP: ProfileReadRepository.getInstance,
+      profileUpdateRepositoryIMP: ProfileUpdateRepository.getInstance,
     );
     return _atualizarContribuicoesUc!;
   }
 
   AtualizarContribuicoesUc({
-    required this.profileDatabaseReadRepositoryIMP,
-    required this.profileDatabaseUpdateRepositoryIMP,
+    required this.profileReadRepositoryIMP,
+    required this.profileUpdateRepositoryIMP,
   });
 
-  final IProfileDatabaseReadRepository profileDatabaseReadRepositoryIMP;
-  final IProfileDatabaseUpdateRepository profileDatabaseUpdateRepositoryIMP;
+  final IProfileReadRepository profileReadRepositoryIMP;
+  final IProfileUpdateRepository profileUpdateRepositoryIMP;
 
   void atualizar(UserM user) {
     try {
       if (user.id == null) throw UserNotFoundFailure();
-      profileDatabaseUpdateRepositoryIMP.atualizarContribuicoes(user);
+      profileUpdateRepositoryIMP.atualizarContribuicoes(user);
     } on FirebaseException catch (e) {
       if (kDebugMode) print(e);
       rethrow;
@@ -40,7 +40,7 @@ class AtualizarContribuicoesUc {
 
   Future<int> pegar(UserM userModel) async {
     try {
-      return await profileDatabaseReadRepositoryIMP.pegarContribuicoes(userModel);
+      return await profileReadRepositoryIMP.pegarContribuicoes(userModel);
     } on FirebaseException catch (e) {
       if (kDebugMode) print(e);
       rethrow;
