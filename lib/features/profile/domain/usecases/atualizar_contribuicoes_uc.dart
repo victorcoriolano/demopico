@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_profile_database_read_repository.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_profile_database_update_repository.dart';
-import 'package:demopico/features/profile/infra/repository/profile_firebase_read_repository.dart';
-import 'package:demopico/features/profile/infra/repository/profile_firebase_update_repository.dart';
+import 'package:demopico/features/profile/infra/repository/profile_read_repository.dart';
+import 'package:demopico/features/profile/infra/repository/profile_update_repository.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter/foundation.dart';
 

@@ -1,4 +1,4 @@
-import 'package:demopico/features/profile/infra/repository/profile_firebase_read_repository.dart';
+import 'package:demopico/features/profile/infra/repository/profile_read_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 

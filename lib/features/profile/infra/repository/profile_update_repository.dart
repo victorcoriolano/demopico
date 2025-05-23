@@ -3,43 +3,43 @@ import 'package:demopico/features/profile/domain/interfaces/i_profile_database_u
 import 'package:demopico/features/profile/infra/datasource/firebase_profile_update_datasource.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 
-class ProfileFirebaseUpdateRepository
+class ProfileUpdateRepository
     implements IProfileDatabaseUpdateRepository {
-  static ProfileFirebaseUpdateRepository? _profileFirebaseUpdateRepository;
+  static ProfileUpdateRepository? _profileUpdateRepository;
 
- static ProfileFirebaseUpdateRepository get getInstance {
-    _profileFirebaseUpdateRepository ??= ProfileFirebaseUpdateRepository(
-        profileDatabaseUpdateServiceIMP:
-            ProfileFirebaseUpdateService.getInstance);
-    return _profileFirebaseUpdateRepository!;
+ static ProfileUpdateRepository get getInstance {
+    _profileUpdateRepository ??= ProfileUpdateRepository(
+        databaseProfileUpdateServiceIMP:
+            FirebaseProfileUpdateDatasource.getInstance);
+    return _profileUpdateRepository!;
   }
 
-  ProfileFirebaseUpdateRepository(
-      {required this.profileDatabaseUpdateServiceIMP});
+  ProfileUpdateRepository(
+      {required this.databaseProfileUpdateServiceIMP});
 
-  final IProfileDatabaseUpdateService profileDatabaseUpdateServiceIMP;
+  final IProfileDatabaseUpdateService databaseProfileUpdateServiceIMP;
 
   @override
   void atualizarBio(String newBio, UserM user) async {
     String uid = user.id!;
-    profileDatabaseUpdateServiceIMP.atualizarBio(newBio, uid);
+    databaseProfileUpdateServiceIMP.atualizarBio(newBio, uid);
   }
 
   @override
   void atualizarContribuicoes(UserM user) async {
     String uid = user.id!;
-    profileDatabaseUpdateServiceIMP.atualizarContribuicoes(uid);
+    databaseProfileUpdateServiceIMP.atualizarContribuicoes(uid);
   }
 
   @override
   void atualizarFoto(String newFoto, UserM user) async {
     String uid = user.id!;
-    profileDatabaseUpdateServiceIMP.atualizarFoto(newFoto, uid);
+    databaseProfileUpdateServiceIMP.atualizarFoto(newFoto, uid);
   }
 
   @override
   void atualizarSeguidores(UserM user) async {
     String uid = user.id!;
-    profileDatabaseUpdateServiceIMP.atualizarSeguidores(uid);
+    databaseProfileUpdateServiceIMP.atualizarSeguidores(uid);
   }
 }
