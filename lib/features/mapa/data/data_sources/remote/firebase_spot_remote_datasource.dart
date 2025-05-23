@@ -108,11 +108,11 @@ class FirebaseSpotRemoteDataSource implements SpotRemoteDataSource {
   Future<void> update(PicoFirebaseDTO picoDto) async {
     try {
       
-     await  _firebaseFirestore
+      await  _firebaseFirestore
           .collection(_collectionName)
           .doc(picoDto.id)
           .update(picoDto.data);
-
+      return;
     } on FirebaseException catch (e) {
       throw FirebaseErrorsMapper.map(e);
     } catch (e, stacktrace) {
