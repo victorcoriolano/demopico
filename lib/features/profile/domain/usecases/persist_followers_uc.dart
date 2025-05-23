@@ -7,18 +7,18 @@ import 'package:demopico/features/profile/infra/repository/profile_update_reposi
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter/foundation.dart';
 
-class AtualizarSeguidoresUc {
-  static AtualizarSeguidoresUc? _atualizarSeguidoresUc;
-  static AtualizarSeguidoresUc get getInstance {
-    _atualizarSeguidoresUc ??= AtualizarSeguidoresUc(
+class PersistFollowersUc {
+  static PersistFollowersUc? _persistFollowersUc;
+  static PersistFollowersUc get getInstance {
+    _persistFollowersUc ??= PersistFollowersUc(
         profileReadRepositoryIMP:
             ProfileReadRepository.getInstance,
         profileUpdateRepositoryIMP:
             ProfileUpdateRepository.getInstance);
-    return _atualizarSeguidoresUc!;
+    return _persistFollowersUc!;
   }
 
-  AtualizarSeguidoresUc(
+  PersistFollowersUc(
       {required this.profileReadRepositoryIMP,
       required this.profileUpdateRepositoryIMP});
 

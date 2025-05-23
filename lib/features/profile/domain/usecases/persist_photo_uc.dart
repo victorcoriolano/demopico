@@ -7,17 +7,17 @@ import 'package:demopico/features/profile/infra/repository/profile_update_reposi
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter/foundation.dart';
 
-class AtualizarFotoUc {
-  static AtualizarFotoUc? _atualizarFotoUc;
-  static AtualizarFotoUc get getInstance {
-    _atualizarFotoUc ??= AtualizarFotoUc(
+class PersistPhotoUc {
+  static PersistPhotoUc? _persistPhotoUc;
+  static PersistPhotoUc get getInstance {
+    _persistPhotoUc ??= PersistPhotoUc(
       profileReadRepositoryIMP: ProfileReadRepository.getInstance,
       profileUpdateRepositoryIMP: ProfileUpdateRepository.getInstance,
     );
-    return _atualizarFotoUc!;
+    return _persistPhotoUc!;
   }
 
-  AtualizarFotoUc({
+  PersistPhotoUc({
     required this.profileReadRepositoryIMP,
     required this.profileUpdateRepositoryIMP,
   });

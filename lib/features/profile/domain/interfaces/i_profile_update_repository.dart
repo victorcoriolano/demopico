@@ -1,8 +1,8 @@
 import 'package:demopico/features/user/domain/models/user.dart';
 
 abstract class IProfileUpdateRepository {
-  void atualizarContribuicoes(UserM user);
-  void atualizarSeguidores(UserM user);
-  void atualizarBio(String newBio, UserM user);
-  void atualizarFoto(String newFoto, UserM user);
+  void updateContributions(UserM user);
+  void updateFollowers(UserM user);
+  void updateBio(String newBio, UserM user);
+  void updatePhoto(String newFoto, UserM user);
 }

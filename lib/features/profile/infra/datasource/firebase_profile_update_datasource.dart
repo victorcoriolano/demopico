@@ -15,7 +15,7 @@ class FirebaseProfileUpdateDatasource implements IProfileDatabaseUpdateService {
   final FirebaseFirestore firestore;
 
   @override
-  void atualizarBio(String newBio, String uid) async {
+  void updateBio(String newBio, String uid) async {
     await firestore
         .collection('users')
         .doc(uid)

@@ -7,17 +7,17 @@ import 'package:demopico/features/profile/infra/repository/profile_update_reposi
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter/foundation.dart';
 
-class AtualizarContribuicoesUc {
-  static AtualizarContribuicoesUc? _atualizarContribuicoesUc;
-  static AtualizarContribuicoesUc get getInstance {
-    _atualizarContribuicoesUc ??= AtualizarContribuicoesUc(
+class PersistContributionsUc {
+  static PersistContributionsUc? _persistContributionsUc;
+  static PersistContributionsUc get getInstance {
+    _persistContributionsUc ??= PersistContributionsUc(
       profileReadRepositoryIMP: ProfileReadRepository.getInstance,
       profileUpdateRepositoryIMP: ProfileUpdateRepository.getInstance,
     );
-    return _atualizarContribuicoesUc!;
+    return _persistContributionsUc!;
   }
 
-  AtualizarContribuicoesUc({
+  PersistContributionsUc({
     required this.profileReadRepositoryIMP,
     required this.profileUpdateRepositoryIMP,
   });

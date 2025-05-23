@@ -1,7 +1,7 @@
 import 'package:demopico/features/profile/domain/usecases/atualizar_bio_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/atualizar_contribuicoes_uc.dart';
-import 'package:demopico/features/profile/domain/usecases/atualizar_foto_uc.dart';
-import 'package:demopico/features/profile/domain/usecases/atualizar_seguidores_uc.dart';
+import 'package:demopico/features/profile/domain/usecases/persist_photo_uc.dart';
+import 'package:demopico/features/profile/domain/usecases/persist_followers_uc.dart';
 import 'package:flutter/foundation.dart';
 
 class ProfileProvider extends ChangeNotifier {
