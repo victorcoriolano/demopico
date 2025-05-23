@@ -18,7 +18,7 @@ class ProfileReadRepository implements IProfileReadRepository {
   final IUserDatabaseRepository userRepositoryIMP;
 
   @override
-  Future<String> pegarBio(UserM userModel) async {
+  Future<String> getBio(UserM userModel) async {
     String? uid = userModel.id;
     if (uid == null) throw UserNotFoundFailure();
     UserM? user = await userRepositoryIMP.getUserDetails(uid);
@@ -27,7 +27,7 @@ class ProfileReadRepository implements IProfileReadRepository {
   }
 
   @override
-  Future<int> pegarContribuicoes(UserM userModel) async {
+  Future<int> getContributions(UserM userModel) async {
     String? uid = userModel.id;
     if (uid == null) throw UserNotFoundFailure();
     UserM? user = await userRepositoryIMP.getUserDetails(uid);
@@ -36,7 +36,7 @@ class ProfileReadRepository implements IProfileReadRepository {
   }
 
   @override
-  Future<String> pegarFoto(UserM userModel) async {
+  Future<String> getPhoto(UserM userModel) async {
     String? uid = userModel.id;
     if (uid == null) throw UserNotFoundFailure();
     UserM? user = await userRepositoryIMP.getUserDetails(uid);
@@ -45,7 +45,7 @@ class ProfileReadRepository implements IProfileReadRepository {
   }
 
   @override
-  Future<int> pegarSeguidores(UserM userModel) async {
+  Future<int> getFollowers(UserM userModel) async {
     String? uid = userModel.id;
     if (uid == null) throw UserNotFoundFailure();
     UserM? user = await userRepositoryIMP.getUserDetails(uid);

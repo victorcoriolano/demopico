@@ -23,19 +23,19 @@ class FirebaseProfileUpdateDatasource implements IProfileDatabaseUpdateService {
   }
 
   @override
-  void atualizarContribuicoes(String uid) async {
+  void updateContributions(String uid) async {
     await firestore.collection('users').doc(uid).update({
       'picosAdicionados': FieldValue.increment(1),
     });
   }
 
   @override
-  void atualizarFoto(String newImg, String uid) async {
+  void updatePhoto(String newImg, String uid) async {
     await firestore.collection('users').doc(uid).update({'pictureUrl': newImg});
   }
 
   @override
-  void atualizarSeguidores(String uid) async {
+  void updateFollowers(String uid) async {
     await firestore
         .collection('users')
         .doc(uid)
