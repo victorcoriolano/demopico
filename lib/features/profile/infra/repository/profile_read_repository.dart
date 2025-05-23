@@ -4,7 +4,7 @@ import 'package:demopico/features/user/domain/interfaces/i_user_database_reposit
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/infra/repositories/user_firebase_repository.dart';
 
-class ProfileReadRepository implements IProfileDatabaseReadRepository {
+class ProfileReadRepository implements IProfileReadRepository {
   static ProfileReadRepository? _profileReadRepository;
 
   static ProfileReadRepository get getInstance {

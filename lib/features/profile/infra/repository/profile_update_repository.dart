@@ -4,7 +4,7 @@ import 'package:demopico/features/profile/infra/datasource/firebase_profile_upda
 import 'package:demopico/features/user/domain/models/user.dart';
 
 class ProfileUpdateRepository
-    implements IProfileDatabaseUpdateRepository {
+    implements IProfileUpdateRepository {
   static ProfileUpdateRepository? _profileUpdateRepository;
 
  static ProfileUpdateRepository get getInstance {
