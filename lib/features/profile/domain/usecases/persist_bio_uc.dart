@@ -25,10 +25,10 @@ class PersistBioUc {
   final IProfileReadRepository profileReadRepositoryIMP;
   final IProfileUpdateRepository profileUpdateRepositoryIMP;
 
-  void atualizar(String newBio, UserM user) {
+  void set(String newBio, UserM user) {
     try {
       if (user.id == null) throw UserNotFoundFailure();
-      profileUpdateRepositoryIMP.atualizarBio(newBio , user);
+      profileUpdateRepositoryIMP.updateBio(newBio , user);
     } on FirebaseException catch (e) {
       if (kDebugMode) print(e);
       rethrow;
@@ -38,9 +38,9 @@ class PersistBioUc {
     }
   }
 
-  Future<String> pegar(UserM userModel) async {
+  Future<String> get(UserM userModel) async {
     try {
-      return await profileReadRepositoryIMP.pegarBio(userModel);
+      return await profileReadRepositoryIMP.getBio(userModel);
     } on FirebaseException catch (e) {
       if (kDebugMode) print(e);
       rethrow;

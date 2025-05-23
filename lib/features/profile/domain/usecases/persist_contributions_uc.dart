@@ -25,10 +25,10 @@ class PersistContributionsUc {
   final IProfileReadRepository profileReadRepositoryIMP;
   final IProfileUpdateRepository profileUpdateRepositoryIMP;
 
-  void atualizar(UserM user) {
+  void set(UserM user) {
     try {
       if (user.id == null) throw UserNotFoundFailure();
-      profileUpdateRepositoryIMP.atualizarContribuicoes(user);
+      profileUpdateRepositoryIMP.updateContributions(user);
     } on FirebaseException catch (e) {
       if (kDebugMode) print(e);
       rethrow;
@@ -38,9 +38,9 @@ class PersistContributionsUc {
     }
   }
 
-  Future<int> pegar(UserM userModel) async {
+  Future<int> get(UserM userModel) async {
     try {
-      return await profileReadRepositoryIMP.pegarContribuicoes(userModel);
+      return await profileReadRepositoryIMP.getContributions(userModel);
     } on FirebaseException catch (e) {
       if (kDebugMode) print(e);
       rethrow;

@@ -1,5 +1,5 @@
-import 'package:demopico/features/profile/domain/usecases/atualizar_bio_uc.dart';
-import 'package:demopico/features/profile/domain/usecases/atualizar_contribuicoes_uc.dart';
+import 'package:demopico/features/profile/domain/usecases/persist_bio_uc.dart';
+import 'package:demopico/features/profile/domain/usecases/persist_contributions_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/persist_photo_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/persist_followers_uc.dart';
 import 'package:flutter/foundation.dart';
@@ -9,21 +9,21 @@ class ProfileProvider extends ChangeNotifier {
 
   static ProfileProvider get getInstance {
     _profileProvider ??= ProfileProvider(
-        atualizarBioUc: AtualizarBioUc.getInstance,
-        atualizarContribuicoesUc: AtualizarContribuicoesUc.getInstance,
-        atualizarFotoUc: AtualizarFotoUc.getInstance,
-        atualizarSeguidoresUc: AtualizarSeguidoresUc.getInstance);
+        persistContributionsUc: PersistContributionsUc.getInstance,
+        persistFollowersUc: PersistFollowersUc.getInstance,
+        persistBioUc: PersistBioUc.getInstance,
+        persistPhotoUc: PersistPhotoUc.getInstance);
     return _profileProvider!;
   }
 
   ProfileProvider(
-      {required this.atualizarBioUc,
-      required this.atualizarContribuicoesUc,
-      required this.atualizarFotoUc,
-      required this.atualizarSeguidoresUc});
+      {required this.persistContributionsUc,
+      required this.persistFollowersUc,
+      required this.persistBioUc,
+      required this.persistPhotoUc});
 
-  final AtualizarBioUc atualizarBioUc;
-  final AtualizarContribuicoesUc atualizarContribuicoesUc;
-  final AtualizarFotoUc atualizarFotoUc;
-  final AtualizarSeguidoresUc atualizarSeguidoresUc;
+  final PersistBioUc persistBioUc;
+  final PersistContributionsUc persistContributionsUc;
+  final PersistPhotoUc persistPhotoUc;
+  final PersistFollowersUc persistFollowersUc;
 }

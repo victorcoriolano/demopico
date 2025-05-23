@@ -25,10 +25,10 @@ class PersistFollowersUc {
   final IProfileReadRepository profileReadRepositoryIMP;
   final IProfileUpdateRepository profileUpdateRepositoryIMP;
 
-  void atualizar(UserM user) {
+  void set(UserM user) {
     try {
       if (user.id == null) throw UserNotFoundFailure();
-      profileUpdateRepositoryIMP.atualizarSeguidores(user);
+      profileUpdateRepositoryIMP.updateFollowers(user);
     } on FirebaseException catch (e) {
       if (kDebugMode) print(e);
       rethrow;
@@ -38,9 +38,9 @@ class PersistFollowersUc {
     }
   }
 
-  Future<int> pegar(UserM userModel) async {
+  Future<int> get(UserM userModel) async {
     try {
-      return await profileReadRepositoryIMP.pegarSeguidores(userModel);
+      return await profileReadRepositoryIMP.getFollowers(userModel);
     } on FirebaseException catch (e) {
       if (kDebugMode) print(e);
       rethrow;

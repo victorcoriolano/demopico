@@ -25,10 +25,10 @@ class PersistPhotoUc {
   final IProfileReadRepository profileReadRepositoryIMP;
   final IProfileUpdateRepository profileUpdateRepositoryIMP;
 
-  void atualizar(String newFoto, UserM user) {
+  void set(String newFoto, UserM user) {
     try {
       if (user.id == null) throw UserNotFoundFailure();
-      profileUpdateRepositoryIMP.atualizarFoto(newFoto, user);
+      profileUpdateRepositoryIMP.updatePhoto(newFoto, user);
     } on FirebaseException catch (e) {
       if (kDebugMode) print(e);
       rethrow;
@@ -38,9 +38,9 @@ class PersistPhotoUc {
     }
   }
 
-  Future<String> pegar(UserM userModel) async {
+  Future<String> get(UserM userModel) async {
     try {
-      return await profileReadRepositoryIMP.pegarFoto(userModel);
+      return await profileReadRepositoryIMP.getPhoto(userModel);
     } on FirebaseException catch (e) {
       if (kDebugMode) print(e);
       rethrow;
