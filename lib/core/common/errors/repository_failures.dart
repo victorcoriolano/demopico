@@ -34,7 +34,15 @@ class UnauthenticatedFailure extends RepositoryFailures {
 }
 
 class ExpiredTokenFailure extends RepositoryFailures {
-  ExpiredTokenFailure({super.originalException}): super("Token expirado",code: 'EXPIRED_TOKEN');
+  ExpiredTokenFailure({super.originalException}): super("Token expirado, refaça login",code: 'EXPIRED_TOKEN');
+}
+
+class AccountExistsFailure extends RepositoryFailures {
+  AccountExistsFailure({super.originalException}): super("Conta já existe",code: 'ACCOUNT_EXISTS');
+}
+
+class DataNotFoundFailure extends RepositoryFailures {
+  DataNotFoundFailure({super.originalException}): super("Dados não encontrados",code: 'DATA_NOT_FOUND');
 }
 
 // Pico
@@ -48,39 +56,45 @@ class UserNotFoundFailure extends RepositoryFailures {
 }
 
 // Arquivos 
-class NoFileSelectedFailure extends RepositoryFailures {
-  NoFileSelectedFailure({super.originalException}): super("Nenhum arquivo selecionado", code: 'NO_FILE_SELECTED');
-}
+
 
 class UploadFileFailure extends RepositoryFailures {
   UploadFileFailure({super.originalException}): super("Erro ao fazer upload do arquivo", code: 'UPLOAD_FILE_FAILURE');
 }
 
-class InvalidFileFailure extends RepositoryFailures {
-  InvalidFileFailure({super.originalException}): super("Arquivo inválido", code: 'INVALID_FILE');
-}
-
-class InvalidFileSizeFailure extends RepositoryFailures {
-  InvalidFileSizeFailure({super.originalException}): super("Tamanho do arquivo inválido", code: 'INVALID_FILE_SIZE');
-}
-
-class InvalidFileFormatFailure extends RepositoryFailures {
-  InvalidFileFormatFailure({super.originalException}): super("Formato de arquivo inválido", code: 'INVALID_FILE_FORMAT');
+class FileNotFoundFailure extends RepositoryFailures {
+  FileNotFoundFailure({super.originalException}): super("Arquivo não encontrado", code: 'FILE_NOT_FOUND');
 }
 
 class LimitExceededFailure extends RepositoryFailures {
   LimitExceededFailure({super.originalException}): super("Limite de arquivos excedido", code: 'LIMIT_EXCEEDED');
 }
 
+class OperationCanceledFailure extends RepositoryFailures {
+  OperationCanceledFailure({super.originalException}): super("Operação cancelada", code: 'OPERATION_CANCELED');
+}
+
 // Erro desconhecido
 class UnknownFailure extends RepositoryFailures {
-  UnknownFailure({super.originalException}): super("Erro desconhecido", code: 'UNKNOWN');
+  UnknownFailure({super.originalException, super.stackTrace}): super("Erro desconhecido", code: 'UNKNOWN');
 }
 
 // Internal server error 
 class InternalServerErrorFailure extends RepositoryFailures {
   InternalServerErrorFailure({super.originalException}): super("Erro interno do servidor", code: 'INTERNAL_SERVER_ERROR');
 }
+
+class EmailAlreadyInUseFailure extends RepositoryFailures {
+  EmailAlreadyInUseFailure({super.originalException}): super("Email já está em uso", code: 'EMAIL_ALREADY_IN_USE');  
+}
+
+class InvalidEmailFailure extends RepositoryFailures {
+  InvalidEmailFailure({super.originalException}): super("Formato de e-mail inválido", code: 'INVALID_EMAIL');
+}
+
+class TooManyAttemptsFailure extends RepositoryFailures {
+  TooManyAttemptsFailure({super.originalException}): super("Limite de tentativas excedido", code: 'TOO_MANY_ATTEMPTS');
+} 
 
 
 

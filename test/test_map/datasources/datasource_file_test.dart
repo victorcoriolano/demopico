@@ -98,6 +98,7 @@ void main() {
       when(() => mockStorageReference.child("spots/${fileMock.fileName}"))
       .thenAnswer((_) => mockStorageReference);
       
+      
     });
 
   });

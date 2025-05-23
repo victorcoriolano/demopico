@@ -37,7 +37,7 @@ void main() {
 
         final result = await useCase.createSpot(mockPico);
         expect(result, isA<PicoModel>());
-        expect(result!.id, "1");
+        expect(result.id, "1");
       });
 
       test("deve propagar exception do repository", () async {
