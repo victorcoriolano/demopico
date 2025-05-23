@@ -63,7 +63,7 @@ void main() {
 
     test("deve atualizar um pico", () async {
       when(() => mockDatasource.update(MapperDtoPicomodel.toDto(testPicoNotaNova))).thenAnswer((_) async {});
-
+ 
       final result = await repositoryImpl.updateSpot(testPicoNotaNova);
       expect(result, isA<PicoModel>());
 

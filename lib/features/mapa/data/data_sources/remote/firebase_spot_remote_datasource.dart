@@ -13,7 +13,7 @@ class FirebaseSpotRemoteDataSource implements SpotRemoteDataSource {
   FirebaseSpotRemoteDataSource(this._firebaseFirestore);
 
   @override
-  Future<PicoModelFirebaseDto> create(PicoModelFirebaseDto data) async {
+  Future<PicoFirebaseDTO> create(PicoFirebaseDTO data) async {
     // Salvando os dados no Firestore
     try {
       final doc =
@@ -43,25 +43,25 @@ class FirebaseSpotRemoteDataSource implements SpotRemoteDataSource {
   }
 
   @override
-  Future<PicoModelFirebaseDto> getbyID(String id) async {
+  Future<PicoFirebaseDTO> getbyID(String id) async {
     final doc =
         await _firebaseFirestore.collection(_collectionName).doc(id).get();
     if (!doc.exists) {
       throw PicoNotFoundFailure();
     }
-    final PicoModelFirebaseDto pico = PicoModelFirebaseDto(id: id, data: doc.data()!);
+    final PicoFirebaseDTO pico = PicoFirebaseDTO(id: id, data: doc.data()!);
     return pico;
   }
   
 
   @override
-  Stream<List<PicoModelFirebaseDto>> load([Filters? filtro]) {
+  Stream<List<PicoFirebaseDTO>> load([Filters? filtro]) {
     final quey = executeQuery(filtro);
     try {
       return quey.snapshots().map(
             (snapshot) => snapshot.docs
                 .map((doc) {
-                  PicoModelFirebaseDto pico = PicoModelFirebaseDto(
+                  PicoFirebaseDTO pico = PicoFirebaseDTO(
                     id: doc.id,
                     data: doc.data()! as Map<String, dynamic>,
                   );
@@ -105,7 +105,7 @@ class FirebaseSpotRemoteDataSource implements SpotRemoteDataSource {
 
 
   @override
-  Future<void> update(PicoModelFirebaseDto picoDto) async {
+  Future<void> update(PicoFirebaseDTO picoDto) async {
     try {
       
      await  _firebaseFirestore

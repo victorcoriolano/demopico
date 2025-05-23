@@ -27,7 +27,7 @@ import '../../mocks/mocks_spots.dart';
 
         final result = await dataSource.create(MapperDtoPicomodel.toDto(testPico));
 
-        expect(result, isA<PicoModelFirebaseDto>());
+        expect(result, isA<PicoFirebaseDTO>());
         expect(result.data, isA<Map<String, dynamic>>());
         expect(result.id, isA<String>());
         debugPrint(result.id);
@@ -78,9 +78,9 @@ import '../../mocks/mocks_spots.dart';
         expectLater(
           stream,
           emitsInOrder([
-            isA<List<PicoModelFirebaseDto>>()
+            isA<List<PicoFirebaseDTO>>()
                 .having((list) => list.length, "deve ter 2 instancia", equals(2)),
-            isA<List<PicoModelFirebaseDto>>()
+            isA<List<PicoFirebaseDTO>>()
                 .having((list) => list.length, "deve ter 3 instancia", equals(3)),
             // Após adicionar o pico
           ]),

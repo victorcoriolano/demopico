@@ -1,15 +1,15 @@
-class PicoModelFirebaseDto {
+class PicoFirebaseDTO {
   final String id;
   final Map<String, dynamic> data;
 
-  PicoModelFirebaseDto({
+  PicoFirebaseDTO({
     required this.id,
     required this.data,
   });
 
-  PicoModelFirebaseDto copyWith({
+  PicoFirebaseDTO copyWith({
     String? id,
     Map<String, dynamic>? data,
-  }) => PicoModelFirebaseDto(id: id ?? this.id, data: data ?? this.data);
+  }) => PicoFirebaseDTO(id: id ?? this.id, data: data ?? this.data);
   
 }
