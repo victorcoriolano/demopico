@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:demopico/features/mapa/data/data_sources/interfaces/upload_task_interface.dart';
+import 'package:demopico/features/mapa/data/data_sources/interfaces/i_upload_task_datasource.dart';
 import 'package:demopico/features/mapa/domain/models/upload_file_model.dart';
 import 'package:demopico/features/mapa/domain/models/upload_result_file_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
 
-class FirebaseFileRemoteDatasource implements FileRemoteDataSource {
+class FirebaseFileRemoteDatasource implements IFileRemoteDataSource {
   static FirebaseFileRemoteDatasource? _firebaseFileRemoteDatasource;
 
   static FirebaseFileRemoteDatasource get getInstance {

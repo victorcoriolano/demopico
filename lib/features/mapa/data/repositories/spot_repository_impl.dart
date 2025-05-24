@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:demopico/features/mapa/data/data_sources/interfaces/spot_datasource_interface.dart';
+import 'package:demopico/features/mapa/data/data_sources/interfaces/i_spot_datasource.dart';
 import 'package:demopico/features/mapa/data/mappers/mapper_dto_picomodel.dart';
 import 'package:demopico/features/mapa/domain/entities/filters.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_spot_repository.dart';
@@ -8,7 +8,7 @@ import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 
 class SpotRepositoryImpl implements ISpotRepository {
 
-  final SpotRemoteDataSource dataSource;
+  final ISpotRemoteDataSource dataSource;
   SpotRepositoryImpl(this.dataSource);
 
   

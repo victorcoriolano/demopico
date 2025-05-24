@@ -1,6 +1,6 @@
 
 import 'package:demopico/features/mapa/data/data_sources/remote/firebase_spot_remote_datasource.dart';
-import 'package:demopico/features/mapa/data/dtos/pico_model_firebase_dto.dart';
+import 'package:demopico/features/mapa/data/dtos/spot_firebase_dto.dart';
 import 'package:demopico/features/mapa/data/mappers/mapper_dto_picomodel.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
@@ -27,7 +27,7 @@ import '../../mocks/mocks_spots.dart';
 
         final result = await dataSource.create(MapperDtoPicomodel.toDto(testPico));
 
-        expect(result, isA<PicoFirebaseDTO>());
+        expect(result, isA<SpotFirebaseDTO>());
         expect(result.data, isA<Map<String, dynamic>>());
         expect(result.id, isA<String>());
         debugPrint(result.id);
@@ -78,9 +78,9 @@ import '../../mocks/mocks_spots.dart';
         expectLater(
           stream,
           emitsInOrder([
-            isA<List<PicoFirebaseDTO>>()
+            isA<List<SpotFirebaseDTO>>()
                 .having((list) => list.length, "deve ter 2 instancia", equals(2)),
-            isA<List<PicoFirebaseDTO>>()
+            isA<List<SpotFirebaseDTO>>()
                 .having((list) => list.length, "deve ter 3 instancia", equals(3)),
             // Após adicionar o pico
           ]),
