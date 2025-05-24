@@ -1,17 +1,19 @@
+import 'package:demopico/features/profile/domain/interfaces/i_profile_read_repository.dart';
+import 'package:demopico/features/profile/domain/interfaces/i_profile_update_datasource.dart';
 import 'package:demopico/features/profile/infra/repository/profile_read_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
-import '../../../../mocks/mocks_profile.dart';
+import '../../../mocks/mocks_profile.dart';
 
-class MockProfileFReadRepository extends Mock
-    implements ProfileReadRepository {}
+class MockDatasource extends Mock
+    implements IProfileReadDatasource {}
 
 void main() {
   group("Este group possui todas as operações de read do Profile", () {
-    late MockProfileFReadRepository fakeProfileReadRepository;
+    late MockDatasource fakeProfileReadRepository;
     setUp(() async {
-      fakeProfileReadRepository = MockProfileFReadRepository();
+      fakeProfileReadRepository = ProfileReadRepository.getInstance;
     });
 
     test("Este teste deve retornar uma string de nova foto ", () async {

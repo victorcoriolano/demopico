@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/external/datasources/firestore.dart';
-import 'package:demopico/features/profile/domain/interfaces/i_profile_update_service.dart';
+import 'package:demopico/features/profile/domain/interfaces/i_profile_update_datasource.dart';
 
-class FirebaseProfileUpdateDatasource implements IProfileDatabaseUpdateService {
+class FirebaseProfileUpdateDatasource implements IProfileUpdateDatasource {
   static FirebaseProfileUpdateDatasource? _firebaseProfileUpdateDatasource;
 
   static FirebaseProfileUpdateDatasource get getInstance {

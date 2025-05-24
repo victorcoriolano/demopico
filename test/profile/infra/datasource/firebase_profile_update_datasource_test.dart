@@ -3,7 +3,7 @@ import 'package:demopico/features/profile/infra/datasource/firebase_profile_upda
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
-import '../../../../mocks/mocks_profile.dart';
+import '../../../mocks/mocks_profile.dart';
 
 class MockFirebaseProfileUpdateService extends Mock
     implements FirebaseProfileUpdateDatasource {}

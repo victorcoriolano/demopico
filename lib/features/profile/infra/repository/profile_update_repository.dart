@@ -1,5 +1,5 @@
 import 'package:demopico/features/profile/domain/interfaces/i_profile_update_repository.dart';
-import 'package:demopico/features/profile/domain/interfaces/i_profile_update_service.dart';
+import 'package:demopico/features/profile/domain/interfaces/i_profile_update_datasource.dart';
 import 'package:demopico/features/profile/infra/datasource/firebase_profile_update_datasource.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 
@@ -17,7 +17,7 @@ class ProfileUpdateRepository
   ProfileUpdateRepository(
       {required this.databaseProfileUpdateServiceIMP});
 
-  final IProfileDatabaseUpdateService databaseProfileUpdateServiceIMP;
+  final IProfileUpdateDatasource databaseProfileUpdateServiceIMP;
 
   @override
   void updateBio(String newBio, UserM user) async {

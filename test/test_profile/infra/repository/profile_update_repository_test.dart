@@ -2,19 +2,17 @@ import 'package:demopico/features/profile/infra/repository/profile_update_reposi
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../../../mocks/mocks_profile.dart';
+import '../../../mocks/mocks_profile.dart';
 
 class MockProfileUpdateRepository extends Mock
     implements ProfileUpdateRepository {}
 
 void main() {
   group('Teste update profile data repository', () {
-    late MockProfileUpdateRepository
-        fakeProfileUpdateRepository;
+    late MockProfileUpdateRepository fakeProfileUpdateRepository;
 
     setUp(() async {
-      fakeProfileUpdateRepository =
-          MockProfileUpdateRepository();
+      fakeProfileUpdateRepository = MockProfileUpdateRepository();
     });
 
     test('Este teste deve subir uma nova bio', () async {
