@@ -1,31 +1,36 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:demopico/features/mapa/domain/entities/comment.dart';
-import 'package:demopico/features/mapa/domain/interfaces/i_comment_repository.dart';
-import 'package:demopico/features/mapa/domain/models/comment_model.dart';
+import 'package:demopico/core/common/errors/repository_failures.dart';
+import 'package:demopico/features/mapa/data/data_sources/interfaces/i_comment_spot_datasource.dart';
+import 'package:demopico/features/mapa/data/dtos/comment_spot_firebase_dto.dart';
+import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
 
-class FirebaseCommentService implements ICommentRepository {
-  static FirebaseCommentService? _firebaseCommentService;
-  static FirebaseCommentService get getInstance {
-    _firebaseCommentService ??= FirebaseCommentService(firebaseFirestore: FirebaseFirestore.instance);
-    return _firebaseCommentService!;
+class FirebaseCommentRemoteDataSource implements ICommentSpotDataSource {
+  static FirebaseCommentRemoteDataSource? _firebaseCommentRemoteDataSource;
+  static FirebaseCommentRemoteDataSource get getInstance {
+    _firebaseCommentRemoteDataSource ??= FirebaseCommentRemoteDataSource(firebaseFirestore: FirebaseFirestore.instance);
+    return _firebaseCommentRemoteDataSource!;
   }
 
   final FirebaseFirestore firebaseFirestore;
 
-  FirebaseCommentService({required this.firebaseFirestore});
+  FirebaseCommentRemoteDataSource({required this.firebaseFirestore});
 
   @override
-  Future<CommentModel> addComment(Comment comment) async {
-    final ref = await firebaseFirestore
-        .collection('comments')
-        .add(CommentModel.fromEntity(comment).toJson());
-    return ref.get().then((doc) {
-      return CommentModel.fromJson(doc.data()!, doc.id);
-    });
+  Future<CommenSpotFirebaseDto> create(CommenSpotFirebaseDto comment) async {
+    try {
+      final ref =
+          await firebaseFirestore.collection('comments').add(comment.data);
+      return comment.copyWith(id: ref.id);
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorsMapper.map(e);
+    } catch (e, stacktrace) {
+      throw UnknownFailure(
+          originalException: e as Exception, stackTrace: stacktrace);
+    }
   }
 
   @override
-  Future<List<CommentModel>> getCommentsByPeak(String peakId) async {
+  Future<List<CommenSpotFirebaseDto>> getBySpotId(String peakId) async {
     final querySnapshot = await firebaseFirestore
         .collection('comments')
         .where('peakId', isEqualTo: peakId)
@@ -34,19 +39,19 @@ class FirebaseCommentService implements ICommentRepository {
 
     return querySnapshot.docs.map((doc) {
       final data = doc.data();
-      return CommentModel.fromJson(data, doc.id);
+      return CommenSpotFirebaseDto(id: doc.id, data: data);
     }).toList();
   }
 
   @override
-  Future<void> deleteComment(String commentId) async {
+  Future<void> delete(String commentId) async {
     final ref = firebaseFirestore.collection('comments').doc(commentId);
     return await ref.delete();
   }
 
   @override
-  Future<CommentModel> updateComment(CommentModel comment) async {
+  Future<void> update(CommenSpotFirebaseDto comment) async {
     final ref = firebaseFirestore.collection('comments').doc(comment.id);
-    return await ref.update(comment.toJson()).then((onValue) => comment);
+    await ref.update(comment.data).then((onValue) => comment);
   }
 }
