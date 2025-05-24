@@ -1,19 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
-import 'package:demopico/features/mapa/data/data_sources/interfaces/spot_datasource_interface.dart';
+import 'package:demopico/features/mapa/data/data_sources/interfaces/i_spot_datasource.dart';
 import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
-import 'package:demopico/features/mapa/data/dtos/pico_model_firebase_dto.dart';
+import 'package:demopico/features/mapa/data/dtos/spot_firebase_dto.dart';
 import 'package:demopico/features/mapa/domain/entities/filters.dart';
 
 
-class FirebaseSpotRemoteDataSource implements SpotRemoteDataSource {
+class FirebaseSpotRemoteDataSource implements ISpotRemoteDataSource {
   final FirebaseFirestore _firebaseFirestore;
   final String _collectionName = 'spots';
 
   FirebaseSpotRemoteDataSource(this._firebaseFirestore);
 
   @override
-  Future<PicoFirebaseDTO> create(PicoFirebaseDTO data) async {
+  Future<SpotFirebaseDTO> create(SpotFirebaseDTO data) async {
     // Salvando os dados no Firestore
     try {
       final doc =
@@ -43,25 +43,25 @@ class FirebaseSpotRemoteDataSource implements SpotRemoteDataSource {
   }
 
   @override
-  Future<PicoFirebaseDTO> getbyID(String id) async {
+  Future<SpotFirebaseDTO> getbyID(String id) async {
     final doc =
         await _firebaseFirestore.collection(_collectionName).doc(id).get();
     if (!doc.exists) {
       throw PicoNotFoundFailure();
     }
-    final PicoFirebaseDTO pico = PicoFirebaseDTO(id: id, data: doc.data()!);
+    final SpotFirebaseDTO pico = SpotFirebaseDTO(id: id, data: doc.data()!);
     return pico;
   }
   
 
   @override
-  Stream<List<PicoFirebaseDTO>> load([Filters? filtro]) {
+  Stream<List<SpotFirebaseDTO>> load([Filters? filtro]) {
     final quey = executeQuery(filtro);
     try {
       return quey.snapshots().map(
             (snapshot) => snapshot.docs
                 .map((doc) {
-                  PicoFirebaseDTO pico = PicoFirebaseDTO(
+                  SpotFirebaseDTO pico = SpotFirebaseDTO(
                     id: doc.id,
                     data: doc.data()! as Map<String, dynamic>,
                   );
@@ -105,7 +105,7 @@ class FirebaseSpotRemoteDataSource implements SpotRemoteDataSource {
 
 
   @override
-  Future<void> update(PicoFirebaseDTO picoDto) async {
+  Future<void> update(SpotFirebaseDTO picoDto) async {
     try {
       
       await  _firebaseFirestore
