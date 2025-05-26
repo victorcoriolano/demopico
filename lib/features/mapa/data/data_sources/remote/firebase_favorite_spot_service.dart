@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:demopico/features/mapa/data/adapters/pico_favorito_firebase_adapter.dart';
+import 'package:demopico/features/mapa/data/mappers/mapper_pico_favorito_firebase.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_favorito.dart';
 import 'package:demopico/features/mapa/domain/models/pico_favorito_model.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_favorite_spot_repository.dart';
@@ -32,12 +32,12 @@ class FirebaseFavoriteSpotService implements IFavoriteSpotRepository {
   @override
   Future<PicoFavoritoModel> saveSpot(PicoFavorito picoFav) async {
     try {
-      final data = PicoFavoritoFirebaseAdapter.toFirebase(picoFav, firebaseFirestore);
+      final data = MapperFavoriteSpotFirebase.toFirebase(picoFav, firebaseFirestore);
 
       final snapshot =
           await firebaseFirestore.collection("picosFavoritados").add(data);
       final docPicoFav = await snapshot.get();
-      return PicoFavoritoFirebaseAdapter.fromFirebase(docPicoFav);
+      return MapperFavoriteSpotFirebase.fromFirebase(docPicoFav);
     } on FirebaseException catch (e) {
       throw Exception("Erro no firevase ao salvar pico: $e");
     } catch (e) {
@@ -53,7 +53,7 @@ class FirebaseFavoriteSpotService implements IFavoriteSpotRepository {
           .where("idUsuario", isEqualTo: idUser)
           .get();
       return snapshot.docs.map((doc) {
-        return PicoFavoritoFirebaseAdapter.fromFirebase(doc);
+        return MapperFavoriteSpotFirebase.fromFirebase(doc);
       }).toList();
     } catch (e) {
       throw Exception("Erro ao listar os picos favoritos: $e");
