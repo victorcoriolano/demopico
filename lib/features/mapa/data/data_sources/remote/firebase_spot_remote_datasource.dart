@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/mapa/data/data_sources/interfaces/i_spot_datasource.dart';
+import 'package:demopico/features/mapa/data/dtos/firebase_dto.dart';
 import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
-import 'package:demopico/features/mapa/data/dtos/spot_firebase_dto.dart';
 import 'package:demopico/features/mapa/domain/entities/filters.dart';
 
 
@@ -13,7 +13,7 @@ class FirebaseSpotRemoteDataSource implements ISpotRemoteDataSource {
   FirebaseSpotRemoteDataSource(this._firebaseFirestore);
 
   @override
-  Future<SpotFirebaseDTO> create(SpotFirebaseDTO data) async {
+  Future<FirebaseDTO> create(FirebaseDTO data) async {
     // Salvando os dados no Firestore
     try {
       final doc =
@@ -43,25 +43,25 @@ class FirebaseSpotRemoteDataSource implements ISpotRemoteDataSource {
   }
 
   @override
-  Future<SpotFirebaseDTO> getbyID(String id) async {
+  Future<FirebaseDTO> getbyID(String id) async {
     final doc =
         await _firebaseFirestore.collection(_collectionName).doc(id).get();
     if (!doc.exists) {
       throw PicoNotFoundFailure();
     }
-    final SpotFirebaseDTO pico = SpotFirebaseDTO(id: id, data: doc.data()!);
+    final FirebaseDTO pico = FirebaseDTO(id: id, data: doc.data()!);
     return pico;
   }
   
 
   @override
-  Stream<List<SpotFirebaseDTO>> load([Filters? filtro]) {
+  Stream<List<FirebaseDTO>> load([Filters? filtro]) {
     final quey = executeQuery(filtro);
     try {
       return quey.snapshots().map(
             (snapshot) => snapshot.docs
                 .map((doc) {
-                  SpotFirebaseDTO pico = SpotFirebaseDTO(
+                  FirebaseDTO pico = FirebaseDTO(
                     id: doc.id,
                     data: doc.data()! as Map<String, dynamic>,
                   );
@@ -105,7 +105,7 @@ class FirebaseSpotRemoteDataSource implements ISpotRemoteDataSource {
 
 
   @override
-  Future<void> update(SpotFirebaseDTO picoDto) async {
+  Future<void> update(FirebaseDTO picoDto) async {
     try {
       
       await  _firebaseFirestore

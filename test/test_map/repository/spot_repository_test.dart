@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:demopico/features/mapa/data/data_sources/remote/firebase_spot_remote_datasource.dart';
-import 'package:demopico/features/mapa/data/dtos/spot_firebase_dto.dart';
+import 'package:demopico/features/mapa/data/dtos/firebase_dto.dart';
 import 'package:demopico/features/mapa/data/mappers/mapper_dto_picomodel.dart';
 import 'package:demopico/features/mapa/data/repositories/spot_repository_impl.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
@@ -14,7 +14,7 @@ import '../../mocks/mocks_spots.dart';
 
 class MockDatasource extends Mock implements FirebaseSpotRemoteDataSource {
   @override
-  Future<void> update(SpotFirebaseDTO pico) {
+  Future<void> update(FirebaseDTO pico) {
     return Future.value();
   }
 }
@@ -40,7 +40,7 @@ void main() {
     test("deve criar um pico com sucesso e retornar a instancia como pico",
         () async {
       // criando fluxo que ocorrerá se der tudo certo
-       when(() => mockDatasource.create(any<SpotFirebaseDTO>()))
+       when(() => mockDatasource.create(any<FirebaseDTO>()))
           .thenAnswer((_) => Future.value(MapperDtoPicomodel.toDto(testPico))); 
 
       //chamando o método

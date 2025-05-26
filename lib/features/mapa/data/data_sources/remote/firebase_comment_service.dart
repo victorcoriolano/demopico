@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/mapa/data/data_sources/interfaces/i_comment_spot_datasource.dart';
-import 'package:demopico/features/mapa/data/dtos/comment_spot_firebase_dto.dart';
+import 'package:demopico/features/mapa/data/dtos/firebase_dto.dart';
 import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
 
 class FirebaseCommentRemoteDataSource implements ICommentSpotDataSource {
@@ -16,7 +16,7 @@ class FirebaseCommentRemoteDataSource implements ICommentSpotDataSource {
   FirebaseCommentRemoteDataSource({required this.firebaseFirestore});
 
   @override
-  Future<CommenSpotFirebaseDto> create(CommenSpotFirebaseDto comment) async {
+  Future<FirebaseDTO> create(FirebaseDTO comment) async {
     try {
       final ref =
           await firebaseFirestore.collection('comments').add(comment.data);
@@ -30,7 +30,7 @@ class FirebaseCommentRemoteDataSource implements ICommentSpotDataSource {
   }
 
   @override
-  Future<List<CommenSpotFirebaseDto>> getBySpotId(String peakId) async {
+  Future<List<FirebaseDTO>> getBySpotId(String peakId) async {
     final querySnapshot = await firebaseFirestore
         .collection('comments')
         .where('peakId', isEqualTo: peakId)
@@ -39,7 +39,7 @@ class FirebaseCommentRemoteDataSource implements ICommentSpotDataSource {
 
     return querySnapshot.docs.map((doc) {
       final data = doc.data();
-      return CommenSpotFirebaseDto(id: doc.id, data: data);
+      return FirebaseDTO(id: doc.id, data: data);
     }).toList();
   }
 
@@ -50,8 +50,7 @@ class FirebaseCommentRemoteDataSource implements ICommentSpotDataSource {
   }
 
   @override
-  Future<void> update(CommenSpotFirebaseDto comment) async {
-    final ref = firebaseFirestore.collection('comments').doc(comment.id);
-    await ref.update(comment.data).then((onValue) => comment);
+  Future<void> update(FirebaseDTO comment) async {    
+    await firebaseFirestore.collection("comments").doc(comment.id).update(comment.data);
   }
 }
