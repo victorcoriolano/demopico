@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demopico/features/mapa/data/data_sources/interfaces/i_favorite_spot_remote_datasource.dart';
+import 'package:demopico/features/mapa/data/dtos/firebase_dto.dart';
 import 'package:demopico/features/mapa/data/mappers/mapper_pico_favorito_firebase.dart';
-import 'package:demopico/features/mapa/domain/entities/pico_favorito.dart';
-import 'package:demopico/features/mapa/domain/models/pico_favorito_model.dart';
-import 'package:demopico/features/mapa/domain/interfaces/i_favorite_spot_repository.dart';
 
-class FirebaseFavoriteSpotService implements IFavoriteSpotRepository {
+class FirebaseFavoriteSpotService implements IFavoriteSpotRemoteDataSource {
 
   static FirebaseFavoriteSpotService? _favoriteSpotService;
   static FirebaseFavoriteSpotService get getInstance {
@@ -18,19 +17,7 @@ class FirebaseFavoriteSpotService implements IFavoriteSpotRepository {
 
 
   @override
-  Future<void> deleteSave(String idPicoFavorito) async {
-    try {
-      await firebaseFirestore
-          .collection("picosFavoritados")
-          .doc(idPicoFavorito)
-          .delete();
-    } catch (e) {
-      throw Exception("Erro ao deletar o pico favoritado: $e");
-    }
-  }
-
-  @override
-  Future<PicoFavoritoModel> saveSpot(PicoFavorito picoFav) async {
+  Future<FirebaseDTO> saveSpot(FirebaseDTO picoFav) async {
     try {
       final data = MapperFavoriteSpotFirebase.toFirebase(picoFav, firebaseFirestore);
 
@@ -46,7 +33,7 @@ class FirebaseFavoriteSpotService implements IFavoriteSpotRepository {
   }
 
   @override
-  Future<List<PicoFavoritoModel>> listFavoriteSpot(String idUser) async {
+  Future<List<FirebaseDTO>> listFavoriteSpot(String idUser) async {
     try {
       final snapshot = await firebaseFirestore
           .collection("picosFavoritados")
@@ -57,6 +44,18 @@ class FirebaseFavoriteSpotService implements IFavoriteSpotRepository {
       }).toList();
     } catch (e) {
       throw Exception("Erro ao listar os picos favoritos: $e");
+    }
+  }
+  
+  @override
+  Future<void> removeFavorito(String id) async{
+    try {
+      await firebaseFirestore
+          .collection("picosFavoritados")
+          .doc(id)
+          .delete();
+    } catch (e) {
+      throw Exception("Erro ao deletar o pico favoritado: $e");
     }
   }
 }
