@@ -7,6 +7,12 @@ import 'package:demopico/features/mapa/domain/entities/filters.dart';
 
 
 class FirebaseSpotRemoteDataSource implements ISpotRemoteDataSource {
+
+  static FirebaseSpotRemoteDataSource? _firebaseSpotRemoteDataSource;
+
+  static FirebaseSpotRemoteDataSource get getInstance => 
+    _firebaseSpotRemoteDataSource ??= FirebaseSpotRemoteDataSource(FirebaseFirestore.instance);
+
   final FirebaseFirestore _firebaseFirestore;
   final String _collectionName = 'spots';
 
