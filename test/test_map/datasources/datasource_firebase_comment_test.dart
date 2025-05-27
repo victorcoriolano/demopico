@@ -76,7 +76,7 @@ void main() {
       
       final updated = await service.getBySpotId("1");
       
-      expect(updated[0].data['content'], equals("teste atualizado"));
+      expect(updated.last.data['content'], equals("teste atualizado"));
 
     });
   });
