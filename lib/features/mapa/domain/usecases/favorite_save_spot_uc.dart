@@ -1,5 +1,5 @@
-import 'package:demopico/features/mapa/data/data_sources/remote/firebase_favorite_spot_service.dart';
-import 'package:demopico/features/mapa/data/data_sources/remote/firebase_spots_service.dart';
+import 'package:demopico/features/mapa/data/repositories/favorite_spot_repository.dart';
+import 'package:demopico/features/mapa/data/repositories/spot_repository_impl.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_favorito.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_favorite_spot_repository.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_spot_repository.dart';
@@ -9,8 +9,8 @@ class SaveSpotUc {
   static SaveSpotUc? _saveSpotUc;
   static get getInstance {
     _saveSpotUc ??= SaveSpotUc(
-        spotFavRepositoryIMP: FirebaseFavoriteSpotService.getInstance,
-        spotRepositoryIMP: FirebaseSpotsService.getInstance);
+        spotFavRepositoryIMP: FavoriteSpotRepository.getInstance,
+        spotRepositoryIMP: SpotRepositoryImpl.getInstance);
     return _saveSpotUc!;
   }
 
