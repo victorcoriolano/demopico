@@ -4,7 +4,6 @@ import 'package:demopico/features/mapa/data/dtos/firebase_dto.dart';
 import 'package:demopico/features/mapa/data/mappers/mapper_dto_commentmodel.dart';
 import 'package:demopico/features/mapa/domain/models/comment_model.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -70,13 +69,15 @@ void main() {
     test("Deve atualizar um comentário", () async {
       //criando fakes
       final commentBD = await service.create(MapperDtoCommentmodel.toDto(comment));
-            var id = commentBD.id;
+      var id = commentBD.id;
       final updateComment = comment.copyWith(content: "teste atualizado", id: id);
         
       await service.update(MapperDtoCommentmodel.toDto(updateComment));
       
       final updated = await service.getBySpotId("1");
+      
       expect(updated[0].data['content'], equals("teste atualizado"));
+
     });
   });
 }  
