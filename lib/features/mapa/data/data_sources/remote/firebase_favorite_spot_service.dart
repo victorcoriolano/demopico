@@ -1,17 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/mapa/data/data_sources/interfaces/i_favorite_spot_remote_datasource.dart';
 import 'package:demopico/features/mapa/data/dtos/firebase_dto.dart';
+import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
 import 'package:demopico/features/mapa/data/mappers/mapper_pico_favorito_firebase.dart';
 
-class FirebaseFavoriteSpotService implements IFavoriteSpotRemoteDataSource {
+class FirebaseFavoriteSpotRemoteDataSource implements IFavoriteSpotRemoteDataSource {
 
-  static FirebaseFavoriteSpotService? _favoriteSpotService;
-  static FirebaseFavoriteSpotService get getInstance {
-    _favoriteSpotService ??= FirebaseFavoriteSpotService(firebaseFirestore: FirebaseFirestore.instance);
+  static FirebaseFavoriteSpotRemoteDataSource? _favoriteSpotService;
+  static FirebaseFavoriteSpotRemoteDataSource get getInstance {
+    _favoriteSpotService ??= FirebaseFavoriteSpotRemoteDataSource(firebaseFirestore: FirebaseFirestore.instance);
     return _favoriteSpotService!;
   }
     
-  FirebaseFavoriteSpotService({required this.firebaseFirestore});
+  FirebaseFavoriteSpotRemoteDataSource({required this.firebaseFirestore});
 
   final FirebaseFirestore firebaseFirestore;
 
@@ -26,9 +28,11 @@ class FirebaseFavoriteSpotService implements IFavoriteSpotRemoteDataSource {
       final docPicoFav = await snapshot.get();
       return MapperFavoriteSpotFirebase.fromFirebase(docPicoFav);
     } on FirebaseException catch (e) {
-      throw Exception("Erro no firevase ao salvar pico: $e");
-    } catch (e) {
-      throw Exception("Erro desconhecido ao salvar pico: $e");
+      throw FirebaseErrorsMapper.map(e);
+    } on Exception catch (e, stackTrace) {
+      throw UnknownFailure(originalException: e ,stackTrace: stackTrace);
+    }catch (e, st) {
+      throw UnknownError("Erro desconhecido: $e", stackTrace: st);
     }
   }
 
@@ -37,7 +41,7 @@ class FirebaseFavoriteSpotService implements IFavoriteSpotRemoteDataSource {
     try {
       final snapshot = await firebaseFirestore
           .collection("picosFavoritados")
-          .where("idUsuario", isEqualTo: idUser)
+          .where("idUser", isEqualTo: idUser)
           .get();
       return snapshot.docs.map((doc) {
         return MapperFavoriteSpotFirebase.fromFirebase(doc);
@@ -54,8 +58,10 @@ class FirebaseFavoriteSpotService implements IFavoriteSpotRemoteDataSource {
           .collection("picosFavoritados")
           .doc(id)
           .delete();
-    } catch (e) {
-      throw Exception("Erro ao deletar o pico favoritado: $e");
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorsMapper.map(e);
+    }catch (e, st) {
+      throw UnknownFailure(originalException: e as Exception, stackTrace: st);
     }
   }
 }
