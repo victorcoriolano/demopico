@@ -10,7 +10,7 @@ class FavoriteSpotRepository implements IFavoriteSpotRepository {
   static FavoriteSpotRepository? _favoriteSpotRepository;
   static FavoriteSpotRepository get getInstance {
     _favoriteSpotRepository ??= FavoriteSpotRepository(
-      FirebaseFavoriteSpotService.getInstance
+      FirebaseFavoriteSpotRemoteDataSource.getInstance
     );
     return _favoriteSpotRepository!;
   }
