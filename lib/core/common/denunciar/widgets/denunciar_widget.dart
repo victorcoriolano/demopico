@@ -58,10 +58,12 @@ class _DenunciaDialogState extends State<DenunciaDialog> {
       );
 
       await _denunciarService.salvarDenuncia(denuncia);
-      Navigator.of(context).pop(); // Fecha o dialog após sucesso
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Denúncia enviada com sucesso!')),
-      );
+      if (!mounted) return;
+        Navigator.of(context).pop(); // Fecha o dialog após sucesso
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Denúncia enviada com sucesso!')),
+        );
+      
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Erro ao enviar denúncia. Tente novamente.')),

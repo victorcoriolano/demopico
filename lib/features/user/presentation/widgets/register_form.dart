@@ -150,6 +150,7 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                       UserCredentialsSignIn credentialsSignIn =
                           UserCredentialsSignIn(
                               email: email, password: password);
+
                       UserCredentialsSignUp credential = UserCredentialsSignUp(
                           nome: vulgo,
                           isColetivo: isColetivo,
@@ -157,7 +158,7 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
 
                       final resultadoRegistro =
                           await _authUserProvider.signUp(credential);
-                      print(resultadoRegistro);
+            
                       if (resultadoRegistro == true) {
                         _vulgoCadastro.clear();
                         _emailController.clear();
@@ -166,7 +167,6 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                         Get.to(() => const UserPage());
                       } else {
                         Get.snackbar('Erro', 'Falha ao registrar usuário');
-                        print("deu mel");
                       }
                       // ir pra página de perfil se der tudo certo
                     }

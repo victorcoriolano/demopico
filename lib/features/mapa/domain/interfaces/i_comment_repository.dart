@@ -1,8 +1,11 @@
 import 'package:demopico/features/mapa/domain/entities/comment.dart';
+import 'package:demopico/features/mapa/domain/models/comment_model.dart';
 
 abstract class ICommentRepository {
 
-  Future<void> addComment(Comment comment) ;
-  Future<List<Comment>> getCommentsByPeak(String peakId);
+  Future<CommentModel> addComment(Comment comment);
+  Future<CommentModel> updateComment(CommentModel comment);
+  Future<void> deleteComment(String commentId);
+  Future<List<CommentModel>> getCommentsByPeak(String peakId);
 
 }

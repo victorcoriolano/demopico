@@ -1,23 +1,25 @@
-import 'dart:io';
 
+import 'package:demopico/features/mapa/data/repositories/files_storage_repository.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_save_image_repository.dart';
+import 'package:demopico/features/mapa/domain/models/upload_file_model.dart';
+import 'package:demopico/features/mapa/domain/models/upload_result_file_model.dart';
 
 
 class SaveImageUC{
-  final ISaveImageRepository isaveImageRepository;
 
-  SaveImageUC(this.isaveImageRepository);
+  static SaveImageUC? _saveImageUC;
 
-  Future<List<String>> saveImage(List<File> files) async{
-    try{
-      List<String> urls = await isaveImageRepository.saveFiles(files);
-      if(urls.isEmpty){
-        throw Exception("Não foi possível salvar a imagem");
-      }
-      return urls;
-    } on Exception catch(e) {
-      print("Erro ao salvar imagem no firebase: $e");
-      return [];
-    }
+ static SaveImageUC  get getInstance{
+    _saveImageUC ??= SaveImageUC(saveImageRepositoryIMP: FilesStorageRepository.getInstance);
+    return _saveImageUC!;
+  } 
+
+  final ISaveImageRepository saveImageRepositoryIMP;
+
+  SaveImageUC({required this.saveImageRepositoryIMP});
+
+  List<UploadResultFileModel> saveImage(List<UploadFileModel> files) {
+    final uploadTask = saveImageRepositoryIMP.saveFiles(files);
+    return uploadTask.map((task) => task.upload).toList();
   }
 }

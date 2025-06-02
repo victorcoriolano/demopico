@@ -1,5 +1,5 @@
 import 'package:demopico/core/app/home_page.dart';
-import 'package:demopico/core/common/errors/failure_server.dart';
+import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/user/domain/entity/user_credentials.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/features/user/presentation/pages/register_page.dart';
@@ -126,21 +126,20 @@ class _LoginFormState extends State<LoginForm> with Validators {
                   bool loginSuccess;
 
                   try {
-                    if (!vulgo.contains("@")) {
+                    if (vulgo.contains("@")) {
                       UserCredentialsSignIn credential = UserCredentialsSignIn(
                           email: vulgo, password: password);
-                      await _authUserProvider.loginEmail(credential);
-                      loginSuccess = true;
+                      loginSuccess =
+                          await _authUserProvider.loginEmail(credential);
                     } else {
                       UserCredentialsSignInVulgo credential =
                           UserCredentialsSignInVulgo(
                               vulgo: vulgo, password: password);
 
-                      await _authUserProvider.loginVulgo(credential);
-                      loginSuccess = true;
+                      loginSuccess =
+                          await _authUserProvider.loginVulgo(credential);
                     }
                   } catch (e) {
-                    print("Erro ao fazer login: $e");
                     loginSuccess = false;
                   }
                   setState(() {
@@ -200,7 +199,7 @@ class _LoginFormState extends State<LoginForm> with Validators {
             SnackBar(content: Text(UserNotFoundFailure().message)));
       case 'default':
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(ServerFailure().message)));
+            .showSnackBar(const SnackBar(content: Text("Algo deu errado")));
     }
   }
 }

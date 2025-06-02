@@ -1,7 +1,7 @@
+import 'package:demopico/features/mapa/domain/entities/filters.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
-import 'package:demopico/features/mapa/presentation/widgets/marker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -12,7 +12,9 @@ class TopSideMapWidget extends StatefulWidget implements PreferredSizeWidget {
   const TopSideMapWidget({super.key});
 
   @override
-  _TopSideMapWidgetState createState() => _TopSideMapWidgetState();
+  State<TopSideMapWidget> createState() {
+    return _TopSideMapWidgetState();
+  }
 
   @override
   Size get preferredSize => const Size.fromHeight(80);
@@ -76,21 +78,15 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
   }
 
   void encontrouPico(String namePico) {
-    final spotProvider =
-        Provider.of<SpotControllerProvider>(context, listen: false);
+    
     final provider = Provider.of<MapControllerProvider>(context, listen: false);
-    Marker? markerEncontrado = spotProvider.markers
+    Marker? markerEncontrado = provider.markers
         .toList()
         .firstWhereOrNull((markers) => markers.markerId.value.toLowerCase() == namePico.toLowerCase());
     if (markerEncontrado != null) {
       removeOverlay();
       provider.reajustarCameraPosition(markerEncontrado.position);
-      showPicoModal(
-        context,
-        spotProvider.picosPesquisados.firstWhere(
-          (pico) => pico.picoName == markerEncontrado.markerId.value,
-        ),
-      );
+      
     } else {
       
       ScaffoldMessenger.of(context).showSnackBar(
@@ -158,10 +154,14 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
               if (value == 'Utilidades') {
                 mostrarAtributos(context);
               } else if (value == 'Modalidade') {
-                print("Filtrar por utilidades");
-              } else {
-                spotProvider.filtrarPicosPorTipo(value, context);
-              }
+              } else if (value == 'todos'){
+                spotProvider.aplicarFiltro();
+              } 
+              
+              Filters filterTipo = Filters(
+                tipo: value
+              );
+              spotProvider.aplicarFiltro(filterTipo);
             },
             color: Colors.white,
             itemBuilder: (BuildContext context) {
@@ -220,7 +220,12 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
                   value: "Modalidade",
                   child: DropdownMenu(
                     hintText: 'Modalidade',
-                    onSelected: (value) => spotProvider.filtrarModalidade(value, context),
+                    onSelected: (value) {
+                      Filters filterModalidade = Filters(
+                        modalidade: value
+                      );
+                      spotProvider.aplicarFiltro(filterModalidade);
+                    },
                     dropdownMenuEntries: const [
                       DropdownMenuEntry(value: 'Skate', label: 'Skate'),
                       DropdownMenuEntry(value: 'Parkuor', label: 'Parkuor'),
@@ -272,7 +277,10 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
             actions: [
               TextButton(
                 onPressed: (){
-                  provider.filtrarPorUtilidade(context);
+                  var filtro = Filters(
+                    utilidades: provider.utilidadesSelecionadas
+                  );
+                  provider.aplicarFiltro(filtro);
                   Navigator.pop(context);
                 }, 
                 child: const Text("Filtrar"),

@@ -40,10 +40,10 @@ class _HomePageState extends State<HomePage> {
             log('$value');
           },
           controller: _pageController,
-          children: [
-            const MapPage(),
+          children: const [
+            MapPage(),
             CentralPage(),
-            const AuthWrapper(),
+            AuthWrapper(),
           ],
         ),
       ),

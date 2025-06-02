@@ -1,8 +1,16 @@
 import 'package:demopico/features/mapa/domain/entities/comment.dart';
+import 'package:demopico/features/mapa/domain/models/comment_model.dart';
 import 'package:demopico/features/mapa/domain/usecases/comment_spot_uc.dart';
 import 'package:flutter/material.dart';
 
 class CommentController extends ChangeNotifier {
+  
+  static CommentController? _commentController;
+   static CommentController  get getInstance{
+    _commentController ??= CommentController(useCase: CommentSpotUC.getInstance);
+    return _commentController!;
+  } 
+
   bool _isLoading = true;
   String? _error;
   List<Comment> _comments = [];
@@ -13,7 +21,7 @@ class CommentController extends ChangeNotifier {
 
   final CommentSpotUC useCase;
 
-  CommentController(this.useCase);
+  CommentController({required this.useCase});
 
 
   // Função para carregar comentários de um servidor ou banco de dados
@@ -23,7 +31,6 @@ class CommentController extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // Substitua por uma chamada real ao banco de dados ou API
 
       _comments = await useCase.execulte(picoId);
 
@@ -37,7 +44,7 @@ class CommentController extends ChangeNotifier {
 
   // Função para adicionar um novo comentário
   Future<void> addComment(String picoId, String content) async {
-    final newComment = Comment(
+    final newComment = CommentModel(
       id: picoId,
       peakId: picoId,
       userId: 'user123', // Pegar o ID do usuário logado

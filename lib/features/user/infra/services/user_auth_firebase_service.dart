@@ -29,10 +29,6 @@ class UserAuthFirebaseService implements IUserAuthService {
     return auth.authStateChanges();
   }
 
-  User? get currentUser {
-    if (auth.currentUser == null) return null;
-    return auth.currentUser;
-  }
 
   @override
   Future<bool> signUp(String inputName, String inputEmail, String password, bool isColetivo) async {
@@ -42,7 +38,7 @@ class UserAuthFirebaseService implements IUserAuthService {
 
       if (signedInUser == null) throw Exception("O usuario não pode ser criado");
 
-      UserM localUser = UserM.userFromFirebaseAuthUser(signedInUser, inputEmail, isColetivo);
+      UserM localUser = UserM.userFromFirebaseAuthUser(signedInUser, inputName, isColetivo);
 
       await userDatabaseRepositoryIMP.addUserDetails(localUser);
       return true;
@@ -81,5 +77,15 @@ class UserAuthFirebaseService implements IUserAuthService {
       }
       throw Exception("Não foi possível deslogar, erro desconhecido");
     }
+  }
+  
+  @override
+  String currentUser() {
+        String? idUser;
+       if (auth.currentUser?.uid == null){
+         throw Exception("Erro ao pegar o currentUser");
+       }
+       idUser = auth.currentUser?.uid;
+    return idUser!;
   }
 }

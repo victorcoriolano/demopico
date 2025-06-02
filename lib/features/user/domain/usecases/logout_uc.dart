@@ -16,7 +16,7 @@ class LogoutUc {
     try {
       return await userAuthRepository.logout();
     } catch (e) {
-      
+      throw Exception("Erro ao deslogar: $e");
     }
   }
 }

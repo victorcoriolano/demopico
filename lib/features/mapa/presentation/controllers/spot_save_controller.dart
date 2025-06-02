@@ -1,21 +1,27 @@
-import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
-import 'package:demopico/features/mapa/domain/usecases/save_spot_uc.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/features/mapa/domain/entities/pico_favorito.dart';
+import 'package:demopico/features/mapa/domain/usecases/favorite_save_spot_uc.dart';
+import 'package:demopico/features/mapa/presentation/dtos/spot_cart_ui_dto.dart';
 import 'package:flutter/material.dart';
 
 class SpotSaveController extends ChangeNotifier {
-  final SaveSpotUc saveSpot;
-  SpotSaveController(this.saveSpot);
+  static SpotSaveController? _spotSaveController;
+  static SpotSaveController get getInstance {
+    _spotSaveController ??=
+        SpotSaveController(saveSpot: SaveSpotUc.getInstance);
+    return _spotSaveController!;
+  }
 
-  List<Pico> picosSalvos = [];
-  Future<bool> savePico(Pico pico, UserM user) async {
-    final salvar = await saveSpot.saveSpot(pico, user);
+  final SaveSpotUc saveSpot;
+  SpotSaveController({required this.saveSpot});
+
+  List<SpotCardUIDto> picosFavoritos = [];
+  String? error;
+  Future<bool> savePico(PicoFavorito picoFav) async {
+    final salvar = await saveSpot.saveSpot(picoFav);
     if (salvar) {
-      picosSalvos.add(pico);
       notifyListeners();
       return true;
     } else {
-      print("Não foi possivel salvar");
       notifyListeners();
       return false;
     }
@@ -23,35 +29,28 @@ class SpotSaveController extends ChangeNotifier {
 
   Future<bool> getPicosSalvos(String idUser) async {
     try {
-      picosSalvos = await saveSpot.listPicoUC(idUser);
-      print("Picos salvos: $picosSalvos");
-      if (picosSalvos.isNotEmpty) {
+      picosFavoritos = await saveSpot.listFavoriteSpot(idUser);
+      if (picosFavoritos.isNotEmpty) {
         return true;
       } else {
-        print("Nenhum pico encontrado para ester user");
+        error = "Picos salvos não encontrados";
         return false;
       }
     } on Exception catch (e) {
-      // TODO
-      print("Erro ao pegar picos salvos: $e");
+      error = "Um erro ao buscar picos salvos foi identificado: $e";
       return false;
     } catch (e) {
-      print("Erro sla: $e");
+      error = "Erro ao buscar picos salvos";
       return false;
     }
   }
 
-  Future<bool> deleteSave(String namePico, String userId) async {
+  Future<bool> deleteSave(String idPicoFavModel) async {
     try {
-      await saveSpot.deleteSaveSpot(userId, namePico);
-      final index =
-          picosSalvos.indexWhere((picoSalvo) => picoSalvo.picoName == namePico);
-      picosSalvos.removeAt(index);
+      await saveSpot.deleteSaveSpot(idPicoFavModel);
       notifyListeners();
-      print("object deleted sucess");
       return true;
     } catch (e) {
-      print("Erro ao del: $e");
       return false;
     }
   }

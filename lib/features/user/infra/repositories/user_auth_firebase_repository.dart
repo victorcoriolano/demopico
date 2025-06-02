@@ -10,7 +10,7 @@ class UserAuthFirebaseRepository implements IUserAuthRepository {
   static UserAuthFirebaseRepository? _userAuthFirebaseRepository;
 
   static UserAuthFirebaseRepository get getInstance {
-    _userAuthFirebaseRepository ??= UserAuthFirebaseRepository(userAuthServiceIMP: UserAuthFirebaseService.getInstace, userDatabaseRepositoryIMP: UserFirebaseRepository.getInstance);
+    _userAuthFirebaseRepository ??= UserAuthFirebaseRepository(userAuthServiceIMP: UserAuthFirebaseService.getInstance, userDatabaseRepositoryIMP: UserFirebaseRepository.getInstance);
     return _userAuthFirebaseRepository!;
   }
 
