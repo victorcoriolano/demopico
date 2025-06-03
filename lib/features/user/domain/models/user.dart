@@ -1,9 +1,7 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/user/domain/enums/auth_enum.dart';
 import 'package:demopico/features/user/domain/enums/sign_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 
 class UserM {
   String? id;
@@ -13,36 +11,68 @@ class UserM {
   String? dob;
   SignMethods? signMethod;
   AuthEnumState? authEnumState = AuthEnumState.notLoggedIn;
-  
+
   //dados profile
   String? description;
   String? pictureUrl;
   String? location;
-  String? conexoes;
-  String? picosAdicionados;
-  String? picosSalvos;
-  
-    //transforma dados do firebase em dados na model
-  //cria um user model de acordo com a nova conta criada
-  factory UserM.userFromFirebaseAuthUser(User user, String name, bool coletivo) {
-      String todayDate ='${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}';
-    return
-        UserM(
-            name: name,
-            email: user.email,
-            description: 'Edite para atualizar sua bio',
-            id: user.uid,
-            picosAdicionados: '0',
-            picosSalvos: '0',
-            location: '',
-            conexoes: '0',
-            dob: todayDate,
-            authEnumState: AuthEnumState.notDetermined,
-            pictureUrl: '',
-            isColetivo: coletivo,
-          );
+  int? conexoes;
+  int? picosAdicionados;
+  int? picosSalvos;
+
+  UserM copyWith({
+    String? id,
+    String? name,
+    String? email,
+    bool? isColetivo,
+    String? dob,
+    SignMethods? signMethod,
+    AuthEnumState? authEnumState,
+    String? description,
+    String? pictureUrl,
+    String? location,
+    int? conexoes,
+    int? picosAdicionados,
+    int? picosSalvos,
+  }) {
+    return UserM(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      isColetivo: isColetivo ?? this.isColetivo,
+      dob: dob ?? this.dob,
+      signMethod: signMethod ?? this.signMethod,
+      authEnumState: authEnumState ?? this.authEnumState,
+      description: description ?? this.description,
+      pictureUrl: pictureUrl ?? this.pictureUrl,
+      location: location ?? this.location,
+      conexoes: conexoes ?? this.conexoes,
+      picosAdicionados: picosAdicionados ?? this.picosAdicionados,
+      picosSalvos: picosSalvos ?? this.picosSalvos,
+    );
   }
 
+  //transforma dados do firebase em dados na model
+  //cria um user model de acordo com a nova conta criada
+  factory UserM.userFromFirebaseAuthUser(
+      User user, String name, bool coletivo) {
+    String todayDate =
+        '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}';
+    return UserM(
+      name: name,
+      email: user.email,
+      description: 'Edite para atualizar sua bio',
+      id: user.uid,
+      picosAdicionados: 0,
+      picosSalvos: 0,
+      location: '',
+      conexoes: 0,
+      dob: todayDate,
+      authEnumState: AuthEnumState.notDetermined,
+      pictureUrl: '',
+      isColetivo: coletivo,
+    );
+  }
 
   factory UserM.fromDocument(DocumentSnapshot doc) {
     return UserM(
@@ -60,27 +90,26 @@ class UserM {
     );
   }
 
-  factory UserM.fromSnapshot(QuerySnapshot doc){
+  factory UserM.fromSnapshot(QuerySnapshot doc) {
     return UserM(email: "email");
   }
-Map<String, dynamic> toJsonMap() {
-  final Map<String, dynamic> data = <String, dynamic>{};
-  data['name'] = name;
-  data['description'] = description;
-  data['id'] = id;
-  data['pictureUrl'] =  pictureUrl;
-  data['location'] = location;
-  data['dob'] = dob;
-  data['conexoes'] =  '0';
-  data['picosAdicionados'] = '0';
-  data['picosSalvos'] =  '0';
-  data['isColetivo'] = isColetivo;
-  data['signMethod'] = signMethod.toString().split('.').last;
-  data['email'] = email;
-  data['authEnumState'] = authEnumState.toString().split('.').last;
-  return data;
-}
-
+  Map<String, dynamic> toJsonMap() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['description'] = description;
+    data['id'] = id;
+    data['pictureUrl'] = pictureUrl;
+    data['location'] = location;
+    data['dob'] = dob;
+    data['conexoes'] = conexoes;
+    data['picosAdicionados'] = picosAdicionados;
+    data['picosSalvos'] = picosSalvos;
+    data['isColetivo'] = isColetivo;
+    data['signMethod'] = signMethod.toString().split('.').last;
+    data['email'] = email;
+    data['authEnumState'] = authEnumState.toString().split('.').last;
+    return data;
+  }
 
   bool get stringify => true;
 
@@ -92,7 +121,7 @@ Map<String, dynamic> toJsonMap() {
       return 'String data was not reached.';
     }
   }
-  
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
