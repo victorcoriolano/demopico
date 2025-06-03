@@ -67,7 +67,7 @@ class SpotControllerProvider extends ChangeNotifier {
     try {
       // Salva o pico no backend
       final picoCriado = await createSpotUseCase.createSpot(pico as PicoModel);
-      spots.add(picoCriado!);
+      spots.add(picoCriado);
 
       notifyListeners();
     } catch (e) {

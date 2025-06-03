@@ -6,7 +6,6 @@ import 'package:demopico/features/mapa/domain/models/upload_result_file_model.da
 abstract class UploadTaskInterface {
   //assinarura do retorno da model 
   UploadResultFileModel get upload;
-
 }
 
 
