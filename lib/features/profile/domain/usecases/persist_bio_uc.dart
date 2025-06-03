@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/core/common/errors/domain_failures.dart';
+import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_profile_read_repository.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_profile_update_repository.dart';
 import 'package:demopico/features/profile/infra/repository/profile_read_repository.dart';
