@@ -11,20 +11,20 @@ import 'package:demopico/features/user/domain/models/user.dart';
    signMethod: SignMethods.email,
    location:'',
    dob:'',
-   conexoes: 0,
-   picosAdicionados: 0,
+   conexoes:'',
+   picosAdicionados:'',
   );
 
   final testeProfileErrado = UserM(
    name: 'artu' ,
    description: null,
-   id: null,
-   pictureUrl: null,
+   id: '1',
+   pictureUrl:'',
    isColetivo: false,
    signMethod: SignMethods.email,
    location:'',
    dob:'',
-   conexoes: null,
-   picosAdicionados: null,
+   conexoes:'',
+   picosAdicionados:'',
   );
 

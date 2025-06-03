@@ -1,7 +1,7 @@
-import 'package:demopico/features/profile/domain/usecases/persist_bio_uc.dart';
-import 'package:demopico/features/profile/domain/usecases/persist_contributions_uc.dart';
-import 'package:demopico/features/profile/domain/usecases/persist_photo_uc.dart';
-import 'package:demopico/features/profile/domain/usecases/persist_followers_uc.dart';
+import 'package:demopico/features/profile/domain/usecases/atualizar_bio_uc.dart';
+import 'package:demopico/features/profile/domain/usecases/atualizar_contribuicoes_uc.dart';
+import 'package:demopico/features/profile/domain/usecases/atualizar_foto_uc.dart';
+import 'package:demopico/features/profile/domain/usecases/atualizar_seguidores_uc.dart';
 import 'package:flutter/foundation.dart';
 
 class ProfileProvider extends ChangeNotifier {
@@ -9,21 +9,21 @@ class ProfileProvider extends ChangeNotifier {
 
   static ProfileProvider get getInstance {
     _profileProvider ??= ProfileProvider(
-        persistContributionsUc: PersistContributionsUc.getInstance,
-        persistFollowersUc: PersistFollowersUc.getInstance,
-        persistBioUc: PersistBioUc.getInstance,
-        persistPhotoUc: PersistPhotoUc.getInstance);
+        atualizarBioUc: AtualizarBioUc.getInstance,
+        atualizarContribuicoesUc: AtualizarContribuicoesUc.getInstance,
+        atualizarFotoUc: AtualizarFotoUc.getInstance,
+        atualizarSeguidoresUc: AtualizarSeguidoresUc.getInstance);
     return _profileProvider!;
   }
 
   ProfileProvider(
-      {required this.persistContributionsUc,
-      required this.persistFollowersUc,
-      required this.persistBioUc,
-      required this.persistPhotoUc});
+      {required this.atualizarBioUc,
+      required this.atualizarContribuicoesUc,
+      required this.atualizarFotoUc,
+      required this.atualizarSeguidoresUc});
 
-  final PersistBioUc persistBioUc;
-  final PersistContributionsUc persistContributionsUc;
-  final PersistPhotoUc persistPhotoUc;
-  final PersistFollowersUc persistFollowersUc;
+  final AtualizarBioUc atualizarBioUc;
+  final AtualizarContribuicoesUc atualizarContribuicoesUc;
+  final AtualizarFotoUc atualizarFotoUc;
+  final AtualizarSeguidoresUc atualizarSeguidoresUc;
 }
