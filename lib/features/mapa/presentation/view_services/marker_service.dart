@@ -18,8 +18,8 @@ class MarkerService {
 
   Future<void> preloadIcons(List<Pico> picos) async {
     for (final pico in picos) {
-      final icon = await const IconMarker(
-        text: '', // Você pode colocar nome ou outro dado aqui
+      final icon = await IconMarker(
+        text: pico.picoName, // Você pode colocar nome ou outro dado aqui
       ).toBitmapDescriptor(
         logicalSize: const Size(150, 150),
         imageSize: const Size(120, 150),
