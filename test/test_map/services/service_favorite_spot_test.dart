@@ -4,7 +4,6 @@ import 'package:demopico/features/mapa/data/dtos/firebase_dto.dart';
 import 'package:demopico/features/mapa/data/mappers/mapper_pico_favorito_firebase.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_favorito.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 
