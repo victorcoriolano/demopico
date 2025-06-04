@@ -38,8 +38,8 @@ class PicoModel extends Pico {
     atributos: Map<String, int>.from(json['atributos'] ?? {}),
     obstaculos: List<String>.from(json['obstaculos'] ?? []),
     utilidades: List<String>.from(json['utilidades'] ?? []),
-    userCreator: json['userCreator'] ?? _padrao,
-    picoName: json['picoName'] ?? _padrao,
+    userCreator: json['criador'] ?? _padrao,
+    picoName: json['nome'] ?? _padrao,
   );
 }
 
@@ -58,8 +58,8 @@ class PicoModel extends Pico {
       'atributos': super.atributos,
       'obstaculos': super.obstaculos,
       'utilidades': super.utilidades,
-      'userCreator': super.userCreator,
-      'picoName': super.picoName,
+      'criador': super.userCreator,
+      'nome': super.picoName,
     };
   }
 
