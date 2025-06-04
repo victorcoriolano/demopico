@@ -29,7 +29,6 @@ class SpotControllerProvider extends ChangeNotifier {
 
   List<Pico> spots = [];
   List<Pico> picosPesquisados = [];
-  List<Pico> myPicos = [];
   Filters? filtrosAtivos;
 
   StreamSubscription? spotsSubscription;
@@ -43,8 +42,8 @@ class SpotControllerProvider extends ChangeNotifier {
   void _loadSpots() {
     spotsSubscription?.cancel();
     spotsSubscription =
-        showAllPicoUseCase.loadSpots(filtrosAtivos).listen((spots) {
-      myPicos = spots;
+        showAllPicoUseCase.loadSpots(filtrosAtivos).listen((events) {
+      spots = events;
       notifyListeners();
     });
   }
