@@ -11,16 +11,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import 'package:provider/provider.dart';
-//import 'package:flutter/src/rendering/box.dart';
+
 
 class ShowPicoWidget extends StatefulWidget {
   final Pico pico;
-  final Map<String, int>? atributos;
+  final ScrollController scrollController;
+  
 
   const ShowPicoWidget(
       {super.key,
       required this.pico,
-      this.atributos});
+      required this.scrollController,
+     });
 
   @override
   State<ShowPicoWidget> createState() => _ShowPicoWidgetState();
@@ -56,7 +58,10 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
 
   void _loadImages() {
     setState(() {
-      images = widget.pico.imgUrls.cast<String>(); //url pico
+      debugPrint("carregando imagens");
+      debugPrint("imagens disponive is: ${widget.pico.imgUrls.length}");
+      images.addAll(widget.pico.imgUrls.cast<String>()); //url pico
+      debugPrint("carregou imagens: ${images.length}");
     });
   }
 
@@ -99,9 +104,11 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("show pico widget");
     final provider = context.read<SpotSaveController>();
 
     return DraggableScrollableSheet(
+
         initialChildSize: 0.6,
         minChildSize: 0.2,
         maxChildSize: 0.86,
@@ -162,8 +169,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                               top: 10, right: 10),
                                           iconSize: 36,
                                           onPressed: () {
-                                            Navigator.pop(
-                                                context); // Retorna para a tela anterior
+                                            Navigator.pop(context); // Retorna para a tela anterior
                                           },
                                         )
                                       ],
@@ -222,10 +228,9 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                 ),
                 Expanded(
                   child: ListView(
-                    controller: scrollController,
+                    controller: widget.scrollController,
                     children: [
                       // Barra de arrastar
-
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             vertical: 20, horizontal: 15),
@@ -465,7 +470,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                               decoration: BoxDecoration(
                                 border: Border.all(
                                     width: 0,
-                                    color: const Color.fromARGB(0, 70, 70, 70)),
+                                    color: const Color.fromARGB(0, 70, 70, 70),),
                               ),
                               child: Column(
                                 children: [
