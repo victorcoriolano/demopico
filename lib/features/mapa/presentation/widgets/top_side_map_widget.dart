@@ -79,13 +79,14 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
 
   void encontrouPico(String namePico) {
     
-    final provider = Provider.of<MapControllerProvider>(context, listen: false);
+    final provider = Provider.of<SpotControllerProvider>(context, listen: false);
+    final controller = Provider.of<MapControllerProvider>(context, listen: false);
     Marker? markerEncontrado = provider.markers
         .toList()
         .firstWhereOrNull((markers) => markers.markerId.value.toLowerCase() == namePico.toLowerCase());
     if (markerEncontrado != null) {
       removeOverlay();
-      provider.reajustarCameraPosition(markerEncontrado.position);
+      controller.reajustarCameraPosition(markerEncontrado.position);
       
     } else {
       
