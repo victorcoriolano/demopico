@@ -6,7 +6,9 @@ import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/usecases/avaliar_spot_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/load_spot_uc.dart';
+import 'package:demopico/features/mapa/presentation/view_services/marker_service.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class SpotControllerProvider extends ChangeNotifier {
   static SpotControllerProvider? _spotControllerProvider;
@@ -30,29 +32,51 @@ class SpotControllerProvider extends ChangeNotifier {
   List<Pico> spots = [];
   List<Pico> picosPesquisados = [];
   Filters? filtrosAtivos;
+  Set<Marker> markers = {};
+  void Function(Pico)? _onTapMarker;
+
+  void setOnTapMarker(void Function(Pico) onTapMarker) {
+    _onTapMarker = onTapMarker;
+  }
+
+  final MarkerService markerService = MarkerService.getInstance;
 
   StreamSubscription? spotsSubscription;
 
   //inicializa o controller carregando os spots do banco
-  void initialize() {
+  void initialize() {// passando o callback para o markerService
     debugPrint("initialize");
     _loadSpots();
   }
 
   //cria um stream para ouvir os spots do banco de dados
-  void _loadSpots() {
-    debugPrint("loadSpots");
+  void _loadSpots() {//repassando o callback para o markerService
+    
+      debugPrint("loadSpots");
     spotsSubscription?.cancel();
     spotsSubscription =
         showAllPicoUseCase.loadSpots(filtrosAtivos).listen((events) {
       spots.addAll(events);
       debugPrint("spots: $spots");
-      notifyListeners();
+       carregarMarkers();
     });
   }
 
+  Future<void> carregarMarkers() async {//repassando o callback para o markerService
+    if (_onTapMarker == null){
+      debugPrint("onTapMarker não pode ser null");
+      return;
+    }
+    await markerService.preloadIcons(spots, _onTapMarker!);
+    debugPrint("markers: ${markerService.markers.length}");
+    markers.addAll(markerService.markers);
+    debugPrint("meus markers: ${markers.length}");
+    notifyListeners();
+  }
+
+
   //aplica os filtros e reacria o stream com os novos filtros
-  void aplicarFiltro([Filters? filtros]) {
+  void aplicarFiltro([Filters? filtros] ) {
     filtrosAtivos = filtros;
     _loadSpots();
   }
