@@ -1,20 +1,11 @@
-import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
-import 'package:demopico/features/mapa/presentation/view_services/marker_service.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class MapControllerProvider extends ChangeNotifier {
-  static MapControllerProvider? _mapControllerProvider;
-  static MapControllerProvider get getInstance {
-    _mapControllerProvider ??= MapControllerProvider(markerService: MarkerService.getInstance);
-    return _mapControllerProvider!;
-  }
+  
 
-  MapControllerProvider({
-    required this.markerService
-  });
 
   GoogleMapController? _mapController;
   LatLng center =
@@ -22,9 +13,8 @@ class MapControllerProvider extends ChangeNotifier {
   String locationMessage = '';
   MapType myMapType = MapType.normal;
   double zoomInicial = 12;
-  Set<Marker> markers = {}; //lista de marcadore que serão adicionados no mapa
+  
 
-  final MarkerService markerService;
 
   GoogleMapController? get mapController => _mapController;
 
@@ -99,24 +89,7 @@ class MapControllerProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> loadMarkersIcons(
-    List<Pico> picos,
-  ) async {
-    await markerService.preloadIcons(picos);
-    
-    
-  }
+  
 
-  void createMarkers(List<Pico> picos) {
-    markers.clear();
-    for (var pico in picos) {
-      markers.add(Marker(
-        markerId: MarkerId(pico.id),
-        position: LatLng(pico.lat, pico.long),
-        icon: markerService.markerIcons[pico.picoName]!,
-        infoWindow: InfoWindow(title: pico.picoName),
-      ));
-    }
-    notifyListeners();
-  }
+  
 }
