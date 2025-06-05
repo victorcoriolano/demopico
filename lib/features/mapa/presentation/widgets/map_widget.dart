@@ -28,13 +28,17 @@ class MapWidgetState extends State<MapWidget> {
 
   Future<void> _initializeProviders() async {
     await _mapControllerProvider.getLocation();
+    _spotControllerProvider.setOnTapMarker(
+      (pico) => ModalHelper.openModalInfoPico(context, pico),
+    );
     _spotControllerProvider.initialize();
-    await _mapControllerProvider
-        .loadMarkersIcons(_spotControllerProvider.spots);
   }
+
+
 
   @override
   Widget build(BuildContext context) {
+    
     // consome os dados do provider para manter a tela atualizada
     return Scaffold(
       body: Consumer<SpotControllerProvider>(
@@ -53,7 +57,7 @@ class MapWidgetState extends State<MapWidget> {
           myLocationEnabled: true,
           myLocationButtonEnabled: true,
           tiltGesturesEnabled: true,
-          markers: _mapControllerProvider.markers,
+          markers: provider.markers,
           onLongPress: (latlang) => ModalHelper.openAddPicoModal(context, latlang),
         ),
       ),
