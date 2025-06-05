@@ -30,7 +30,7 @@ class _CentralPageState extends State<CentralPage> {
 
   Future<void> _loadUser() async {
     final providerData = Provider.of<UserDatabaseProvider>(context);
-    final providerAuth = Provider.of<AuthUserProvider>(context);
+    final providerAuth = Provider.of<AuthUserProvider>(context, listen: false);
     String? userId = providerAuth.pegarId();
 
     if (userId != null) {
