@@ -6,6 +6,7 @@ import 'package:demopico/features/mapa/data/mappers/mapper_dto_picomodel.dart';
 import 'package:demopico/features/mapa/domain/entities/filters.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_spot_repository.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
+import 'package:flutter/foundation.dart';
 
 class SpotRepositoryImpl implements ISpotRepository {
 
@@ -45,6 +46,7 @@ class SpotRepositoryImpl implements ISpotRepository {
 
       return dataStream.map((data) {
         return data.map((pico) {
+          debugPrint("dataStream: $data");
           return MapperDtoPicomodel.fromDto(pico);
         }).toList();
       });

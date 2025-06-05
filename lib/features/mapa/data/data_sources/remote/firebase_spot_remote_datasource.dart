@@ -4,6 +4,7 @@ import 'package:demopico/features/mapa/data/data_sources/interfaces/i_spot_datas
 import 'package:demopico/features/mapa/data/dtos/firebase_dto.dart';
 import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
 import 'package:demopico/features/mapa/domain/entities/filters.dart';
+import 'package:flutter/foundation.dart';
 
 
 class FirebaseSpotRemoteDataSource implements ISpotRemoteDataSource {
@@ -71,6 +72,7 @@ class FirebaseSpotRemoteDataSource implements ISpotRemoteDataSource {
                     id: doc.id,
                     data: doc.data()! as Map<String, dynamic>,
                   );
+                  debugPrint("pico: ${pico.data}");
                   return pico;
                 })
                 .toList(),

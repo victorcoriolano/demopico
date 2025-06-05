@@ -35,15 +35,18 @@ class SpotControllerProvider extends ChangeNotifier {
 
   //inicializa o controller carregando os spots do banco
   void initialize() {
+    debugPrint("initialize");
     _loadSpots();
   }
 
   //cria um stream para ouvir os spots do banco de dados
   void _loadSpots() {
+    debugPrint("loadSpots");
     spotsSubscription?.cancel();
     spotsSubscription =
         showAllPicoUseCase.loadSpots(filtrosAtivos).listen((events) {
-      spots = events;
+      spots.addAll(events);
+      debugPrint("spots: $spots");
       notifyListeners();
     });
   }

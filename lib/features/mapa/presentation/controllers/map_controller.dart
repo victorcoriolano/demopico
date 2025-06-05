@@ -103,6 +103,8 @@ class MapControllerProvider extends ChangeNotifier {
     List<Pico> picos,
   ) async {
     await markerService.preloadIcons(picos);
+    
+    
   }
 
   void createMarkers(List<Pico> picos) {
