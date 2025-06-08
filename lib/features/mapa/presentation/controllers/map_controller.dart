@@ -6,8 +6,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class MapControllerProvider extends ChangeNotifier {
-  
-
 
   GoogleMapController? _mapController;
   LatLng center =
@@ -30,7 +28,6 @@ class MapControllerProvider extends ChangeNotifier {
       return;  
     }
     _mapController = controller;
-    completer.complete(_mapController);
     notifyListeners();
   }
 
