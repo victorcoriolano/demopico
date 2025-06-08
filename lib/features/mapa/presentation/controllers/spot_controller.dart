@@ -7,6 +7,7 @@ import 'package:demopico/features/mapa/domain/usecases/avaliar_spot_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/load_spot_uc.dart';
 import 'package:demopico/features/mapa/presentation/view_services/marker_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -76,10 +77,16 @@ class SpotControllerProvider extends ChangeNotifier {
       return;
     }
     markers.clear();
-    await markerService.preloadIcons(spots, _onTapMarker!);
-    debugPrint("markers: ${markerService.markers.length}");
-    markers.addAll(markerService.markers);
-    debugPrint("meus markers: ${markers.length}");
+    
+    markerService.preloadIcons(spots, _onTapMarker!).listen(
+      (marker) {
+        markers.add(marker);
+        notifyListeners();
+      },
+      onError: (error) {
+        debugPrint("error: $error");
+      },
+    );
     notifyListeners();
   }
 
