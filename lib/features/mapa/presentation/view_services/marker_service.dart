@@ -17,8 +17,7 @@ class MarkerService {
 
   Map<String, BitmapDescriptor> get markerIcons => _markerIcons;
 
-  Future<void> preloadIcons(List<Pico> picos, void Function(Pico) onTap) async {
-    markers.clear();
+  Stream<Marker> preloadIcons(List<Pico> picos, void Function(Pico) onTap) async*{
     for (final pico in picos) {
       // carrega os icons 
       final icon = await IconMarker(
@@ -28,7 +27,6 @@ class MarkerService {
         imageSize: const Size(120, 150),
       );
       _markerIcons[pico.picoName] = icon;
-      debugPrint("criou o icon");
 
       // carrega os markers 
       final marker = Marker(
@@ -37,8 +35,8 @@ class MarkerService {
         icon: _markerIcons[pico.picoName] ?? BitmapDescriptor.defaultMarker,
         onTap: () => onTap(pico),
       );
-      markers.add(marker);
       debugPrint("criou o marker");
+      yield marker;
     }
   }
 }
