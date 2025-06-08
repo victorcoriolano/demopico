@@ -16,6 +16,9 @@ class MapControllerProvider extends ChangeNotifier {
   MapType myMapType = MapType.normal;
   double zoomInicial = 12;
   final completer = Completer<GoogleMapController>();
+  bool alreaySetController = false;
+
+  
   
 
 
@@ -23,6 +26,9 @@ class MapControllerProvider extends ChangeNotifier {
 
   //setando o controller para manipular em qualquer lugar do código
   void setGoogleMapController(GoogleMapController controller) {
+    if (_mapController != null) {
+      return;  
+    }
     _mapController = controller;
     completer.complete(_mapController);
     notifyListeners();
