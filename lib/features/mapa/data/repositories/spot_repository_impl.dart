@@ -45,10 +45,11 @@ class SpotRepositoryImpl implements ISpotRepository {
     final dataStream = dataSource.load(filtros);
 
       return dataStream.map((data) {
-        return data.map((pico) {
-          debugPrint("dataStream: $data");
+        final picos = data.map((pico) {
           return MapperDtoPicomodel.fromDto(pico);
         }).toList();
+        debugPrint("picos: $picos");
+        return picos;
       });
 
     

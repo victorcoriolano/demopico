@@ -7,6 +7,7 @@ import 'package:demopico/features/mapa/domain/usecases/avaliar_spot_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/load_spot_uc.dart';
 import 'package:demopico/features/mapa/presentation/view_services/marker_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -49,17 +50,44 @@ class SpotControllerProvider extends ChangeNotifier {
     _loadSpots();
   }
 
+   
+
   //cria um stream para ouvir os spots do banco de dados
   void _loadSpots() {//repassando o callback para o markerService
-    
-      debugPrint("loadSpots");
+    debugPrint("chamou loadSpots");
     spotsSubscription?.cancel();
-    spotsSubscription =
-        showAllPicoUseCase.loadSpots(filtrosAtivos).listen((events) {
-      spots.addAll(events);
-      debugPrint("spots: $spots");
-       carregarMarkers();
-    });
+    if (filtrosAtivos != null) {
+      debugPrint("filtrosAtivos não é null");
+      spotsSubscription =
+        showAllPicoUseCase.loadSpots(filtrosAtivos).listen(
+          (events) {
+            spots.clear();
+            spots.addAll(events);
+            debugPrint("spots: ${spots.length}");
+            carregarMarkers();
+          },
+
+          onError: (error) {
+            debugPrint("error: $error");
+          }
+        );  
+    }else {
+      debugPrint("filtrosAtivos é null");
+      spotsSubscription =
+        showAllPicoUseCase.loadSpots().listen(
+          (events) {
+            spots.clear();
+            spots.addAll(events);
+            debugPrint("spots: ${spots.length}");
+            carregarMarkers();
+          },
+
+          onError: (error) {
+            debugPrint("error: $error");
+          }
+        );
+    }
+    
   }
 
   Future<void> carregarMarkers() async {//repassando o callback para o markerService
@@ -67,17 +95,26 @@ class SpotControllerProvider extends ChangeNotifier {
       debugPrint("onTapMarker não pode ser null");
       return;
     }
-    await markerService.preloadIcons(spots, _onTapMarker!);
-    debugPrint("markers: ${markerService.markers.length}");
-    markers.addAll(markerService.markers);
-    debugPrint("meus markers: ${markers.length}");
+    markers.clear();
+    
+    markerService.preloadIcons(spots, _onTapMarker!).listen(
+      (marker) {
+        markers.add(marker);
+        notifyListeners();
+      },
+      onError: (error) {
+        debugPrint("error: $error");
+      },
+    );
     notifyListeners();
   }
 
 
   //aplica os filtros e reacria o stream com os novos filtros
-  void aplicarFiltro([Filters? filtros] ) {
+  void aplicarFiltro([Filters? filtros]) {
+    debugPrint("aplicarFiltro: filtros $filtros");
     filtrosAtivos = filtros;
+    debugPrint("filtrosAtivos: $filtrosAtivos");
     _loadSpots();
   }
 

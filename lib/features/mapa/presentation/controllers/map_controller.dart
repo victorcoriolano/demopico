@@ -1,11 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class MapControllerProvider extends ChangeNotifier {
-  
-
 
   GoogleMapController? _mapController;
   LatLng center =
@@ -13,6 +13,10 @@ class MapControllerProvider extends ChangeNotifier {
   String locationMessage = '';
   MapType myMapType = MapType.normal;
   double zoomInicial = 12;
+  final completer = Completer<GoogleMapController>();
+  bool alreaySetController = false;
+
+  
   
 
 
@@ -20,14 +24,18 @@ class MapControllerProvider extends ChangeNotifier {
 
   //setando o controller para manipular em qualquer lugar do código
   void setGoogleMapController(GoogleMapController controller) {
+    if (_mapController != null) {
+      return;  
+    }
     _mapController = controller;
     notifyListeners();
   }
 
-  void reajustarCameraPosition(LatLng position) {
+  void reajustarCameraPosition(LatLng position) async {
     //movendo a camera position
     if (_mapController != null) {
-      _mapController!.animateCamera(CameraUpdate.newLatLng(position));
+      await completer.future;
+      _mapController!.animateCamera(CameraUpdate.newLatLng(position));      
     }
   }
 
