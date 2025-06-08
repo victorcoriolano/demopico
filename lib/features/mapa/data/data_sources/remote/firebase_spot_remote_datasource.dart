@@ -72,7 +72,7 @@ class FirebaseSpotRemoteDataSource implements ISpotRemoteDataSource {
                     id: doc.id,
                     data: doc.data()! as Map<String, dynamic>,
                   );
-                  debugPrint("pico: ${pico.data}");
+                  debugPrint("pico");
                   return pico;
                 })
                 .toList(),
