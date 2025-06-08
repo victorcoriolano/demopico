@@ -156,6 +156,7 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
                 mostrarAtributos(context);
               } else if (value == 'Modalidade') {
               } else if (value == 'todos'){
+                debugPrint("Todos");
                 spotProvider.aplicarFiltro();
               } 
               
