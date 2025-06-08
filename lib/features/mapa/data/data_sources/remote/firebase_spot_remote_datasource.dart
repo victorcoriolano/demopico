@@ -89,26 +89,32 @@ class FirebaseSpotRemoteDataSource implements ISpotRemoteDataSource {
   Query executeQuery([Filters? filtro]) {
     Query querySnapshot = _firebaseFirestore.collection(_collectionName);
 
-    if (filtro != null && filtro.hasActivateFilters) {
-      if (filtro.atributos!.isNotEmpty) {
-        querySnapshot =
-            querySnapshot.where("atributos", arrayContains: filtro.atributos);
-      }
-
-      if (filtro.utilidades!.isNotEmpty) {
-        querySnapshot = querySnapshot.where("utilidades",
-            arrayContainsAny: filtro.utilidades);
-      }
-
-      if (filtro.modalidade != null) {
-        querySnapshot =
-            querySnapshot.where("modalidade", isEqualTo: filtro.modalidade);
-      }
-      if (filtro.tipo != null) {
-        querySnapshot = querySnapshot.where("tipoPico", isEqualTo: filtro.tipo);
-      }
+    try {
+  if (filtro != null ) {
+     if (filtro.tipo != null) {
+      querySnapshot = querySnapshot.where("tipo", isEqualTo: filtro.tipo);
     }
-    return querySnapshot;
+    if (filtro.atributos != null && filtro.atributos!.isNotEmpty) {
+      querySnapshot =
+          querySnapshot.where("atributos", arrayContains: filtro.atributos);
+    }
+  
+    if (filtro.utilidades != null && filtro.utilidades!.isNotEmpty) {
+      querySnapshot = querySnapshot.where("utilidades",
+          arrayContainsAny: filtro.utilidades);
+    }
+  
+    if (filtro.modalidade != null) {
+      querySnapshot =
+          querySnapshot.where("modalidade", isEqualTo: filtro.modalidade);
+    }
+   
+  }
+} catch (e, st) {
+  debugPrint("Erro na consulta: $e $st");
+  
+}
+return querySnapshot;
   }
 
 
