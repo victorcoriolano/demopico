@@ -2,7 +2,6 @@
 import 'package:demopico/core/app/auth_wrapper.dart';
 import 'package:demopico/features/home/presentation/widgets/events_bottom_sheet.dart';
 import 'package:demopico/features/home/presentation/widgets/hub_upper_sheet.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +17,11 @@ class CentralPage extends StatefulWidget {
 
 class _CentralPageState extends State<CentralPage> {
   final ScrollController scrollController = ScrollController();
-  UserM? user;
+  late UserDatabaseProvider _userDatabaseProvider;
+  late AuthUserProvider _authUserProvider;
+  String? userId;
+  String? userImage;
+  
 
   @override
   void initState() {
@@ -29,32 +32,30 @@ class _CentralPageState extends State<CentralPage> {
   }
 
   Future<void> _loadUser() async {
-    final providerData = Provider.of<UserDatabaseProvider>(context);
-    final providerAuth = Provider.of<AuthUserProvider>(context, listen: false);
-    String? userId = providerAuth.pegarId();
+    _userDatabaseProvider = Provider.of<UserDatabaseProvider>(context, listen: false);
+    _authUserProvider = Provider.of<AuthUserProvider>(context, listen: false);
+    String? userId = _authUserProvider.pegarId();
 
     if (userId != null) {
-      await providerData.retrieveUserProfileData(userId);
+      await _userDatabaseProvider.retrieveUserProfileData(userId);
     }
-    setState(() {
-      user = providerData.user;
-    });
+    if (userId != null) {
+      final user = _userDatabaseProvider.user;
+      
+      if (user!= null) userImage = user.pictureUrl;
+    }
+    
     return;
   }
+  
+
+    
+
 
   @override
   Widget build(BuildContext context) {
-    final providerData = Provider.of<UserDatabaseProvider>(context);
-    final providerAuth = Provider.of<AuthUserProvider>(context);
-    String? userId = providerAuth.pegarId();
-    String? userImage;
-
-    if (userId != null) {
-      providerData.retrieveUserProfileData(userId);
-      UserM? user = providerData.user;
-      if (user != null) userImage = user.pictureUrl;
-    }
-
+    
+    
     return Scaffold(
       body: Stack(
         children: [
@@ -149,7 +150,7 @@ class _CentralPageState extends State<CentralPage> {
                               : CircleAvatar(
                                   radius: 32,
                                   backgroundImage: 
-                                      NetworkImage(userImage),
+                                      NetworkImage(userImage!),
                                   backgroundColor: Colors.transparent)),
                     ]),
                   ),
