@@ -56,7 +56,9 @@ class SpotControllerProvider extends ChangeNotifier {
   void _loadSpots() {//repassando o callback para o markerService
     debugPrint("chamou loadSpots");
     spotsSubscription?.cancel();
-    spotsSubscription =
+    if (filtrosAtivos != null) {
+      debugPrint("filtrosAtivos não é null");
+      spotsSubscription =
         showAllPicoUseCase.loadSpots(filtrosAtivos).listen(
           (events) {
             spots.clear();
@@ -68,7 +70,24 @@ class SpotControllerProvider extends ChangeNotifier {
           onError: (error) {
             debugPrint("error: $error");
           }
+        );  
+    }else {
+      debugPrint("filtrosAtivos é null");
+      spotsSubscription =
+        showAllPicoUseCase.loadSpots().listen(
+          (events) {
+            spots.clear();
+            spots.addAll(events);
+            debugPrint("spots: ${spots.length}");
+            carregarMarkers();
+          },
+
+          onError: (error) {
+            debugPrint("error: $error");
+          }
         );
+    }
+    
   }
 
   Future<void> carregarMarkers() async {//repassando o callback para o markerService
@@ -92,8 +111,10 @@ class SpotControllerProvider extends ChangeNotifier {
 
 
   //aplica os filtros e reacria o stream com os novos filtros
-  void aplicarFiltro([Filters? filtros] ) {
+  void aplicarFiltro([Filters? filtros]) {
+    debugPrint("aplicarFiltro: filtros $filtros");
     filtrosAtivos = filtros;
+    debugPrint("filtrosAtivos: $filtrosAtivos");
     _loadSpots();
   }
 
