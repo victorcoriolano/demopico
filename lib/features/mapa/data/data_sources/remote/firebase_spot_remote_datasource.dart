@@ -6,13 +6,12 @@ import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart'
 import 'package:demopico/features/mapa/domain/entities/filters.dart';
 import 'package:flutter/foundation.dart';
 
-
 class FirebaseSpotRemoteDataSource implements ISpotRemoteDataSource {
-
   static FirebaseSpotRemoteDataSource? _firebaseSpotRemoteDataSource;
 
-  static FirebaseSpotRemoteDataSource get getInstance => 
-    _firebaseSpotRemoteDataSource ??= FirebaseSpotRemoteDataSource(FirebaseFirestore.instance);
+  static FirebaseSpotRemoteDataSource get getInstance =>
+      _firebaseSpotRemoteDataSource ??=
+          FirebaseSpotRemoteDataSource(FirebaseFirestore.instance);
 
   final FirebaseFirestore _firebaseFirestore;
   final String _collectionName = 'spots';
@@ -25,10 +24,9 @@ class FirebaseSpotRemoteDataSource implements ISpotRemoteDataSource {
     try {
       final doc =
           await _firebaseFirestore.collection(_collectionName).add(data.data);
-      //retornando id do spot criado 
+      //retornando id do spot criado
       final newPico = data.copyWith(id: doc.id);
       return newPico;
-
     } on FirebaseException catch (e) {
       throw FirebaseErrorsMapper.map(e);
     } catch (e, stacktrace) {
@@ -59,23 +57,20 @@ class FirebaseSpotRemoteDataSource implements ISpotRemoteDataSource {
     final FirebaseDTO pico = FirebaseDTO(id: id, data: doc.data()!);
     return pico;
   }
-  
 
   @override
   Stream<List<FirebaseDTO>> load([Filters? filtro]) {
     final quey = executeQuery(filtro);
     try {
       return quey.snapshots().map(
-            (snapshot) => snapshot.docs
-                .map((doc) {
-                  FirebaseDTO pico = FirebaseDTO(
-                    id: doc.id,
-                    data: doc.data()! as Map<String, dynamic>,
-                  );
-                  debugPrint("pico");
-                  return pico;
-                })
-                .toList(),
+            (snapshot) => snapshot.docs.map((doc) {
+              FirebaseDTO pico = FirebaseDTO(
+                id: doc.id,
+                data: doc.data()! as Map<String, dynamic>,
+              );
+              debugPrint("pico");
+              return pico;
+            }).toList(),
           );
     } on FirebaseException catch (e) {
       throw FirebaseErrorsMapper.map(e);
@@ -84,45 +79,43 @@ class FirebaseSpotRemoteDataSource implements ISpotRemoteDataSource {
           originalException: e as Exception, stackTrace: stacktrace);
     }
   }
-  
 
   Query executeQuery([Filters? filtro]) {
     Query querySnapshot = _firebaseFirestore.collection(_collectionName);
 
     try {
-  if (filtro != null ) {
-     if (filtro.tipo != null) {
-      querySnapshot = querySnapshot.where("tipo", isEqualTo: filtro.tipo);
-    }
-    if (filtro.atributos != null && filtro.atributos!.isNotEmpty) {
-      querySnapshot =
-          querySnapshot.where("atributos", arrayContains: filtro.atributos);
-    }
-  
-    if (filtro.utilidades != null && filtro.utilidades!.isNotEmpty) {
-      querySnapshot = querySnapshot.where("utilidades",
-          arrayContainsAny: filtro.utilidades);
-    }
-  
-    if (filtro.modalidade != null) {
-      querySnapshot =
-          querySnapshot.where("modalidade", isEqualTo: filtro.modalidade);
-    }
-   
-  }
-} catch (e, st) {
-  debugPrint("Erro na consulta: $e $st");
-  
-}
-return querySnapshot;
-  }
+      if (filtro != null) {
+        if (filtro.tipo != null) {
+          querySnapshot = querySnapshot.where("tipo", isEqualTo: filtro.tipo);
+        }
+        if (filtro.atributos != null && filtro.atributos!.isNotEmpty) {
+          querySnapshot =
+              querySnapshot.where("atributos", arrayContains: filtro.atributos);
+        }
 
+        if (filtro.utilidades != null && filtro.utilidades!.isNotEmpty) {
+          querySnapshot = querySnapshot.where("utilidades",
+              arrayContainsAny: filtro.utilidades);
+        }
+
+        if (filtro.modalidade != null) {
+          querySnapshot =
+              querySnapshot.where("modalidade", isEqualTo: filtro.modalidade);
+        }
+      }
+      else {
+        querySnapshot = querySnapshot.limit(30);
+      }
+    } catch (e, st) {
+      debugPrint("Erro na consulta: $e $st");
+    }
+    return querySnapshot;
+  }
 
   @override
   Future<void> update(FirebaseDTO picoDto) async {
     try {
-      
-      await  _firebaseFirestore
+      await _firebaseFirestore
           .collection(_collectionName)
           .doc(picoDto.id)
           .update(picoDto.data);
