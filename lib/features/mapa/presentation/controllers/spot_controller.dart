@@ -49,17 +49,25 @@ class SpotControllerProvider extends ChangeNotifier {
     _loadSpots();
   }
 
+   
+
   //cria um stream para ouvir os spots do banco de dados
   void _loadSpots() {//repassando o callback para o markerService
-    
-      debugPrint("loadSpots");
+    debugPrint("chamou loadSpots");
     spotsSubscription?.cancel();
     spotsSubscription =
-        showAllPicoUseCase.loadSpots(filtrosAtivos).listen((events) {
-      spots.addAll(events);
-      debugPrint("spots: $spots");
-       carregarMarkers();
-    });
+        showAllPicoUseCase.loadSpots(filtrosAtivos).listen(
+          (events) {
+            spots.clear();
+            spots.addAll(events);
+            debugPrint("spots: ${spots.length}");
+            carregarMarkers();
+          },
+
+          onError: (error) {
+            debugPrint("error: $error");
+          }
+        );
   }
 
   Future<void> carregarMarkers() async {//repassando o callback para o markerService
@@ -67,6 +75,7 @@ class SpotControllerProvider extends ChangeNotifier {
       debugPrint("onTapMarker não pode ser null");
       return;
     }
+    markers.clear();
     await markerService.preloadIcons(spots, _onTapMarker!);
     debugPrint("markers: ${markerService.markers.length}");
     markers.addAll(markerService.markers);
