@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -13,6 +15,7 @@ class MapControllerProvider extends ChangeNotifier {
   String locationMessage = '';
   MapType myMapType = MapType.normal;
   double zoomInicial = 12;
+  final completer = Completer<GoogleMapController>();
   
 
 
@@ -21,13 +24,15 @@ class MapControllerProvider extends ChangeNotifier {
   //setando o controller para manipular em qualquer lugar do código
   void setGoogleMapController(GoogleMapController controller) {
     _mapController = controller;
+    completer.complete(_mapController);
     notifyListeners();
   }
 
-  void reajustarCameraPosition(LatLng position) {
+  void reajustarCameraPosition(LatLng position) async {
     //movendo a camera position
     if (_mapController != null) {
-      _mapController!.animateCamera(CameraUpdate.newLatLng(position));
+      await completer.future;
+      _mapController!.animateCamera(CameraUpdate.newLatLng(position));      
     }
   }
 
