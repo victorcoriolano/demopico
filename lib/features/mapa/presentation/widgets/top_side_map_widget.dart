@@ -152,18 +152,22 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
             icon: const Icon(Icons.filter_list, color: Colors.white),
             tooltip: "Filtrar picos",
             onSelected: (String? value) {
+              if (value == "Modalidade"){
+                return;
+              }
               if (value == 'Utilidades') {
                 mostrarAtributos(context);
-              } else if (value == 'Modalidade') {
               } else if (value == 'todos'){
-                debugPrint("Todos");
+                
                 spotProvider.aplicarFiltro();
-              } 
+              } else{
+                Filters filterTipo = Filters(
+                  tipo: value
+                );
+                spotProvider.aplicarFiltro(filterTipo);
+              }
               
-              Filters filterTipo = Filters(
-                tipo: value
-              );
-              spotProvider.aplicarFiltro(filterTipo);
+              
             },
             color: Colors.white,
             itemBuilder: (BuildContext context) {
