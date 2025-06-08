@@ -18,6 +18,7 @@ class MarkerService {
   Map<String, BitmapDescriptor> get markerIcons => _markerIcons;
 
   Future<void> preloadIcons(List<Pico> picos, void Function(Pico) onTap) async {
+    markers.clear();
     for (final pico in picos) {
       // carrega os icons 
       final icon = await IconMarker(
