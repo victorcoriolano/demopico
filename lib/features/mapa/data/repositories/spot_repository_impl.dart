@@ -1,17 +1,24 @@
 import 'dart:async';
 
-import 'package:demopico/features/mapa/data/data_sources/interfaces/spot_datasource_interface.dart';
+import 'package:demopico/features/mapa/data/data_sources/interfaces/i_spot_datasource.dart';
+import 'package:demopico/features/mapa/data/data_sources/remote/firebase_spot_remote_datasource.dart';
 import 'package:demopico/features/mapa/data/mappers/mapper_dto_picomodel.dart';
 import 'package:demopico/features/mapa/domain/entities/filters.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_spot_repository.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
+import 'package:flutter/foundation.dart';
 
 class SpotRepositoryImpl implements ISpotRepository {
 
-  final SpotRemoteDataSource dataSource;
-  SpotRepositoryImpl(this.dataSource);
+  static SpotRepositoryImpl? _spotRepositoryImpl;
+  static SpotRepositoryImpl get getInstance 
+    => _spotRepositoryImpl ??= SpotRepositoryImpl(
+      FirebaseSpotRemoteDataSource.getInstance
+    );
+    
 
-  
+  final ISpotRemoteDataSource dataSource;
+  SpotRepositoryImpl(this.dataSource);
 
   @override
   Future<PicoModel> createSpot(PicoModel pico) async {
@@ -39,6 +46,7 @@ class SpotRepositoryImpl implements ISpotRepository {
 
       return dataStream.map((data) {
         return data.map((pico) {
+          debugPrint("dataStream: $data");
           return MapperDtoPicomodel.fromDto(pico);
         }).toList();
       });

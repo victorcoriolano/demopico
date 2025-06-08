@@ -27,7 +27,7 @@ class PicoModel extends Pico {
   factory PicoModel.fromJson(Map<String, dynamic> json, String id) {
   return PicoModel(
     id: id,
-    imgUrls: List<String>.from(json['imgUrl'] ?? []),
+    imgUrls: List<String>.from(json['imageUrl'] ?? []),
     tipoPico: json['tipo'] ?? _padrao,
     modalidade: json['modalidade'] ?? _padrao,
     nota: (json['nota'] as num?)?.toDouble() ?? 0.0,
@@ -38,8 +38,8 @@ class PicoModel extends Pico {
     atributos: Map<String, int>.from(json['atributos'] ?? {}),
     obstaculos: List<String>.from(json['obstaculos'] ?? []),
     utilidades: List<String>.from(json['utilidades'] ?? []),
-    userCreator: json['userCreator'] ?? _padrao,
-    picoName: json['picoName'] ?? _padrao,
+    userCreator: json['criador'] ?? _padrao,
+    picoName: json['name'] ?? _padrao,
   );
 }
 
@@ -58,8 +58,8 @@ class PicoModel extends Pico {
       'atributos': super.atributos,
       'obstaculos': super.obstaculos,
       'utilidades': super.utilidades,
-      'userCreator': super.userCreator,
-      'picoName': super.picoName,
+      'criador': super.userCreator,
+      'name': super.picoName,
     };
   }
 

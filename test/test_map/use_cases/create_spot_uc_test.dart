@@ -1,11 +1,11 @@
 
+import 'package:demopico/features/mapa/data/repositories/spot_repository_impl.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
-import 'package:demopico/features/mapa/data/data_sources/remote/firebase_spots_service.dart';
 import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-final class MockPicoRepository extends Mock implements FirebaseSpotsService {}
+final class MockPicoRepository extends Mock implements SpotRepositoryImpl {}
 final class MockPico extends Mock implements PicoModel {}
 
     final testPico = PicoModel(

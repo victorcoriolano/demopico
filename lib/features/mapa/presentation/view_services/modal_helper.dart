@@ -35,6 +35,7 @@ class ModalHelper {
   }
 
   static void openModalInfoPico(BuildContext context, Pico pico) {
+    debugPrint("chamou o modal para o pico ${pico.picoName}");
     // salvando no histórico
     final provider = context.read<HistoricoController>();
     provider.salvarNoHistorico(pico.picoName, pico.lat, pico.long);
@@ -50,7 +51,10 @@ class ModalHelper {
             minChildSize: 0.2,
             maxChildSize: 0.86,
             builder: (BuildContext context, ScrollController scrollController) {
+              debugPrint("chamou o modal para o pico ${pico.picoName}");
+              debugPrint("images ${pico.imgUrls.length}");
               return ShowPicoWidget(
+                scrollController: scrollController,
                 pico: pico,
               );
             },

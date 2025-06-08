@@ -34,7 +34,7 @@ class MyAppWidget extends StatelessWidget {
         ),
         ChangeNotifierProvider(create: (_) => AddPicoProvider.getInstance),
         ChangeNotifierProvider(
-            create: (_) => MapControllerProvider.getInstance),
+            create: (_) => MapControllerProvider()),
         ChangeNotifierProvider(create: (_) => SpotSaveController.getInstance),
         ChangeNotifierProvider(
             create: (_) => SpotControllerProvider.getInstance),

@@ -1,5 +1,5 @@
 
-import 'package:demopico/features/mapa/data/data_sources/remote/firebase_spots_service.dart';
+import 'package:demopico/features/mapa/data/repositories/spot_repository_impl.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_spot_repository.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 
@@ -7,7 +7,7 @@ class AvaliarSpotUc {
 
   static AvaliarSpotUc? _avaliarSpotUc;
      static AvaliarSpotUc  get getInstance{
-    _avaliarSpotUc ??= AvaliarSpotUc(notaRepositoryIMP: FirebaseSpotsService.getInstance);
+    _avaliarSpotUc ??= AvaliarSpotUc(notaRepositoryIMP: SpotRepositoryImpl.getInstance);
     return _avaliarSpotUc!;
   } 
 

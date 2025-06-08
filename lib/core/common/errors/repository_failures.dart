@@ -12,6 +12,10 @@ class TimeoutFailure extends RepositoryFailures {
   TimeoutFailure({super.originalException}): super("Tempo limite excedido",code: 'TIMEOUT_FAILURE');
 }
 
+class UnknownError extends RepositoryFailures {
+  UnknownError(super.message, {super.stackTrace}): super(code: 'UNKNOWN_ERROR');
+}
+
 
 class CacheFailure extends RepositoryFailures {
   CacheFailure(super.message, {super.originalException}): super(code: 'CACHE_FAILURE');

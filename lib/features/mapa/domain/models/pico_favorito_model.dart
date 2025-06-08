@@ -8,4 +8,12 @@ class PicoFavoritoModel extends PicoFavorito {
     required super.idUsuario,
     required this.id,
   });
+
+  Map<String, dynamic> toJson(){
+    return {
+      'idPico': idPico,
+      'idUsuario': idUsuario,
+      'id': id,
+    };
+  }
 }

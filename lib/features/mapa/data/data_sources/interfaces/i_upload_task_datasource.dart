@@ -10,7 +10,7 @@ abstract class UploadTaskInterface {
 
 
 //interface para armazenamento remoto
-abstract class FileRemoteDataSource {
+abstract class IFileRemoteDataSource {
   /// Dispara o upload e devolve sua abstração.
   List<UploadTaskInterface> uploadFile(List<UploadFileModel> file);
 }
