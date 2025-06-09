@@ -1,6 +1,8 @@
 import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
+import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/container_telas.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 class AddPicoWidget extends StatefulWidget {
@@ -13,7 +15,14 @@ class AddPicoWidget extends StatefulWidget {
 }
 
 class AddPicoWidgetState extends State<AddPicoWidget> {
-  bool _isExpanded = false;
+  bool _isExpanded = false; 
+  late LatLng latLng;
+
+  @override
+  void initState() {
+    super.initState();
+    latLng = context.read<MapControllerProvider>().center;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +33,7 @@ class AddPicoWidgetState extends State<AddPicoWidget> {
             Stack(alignment: Alignment.topRight, children: [
               Center(
                 child: ContainerTelas(
-                  latlang: provider.latlang!,
+                  latlang: latLng,
                   expanded: _isExpanded,
                 ),
               ),
