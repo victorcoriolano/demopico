@@ -10,10 +10,7 @@ void main() {
 
     setUp(() async {
       fakeFirebaseFirestore = FakeFirebaseFirestore();
-      await fakeFirebaseFirestore
-          .collection("users")
-          .doc(testeProfileCerto.id)
-          .set(testeProfileCerto.toJsonMap());
+      fakeFirebaseFirestore.collection("users").doc(mockUserProfile.id).set(mockUserProfile.toJsonMap());
 
       fakeFirebaseProfileUpdateDatasource =
           FirebaseProfileUpdateDatasource(firestore: fakeFirebaseFirestore);
@@ -23,11 +20,11 @@ void main() {
       String novaBio = 'teste';
 
       fakeFirebaseProfileUpdateDatasource.updateBio(
-          novaBio, testeProfileCerto.id!);
+          novaBio, mockUserProfile.id!);
 
       final referenceGet = await fakeFirebaseFirestore
           .collection("users")
-          .doc(testeProfileCerto.id)
+          .doc(mockUserProfile.id)
           .get();
 
       final result = referenceGet.data()!["description"];
@@ -37,12 +34,12 @@ void main() {
 
     test('Este teste deve adicionar um novo seguidor ', () async {
       fakeFirebaseProfileUpdateDatasource
-          .updateFollowers(testeProfileCerto.id!);
+          .updateFollowers(mockUserProfile.id!);
 
           
       final referenceGet = await fakeFirebaseFirestore
           .collection("users")
-          .doc(testeProfileCerto.id)
+          .doc(mockUserProfile.id)
           .get();
 
       final result = referenceGet.data()!["conexoes"];
@@ -52,12 +49,12 @@ void main() {
 
     test('Este teste deve adicionar uma nova contribuição ', () async {
       fakeFirebaseProfileUpdateDatasource
-          .updateContributions(testeProfileCerto.id!);
+          .updateContributions(mockUserProfile.id!);
 
           
       final referenceGet = await fakeFirebaseFirestore
           .collection("users")
-          .doc(testeProfileCerto.id)
+          .doc(mockUserProfile.id)
           .get();
 
       final result = referenceGet.data()!["picosAdicionados"];
@@ -69,11 +66,11 @@ void main() {
       String newImage = 'foto.jpg';
 
       fakeFirebaseProfileUpdateDatasource.updatePhoto(
-          newImage, testeProfileCerto.id!);
+          newImage, mockUserProfile.id!);
         
         final referenceGet = await fakeFirebaseFirestore
           .collection("users")
-          .doc(testeProfileCerto.id)
+          .doc(mockUserProfile.id)
           .get();
 
       final result = referenceGet.data()!["pictureUrl"];

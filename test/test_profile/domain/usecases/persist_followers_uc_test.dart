@@ -27,17 +27,17 @@ void main() {
     });
 
     test('Deve chamar updateFollowers corretamente', () async {
-      fakePersistFollowersUc.set(testeProfileCerto);
-      verify(() => fakeRepositoryUpdate.updateFollowers(testeProfileCerto)).called(1);
+      fakePersistFollowersUc.set(mockUserProfile);
+      verify(() => fakeRepositoryUpdate.updateFollowers(mockUserProfile)).called(1);
     });
 
     test('Deve retornar número de seguidores', () async {
-      when(() => fakeRepositoryRead.getFollowers(testeProfileCerto))
-          .thenAnswer((_) async => testeProfileCerto.conexoes!);
+      when(() => fakeRepositoryRead.getFollowers(mockUserProfile))
+          .thenAnswer((_) async => mockUserProfile.conexoes!);
 
-      final result = await fakePersistFollowersUc.get(testeProfileCerto);
-      expect(result, testeProfileCerto.conexoes);
-      verify(() => fakeRepositoryRead.getFollowers(testeProfileCerto)).called(1);
+      final result = await fakePersistFollowersUc.get(mockUserProfile);
+      expect(result, mockUserProfile.conexoes);
+      verify(() => fakeRepositoryRead.getFollowers(mockUserProfile)).called(1);
     });
   });
 }

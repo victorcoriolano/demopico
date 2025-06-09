@@ -1,4 +1,4 @@
-import 'package:demopico/features/profile/presentation/pages/user_page.dart';
+import 'package:demopico/core/app/home_page.dart';
 import 'package:demopico/features/user/domain/entity/user_credentials.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 
@@ -158,13 +158,15 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
 
                       final resultadoRegistro =
                           await _authUserProvider.signUp(credential);
+                      
             
                       if (resultadoRegistro == true) {
                         _vulgoCadastro.clear();
                         _emailController.clear();
                         _senhaController.clear();
                         _senhaController2.clear();
-                        Get.to(() => const UserPage());
+                        
+                        Get.to(() => const HomePage());
                       } else {
                         Get.snackbar('Erro', 'Falha ao registrar usuário');
                       }

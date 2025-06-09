@@ -19,50 +19,50 @@ void main() {
     });
 
     test("Este teste deve retornar uma string de nova foto ", () async {
-      when(() => fakeUserRepository.getUserDetails(testeProfileCerto.id!))
-          .thenAnswer((_) async => testeProfileCerto);
+      when(() => fakeUserRepository.getUserDetails(mockUserProfile.id!))
+          .thenAnswer((_) async => mockUserProfile);
 
       final result =
-          await fakeProfileReadRepository.getPhoto(testeProfileCerto);
+          await fakeProfileReadRepository.getPhoto(mockUserProfile);
 
-      expect(result, equals(testeProfileCerto.pictureUrl));
+      expect(result, equals(mockUserProfile.pictureUrl));
 
-      verify(() => fakeUserRepository.getUserDetails(testeProfileCerto.id!))
+      verify(() => fakeUserRepository.getUserDetails(mockUserProfile.id!))
           .called(1);
     });
 
     test("Este teste deve retornar uma string de uma nova bio", () async {
-      when(() => fakeUserRepository.getUserDetails(testeProfileCerto.id!))
-          .thenAnswer((_) async => testeProfileCerto);
+      when(() => fakeUserRepository.getUserDetails(mockUserProfile.id!))
+          .thenAnswer((_) async => mockUserProfile);
 
-      final result = await fakeProfileReadRepository.getBio(testeProfileCerto);
+      final result = await fakeProfileReadRepository.getBio(mockUserProfile);
 
-      expect(result, equals(testeProfileCerto.description));
-      verify(() => fakeUserRepository.getUserDetails(testeProfileCerto.id!))
+      expect(result, equals(mockUserProfile.description));
+      verify(() => fakeUserRepository.getUserDetails(mockUserProfile.id!))
           .called(1);
     });
 
     test("Este teste deve retornar um novo int de seguidor", () async {
-      when(() => fakeUserRepository.getUserDetails(testeProfileCerto.id!))
-          .thenAnswer((_) async => testeProfileCerto);
+      when(() => fakeUserRepository.getUserDetails(mockUserProfile.id!))
+          .thenAnswer((_) async => mockUserProfile);
 
       final result =
-          await fakeProfileReadRepository.getFollowers(testeProfileCerto);
+          await fakeProfileReadRepository.getFollowers(mockUserProfile);
 
-      expect(result, equals(testeProfileCerto.conexoes));
-      verify(() => fakeUserRepository.getUserDetails(testeProfileCerto.id!))
+      expect(result, equals(mockUserProfile.conexoes));
+      verify(() => fakeUserRepository.getUserDetails(mockUserProfile.id!))
           .called(1);
     });
 
     test("Este teste deve retornar um novo int de contribuições", () async {
-      when(() => fakeUserRepository.getUserDetails(testeProfileCerto.id!))
-          .thenAnswer((_) async => testeProfileCerto);
+      when(() => fakeUserRepository.getUserDetails(mockUserProfile.id!))
+          .thenAnswer((_) async => mockUserProfile);
 
       final result =
-          await fakeProfileReadRepository.getContributions(testeProfileCerto);
+          await fakeProfileReadRepository.getContributions(mockUserProfile);
 
-      expect(result, equals(testeProfileCerto.picosAdicionados));
-      verify(() => fakeUserRepository.getUserDetails(testeProfileCerto.id!))
+      expect(result, equals(mockUserProfile.picosAdicionados));
+      verify(() => fakeUserRepository.getUserDetails(mockUserProfile.id!))
           .called(1);
     });
   });
