@@ -1,14 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+       <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+        <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />    
     <application
         android:label="demopico"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
-         <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyD9Vb3pQkxxG7Hp28-q-1KshsJ9NqIq6Cw" />
+         <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyD9Vb3pQkxxG7Hp28-q-1KshsJ9NqIq6Cw"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
