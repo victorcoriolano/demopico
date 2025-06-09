@@ -80,18 +80,20 @@ class UserM {
   }
 
   factory UserM.fromDocument(DocumentSnapshot doc) {
-    return UserM(
+    return UserM.withRequired(
       name: doc['name'],
       description: doc['description'],
       id: doc['id'],
       location: doc['location'],
-      dob: doc['dob'],
+      dob: doc['dob'] ?? "",
       conexoes: doc['conexoes'],
       picosAdicionados: doc['picosAdicionados'],
       picosSalvos: doc['picosSalvos'],
       pictureUrl: doc['pictureUrl'],
       backgroundPicture: doc['backgroundPicture'],
       isColetivo: doc['isColetivo'],
+      signMethod: doc['signMethod'],
+      authEnumState: AuthEnumState.loggedIn,
       email: doc['email'],
     );
   }
@@ -177,4 +179,20 @@ class UserM {
       this.authEnumState,
       this.email, 
       this.backgroundPicture});
+
+      UserM.withRequired(
+      {required this.name,
+      required this.description,
+      required this.id,
+      required this.pictureUrl,
+      required this.isColetivo,
+      required this.signMethod,
+      required this.location,
+      required this.dob,
+      required this.conexoes,
+      required this.picosAdicionados,
+      required this.picosSalvos,
+      required this.authEnumState,
+      required this.email, 
+      required this.backgroundPicture});
 }
