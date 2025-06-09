@@ -143,14 +143,14 @@ class _LoginFormState extends State<LoginForm> with Validators {
                     debugPrint("erro aou fazer login: ${e.toString()}");
                     loginSuccess = false;
                   }
-                  setState(() {
+                
                     if (loginSuccess) {
                       Get.to(() => const HomePage());
                     } else {
                       debugPrint('Login falhou');
                       showSnackbar(vulgo.contains("@") ? 'email' : 'user');
                     }
-                  });
+                  
                 } else {
                   showSnackbar('default');
                 }
