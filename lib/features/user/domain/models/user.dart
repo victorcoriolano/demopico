@@ -55,6 +55,7 @@ class UserM {
       backgroundPicture: backgroundPicture ?? this.backgroundPicture,
     );
   }
+  
 
   //transforma dados do firebase em dados na model
   //cria um user model de acordo com a nova conta criada
@@ -85,18 +86,20 @@ class UserM {
       description: doc['description'] ?? "",
       id: doc['id'] ?? "",
       location: doc['location'] ?? '',
-      picosSalvos: doc['picosSalvos'] ?? "0",
+      picosSalvos: doc['picosSalvos'] ?? 0,
       pictureUrl: doc['pictureUrl'] ?? '',
       backgroundPicture: doc['backgroundPicture'] ?? '',
       isColetivo: doc['isColetivo'] ?? false,
-      signMethod: doc['signMethod'] ?? SignMethods.email,
+      signMethod: SignMethods.fromString(doc['signMethod'] ?? "email"),
       authEnumState: AuthEnumState.loggedIn,
       email: doc['email'] ?? "",
       dob: doc['dob'] ?? "2022-01-01",
-      conexoes: doc['conexoes'] ?? "0",
+      conexoes: doc['conexoes'] ?? 0,
       picosAdicionados: doc['picosAdicionados'] ?? 0,
     );
   }
+
+  
 
   factory UserM.fromSnapshot(QuerySnapshot doc) {
     return UserM(email: "email");
@@ -114,7 +117,7 @@ class UserM {
     data['picosAdicionados'] = picosAdicionados;
     data['picosSalvos'] = picosSalvos;
     data['isColetivo'] = isColetivo;
-    data['signMethod'] = signMethod.toString().split('.').last;
+    data['signMethod'] = signMethod!.name;
     data['email'] = email;
     data['authEnumState'] = authEnumState.toString().split('.').last;
     return data;
