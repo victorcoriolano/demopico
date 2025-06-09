@@ -3,6 +3,7 @@ import 'package:demopico/features/user/domain/enums/auth_enum.dart';
 import 'package:demopico/features/user/domain/enums/sign_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+
 class UserM {
   String? id;
   String? name;
@@ -19,6 +20,7 @@ class UserM {
   int? conexoes;
   int? picosAdicionados;
   int? picosSalvos;
+  String? backgroundPicture;
 
   UserM copyWith({
     String? id,
@@ -34,6 +36,7 @@ class UserM {
     int? conexoes,
     int? picosAdicionados,
     int? picosSalvos,
+    String? backgroundPicture
   }) {
     return UserM(
       id: id ?? this.id,
@@ -49,6 +52,7 @@ class UserM {
       conexoes: conexoes ?? this.conexoes,
       picosAdicionados: picosAdicionados ?? this.picosAdicionados,
       picosSalvos: picosSalvos ?? this.picosSalvos,
+      backgroundPicture: backgroundPicture ?? this.backgroundPicture,
     );
   }
 
@@ -69,8 +73,9 @@ class UserM {
       conexoes: 0,
       dob: todayDate,
       authEnumState: AuthEnumState.notDetermined,
-      pictureUrl: '',
+      pictureUrl: "https://firebasestorage.googleapis.com/v0/b/pico-skatepico.appspot.com/o/users%2FfotoPadrao%2FuserPhoto.png?alt=media&token=c48f5406-fac1-4b35-b2a7-453e2fb57427",
       isColetivo: coletivo,
+      backgroundPicture: "",
     );
   }
 
@@ -85,6 +90,7 @@ class UserM {
       picosAdicionados: doc['picosAdicionados'],
       picosSalvos: doc['picosSalvos'],
       pictureUrl: doc['pictureUrl'],
+      backgroundPicture: doc['backgroundPicture'],
       isColetivo: doc['isColetivo'],
       email: doc['email'],
     );
@@ -99,6 +105,7 @@ class UserM {
     data['description'] = description;
     data['id'] = id;
     data['pictureUrl'] = pictureUrl;
+    data['backgroundPicture'] = backgroundPicture;
     data['location'] = location;
     data['dob'] = dob;
     data['conexoes'] = conexoes;
@@ -168,5 +175,6 @@ class UserM {
       this.picosAdicionados,
       this.picosSalvos,
       this.authEnumState,
-      this.email});
+      this.email, 
+      this.backgroundPicture});
 }
