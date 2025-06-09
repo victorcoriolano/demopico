@@ -1,6 +1,5 @@
 import 'package:demopico/features/profile/infra/datasource/firebase_profile_update_datasource.dart';
 import 'package:demopico/features/profile/infra/repository/profile_update_repository.dart';
-import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -14,13 +13,8 @@ void main() {
     late MockFirebaseProfileUpdateDatasource
         fakeFirebaseProfileUpdateDatasource;
     late ProfileUpdateRepository fakeProfileUpdateRepository;
-    late FakeFirebaseFirestore fakeFirebaseFirestore;
     setUp(() async {
-      fakeFirebaseFirestore = FakeFirebaseFirestore();
-      await fakeFirebaseFirestore
-          .collection("users")
-          .doc(testeProfileCerto.id)
-          .set(testeProfileCerto.toJsonMap());
+
 
       fakeFirebaseProfileUpdateDatasource =
           MockFirebaseProfileUpdateDatasource();
@@ -35,9 +29,9 @@ void main() {
 
       String novaBio = 'teste';
 
-      repositoryUpdate.updateBio(novaBio, testeProfileCerto);
+      repositoryUpdate.updateBio(novaBio, mockUserProfile);
 
-      verify(() => datasourceUpdate.updateBio(novaBio, testeProfileCerto.id!))
+      verify(() => datasourceUpdate.updateBio(novaBio, mockUserProfile.id!))
           .called(1);
     });
 
@@ -45,15 +39,15 @@ void main() {
       final repositoryUpdate = fakeProfileUpdateRepository;
       final datasourceUpdate = fakeFirebaseProfileUpdateDatasource;
 
-      repositoryUpdate.updateFollowers(testeProfileCerto);
-      verify(() => datasourceUpdate.updateFollowers(testeProfileCerto.id!));
+      repositoryUpdate.updateFollowers(mockUserProfile);
+      verify(() => datasourceUpdate.updateFollowers(mockUserProfile.id!));
     });
 
     test('Este teste deve passar um id compativel com o do datasource', () async {
       final repositoryUpdate = fakeProfileUpdateRepository;
       final datasourceUpdate = fakeFirebaseProfileUpdateDatasource;
-      repositoryUpdate.updateContributions(testeProfileCerto);
-      verify(() => datasourceUpdate.updateContributions(testeProfileCerto.id!));
+      repositoryUpdate.updateContributions(mockUserProfile);
+      verify(() => datasourceUpdate.updateContributions(mockUserProfile.id!));
     });
 
     test('Este teste deve passar uma foto e um id compativel com o do datasource ', () async {
@@ -61,9 +55,9 @@ void main() {
       final datasourceUpdate = fakeFirebaseProfileUpdateDatasource;
       String novaImage = "newImage.jpg";
 
-      repositoryUpdate.updatePhoto(novaImage, testeProfileCerto);
+      repositoryUpdate.updatePhoto(novaImage, mockUserProfile);
       verify(
-          () => datasourceUpdate.updatePhoto(novaImage, testeProfileCerto.id!));
+          () => datasourceUpdate.updatePhoto(novaImage, mockUserProfile.id!));
     });
   });
 }

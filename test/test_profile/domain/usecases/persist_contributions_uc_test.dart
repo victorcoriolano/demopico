@@ -27,17 +27,17 @@ void main() {
     });
 
     test('Deve chamar updateContributions sem dados explícitos', () async {
-      fakePersistContributionsUc.set(testeProfileCerto);
-      verify(() => fakeRepositoryUpdate.updateContributions(testeProfileCerto)).called(1);
+      fakePersistContributionsUc.set(mockUserProfile);
+      verify(() => fakeRepositoryUpdate.updateContributions(mockUserProfile)).called(1);
     });
 
     test('Deve retornar número de contribuições', () async {
-      when(() => fakeRepositoryRead.getContributions(testeProfileCerto))
-          .thenAnswer((_) async => testeProfileCerto.picosAdicionados!);
+      when(() => fakeRepositoryRead.getContributions(mockUserProfile))
+          .thenAnswer((_) async => mockUserProfile.picosAdicionados!);
 
-      final result = await fakePersistContributionsUc.get(testeProfileCerto);
-      expect(result, testeProfileCerto.picosAdicionados);
-      verify(() => fakeRepositoryRead.getContributions(testeProfileCerto)).called(1);
+      final result = await fakePersistContributionsUc.get(mockUserProfile);
+      expect(result, mockUserProfile.picosAdicionados);
+      verify(() => fakeRepositoryRead.getContributions(mockUserProfile)).called(1);
     });
   });
 }

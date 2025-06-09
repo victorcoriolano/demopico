@@ -29,18 +29,18 @@ void main() {
     test('Este teste deve validar os dados antes de mandar para infra',
         () async {
       String novaFoto = "https://example.com/foto.png";
-      fakePersistPhotoUc.set(novaFoto, testeProfileCerto);
-      verify(() => fakeRepositoryUpdate.updatePhoto(novaFoto, testeProfileCerto))
+      fakePersistPhotoUc.set(novaFoto, mockUserProfile);
+      verify(() => fakeRepositoryUpdate.updatePhoto(novaFoto, mockUserProfile))
           .called(1);
     });
 
     test('Este teste deve retornar uma foto atualizada', () async {
-      when(() => fakeRepositoryRead.getPhoto(testeProfileCerto))
-          .thenAnswer((_) async => testeProfileCerto.pictureUrl!);
+      when(() => fakeRepositoryRead.getPhoto(mockUserProfile))
+          .thenAnswer((_) async => mockUserProfile.pictureUrl!);
 
-      String foto = await fakePersistPhotoUc.get(testeProfileCerto);
-      expect(foto, testeProfileCerto.pictureUrl);
-      verify(() => fakeRepositoryRead.getPhoto(testeProfileCerto)).called(1);
+      String foto = await fakePersistPhotoUc.get(mockUserProfile);
+      expect(foto, mockUserProfile.pictureUrl);
+      verify(() => fakeRepositoryRead.getPhoto(mockUserProfile)).called(1);
     });
   });
 }

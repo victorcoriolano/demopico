@@ -28,18 +28,18 @@ void main() {
     test('Este teste deve validar os dados antes de mandar para infra',
         () async {
       String novaBio = "newBio";
-      fakePersistBioUc.set(novaBio, testeProfileCerto);
-      verify(() => fakeRepositoryUpdate.updateBio(novaBio, testeProfileCerto))
+      fakePersistBioUc.set(novaBio, mockUserProfile);
+      verify(() => fakeRepositoryUpdate.updateBio(novaBio, mockUserProfile))
           .called(1);
     });
 
     test('Este teste deve retornar uma bio atualizado', () async {
-      when(() => fakeRepositoryRead.getBio(testeProfileCerto))
-          .thenAnswer((_) async => testeProfileCerto.description!);
+      when(() => fakeRepositoryRead.getBio(mockUserProfile))
+          .thenAnswer((_) async => mockUserProfile.description!);
 
-      String bio = await fakePersistBioUc.get(testeProfileCerto);
-      expect(bio, testeProfileCerto.description);
-      verify(() => fakeRepositoryRead.getBio(testeProfileCerto)).called(1);
+      String bio = await fakePersistBioUc.get(mockUserProfile);
+      expect(bio, mockUserProfile.description);
+      verify(() => fakeRepositoryRead.getBio(mockUserProfile)).called(1);
     });
   });
 }
