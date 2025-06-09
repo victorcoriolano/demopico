@@ -35,6 +35,7 @@ class UserFirebaseService implements IUserDatabaseService {
     try {
       DocumentSnapshot userSnapshot =
           await firebaseFirestore.collection('users').doc(uid).get();
+      
 
       if (!userSnapshot.exists) {
         throw Exception("Usuario não existe");
@@ -44,7 +45,7 @@ class UserFirebaseService implements IUserDatabaseService {
     } on FirebaseException {
       throw Exception("Erro no banco, tente novamente mais tarde");
     } catch (e) {
-      throw Exception("Não foi possivel pegar o email");
+      throw Exception("Não foi possivel pegar os detalhes do usuário");
     }
   }
 
