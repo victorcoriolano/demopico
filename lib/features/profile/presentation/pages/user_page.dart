@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class UserPage extends StatefulWidget {
-  const UserPage({ super.key});
+  const UserPage({super.key});
 
   @override
   State<UserPage> createState() => _UserPageState();
@@ -38,7 +38,7 @@ class _UserPageState extends State<UserPage> {
 
     String? uid = providerAuth.pegarId();
 
-    if (uid == null || user == null) {
+    if (uid == null) {
       setState(() {
         _isLoading = true;
       });
@@ -60,12 +60,31 @@ class _UserPageState extends State<UserPage> {
       );
       return;
     }
-
+    currentUserId = uid;
     await providerDatabase.retrieveUserProfileData(uid);
+
     if (providerDatabase.user == null) {
       setState(() {
         _isLoading = true;
       });
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Error'),
+            content: const Text('User not found.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.to(() => const HomePage());
+                },
+                child: const Text('OK'),
+              )
+            ],
+          ),
+        );
+      }
+      return;
     } else {
       setState(() {
         user = providerDatabase.user!;
