@@ -1,4 +1,5 @@
 import 'package:demopico/core/app/home_page.dart';
+import 'package:demopico/core/common/widgets/back_widget.dart';
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
 import 'package:demopico/features/profile/presentation/widgets/edit_field_dialog.dart';
@@ -116,25 +117,9 @@ class _UserPageState extends State<UserPage> {
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    IconButton(
-                                      onPressed: () {
-                                        Get.to(() => const HomePage(),
-                                            popGesture: true,
-                                            preventDuplicates: true,
-                                            curve: Curves.easeInBack,
-                                            transition: Transition.leftToRight);
-                                      },
-                                      icon: const Icon(Icons.arrow_left),
-                                      color: const Color.fromARGB(255, 0, 0, 0),
-                                      splashRadius: 0.5,
-                                      tooltip: "Voltar",
-                                      splashColor: null,
-                                      focusColor: null,
-                                      hoverColor: null,
-                                      iconSize: 60,
-                                    ),
+                                    const CustomBackButton(destination: HomePage(), iconSize: 35,),
                                     ProfileConfigureWidget(
                                         bioController: bioController),
                                   ],
