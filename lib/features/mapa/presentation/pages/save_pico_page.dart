@@ -20,7 +20,7 @@ class _SavePicoPageState extends State<SavePicoPage> {
     final mapProvider = Provider.of<MapControllerProvider>(context, listen: true);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Picos Salvos', style: TextStyle(color: Colors.white),),
+        title: const Text('Picos Favoritos', style: TextStyle(color: Colors.white),),
         backgroundColor: const Color(0xFF8B0000),
         leading: IconButton(
           onPressed: () {
