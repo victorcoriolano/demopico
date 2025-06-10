@@ -99,9 +99,6 @@ class _UserPageState extends State<UserPage> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double avatarSize = 160; // 80 (raio) * 2
-
     return Scaffold(
         body: Consumer<UserDatabaseProvider>(
             builder: (context, provider, child) => SafeArea(
