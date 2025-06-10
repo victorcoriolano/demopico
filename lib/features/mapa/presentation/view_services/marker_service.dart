@@ -1,9 +1,9 @@
 
+import 'dart:async';
+
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
-import 'package:demopico/features/mapa/presentation/widgets/icon_marker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:widget_to_marker/widget_to_marker.dart';
 
 class MarkerService {
   static MarkerService? _markerService;
@@ -15,28 +15,36 @@ class MarkerService {
   final Map<String, BitmapDescriptor> _markerIcons = {};
   Set<Marker> markers = {};
 
+ 
+
   Map<String, BitmapDescriptor> get markerIcons => _markerIcons;
+  
+  Future<void> createIcons(List<Pico> picos) async {
+    await Future.wait(
+      picos.map(
+        (pico){      
+          return BitmapDescriptor.asset(
+            const ImageConfiguration(size: Size(27, 32)), 
+            "images/Location.png",).then(
+              (assets) => _markerIcons[pico.picoName] = assets);
+        }
+      
+      )
+    );
+  }
+  
 
   Stream<Marker> preloadIcons(List<Pico> picos, void Function(Pico) onTap) async*{
-    for (final pico in picos) {
-      // carrega os icons 
-      final icon = await IconMarker(
-        text: pico.picoName, 
-      ).toBitmapDescriptor(
-        logicalSize: const Size(150, 150),
-        imageSize: const Size(120, 150),
-      );
-      _markerIcons[pico.picoName] = icon;
-
-      // carrega os markers 
-      final marker = Marker(
-        markerId: MarkerId(pico.picoName),
-        position: LatLng(pico.lat, pico.long),
-        icon: _markerIcons[pico.picoName] ?? BitmapDescriptor.defaultMarker,
-        onTap: () => onTap(pico),
-      );
-      debugPrint("criou o marker");
-      yield marker;
+    if (_markerIcons.isEmpty){
+      await createIcons(picos);
+      for (var pico in picos){
+        yield Marker(
+          markerId: MarkerId(pico.picoName),
+          position: LatLng(pico.lat, pico.long),
+          icon: _markerIcons[pico.picoName]!,
+          onTap: () => onTap(pico),
+        );
+      }  
     }
   }
 }
