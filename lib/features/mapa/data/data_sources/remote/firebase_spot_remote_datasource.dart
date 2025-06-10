@@ -104,7 +104,7 @@ class FirebaseSpotRemoteDataSource implements ISpotRemoteDataSource {
         }
       }
       else {
-        querySnapshot = querySnapshot.limit(3);
+        querySnapshot = querySnapshot;
       }
     } catch (e, st) {
       debugPrint("Erro na consulta: $e $st");
