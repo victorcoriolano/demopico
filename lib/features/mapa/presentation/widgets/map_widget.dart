@@ -35,9 +35,6 @@ class MapWidgetState extends State<MapWidget> {
     );
     _spotControllerProvider.initialize();
   }
-  
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +51,7 @@ class MapWidgetState extends State<MapWidget> {
             target: _mapControllerProvider.center,
             zoom: _mapControllerProvider.zoomInicial,
           ),
-          mapType: _mapControllerProvider.myMapType,
+          mapType: context.watch<MapControllerProvider>().myMapType,
           scrollGesturesEnabled: true,
           rotateGesturesEnabled: true,
           myLocationEnabled: true,
