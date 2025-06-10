@@ -36,7 +36,7 @@ class ProfileDataWidget extends StatelessWidget {
                 image: DecorationImage(
                   image: backgroundUrl != null && backgroundUrl!.isNotEmpty
                       ? NetworkImage(backgroundUrl!)
-                      : const AssetImage("assets/images/backgroundPadrao.png")
+                      : const AssetImage("images/backgroundPadrao.png")
                           as ImageProvider,
                   fit: BoxFit.cover,
                 ),
@@ -64,7 +64,7 @@ class ProfileDataWidget extends StatelessWidget {
         ),
         const SizedBox(height: 100),
         Text(
-          name ?? 'Usuário não encontrado...',
+          name ?? 'Nome de usuário não encontrado...',
           style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 10),
