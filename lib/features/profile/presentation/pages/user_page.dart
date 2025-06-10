@@ -133,80 +133,86 @@ class _UserPageState extends State<UserPage> {
                                 followers: user?.conexoes ?? 0,
                                 contributions: user?.picosAdicionados ?? 0,
                               ),
-                              const SizedBox(height: 20),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20),
-                                child: Container(
-                                    padding: const EdgeInsets.all(12),
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.rectangle,
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(10)),
-                                      color: const Color.fromARGB(
-                                          29, 248, 248, 248),
-                                      border: Border.all(
-                                          color: Colors.black, width: 1),
-                                    ),
-                                    width: MediaQueryData.fromView(
-                                                    View.of(context))
-                                                .size
-                                                .width >
-                                            600
-                                        ? 400
-                                        : null,
-                                    alignment: Alignment.center,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        ProfileActionButton(
-                                          icon: Icons.add_card,
-                                          label: 'Fazer Comunicado',
-                                          onPressed: () {
-                                            Get.to(() => const HubPage(),
-                                                curve: Curves.easeOutSine,
-                                                transition:
-                                                    Transition.upToDown);
-                                          },
+                              const SizedBox(height: 10),
+                              Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    child: Container(
+                                        padding: const EdgeInsets.all(12),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.rectangle,
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(10)),
+                                          color: const Color.fromARGB(
+                                              29, 248, 248, 248),
+                                         
                                         ),
-                                        ProfileActionButton(
-                                          icon: Icons.add_location,
-                                          label: 'Adicionar um Pico',
-                                          onPressed: () {
-                                            Get.to(() => const MapPage(),
-                                                curve: Curves.easeInOutSine,
-                                                transition:
-                                                    Transition.leftToRight);
-                                          },
-                                        ),
-                                        ProfileActionButton(
-                                          icon: Icons.edit,
-                                          label: 'Editar Descrição',
-                                          onPressed: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return EditFieldDialog(
-                                                  title: 'Editar descrição',
-                                                  controller: bioController,
-                                                  onConfirm: () {
-                                                    setState(() {
-                                                      user?.description =
-                                                          bioController
-                                                              .text;
-                                                    });
-                                                    bioController.clear();
+                                        width: MediaQueryData.fromView(
+                                                        View.of(context))
+                                                    .size
+                                                    .width >
+                                                600
+                                            ? 400
+                                            : null,
+                                        alignment: Alignment.center,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            ProfileActionButton(
+                                              icon: Icons.add_card,
+                                              label: 'Fazer Comunicado',
+                                              onPressed: () {
+                                                Get.to(() => const HubPage(),
+                                                    curve: Curves.easeOutSine,
+                                                    transition:
+                                                        Transition.upToDown);
+                                              },
+                                            ),
+                                            ProfileActionButton(
+                                              icon: Icons.add_location,
+                                              label: 'Adicionar um Pico',
+                                              onPressed: () {
+                                                Get.to(() => const MapPage(),
+                                                    curve: Curves.easeInOutSine,
+                                                    transition:
+                                                        Transition.leftToRight);
+                                              },
+                                            ),
+                                            ProfileActionButton(
+                                              icon: Icons.edit,
+                                              label: 'Editar Descrição',
+                                              onPressed: () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return EditFieldDialog(
+                                                      title: 'Editar descrição',
+                                                      controller: bioController,
+                                                      onConfirm: () {
+                                                        setState(() {
+                                                          user?.description =
+                                                              bioController
+                                                                  .text;
+                                                        });
+                                                        bioController.clear();
+                                                      },
+                                                    );
                                                   },
                                                 );
                                               },
-                                            );
-                                          },
-                                        ),
-                                      ],
-                                    )),
+                                            ),
+                                          ],
+                                        )
+                                        )
+                                        ,
+                                  ),
+                                   Divider(color: const Color.fromARGB(255, 0, 0, 0)),
+                                ],
                               ),
                               const Spacer(),
                             ])))));

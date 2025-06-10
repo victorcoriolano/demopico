@@ -67,39 +67,49 @@ class ProfileDataWidget extends StatelessWidget {
           name ?? 'Nome de usuário não encontrado...',
           style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Text(
-              '$followers\nSeguidores',
-              textAlign: TextAlign.center,
-            ),
-            Text(
-              '$contributions\nContribuições',
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-        const SizedBox(height: 30),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.circular(10),
-              color: const Color.fromARGB(176, 196, 196, 196),
-              border: Border.all(color: Colors.black, width: 1),
-            ),
-            width: screenWidth > 600 ? 400 : null,
-            alignment: Alignment.center,
-            child: Text(
-              description ?? '',
-              style: const TextStyle(fontSize: 12),
-            ),
+
+        Container(
+          margin: EdgeInsets.symmetric(
+              horizontal: (screenWidth * 0.20) / 2, vertical: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '$followers\nSeguidores',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              Text(
+                '$contributions\nContribuições',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+            ],
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Center(
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              width: screenWidth > 600 ? 400 : null,
+              alignment: Alignment.center,
+              child: Text(
+                textAlign: TextAlign.center,
+                description ?? '',
+                style: const TextStyle(fontSize: 16),
+              ),
+            ),
+          ),
+        )
       ],
     );
   }
