@@ -29,6 +29,7 @@ class SpotSaveController extends ChangeNotifier {
 
   Future<bool> getPicosSalvos(String idUser) async {
     try {
+      debugPrint("Busca de picos salvos");
       picosFavoritos = await saveSpot.listFavoriteSpot(idUser);
       if (picosFavoritos.isNotEmpty) {
         return true;
