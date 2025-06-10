@@ -30,21 +30,19 @@ class SaveSpotUc {
   }
 
   Future<List<SpotCardUIDto>> listFavoriteSpot(String idUser) async {
-    try {
+    
       final favoritos = await spotFavRepositoryIMP.listFavoriteSpot(idUser);
       if (favoritos.isEmpty) {
-        throw Exception("Picos salvos não encontrados");
+        return [];
       }
       final result = await Future.wait(favoritos.map((fav) async {
         final pico =
-            await spotRepositoryIMP.getPicoByID(fav.id); // retorna PicoModel
+            await spotRepositoryIMP.getPicoByID(fav.idPico); // retorna PicoModel
         var card = SpotCardUIDto(picoFavoritoModel: fav, picoModel: pico);
         return card;
       }));
       return result;
-    } catch (e) {
-      return [];
-    }
+    
   }
 
   Future<void> deleteSaveSpot(String idPicoFavModel) async {
