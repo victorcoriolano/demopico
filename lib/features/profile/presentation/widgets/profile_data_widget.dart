@@ -62,7 +62,7 @@ class ProfileDataWidget extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 70),
+        const SizedBox(height: 100),
         Text(
           name ?? 'Usuário não encontrado...',
           style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
