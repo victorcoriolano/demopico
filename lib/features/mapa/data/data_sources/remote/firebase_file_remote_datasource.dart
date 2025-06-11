@@ -5,6 +5,7 @@ import 'package:demopico/features/mapa/domain/models/upload_file_model.dart';
 import 'package:demopico/features/mapa/domain/models/upload_result_file_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
+import 'package:flutter/material.dart';
 
 class FirebaseFileRemoteDatasource implements IFileRemoteDataSource {
   static FirebaseFileRemoteDatasource? _firebaseFileRemoteDatasource;
@@ -32,6 +33,7 @@ class FirebaseFileRemoteDatasource implements IFileRemoteDataSource {
     return tasks;
     }
     on FirebaseException catch(e) {
+      debugPrint("Erro aqui no file: ${e.message}");
       throw FirebaseErrorsMapper.map(e);
     }
   }
@@ -46,6 +48,7 @@ class FirebaseUploadTask implements UploadTaskInterface {
       (event) {
         if (event.state == TaskState.running) {
           final progress = event.bytesTransferred / event.totalBytes;
+          debugPrint("Progress: $progress");
           _controller.add(progress);
         }
       },
