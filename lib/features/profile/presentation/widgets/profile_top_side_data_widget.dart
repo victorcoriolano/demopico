@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class ProfileTopSideDataWidget extends StatelessWidget {
-  final String? name;
+
   final String? avatarUrl;
   final String? backgroundUrl;
   final double avatarSize;
   const ProfileTopSideDataWidget({
     super.key,
-    required this.name,
+
     required this.avatarUrl,
     required this.backgroundUrl,
     this.avatarSize = 80,
@@ -24,7 +24,7 @@ class ProfileTopSideDataWidget extends StatelessWidget {
           children: [
             Container(
               width: double.infinity,
-              height: 200,
+              height: 220,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: backgroundUrl != null && backgroundUrl!.isNotEmpty
@@ -54,11 +54,6 @@ class ProfileTopSideDataWidget extends StatelessWidget {
               ),
             ),
           ],
-        ),
-        const SizedBox(height: 100),
-        Text(
-          name ?? 'Nome de usuário não encontrado...',
-          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
       ],
     );
