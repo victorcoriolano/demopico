@@ -38,9 +38,9 @@ class _ContainerPostsWidgetState extends State<ContainerPostsWidget> {
         ),
         itemCount: filteredPosts.length,
         itemBuilder: (context, index) {
-          return Card(
-            margin: const EdgeInsets.all(0.8),
-              shape: const RoundedRectangleBorder(
+          return const Card(
+            margin: EdgeInsets.all(0.8),
+              shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.zero,
         ),
             child: Center(

@@ -13,12 +13,12 @@ class CardPostWidget extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => HomePage(),
+            builder: (_) => const HomePage(),
           ),
         );
       },
       child: Card(
-        margin: EdgeInsets.all(0),
+        margin: const EdgeInsets.all(0),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
         clipBehavior: Clip.antiAlias,
         child: Image.asset(

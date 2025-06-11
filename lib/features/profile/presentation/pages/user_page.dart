@@ -154,10 +154,8 @@ class _UserPageState extends State<UserPage> {
                               Container(
                                 padding: const EdgeInsets.all(0),
                                 margin: const EdgeInsets.all(0),
-                                height: screenHeight * 0.56
-                                ,
+                                height: screenHeight * 0.56,
                                 child: SingleChildScrollView(
-                                  padding: EdgeInsets.all(0),
                                     child: Column(
                                   children: [
                                     ProfileBottomSideDataWidget(
@@ -168,7 +166,6 @@ class _UserPageState extends State<UserPage> {
                                     ),
                                     Container(
                                       padding: const EdgeInsets.all(0),
-                                      margin: EdgeInsets.all(0),
                                       height: screenHeight * 0.57
                                       ,
                                       child: const ProfilePostsWidget(),
