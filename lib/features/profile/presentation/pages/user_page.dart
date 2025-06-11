@@ -109,14 +109,18 @@ class _UserPageState extends State<UserPage> {
                 child: _isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : Container(
+                        padding: const EdgeInsets.all(0),
+                        margin: const EdgeInsets.all(0),
                         height: double.infinity,
                         color: const Color.fromARGB(80, 243, 240, 240),
                         child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Container(
-                                height: screenHeight * 0.44,
+                                height: screenHeight * 0.40,
+                                padding: const EdgeInsets.all(0),
+                                margin: const EdgeInsets.all(0),
                                 child: Column(
                                   children: [
                                     Padding(
@@ -126,11 +130,18 @@ class _UserPageState extends State<UserPage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                            CrossAxisAlignment.center,
                                         children: [
                                           const CustomBackButton(
                                             destination: HomePage(),
                                             iconSize: 35,
+                                          ),
+                                          Text(
+                                            user!.name ??
+                                                'Nome de usuário não encontrado...',
+                                            style: const TextStyle(
+                                                fontSize: 22,
+                                                fontWeight: FontWeight.bold),
                                           ),
                                           ProfileConfigureWidget(
                                               bioController: bioController),
@@ -138,7 +149,6 @@ class _UserPageState extends State<UserPage> {
                                       ),
                                     ),
                                     ProfileTopSideDataWidget(
-                                      name: user?.name,
                                       avatarUrl: user?.pictureUrl,
                                       backgroundUrl: user?.backgroundPicture,
                                     ),
@@ -146,7 +156,9 @@ class _UserPageState extends State<UserPage> {
                                 ),
                               ),
                               Container(
-                                height: screenHeight * 0.50,
+                                padding: const EdgeInsets.all(0),
+                                margin: const EdgeInsets.all(0),
+                                height: screenHeight * 0.55,
                                 child: SingleChildScrollView(
                                     child: Column(
                                   children: [
@@ -157,7 +169,7 @@ class _UserPageState extends State<UserPage> {
                                           user?.picosAdicionados ?? 0,
                                     ),
                                     Container(
-                                      height: screenHeight * 0.50,
+                                      height: screenHeight * 0.55,
                                       child: ProfilePostWidget(),
                                     )
                                   ],
