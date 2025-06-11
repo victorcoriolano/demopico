@@ -1,6 +1,6 @@
 import 'package:demopico/core/app/home_page.dart';
 import 'package:demopico/core/common/widgets/back_widget.dart';
-import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_post_widget.dart';
+import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_posts_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_bottom_side_data_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_configure_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_top_side_data_widget.dart';
@@ -154,8 +154,10 @@ class _UserPageState extends State<UserPage> {
                               Container(
                                 padding: const EdgeInsets.all(0),
                                 margin: const EdgeInsets.all(0),
-                                height: screenHeight * 0.55,
+                                height: screenHeight * 0.56
+                                ,
                                 child: SingleChildScrollView(
+                                  padding: EdgeInsets.all(0),
                                     child: Column(
                                   children: [
                                     ProfileBottomSideDataWidget(
@@ -166,9 +168,13 @@ class _UserPageState extends State<UserPage> {
                                     ),
                                     Container(
                                       padding: const EdgeInsets.all(0),
-                                      height: screenHeight * 0.55,
-                                      child: const ProfilePostWidget(),
-                                    )
+                                      margin: EdgeInsets.all(0),
+                                      height: screenHeight * 0.57
+                                      ,
+                                      child: const ProfilePostsWidget(),
+                                      
+                                    ),
+                                  
                                   ],
                                 )),
                               ),
