@@ -22,6 +22,7 @@ class AddPicoWidgetState extends State<AddPicoWidget> {
   void initState() {
     super.initState();
     latLng = context.read<MapControllerProvider>().center;
+    context.read<AddPicoProvider>().initialize();
   }
 
   @override
