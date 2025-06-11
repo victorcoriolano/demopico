@@ -106,8 +106,8 @@ class _ProfileConfigureWidgetState extends State<ProfileConfigureWidget> {
       alignment: Alignment.topRight,
       child: IconButton(
         icon: const Icon(Icons.settings),
-        iconSize: 35,
-        color: const Color.fromARGB(255, 255, 255, 255),
+        iconSize: 30,
+        color: const Color.fromARGB(255, 0, 0, 0),
         onPressed: _showSettingsDialog,
       ),
     );

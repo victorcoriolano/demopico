@@ -11,7 +11,7 @@ class ProfileActionButton extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.onPressed,
-    this.iconSize = 38,
+    this.iconSize = 30,
   });
 
   @override
