@@ -129,8 +129,8 @@ class _UserPageState extends State<UserPage> {
                                             CrossAxisAlignment.center,
                                         children: [
                                           const CustomBackButton(
+                                            iconSize: 30,
                                             destination: HomePage(),
-                                            iconSize: 35,
                                           ),
                                           Text(
                                             user!.name ??
