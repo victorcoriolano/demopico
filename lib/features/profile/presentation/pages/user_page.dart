@@ -1,10 +1,6 @@
 import 'package:demopico/core/app/home_page.dart';
 import 'package:demopico/core/common/widgets/back_widget.dart';
-import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
-import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
-import 'package:demopico/features/profile/presentation/widgets/edit_field_dialog.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_post_widget.dart';
-import 'package:demopico/features/profile/presentation/widgets/profile_action_button.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_bottom_side_data_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_configure_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_top_side_data_widget.dart';

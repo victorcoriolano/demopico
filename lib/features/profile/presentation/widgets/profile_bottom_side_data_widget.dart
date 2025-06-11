@@ -28,14 +28,14 @@ class ProfileBottomSideDataWidget extends StatelessWidget {
               Text(
                 '$followers\nSeguidores',
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                 ),
               ),
               Text(
                 '$contributions\nContribuições',
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                 ),
               ),
