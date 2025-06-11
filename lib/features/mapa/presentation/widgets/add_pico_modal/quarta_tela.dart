@@ -83,7 +83,7 @@ class _QuartaTelaState extends State<QuartaTela>  {
                 GestureDetector(
                   onTap: () async {
                     // Função para anexar imagem (placeholder)
-                    await provider.selecionarImag();
+                    await provider.pickImages();
                   },
                   child: Column(
                     children: [
@@ -97,8 +97,30 @@ class _QuartaTelaState extends State<QuartaTela>  {
                       Container(
                         margin: const EdgeInsets.only(top: 5),
                         child: Visibility(
-                          visible: provider.urlImage.isNotEmpty,
-                          child: const Text("imagem selecionada com sucesso"),
+                          visible: provider.files.isNotEmpty,
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 200,
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: provider.files.length,
+                                  itemBuilder: (context, index) {
+                                    return Image.memory(provider.files[index].bytes);
+                                  }
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              TextButton(
+                                onPressed: (){
+                                  provider.uploadFiles();
+                                },
+                                child: const Text('Salvar'),
+                              ),
+                              LinearProgressIndicator(value: provider.progress,),
+                            ],
+                          ),
+
                         ),
                       ),
                     ],
