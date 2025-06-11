@@ -165,8 +165,9 @@ class _UserPageState extends State<UserPage> {
                                           user?.picosAdicionados ?? 0,
                                     ),
                                     Container(
+                                      padding: const EdgeInsets.all(0),
                                       height: screenHeight * 0.55,
-                                      child: ProfilePostWidget(),
+                                      child: const ProfilePostWidget(),
                                     )
                                   ],
                                 )),
