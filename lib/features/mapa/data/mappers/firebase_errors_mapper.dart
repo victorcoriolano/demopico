@@ -19,6 +19,8 @@ class FirebaseErrorsMapper {
         return OperationCanceledFailure(originalException: exception);
       case 'storage/quota-exceeded':
         return LimitExceededFailure(originalException: exception);
+      case 'firebase_storage/object-not-found':
+        return PicoNotFoundFailure(originalException: exception);
       
       // Auth
       case 'auth/email-already-in-use':
