@@ -1,22 +1,15 @@
 import 'package:flutter/material.dart';
 
-class ProfileDataWidget extends StatelessWidget {
-  final String? name;
+class ProfileTopSideDataWidget extends StatelessWidget {
+
   final String? avatarUrl;
   final String? backgroundUrl;
-  final String? description;
-  final int? followers;
-  final int? contributions;
   final double avatarSize;
-
-  const ProfileDataWidget({
+  const ProfileTopSideDataWidget({
     super.key,
-    required this.name,
+
     required this.avatarUrl,
     required this.backgroundUrl,
-    required this.description,
-    required this.followers,
-    required this.contributions,
     this.avatarSize = 80,
   });
 
@@ -31,7 +24,7 @@ class ProfileDataWidget extends StatelessWidget {
           children: [
             Container(
               width: double.infinity,
-              height: 200,
+              height: 220,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: backgroundUrl != null && backgroundUrl!.isNotEmpty
@@ -61,44 +54,6 @@ class ProfileDataWidget extends StatelessWidget {
               ),
             ),
           ],
-        ),
-        const SizedBox(height: 100),
-        Text(
-          name ?? 'Nome de usuário não encontrado...',
-          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Text(
-              '$followers\nSeguidores',
-              textAlign: TextAlign.center,
-            ),
-            Text(
-              '$contributions\nContribuições',
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-        const SizedBox(height: 30),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.circular(10),
-              color: const Color.fromARGB(176, 196, 196, 196),
-              border: Border.all(color: Colors.black, width: 1),
-            ),
-            width: screenWidth > 600 ? 400 : null,
-            alignment: Alignment.center,
-            child: Text(
-              description ?? '',
-              style: const TextStyle(fontSize: 12),
-            ),
-          ),
         ),
       ],
     );
