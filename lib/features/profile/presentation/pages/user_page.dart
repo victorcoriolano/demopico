@@ -3,9 +3,11 @@ import 'package:demopico/core/common/widgets/back_widget.dart';
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
 import 'package:demopico/features/profile/presentation/widgets/edit_field_dialog.dart';
+import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_post_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_action_button.dart';
+import 'package:demopico/features/profile/presentation/widgets/profile_bottom_side_data_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_configure_widget.dart';
-import 'package:demopico/features/profile/presentation/widgets/profile_data_widget.dart';
+import 'package:demopico/features/profile/presentation/widgets/profile_top_side_data_widget.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
@@ -100,121 +102,67 @@ class _UserPageState extends State<UserPage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
         body: Consumer<UserDatabaseProvider>(
             builder: (context, provider, child) => SafeArea(
                 child: _isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : Container(
-                        color: const Color.fromARGB(80, 241, 236, 236),
+                        height: double.infinity,
+                        color: const Color.fromARGB(80, 243, 240, 240),
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 4.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                              Container(
+                                height: screenHeight * 0.44,
+                                child: Column(
                                   children: [
-                                    const CustomBackButton(destination: HomePage(), iconSize: 35,),
-                                    ProfileConfigureWidget(
-                                        bioController: bioController),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 4.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const CustomBackButton(
+                                            destination: HomePage(),
+                                            iconSize: 35,
+                                          ),
+                                          ProfileConfigureWidget(
+                                              bioController: bioController),
+                                        ],
+                                      ),
+                                    ),
+                                    ProfileTopSideDataWidget(
+                                      name: user?.name,
+                                      avatarUrl: user?.pictureUrl,
+                                      backgroundUrl: user?.backgroundPicture,
+                                    ),
                                   ],
                                 ),
                               ),
-                              ProfileDataWidget(
-                                name: user?.name,
-                                avatarUrl: user?.pictureUrl,
-                                backgroundUrl: user?.backgroundPicture,
-                                description: user?.description,
-                                followers: user?.conexoes ?? 0,
-                                contributions: user?.picosAdicionados ?? 0,
+                              Container(
+                                height: screenHeight * 0.50,
+                                child: SingleChildScrollView(
+                                    child: Column(
+                                  children: [
+                                    ProfileBottomSideDataWidget(
+                                      description: user?.description,
+                                      followers: user?.conexoes ?? 0,
+                                      contributions:
+                                          user?.picosAdicionados ?? 0,
+                                    ),
+                                    Container(
+                                      height: screenHeight * 0.50,
+                                      child: ProfilePostWidget(),
+                                    )
+                                  ],
+                                )),
                               ),
-                              const SizedBox(height: 10),
-                              Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20),
-                                    child: Container(
-                                        padding: const EdgeInsets.all(12),
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.rectangle,
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(10)),
-                                          color: const Color.fromARGB(
-                                              29, 248, 248, 248),
-                                         
-                                        ),
-                                        width: MediaQueryData.fromView(
-                                                        View.of(context))
-                                                    .size
-                                                    .width >
-                                                600
-                                            ? 400
-                                            : null,
-                                        alignment: Alignment.center,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            ProfileActionButton(
-                                              icon: Icons.add_card,
-                                              label: 'Fazer Comunicado',
-                                              onPressed: () {
-                                                Get.to(() => const HubPage(),
-                                                    curve: Curves.easeOutSine,
-                                                    transition:
-                                                        Transition.upToDown);
-                                              },
-                                            ),
-                                            ProfileActionButton(
-                                              icon: Icons.add_location,
-                                              label: 'Adicionar um Pico',
-                                              onPressed: () {
-                                                Get.to(() => const MapPage(),
-                                                    curve: Curves.easeInOutSine,
-                                                    transition:
-                                                        Transition.leftToRight);
-                                              },
-                                            ),
-                                            ProfileActionButton(
-                                              icon: Icons.edit,
-                                              label: 'Editar Descrição',
-                                              onPressed: () {
-                                                showDialog(
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return EditFieldDialog(
-                                                      title: 'Editar descrição',
-                                                      controller: bioController,
-                                                      onConfirm: () {
-                                                        setState(() {
-                                                          user?.description =
-                                                              bioController
-                                                                  .text;
-                                                        });
-                                                        bioController.clear();
-                                                      },
-                                                    );
-                                                  },
-                                                );
-                                              },
-                                            ),
-                                          ],
-                                        )
-                                        )
-                                        ,
-                                  ),
-                                   Divider(color: const Color.fromARGB(255, 0, 0, 0)),
-                                ],
-                              ),
-                              const Spacer(),
                             ])))));
   }
 }
