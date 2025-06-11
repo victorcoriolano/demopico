@@ -19,8 +19,8 @@ class CustomBackButton extends StatelessWidget {
           () => destination,
           popGesture: true,
           preventDuplicates: true,
-          curve: Curves.easeInBack,
-          transition: Transition.downToUp,
+          curve: Curves.ease,
+          transition: Transition.leftToRight,
         );
       },
       icon: const Icon(Icons.arrow_back),
