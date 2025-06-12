@@ -1,12 +1,14 @@
 
 import 'dart:async';
 
+import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
+import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 import 'package:demopico/features/mapa/domain/models/upload_file_model.dart';
 import 'package:demopico/features/mapa/domain/models/upload_result_file_model.dart';
+import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/pick_image_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/save_image_uc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -16,15 +18,19 @@ class AddPicoProvider extends ChangeNotifier{
   static AddPicoProvider get getInstance {
     _addPicoProvider ??= AddPicoProvider(
         pickImageUC: PickImageUC.getInstance,
-        saveImageUC: SaveImageUC.getInstance);
+        saveImageUC: SaveImageUC.getInstance,
+        createSpotUc: CreateSpotUc.getInstance);
     return _addPicoProvider!;
   }
 
   //instanciando casos de uso
   final PickImageUC pickImageUC;
   final SaveImageUC saveImageUC;
+  final CreateSpotUc createSpotUc;
 
-  AddPicoProvider({required this.pickImageUC, required this.saveImageUC, });
+  AddPicoProvider({required this.pickImageUC, required this.saveImageUC, required this.createSpotUc});
+
+  Pico? pico;
 
   Map<String, int> atributos = {};
   List<String> obstaculos = [];
@@ -49,7 +55,12 @@ class AddPicoProvider extends ChangeNotifier{
   
 
   Future<void> pickImages() async{
-    files = await pickImageUC.pegarArquivos();
+    try{
+      files = await pickImageUC.pegarArquivos();
+    }on Exception catch(e) {
+      debugPrint("Erro ao selecionar imagens: $e");
+      errosImages = e.toString();
+    }
     notifyListeners();
   }
 
@@ -80,13 +91,10 @@ class AddPicoProvider extends ChangeNotifier{
   
 
   
-  void pegarLocalizacao(LatLng localizacao) {
-    latlang = localizacao;
-  }
+  /* - */
 
   //variaveis de mensagem de erro
-  String? nomePicoErro;
-  String? descricaoErro;
+  String? errors;
 
   Map<String, List<String>> utilidadesPorModalidade = {
     'Skate': [
@@ -198,42 +206,19 @@ class AddPicoProvider extends ChangeNotifier{
     }
   }
 
-  bool imagensIsNotEmpty() {
-    return imgUrls.isNotEmpty;
-  }
-
-  bool validarNomePico() {
-    if (nomePico.isEmpty) {
-      nomePicoErro = "Preencha este campo";
-      notifyListeners();
-      return false;
-    }
-    nomePicoErro = null;
-    notifyListeners();
-    return true;
-  }
-
-  bool validarDescricao() {
-    if (descricao.isEmpty) {
-      descricaoErro = "Preencha este campo";
-      notifyListeners();
-      return false;
-    }
-    descricaoErro = null;
-    notifyListeners();
-    return true;
+  bool validarTexto(){
+    return nomePico.isNotEmpty && descricao.isNotEmpty;
   }
 
   bool validarFormulario() {
-    final nomeValido = validarNomePico();
-    final descricaoValida = validarDescricao();
-    final validarImagens = imagensIsNotEmpty();
-    return nomeValido && descricaoValida && validarImagens;
+    final camposValidos = validarTexto();
+    final validarImagens = files.isNotEmpty;
+    return camposValidos && validarImagens;
   }
   
   
 
-  Pico getInfoPico(User? userCriador) {
+  Pico getInfoPico(String? userCriador) {
     return Pico(
       id: "",
       picoName: nomePico,
@@ -247,7 +232,7 @@ class AddPicoProvider extends ChangeNotifier{
       long: latlang!.longitude,
       atributos: atributos,
       modalidade: selectedModalidade,
-      userCreator: userCriador?.displayName ?? "Anônimo",
+      userCreator: userCriador ?? "Anônimo",
       obstaculos: obstaculos,
     );
   }
@@ -267,5 +252,21 @@ class AddPicoProvider extends ChangeNotifier{
     files.clear();
     notifyListeners();
     super.dispose();
+  }
+   
+
+  String? error;
+
+  Future<void> createSpot(String? user) async {
+    try {
+      final newPico = getInfoPico(user);
+      // Salva o pico no backend
+      await createSpotUc.createSpot(newPico as PicoModel);
+
+      // Limpa os campos após a criação bem-sucedida
+      dispose();
+    }on Failure catch (e) {
+      error = e.message;
+    }
   }
 }
