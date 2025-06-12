@@ -31,7 +31,7 @@ class MapWidgetState extends State<MapWidget> {
   Future<void> _initializeProviders() async {
     await _mapControllerProvider.getLocation();
     _spotControllerProvider.setOnTapMarker(
-      (pico) => ModalHelper.openModalInfoPico(context, pico),
+      (pico) => ModalHelper.openModalInfoPico(context, pico, _spotControllerProvider.deletarPico),
     );
     _spotControllerProvider.initialize();
   }
