@@ -1,3 +1,4 @@
+
 import 'package:demopico/core/common/denunciar/widgets/denunciar_widget.dart';
 import 'package:demopico/core/common/denunciar/denuncia_model.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
@@ -16,10 +17,12 @@ import 'package:provider/provider.dart';
 class ShowPicoWidget extends StatefulWidget {
   final Pico pico;
   final ScrollController scrollController;
+  final void Function(String id) deletarPico;
   
 
   const ShowPicoWidget(
       {super.key,
+      required this.deletarPico,
       required this.pico,
       required this.scrollController,
      });
@@ -108,10 +111,9 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
     final provider = context.read<SpotSaveController>();
 
     return DraggableScrollableSheet(
-
-        initialChildSize: 0.6,
+        initialChildSize: 0.7,
         minChildSize: 0.2,
-        maxChildSize: 0.86,
+        maxChildSize: 0.96,
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(
             decoration: const BoxDecoration(
@@ -136,6 +138,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                           ? Stack(
                               children: [
                                 PageView.builder(
+
                                   itemCount: images.length,
                                   onPageChanged: (int page) {
                                     setState(() {
@@ -171,7 +174,21 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                           onPressed: () {
                                             Navigator.pop(context); // Retorna para a tela anterior
                                           },
-                                        )
+                                        ),
+                                        Visibility(
+                                          visible: widget.pico.userCreator != null && widget.pico.userCreator! == user.name,
+                                          child: IconButton(
+                                            onPressed: () {
+                                              // TODO: Implementar a exclusão do pico
+                                              //context.read<SpotControllerProvider>().deletarPico(widget.pico.id)
+                                            }, 
+                                            icon: const Icon(Icons.delete),
+                                            padding: const EdgeInsets.only(
+                                              top: 10,
+                                              left: 10,
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     );
                                   },
@@ -208,9 +225,26 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                 ),
                               ],
                             )
-                          : const Center(
-                              child: Text('Sem imagens disponíveis'),
-                            ),
+                          : Stack(
+                            children:[
+                              const Center(
+                                child: Text('Sem imagens disponíveis'),
+                              ),
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.close,
+                                  color: Color.fromARGB(
+                                      255, 243, 243, 243),
+                                ),
+                                padding: const EdgeInsets.only(
+                                    top: 10, right: 10),
+                                iconSize: 36,
+                                onPressed: () {
+                                  Navigator.pop(context); // Retorna para a tela anterior
+                                },
+                              )
+                            ] 
+                          ),
                     ),
                     Align(
                       alignment: Alignment.center,
