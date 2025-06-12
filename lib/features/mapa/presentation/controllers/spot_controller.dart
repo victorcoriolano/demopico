@@ -27,6 +27,7 @@ class SpotControllerProvider extends ChangeNotifier {
   final LoadSpotUc showAllPicoUseCase;
   final AvaliarSpotUc avaliarUseCase;
 
+
   List<Pico> spots = [];
   List<Pico> picosPesquisados = [];
   Filters? filtrosAtivos;
@@ -35,6 +36,11 @@ class SpotControllerProvider extends ChangeNotifier {
 
   void setOnTapMarker(void Function(Pico) onTapMarker) {
     _onTapMarker = onTapMarker;
+  }
+
+  Future<void> deletarPico(String id) async {
+    // TODO: implement deletarPico
+    throw UnimplementedError();
   }
 
   final MarkerService markerService = MarkerService.getInstance;
