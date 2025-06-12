@@ -46,20 +46,11 @@ class ModalHelper {
         isScrollControlled: true,
         backgroundColor: Colors.transparent, // Transparência para o fundo
         builder: (context) {
-          return DraggableScrollableSheet(
-            initialChildSize: 0.6,
-            minChildSize: 0.2,
-            maxChildSize: 0.86,
-            builder: (BuildContext context, ScrollController scrollController) {
-              debugPrint("chamou o modal para o pico ${pico.picoName}");
-              debugPrint("images ${pico.imgUrls.length}");
+          debugPrint("chamou o modal para o pico ${pico.picoName}");
               return ShowPicoWidget(
                 deletarPico: onDelete,
-                scrollController: scrollController,
                 pico: pico,
               );
-            },
-          );
         },
       );
     } catch (e) {

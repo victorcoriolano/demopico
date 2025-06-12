@@ -16,7 +16,6 @@ import 'package:provider/provider.dart';
 
 class ShowPicoWidget extends StatefulWidget {
   final Pico pico;
-  final ScrollController scrollController;
   final void Function(Pico) deletarPico;
   
 
@@ -24,7 +23,6 @@ class ShowPicoWidget extends StatefulWidget {
       {super.key,
       required this.deletarPico,
       required this.pico,
-      required this.scrollController,
      });
 
   @override
@@ -111,9 +109,9 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
     final provider = context.read<SpotSaveController>();
 
     return DraggableScrollableSheet(
-        initialChildSize: 0.7,
+        initialChildSize: 0.8,
         minChildSize: 0.2,
-        maxChildSize: 0.96,
+        maxChildSize: 0.83,
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(
             decoration: const BoxDecoration(
@@ -224,23 +222,38 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                               ],
                             )
                           : Stack(
+
                             children:[
+                              
                               const Center(
                                 child: Text('Sem imagens disponíveis'),
                               ),
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.close,
-                                  color: Color.fromARGB(
-                                      255, 243, 243, 243),
-                                ),
-                                padding: const EdgeInsets.only(
-                                    top: 10, right: 10),
-                                iconSize: 36,
-                                onPressed: () {
-                                  Navigator.pop(context); // Retorna para a tela anterior
-                                },
-                              )
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(
+                                      Icons.close,
+                                      color: Color.fromARGB(255, 0, 0, 0),
+                                    ),
+                                    
+                                    iconSize: 36,
+                                    onPressed: () {
+                                      Navigator.pop(context); // Retorna para a tela anterior
+                                    },
+                                  ),
+                                  
+                                  IconButton(
+                                      tooltip: "Deletar pico",
+                                        onPressed: () async {
+                                          await context.read<SpotControllerProvider>().deletarPico(widget.pico);
+                                          if (context.mounted) Navigator.pop(context);
+                                        },
+                                        icon: const Icon(Icons.delete, color: Colors.black,),
+                                        
+                                      ),
+                                ],
+                              ),
                             ] 
                           ),
                     ),
@@ -260,7 +273,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                 ),
                 Expanded(
                   child: ListView(
-                    controller: widget.scrollController,
+                    controller: scrollController,
                     children: [
                       // Barra de arrastar
                       Padding(
@@ -272,6 +285,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
+                                
                                 Row(
                                   children: List.generate(
                                       widget.pico.obstaculos.length, (index) {
