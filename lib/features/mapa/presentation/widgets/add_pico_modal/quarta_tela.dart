@@ -4,22 +4,17 @@ import 'package:provider/provider.dart';
 
 // Classe que representa a quarta tela
 class QuartaTela extends StatefulWidget {
-
   const QuartaTela({super.key});
 
   @override
   State<QuartaTela> createState() => _QuartaTelaState();
 }
 
-class _QuartaTelaState extends State<QuartaTela>  {
-  
-
-
+class _QuartaTelaState extends State<QuartaTela> {
   @override
   Widget build(BuildContext context) {
     return Consumer<AddPicoProvider>(
-      builder: (context, provider, child) => 
-      Scaffold(
+      builder: (context, provider, child) => Scaffold(
         backgroundColor: Colors.grey[200],
         body: SingleChildScrollView(
           // Permite rolagem do conteúdo
@@ -47,17 +42,17 @@ class _QuartaTelaState extends State<QuartaTela>  {
                     color: Colors.black,
                   ),
                 ),
-                 const SizedBox(height: 10),
+                const SizedBox(height: 10),
                 // Campo de texto para o nome do pico
                 TextFormField(
-                  decoration:  InputDecoration(
+                  decoration: InputDecoration(
                     hintText: 'Escreva aqui...', // Texto de sugestão
                     border: const OutlineInputBorder(), // Borda do campo
-                    errorText: provider.nomePicoErro,
+                    errorText: provider.errors,
                   ),
                   onChanged: (value) => provider.atualizarNome(value),
                 ),
-                const SizedBox(height: 50), // Espaço entre os campos
+                const SizedBox(height: 20), // Espaço entre os campos
                 // Texto para o campo de descrição
                 const Text(
                   'FALE UM POUCO SOBRE:',
@@ -74,26 +69,34 @@ class _QuartaTelaState extends State<QuartaTela>  {
                   decoration: InputDecoration(
                     hintText: 'Escreva aqui...', // Texto de sugestão
                     border: const OutlineInputBorder(), // Borda do campo
-                    errorText: provider.descricaoErro,
+                    errorText: provider.errors,
                   ),
                   onChanged: (value) => provider.atualizarDescricao(value),
                 ),
-                const SizedBox(height: 30), // Espaço entre os campos
+                const SizedBox(height: 20), // Espaço entre os campos
                 // Botão para anexar imagens
                 GestureDetector(
                   onTap: () async {
                     // Função para anexar imagem (placeholder)
-                    await provider.pickImages();
+                    if (provider.files.length <= 3) {
+                      await provider.pickImages();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Só é possível anexar no máximo 3 imagens.'),
+                        ),
+                      );
+                    }
+                    
                   },
                   child: Column(
                     children: [
-                      const Icon(Icons.cloud_upload,
-                          size: 62, color: Colors.black), // Ícone de upload
+                       Icon(Icons.cloud_upload,
+                          size: 62, color: provider.files.length <=3 ? Colors.black : Colors.grey), // Ícone de upload
                       const Text(
                         'ANEXAR IMAGENS',
-                        style:
-                          TextStyle(fontSize: 16),// Texto abaixo do ícone
-                      ), 
+                        style: TextStyle(fontSize: 16), // Texto abaixo do ícone
+                      ),
                       Container(
                         margin: const EdgeInsets.only(top: 5),
                         child: Visibility(
@@ -101,26 +104,51 @@ class _QuartaTelaState extends State<QuartaTela>  {
                           child: Column(
                             children: [
                               SizedBox(
-                                height: 200,
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: provider.files.length,
-                                  itemBuilder: (context, index) {
-                                    return Image.memory(provider.files[index].bytes);
-                                  }
-                                ),
+                                height: 120,
+                                child: ListView.separated(
+                                    separatorBuilder: (context, index) =>
+                                        const SizedBox(width: 10),
+                                    scrollDirection: Axis.horizontal,
+                                    shrinkWrap: true,
+                                    itemCount: provider.files.length,
+                                    itemBuilder: (context, index) {
+                                      return Stack(
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              
+                                            ),
+                                            width: 90,
+                                            child: Image.memory(
+                                              provider.files[index].bytes,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          Positioned(
+                                            top: 0,
+                                            right: 0,
+                                            child: IconButton(
+                                              onPressed: () {
+                                                provider
+                                                  .files
+                                                  .removeAt(index);
+                                                setState(() {});
+                                              },   
+                                              icon: const Icon(Icons.close),
+                                            ),
+                                          ),
+                                          const Positioned(
+                                            bottom: 0,
+                                            child: Icon(Icons.check_circle, color: Colors.green,),
+                                          ),
+                                        ],
+                                      );
+                                    }),
                               ),
-                              const SizedBox(height: 10),
-                              TextButton(
-                                onPressed: (){
-                                  provider.uploadFiles();
-                                },
-                                child: const Text('Salvar'),
-                              ),
-                              LinearProgressIndicator(value: provider.progress,),
                             ],
                           ),
-
                         ),
                       ),
                     ],
