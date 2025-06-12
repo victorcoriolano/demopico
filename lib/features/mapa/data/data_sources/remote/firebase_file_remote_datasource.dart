@@ -21,10 +21,11 @@ class FirebaseFileRemoteDatasource implements IFileRemoteDataSource {
   @override
   List<UploadTaskInterface> uploadFile(List<UploadFileModel> files) {
     try{
+      final String data = DateTime.now().toIso8601String();
       final tasks = files.map((file) {
         final task = firebaseStorage
             .ref()
-            .child("spots/${file.fileName}")
+            .child("spots/${file.fileName}_$data")
             .putData(file.bytes);
         return FirebaseUploadTask(uploadTask: task);
       }).toList();
