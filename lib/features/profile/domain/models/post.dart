@@ -1,5 +1,7 @@
 class Post {
-  String nome;
+  String nome;     
+  String userId;
+  String postId;             
   String urlUserPhoto;
   String description;
   List<String> urlPhotos;
@@ -8,22 +10,31 @@ class Post {
 
   Post({
     required this.nome,
+    required this.userId,
+    required this.postId,
     required this.urlUserPhoto,
     required this.description,
     required this.urlPhotos,
     DateTime? dateTime,
     int? curtidas,
-  }) : dateTime = dateTime ?? DateTime.now(), 
-      curtidas = curtidas ?? 0;
-  
+  })  : dateTime = dateTime ?? DateTime.now(),
+        curtidas = curtidas ?? 0;
 
   // Métodos GET
   String getNome() {
     return nome;
   }
 
-  String getUrlUserPhoto(){
+  String getUrlUserPhoto() {
     return urlUserPhoto;
+  }
+
+  String getUserID() {
+    return nome;
+  }
+
+    String getPostID() {
+    return nome;
   }
 
   String getDescription() {
@@ -43,6 +54,14 @@ class Post {
     nome = value;
   }
 
+  void setUserId(String value) {
+    userId = value;
+  }
+
+    void setPostId(String value) {
+    postId = value;
+  }
+
   void setUrlUserPhoto(String value) {
     urlUserPhoto = value;
   }
@@ -55,7 +74,7 @@ class Post {
     urlPhotos = value;
   }
 
-   void setCurtidas(int value) {
+  void setCurtidas(int value) {
     curtidas = value;
   }
 }
