@@ -14,7 +14,6 @@ class DeleteFileUc {
     return _instance!;
   }
 
-
   Future<void> deletarFile(List<String> urls) async =>
       await repository.deleteFiles(urls);
   

@@ -69,23 +69,10 @@ class AddPicoProvider extends ChangeNotifier{
     final listResultFileModel = saveImageUC.saveImage(files);
 
     final urlFutures = <Future<String>>[];
+    
+    urlFutures.addAll(listResultFileModel.map((file) async => await file.url).toList());
 
-    listResultFileModel.map((taskUpload){
-      taskUpload.progress.listen(
-        (progressData) {
-          progress = progressData;
-          debugPrint("Progress: $progress");
-        },
-        onDone: () async {
-          urlFutures.add(taskUpload.url);
-          debugPrint("URL: ${taskUpload.url}");
-        },
-        onError: (erros) {
-          debugPrint("Erro ao fazer upload: $erros");
-          errosImages = erros.toString();
-        }
-      );
-    });
+    
 
     final urls = await Future.wait(urlFutures);
     debugPrint("URLs geradas do firestore: $urls");
@@ -247,8 +234,7 @@ class AddPicoProvider extends ChangeNotifier{
     );
   }
 
-  @override
-  void dispose() {
+  void limpar() {
     atributos.clear();
     obstaculos.clear();
     nomePico = '';
@@ -261,7 +247,6 @@ class AddPicoProvider extends ChangeNotifier{
     utilidades.clear();
     files.clear();
     notifyListeners();
-    super.dispose();
   }
    
 
@@ -281,9 +266,15 @@ class AddPicoProvider extends ChangeNotifier{
       
 
       // Limpa os campos após a criação bem-sucedida
-      dispose();
+      limpar();
     }on Failure catch (e) {
       errorCriarPico = e.message;
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    limpar();
   }
 }
