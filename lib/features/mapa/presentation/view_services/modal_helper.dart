@@ -34,7 +34,7 @@ class ModalHelper {
     );
   }
 
-  static void openModalInfoPico(BuildContext context, Pico pico) {
+  static void openModalInfoPico(BuildContext context, Pico pico, void Function(String) onDelete) {
     debugPrint("chamou o modal para o pico ${pico.picoName}");
     // salvando no histórico
     final provider = context.read<HistoricoController>();
@@ -54,6 +54,7 @@ class ModalHelper {
               debugPrint("chamou o modal para o pico ${pico.picoName}");
               debugPrint("images ${pico.imgUrls.length}");
               return ShowPicoWidget(
+                deletarPico: onDelete,
                 scrollController: scrollController,
                 pico: pico,
               );
