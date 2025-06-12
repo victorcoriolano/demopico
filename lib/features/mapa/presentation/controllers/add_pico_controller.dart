@@ -88,6 +88,11 @@ class AddPicoProvider extends ChangeNotifier{
     });
     notifyListeners();
   }
+
+  void removerImagens(int index){
+    files.removeAt(index);
+    notifyListeners();
+  }
   
 
   
