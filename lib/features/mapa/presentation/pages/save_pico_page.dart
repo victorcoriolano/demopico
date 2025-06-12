@@ -1,5 +1,5 @@
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
-import 'package:demopico/features/mapa/presentation/controllers/spot_save_controller.dart';
+import 'package:demopico/features/mapa/presentation/controllers/favorite_spot_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -34,7 +34,7 @@ class _SavePicoPageState extends State<SavePicoPage> {
           ),
         ),
       ),
-      body: Consumer<SpotSaveController>(
+      body: Consumer<FavoriteSpotController>(
         builder: (context, provider, child) => FutureBuilder(
           future: provider.getPicosSalvos(widget.userID),
           builder: (context, snapshot) {

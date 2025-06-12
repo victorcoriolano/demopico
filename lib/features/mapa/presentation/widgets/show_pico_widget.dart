@@ -1,29 +1,27 @@
-
 import 'package:demopico/core/common/denunciar/widgets/denunciar_widget.dart';
 import 'package:demopico/core/common/denunciar/denuncia_model.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_favorito.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
-import 'package:demopico/features/mapa/presentation/controllers/spot_save_controller.dart';
+import 'package:demopico/features/mapa/presentation/controllers/favorite_spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/pages/comment_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/save_pico_page.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import 'package:provider/provider.dart';
 
-
 class ShowPicoWidget extends StatefulWidget {
   final Pico pico;
-  final void Function(Pico) deletarPico;
-  
 
-  const ShowPicoWidget(
-      {super.key,
-      required this.deletarPico,
-      required this.pico,
-     });
+  final void Function(Pico) deletarPico;
+
+  const ShowPicoWidget({
+    super.key,
+    required this.deletarPico,
+    required this.pico,
+  });
 
   @override
   State<ShowPicoWidget> createState() => _ShowPicoWidgetState();
@@ -56,7 +54,6 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
     "Lixeira": "assets/images/icons/lixeira.png",
   };
 
-
   void _loadImages() {
     setState(() {
       debugPrint("carregando imagens");
@@ -80,7 +77,6 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
   }
 
   Widget buildAttributeIcons(int value) {
-    
     return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
       Row(
         children: [
@@ -101,12 +97,15 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
     ]);
   }
 
-  final user = UserM();
-
   @override
   Widget build(BuildContext context) {
     debugPrint("show pico widget");
-    final provider = context.read<SpotSaveController>();
+    final provider = context.read<FavoriteSpotController>();
+    final user = context.read<UserDatabaseProvider>().user;
+
+    bool isMyPico = widget.pico.userCreator != null &&
+        user != null &&
+        widget.pico.userCreator! == user.name;
 
     return DraggableScrollableSheet(
         initialChildSize: 0.8,
@@ -136,7 +135,6 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                           ? Stack(
                               children: [
                                 PageView.builder(
-
                                   itemCount: images.length,
                                   onPageChanged: (int page) {
                                     setState(() {
@@ -170,18 +168,20 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                               top: 10, right: 10),
                                           iconSize: 36,
                                           onPressed: () {
-                                            Navigator.pop(context); // Retorna para a tela anterior
+                                            Navigator.pop(
+                                                context); // Retorna para a tela anterior
                                           },
                                         ),
                                         Visibility(
-                                          visible: widget.pico.userCreator != null && widget.pico.userCreator! == user.name,
+                                          visible: isMyPico,
                                           child: IconButton(
-                                            onPressed: () =>
-                                              context.read<SpotControllerProvider>().deletarPico(widget.pico),
-                                            icon: const Icon(Icons.delete),
+                                            onPressed: () => context
+                                                .read<SpotControllerProvider>()
+                                                .deletarPico(widget.pico),
+                                            icon: const Icon(Icons.delete, color: Colors.black,),
                                             padding: const EdgeInsets.only(
                                               top: 10,
-                                              left: 10,
+                                              right: 10,
                                             ),
                                           ),
                                         ),
@@ -221,10 +221,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                 ),
                               ],
                             )
-                          : Stack(
-
-                            children:[
-                              
+                          : Stack(children: [
                               const Center(
                                 child: Text('Sem imagens disponíveis'),
                               ),
@@ -236,26 +233,28 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                       Icons.close,
                                       color: Color.fromARGB(255, 0, 0, 0),
                                     ),
-                                    
                                     iconSize: 36,
                                     onPressed: () {
-                                      Navigator.pop(context); // Retorna para a tela anterior
+                                      Navigator.pop(
+                                          context); // Retorna para a tela anterior
                                     },
                                   ),
-                                  
                                   IconButton(
-                                      tooltip: "Deletar pico",
-                                        onPressed: () async {
-                                          await context.read<SpotControllerProvider>().deletarPico(widget.pico);
-                                          if (context.mounted) Navigator.pop(context);
-                                        },
-                                        icon: const Icon(Icons.delete, color: Colors.black,),
-                                        
-                                      ),
+                                    tooltip: "Deletar pico",
+                                    onPressed: () async {
+                                      await context
+                                          .read<SpotControllerProvider>()
+                                          .deletarPico(widget.pico);
+                                      if (context.mounted) Navigator.pop(context);
+                                    },
+                                    icon: const Icon(
+                                      Icons.delete,
+                                      color: Colors.black,
+                                    ),
+                                  ),
                                 ],
                               ),
-                            ] 
-                          ),
+                            ]),
                     ),
                     Align(
                       alignment: Alignment.center,
@@ -285,7 +284,6 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                
                                 SizedBox(
                                   width: 200,
                                   child: Wrap(
@@ -295,7 +293,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                           widget.pico.obstaculos[index];
                                       String? iconPath = obstaculosMap[
                                           obstaculo]; // Busca o caminho do ícone no Map
-                                  
+
                                       return Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal:
@@ -331,16 +329,19 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                                     .toStringAsFixed(2),
                                                 style: const TextStyle(
                                                     fontSize: 16,
-                                                    fontWeight: FontWeight.bold),
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
                                               const SizedBox(width: 8),
                                               Row(
                                                 children:
                                                     List.generate(5, (index) {
                                                   if (index <
-                                                      widget.pico.nota!.floor()) {
+                                                      widget.pico.nota!
+                                                          .floor()) {
                                                     // Estrela cheia
-                                                    return const Icon(Icons.star,
+                                                    return const Icon(
+                                                        Icons.star,
                                                         color: Colors.black);
                                                   } else if (index ==
                                                           widget.pico.nota!
@@ -353,7 +354,8 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                                         color: Colors.black);
                                                   } else {
                                                     // Estrela vazia
-                                                    return const Icon(Icons.star,
+                                                    return const Icon(
+                                                        Icons.star,
                                                         color: Colors.grey);
                                                   }
                                                 }),
@@ -365,8 +367,8 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                                 MainAxisAlignment.end,
                                             children: [
                                               Container(
-                                                margin:
-                                                    const EdgeInsets.only(top: 5),
+                                                margin: const EdgeInsets.only(
+                                                    top: 5),
                                                 child: Text(
                                                   ' ${widget.pico.numeroAvaliacoes.toString()} avaliações',
                                                   style: const TextStyle(
@@ -474,14 +476,18 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: const Color(0xFF8B0000),
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 50, vertical: 10,),
+                                      horizontal: 50,
+                                      vertical: 10,
+                                    ),
                                   ),
                                   onPressed: () {
-                                    Navigator.of(context)
-                                        .push(MaterialPageRoute(
-                                            builder: (_) => CommentPage(
-                                                  picoId: widget.pico.id,
-                                                ),),);
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (_) => CommentPage(
+                                          picoId: widget.pico.id,
+                                        ),
+                                      ),
+                                    );
                                   },
                                   child: const Text(
                                     "ABRIR DISCUSSÃO",
@@ -521,8 +527,9 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                             Container(
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                    width: 0,
-                                    color: const Color.fromARGB(0, 70, 70, 70),),
+                                  width: 0,
+                                  color: const Color.fromARGB(0, 70, 70, 70),
+                                ),
                               ),
                               child: Column(
                                 children: [
@@ -566,31 +573,48 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                   children: [
                                     IconButton(
                                       onPressed: () async {
-                                        final picoFav = PicoFavorito(idPico: widget.pico.id, idUsuario: user.id!);
-                                        final salvar = provider.savePico(picoFav);
-                                        if (await salvar) {
-                                          if (context.mounted) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content:
-                                                    const Text("Pico Salvo"),
-                                                action: SnackBarAction(
-                                                    label: "Ver pico salvo",
-                                                    onPressed: () {
-                                                      Navigator.push(
+                                        if(user == null){
+                                          Navigator.pop(context);
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                            content: Text(
+                                                'Você precisa estar logado para salvar um pico!'),
+                                          ));
+                                          return;
+                                        }
+                                        
+                                          final picoFav = PicoFavorito(
+                                              idPico: widget.pico.id,
+                                              idUsuario: user.id!);
+                                          final salvar =
+                                              await provider.savePico(picoFav);
+                                          if (salvar) {
+                                            if (context.mounted) {
+                                              Navigator.pop(context);
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content:
+                                                      const Text("Pico Salvo"),
+                                                  action: SnackBarAction(
+                                                      label: "Ver pico salvo",
+                                                      onPressed: () {
+                                                        Navigator.push(
                                                           context,
                                                           MaterialPageRoute(
-                                                              builder: (_) =>
-                                                                  SavePicoPage(
-                                                                    userID:
-                                                                        user.id ??
-                                                                            "",
-                                                                  )));
-                                                    }),
-                                              ),
-                                            );
+                                                            builder: (_) =>
+                                                                SavePicoPage(
+                                                              userID:
+                                                                  user.id ??
+                                                                      "",
+                                                            ),
+                                                          ),
+                                                        );
+                                                      }),
+                                                ),
+                                              );
                                           }
+                                          
                                         }
                                       },
                                       icon: const Icon(Icons.bookmark_border),
@@ -601,7 +625,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                         tooltip: "Denunciar Pico",
                                         onPressed: () {
                                           denunciarPico(
-                                              context, user.id, widget.pico.id);
+                                              context, user?.id ?? "anonimo", widget.pico.id);
                                         },
                                         icon: const Icon(Icons.flag),
                                         iconSize: 35),
@@ -672,7 +696,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                   await provider.avaliarPico(pico, nota);
                   if (context.mounted) {
                     Navigator.of(context).pop();
-                  } 
+                  }
                 },
                 child: const Text("Avaliar"),
               ),
