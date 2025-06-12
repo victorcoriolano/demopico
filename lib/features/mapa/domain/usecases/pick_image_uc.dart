@@ -17,6 +17,9 @@ class PickImageUC {
   Future<List<UploadFileModel>> pegarArquivos() async {
     try {
       final files = await repositoryIMP.pickImage();
+      
+      if (files.length > 3) throw Exception("Limite de 3 arquivos");
+
       return files;
     } catch (e) {
       throw Exception(e);
