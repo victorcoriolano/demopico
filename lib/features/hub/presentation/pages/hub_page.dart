@@ -1,3 +1,4 @@
+import 'package:demopico/core/common/ui_context_extension.dart';
 import 'package:demopico/features/hub/presentation/providers/hub_provider.dart';
 import 'package:demopico/features/hub/presentation/widgets/communique_tile.dart';
 import 'package:demopico/features/hub/presentation/widgets/input_box.dart';
@@ -57,31 +58,50 @@ class _HubPageState extends State<HubPage> {
         backgroundColor: const Color.fromARGB(255, 238, 238, 238),
         body: Stack(
           children: [
+            ////////////////////CONTÂINER DE FUNDO
+            Positioned(
+              top: 0,
+              child: Container(
+                width: context.screenWidth,
+                height: context.screenHeight / 2,
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 107, 7, 7),
+                  shape: BoxShape.rectangle,
+                ),
+              ),
+            ),
             Positioned(
                 ///////////////// BOTÃO DE VOLTAR
-                left: 12,
-                top: 55,
+                left: 30,
+                top: 45,
                 child: IconButton(
                     onPressed: () {
                       Get.back();
                     },
                     focusColor: Colors.transparent,
                     hoverColor: Colors.transparent,
-                    icon: const Icon(Icons.arrow_back,
-                        color: Colors.black, size: 38))),
+                    visualDensity: VisualDensity.compact,
+                    icon: Image(
+                        repeat: ImageRepeat.repeat,
+                        width: 38,
+                        height: 38,
+                        semanticLabel: "Sair",
+                        color: Colors.black,
+                        isAntiAlias: true,
+                        image: AssetImage("images/icons/fist-icon.png")))),
             Positioned(
                 ///////////////// TÍTULO DA PÁGINA
-                top: 60,
+                top: 50,
                 left: context.width / 2 - 50,
                 right: context.width / 2 - 50,
-                child: const Center(
+                child: Center(
                   child: Text("HUB",
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontStyle: FontStyle.normal,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 128, 25, 18),
+                        color: const Color.fromARGB(255, 243, 243, 243),
                       )),
                 )),
             Positioned(
@@ -231,7 +251,7 @@ class _HubPageState extends State<HubPage> {
                   shape: RoundedRectangleBorder(
                       borderRadius: const BorderRadius.all(Radius.circular(12)),
                       side: BorderSide(
-                          width: 2,
+                          width: 0.5,
                           color: post.type == "evento"
                               ? const Color.fromARGB(255, 128, 25, 18)
                               : Colors.black,
