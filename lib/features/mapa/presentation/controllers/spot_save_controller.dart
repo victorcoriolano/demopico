@@ -27,22 +27,16 @@ class SpotSaveController extends ChangeNotifier {
     }
   }
 
-  Future<bool> getPicosSalvos(String idUser) async {
+  Future<void> getPicosSalvos(String idUser) async {
     try {
       debugPrint("Busca de picos salvos");
       picosFavoritos = await saveSpot.listFavoriteSpot(idUser);
-      if (picosFavoritos.isNotEmpty) {
-        return true;
-      } else {
-        error = "Picos salvos não encontrados";
-        return false;
-      }
+      
     } on Exception catch (e) {
       error = "Um erro ao buscar picos salvos foi identificado: $e";
-      return false;
     } catch (e) {
       error = "Erro ao buscar picos salvos";
-      return false;
+      
     }
   }
 
