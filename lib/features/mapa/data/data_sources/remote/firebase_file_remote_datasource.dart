@@ -57,20 +57,27 @@ class FirebaseUploadTask implements UploadTaskInterface {
       (event) {
         if (event.state == TaskState.running) {
           final progress = event.bytesTransferred / event.totalBytes;
-          debugPrint("Progress: $progress");
           _controller.add(progress);
+          debugPrint("Progress: $progress");
         }
         else if (event.state == TaskState.success) {
+          debugPrint("Upload concluído");
           final url = event.ref.getDownloadURL();
+          debugPrint("URL: $url");
           _urlCompleter.complete(url);
+          _controller.add(1.0);
+          _controller.close();
         }
       },
       onDone: () {
+        debugPrint("Caiu no ondone");
         _controller.close();
       } ,
       onError: (error) {
+        debugPrint("Caiu no onerror");
         _urlCompleter.completeError(error);
         _controller.addError(error);
+        _controller.close();
       } ,
       cancelOnError: true,
     );
