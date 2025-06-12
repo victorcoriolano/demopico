@@ -33,7 +33,7 @@ class _CommuniqueTileState extends State<CommuniqueTile> {
                       .pictureUrl ==
                   null ||
               post.pictureUrl == ""
-          ? "https://firebasestorage.googleapis.com/v0/b/pico-skatepico.appspot.com/o/users%2FfotoPadrao%2FuserPhoto.png?alt=media&token=c48f5406-fac1-4b35-b2a7-453e2fb57427"
+          ? "https://firebasestorage.googleapis.com/v0/b/pico-skatepico.appspot.com/o/users%2FfotoPadrao%2FuserPhoto.png?alt=media"
           : post.pictureUrl!);
       final imageData = await httpsReference.getData();
       return imageData;
@@ -53,6 +53,9 @@ class _CommuniqueTileState extends State<CommuniqueTile> {
       return null;
     }
   }
+
+  final String _defaultPicUrl =
+      "https://firebasestorage.googleapis.com/v0/b/pico-skatepico.appspot.com/o/users%2F%7BkGwNgh3myaVxmuCSweq3wZoQanz2%7D%2F350497514_618246436914572_6911710937269163378_n.jpg?alt=media&token=bd55be24-d53f-41fd-b4b3-52fde86cce2a";
 
   @override
   Widget build(BuildContext context) {
@@ -75,23 +78,28 @@ class _CommuniqueTileState extends State<CommuniqueTile> {
                         snapshot.data!.isEmpty) {
                       if (kDebugMode) {
                         print(
-                            "${snapshot.hasError ? snapshot.error : snapshot.data}");
+                            "ERRO NO SNAPSHOT : ${snapshot.hasError ? snapshot.error : snapshot.data}, ${snapshot.data.isBlank}");
                       }
                       return ClipOval(
                           clipBehavior: Clip.antiAlias,
-                          child: const Align(
+                          child: Image.network(
+                              post.pictureUrl == "" || post.pictureUrl == null
+                                  ? _defaultPicUrl
+                                  : post.pictureUrl!,
+                              width: 40,
+                              height: 40,
+                              webHtmlElementStrategy:
+                                  WebHtmlElementStrategy.never,
                               alignment: Alignment.centerLeft,
-                              child: Icon(
-                                Icons.supervised_user_circle,
-                                size: 55,
-                                color: Colors.black,
-                              )));
+                              fit: BoxFit.contain));
                     }
+
                     return ClipOval(
                       clipBehavior: Clip.antiAlias,
-                      child: Image.memory(
-                          //post.pictureUrl!,
-                          snapshot.data!,
+                      child: Image.network(
+                          post.pictureUrl == "" || post.pictureUrl == null
+                              ? _defaultPicUrl
+                              : post.pictureUrl!,
                           width: 40,
                           height: 40,
                           alignment: Alignment.centerLeft,
