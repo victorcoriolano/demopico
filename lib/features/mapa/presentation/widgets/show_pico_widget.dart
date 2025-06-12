@@ -286,95 +286,101 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 
-                                Row(
-                                  children: List.generate(
-                                      widget.pico.obstaculos.length, (index) {
-                                    String obstaculo =
-                                        widget.pico.obstaculos[index];
-                                    String? iconPath = obstaculosMap[
-                                        obstaculo]; // Busca o caminho do ícone no Map
-
-                                    return Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal:
-                                              4.0), // Ajuste opcional de espaçamento
-                                      child: iconPath != null
-                                          ? Image.asset(
-                                              iconPath,
-                                              width: 40, // Largura da imagem
-                                              height: 40, // Altura da imagem
-                                            )
-                                          : const Icon(
-                                              Icons
-                                                  .error, // Ícone padrão caso o obstáculo não exista no Map
-                                              color: Colors.red,
-                                            ),
-                                    );
-                                  }),
+                                SizedBox(
+                                  width: 200,
+                                  child: Wrap(
+                                    children: List.generate(
+                                        widget.pico.obstaculos.length, (index) {
+                                      String obstaculo =
+                                          widget.pico.obstaculos[index];
+                                      String? iconPath = obstaculosMap[
+                                          obstaculo]; // Busca o caminho do ícone no Map
+                                  
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal:
+                                                4.0), // Ajuste opcional de espaçamento
+                                        child: iconPath != null
+                                            ? Image.asset(
+                                                iconPath,
+                                                width: 40, // Largura da imagem
+                                                height: 40, // Altura da imagem
+                                              )
+                                            : const Icon(
+                                                Icons
+                                                    .error, // Ícone padrão caso o obstáculo não exista no Map
+                                                color: Colors.red,
+                                              ),
+                                      );
+                                    }),
+                                  ),
                                 ),
 
                                 // Avaliação com estrelas
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              widget.pico.nota!
-                                                  .toStringAsFixed(2),
-                                              style: const TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            const SizedBox(width: 8),
-                                            Row(
-                                              children:
-                                                  List.generate(5, (index) {
-                                                if (index <
-                                                    widget.pico.nota!.floor()) {
-                                                  // Estrela cheia
-                                                  return const Icon(Icons.star,
-                                                      color: Colors.black);
-                                                } else if (index ==
-                                                        widget.pico.nota!
-                                                            .floor() &&
-                                                    (widget.pico.nota! % 1) >=
-                                                        0.5) {
-                                                  // Meia estrela se a parte decimal for >= 0.5
-                                                  return const Icon(
-                                                      Icons.star_half,
-                                                      color: Colors.black);
-                                                } else {
-                                                  // Estrela vazia
-                                                  return const Icon(Icons.star,
-                                                      color: Colors.grey);
-                                                }
-                                              }),
-                                            ),
-                                          ],
-                                        ),
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            Container(
-                                              margin:
-                                                  const EdgeInsets.only(top: 5),
-                                              child: Text(
-                                                ' ${widget.pico.numeroAvaliacoes.toString()} avaliações',
+                                SizedBox(
+                                  width: 200,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                widget.pico.nota!
+                                                    .toStringAsFixed(2),
                                                 style: const TextStyle(
-                                                    color: Color.fromARGB(
-                                                        255, 93, 93, 93),
-                                                    fontSize: 12),
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                              const SizedBox(width: 8),
+                                              Row(
+                                                children:
+                                                    List.generate(5, (index) {
+                                                  if (index <
+                                                      widget.pico.nota!.floor()) {
+                                                    // Estrela cheia
+                                                    return const Icon(Icons.star,
+                                                        color: Colors.black);
+                                                  } else if (index ==
+                                                          widget.pico.nota!
+                                                              .floor() &&
+                                                      (widget.pico.nota! % 1) >=
+                                                          0.5) {
+                                                    // Meia estrela se a parte decimal for >= 0.5
+                                                    return const Icon(
+                                                        Icons.star_half,
+                                                        color: Colors.black);
+                                                  } else {
+                                                    // Estrela vazia
+                                                    return const Icon(Icons.star,
+                                                        color: Colors.grey);
+                                                  }
+                                                }),
+                                              ),
+                                            ],
+                                          ),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Container(
+                                                margin:
+                                                    const EdgeInsets.only(top: 5),
+                                                child: Text(
+                                                  ' ${widget.pico.numeroAvaliacoes.toString()} avaliações',
+                                                  style: const TextStyle(
+                                                      color: Color.fromARGB(
+                                                          255, 93, 93, 93),
+                                                      fontSize: 12),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
