@@ -17,7 +17,7 @@ import 'package:provider/provider.dart';
 class ShowPicoWidget extends StatefulWidget {
   final Pico pico;
   final ScrollController scrollController;
-  final void Function(String id) deletarPico;
+  final void Function(Pico) deletarPico;
   
 
   const ShowPicoWidget(
@@ -178,10 +178,8 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                         Visibility(
                                           visible: widget.pico.userCreator != null && widget.pico.userCreator! == user.name,
                                           child: IconButton(
-                                            onPressed: () {
-                                              // TODO: Implementar a exclusão do pico
-                                              //context.read<SpotControllerProvider>().deletarPico(widget.pico.id)
-                                            }, 
+                                            onPressed: () =>
+                                              context.read<SpotControllerProvider>().deletarPico(widget.pico),
                                             icon: const Icon(Icons.delete),
                                             padding: const EdgeInsets.only(
                                               top: 10,
