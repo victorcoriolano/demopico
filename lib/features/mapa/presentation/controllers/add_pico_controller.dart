@@ -255,7 +255,7 @@ class AddPicoProvider extends ChangeNotifier{
   }
    
 
-  String? error;
+  String? errorCriarPico;
 
   Future<void> createSpot(String? user) async {
     try {
@@ -266,7 +266,7 @@ class AddPicoProvider extends ChangeNotifier{
       // Limpa os campos após a criação bem-sucedida
       dispose();
     }on Failure catch (e) {
-      error = e.message;
+      errorCriarPico = e.message;
     }
   }
 }
