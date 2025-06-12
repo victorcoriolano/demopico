@@ -4,7 +4,6 @@ import 'package:demopico/features/mapa/domain/entities/filters.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/usecases/avaliar_spot_uc.dart';
-import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/load_spot_uc.dart';
 import 'package:demopico/features/mapa/presentation/view_services/marker_service.dart';
 import 'package:flutter/foundation.dart';
@@ -15,18 +14,16 @@ class SpotControllerProvider extends ChangeNotifier {
   static SpotControllerProvider? _spotControllerProvider;
   static SpotControllerProvider get getInstance {
     _spotControllerProvider ??= SpotControllerProvider(
-        createSpotUseCase: CreateSpotUc.getInstance,
         avaliarUseCase: AvaliarSpotUc.getInstance,
         showAllPicoUseCase: LoadSpotUc.getInstance);
     return _spotControllerProvider!;
   }
 
   SpotControllerProvider(
-      {required this.createSpotUseCase,
-      required this.avaliarUseCase,
+      {required this.avaliarUseCase,
       required this.showAllPicoUseCase});
 
-  final CreateSpotUc createSpotUseCase;
+
   final LoadSpotUc showAllPicoUseCase;
   final AvaliarSpotUc avaliarUseCase;
 
@@ -125,18 +122,6 @@ class SpotControllerProvider extends ChangeNotifier {
     super.dispose();
   }
 
-  // Método para criar um pico e adicionar o marker
-  Future<void> createSpot(Pico pico) async {
-    try {
-      // Salva o pico no backend
-      final picoCriado = await createSpotUseCase.createSpot(pico as PicoModel);
-      spots.add(picoCriado);
-
-      notifyListeners();
-    } catch (e) {
-      throw Exception("Erro ao criar o pico: $e");
-    }
-  }
 
   // Método para pesquisar picos
   void pesquisandoPico(String word) {

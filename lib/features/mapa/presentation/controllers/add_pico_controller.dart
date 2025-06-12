@@ -1,32 +1,37 @@
-import 'dart:io';
 
+import 'dart:async';
+
+import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
+import 'package:demopico/features/mapa/domain/models/pico_model.dart';
+import 'package:demopico/features/mapa/domain/models/upload_file_model.dart';
+import 'package:demopico/features/mapa/domain/models/upload_result_file_model.dart';
+import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/pick_image_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/save_image_uc.dart';
-import 'package:demopico/features/user/presentation/widgets/form_validator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:image_picker/image_picker.dart';
 
-class AddPicoProvider extends ChangeNotifier with Validators {
+class AddPicoProvider extends ChangeNotifier{
   static AddPicoProvider? _addPicoProvider;
 
   static AddPicoProvider get getInstance {
     _addPicoProvider ??= AddPicoProvider(
         pickImageUC: PickImageUC.getInstance,
-        saveImageUC: SaveImageUC.getInstance);
+        saveImageUC: SaveImageUC.getInstance,
+        createSpotUc: CreateSpotUc.getInstance);
     return _addPicoProvider!;
   }
 
   //instanciando casos de uso
   final PickImageUC pickImageUC;
   final SaveImageUC saveImageUC;
+  final CreateSpotUc createSpotUc;
 
-  AddPicoProvider({required this.pickImageUC, required this.saveImageUC});
+  AddPicoProvider({required this.pickImageUC, required this.saveImageUC, required this.createSpotUc});
 
-  bool loadingImagens = false;
+  Pico? pico;
+
   Map<String, int> atributos = {};
   List<String> obstaculos = [];
   String nomePico = '';
@@ -36,70 +41,60 @@ class AddPicoProvider extends ChangeNotifier with Validators {
   int numAval = 0;
   String tipo = 'Pico de Rua';
   List<String> utilidades = [];
-  List<String> urlImage = [];
-  File? fotoPico;
+  List<String> imgUrls = [];
   LatLng? latlang;
-  List<File?> images = [];
 
-  final pegadorImage = ImagePicker();
+  String? errosImages;
 
-  Future<void> selecionarImag() async {
-    images.clear();
-    urlImage.clear();
-    try {
-      // Reseta a lista de imagens antes de selecionar novas
+  List<UploadResultFileModel> listResultFileModel = [];
 
-      // Pega múltiplas imagens da galeria (limite de 3)
-      final imgs = await pegadorImage.pickMultiImage(
-        limit: 3,
-      );
-      if (imgs.isNotEmpty) {
-        for (var img in imgs) {
-          images.add(File(img.path));
+
+  List<UploadFileModel> files = [];
+
+  double progress = 0.0;
+  
+
+  Future<void> pickImages() async{
+    try{
+      files = await pickImageUC.pegarArquivos();
+    }on Exception catch(e) {
+      debugPrint("Erro ao selecionar imagens: $e");
+      errosImages = e.toString();
+    }
+    notifyListeners();
+  }
+
+  void uploadFiles() async{
+    listResultFileModel = saveImageUC.saveImage(files);
+    listResultFileModel.map((taskUpload){
+      taskUpload.progress.listen(
+        (progressData) {
+          progress = progressData;
+          debugPrint("Progress: $progress");
+          notifyListeners();
+        },
+        onDone: () async {
+          final url = await taskUpload.url;
+          debugPrint("URL: $url");
+          imgUrls.add(url);
+          notifyListeners();
+        },
+        onError: (erros) {
+          debugPrint("Erro ao fazer upload: $erros");
+          errosImages = erros.toString();
+          notifyListeners();
         }
-        // Chama o método para subir as imagens
-
-        await testeSubindoImg(images);
-      }
-    } on Exception catch (e) {
-      debugPrint('Erro ao selecionar imagem: $e');
-      throw Exception('Erro ao selecionar imagem: $e');
-    }
+      );
+    });
+    notifyListeners();
   }
+  
 
-  Future<void> testeSubindoImg(List<File?> imgs) async {
-    try {
-      for (var img in imgs) {
-        // Gera um nome único para cada imagem
-        final uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
-        final ref = FirebaseStorage.instance
-            .ref()
-            .child('spots_images')
-            .child('images/$nomePico$uniqueName.jpg');
-
-        debugPrint('Enviando imagem: ${img!.path}');
-
-        // Faz o upload da imagem
-        await ref.putFile(img);
-
-        // Adiciona a URL de download à lista
-        final downloadURL = await ref.getDownloadURL();
-        urlImage.add(downloadURL);
-      }
-
-      urlImage.clear;
-    } on Exception catch (e) {
-      throw Exception('Erro ao subir imagem: $e');
-    }
-  }
-
-  void pegarLocalizacao(LatLng localizacao) {
-    latlang = localizacao;
-  }
+  
+  /* - */
 
   //variaveis de mensagem de erro
-  String? nomePicoErro;
-  String? descricaoErro;
+  String? errors;
 
   Map<String, List<String>> utilidadesPorModalidade = {
     'Skate': [
@@ -116,7 +111,7 @@ class AddPicoProvider extends ChangeNotifier with Validators {
   List<String> utilidadesAtuais = [];
   Map<String, bool> utilidadesSelecionadas = {};
 
-  addPicoControllerProvider() {
+  void initialize() {
     // definindo o estado inicial de cada page
     _atualizarUtilidades();
     atributos = {
@@ -211,53 +206,19 @@ class AddPicoProvider extends ChangeNotifier with Validators {
     }
   }
 
-  bool imagensIsNotEmpty() {
-    return urlImage.isNotEmpty;
-  }
-
-  bool validarNomePico() {
-    if (nomePico.isEmpty) {
-      nomePicoErro = "Preencha este campo";
-      notifyListeners();
-      return false;
-    }
-    nomePicoErro = null;
-    notifyListeners();
-    return true;
-  }
-
-  bool validarDescricao() {
-    if (descricao.isEmpty) {
-      descricaoErro = "Preencha este campo";
-      notifyListeners();
-      return false;
-    }
-    descricaoErro = null;
-    notifyListeners();
-    return true;
+  bool validarTexto(){
+    return nomePico.isNotEmpty && descricao.isNotEmpty;
   }
 
   bool validarFormulario() {
-    final nomeValido = validarNomePico();
-    final descricaoValida = validarDescricao();
-    final validarImagens = imagensIsNotEmpty();
-    return nomeValido && descricaoValida && validarImagens;
+    final camposValidos = validarTexto();
+    final validarImagens = files.isNotEmpty;
+    return camposValidos && validarImagens;
   }
-  void limpar() {
-    atributos.clear();
-    obstaculos.clear();
-    nomePico = '';
-    descricao = '';
-    selectedModalidade = 'Skate';
-    nota = 0.0;
-    numAval = 0;
-    tipo = 'Pico de Rua';
-    utilidades.clear();
-    urlImage.clear();
-    notifyListeners();
-  }
+  
+  
 
-  Pico getInfoPico(User? userCriador) {
+  Pico getInfoPico(String? userCriador) {
     return Pico(
       id: "",
       picoName: nomePico,
@@ -266,13 +227,46 @@ class AddPicoProvider extends ChangeNotifier with Validators {
       numeroAvaliacoes: numAval,
       tipoPico: tipo,
       utilidades: utilidades,
-      imgUrls: urlImage,
+      imgUrls: imgUrls,
       lat: latlang!.latitude,
       long: latlang!.longitude,
       atributos: atributos,
       modalidade: selectedModalidade,
-      userCreator: userCriador?.displayName ?? "Anônimo",
+      userCreator: userCriador ?? "Anônimo",
       obstaculos: obstaculos,
     );
+  }
+
+  @override
+  void dispose() {
+    atributos.clear();
+    obstaculos.clear();
+    nomePico = '';
+    descricao = '';
+    selectedModalidade = 'Skate';
+    nota = 0.0;
+    numAval = 0;
+    imgUrls.clear();
+    tipo = 'Pico de Rua';
+    utilidades.clear();
+    files.clear();
+    notifyListeners();
+    super.dispose();
+  }
+   
+
+  String? errorCriarPico;
+
+  Future<void> createSpot(String? user) async {
+    try {
+      final newPico = getInfoPico(user);
+      // Salva o pico no backend
+      await createSpotUc.createSpot(newPico as PicoModel);
+
+      // Limpa os campos após a criação bem-sucedida
+      dispose();
+    }on Failure catch (e) {
+      errorCriarPico = e.message;
+    }
   }
 }

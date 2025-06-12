@@ -45,7 +45,7 @@ class _ContainerPostsWidgetState extends State<ContainerPostsWidget> {
       listPost.clear();
       listPost.add(post);
       listPost.add(post1);
-      print(listPost);
+      debugPrint(listPost.length.toString());
     }
 
   
@@ -71,6 +71,7 @@ class _ContainerPostsWidgetState extends State<ContainerPostsWidget> {
     inserir();
     List<Map<String, String>> filteredPosts =
         posts.where((post) => post['type'] == 'photo').toList();
+        debugPrint(filteredPosts.length.toString());
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 2.0),
       child: GridView.builder(
