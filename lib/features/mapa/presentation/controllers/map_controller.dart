@@ -35,7 +35,8 @@ class MapControllerProvider extends ChangeNotifier {
     //movendo a camera position
     if (_mapController != null) {
       await completer.future;
-      _mapController!.animateCamera(CameraUpdate.newLatLng(position));      
+      _mapController!.animateCamera(CameraUpdate.newLatLng(position));
+      notifyListeners();      
     }
   }
 
