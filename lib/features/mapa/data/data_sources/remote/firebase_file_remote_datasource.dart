@@ -42,6 +42,7 @@ class FirebaseFileRemoteDatasource implements IFileRemoteDataSource {
 class FirebaseUploadTask implements UploadTaskInterface {
   final _controller = StreamController<double>();
   final UploadTask uploadTask;
+  final Completer<String> _urlCompleter = Completer<String>();
 
   FirebaseUploadTask({required this.uploadTask}) {
     uploadTask.snapshotEvents.listen(
@@ -51,16 +52,26 @@ class FirebaseUploadTask implements UploadTaskInterface {
           debugPrint("Progress: $progress");
           _controller.add(progress);
         }
+        else if (event.state == TaskState.success) {
+          final url = event.ref.getDownloadURL();
+          _urlCompleter.complete(url);
+        }
       },
-      onDone: () => _controller.close(),
-      onError: (error) => _controller.addError(error),
+      onDone: () {
+        _controller.close();
+      } ,
+      onError: (error) {
+        _urlCompleter.completeError(error);
+        _controller.addError(error);
+      } ,
       cancelOnError: true,
     );
   }
 
+
   @override
   UploadResultFileModel get upload => UploadResultFileModel(
         progress: _controller.stream,
-        url: uploadTask.snapshot.ref.getDownloadURL(),
+        url: _urlCompleter.future,
       );
 }
