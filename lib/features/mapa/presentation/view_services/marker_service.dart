@@ -35,7 +35,7 @@ class MarkerService {
   
 
   Stream<Marker> preloadIcons(List<Pico> picos, void Function(Pico) onTap) async*{
-    if (_markerIcons.isEmpty){
+    
       await createIcons(picos);
       for (var pico in picos){
         yield Marker(
@@ -44,7 +44,7 @@ class MarkerService {
           icon: _markerIcons[pico.picoName]!,
           onTap: () => onTap(pico),
         );
-      }  
+      
     }
   }
 }
