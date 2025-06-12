@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:demopico/features/mapa/data/data_sources/interfaces/i_upload_task_datasource.dart';
 import 'package:demopico/features/mapa/domain/models/upload_file_model.dart';
 import 'package:demopico/features/mapa/domain/models/upload_result_file_model.dart';
@@ -34,6 +33,15 @@ class FirebaseFileRemoteDatasource implements IFileRemoteDataSource {
     }
     on FirebaseException catch(e) {
       debugPrint("Erro aqui no file: ${e.message}");
+      throw FirebaseErrorsMapper.map(e);
+    }
+  }
+
+  @override
+  Future<void> deleteFile(String url) async {
+    try {
+      await firebaseStorage.refFromURL(url).delete();
+    } on FirebaseException catch (e){
       throw FirebaseErrorsMapper.map(e);
     }
   }
