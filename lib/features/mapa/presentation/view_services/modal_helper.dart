@@ -34,7 +34,7 @@ class ModalHelper {
     );
   }
 
-  static void openModalInfoPico(BuildContext context, Pico pico, void Function(String) onDelete) {
+  static void openModalInfoPico(BuildContext context, Pico pico, void Function(Pico) onDelete) {
     debugPrint("chamou o modal para o pico ${pico.picoName}");
     // salvando no histórico
     final provider = context.read<HistoricoController>();
