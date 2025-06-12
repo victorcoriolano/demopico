@@ -19,8 +19,13 @@ class ImagePickerService implements IPickImageRepository {
       final pickedFiles = await _imagePicker.pickMultiImage(
         limit: 3,
       );
+      if (pickedFiles.isEmpty) {
+        throw Exception(
+          "Nenhuma imagem foi selecionada",
+        );
+      }
 
-      if (pickedFiles.isNotEmpty) {
+      
         final uploadModel = Future.wait(pickedFiles.map((xFile) async {
           final bytes = await xFile.readAsBytes();
           return UploadFileModel(
@@ -31,11 +36,7 @@ class ImagePickerService implements IPickImageRepository {
           );
         }).toList());
         return uploadModel;
-      } else {
-        throw Exception(
-          "Nenhuma imagem foi selecionada",
-        );
-      }
+      
     } catch (e) {
       throw Exception("Erro ao selecionar a imagem: $e");
     }
