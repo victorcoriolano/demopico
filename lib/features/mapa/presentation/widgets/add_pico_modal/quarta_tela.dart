@@ -75,32 +75,39 @@ class _QuartaTelaState extends State<QuartaTela> {
                 ),
                 const SizedBox(height: 20), // Espaço entre os campos
                 // Botão para anexar imagens
-                GestureDetector(
-                  onTap: () async {
-                    // Função para anexar imagem (placeholder)
-                    if (provider.files.length <= 3) {
-                      await provider.pickImages();
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Só é possível anexar no máximo 3 imagens.'),
-                        ),
-                      );
-                    }
-                    
-                  },
-                  child: Column(
-                    children: [
-                       Icon(Icons.cloud_upload,
-                          size: 62, color: provider.files.length <=3 ? Colors.black : Colors.grey), // Ícone de upload
-                      const Text(
-                        'ANEXAR IMAGENS',
-                        style: TextStyle(fontSize: 16), // Texto abaixo do ícone
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 5),
-                        child: Visibility(
-                          visible: provider.files.isNotEmpty,
+                Visibility(
+                  visible: provider.files.length <= 3,
+                  child: GestureDetector(
+                    onTap: () async {
+                      // Função para anexar imagem (placeholder)
+                      if (provider.files.length <= 3) {
+                        await provider.pickImages();
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Só é possível anexar no máximo 3 imagens.'),
+                          ),
+                        );
+                      }
+                    },
+                    child: const  Column(
+                      children: [
+                        Icon(
+                          Icons.cloud_upload,
+                          size: 62, 
+                          color: Colors.black 
+                        ), // Ícone de upload
+                        Text(
+                          'ANEXAR IMAGENS',
+                          style: TextStyle(fontSize: 16), // Texto abaixo do ícone
+                        ),                      ],
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: provider.files.isNotEmpty,
+                  child: Container(
+                          margin: const EdgeInsets.only(top: 5),
                           child: Column(
                             children: [
                               SizedBox(
@@ -132,9 +139,7 @@ class _QuartaTelaState extends State<QuartaTela> {
                                             child: IconButton(
                                               onPressed: () {
                                                 provider
-                                                  .files
-                                                  .removeAt(index);
-                                                setState(() {});
+                                                  .removerImagens(index);
                                               },   
                                               icon: const Icon(Icons.close),
                                             ),
@@ -150,9 +155,6 @@ class _QuartaTelaState extends State<QuartaTela> {
                             ],
                           ),
                         ),
-                      ),
-                    ],
-                  ),
                 ),
               ],
             ),
