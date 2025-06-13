@@ -4,7 +4,6 @@ import 'package:demopico/features/profile/presentation/widgets/post_widgets/prof
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_navigator_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_posts_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_stats_widget.dart';
-import 'package:demopico/features/profile/presentation/widgets/profile_bottom_side_data_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_configure_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_top_side_data_widget.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
@@ -232,9 +231,9 @@ class _UserPageState extends State<UserPage> {
                       ),
                       Container(
                         height: 60,
-                        padding: EdgeInsets.all(0),
-                        margin: EdgeInsets.all(0),
-                        child: ProfileNavigatorWidget(),
+                        padding: const EdgeInsets.all(0),
+                        margin: const EdgeInsets.all(0),
+                        child: const ProfileNavigatorWidget(),
                       ),
                     ],
                   ),

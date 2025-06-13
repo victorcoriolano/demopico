@@ -35,9 +35,9 @@ class ProfileBottomSideDataWidget extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text(
+                  const Text(
                     'SEGUIDORES',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 10, // menor para o texto
                       letterSpacing: 1,
                       color: Colors.grey,
@@ -54,9 +54,9 @@ class ProfileBottomSideDataWidget extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text(
+                  const Text(
                     'CONTRIBUIÇÕES',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 10, // menor para o texto
                       letterSpacing: 1,
                       color: Colors.grey,
