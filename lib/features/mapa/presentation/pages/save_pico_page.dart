@@ -104,8 +104,8 @@ class _SavePicoPageState extends State<SavePicoPage> {
                           tooltip: "Localização no mapa",
                           icon:
                               const Icon(Icons.location_on, color: Colors.blue),
-                          onPressed: () async{
-                            await mapProvider.reajustarCameraPosition(LatLng(
+                          onPressed: () {
+                            mapProvider.reajustarCameraPosition(LatLng(
                                 pico.picoModel.lat, pico.picoModel.long));
                             if (context.mounted) Navigator.pop(context);
                           },
