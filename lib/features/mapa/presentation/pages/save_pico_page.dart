@@ -13,6 +13,18 @@ class SavePicoPage extends StatefulWidget {
 }
 
 class _SavePicoPageState extends State<SavePicoPage> {
+
+  void getSpots() async {
+    await context.read<FavoriteSpotController>().getPicosSalvos(widget.userID);
+  }
+
+  @override
+  void initState() {
+    getSpots();
+    super.initState();
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     final mapProvider =
@@ -35,10 +47,9 @@ class _SavePicoPageState extends State<SavePicoPage> {
         ),
       ),
       body: Consumer<FavoriteSpotController>(
-        builder: (context, provider, child) => FutureBuilder(
-          future: provider.getPicosSalvos(widget.userID),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
+        builder: (context, provider, child) {
+            
+            if (provider.isLoading) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
@@ -48,8 +59,8 @@ class _SavePicoPageState extends State<SavePicoPage> {
                   child: Text("Você não possui nenhum pico salvo"));
             }
 
-            if (snapshot.hasError) {
-              return const Center(child: Text("Algum erro aconteceu"));
+            if (provider.error != null) {
+              return Center(child: Text("Erro ao carregar os dados: ${provider.error}"));
             }
             return ListView.builder(
               itemCount: provider.picosFavoritos.length,
@@ -93,10 +104,10 @@ class _SavePicoPageState extends State<SavePicoPage> {
                           tooltip: "Localização no mapa",
                           icon:
                               const Icon(Icons.location_on, color: Colors.blue),
-                          onPressed: () {
-                            mapProvider.reajustarCameraPosition(LatLng(
+                          onPressed: () async{
+                            await mapProvider.reajustarCameraPosition(LatLng(
                                 pico.picoModel.lat, pico.picoModel.long));
-                            Navigator.pop(context);
+                            if (context.mounted) Navigator.pop(context);
                           },
                         ),
                         IconButton(
@@ -136,7 +147,7 @@ class _SavePicoPageState extends State<SavePicoPage> {
               },
             );
           },
-        ),
+        
       ),
     );
   }
