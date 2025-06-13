@@ -1,5 +1,4 @@
 import 'package:demopico/features/hub/domain/entities/communique.dart';
-import 'package:demopico/features/user/infra/repositories/user_firebase_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
