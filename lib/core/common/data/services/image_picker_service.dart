@@ -3,7 +3,7 @@ import 'package:demopico/core/common/data/models/upload_file_model.dart';
 
 import 'package:image_picker/image_picker.dart';
 
-class ImagePickerService implements IPickImageRepository {
+class ImagePickerService implements IPickFileRepository {
 
   static ImagePickerService? _imagePickerService;
   
@@ -15,7 +15,7 @@ class ImagePickerService implements IPickImageRepository {
   final _imagePicker = ImagePicker();
 
   @override
-  Future<List<UploadFileModel>> pickImage() async {
+  Future<List<UploadFileModel>> pickImages() async {
     try {
       final pickedFiles = await _imagePicker.pickMultiImage(
         limit: 3,
@@ -37,6 +37,31 @@ class ImagePickerService implements IPickImageRepository {
           );
         }).toList());
         return uploadModel;
+      
+    } catch (e) {
+      throw Exception("Erro ao selecionar a imagem: $e");
+    }
+  }
+  
+  @override
+  Future<UploadFileModel> pickVideo()async {
+    try {
+      final pickedFile = await _imagePicker.pickVideo(
+        source: ImageSource.gallery,
+      );
+      if (pickedFile == null) {
+        throw Exception(
+          "Nenhuma video foi selecionado",
+        );
+      }
+      final bytes = await pickedFile.readAsBytes();
+      
+      return UploadFileModel(
+            fileName: pickedFile.name,
+            filePath: pickedFile.path,
+            bytes: bytes,
+            contentType: pickedFile.mimeType!,
+      );
       
     } catch (e) {
       throw Exception("Erro ao selecionar a imagem: $e");
