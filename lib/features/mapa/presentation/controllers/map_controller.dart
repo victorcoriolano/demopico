@@ -27,7 +27,7 @@ class MapControllerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> reajustarCameraPosition(LatLng position) async {
+  void reajustarCameraPosition(LatLng position)  {
     debugPrint("Reajustando a camera position");
     //movendo a camera position
     if (completer.isCompleted) {
@@ -35,7 +35,7 @@ class MapControllerProvider extends ChangeNotifier {
         CameraUpdate.newCameraPosition(
           CameraPosition(
             target: position,
-            zoom: 30,
+            zoom: 20,
           ),
         ),
       );
