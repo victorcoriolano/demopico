@@ -39,7 +39,7 @@ class MarkerService {
       await createIcons(picos);
       for (var pico in picos){
         yield Marker(
-          markerId: MarkerId(pico.picoName),
+          markerId: MarkerId(pico.id),
           position: LatLng(pico.lat, pico.long),
           icon: _markerIcons[pico.picoName]!,
           onTap: () => onTap(pico),
