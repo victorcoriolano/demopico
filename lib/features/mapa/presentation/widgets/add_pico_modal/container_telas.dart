@@ -7,6 +7,7 @@ import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/terce
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -51,6 +52,7 @@ class _ContainerTelasState extends State<ContainerTelas> {
   void initState() {
     super.initState();
     user = context.read<UserDatabaseProvider>().user;
+    context.read<AddPicoProvider>().setLocation(widget.latlang);
   }
 
   
@@ -122,7 +124,12 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                 ),
                               ),
                               onPressed: () async {
+                                
                                 await provider.createSpot(user?.name);
+                                if( provider.errorCriarPico != null ){
+                                  Get.snackbar("Erro ao criar pico", provider.errorCriarPico.toString(),);
+                                }
+                                if(context.mounted) Navigator.pop(context);
                                 
                               },
                               child: const Text('POSTAR PICO',

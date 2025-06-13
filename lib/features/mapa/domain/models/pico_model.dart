@@ -43,6 +43,25 @@ class PicoModel extends Pico {
   );
 }
 
+  factory PicoModel.fromEntity(Pico pico){
+    return PicoModel(
+      id: pico.id,
+      imgUrls: pico.imgUrls,
+      tipoPico: pico.tipoPico,
+      modalidade: pico.modalidade,
+      nota: pico.nota,
+      numeroAvaliacoes: pico.numeroAvaliacoes,
+      long: pico.long,
+      lat: pico.lat,
+      description: pico.description,
+      atributos: pico.atributos,
+      obstaculos: pico.obstaculos,
+      utilidades: pico.utilidades,
+      userCreator: pico.userCreator,
+      picoName: pico.picoName,
+    );
+  }
+
 
 
   Map<String, dynamic> toJson() {

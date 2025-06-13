@@ -13,13 +13,17 @@ class FilesStorageRepository implements ISaveImageRepository {
     return _filesStorageRepository ??= FilesStorageRepository(FirebaseFileRemoteDatasource.getInstance);
   }
 
-  final IFileRemoteDataSource fileRemoteDataSource;
+  final IFileRemoteDataSource dataSource;
 
-  FilesStorageRepository(this.fileRemoteDataSource);
+  FilesStorageRepository(this.dataSource);
 
   @override
   List<UploadTaskInterface> saveFiles(List<UploadFileModel> files) {
-      return fileRemoteDataSource.uploadFile(files);
+      return dataSource.uploadFile(files);
+  }
+
+  Future<void> deleteFiles(List<String> urls) async {
+    await  Future.wait(urls.map((url) => dataSource.deleteFile(url)));
   }
 
 }

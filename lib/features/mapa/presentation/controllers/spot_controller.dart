@@ -4,6 +4,8 @@ import 'package:demopico/features/mapa/domain/entities/filters.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/usecases/avaliar_spot_uc.dart';
+import 'package:demopico/features/mapa/domain/usecases/delete_file_uc.dart';
+import 'package:demopico/features/mapa/domain/usecases/delete_spot_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/load_spot_uc.dart';
 import 'package:demopico/features/mapa/presentation/view_services/marker_service.dart';
 import 'package:flutter/foundation.dart';
@@ -11,21 +13,30 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class SpotControllerProvider extends ChangeNotifier {
+
   static SpotControllerProvider? _spotControllerProvider;
   static SpotControllerProvider get getInstance {
     _spotControllerProvider ??= SpotControllerProvider(
+        deleteFile: DeleteFileUc.instance,
+        deleteSpotUC: DeleteSpotUC.instance,
         avaliarUseCase: AvaliarSpotUc.getInstance,
         showAllPicoUseCase: LoadSpotUc.getInstance);
     return _spotControllerProvider!;
   }
 
   SpotControllerProvider(
-      {required this.avaliarUseCase,
-      required this.showAllPicoUseCase});
+    {
+      required this.deleteFile,
+      required this.deleteSpotUC,
+      required this.avaliarUseCase,
+      required this.showAllPicoUseCase
+    });
 
-
+  final DeleteFileUc deleteFile;
+  final DeleteSpotUC deleteSpotUC;
   final LoadSpotUc showAllPicoUseCase;
   final AvaliarSpotUc avaliarUseCase;
+
 
   List<Pico> spots = [];
   List<Pico> picosPesquisados = [];
@@ -33,8 +44,21 @@ class SpotControllerProvider extends ChangeNotifier {
   Set<Marker> markers = {};
   void Function(Pico)? _onTapMarker;
 
+  String? error;
+
   void setOnTapMarker(void Function(Pico) onTapMarker) {
     _onTapMarker = onTapMarker;
+  }
+
+  Future<void> deletarPico(Pico pico) async {
+    try{
+     await Future.wait([
+      deleteFile.deletarFile(pico.imgUrls),
+      deleteSpotUC.callDelete(pico.id),
+     ]);
+    }catch (e) {
+      error = e.toString(); 
+    }
   }
 
   final MarkerService markerService = MarkerService.getInstance;

@@ -5,7 +5,6 @@ import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 import 'package:demopico/features/mapa/domain/models/upload_file_model.dart';
-import 'package:demopico/features/mapa/domain/models/upload_result_file_model.dart';
 import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/pick_image_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/save_image_uc.dart';
@@ -46,12 +45,13 @@ class AddPicoProvider extends ChangeNotifier{
 
   String? errosImages;
 
-  List<UploadResultFileModel> listResultFileModel = [];
-
-
   List<UploadFileModel> files = [];
 
   double progress = 0.0;
+
+  void setLocation(LatLng latlang) {
+    this.latlang = latlang;
+  }
   
 
   Future<void> pickImages() async{
@@ -64,28 +64,25 @@ class AddPicoProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  void uploadFiles() async{
-    listResultFileModel = saveImageUC.saveImage(files);
-    listResultFileModel.map((taskUpload){
-      taskUpload.progress.listen(
-        (progressData) {
-          progress = progressData;
-          debugPrint("Progress: $progress");
-          notifyListeners();
-        },
-        onDone: () async {
-          final url = await taskUpload.url;
-          debugPrint("URL: $url");
-          imgUrls.add(url);
-          notifyListeners();
-        },
-        onError: (erros) {
-          debugPrint("Erro ao fazer upload: $erros");
-          errosImages = erros.toString();
-          notifyListeners();
-        }
-      );
-    });
+  Future<void> uploadFiles() async{
+    debugPrint("Iniciando upload de arquivos");
+    final listResultFileModel = saveImageUC.saveImage(files);
+
+    final urlFutures = <Future<String>>[];
+    
+    urlFutures.addAll(listResultFileModel.map((file) async => await file.url).toList());
+
+    
+
+    final urls = await Future.wait(urlFutures);
+    debugPrint("URLs geradas do firestore: $urls");
+    imgUrls.addAll(urls);
+    debugPrint("URLs finais: $imgUrls");
+    notifyListeners();
+  }
+
+  void removerImagens(int index){
+    files.removeAt(index);
     notifyListeners();
   }
   
@@ -218,8 +215,8 @@ class AddPicoProvider extends ChangeNotifier{
   
   
 
-  Pico getInfoPico(String? userCriador) {
-    return Pico(
+  PicoModel getInfoPico(String? userCriador) {
+    return PicoModel(
       id: "",
       picoName: nomePico,
       description: descricao,
@@ -237,8 +234,7 @@ class AddPicoProvider extends ChangeNotifier{
     );
   }
 
-  @override
-  void dispose() {
+  void limpar() {
     atributos.clear();
     obstaculos.clear();
     nomePico = '';
@@ -251,7 +247,6 @@ class AddPicoProvider extends ChangeNotifier{
     utilidades.clear();
     files.clear();
     notifyListeners();
-    super.dispose();
   }
    
 
@@ -259,14 +254,27 @@ class AddPicoProvider extends ChangeNotifier{
 
   Future<void> createSpot(String? user) async {
     try {
-      final newPico = getInfoPico(user);
+      late PicoModel newPico;
+      // Faz o upload das imagens e espera as urls
+      await uploadFiles().then((_) => newPico = getInfoPico(user));
+
+
       // Salva o pico no backend
-      await createSpotUc.createSpot(newPico as PicoModel);
+      
+      await createSpotUc.createSpot(newPico);
+      
+      
 
       // Limpa os campos após a criação bem-sucedida
-      dispose();
+      limpar();
     }on Failure catch (e) {
       errorCriarPico = e.message;
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    limpar();
   }
 }
