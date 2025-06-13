@@ -86,9 +86,9 @@ class _HubPageState extends State<HubPage> {
                         width: 38,
                         height: 38,
                         semanticLabel: "Sair",
-                        color: Colors.black,
+                        color: const Color.fromARGB(255, 255, 255, 255),
                         isAntiAlias: true,
-                        image: AssetImage("images/icons/fist-icon.png")))),
+                        image: AssetImage("assets/images/icons/fist-icon.png")))),
             Positioned(
                 ///////////////// TÍTULO DA PÁGINA
                 top: 50,
@@ -169,47 +169,33 @@ class _HubPageState extends State<HubPage> {
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
                                     CupertinoSwitch(
-                                        value: _isDonation,
-                                        activeTrackColor: const Color.fromARGB(
-                                            255, 151, 2, 2),
-                                        focusColor:
-                                            const Color.fromARGB(255, 66, 7, 7),
-                                        inactiveTrackColor:
-                                            const Color.fromARGB(
-                                                255, 255, 255, 255),
-                                        thumbColor:
-                                            const Color.fromARGB(255, 0, 0, 0),
-                                        onChanged: (bool value) {
-                                          setState(() {
-                                            _isDonation = !_isDonation;
-                                            if (_isEvent == true ||
-                                                _isDonation == true) {
-                                              _isEvent = false;
-                                            }
-                                          });
-                                        }),
+                                      value: _isDonation,
+                                      activeColor: const Color(
+                                          0xFF970202), // Vermelho escuro quando ativado
+                                      trackColor: const Color(
+                                          0xFFE0E0E0), // Cinza claro quando desativado
+                                      thumbColor: Colors.black,
+                                      onChanged: (bool value) {
+                                        setState(() {
+                                          _isDonation = value;
+                                          if (value) _isEvent = false;
+                                        });
+                                      },
+                                    ),
                                     CupertinoSwitch(
-                                        value: _isEvent,
-                                        activeTrackColor: const Color.fromARGB(
-                                            255, 151, 2, 2),
-                                        focusColor:
-                                            const Color.fromARGB(255, 66, 7, 7),
-                                        inactiveTrackColor:
-                                            const Color.fromARGB(
-                                                255, 255, 255, 255),
-                                        thumbColor:
-                                            const Color.fromARGB(255, 0, 0, 0),
-                                        onChanged: (bool value) {
-                                          setState(() {
-                                            _isEvent = !_isEvent;
-                                            if (_isEvent == true ||
-                                                _isDonation == true) {
-                                              _isDonation = false;
-                                            }
-                                          });
-                                        }),
+                                      value: _isEvent,
+                                      activeColor: const Color(0xFF970202),
+                                      trackColor: const Color(0xFFE0E0E0),
+                                      thumbColor: Colors.black,
+                                      onChanged: (bool value) {
+                                        setState(() {
+                                          _isEvent = value;
+                                          if (value) _isDonation = false;
+                                        });
+                                      },
+                                    ),
                                   ],
-                                )
+                                ),
                               ],
                             ),
                           )),
