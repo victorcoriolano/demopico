@@ -28,18 +28,20 @@ class MapControllerProvider extends ChangeNotifier {
   }
 
   void reajustarCameraPosition(LatLng position)  {
-    debugPrint("Reajustando a camera position");
     //movendo a camera position
-    if (completer.isCompleted) {
-      _mapController!.animateCamera(
+    debugPrint("Reajustando a camera position");
+    completer.future.then((controller) {
+      controller.animateCamera(
         CameraUpdate.newCameraPosition(
           CameraPosition(
             target: position,
-            zoom: 20,
+            zoom: 15,
           ),
         ),
       );
-    }
+    });
+    
+    
     notifyListeners();
   }
 
