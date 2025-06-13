@@ -77,4 +77,30 @@ class Post {
   void setCurtidas(int value) {
     curtidas = value;
   }
+
+  factory Post.fromJson(Map<String, dynamic> json) {
+    return Post(
+      nome: json['nome'],
+      userId: json['userId'],
+      postId: json['postId'],
+      urlUserPhoto: json['urlUserPhoto'],
+      description: json['description'],
+      urlPhotos: List<String>.from(json['urlPhotos']),
+      dateTime: DateTime.parse(json['dateTime']),
+      curtidas: json['curtidas'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'nome': nome,
+      'userId': userId,
+      'postId': postId,
+      'urlUserPhoto': urlUserPhoto,
+      'description': description,
+      'urlPhotos': urlPhotos,
+      'dateTime': dateTime.toIso8601String(),
+      'curtidas': curtidas,
+    };
+  }
 }
