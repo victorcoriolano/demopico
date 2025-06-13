@@ -8,18 +8,21 @@ import 'package:demopico/features/user/domain/interfaces/i_user_database_reposit
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/infra/repositories/user_firebase_repository.dart';
 import 'package:demopico/features/user/infra/services/user_auth_firebase_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 class HubRepository implements IHubRepository {
-
   static HubRepository? _hubRepository;
 
-  static HubRepository get getInstance{
-    _hubRepository ??= HubRepository(userAuthServiceIMP: UserAuthFirebaseService.getInstance, hubServiceIMP: HubService.getInstance, userDatabaseRepositoryIMP: UserFirebaseRepository.getInstance);
+  static HubRepository get getInstance {
+    _hubRepository ??= HubRepository(
+        userAuthServiceIMP: UserAuthFirebaseService.getInstance,
+        hubServiceIMP: HubService.getInstance,
+        userDatabaseRepositoryIMP: UserFirebaseRepository.getInstance);
     return _hubRepository!;
   }
 
-  final IUserDatabaseRepository  userDatabaseRepositoryIMP;
+  final IUserDatabaseRepository userDatabaseRepositoryIMP;
   final IUserAuthService userAuthServiceIMP;
   final IHubService hubServiceIMP;
 
@@ -52,6 +55,8 @@ class HubRepository implements IHubRepository {
         await hubServiceIMP.createCommunique(newCommunique);
       } else {
         if (kDebugMode) print('Usuário não encontrado.');
+        throw FirebaseAuthException(
+            code: 'permission-denied', message: 'Usuário não encontrado.');
       }
     } on FirebaseException catch (e) {
       if (kDebugMode) {
@@ -59,6 +64,7 @@ class HubRepository implements IHubRepository {
         print(e.message);
         print(e.stackTrace);
       }
+      throw UnimplementedError('Erro ao criar comunicado: ${e.message}');
     }
   }
 

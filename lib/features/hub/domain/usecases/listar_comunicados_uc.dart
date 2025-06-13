@@ -14,7 +14,11 @@ class ListarComunicado{
     }
 
 
-  Future<List<Communique>> listar() async{
-   return await hubRepositoryIMP.getAllCommuniques();
+  Future<List<Communique>> listar() async {
+    var dados = await hubRepositoryIMP.getAllCommuniques();
+    if (dados.isEmpty) {
+      throw Exception('Não foi possível listar os comunicados');
+    }
+    return dados;
   }
 }

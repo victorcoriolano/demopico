@@ -1,0 +1,22 @@
+[
+    {
+        "origin": [
+            "*"
+        ],
+        "method": [
+            "GET"
+        ],
+        "responseHeader": [
+            "Content-Type",
+            "Access-Control-Allow-Origin",
+            "Cache-Control",
+            "Content-Disposition",
+            "Content-Encoding",
+            "Content-Length",
+            "X-Firebase-Storage-Version",
+            "X-Firebase-AppCheck",
+            "X-Goog-Metageneration"
+        ],
+        "maxAgeSeconds": 3600
+    }
+]

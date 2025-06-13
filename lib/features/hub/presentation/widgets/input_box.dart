@@ -104,7 +104,7 @@ class _InputBoxState extends State<InputBox> {
           top: 23,
           right: 8,
           child: IconButton(
-              icon: const Icon(Icons.send_rounded),
+              icon: const Icon(Icons.send_rounded, color: Colors.black),
               iconSize: 30,
               onPressed: () async {
                 try {
