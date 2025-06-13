@@ -1,9 +1,7 @@
 
-
-
-
 import 'package:demopico/core/common/data/models/upload_file_model.dart';
 
-abstract interface class IPickImageRepository {
-  Future<List<UploadFileModel>> pickImage();
+abstract interface class IPickFileRepository {
+  Future<List<UploadFileModel>> pickImages();
+  Future<UploadFileModel> pickVideo();
 }
