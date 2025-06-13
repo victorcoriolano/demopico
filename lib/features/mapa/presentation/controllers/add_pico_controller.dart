@@ -1,10 +1,10 @@
 
 import 'dart:async';
 
+import 'package:demopico/core/common/data/models/upload_file_model.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
-import 'package:demopico/features/mapa/domain/models/upload_file_model.dart';
 import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/pick_image_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/save_image_uc.dart';

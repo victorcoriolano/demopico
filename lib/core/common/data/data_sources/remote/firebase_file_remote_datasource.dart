@@ -1,8 +1,9 @@
 import 'dart:async';
+import 'package:demopico/core/common/data/interfaces/datasource/i_upload_task_datasource.dart';
+import 'package:demopico/core/common/data/models/upload_file_model.dart';
+import 'package:demopico/core/common/data/models/upload_result_file_model.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
-import 'package:demopico/features/mapa/data/data_sources/interfaces/i_upload_task_datasource.dart';
-import 'package:demopico/features/mapa/domain/models/upload_file_model.dart';
-import 'package:demopico/features/mapa/domain/models/upload_result_file_model.dart';
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
 import 'package:flutter/material.dart';

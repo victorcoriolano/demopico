@@ -1,8 +1,9 @@
 
-import 'package:demopico/features/mapa/data/repositories/files_storage_repository.dart';
-import 'package:demopico/features/mapa/domain/interfaces/i_save_image_repository.dart';
-import 'package:demopico/features/mapa/domain/models/upload_file_model.dart';
-import 'package:demopico/features/mapa/domain/models/upload_result_file_model.dart';
+import 'package:demopico/core/common/data/models/upload_file_model.dart';
+import 'package:demopico/core/common/data/models/upload_result_file_model.dart';
+import 'package:demopico/core/common/data/repository/files_storage_repository.dart';
+import 'package:demopico/core/common/data/interfaces/repository/i_save_image_repository.dart';
+
 
 
 class SaveImageUC{

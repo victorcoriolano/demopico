@@ -1,7 +1,8 @@
 
-import 'package:demopico/features/mapa/data/services/image_picker_service.dart';
-import 'package:demopico/features/mapa/domain/interfaces/i_pick_image_repository.dart';
-import 'package:demopico/features/mapa/domain/models/upload_file_model.dart';
+
+import 'package:demopico/core/common/data/interfaces/repository/i_pick_image_repository.dart';
+import 'package:demopico/core/common/data/models/upload_file_model.dart';
+import 'package:demopico/core/common/data/services/image_picker_service.dart';
 
 class PickImageUC {
   static PickImageUC? _pickImageUC;

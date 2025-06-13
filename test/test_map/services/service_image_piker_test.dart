@@ -1,7 +1,8 @@
 
-  import 'package:demopico/features/mapa/data/services/image_picker_service.dart';
-  import 'package:demopico/features/mapa/domain/models/upload_file_model.dart';
-  import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
+
+  import 'package:demopico/core/common/data/models/upload_file_model.dart';
+import 'package:demopico/core/common/data/services/image_picker_service.dart';
+import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
   import 'package:flutter_test/flutter_test.dart';
   import 'package:flutter/services.dart';
 

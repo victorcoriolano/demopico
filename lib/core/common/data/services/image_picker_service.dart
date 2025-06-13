@@ -1,5 +1,6 @@
-import 'package:demopico/features/mapa/domain/interfaces/i_pick_image_repository.dart';
-import 'package:demopico/features/mapa/domain/models/upload_file_model.dart';
+import 'package:demopico/core/common/data/interfaces/repository/i_pick_image_repository.dart';
+import 'package:demopico/core/common/data/models/upload_file_model.dart';
+
 import 'package:image_picker/image_picker.dart';
 
 class ImagePickerService implements IPickImageRepository {
