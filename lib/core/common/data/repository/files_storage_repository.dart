@@ -7,7 +7,7 @@ import 'package:demopico/core/common/data/interfaces/datasource/i_upload_task_da
 import 'package:demopico/core/common/data/interfaces/repository/i_save_image_repository.dart';
 import 'package:demopico/core/common/data/models/upload_file_model.dart';
 
-class FilesStorageRepository implements ISaveImageRepository {
+class FilesStorageRepository implements ISaveFileRepository {
 
   static FilesStorageRepository? _filesStorageRepository;
 

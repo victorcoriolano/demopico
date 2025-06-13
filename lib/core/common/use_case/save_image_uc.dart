@@ -15,7 +15,7 @@ class SaveImageUC{
     return _saveImageUC!;
   } 
 
-  final ISaveImageRepository saveImageRepositoryIMP;
+  final ISaveFileRepository saveImageRepositoryIMP;
 
   SaveImageUC({required this.saveImageRepositoryIMP});
 
