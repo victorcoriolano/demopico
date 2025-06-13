@@ -1,3 +1,4 @@
+import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_favorito.dart';
 import 'package:demopico/features/mapa/domain/usecases/favorite_save_spot_uc.dart';
 import 'package:demopico/features/mapa/presentation/dtos/spot_cart_ui_dto.dart';
@@ -11,11 +12,16 @@ class FavoriteSpotController extends ChangeNotifier {
     return _spotSaveController!;
   }
 
-  final SaveSpotUc saveSpot;
   FavoriteSpotController({required this.saveSpot});
+
+  final SaveSpotUc saveSpot;
+
+  bool isLoading = false;
 
   List<SpotCardUIDto> picosFavoritos = [];
   String? error;
+
+
   Future<bool> savePico(PicoFavorito picoFav) async {
     final salvar = await saveSpot.saveSpot(picoFav);
     if (salvar) {
@@ -28,16 +34,20 @@ class FavoriteSpotController extends ChangeNotifier {
   }
 
   Future<void> getPicosSalvos(String idUser) async {
+    isLoading = true;
+    
     try {
       debugPrint("Busca de picos salvos");
-      picosFavoritos = await saveSpot.listFavoriteSpot(idUser);
+      picosFavoritos.addAll(await saveSpot.listFavoriteSpot(idUser));
+      debugPrint("Picos salvos: ${picosFavoritos.length}");
+      isLoading = false;
+      notifyListeners();
       
-    } on Exception catch (e) {
+    } on Failure catch (e) {
       error = "Um erro ao buscar picos salvos foi identificado: $e";
-    } catch (e) {
-      error = "Erro ao buscar picos salvos";
-      
+      notifyListeners();
     }
+
   }
 
   Future<bool> deleteSave(String idPicoFavModel) async {
@@ -46,6 +56,7 @@ class FavoriteSpotController extends ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
+      error = e.toString();
       return false;
     }
   }
