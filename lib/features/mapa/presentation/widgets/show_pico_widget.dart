@@ -103,9 +103,16 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
     final provider = context.read<FavoriteSpotController>();
     final user = context.read<UserDatabaseProvider>().user;
 
-    bool isMyPico = widget.pico.userCreator != null &&
+    
+
+    bool isMine(){
+      
+      bool isMyPico = widget.pico.userCreator != null &&
         user != null &&
         widget.pico.userCreator! == user.name;
+      debugPrint("isMine: $isMyPico");
+        return isMyPico;
+    }
 
     return DraggableScrollableSheet(
         initialChildSize: 0.8,
@@ -158,32 +165,71 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                             width: double.infinity,
                                           ),
                                         ),
-                                        IconButton(
-                                          icon: const Icon(
-                                            Icons.close,
-                                            color: Color.fromARGB(
-                                                255, 243, 243, 243),
-                                          ),
-                                          padding: const EdgeInsets.only(
-                                              top: 10, right: 10),
-                                          iconSize: 36,
-                                          onPressed: () {
-                                            Navigator.pop(
-                                                context); // Retorna para a tela anterior
-                                          },
-                                        ),
-                                        Visibility(
-                                          visible: isMyPico,
-                                          child: IconButton(
-                                            onPressed: () => context
-                                                .read<SpotControllerProvider>()
-                                                .deletarPico(widget.pico),
-                                            icon: const Icon(Icons.delete, color: Colors.black,),
-                                            padding: const EdgeInsets.only(
-                                              top: 10,
-                                              right: 10,
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            IconButton(
+                                              icon: const Icon(
+                                                Icons.close,
+                                                color: Color.fromARGB(
+                                                    255, 243, 243, 243),
+                                              ),
+                                              padding: const EdgeInsets.all(10),
+                                              iconSize: 36,
+                                              onPressed: () {
+                                                Navigator.pop(
+                                                    context); // Retorna para a tela anterior
+                                              },
                                             ),
-                                          ),
+                                            Visibility(
+                                              visible: isMine(),
+                                              child: IconButton(
+                                                onPressed: () {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return AlertDialog(
+                                                        title: const Text(
+                                                            'Excluir Pico'),
+                                                        content: const Text(
+                                                            'Tem certeza que deseja excluir este pico?'),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed: () {
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                            child: const Text(
+                                                                'Cancelar'),
+                                                          ),
+                                                          TextButton(
+                                                            onPressed: () {
+                                                              context
+                                                                  .read<
+                                                                      SpotControllerProvider>()
+                                                                  .deletarPico(
+                                                                      widget.pico);
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                            child: const Text(
+                                                                'Excluir'),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
+                                                } ,
+                                                icon: const Icon(
+                                                  Icons.delete,
+                                                  color: Colors.black,
+                                                ),
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     );
@@ -573,7 +619,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                   children: [
                                     IconButton(
                                       onPressed: () async {
-                                        if(user == null){
+                                        if (user == null) {
                                           Navigator.pop(context);
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(const SnackBar(
@@ -582,39 +628,37 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                           ));
                                           return;
                                         }
-                                        
-                                          final picoFav = PicoFavorito(
-                                              idPico: widget.pico.id,
-                                              idUsuario: user.id!);
-                                          final salvar =
-                                              await provider.savePico(picoFav);
-                                          if (salvar) {
-                                            if (context.mounted) {
-                                              Navigator.pop(context);
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                SnackBar(
-                                                  content:
-                                                      const Text("Pico Salvo"),
-                                                  action: SnackBarAction(
-                                                      label: "Ver pico salvo",
-                                                      onPressed: () {
-                                                        Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (_) =>
-                                                                SavePicoPage(
-                                                              userID:
-                                                                  user.id ??
-                                                                      "",
-                                                            ),
+
+                                        final picoFav = PicoFavorito(
+                                            idPico: widget.pico.id,
+                                            idUsuario: user.id!);
+                                        final salvar =
+                                            await provider.savePico(picoFav);
+                                        if (salvar) {
+                                          if (context.mounted) {
+                                            Navigator.pop(context);
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content:
+                                                    const Text("Pico Salvo"),
+                                                action: SnackBarAction(
+                                                    label: "Ver pico salvo",
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (_) =>
+                                                              SavePicoPage(
+                                                            userID:
+                                                                user.id ?? "",
                                                           ),
-                                                        );
-                                                      }),
-                                                ),
-                                              );
+                                                        ),
+                                                      );
+                                                    }),
+                                              ),
+                                            );
                                           }
-                                          
                                         }
                                       },
                                       icon: const Icon(Icons.bookmark_border),
@@ -625,7 +669,9 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                         tooltip: "Denunciar Pico",
                                         onPressed: () {
                                           denunciarPico(
-                                              context, user?.id ?? "anonimo", widget.pico.id);
+                                              context,
+                                              user?.id ?? "anonimo",
+                                              widget.pico.id);
                                         },
                                         icon: const Icon(Icons.flag),
                                         iconSize: 35),
