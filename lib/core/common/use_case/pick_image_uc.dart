@@ -4,20 +4,20 @@ import 'package:demopico/core/common/data/interfaces/repository/i_pick_image_rep
 import 'package:demopico/core/common/data/models/upload_file_model.dart';
 import 'package:demopico/core/common/data/services/image_picker_service.dart';
 
-class PickImageUC {
-  static PickImageUC? _pickImageUC;
+class PickFileUC {
+  static PickFileUC? _pickImageUC;
 
-  static PickImageUC get getInstance{
-    _pickImageUC ??= PickImageUC(repositoryIMP: ImagePickerService.getInstance);
+  static PickFileUC get getInstance{
+    _pickImageUC ??= PickFileUC(repositoryIMP: ImagePickerService.getInstance);
     return _pickImageUC!;
   } 
-  final IPickImageRepository repositoryIMP;
+  final IPickFileRepository repositoryIMP;
 
-  PickImageUC({required this.repositoryIMP});
+  PickFileUC({required this.repositoryIMP});
 
   Future<List<UploadFileModel>> pegarArquivos() async {
     try {
-      final files = await repositoryIMP.pickImage();
+      final files = await repositoryIMP.pickImages();
       
       if (files.length > 3) throw Exception("Limite de 3 arquivos");
 
