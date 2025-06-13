@@ -88,8 +88,6 @@ class _CommuniqueTileState extends State<CommuniqueTile> {
                                   : post.pictureUrl!,
                               width: 40,
                               height: 40,
-                              webHtmlElementStrategy:
-                                  WebHtmlElementStrategy.never,
                               alignment: Alignment.centerLeft,
                               fit: BoxFit.contain));
                     }
