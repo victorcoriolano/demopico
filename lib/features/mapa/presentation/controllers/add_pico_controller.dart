@@ -56,7 +56,7 @@ class AddPicoProvider extends ChangeNotifier{
 
   Future<void> pickImages() async{
     try{
-      files = await pickImageUC.pegarArquivos();
+      files = await pickImageUC.pick();
     }on Exception catch(e) {
       debugPrint("Erro ao selecionar imagens: $e");
       errosImages = e.toString();
