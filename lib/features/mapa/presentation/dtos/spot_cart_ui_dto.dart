@@ -9,4 +9,9 @@ class SpotCardUIDto {
     required this.picoModel,
     required this.picoFavoritoModel,
   });
+
+  @override
+  String toString() {
+    return "Pico: ${picoModel.picoName} - Favorito: ${picoFavoritoModel.idPico}";
+  }
 }
