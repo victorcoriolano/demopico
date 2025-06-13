@@ -134,9 +134,9 @@ class _PostWidgetState extends State<PostWidget> {
         });
       },
       child: Image.asset(
-        'images/cumprimento_marreta.png',
-        width: 10,
-        height: 10,
+        'assets/images/cumprimento_marreta.png',
+        width: 60,
+        height: 60,
       ),
     ),
     const SizedBox(width: 8),

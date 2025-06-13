@@ -1,5 +1,5 @@
 
-import 'package:demopico/features/mapa/data/repositories/files_storage_repository.dart';
+import 'package:demopico/core/common/data/repository/files_storage_repository.dart';
 
 class DeleteFileUc {
   final FilesStorageRepository repository;

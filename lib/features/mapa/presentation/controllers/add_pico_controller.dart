@@ -1,13 +1,13 @@
 
 import 'dart:async';
 
+import 'package:demopico/core/common/data/models/upload_file_model.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
-import 'package:demopico/features/mapa/domain/models/upload_file_model.dart';
 import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
-import 'package:demopico/features/mapa/domain/usecases/pick_image_uc.dart';
-import 'package:demopico/features/mapa/domain/usecases/save_image_uc.dart';
+import 'package:demopico/core/common/use_case/pick_image_uc.dart';
+import 'package:demopico/core/common/use_case/save_image_uc.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -16,14 +16,14 @@ class AddPicoProvider extends ChangeNotifier{
 
   static AddPicoProvider get getInstance {
     _addPicoProvider ??= AddPicoProvider(
-        pickImageUC: PickImageUC.getInstance,
+        pickImageUC: PickFileUC.getInstance,
         saveImageUC: SaveImageUC.getInstance,
         createSpotUc: CreateSpotUc.getInstance);
     return _addPicoProvider!;
   }
 
   //instanciando casos de uso
-  final PickImageUC pickImageUC;
+  final PickFileUC pickImageUC;
   final SaveImageUC saveImageUC;
   final CreateSpotUc createSpotUc;
 
@@ -56,7 +56,7 @@ class AddPicoProvider extends ChangeNotifier{
 
   Future<void> pickImages() async{
     try{
-      files = await pickImageUC.pegarArquivos();
+      files = await pickImageUC.pick();
     }on Exception catch(e) {
       debugPrint("Erro ao selecionar imagens: $e");
       errosImages = e.toString();

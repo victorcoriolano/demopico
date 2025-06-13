@@ -1,9 +1,9 @@
+import 'package:demopico/core/common/ui_context_extension.dart';
 import 'package:demopico/features/hub/presentation/providers/hub_provider.dart';
 import 'package:demopico/features/hub/presentation/widgets/communique_tile.dart';
 import 'package:demopico/features/hub/presentation/widgets/input_box.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -58,34 +58,59 @@ class _HubPageState extends State<HubPage> {
         backgroundColor: const Color.fromARGB(255, 238, 238, 238),
         body: Stack(
           children: [
+            ////////////////////CONTÂINER DE FUNDO
             Positioned(
-                left: 12,
-                top: 55,
+              top: 0,
+              child: Container(
+                width: context.screenWidth,
+                height: context.screenHeight / 2,
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 107, 7, 7),
+                  shape: BoxShape.rectangle,
+                ),
+              ),
+            ),
+            Positioned(
+                ///////////////// BOTÃO DE VOLTAR
+                left: 30,
+                top: 45,
                 child: IconButton(
                     onPressed: () {
                       Get.back();
                     },
-                    icon: const Icon(Icons.arrow_left,
-                        color: Colors.black, size: 38))),
+                    focusColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                    visualDensity: VisualDensity.compact,
+                    icon: Image(
+                        repeat: ImageRepeat.repeat,
+                        width: 38,
+                        height: 38,
+                        semanticLabel: "Sair",
+                        color: const Color.fromARGB(255, 255, 255, 255),
+                        isAntiAlias: true,
+                        image: AssetImage("assets/images/icons/fist-icon.png")))),
             Positioned(
-                top: 60,
+                ///////////////// TÍTULO DA PÁGINA
+                top: 50,
                 left: context.width / 2 - 50,
                 right: context.width / 2 - 50,
-                child: const Center(
+                child: Center(
                   child: Text("HUB",
                       style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontStyle: FontStyle.normal,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 128, 25, 18),
+                        color: const Color.fromARGB(255, 243, 243, 243),
                       )),
                 )),
             Positioned(
-              top: 200,
+              top: 100,
               child: SizedBox(
-                  /////////////////// Carregar posts
+                  /////////////////// Contâiner dos posts
                   child: Container(
                 alignment: Alignment.topCenter,
-                height: context.height * 0.60,
+                height: context.height * 0.7,
                 width: context.width,
                 padding: const EdgeInsets.all(8),
                 decoration: const BoxDecoration(
@@ -96,7 +121,6 @@ class _HubPageState extends State<HubPage> {
                 ),
               )),
             ),
-
             Positioned(
               bottom: 4.5,
               left: context.width / 2 - 170,
@@ -121,31 +145,6 @@ class _HubPageState extends State<HubPage> {
                         fit: StackFit.loose,
                         clipBehavior: Clip.none,
                         children: [
-                          Positioned.fill(
-                            child: GestureDetector(
-                                behavior: HitTestBehavior.deferToChild,
-                                dragStartBehavior: DragStartBehavior.start,
-                                excludeFromSemantics: true,
-                                onTapCancel: null,
-                                onDoubleTapCancel: null,
-                                onTap: () {
-                                  setState(() {
-                                    isChoosingType = false;
-                                  });
-                                },
-                                child: Container(
-                                  color: const Color.fromARGB(209, 0, 0, 0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      const Icon(Icons.close,
-                                          color: Colors.white),
-                                      SizedBox(width: context.width * 0.8),
-                                    ],
-                                  ),
-                                )),
-                          ),
                           Positioned(
                               child: Container(
                             color: const Color.fromARGB(255, 177, 177, 177),
@@ -161,7 +160,7 @@ class _HubPageState extends State<HubPage> {
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Icon(Icons.star),
-                                    SizedBox(width: 2),
+                                    SizedBox(width: 1.5),
                                     Icon(Icons.recycling)
                                   ],
                                 ),
@@ -170,56 +169,54 @@ class _HubPageState extends State<HubPage> {
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
                                     CupertinoSwitch(
-                                        value: _isDonation,
-                                        activeColor: const Color.fromARGB(
-                                            255, 151, 2, 2),
-                                        focusColor:
-                                            const Color.fromARGB(255, 66, 7, 7),
-                                        trackColor: const Color.fromARGB(
-                                            255, 255, 255, 255),
-                                        thumbColor:
-                                            const Color.fromARGB(255, 0, 0, 0),
-                                        onChanged: (bool value) {
-                                          setState(() {
-                                            _isDonation = !_isDonation;
-                                            if (_isEvent == true ||
-                                                _isDonation == true) {
-                                              _isEvent = false;
-                                            }
-                                          });
-                                        }),
+                                      value: _isDonation,
+                                      activeColor: const Color(
+                                          0xFF970202), // Vermelho escuro quando ativado
+                                      trackColor: const Color(
+                                          0xFFE0E0E0), // Cinza claro quando desativado
+                                      thumbColor: Colors.black,
+                                      onChanged: (bool value) {
+                                        setState(() {
+                                          _isDonation = value;
+                                          if (value) _isEvent = false;
+                                        });
+                                      },
+                                    ),
                                     CupertinoSwitch(
-                                        value: _isEvent,
-                                        activeColor: const Color.fromARGB(
-                                            255, 151, 2, 2),
-                                        focusColor:
-                                            const Color.fromARGB(255, 66, 7, 7),
-                                        trackColor: const Color.fromARGB(
-                                            255, 255, 255, 255),
-                                        thumbColor:
-                                            const Color.fromARGB(255, 0, 0, 0),
-                                        onChanged: (bool value) {
-                                          setState(() {
-                                            _isEvent = !_isEvent;
-                                            if (_isEvent == true ||
-                                                _isDonation == true) {
-                                              _isDonation = false;
-                                            }
-                                          });
-                                        }),
+                                      value: _isEvent,
+                                      activeColor: const Color(0xFF970202),
+                                      trackColor: const Color(0xFFE0E0E0),
+                                      thumbColor: Colors.black,
+                                      onChanged: (bool value) {
+                                        setState(() {
+                                          _isEvent = value;
+                                          if (value) _isDonation = false;
+                                        });
+                                      },
+                                    ),
                                   ],
-                                )
+                                ),
                               ],
                             ),
-                          ))
+                          )),
+                          Positioned(
+                            top: 15,
+                            left: 15,
+                            child: IconButton(
+                                icon: const Icon(Icons.close),
+                                color: Colors.black,
+                                onPressed: () {
+                                  setState(() {
+                                    isChoosingType = !isChoosingType;
+                                  });
+                                }),
+                          ),
                         ],
                       ),
                     )
                 ],
               ),
             ),
-
-            //Procede a escolher o tipo de publicação
           ],
         ),
       ),
@@ -240,14 +237,12 @@ class _HubPageState extends State<HubPage> {
                   shape: RoundedRectangleBorder(
                       borderRadius: const BorderRadius.all(Radius.circular(12)),
                       side: BorderSide(
-                          width: 2.5,
-                          color: post.type == "doacoesEtrocas" ||
-                                  post.type == "evento"
-                              ? Colors.black
-                              : const Color.fromARGB(255, 128, 25, 18),
+                          width: 0.5,
+                          color: post.type == "evento"
+                              ? const Color.fromARGB(255, 128, 25, 18)
+                              : Colors.black,
                           style: BorderStyle.solid)),
                   child: CommuniqueTile(post: post));
             });
   }
 }
-

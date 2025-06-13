@@ -14,7 +14,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   get: ^4.6.6
   provider: ^6.1.2
-  intl: ^0.19.0
+  intl: ^0.20.2
   firebase_core: ^3.4.1
   firebase_auth: ^5.2.1
   cloud_firestore: ^5.4.1
@@ -22,8 +22,8 @@ dependencies:
   google_maps_flutter: ^2.9.0
   dartz: ^0.10.1
   geolocator: ^13.0.1
-  permission_handler: ^11.3.1
-  get_it: ^7.7.0
+  permission_handler: ^12.0.0+1
+  get_it: ^8.0.3
   firebase_storage: ^12.3.2
   image_picker: ^1.1.2
   icon_decoration: ^2.0.2
@@ -46,7 +46,7 @@ dev_dependencies:
   mockito: ^5.4.4
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
   integration_test:
       sdk: flutter
   flutter_driver:
@@ -62,3 +62,4 @@ flutter:
     assets:
       - assets/images/
       - assets/images/icons/
+

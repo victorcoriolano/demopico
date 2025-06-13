@@ -1,11 +1,13 @@
 
 
-import 'package:demopico/features/mapa/data/data_sources/interfaces/i_upload_task_datasource.dart';
-import 'package:demopico/features/mapa/data/data_sources/remote/firebase_file_remote_datasource.dart';
-import 'package:demopico/features/mapa/domain/interfaces/i_save_image_repository.dart';
-import 'package:demopico/features/mapa/domain/models/upload_file_model.dart';
 
-class FilesStorageRepository implements ISaveImageRepository {
+
+import 'package:demopico/core/common/data/data_sources/remote/firebase_file_remote_datasource.dart';
+import 'package:demopico/core/common/data/interfaces/datasource/i_upload_task_datasource.dart';
+import 'package:demopico/core/common/data/interfaces/repository/i_save_image_repository.dart';
+import 'package:demopico/core/common/data/models/upload_file_model.dart';
+
+class FilesStorageRepository implements ISaveFileRepository {
 
   static FilesStorageRepository? _filesStorageRepository;
 
