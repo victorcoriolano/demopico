@@ -65,7 +65,7 @@ void main() {
       when(() => mockTaskSnapshot.state).thenReturn(TaskState.running);
       when(() => mockTaskSnapshot.bytesTransferred).thenReturn(100);
       when(() => mockTaskSnapshot.totalBytes).thenReturn(100);
-      when(() => mockStorageReference.child("spots/${fileMock.fileName}"))
+      when(() => mockStorageReference.child(any()))
           .thenAnswer((_) => mockStorageReference);
       when(() => mockStorageReference.putData(
         fileMock.bytes,
