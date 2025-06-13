@@ -24,9 +24,10 @@ class ProfileTopSideDataWidget extends StatelessWidget {
           children: [
             Container(
               width: double.infinity,
-              height: 220,
+              height: 175,
               decoration: BoxDecoration(
                 image: DecorationImage(
+                  alignment: Alignment.center,
                   image: backgroundUrl != null && backgroundUrl!.isNotEmpty
                       ? NetworkImage(backgroundUrl!)
                       : const AssetImage("images/backgroundPadrao.png")
