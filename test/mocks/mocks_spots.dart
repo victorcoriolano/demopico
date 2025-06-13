@@ -1,3 +1,4 @@
+import 'package:demopico/features/mapa/data/mappers/mapper_dto_picomodel.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 
 final testPico = PicoModel(
@@ -50,3 +51,9 @@ final testPico = PicoModel(
       userCreator: "user123",
       picoName: "Pico Dhora",
     );
+
+    
+    final listSpots = [testPico, testPico2, testPico3];
+
+    // mockando o dto para teste de repository
+    final listDto = listSpots.map((pico) => MapperDtoPicomodel.toDto(pico)).toList();

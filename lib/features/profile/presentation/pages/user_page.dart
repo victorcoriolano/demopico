@@ -1,10 +1,16 @@
 import 'package:demopico/core/app/home_page.dart';
-import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
-import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
+import 'package:demopico/core/common/widgets/back_widget.dart';
+import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_description_widget.dart';
+import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_navigator_widget.dart';
+import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_posts_widget.dart';
+import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_stats_widget.dart';
+import 'package:demopico/features/profile/presentation/widgets/profile_configure_widget.dart';
+import 'package:demopico/features/profile/presentation/widgets/profile_top_side_data_widget.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
@@ -16,11 +22,15 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
-  UserM? user;
+  late UserM? user;
   String? currentUserId;
-
+  bool _isVisible = true;
   bool _isLoading = true;
+  ScrollDirection? _lastDirection;
+  double _accumulatedScroll = 0.0;
+  double _lastOffset = 0.0;
 
+  final ScrollController _scrollController = ScrollController();
   final TextEditingController bioController = TextEditingController();
 
   @override
@@ -29,8 +39,49 @@ class _UserPageState extends State<UserPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadUser();
     });
+    _scrollController.addListener(() {
+      final currentOffset = _scrollController.offset;
+      final direction = _scrollController.position.userScrollDirection;
+      final delta = currentOffset - _lastOffset;
+
+      // Se mudou de direção, zera o acumulado
+      if (direction != _lastDirection) {
+        _accumulatedScroll = 0.0;
+        _lastDirection = direction;
+      }
+
+      _accumulatedScroll += delta;
+
+      // Scroll para baixo (esconde) — precisa acumular pelo menos 20 pixels
+      if (direction == ScrollDirection.reverse && _accumulatedScroll > 10) {
+        if (_isVisible) {
+          setState(() {
+            _isVisible = false;
+          });
+        }
+        _accumulatedScroll = 0; // zera após acionar
+      }
+
+      // Scroll para cima (mostra) — precisa acumular pelo menos -20 pixels
+      else if (direction == ScrollDirection.forward &&
+          _accumulatedScroll < -2) {
+        if (!_isVisible) {
+          setState(() {
+            _isVisible = true;
+          });
+        }
+        _accumulatedScroll = 0; // zera após acionar
+      }
+
+      _lastOffset = currentOffset;
+    });
   }
-  
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   Future<void> _loadUser() async {
     final providerAuth = Provider.of<AuthUserProvider>(context, listen: false);
@@ -48,7 +99,7 @@ class _UserPageState extends State<UserPage> {
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Error'),
-          content: const Text('User not logged in.'),
+          content: const Text('User not found.'),
           actions: [
             TextButton(
               onPressed: () {
@@ -61,353 +112,134 @@ class _UserPageState extends State<UserPage> {
       );
       return;
     }
-
+    currentUserId = uid;
     await providerDatabase.retrieveUserProfileData(uid);
-    setState(() {
-      user = providerDatabase.user;
-      _isLoading = false;
-    });
+
+    if (providerDatabase.user == null) {
+      setState(() {
+        _isLoading = true;
+      });
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Error'),
+            content: const Text('User not found.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.to(() => const HomePage());
+                },
+                child: const Text('OK'),
+              )
+            ],
+          ),
+        );
+      }
+      return;
+    } else {
+      setState(() {
+        user = providerDatabase.user!;
+        _isLoading = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final providerAuthListen = Provider.of<AuthUserProvider>(context);
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      body: SafeArea(
-          child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-        child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 20),
-                  Row(
+      body: Consumer<UserDatabaseProvider>(
+        builder: (context, provider, child) => SafeArea(
+          child: _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : Container(
+                  padding: const EdgeInsets.all(0),
+                  margin: const EdgeInsets.all(0),
+                  height: double.infinity,
+                  color: const Color.fromARGB(80, 243, 240, 240),
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      IconButton(
-                        onPressed: () {
-                          Get.to(() => const HomePage(),
-                              popGesture: true,
-                              preventDuplicates: true,
-                              curve: Curves.easeInBack,
-                              transition: Transition.leftToRight);
-                        },
-                        icon: const Icon(Icons.arrow_left),
-                        splashRadius: 0.5,
-                        tooltip: "Voltar",
-                        splashColor: null,
-                        focusColor: null,
-                        hoverColor: null,
-                        iconSize: 60,
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          //Aplicar funcionalidade de settings
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text('Configurações',
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 18)),
-                                  content: SizedBox(
-                                    height: 200,
-                                    width: 100,
-                                    child: ListView(
-                                      shrinkWrap: true,
-                                      itemExtent: 50,
-                                      children: [
-                                        ListTile(
-                                            title: const Text(
-                                                'Sobre o Aplicativo'),
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                              Navigator.pushReplacement(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          const AboutPage()));
-                                            }),
-                                        ListTile(
-                                            title: const Text('Fazer Logout'),
-                                            onTap: () {
-                                              showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return AlertDialog(
-                                                        title: const Text(
-                                                            'Logout'),
-                                                        content: const Text(
-                                                            'Tem certeza que deseja sair da sua conta?'),
-                                                        actions: [
-                                                          TextButton(
-                                                              onPressed: () {
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
-                                                              },
-                                                              child: const Text(
-                                                                'Cancelar',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .black),
-                                                              )),
-                                                          TextButton(
-                                                              child: const Text(
-                                                                  'Sair'),
-                                                              onPressed:
-                                                                  () async {
-                                                                providerAuthListen
-                                                                    .logout();
-                                                                Get.offAll(
-                                                                    () =>
-                                                                        const HomePage(),
-                                                                    transition:
-                                                                        Transition
-                                                                            .rightToLeftWithFade);
-                                                              })
-                                                        ]);
-                                                  });
-                                            })
-                                      ],
-                                    ),
+                      Container(
+                        height: screenHeight * 0.35,
+                        padding: const EdgeInsets.all(0),
+                        margin: const EdgeInsets.all(0),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const CustomBackButton(
+                                    iconSize: 30,
+                                    destination: HomePage(),
                                   ),
-                                  actions: [
-                                    TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text(
-                                          'Voltar',
-                                          style: TextStyle(color: Colors.black),
-                                        )),
-                                  ],
-                                );
-                              });
-                        },
-                        icon: const Icon(Icons.settings),
-                        tooltip: "Configurações",
-                        iconSize: 35,
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                      child: user?.pictureUrl != null
-                          ? CircleAvatar(
-                              radius: 50,
-                              backgroundImage: null,
-                              backgroundColor: Colors.grey.shade200,
-                              foregroundImage: NetworkImage(
-                                user!.pictureUrl!,
+                                  Text(
+                                    user!.name ??
+                                        'Nome de usuário não encontrado...',
+                                    style: const TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  ProfileConfigureWidget(
+                                      bioController: bioController),
+                                ],
                               ),
-                            )
-                          : const IconButton.filled(
-                              onPressed: null,
-                              icon: Icon(Icons.nature_people_rounded),
-                              iconSize: 100,
-                            )),
-                  const SizedBox(height: 20),
-                  Text(
-                    user!.name != null
-                        ? user!.name!
-                        : 'Usuário não encontrado...',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text('${user?.conexoes} \n Seguidores',
-                          textAlign: TextAlign.center),
-                      Text('${user?.picosAdicionados}\n Contribuições',
-                          textAlign: TextAlign.center),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      color: const Color.fromARGB(176, 196, 196, 196),
-                      border: Border.all(color: Colors.black, width: 1),
-                    ),
-                    width:
-                        MediaQueryData.fromView(View.of(context)).size.width >
-                                600
-                            ? 400
-                            : null,
-                    alignment: Alignment.center,
-                    child: Text(user!.description!,
-                        style: const TextStyle(
-                          fontSize: 12,
-                        )),
-                  ),
-                  const SizedBox(height: 20),
-                  Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
-                        color: const Color.fromARGB(176, 196, 196, 196),
-                        border: Border.all(color: Colors.black, width: 1),
+                            ),
+                            ProfileTopSideDataWidget(
+                              avatarUrl: user?.pictureUrl,
+                              backgroundUrl: user?.backgroundPicture,
+                            ),
+
+                              ProfileStatsWidget(
+                                followers: user?.conexoes ?? 0,
+                                contributions: user?.picosAdicionados ?? 0,
+                              ),
+                          ],
+                        ),
                       ),
-                      width:
-                          MediaQueryData.fromView(View.of(context)).size.width >
-                                  600
-                              ? 400
-                              : null,
-                      alignment: Alignment.center,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                      Container(
+                        padding: const EdgeInsets.all(0),
+                        margin: const EdgeInsets.all(0),
+                        height: screenHeight * 0.54,
+                        child: SingleChildScrollView(
+                          controller: _scrollController,
+                          child: Column(
                             children: [
-                              IconButton(
-                                icon: const Icon(Icons.add_card),
-                                onPressed: () {
-                                  Get.to(() => const HubPage(),
-                                      curve: Curves.easeOutSine,
-                                      transition: Transition.upToDown);
-                                },
+                            
+                              AnimatedOpacity(
+                                opacity: _isVisible ? 1.0 : 0.0,
+                                duration: const Duration(milliseconds: 400),
+                                child: ProfileDescriptionWidget(
+                                  description: user?.description,
+                                ),
                               ),
-                              const Text(
-                                'Fazer Comunicado',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                ),
-                              )
+                              Container(
+                                padding: const EdgeInsets.all(0),
+                                height: screenHeight * 0.53,
+                                child: const ProfilePostsWidget(),
+                              ),
                             ],
                           ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                  icon: const Icon(Icons.add_location),
-                                  onPressed: () {
-                                    Get.to(() => const MapPage(),
-                                        curve: Curves.easeInOutSine,
-                                        transition: Transition.leftToRight);
-                                  }),
-                              const Text(
-                                'Adicionar um Pico',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                ),
-                              )
-                            ],
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                  icon: const Icon(Icons.edit_note),
-                                  onPressed: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: const Text(
-                                                'Editar descrição',
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 18)),
-                                            content: TextField(
-                                              controller: bioController,
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: const Text(
-                                                    'Cancelar',
-                                                    style: TextStyle(
-                                                        color: Colors.black),
-                                                  )),
-                                              TextButton(
-                                                onPressed: () {
-                                                  if (bioController
-                                                      .text.isNotEmpty) {
-                                                    setState(() {
-                                                      user?.description =
-                                                          bioController.text;
-                                                    });
-                                                    //databaseProvider
-                                                    //            .updateUserBio(
-                                                    //              bioController.text);
-                                                    bioController.clear();
-                                                    Navigator.of(context).pop();
-                                                  }
-                                                },
-                                                child: const Text('Salvar',
-                                                    style: TextStyle(
-                                                        color: Colors.black)),
-                                              )
-                                            ],
-                                          );
-                                        });
-                                  }),
-                              const Text(
-                                'Editar Descrição',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                ),
-                              )
-                            ],
-                          )
-                        ],
-                      )),
-                  const Spacer(),
-                ],
-              ),
-      )),
-    );
-  }
-}
-
-class AboutPage extends StatelessWidget {
-  const AboutPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          foregroundColor: Colors.white,
-          title: const Text('Sobre'),
-          titleTextStyle: const TextStyle(color: Colors.black),
-          iconTheme: const IconThemeData(color: Colors.black)),
-      body: const Center(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text('Sobre:'),
-          SizedBox(height: 30),
-          Text(
-              "Desenvolvido em 2024 \n Aplicativo de Geomídia para localização de pontos de interesse."),
-          SizedBox(height: 30),
-          Text('Elenco de desenvolvedores:'),
-          Text(
-              'Gabriel Pires, Arthur Selingin, Enzo Hiroshi, Victor Coriolano'),
-          Text('Contato:'),
-          Text('Email: picoskatepico@gmail.com'),
-          Text('Todos os Direitos Reservados.')
-        ],
-      )),
+                        ),
+                      ),
+                      Container(
+                        height: 60,
+                        padding: const EdgeInsets.all(0),
+                        margin: const EdgeInsets.all(0),
+                        child: const ProfileNavigatorWidget(),
+                      ),
+                    ],
+                  ),
+                ),
+        ),
+      ),
     );
   }
 }

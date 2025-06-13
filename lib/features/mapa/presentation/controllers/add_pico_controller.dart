@@ -1,32 +1,36 @@
-import 'dart:io';
 
+import 'dart:async';
+
+import 'package:demopico/core/common/data/models/upload_file_model.dart';
+import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
-import 'package:demopico/features/mapa/domain/usecases/pick_image_uc.dart';
-import 'package:demopico/features/mapa/domain/usecases/save_image_uc.dart';
-import 'package:demopico/features/user/presentation/widgets/form_validator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:demopico/features/mapa/domain/models/pico_model.dart';
+import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
+import 'package:demopico/core/common/use_case/pick_image_uc.dart';
+import 'package:demopico/core/common/use_case/save_image_uc.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:image_picker/image_picker.dart';
 
-class AddPicoProvider extends ChangeNotifier with Validators {
+class AddPicoProvider extends ChangeNotifier{
   static AddPicoProvider? _addPicoProvider;
 
   static AddPicoProvider get getInstance {
     _addPicoProvider ??= AddPicoProvider(
-        pickImageUC: PickImageUC.getInstance,
-        saveImageUC: SaveImageUC.getInstance);
+        pickImageUC: PickFileUC.getInstance,
+        saveImageUC: SaveImageUC.getInstance,
+        createSpotUc: CreateSpotUc.getInstance);
     return _addPicoProvider!;
   }
 
   //instanciando casos de uso
-  final PickImageUC pickImageUC;
+  final PickFileUC pickImageUC;
   final SaveImageUC saveImageUC;
+  final CreateSpotUc createSpotUc;
 
-  AddPicoProvider({required this.pickImageUC, required this.saveImageUC});
+  AddPicoProvider({required this.pickImageUC, required this.saveImageUC, required this.createSpotUc});
 
-  bool loadingImagens = false;
+  Pico? pico;
+
   Map<String, int> atributos = {};
   List<String> obstaculos = [];
   String nomePico = '';
@@ -36,70 +40,58 @@ class AddPicoProvider extends ChangeNotifier with Validators {
   int numAval = 0;
   String tipo = 'Pico de Rua';
   List<String> utilidades = [];
-  List<String> urlImage = [];
-  File? fotoPico;
+  List<String> imgUrls = [];
   LatLng? latlang;
-  List<File?> images = [];
 
-  final pegadorImage = ImagePicker();
+  String? errosImages;
 
-  Future<void> selecionarImag() async {
-    images.clear();
-    urlImage.clear();
-    try {
-      // Reseta a lista de imagens antes de selecionar novas
+  List<UploadFileModel> files = [];
 
-      // Pega múltiplas imagens da galeria (limite de 3)
-      final imgs = await pegadorImage.pickMultiImage(
-        limit: 3,
-      );
-      if (imgs.isNotEmpty) {
-        for (var img in imgs) {
-          images.add(File(img.path));
-        }
-        // Chama o método para subir as imagens
+  double progress = 0.0;
 
-        await testeSubindoImg(images);
-      }
-    } on Exception catch (e) {
-      debugPrint('Erro ao selecionar imagem: $e');
-      throw Exception('Erro ao selecionar imagem: $e');
+  void setLocation(LatLng latlang) {
+    this.latlang = latlang;
+  }
+  
+
+  Future<void> pickImages() async{
+    try{
+      files = await pickImageUC.pick();
+    }on Exception catch(e) {
+      debugPrint("Erro ao selecionar imagens: $e");
+      errosImages = e.toString();
     }
+    notifyListeners();
   }
 
-  Future<void> testeSubindoImg(List<File?> imgs) async {
-    try {
-      for (var img in imgs) {
-        // Gera um nome único para cada imagem
-        final uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
-        final ref = FirebaseStorage.instance
-            .ref()
-            .child('spots_images')
-            .child('images/$nomePico$uniqueName.jpg');
+  Future<void> uploadFiles() async{
+    debugPrint("Iniciando upload de arquivos");
+    final listResultFileModel = saveImageUC.saveImage(files);
 
-        debugPrint('Enviando imagem: ${img!.path}');
+    final urlFutures = <Future<String>>[];
+    
+    urlFutures.addAll(listResultFileModel.map((file) async => await file.url).toList());
 
-        // Faz o upload da imagem
-        await ref.putFile(img);
+    
 
-        // Adiciona a URL de download à lista
-        final downloadURL = await ref.getDownloadURL();
-        urlImage.add(downloadURL);
-      }
-
-      urlImage.clear;
-    } on Exception catch (e) {
-      throw Exception('Erro ao subir imagem: $e');
-    }
+    final urls = await Future.wait(urlFutures);
+    debugPrint("URLs geradas do firestore: $urls");
+    imgUrls.addAll(urls);
+    debugPrint("URLs finais: $imgUrls");
+    notifyListeners();
   }
 
-  void pegarLocalizacao(LatLng localizacao) {
-    latlang = localizacao;
+  void removerImagens(int index){
+    files.removeAt(index);
+    notifyListeners();
   }
+  
+
+  
+  /* - */
 
   //variaveis de mensagem de erro
-  String? nomePicoErro;
-  String? descricaoErro;
+  String? errors;
 
   Map<String, List<String>> utilidadesPorModalidade = {
     'Skate': [
@@ -116,7 +108,7 @@ class AddPicoProvider extends ChangeNotifier with Validators {
   List<String> utilidadesAtuais = [];
   Map<String, bool> utilidadesSelecionadas = {};
 
-  addPicoControllerProvider() {
+  void initialize() {
     // definindo o estado inicial de cada page
     _atualizarUtilidades();
     atributos = {
@@ -211,38 +203,37 @@ class AddPicoProvider extends ChangeNotifier with Validators {
     }
   }
 
-  bool imagensIsNotEmpty() {
-    return urlImage.isNotEmpty;
-  }
-
-  bool validarNomePico() {
-    if (nomePico.isEmpty) {
-      nomePicoErro = "Preencha este campo";
-      notifyListeners();
-      return false;
-    }
-    nomePicoErro = null;
-    notifyListeners();
-    return true;
-  }
-
-  bool validarDescricao() {
-    if (descricao.isEmpty) {
-      descricaoErro = "Preencha este campo";
-      notifyListeners();
-      return false;
-    }
-    descricaoErro = null;
-    notifyListeners();
-    return true;
+  bool validarTexto(){
+    return nomePico.isNotEmpty && descricao.isNotEmpty;
   }
 
   bool validarFormulario() {
-    final nomeValido = validarNomePico();
-    final descricaoValida = validarDescricao();
-    final validarImagens = imagensIsNotEmpty();
-    return nomeValido && descricaoValida && validarImagens;
+    final camposValidos = validarTexto();
+    final validarImagens = files.isNotEmpty;
+    return camposValidos && validarImagens;
   }
+  
+  
+
+  PicoModel getInfoPico(String? userCriador) {
+    return PicoModel(
+      id: "",
+      picoName: nomePico,
+      description: descricao,
+      nota: nota,
+      numeroAvaliacoes: numAval,
+      tipoPico: tipo,
+      utilidades: utilidades,
+      imgUrls: imgUrls,
+      lat: latlang!.latitude,
+      long: latlang!.longitude,
+      atributos: atributos,
+      modalidade: selectedModalidade,
+      userCreator: userCriador ?? "Anônimo",
+      obstaculos: obstaculos,
+    );
+  }
+
   void limpar() {
     atributos.clear();
     obstaculos.clear();
@@ -251,28 +242,39 @@ class AddPicoProvider extends ChangeNotifier with Validators {
     selectedModalidade = 'Skate';
     nota = 0.0;
     numAval = 0;
+    imgUrls.clear();
     tipo = 'Pico de Rua';
     utilidades.clear();
-    urlImage.clear();
+    files.clear();
     notifyListeners();
   }
+   
 
-  Pico getInfoPico(User? userCriador) {
-    return Pico(
-      id: "",
-      picoName: nomePico,
-      description: descricao,
-      nota: nota,
-      numeroAvaliacoes: numAval,
-      tipoPico: tipo,
-      utilidades: utilidades,
-      imgUrls: urlImage,
-      lat: latlang!.latitude,
-      long: latlang!.longitude,
-      atributos: atributos,
-      modalidade: selectedModalidade,
-      userCreator: userCriador?.displayName ?? "Anônimo",
-      obstaculos: obstaculos,
-    );
+  String? errorCriarPico;
+
+  Future<void> createSpot(String? user) async {
+    try {
+      late PicoModel newPico;
+      // Faz o upload das imagens e espera as urls
+      await uploadFiles().then((_) => newPico = getInfoPico(user));
+
+
+      // Salva o pico no backend
+      
+      await createSpotUc.createSpot(newPico);
+      
+      
+
+      // Limpa os campos após a criação bem-sucedida
+      limpar();
+    }on Failure catch (e) {
+      errorCriarPico = e.message;
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    limpar();
   }
 }

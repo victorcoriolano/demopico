@@ -4,54 +4,138 @@ import 'package:demopico/features/mapa/domain/entities/filters.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/usecases/avaliar_spot_uc.dart';
-import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
+import 'package:demopico/core/common/use_case/delete_file_uc.dart';
+import 'package:demopico/features/mapa/domain/usecases/delete_spot_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/load_spot_uc.dart';
+import 'package:demopico/features/mapa/presentation/view_services/marker_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class SpotControllerProvider extends ChangeNotifier {
+
   static SpotControllerProvider? _spotControllerProvider;
   static SpotControllerProvider get getInstance {
     _spotControllerProvider ??= SpotControllerProvider(
-        createSpotUseCase: CreateSpotUc.getInstance,
+        deleteFile: DeleteFileUc.instance,
+        deleteSpotUC: DeleteSpotUC.instance,
         avaliarUseCase: AvaliarSpotUc.getInstance,
         showAllPicoUseCase: LoadSpotUc.getInstance);
     return _spotControllerProvider!;
   }
 
   SpotControllerProvider(
-      {required this.createSpotUseCase,
+    {
+      required this.deleteFile,
+      required this.deleteSpotUC,
       required this.avaliarUseCase,
-      required this.showAllPicoUseCase});
+      required this.showAllPicoUseCase
+    });
 
-  final CreateSpotUc createSpotUseCase;
+  final DeleteFileUc deleteFile;
+  final DeleteSpotUC deleteSpotUC;
   final LoadSpotUc showAllPicoUseCase;
   final AvaliarSpotUc avaliarUseCase;
 
+
   List<Pico> spots = [];
   List<Pico> picosPesquisados = [];
-  List<Pico> myPicos = [];
   Filters? filtrosAtivos;
+  Set<Marker> markers = {};
+  void Function(Pico)? _onTapMarker;
+
+  String? error;
+
+  void setOnTapMarker(void Function(Pico) onTapMarker) {
+    _onTapMarker = onTapMarker;
+  }
+
+  Future<void> deletarPico(Pico pico) async {
+    try{
+     await Future.wait([
+      deleteFile.deletarFile(pico.imgUrls),
+      deleteSpotUC.callDelete(pico.id),
+     ]);
+    }catch (e) {
+      error = e.toString(); 
+    }
+  }
+
+  final MarkerService markerService = MarkerService.getInstance;
 
   StreamSubscription? spotsSubscription;
 
   //inicializa o controller carregando os spots do banco
-  void initialize() {
+  void initialize() {// passando o callback para o markerService
+    debugPrint("initialize");
     _loadSpots();
   }
 
+   
+
   //cria um stream para ouvir os spots do banco de dados
-  void _loadSpots() {
+  void _loadSpots() {//repassando o callback para o markerService
+    debugPrint("chamou loadSpots");
     spotsSubscription?.cancel();
-    spotsSubscription =
-        showAllPicoUseCase.loadSpots(filtrosAtivos).listen((spots) {
-      myPicos = spots;
-      notifyListeners();
-    });
+    if (filtrosAtivos != null) {
+      debugPrint("filtrosAtivos não é null");
+      spotsSubscription =
+        showAllPicoUseCase.loadSpots(filtrosAtivos).listen(
+          (events) {
+            spots.clear();
+            spots.addAll(events);
+            debugPrint("spots: ${spots.length}");
+            carregarMarkers();
+          },
+
+          onError: (error) {
+            debugPrint("error: $error");
+          }
+        );  
+    }else {
+      debugPrint("filtrosAtivos é null");
+      spotsSubscription =
+        showAllPicoUseCase.loadSpots().listen(
+          (events) {
+            spots.clear();
+            spots.addAll(events);
+            debugPrint("spots: ${spots.length}");
+            carregarMarkers();
+          },
+
+          onError: (error) {
+            debugPrint("error: $error");
+          }
+        );
+    }
+    
   }
+
+  Future<void> carregarMarkers() async {//repassando o callback para o markerService
+    if (_onTapMarker == null){
+      debugPrint("onTapMarker não pode ser null");
+      return;
+    }
+    markers.clear();
+    
+    markerService.preloadIcons(spots, _onTapMarker!).listen(
+      (marker) {
+        markers.add(marker);
+        notifyListeners();
+      },
+      onError: (error) {
+        debugPrint("error: $error");
+      },
+    );
+    notifyListeners();
+  }
+
 
   //aplica os filtros e reacria o stream com os novos filtros
   void aplicarFiltro([Filters? filtros]) {
+    debugPrint("aplicarFiltro: filtros $filtros");
     filtrosAtivos = filtros;
+    debugPrint("filtrosAtivos: $filtrosAtivos");
     _loadSpots();
   }
 
@@ -62,18 +146,6 @@ class SpotControllerProvider extends ChangeNotifier {
     super.dispose();
   }
 
-  // Método para criar um pico e adicionar o marker
-  Future<void> createSpot(Pico pico) async {
-    try {
-      // Salva o pico no backend
-      final picoCriado = await createSpotUseCase.createSpot(pico as PicoModel);
-      spots.add(picoCriado!);
-
-      notifyListeners();
-    } catch (e) {
-      throw Exception("Erro ao criar o pico: $e");
-    }
-  }
 
   // Método para pesquisar picos
   void pesquisandoPico(String word) {

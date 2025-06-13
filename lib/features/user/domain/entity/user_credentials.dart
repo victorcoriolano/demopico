@@ -1,4 +1,5 @@
-class UserCredentialsSignIn {
+abstract class UserCredentials {}
+class UserCredentialsSignIn implements UserCredentials {
   final String email;
   final String password;
 
@@ -8,7 +9,7 @@ class UserCredentialsSignIn {
   });
 }
 
-class UserCredentialsSignInVulgo {
+class UserCredentialsSignInVulgo implements UserCredentials {
   final String vulgo;
   final String password;
 

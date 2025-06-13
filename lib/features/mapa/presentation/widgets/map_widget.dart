@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/view_services/modal_helper.dart';
@@ -28,13 +30,15 @@ class MapWidgetState extends State<MapWidget> {
 
   Future<void> _initializeProviders() async {
     await _mapControllerProvider.getLocation();
+    _spotControllerProvider.setOnTapMarker(
+      (pico) => ModalHelper.openModalInfoPico(context, pico, _spotControllerProvider.deletarPico),
+    );
     _spotControllerProvider.initialize();
-    await _mapControllerProvider
-        .loadMarkersIcons(_spotControllerProvider.spots);
   }
 
   @override
   Widget build(BuildContext context) {
+    
     // consome os dados do provider para manter a tela atualizada
     return Scaffold(
       body: Consumer<SpotControllerProvider>(
@@ -47,13 +51,13 @@ class MapWidgetState extends State<MapWidget> {
             target: _mapControllerProvider.center,
             zoom: _mapControllerProvider.zoomInicial,
           ),
-          mapType: _mapControllerProvider.myMapType,
+          mapType: context.watch<MapControllerProvider>().myMapType,
           scrollGesturesEnabled: true,
           rotateGesturesEnabled: true,
           myLocationEnabled: true,
           myLocationButtonEnabled: true,
           tiltGesturesEnabled: true,
-          markers: _mapControllerProvider.markers,
+          markers: provider.markers,
           onLongPress: (latlang) => ModalHelper.openAddPicoModal(context, latlang),
         ),
       ),

@@ -1,44 +1,46 @@
-import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
-import 'package:demopico/features/mapa/presentation/view_services/marker_service.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class MapControllerProvider extends ChangeNotifier {
-  static MapControllerProvider? _mapControllerProvider;
-  static MapControllerProvider get getInstance {
-    _mapControllerProvider ??= MapControllerProvider(markerService: MarkerService.getInstance);
-    return _mapControllerProvider!;
-  }
-
-  MapControllerProvider({
-    required this.markerService
-  });
-
   GoogleMapController? _mapController;
   LatLng center =
       const LatLng(-23.550104, -46.633953); // Inicializa o centro do mapa
   String locationMessage = '';
   MapType myMapType = MapType.normal;
   double zoomInicial = 12;
-  Set<Marker> markers = {}; //lista de marcadore que serão adicionados no mapa
-
-  final MarkerService markerService;
+  final completer = Completer<GoogleMapController>();
+  bool alreaySetController = false;
 
   GoogleMapController? get mapController => _mapController;
 
   //setando o controller para manipular em qualquer lugar do código
   void setGoogleMapController(GoogleMapController controller) {
+    if (_mapController != null) {
+      return;
+    }
     _mapController = controller;
+    completer.complete(controller);
     notifyListeners();
   }
 
-  void reajustarCameraPosition(LatLng position) {
+  void reajustarCameraPosition(LatLng position)  {
+    debugPrint("Reajustando a camera position");
     //movendo a camera position
-    if (_mapController != null) {
-      _mapController!.animateCamera(CameraUpdate.newLatLng(position));
+    if (completer.isCompleted) {
+      _mapController!.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: position,
+            zoom: 20,
+          ),
+        ),
+      );
     }
+    notifyListeners();
   }
 
   void setZoom(double zoomLevel) {
@@ -97,24 +99,5 @@ class MapControllerProvider extends ChangeNotifier {
         notifyListeners();
       }
     }
-  }
-
-  Future<void> loadMarkersIcons(
-    List<Pico> picos,
-  ) async {
-    await markerService.preloadIcons(picos);
-  }
-
-  void createMarkers(List<Pico> picos) {
-    markers.clear();
-    for (var pico in picos) {
-      markers.add(Marker(
-        markerId: MarkerId(pico.id),
-        position: LatLng(pico.lat, pico.long),
-        icon: markerService.markerIcons[pico.picoName]!,
-        infoWindow: InfoWindow(title: pico.picoName),
-      ));
-    }
-    notifyListeners();
   }
 }

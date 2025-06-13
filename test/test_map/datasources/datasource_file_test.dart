@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:demopico/features/mapa/data/data_sources/interfaces/upload_task_interface.dart';
-import 'package:demopico/features/mapa/data/data_sources/remote/firebase_file_remote_datasource.dart';
-import 'package:demopico/features/mapa/domain/models/upload_file_model.dart';
-import 'package:demopico/features/mapa/domain/models/upload_result_file_model.dart';
+import 'package:demopico/core/common/data/data_sources/remote/firebase_file_remote_datasource.dart';
+import 'package:demopico/core/common/data/interfaces/datasource/i_upload_task_datasource.dart';
+import 'package:demopico/core/common/data/models/upload_file_model.dart';
+import 'package:demopico/core/common/data/models/upload_result_file_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -65,7 +65,7 @@ void main() {
       when(() => mockTaskSnapshot.state).thenReturn(TaskState.running);
       when(() => mockTaskSnapshot.bytesTransferred).thenReturn(100);
       when(() => mockTaskSnapshot.totalBytes).thenReturn(100);
-      when(() => mockStorageReference.child("spots/${fileMock.fileName}"))
+      when(() => mockStorageReference.child(any()))
           .thenAnswer((_) => mockStorageReference);
       when(() => mockStorageReference.putData(
         fileMock.bytes,
@@ -87,18 +87,5 @@ void main() {
 
       
     });
-
-    /// teste exceções
-    /// - erro de internet 
-    test("Deve lançar uma exception quando houver erro de internet", () async {
-      when(() => mockFirebaseStorage.ref()).thenAnswer((_) => mockStorageReference);
-      when(() => mockTaskSnapshot.state).thenReturn(TaskState.running);
-      when(() => mockTaskSnapshot.bytesTransferred).thenReturn(10);
-      when(() => mockTaskSnapshot.totalBytes).thenReturn(100);
-      when(() => mockStorageReference.child("spots/${fileMock.fileName}"))
-      .thenAnswer((_) => mockStorageReference);
-      
-    });
-
   });
 }

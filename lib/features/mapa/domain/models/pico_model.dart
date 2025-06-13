@@ -27,7 +27,7 @@ class PicoModel extends Pico {
   factory PicoModel.fromJson(Map<String, dynamic> json, String id) {
   return PicoModel(
     id: id,
-    imgUrls: List<String>.from(json['imgUrl'] ?? []),
+    imgUrls: List<String>.from(json['imageUrl'] ?? []),
     tipoPico: json['tipo'] ?? _padrao,
     modalidade: json['modalidade'] ?? _padrao,
     nota: (json['nota'] as num?)?.toDouble() ?? 0.0,
@@ -38,10 +38,29 @@ class PicoModel extends Pico {
     atributos: Map<String, int>.from(json['atributos'] ?? {}),
     obstaculos: List<String>.from(json['obstaculos'] ?? []),
     utilidades: List<String>.from(json['utilidades'] ?? []),
-    userCreator: json['userCreator'] ?? _padrao,
-    picoName: json['picoName'] ?? _padrao,
+    userCreator: json['criador'] ?? _padrao,
+    picoName: json['name'] ?? _padrao,
   );
 }
+
+  factory PicoModel.fromEntity(Pico pico){
+    return PicoModel(
+      id: pico.id,
+      imgUrls: pico.imgUrls,
+      tipoPico: pico.tipoPico,
+      modalidade: pico.modalidade,
+      nota: pico.nota,
+      numeroAvaliacoes: pico.numeroAvaliacoes,
+      long: pico.long,
+      lat: pico.lat,
+      description: pico.description,
+      atributos: pico.atributos,
+      obstaculos: pico.obstaculos,
+      utilidades: pico.utilidades,
+      userCreator: pico.userCreator,
+      picoName: pico.picoName,
+    );
+  }
 
 
 
@@ -58,8 +77,8 @@ class PicoModel extends Pico {
       'atributos': super.atributos,
       'obstaculos': super.obstaculos,
       'utilidades': super.utilidades,
-      'userCreator': super.userCreator,
-      'picoName': super.picoName,
+      'criador': super.userCreator,
+      'name': super.picoName,
     };
   }
 
@@ -67,6 +86,7 @@ class PicoModel extends Pico {
   
 
   PicoModel copyWith({
+    String? id,
     List<String>? imgUrls,
     String? tipoPico,
     String? modalidade,
@@ -95,7 +115,7 @@ class PicoModel extends Pico {
       utilidades: utilidades ?? this.utilidades,
       userCreator: userCreator ?? this.userCreator,
       picoName: picoName ?? this.picoName,
-      id: id,
+      id: id ?? this.id,
     );
   }
 }

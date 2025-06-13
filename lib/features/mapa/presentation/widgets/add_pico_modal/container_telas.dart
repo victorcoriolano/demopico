@@ -1,12 +1,13 @@
-import 'package:demopico/core/common/inject_dependencies.dart';
+
 import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
-import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/primeira_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/quarta_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/segunda_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/terceira_tela.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +25,7 @@ class ContainerTelas extends StatefulWidget {
 
 class _ContainerTelasState extends State<ContainerTelas> {
   int _currentIndex = 0;
+  late UserM? user;
 
   final List<Widget> _screens = [
     const EspecificidadeScreen(), // Página 1
@@ -46,7 +48,14 @@ class _ContainerTelasState extends State<ContainerTelas> {
     });
   }
 
-  final user = FirebaseAuth.instance.currentUser;
+  @override
+  void initState() {
+    super.initState();
+    user = context.read<UserDatabaseProvider>().user;
+    context.read<AddPicoProvider>().setLocation(widget.latlang);
+  }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +92,7 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                 _screens[_currentIndex], // Exibe o widget atual
                           ),
                           const SizedBox(height: 10),
-                          if (!(_currentIndex == 0))
+                          if (_currentIndex != 0)
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
@@ -105,8 +114,8 @@ class _ContainerTelasState extends State<ContainerTelas> {
                           if (_currentIndex == 3)
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    const Color(0xFF8B0000), // Cor do botão
+                                backgroundColor: provider.validarFormulario() ?
+                                    const Color(0xFF8B0000) : Colors.grey, // Cor do botão
                                 foregroundColor: Colors.white,
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 50, vertical: 15),
@@ -115,25 +124,13 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                 ),
                               ),
                               onPressed: () async {
-                                /* if(user != null){
-                                  final DatabaseService  dataUser = DatabaseService();
-                                  dataUser.atualizarContribuicoes();//autualiza contribuições
-
-                                } */
-                                // função para criar o pico
-                                if (provider.validarFormulario())  {
-                                    await serviceLocator<SpotControllerProvider>()
-                                        .createSpot(provider.getInfoPico(user));
-                                } else {
-                                  // Exibe um alerta de erro
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                          'Preencha todos os campos corretamente'),
-                                    ),
-                                  );
+                                
+                                await provider.createSpot(user?.name);
+                                if( provider.errorCriarPico != null ){
+                                  Get.snackbar("Erro ao criar pico", provider.errorCriarPico.toString(),);
                                 }
-
+                                if(context.mounted) Navigator.pop(context);
+                                
                               },
                               child: const Text('POSTAR PICO',
                                   style: TextStyle(fontSize: 15)),

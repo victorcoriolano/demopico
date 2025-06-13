@@ -10,4 +10,6 @@ class Filters {
   bool get hasActivateFilters {
     return utilidades!.isNotEmpty || modalidade != null || raio != null || atributos!.isNotEmpty;
   }
+
+  
 }

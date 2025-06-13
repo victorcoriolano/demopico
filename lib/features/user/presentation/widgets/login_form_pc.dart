@@ -1,5 +1,5 @@
 import 'package:demopico/core/app/home_page.dart';
-import 'package:demopico/core/common/errors/domain_failures.dart';
+import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/user/domain/entity/user_credentials.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/features/user/presentation/pages/register_page.dart';
@@ -140,15 +140,17 @@ class _LoginFormState extends State<LoginForm> with Validators {
                           await _authUserProvider.loginVulgo(credential);
                     }
                   } catch (e) {
+                    debugPrint("erro aou fazer login: ${e.toString()}");
                     loginSuccess = false;
                   }
-                  setState(() {
+                
                     if (loginSuccess) {
                       Get.to(() => const HomePage());
                     } else {
+                      debugPrint('Login falhou');
                       showSnackbar(vulgo.contains("@") ? 'email' : 'user');
                     }
-                  });
+                  
                 } else {
                   showSnackbar('default');
                 }
