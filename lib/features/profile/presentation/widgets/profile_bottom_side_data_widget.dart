@@ -4,14 +4,15 @@ class ProfileBottomSideDataWidget extends StatelessWidget {
   final int? followers;
   final int? contributions;
   final String? description;
+  final bool isScrolling;
 
 
-  const ProfileBottomSideDataWidget({
-    super.key,
-    required this.followers,
-    required this.contributions,
-    required this.description
-  });
+  const ProfileBottomSideDataWidget(
+      {super.key,
+      required this.followers,
+      required this.contributions,
+      required this.description,
+       this.isScrolling = false,});
 
   @override
   Widget build(BuildContext context) {
@@ -21,23 +22,47 @@ class ProfileBottomSideDataWidget extends StatelessWidget {
       children: [
         Container(
           margin: EdgeInsets.symmetric(
-              horizontal: (screenWidth * 0.20) / 2, vertical: 20),
+              horizontal: (screenWidth * 0.10) / 2, vertical: 30),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                '$followers\nSeguidores',
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 16,
-                ),
+              Column(
+                children: [
+                  Text(
+                    '$followers',
+                    style: const TextStyle(
+                      fontSize: 18, // maior para o número
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    'SEGUIDORES',
+                    style: const TextStyle(
+                      fontSize: 10, // menor para o texto
+                      letterSpacing: 1,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
               ),
-              Text(
-                '$contributions\nContribuições',
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 16,
-                ),
+              Column(
+                children: [
+                  Text(
+                    '$contributions',
+                    style: const TextStyle(
+                      fontSize: 18, // maior para o número
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    'CONTRIBUIÇÕES',
+                    style: const TextStyle(
+                      fontSize: 10, // menor para o texto
+                      letterSpacing: 1,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -46,7 +71,7 @@ class ProfileBottomSideDataWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Center(
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              padding: const EdgeInsets.symmetric( horizontal: 10),
               decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
                 borderRadius: BorderRadius.circular(10),
