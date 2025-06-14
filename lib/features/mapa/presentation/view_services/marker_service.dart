@@ -25,7 +25,7 @@ class MarkerService {
         (pico){      
           return BitmapDescriptor.asset(
             const ImageConfiguration(size: Size(27, 32)), 
-            "images/Location.png",).then(
+            "assets/images/Location.png",).then(
               (assets) => _markerIcons[pico.picoName] = assets);
         }
       
