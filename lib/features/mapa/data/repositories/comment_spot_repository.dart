@@ -1,9 +1,16 @@
+
+import 'package:demopico/core/common/data/interfaces/datasource/i_mapper_dto.dart';
+import 'package:demopico/core/common/data/mappers/firebase_dto_mapper.dart';
 import 'package:demopico/features/mapa/data/data_sources/interfaces/i_comment_spot_datasource.dart';
 import 'package:demopico/features/mapa/data/data_sources/remote/firebase_comment_service.dart';
-import 'package:demopico/features/mapa/data/mappers/mapper_dto_commentmodel.dart';
 import 'package:demopico/features/mapa/domain/entities/comment.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_comment_repository.dart';
 import 'package:demopico/features/mapa/domain/models/comment_model.dart';
+
+
+
+ /// representa o context do strategy
+ 
 
 class CommentSpotRepositoryImpl implements ICommentRepository {
   static CommentSpotRepositoryImpl? _commentSpotRepositoryImpl;
@@ -15,10 +22,19 @@ class CommentSpotRepositoryImpl implements ICommentRepository {
 
   CommentSpotRepositoryImpl(this.datasource);
 
+
+  final IMapperDto _mapper = Firebasedtomapper<CommentModel>(
+    fromJson: (data, id) => CommentModel.fromJson(data, id),
+    toMap: (model) => model.toMap() , 
+    getId: (model) => model.id,
+  );
+
+
+
   @override
   Future<CommentModel> addComment(Comment comment) async {
-    final commentDto = MapperDtoCommentmodel.toDto(CommentModel.fromEntity(comment));
-    return MapperDtoCommentmodel.fromDto(await datasource.create(commentDto));
+    final commentDto = _mapper.toDTO(CommentModel.fromEntity(comment));
+    return _mapper.fromDto(await datasource.create(commentDto));
   }
 
   @override
@@ -29,13 +45,13 @@ class CommentSpotRepositoryImpl implements ICommentRepository {
   @override
   Future<List<CommentModel>> getCommentsByPeak(String peakId) async{
     final commentsDto = await datasource.getBySpotId(peakId);
-    final comments = commentsDto.map((e) => MapperDtoCommentmodel.fromDto(e)).toList();
-    return comments;
+    final comments = commentsDto.map((e) => _mapper.fromDto(commentsDto)).toList();
+    return comments as List<CommentModel>;
   }
 
   @override
   Future<CommentModel> updateComment(CommentModel comment) async{
-    final commentDto = MapperDtoCommentmodel.toDto(comment);
+    final commentDto = _mapper.toDTO(comment);
     await datasource.update(commentDto);
     return comment;
   }
