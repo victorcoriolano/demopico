@@ -63,8 +63,7 @@ class PicoModel extends Pico {
   }
 
 
-
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     return {
       'imageUrl': super.imgUrls,
       'tipo': super.tipoPico,
@@ -83,7 +82,6 @@ class PicoModel extends Pico {
   }
 
 
-  
 
   PicoModel copyWith({
     String? id,
