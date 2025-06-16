@@ -38,7 +38,7 @@ import '../../mocks/mocks_spots.dart';
       test("deve alterar um spot", () async {
         await fakeFirestore.collection("spots")
           .doc("1")
-          .set(testPico.toJson());
+          .set(testPico.toMap());
 
         var newPico = testPico
           .copyWith(
@@ -49,14 +49,14 @@ import '../../mocks/mocks_spots.dart';
 
         
         final dadosAlterados = await dataSource.getbyID("1");
-        expect(dadosAlterados.data, newPico.toJson());
+        expect(dadosAlterados.data, newPico.toMap());
         expect(dadosAlterados.id, equals('1') );
 
       });
 
       test("deve deletar um spot", () async {
         
-        await fakeFirestore.collection("spots").doc("1").set(testPico.toJson());
+        await fakeFirestore.collection("spots").doc("1").set(testPico.toMap());
         
 
         await dataSource.delete("1");
