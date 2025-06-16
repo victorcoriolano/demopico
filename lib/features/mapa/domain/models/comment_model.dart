@@ -32,7 +32,7 @@ class CommentModel extends Comment{
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     return {
       'peakId': peakId,
       'userId': userId,
