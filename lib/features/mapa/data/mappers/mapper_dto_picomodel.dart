@@ -9,7 +9,7 @@ class MapperDtoPicomodel {
   static FirebaseDTO toDto(PicoModel pico) {
     return FirebaseDTO(
       id: pico.id,
-      data: pico.toJson(),
+      data: pico.toMap(),
     );
   }
 }
