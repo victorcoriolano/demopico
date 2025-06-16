@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:demopico/features/mapa/data/data_sources/remote/firebase_spot_remote_datasource.dart';
-import 'package:demopico/features/mapa/data/dtos/firebase_dto.dart';
+import 'package:demopico/core/common/data/dtos/firebase_dto.dart';
 import 'package:demopico/features/mapa/data/mappers/mapper_dto_picomodel.dart';
 import 'package:demopico/features/mapa/data/repositories/spot_repository_impl.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';

@@ -1,5 +1,5 @@
 import 'package:demopico/core/common/data/interfaces/datasource/i_mapper_dto.dart';
-import 'package:demopico/features/mapa/data/dtos/firebase_dto.dart';
+import 'package:demopico/core/common/data/dtos/firebase_dto.dart';
 
 
 /// classe de mapeamento de dados do firebase

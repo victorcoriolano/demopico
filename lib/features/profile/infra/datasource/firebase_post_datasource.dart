@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:demopico/features/mapa/data/dtos/firebase_dto.dart';
+import 'package:demopico/core/common/data/dtos/firebase_dto.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_post_datasource.dart';
 
 class FirebasePostDatasource implements IPostDatasource {

@@ -2,7 +2,7 @@
 import 'package:demopico/core/common/data/interfaces/datasource/i_mapper_dto.dart';
 import 'package:demopico/core/common/data/mappers/firebase_dto_mapper.dart';
 import 'package:demopico/features/mapa/data/data_sources/remote/firebase_comment_service.dart';
-import 'package:demopico/features/mapa/data/dtos/firebase_dto.dart';
+import 'package:demopico/core/common/data/dtos/firebase_dto.dart';
 import 'package:demopico/features/mapa/domain/models/comment_model.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:test/test.dart';

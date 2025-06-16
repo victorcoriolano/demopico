@@ -1,4 +1,4 @@
-import 'package:demopico/features/mapa/data/dtos/firebase_dto.dart';
+import 'package:demopico/core/common/data/dtos/firebase_dto.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 
 class MapperDtoPicomodel {
