@@ -2,7 +2,7 @@ import 'package:demopico/core/common/data/models/upload_file_model.dart';
 import 'package:demopico/core/common/data/models/upload_result_file_model.dart';
 import 'package:demopico/core/common/use_case/delete_file_uc.dart';
 import 'package:demopico/core/common/use_case/pick_image_uc.dart';
-import 'package:demopico/core/common/use_case/picke_video_uc.dart';
+import 'package:demopico/core/common/use_case/pick_video_uc.dart';
 import 'package:demopico/core/common/use_case/save_image_uc.dart';
 import 'package:flutter/material.dart';
 
