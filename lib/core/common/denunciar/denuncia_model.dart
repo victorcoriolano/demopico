@@ -34,7 +34,7 @@ class DenunciaModel {
     );
   }
 
-  /// Converte uma instância de DenunciaModel em um Map (para salvar no Firebase, por exemplo)
+  /// Converte uma instância de DenunciaModel em um Map 
   Map<String, dynamic> toMap() {
     return {
       'type': type,
