@@ -1,4 +1,5 @@
 class Post {
+  String id;
   String nome;     
   String userId;
   String postId;             
@@ -9,6 +10,7 @@ class Post {
   int curtidas;
 
   Post({
+    required this.id,
     required this.nome,
     required this.userId,
     required this.postId,
@@ -78,8 +80,9 @@ class Post {
     curtidas = value;
   }
 
-  factory Post.fromJson(Map<String, dynamic> json) {
+  factory Post.fromJson(Map<String, dynamic> json, String id) {
     return Post(
+      id: id,
       nome: json['nome'],
       userId: json['userId'],
       postId: json['postId'],
