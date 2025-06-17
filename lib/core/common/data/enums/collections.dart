@@ -4,7 +4,8 @@ enum Collections {
   picosFavoritados,
   denuncias,
   communique,
-  comments;
+  comments,
+  posts;
 
   String fromString(String value) {
     switch (value) {
@@ -20,6 +21,8 @@ enum Collections {
         return Collections.communique.name;
       case 'comments':
         return Collections.comments.name;
+      case 'posts':
+        return Collections.posts.name;
       default:
         throw Exception("Invalid Tables name");
     }
@@ -39,6 +42,8 @@ enum Collections {
         return 'communique';
       case Collections.comments:
         return 'comments';
+      case Collections.posts:
+        return 'posts';
     }
   }
 }
