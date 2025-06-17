@@ -49,6 +49,7 @@ class PostDTO {
 
   Post toModel() {
     return Post(
+      id: '',
       nome: nome,
       userId: userId,
       postId: postId,
