@@ -14,17 +14,4 @@ class FirebaseDTO {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'data': data,
-    };
-  }
-
-  factory FirebaseDTO.fromJson(Map<String, dynamic> json) {
-    return FirebaseDTO(
-      id: json['id'],
-      data: Map<String, dynamic>.from(json['data']),
-    );
-  }
 }
