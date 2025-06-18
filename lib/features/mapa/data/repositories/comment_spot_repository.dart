@@ -23,7 +23,7 @@ class CommentSpotRepositoryImpl implements ICommentRepository {
   CommentSpotRepositoryImpl(this.datasource);
 
 
-  final IMapperDto _mapper = Firebasedtomapper<CommentModel>(
+  final IMapperDto _mapper = FirebaseDtoMapper<CommentModel>(
     fromJson: (data, id) => CommentModel.fromJson(data, id),
     toMap: (model) => model.toMap() , 
     getId: (model) => model.id,

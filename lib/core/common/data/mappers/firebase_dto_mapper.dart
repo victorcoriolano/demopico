@@ -9,14 +9,14 @@ import 'package:demopico/core/common/data/dtos/firebase_dto.dart';
 /// de mapeamento de dados
 /// assim não precisamos de diversos mappers pq os comportamentos são injetados
 
-class Firebasedtomapper<Model> implements IMapperDto<FirebaseDTO, Model> {
+class FirebaseDtoMapper<Model> implements IMapperDto<FirebaseDTO, Model> {
 
   // aplica as funções de comportamento na composição da classe 
   final Model Function (Map<String, dynamic> map, String id) fromJson;
   final Map<String, dynamic> Function (Model model) toMap;
   final String Function (Model model) getId;
 
-  Firebasedtomapper({
+  FirebaseDtoMapper({
     required this.fromJson,
     required this.toMap,
     required this.getId,
