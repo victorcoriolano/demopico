@@ -53,8 +53,6 @@ class MyAppWidget extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'SKATEPICO',
         theme: ThemeData(
-          // This is the theme of your application.
-          // TRY THIS: changing the seedColor in the colorScheme below
           colorScheme: ColorScheme.fromSeed(
               seedColor: const Color.fromARGB(255, 139, 0, 0)),
           useMaterial3: true,

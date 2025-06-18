@@ -6,10 +6,10 @@ import 'package:demopico/core/common/use_case/pick_video_uc.dart';
 import 'package:demopico/core/common/use_case/save_image_uc.dart';
 import 'package:flutter/material.dart';
 
-class FilesProvider extends ChangeNotifier {
-  static FilesProvider? _filesProvider;
-  static FilesProvider get getInstance {
-    _filesProvider ??= FilesProvider(
+class MidiaProvider extends ChangeNotifier {
+  static MidiaProvider? _filesProvider;
+  static MidiaProvider get getInstance {
+    _filesProvider ??= MidiaProvider(
       pickFiles: PickFileUC.getInstance,
       saveImageUC: SaveImageUC.getInstance,
       deleteFile: DeleteFileUc.instance,
@@ -23,7 +23,7 @@ class FilesProvider extends ChangeNotifier {
   final SaveImageUC saveImageUC;
   final DeleteFileUc deleteFile;
 
-  FilesProvider({
+  MidiaProvider({
     required this.pickFiles, 
     required this.saveImageUC, 
     required this.deleteFile,
