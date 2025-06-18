@@ -1,4 +1,7 @@
-import 'package:demopico/features/mapa/data/mappers/mapper_dto_picomodel.dart';
+
+import 'package:demopico/core/common/data/dtos/firebase_dto.dart';
+import 'package:demopico/core/common/data/mappers/i_mapper_dto.dart';
+import 'package:demopico/features/external/datasources/dto/firebase_dto_mapper.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 
 final testPico = PicoModel(
@@ -55,5 +58,10 @@ final testPico = PicoModel(
     
     final listSpots = [testPico, testPico2, testPico3];
 
+    final IMapperDto mapper = FirebaseDtoMapper<PicoModel>(
+      fromJson: (data, id) => PicoModel.fromJson(data, id),
+      toMap: (model) => model.toMap(), 
+      getId: (model) => model.id); 
+
     // mockando o dto para teste de repository
-    final listDto = listSpots.map((pico) => MapperDtoPicomodel.toDto(pico)).toList();
+    final listDto = listSpots.map((pico) => mapper.toDTO(pico) as FirebaseDTO).toList();
