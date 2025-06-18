@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:demopico/core/common/data/interfaces/datasource/i_mapper_dto.dart';
+import 'package:demopico/core/common/data/mappers/firebase_dto_mapper.dart';
 import 'package:demopico/features/mapa/data/data_sources/interfaces/i_spot_datasource.dart';
 import 'package:demopico/features/mapa/data/data_sources/remote/firebase_spot_remote_datasource.dart';
 import 'package:demopico/features/mapa/data/mappers/mapper_dto_picomodel.dart';
@@ -20,11 +22,20 @@ class SpotRepositoryImpl implements ISpotRepository {
   final ISpotRemoteDataSource dataSource;
   SpotRepositoryImpl(this.dataSource);
 
+    final IMapperDto _mapper = FirebaseDtoMapper<PicoModel>(
+    fromJson: (data, id) => PicoModel.fromJson(data, id),
+    toMap: (model) => model.toMap() , 
+    getId: (model) => model.id,
+  );
+
+
   @override
   Future<PicoModel> createSpot(PicoModel pico) async {
-    final newDto = await dataSource.create(MapperDtoPicomodel.toDto(pico));
     
-    return MapperDtoPicomodel.fromDto(newDto);
+    final picoDto = await _mapper.toModalDto(pico);
+    final firebaseDto =  _mapper.toDatasourceDto(picoDto);
+
+    return  _mapper.toModalDto(firebaseDto);
 
   }
 
