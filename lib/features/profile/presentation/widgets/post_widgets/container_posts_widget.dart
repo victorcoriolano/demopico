@@ -12,6 +12,7 @@ class ContainerPostsWidget extends StatefulWidget {
 class _ContainerPostsWidgetState extends State<ContainerPostsWidget> {
 
   Post post = Post(
+    id: "",
     nome: 'João Silva',
     userId: 'user123',
     postId: 'post123',
@@ -26,6 +27,7 @@ class _ContainerPostsWidgetState extends State<ContainerPostsWidget> {
   );
 
     Post post1 = Post(
+      id: "",
     nome: 'João Silva',
     userId: 'user123',
     postId: 'post123',

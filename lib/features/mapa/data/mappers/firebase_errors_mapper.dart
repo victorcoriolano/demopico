@@ -13,11 +13,11 @@ class FirebaseErrorsMapper {
         return DatabaseFailure("Serviço indisponível", originalException: exception,);
       
      // Storage
-      case 'storage/unauthorized':
+      case 'firebase_storage/unauthorized':
         return UnauthorizedFailure(originalException: exception);
-      case 'storage/canceled':
+      case 'firebase_storage/canceled':
         return OperationCanceledFailure(originalException: exception);
-      case 'storage/quota-exceeded':
+      case 'firebase_storage/quota-exceeded':
         return LimitExceededFailure(originalException: exception);
       case 'firebase_storage/object-not-found':
         return PicoNotFoundFailure(originalException: exception);
@@ -29,10 +29,12 @@ class FirebaseErrorsMapper {
         return InvalidEmailFailure(originalException: exception);
       case 'auth/too-many-requests':
         return TooManyAttemptsFailure(originalException: exception);
-      case 'auth/account-exists-with-different-credential':
+      case 'auth/uid-already-exists':
         return AccountExistsFailure(originalException: exception);  
       case 'auth/user-token-expired':
         return ExpiredTokenFailure(originalException: exception);
+      case 'auth/user-not-found':
+        return UserNotFoundFailure(originalException: exception);
       
       // Genéricos
       default:

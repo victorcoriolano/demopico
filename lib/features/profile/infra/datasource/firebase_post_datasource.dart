@@ -1,70 +1,42 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:demopico/features/mapa/data/dtos/firebase_dto.dart';
+import 'package:demopico/core/common/data/dtos/firebase_dto.dart';
+import 'package:demopico/core/common/data/enums/collections.dart';
+import 'package:demopico/features/external/datasources/remote/firebase/crud_firebase.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_post_datasource.dart';
 
 class FirebasePostDatasource implements IPostDatasource {
-  final FirebaseFirestore _firestore;
 
-  FirebasePostDatasource(this._firestore);
 
   static FirebasePostDatasource? _firebasePostDatasource;
   static FirebasePostDatasource get getInstance {
-    _firebasePostDatasource ??= FirebasePostDatasource(
-      FirebaseFirestore.instance,
-    );
+    _firebasePostDatasource ??= FirebasePostDatasource();
     return _firebasePostDatasource!;
   }
 
-  final String collectionName = "posts";
+
+  final CrudFirebase crudFirebase = CrudFirebase(table: Collections.posts);
+
 
   @override
-  Future<FirebaseDTO> createPost(FirebaseDTO firebaseDTO) async{
-    try{
-      final docRef = await _firestore.collection(collectionName).add(firebaseDTO.data);
-      return firebaseDTO.copyWith(id: docRef.id);
-    }catch(e){
-      throw Exception("Erro ao criar o post: $e");
-    }
-  }
+  Future<FirebaseDTO> createPost(FirebaseDTO firebaseDTO) async => 
+      await crudFirebase.create(firebaseDTO);
 
   @override
   Future<void> deletePost(String postId) async {
-    try{
-      await _firestore.collection(collectionName).doc(postId).delete();
-    }catch(e){
-      throw Exception("Erro ao deletar o post: $e");
-    }
+    await crudFirebase.delete(postId);
   }
 
   @override
   Future<FirebaseDTO> getPostbyID(String postId) async {
-    final docRef = await _firestore.collection(collectionName).doc(postId).get();
-    return FirebaseDTO(
-      id: docRef.id,
-      data: docRef.data() as Map<String, dynamic>,
-    );
+    return await crudFirebase.read(postId);
   }
 
   @override
-  Future<List<FirebaseDTO>> getPosts() {
-    try{
-      final snapshot = _firestore.collection(collectionName).get();
-      return snapshot.then((value) => value.docs.map((e) => FirebaseDTO(
-        id: e.id,
-        data: e.data(),
-      )).toList());
-    }catch(e){
-      throw Exception("Erro ao buscar os posts: $e");
-    }
+  Future<List<FirebaseDTO>> getPosts() async {
+    return await crudFirebase.list();
   }
   
   @override
   Future<FirebaseDTO> updatePost(FirebaseDTO firebaseDTO) async {
-    try{
-      await _firestore.collection(collectionName).doc(firebaseDTO.id).update(firebaseDTO.data);
-      return firebaseDTO;
-    }catch(e){
-      throw Exception("Erro ao atualizar o post: $e");
-    }
+    return await crudFirebase.update(firebaseDTO);
   }
 }

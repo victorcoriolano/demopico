@@ -9,7 +9,7 @@ class PicoFavoritoModel extends PicoFavorito {
     required this.id,
   });
 
-  Map<String, dynamic> toJson(){
+  Map<String, dynamic> toMap(){
     return {
       'idPico': idPico,
       'idUsuario': idUsuario,

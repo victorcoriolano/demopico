@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:demopico/features/external/datasources/firestore.dart';
+import 'package:demopico/features/external/datasources/remote/firebase/firestore.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_database_service.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 

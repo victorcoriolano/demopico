@@ -1,3 +1,4 @@
+import 'package:demopico/core/common/data/mappers/firebase_dto_mapper.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_post_datasource.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_post_repository.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';
@@ -14,34 +15,43 @@ class PostRepository implements IPostRepository {
     return _postRepository!;
   }
 
+  final _mapper = FirebaseDtoMapper(
+    fromJson: (data, id) => Post.fromJson(data, id),
+    toMap: (post) => post.toJson(),
+    getId: (post) => post.id,
+  );
+
+
   @override
-  Future<Post> createPost(Post post) {
-    // TODO: implement createPost
-    throw UnimplementedError();
+  Future<Post> createPost(Post post) async {
+    
+    final dto = await postDatasource.createPost(_mapper.toDatasourceDto(post));
+    return _mapper.toModalDto(dto);
+
   }
 
   @override
-  Future<void> deletePost(String postId) {
-    // TODO: implement deletePost
-    throw UnimplementedError();
+  Future<void> deletePost(String postId) async =>
+    await postDatasource.deletePost(postId);
+    
+  
+
+  @override
+  Future<Post> getPostbyID(String postId) async {
+    final dto = await postDatasource.getPostbyID(postId);
+    return _mapper.toModalDto(dto);
   }
 
   @override
-  Future<Post> getPostbyID(String postId) {
-    // TODO: implement getPostbyID
-    throw UnimplementedError();
+  Future<List<Post>> getPosts(String uid) async {
+    final listDto = await  postDatasource.getPosts();
+    return listDto.map((dto) => _mapper.toModalDto(dto)).toList();
   }
 
   @override
-  Future<List<Post>> getPosts(String uid) {
-    // TODO: implement getPosts
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Post> updatePost(Post post) {
-    // TODO: implement updatePost
-    throw UnimplementedError();
+  Future<Post> updatePost(Post post) async {
+    final dto = await postDatasource.updatePost(_mapper.toDatasourceDto(post));
+    return _mapper.toModalDto(dto);
   }
 
 

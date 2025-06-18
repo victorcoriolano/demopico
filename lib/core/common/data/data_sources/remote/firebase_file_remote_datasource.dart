@@ -35,11 +35,11 @@ class FirebaseFileRemoteDatasource implements IFileRemoteDataSource {
     return tasks;
     }
     on FirebaseException catch(e) {
-      debugPrint("Erro aqui no file: ${e.message}");
+      debugPrint("Erro capturado no data source: ${e.message}");
       throw FirebaseErrorsMapper.map(e);
-    }catch (e) {
+    }on Exception catch (e) {
       debugPrint("Erro desconhecido: $e");
-      throw UnknownFailure();
+      throw UnknownFailure(originalException: e);
     }
   }
 
