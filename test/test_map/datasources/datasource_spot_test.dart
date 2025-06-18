@@ -1,7 +1,9 @@
 
+import 'package:demopico/core/common/data/mappers/i_mapper_dto.dart';
+import 'package:demopico/features/external/datasources/dto/firebase_dto_mapper.dart';
 import 'package:demopico/features/mapa/data/data_sources/remote/firebase_spot_remote_datasource.dart';
 import 'package:demopico/core/common/data/dtos/firebase_dto.dart';
-import 'package:demopico/features/mapa/data/mappers/mapper_dto_picomodel.dart';
+import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,10 +15,16 @@ import '../../mocks/mocks_spots.dart';
 
       late FakeFirebaseFirestore fakeFirestore;
       late FirebaseSpotRemoteDataSource dataSource;
+      late IMapperDto mapper;
 
       setUpAll(() {
         fakeFirestore = FakeFirebaseFirestore();
         dataSource = FirebaseSpotRemoteDataSource(fakeFirestore);
+        mapper = FirebaseDtoMapper<PicoModel>(
+          fromJson: (data, id) => PicoModel.fromJson(data, id),
+          toMap: (model) => model.toMap() ,
+          getId: (model) => model.id,
+        );
       });
 
       tearDown(() {
@@ -25,7 +33,7 @@ import '../../mocks/mocks_spots.dart';
 
       test("dever criar um spot no datasource e retornar um dto com id", () async {
 
-        final result = await dataSource.create(MapperDtoPicomodel.toDto(testPico));
+        final result = await dataSource.create(mapper.toDTO(testPico));
 
         expect(result, isA<FirebaseDTO>());
         expect(result.data, isA<Map<String, dynamic>>());
@@ -45,7 +53,7 @@ import '../../mocks/mocks_spots.dart';
             picoName: "Pico Maneiro", 
             description: "Teste descrição alterada");
         
-        await dataSource.update(MapperDtoPicomodel.toDto(newPico));
+        await dataSource.update(mapper.toDTO(newPico));
 
         
         final dadosAlterados = await dataSource.getbyID("1");
@@ -70,8 +78,10 @@ import '../../mocks/mocks_spots.dart';
         
 
         //criando falsos picos no bd falso
-        await dataSource.create(MapperDtoPicomodel.toDto(testPico));
-        await dataSource.create(MapperDtoPicomodel.toDto(testPico2));
+        await Future.wait([
+          fakeFirestore.collection("spots").doc("1").set(testPico.toMap()),
+          fakeFirestore.collection("spots").doc("2").set(testPico2.toMap()),
+        ]);
 
         final stream = dataSource.load();
 
@@ -86,7 +96,7 @@ import '../../mocks/mocks_spots.dart';
           ]),
         );
 
-        await dataSource.create(MapperDtoPicomodel.toDto(testPico3));
+        await dataSource.create(mapper.toDTO(testPico3));
       });
     });
   }
