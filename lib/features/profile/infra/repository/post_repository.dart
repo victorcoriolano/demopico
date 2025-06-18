@@ -25,8 +25,8 @@ class PostRepository implements IPostRepository {
   @override
   Future<Post> createPost(Post post) async {
     
-    final dto = await postDatasource.createPost(_mapper.toDTO(post));
-    return _mapper.fromDto(dto);
+    final dto = await postDatasource.createPost(_mapper.toDatasourceDto(post));
+    return _mapper.toModalDto(dto);
 
   }
 
@@ -39,19 +39,19 @@ class PostRepository implements IPostRepository {
   @override
   Future<Post> getPostbyID(String postId) async {
     final dto = await postDatasource.getPostbyID(postId);
-    return _mapper.fromDto(dto);
+    return _mapper.toModalDto(dto);
   }
 
   @override
   Future<List<Post>> getPosts(String uid) async {
     final listDto = await  postDatasource.getPosts();
-    return listDto.map((dto) => _mapper.fromDto(dto)).toList();
+    return listDto.map((dto) => _mapper.toModalDto(dto)).toList();
   }
 
   @override
   Future<Post> updatePost(Post post) async {
-    final dto = await postDatasource.updatePost(_mapper.toDTO(post));
-    return _mapper.fromDto(dto);
+    final dto = await postDatasource.updatePost(_mapper.toDatasourceDto(post));
+    return _mapper.toModalDto(dto);
   }
 
 

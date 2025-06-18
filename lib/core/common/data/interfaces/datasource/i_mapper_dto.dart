@@ -1,5 +1,5 @@
 //strategy 
 abstract class IMapperDto<T, Y>{
-   T toDTO (Y model);
-   Y fromDto (T dto);
+   T toDatasourceDto (Y model);
+   Y toModalDto (T dto);
 }
