@@ -1,4 +1,4 @@
-import 'package:demopico/core/common/data/mappers/firebase_dto_mapper.dart';
+import 'package:demopico/features/external/datasources/dto/firebase_dto_mapper.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_post_datasource.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_post_repository.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';

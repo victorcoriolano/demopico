@@ -1,4 +1,4 @@
-import 'package:demopico/core/common/data/interfaces/datasource/i_mapper_dto.dart';
+import 'package:demopico/core/common/data/mappers/i_mapper_dto.dart';
 import 'package:demopico/core/common/data/dtos/firebase_dto.dart';
 
 
