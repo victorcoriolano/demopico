@@ -33,8 +33,8 @@ class CommentSpotRepositoryImpl implements ICommentRepository {
 
   @override
   Future<CommentModel> addComment(Comment comment) async {
-    final commentDto = _mapper.toDatasourceDto(CommentModel.fromEntity(comment));
-    return _mapper.toModalDto(await datasource.create(commentDto));
+    final commentDto = _mapper.toDTO(CommentModel.fromEntity(comment));
+    return _mapper.toModel(await datasource.create(commentDto));
   }
 
   @override
@@ -45,13 +45,13 @@ class CommentSpotRepositoryImpl implements ICommentRepository {
   @override
   Future<List<CommentModel>> getCommentsByPeak(String peakId) async{
     final commentsDto = await datasource.getBySpotId(peakId);
-    final comments = commentsDto.map((e) => _mapper.toModalDto(commentsDto)).toList();
+    final comments = commentsDto.map((e) => _mapper.toModel(commentsDto)).toList();
     return comments as List<CommentModel>;
   }
 
   @override
   Future<CommentModel> updateComment(CommentModel comment) async{
-    final commentDto = _mapper.toDatasourceDto(comment);
+    final commentDto = _mapper.toDTO(comment);
     await datasource.update(commentDto);
     return comment;
   }

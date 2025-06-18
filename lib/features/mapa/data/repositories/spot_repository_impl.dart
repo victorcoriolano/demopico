@@ -32,10 +32,10 @@ class SpotRepositoryImpl implements ISpotRepository {
   @override
   Future<PicoModel> createSpot(PicoModel pico) async {
     
-    final picoDto = await _mapper.toModalDto(pico);
-    final firebaseDto =  _mapper.toDatasourceDto(picoDto);
+    final picoDto = await _mapper.toModel(pico);
+    final firebaseDto =  _mapper.toDTO(picoDto);
 
-    return  _mapper.toModalDto(firebaseDto);
+    return  _mapper.toModel(firebaseDto);
 
   }
 
