@@ -15,7 +15,7 @@ class PostRepository implements IPostRepository {
     return _postRepository!;
   }
 
-  final _mapper = Firebasedtomapper(
+  final _mapper = FirebaseDtoMapper(
     fromJson: (data, id) => Post.fromJson(data, id),
     toMap: (post) => post.toJson(),
     getId: (post) => post.id,

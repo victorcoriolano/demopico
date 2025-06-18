@@ -20,7 +20,7 @@ void main() {
       fakeFirestore = FakeFirebaseFirestore();
       service = FirebaseCommentRemoteDataSource(firebaseFirestore: fakeFirestore);
       comment = CommentModel(id: "1",peakId: "1", userId: "userId", content: "teste", timestamp: DateTime.now());
-      mapperDto = Firebasedtomapper<CommentModel>(
+      mapperDto = FirebaseDtoMapper<CommentModel>(
         fromJson: (data, id) => CommentModel.fromJson(data, id),
         toMap: (model) => model.toMap() , 
         getId: (model) => model.id,
