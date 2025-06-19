@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/core/common/data/dtos/firebase_dto.dart';
 import 'package:demopico/core/common/data/enums/collections.dart';
-import 'package:demopico/features/external/datasources/remote/firebase/firestore.dart';
+import 'package:demopico/features/external/datasources/firebase/remote/firestore.dart';
 import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
 
 class CrudFirebase {

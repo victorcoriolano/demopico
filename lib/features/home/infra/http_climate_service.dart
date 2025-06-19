@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 class HttpClimateService {
+  // TODO: APLICAR INJEÇÃO DE DEPENDÊNCIA 
   final Geopositioning _geolocator = Geopositioning();
   final String apiKey = dotenv.env['WEATHER_API_KEY']!;
 

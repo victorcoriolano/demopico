@@ -1,6 +1,6 @@
 
 import 'package:demopico/core/common/data/mappers/i_mapper_dto.dart';
-import 'package:demopico/features/external/datasources/dto/firebase_dto_mapper.dart';
+import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto_mapper.dart';
 import 'package:demopico/features/mapa/data/data_sources/interfaces/i_comment_spot_datasource.dart';
 import 'package:demopico/features/mapa/data/data_sources/remote/firebase_comment_service.dart';
 import 'package:demopico/features/mapa/domain/entities/comment.dart';

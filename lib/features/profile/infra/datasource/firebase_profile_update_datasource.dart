@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:demopico/features/external/datasources/remote/firebase/firestore.dart';
+import 'package:demopico/features/external/datasources/firebase/remote/firestore.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_profile_update_datasource.dart';
 
 class FirebaseProfileUpdateDatasource implements IProfileUpdateDatasource {
