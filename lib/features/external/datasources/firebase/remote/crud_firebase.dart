@@ -17,7 +17,7 @@ class CrudFirebase {
 
   CrudFirebase.test({
     required this.table, 
-    required FirebaseFirestore firestore}): _firestore = firestore;
+    required FirebaseFirestore firestoreTest}): _firestore = firestoreTest;
 
   CrudFirebase({required this.table})
     : _firestore = Firestore.getInstance;
@@ -26,6 +26,7 @@ class CrudFirebase {
   void setTable(Collections table) {
     _instance?.table = table;
   }
+
 
   Future<FirebaseDTO> create(FirebaseDTO model) async{
     try {
@@ -61,18 +62,5 @@ class CrudFirebase {
       throw FirebaseErrorsMapper.map(e);
     }
   }
-  Future<List<FirebaseDTO>> list() async {
-    try {
-      QuerySnapshot querySnapshot = await _firestore.collection(table.name).get();
-      return querySnapshot.docs.map((doc) {
-        final data = doc.data() as Map<String, dynamic>;
-        return FirebaseDTO(id: doc.id, data: data);
-      }).toList();
-    } on FirebaseException catch (e) {
-      throw FirebaseErrorsMapper.map(e);
-    }
-  }
-  
-
 
 }
