@@ -22,8 +22,8 @@ class CreateSpotUc {
       
     } on Exception catch (e) {
       throw Exception("Erro ao criar piquerson: $e ");
-    } catch (e) {
-      throw Exception("Erro inesperado criar piquerson: $e ");
+    } catch (e, st) {
+      throw Exception("Erro inesperado criar piquerson: $e $st");
     }
   }
 }
