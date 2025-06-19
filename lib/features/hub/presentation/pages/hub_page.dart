@@ -60,12 +60,12 @@ class _HubPageState extends State<HubPage> {
           children: [
             ////////////////////CONTÂINER DE FUNDO
             Positioned(
-              top: 0,
+              top: -1,
+              bottom: 630,
               child: Container(
                 width: context.screenWidth,
-                height: context.screenHeight / 2,
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 107, 7, 7),
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 107, 7, 7),
                   shape: BoxShape.rectangle,
                 ),
               ),
@@ -81,31 +81,33 @@ class _HubPageState extends State<HubPage> {
                     focusColor: Colors.transparent,
                     hoverColor: Colors.transparent,
                     visualDensity: VisualDensity.compact,
-                    icon: Image(
+                    icon: const Image(
                         repeat: ImageRepeat.repeat,
                         width: 38,
                         height: 38,
                         semanticLabel: "Sair",
-                        color: const Color.fromARGB(255, 255, 255, 255),
+                        color: Color.fromARGB(255, 255, 255, 255),
                         isAntiAlias: true,
-                        image: AssetImage("assets/images/icons/fist-icon.png")))),
+                        image:
+                            AssetImage("assets/images/icons/fist-icon.png")))),
             Positioned(
                 ///////////////// TÍTULO DA PÁGINA
                 top: 50,
                 left: context.width / 2 - 50,
                 right: context.width / 2 - 50,
-                child: Center(
+                child: const Center(
                   child: Text("HUB",
                       style: TextStyle(
-                        fontFamily: 'Poppins',
+                        fontFamily: 'Misfit',
+                        letterSpacing: 2,
                         fontStyle: FontStyle.normal,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: const Color.fromARGB(255, 243, 243, 243),
+                        color: Color.fromARGB(255, 243, 243, 243),
                       )),
                 )),
             Positioned(
-              top: 100,
+              top: 260,
               child: SizedBox(
                   /////////////////// Contâiner dos posts
                   child: Container(
@@ -170,9 +172,9 @@ class _HubPageState extends State<HubPage> {
                                   children: [
                                     CupertinoSwitch(
                                       value: _isDonation,
-                                      activeColor: const Color(
+                                      activeTrackColor: const Color(
                                           0xFF970202), // Vermelho escuro quando ativado
-                                      trackColor: const Color(
+                                      inactiveTrackColor: const Color(
                                           0xFFE0E0E0), // Cinza claro quando desativado
                                       thumbColor: Colors.black,
                                       onChanged: (bool value) {
@@ -184,8 +186,9 @@ class _HubPageState extends State<HubPage> {
                                     ),
                                     CupertinoSwitch(
                                       value: _isEvent,
-                                      activeColor: const Color(0xFF970202),
-                                      trackColor: const Color(0xFFE0E0E0),
+                                      activeTrackColor: const Color(0xFF970202),
+                                      inactiveTrackColor:
+                                          const Color(0xFFE0E0E0),
                                       thumbColor: Colors.black,
                                       onChanged: (bool value) {
                                         setState(() {

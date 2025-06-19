@@ -10,7 +10,7 @@ import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-const double minHeight = 90;
+const double minHeight = 120;
 const double iconStartSize = 44;
 const double iconEndSize = 120;
 const double iconStartMarginTop = 36;
@@ -81,10 +81,10 @@ class _HubUpperSheetState extends State<HubUpperSheet>
         animation: _controller,
         builder: (context, child) {
           return Positioned(
-              height: lerp(minHeight, maxHeight + 100),
+              height: lerp(minHeight, maxHeight + 180),
               left: 0,
               right: 0,
-              bottom: MediaQuery.maybeSizeOf(context)!.height / 3.3 +
+              bottom: MediaQuery.maybeSizeOf(context)!.height / 3.5 +
                   maxHeight -
                   maxHeight * _controller.value,
               child: GestureDetector(

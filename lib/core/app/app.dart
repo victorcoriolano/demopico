@@ -1,5 +1,7 @@
 import 'package:demopico/core/app/home_page.dart';
+import 'package:demopico/features/home/provider/forecast_provider.dart';
 import 'package:demopico/features/home/provider/home_provider.dart';
+import 'package:demopico/features/home/provider/weather_provider.dart';
 import 'package:demopico/features/hub/domain/usecases/listar_comunicados_uc.dart';
 import 'package:demopico/features/hub/domain/usecases/postar_comunicado_uc.dart';
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
@@ -11,6 +13,7 @@ import 'package:demopico/features/mapa/presentation/controllers/map_controller.d
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/favorite_spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
+import 'package:demopico/features/profile/presentation/pages/user_page.dart';
 import 'package:demopico/features/user/infra/services/user_auth_firebase_service.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
@@ -26,6 +29,8 @@ class MyAppWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => OpenWeatherProvider()),
+        ChangeNotifierProvider(create: (_) => ForecastProvider(null)),
         ChangeNotifierProvider(create: (_) => AuthUserProvider.getInstance),
         StreamProvider(
           create: (_) =>
@@ -33,9 +38,9 @@ class MyAppWidget extends StatelessWidget {
           initialData: null,
         ),
         ChangeNotifierProvider(create: (_) => AddPicoProvider.getInstance),
+        ChangeNotifierProvider(create: (_) => MapControllerProvider()),
         ChangeNotifierProvider(
-            create: (_) => MapControllerProvider()),
-        ChangeNotifierProvider(create: (_) => FavoriteSpotController.getInstance),
+            create: (_) => FavoriteSpotController.getInstance),
         ChangeNotifierProvider(
             create: (_) => SpotControllerProvider.getInstance),
         ChangeNotifierProvider(create: (_) => UserDatabaseProvider.getInstance),
@@ -59,8 +64,9 @@ class MyAppWidget extends StatelessWidget {
         ),
         routes: {
           '/': (context) => const HomePage(),
-          '/hub': (context) => const HubPage(),
-          '/map': (context) => const MapPage(),
+          '/HubPage': (context) => const HubPage(),
+          '/MapPage': (context) => const MapPage(),
+          '/UserPage': (context) => const UserPage()
         },
       ),
     );
