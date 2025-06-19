@@ -27,7 +27,7 @@ class InvalidFormatFileFailure extends DomainFailure {
   InvalidFormatFileFailure(): super("Formato de arquivo inválido", code: 'invalid_file');
 }
 
-class  InvalidSizeFileFailure extends DomainFailure {
+class InvalidSizeFileFailure extends DomainFailure {
   InvalidSizeFileFailure(): super("Tamanho de arquivo inválido", code: 'invalid_size_file');
 }
 
@@ -37,4 +37,8 @@ class NoSuchFileFailure extends DomainFailure {
 
 class NoFileSelectedFailure extends DomainFailure {
   NoFileSelectedFailure(): super("Nenhum arquivo selecionado", code: 'no_file_selected');
+}
+
+class FileLimitExceededFailure extends DomainFailure {
+  FileLimitExceededFailure(): super("Limite de arquivos excedido", code: 'file_limit_exceeded');
 }

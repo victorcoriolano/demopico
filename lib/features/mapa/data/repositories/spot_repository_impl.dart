@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:demopico/core/common/data/interfaces/datasource/i_mapper_dto.dart';
-import 'package:demopico/core/common/data/mappers/firebase_dto_mapper.dart';
+import 'package:demopico/core/common/data/dtos/firebase_dto.dart';
+import 'package:demopico/core/common/data/mappers/i_mapper_dto.dart';
+import 'package:demopico/features/external/datasources/dto/firebase_dto_mapper.dart';
 import 'package:demopico/features/mapa/data/data_sources/interfaces/i_spot_datasource.dart';
 import 'package:demopico/features/mapa/data/data_sources/remote/firebase_spot_remote_datasource.dart';
-import 'package:demopico/features/mapa/data/mappers/mapper_dto_picomodel.dart';
 import 'package:demopico/features/mapa/domain/entities/filters.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_spot_repository.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
@@ -22,7 +22,7 @@ class SpotRepositoryImpl implements ISpotRepository {
   final ISpotRemoteDataSource dataSource;
   SpotRepositoryImpl(this.dataSource);
 
-    final IMapperDto _mapper = FirebaseDtoMapper<PicoModel>(
+  final IMapperDto<PicoModel, FirebaseDTO> _mapper = FirebaseDtoMapper<PicoModel>(
     fromJson: (data, id) => PicoModel.fromJson(data, id),
     toMap: (model) => model.toMap() , 
     getId: (model) => model.id,
@@ -32,10 +32,11 @@ class SpotRepositoryImpl implements ISpotRepository {
   @override
   Future<PicoModel> createSpot(PicoModel pico) async {
     
-    final picoDto = await _mapper.toModalDto(pico);
-    final firebaseDto =  _mapper.toDatasourceDto(picoDto);
-
-    return  _mapper.toModalDto(firebaseDto);
+    final picoDto = await dataSource.create(
+      _mapper.toDTO(pico)
+    );
+    
+    return  _mapper.toModel(picoDto);
 
   }
 
@@ -46,8 +47,8 @@ class SpotRepositoryImpl implements ISpotRepository {
 
   @override
   Future<PicoModel> getPicoByID(String id) async {
-    var data = await  dataSource.getbyID(id);
-    return MapperDtoPicomodel.fromDto(data);
+    var picoDto = await  dataSource.getbyID(id);
+    return _mapper.toModel(picoDto);
   }
 
   @override
@@ -57,7 +58,7 @@ class SpotRepositoryImpl implements ISpotRepository {
 
       return dataStream.map((data) {
         final picos = data.map((pico) {
-          return MapperDtoPicomodel.fromDto(pico);
+          return _mapper.toModel(pico);
         }).toList();
         debugPrint("picos: $picos");
         return picos;
@@ -68,7 +69,7 @@ class SpotRepositoryImpl implements ISpotRepository {
     
   @override
   Future<PicoModel> updateSpot(PicoModel pico) async {
-    final dto = MapperDtoPicomodel.toDto( pico);
+    final dto = _mapper.toDTO(pico);
     await dataSource.update(dto);
     return  pico;
   }

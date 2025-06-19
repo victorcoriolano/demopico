@@ -1,6 +1,6 @@
 
-import 'package:demopico/core/common/data/interfaces/datasource/i_mapper_dto.dart';
-import 'package:demopico/core/common/data/mappers/firebase_dto_mapper.dart';
+import 'package:demopico/core/common/data/mappers/i_mapper_dto.dart';
+import 'package:demopico/features/external/datasources/dto/firebase_dto_mapper.dart';
 import 'package:demopico/features/mapa/data/data_sources/remote/firebase_comment_service.dart';
 import 'package:demopico/core/common/data/dtos/firebase_dto.dart';
 import 'package:demopico/features/mapa/domain/models/comment_model.dart';
@@ -29,7 +29,7 @@ void main() {
 
     test("Deve salvar um comentário", () async {
       
-      final result = await service.create(mapperDto.toDatasourceDto(comment));
+      final result = await service.create(mapperDto.toDTO(comment));
 
       expect(result, isA<FirebaseDTO>());
       expect(result.id, isNotEmpty);
@@ -67,7 +67,7 @@ void main() {
 
     test("Deve deletar um comentário", () async {
       //criando fakes
-      final commentOnDB = await service.create(mapperDto.toDatasourceDto(comment));
+      final commentOnDB = await service.create(mapperDto.toDTO(comment));
       await service.delete(commentOnDB.id);
       final result = await service.getBySpotId("2");
       expect(result.length, equals(0)); // 0 comentários do pico 2
@@ -75,11 +75,11 @@ void main() {
 
     test("Deve atualizar um comentário", () async {
       //criando fakes
-      final commentBD = await service.create(mapperDto.toDatasourceDto(comment));
+      final commentBD = await service.create(mapperDto.toDTO(comment));
       var id = commentBD.id;
       final updateComment = comment.copyWith(content: "teste atualizado", id: id);
         
-      await service.update(mapperDto.toDatasourceDto(updateComment));
+      await service.update(mapperDto.toDTO(updateComment));
       
       final updated = await service.getBySpotId("1");
       

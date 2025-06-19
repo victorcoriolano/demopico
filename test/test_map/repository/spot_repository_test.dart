@@ -1,8 +1,9 @@
 import 'dart:async';
 
+import 'package:demopico/core/common/data/mappers/i_mapper_dto.dart';
+import 'package:demopico/features/external/datasources/dto/firebase_dto_mapper.dart';
 import 'package:demopico/features/mapa/data/data_sources/remote/firebase_spot_remote_datasource.dart';
 import 'package:demopico/core/common/data/dtos/firebase_dto.dart';
-import 'package:demopico/features/mapa/data/mappers/mapper_dto_picomodel.dart';
 import 'package:demopico/features/mapa/data/repositories/spot_repository_impl.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -20,7 +21,10 @@ class MockDatasource extends Mock implements FirebaseSpotRemoteDataSource {
 }
 
 void main() {
+  
   group("Deve testar a interação com o firebase ", () {
+    late IMapperDto mapperDto;
+
     //variáveis mockadas para utilizar nos testes
 
     late MockDatasource mockDatasource;
@@ -32,8 +36,13 @@ void main() {
     setUpAll(() {
       mockDatasource = MockDatasource();
       repositoryImpl = SpotRepositoryImpl(mockDatasource);
+      mapperDto = FirebaseDtoMapper<PicoModel>(
+        fromJson: (data, id) => PicoModel.fromJson(data, id),
+        toMap: (model) => model.toMap(),
+        getId: (model) => model.id,
+      );
 
-      registerFallbackValue(MapperDtoPicomodel.toDto(testPico));
+      registerFallbackValue(mapperDto.toDTO(testPico));
     });
 
     //testando criar pico
@@ -41,7 +50,7 @@ void main() {
         () async {
       // criando fluxo que ocorrerá se der tudo certo
        when(() => mockDatasource.create(any<FirebaseDTO>()))
-          .thenAnswer((_) => Future.value(MapperDtoPicomodel.toDto(testPico))); 
+          .thenAnswer((_) => Future.value(mapperDto.toDTO(testPico))); 
 
       //chamando o método
       final result = await repositoryImpl.createSpot(testPico);
