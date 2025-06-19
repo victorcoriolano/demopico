@@ -14,7 +14,9 @@ abstract class Failure implements Exception {
   });
 
   @override
-  String toString() => code != null ? '$code: $message': message;
+  String toString() {
+    return "Failure Error: $message, code: $code, stackTrace: $stackTrace, originalException: $originalException";
+  }
 }
 
 
