@@ -17,6 +17,7 @@ class FirebasePostDatasource implements IPostDatasource {
 
   final CrudFirebase crudFirebase;
   
+  
   FirebasePostDatasource({required this.crudFirebase});
 
   @override
@@ -34,8 +35,9 @@ class FirebasePostDatasource implements IPostDatasource {
   }
 
   @override
-  Future<List<FirebaseDTO>> getPosts() async {
-    return await crudFirebase.list();
+  Future<List<FirebaseDTO>> getPosts(String id) async {
+    // TODO: implement getPosts
+    throw UnimplementedError();
   }
   
   @override
