@@ -1,3 +1,4 @@
+
 import 'package:demopico/core/common/data/enums/collections.dart';
 import 'package:demopico/features/external/datasources/firebase/remote/crud_firebase.dart';
 import 'package:demopico/features/profile/infra/datasource/firebase_post_datasource.dart';
@@ -36,7 +37,7 @@ void main(){
      test("deve atualizar uma postagem ", ()  async{
       
       await firestore.collection("posts").doc("123").set(listDto[0].data);
-      final dto = await firebasePostDatasource.updatePost(listDto[1]);
+      final dto = await firebasePostDatasource.updatePost(listDto[0].copyWith(data: {"nome": "Tete da Silva"}));;
       expect(dto.data["nome"], "Tete da Silva");
     });
 
@@ -48,9 +49,12 @@ void main(){
     
     test("deve deletar uma postagem ", ()  async{
       await firestore.collection("posts").doc("123").set(listDto[0].data);
-      await firebasePostDatasource.deletePost("123");
       
-      expect(firestore.collection("posts").doc("123").get(), throwsException);
+
+      await firebasePostDatasource.deletePost("123");
+      final dataAfterDelete = await firestore.collection("posts").doc("123").get();
+      expect(dataAfterDelete.exists, false);
+      
     });
     
 
