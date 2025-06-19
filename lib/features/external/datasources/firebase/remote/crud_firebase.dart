@@ -10,14 +10,16 @@ class CrudFirebase {
   
 
   static CrudFirebase? _instance;
-  static CrudFirebase get getInstance => _instance ??= CrudFirebase(
-    table: Collections.spots);
+  static CrudFirebase get getInstance {
+    _instance ??= CrudFirebase(table: Collections.users);
+    return _instance!;
+  }
 
   CrudFirebase({required this.table})
     : _firestore = Firestore.getInstance;
 
   
-  static void setTable(Collections table) {
+  void setTable(Collections table) {
     _instance?.table = table;
   }
 

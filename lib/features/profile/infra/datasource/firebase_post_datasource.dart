@@ -13,7 +13,10 @@ class FirebasePostDatasource implements IPostDatasource {
   }
 
 
-  final CrudFirebase crudFirebase = CrudFirebase(table: Collections.posts);
+  final crudFirebase = CrudFirebase(
+    table: Collections.posts,
+  );
+  
 
 
   @override
