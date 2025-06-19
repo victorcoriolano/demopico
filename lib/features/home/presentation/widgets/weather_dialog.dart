@@ -48,7 +48,6 @@ class _WeatherDialogState extends State<WeatherDialog> {
         return Center(
           child: CircularProgressIndicator(
             color: Theme.of(context).primaryColor,
-            constraints: BoxConstraints.expand(),
           ),
         );
       } else {
