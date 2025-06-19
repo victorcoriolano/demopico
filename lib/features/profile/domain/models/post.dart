@@ -5,7 +5,7 @@ class Post {
   String postId;             
   String urlUserPhoto;
   String description;
-  List<String> urlPhotos;
+  List<String> urlMidia;
   DateTime dateTime;
   int curtidas;
 
@@ -16,7 +16,7 @@ class Post {
     required this.postId,
     required this.urlUserPhoto,
     required this.description,
-    required this.urlPhotos,
+    required this.urlMidia,
     DateTime? dateTime,
     int? curtidas,
   })  : dateTime = dateTime ?? DateTime.now(),
@@ -43,8 +43,8 @@ class Post {
     return description;
   }
 
-  List<String> getUrlPhotos() {
-    return urlPhotos;
+  List<String> geturlMidia() {
+    return urlMidia;
   }
 
   DateTime getDateTime() {
@@ -72,8 +72,8 @@ class Post {
     description = value;
   }
 
-  void setUrlPhotos(List<String> value) {
-    urlPhotos = value;
+  void seturlMidia(List<String> value) {
+    urlMidia = value;
   }
 
   void setCurtidas(int value) {
@@ -88,7 +88,7 @@ class Post {
       postId: json['postId'],
       urlUserPhoto: json['urlUserPhoto'],
       description: json['description'],
-      urlPhotos: List<String>.from(json['urlPhotos']),
+      urlMidia: List<String>.from(json['urlMidia']),
       dateTime: DateTime.parse(json['dateTime']),
       curtidas: json['curtidas'],
     );
@@ -101,7 +101,7 @@ class Post {
       'postId': postId,
       'urlUserPhoto': urlUserPhoto,
       'description': description,
-      'urlPhotos': urlPhotos,
+      'urlMidia': urlMidia,
       'dateTime': dateTime.toIso8601String(),
       'curtidas': curtidas,
     };

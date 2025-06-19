@@ -68,14 +68,14 @@ class _PostWidgetState extends State<PostWidget> {
             const SizedBox(height: 12),
 
             // Fotos com PageView
-            if (post.urlPhotos.isNotEmpty)
+            if (post.urlMidia.isNotEmpty)
               Column(
                 children: [
                   SizedBox(
                     height: screenHeight * 0.6,
                     child: PageView.builder(
                       controller: _pageController,
-                      itemCount: post.urlPhotos.length,
+                      itemCount: post.urlMidia.length,
                       onPageChanged: (index) {
                         setState(() => _currentPage = index);
                       },
@@ -83,7 +83,7 @@ class _PostWidgetState extends State<PostWidget> {
                         return ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: Image.network(
-                            post.urlPhotos[index],
+                            post.urlMidia[index],
                             width: double.infinity,
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) =>
@@ -97,7 +97,7 @@ class _PostWidgetState extends State<PostWidget> {
                   // Indicador de página
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(post.urlPhotos.length, (index) {
+                    children: List.generate(post.urlMidia.length, (index) {
                       final isActive = _currentPage == index;
                       return AnimatedContainer(
                         duration: const Duration(milliseconds: 300),
