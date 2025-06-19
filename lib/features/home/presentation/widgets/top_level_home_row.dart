@@ -21,6 +21,8 @@ class TopLevelHomeRow extends StatefulWidget {
   State<TopLevelHomeRow> createState() => _TopLevelHomeRowState();
 }
 
+// TODO: IMPLEMENT HERO TO THE CLIMATE ICON
+
 class _TopLevelHomeRowState extends State<TopLevelHomeRow> {
   @override
   Widget build(BuildContext context) {
