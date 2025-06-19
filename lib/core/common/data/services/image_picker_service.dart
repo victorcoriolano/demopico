@@ -1,5 +1,7 @@
 import 'package:demopico/core/common/data/interfaces/repository/i_pick_image_repository.dart';
 import 'package:demopico/core/common/data/models/upload_file_model.dart';
+import 'package:demopico/core/common/errors/domain_failures.dart';
+import 'package:flutter/material.dart';
 
 import 'package:image_picker/image_picker.dart';
 
@@ -65,6 +67,33 @@ class ImagePickerService implements IPickFileRepository {
       
     } catch (e) {
       throw Exception("Erro ao selecionar a imagem: $e");
+    }
+  }
+  
+  @override
+  Future<List<UploadFileModel>> pickMultipleMedia() async {
+    try{
+      final xFiles = await _imagePicker.pickMultipleMedia(
+        limit: 3,
+      );
+      if (xFiles.isEmpty) {
+        throw NoFileSelectedFailure();
+      }
+
+      final files = await Future.wait(xFiles.map((xFile) async {
+        final bytes = await xFile.readAsBytes();
+        return UploadFileModel(
+          fileName: xFile.name,
+          filePath: xFile.path,
+          bytes: bytes,
+          contentType: xFile.mimeType!,
+        );
+      }).toList());
+
+      return files;
+    } catch (e, st) {
+      debugPrint("Erro ao selecionar multiplos arquivos : $e stackTrace: $st");
+      throw Exception("Erro ao selecionar multiplos arquivos: $e stackTrace: $st");
     }
   }
 }
