@@ -8,16 +8,16 @@ class FirebasePostDatasource implements IPostDatasource {
 
   static FirebasePostDatasource? _firebasePostDatasource;
   static FirebasePostDatasource get getInstance {
-    _firebasePostDatasource ??= FirebasePostDatasource();
+    _firebasePostDatasource ??= FirebasePostDatasource(
+      crudFirebase: CrudFirebase.getInstance..setTable(Collections.posts)
+    );
     return _firebasePostDatasource!;
   }
 
 
-  final crudFirebase = CrudFirebase(
-    table: Collections.posts,
-  );
+  final CrudFirebase crudFirebase;
   
-
+  FirebasePostDatasource({required this.crudFirebase});
 
   @override
   Future<FirebaseDTO> createPost(FirebaseDTO firebaseDTO) async => 
