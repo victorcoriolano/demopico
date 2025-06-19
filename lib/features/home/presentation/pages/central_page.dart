@@ -119,4 +119,13 @@ class _CentralPageState extends State<CentralPage> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    _userDatabaseProvider.dispose();
+    _authUserProvider.dispose();
+    debugPrint('CentralPage disposed');
+    super.dispose();
+  }
 }
