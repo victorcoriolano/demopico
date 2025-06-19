@@ -9,7 +9,7 @@ class CardPostWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String cardPhoto = post.urlPhotos[0];
+    String cardPhoto = post.urlMidia[0];
     return GestureDetector(
       onTap: () {
         Navigator.push(

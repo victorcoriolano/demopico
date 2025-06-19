@@ -44,7 +44,7 @@ class PostRepository implements IPostRepository {
 
   @override
   Future<List<Post>> getPosts(String uid) async {
-    final listDto = await  postDatasource.getPosts();
+    final listDto = await  postDatasource.getPosts(uid);
     return listDto.map((dto) => _mapper.toModel(dto)).toList();
   }
 
