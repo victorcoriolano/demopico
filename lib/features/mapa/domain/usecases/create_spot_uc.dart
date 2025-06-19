@@ -1,6 +1,9 @@
+import 'package:demopico/core/common/errors/failure_server.dart';
+import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/mapa/data/repositories/spot_repository_impl.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_spot_repository.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
+import 'package:flutter/material.dart';
 
 class CreateSpotUc {
   static CreateSpotUc? _createSpotUc;
@@ -17,13 +20,13 @@ class CreateSpotUc {
   Future<PicoModel> createSpot(PicoModel pico) async {
     try {
       final picoCriado = await spotRepositoryIMP.createSpot(pico);
+      return picoCriado;
       
-        return picoCriado;
-      
-    } on Exception catch (e) {
-      throw Exception("Erro ao criar piquerson: $e ");
+    }on Failure catch (e) {
+      debugPrint("Falha conhecida capturada: $e");
+      rethrow;
     } catch (e, st) {
-      throw Exception("Erro inesperado criar piquerson: $e $st");
+      throw UnknownError("Erro inesperado criar piquerson: $e $st");
     }
   }
 }
