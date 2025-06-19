@@ -113,9 +113,10 @@ class _ContainerTelasState extends State<ContainerTelas> {
                           const SizedBox(height: 10),
                           if (_currentIndex == 3)
                             ElevatedButton(
+                              
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: provider.validarFormulario() ?
-                                    const Color(0xFF8B0000) : Colors.grey, // Cor do botão
+                                backgroundColor: 
+                                    const Color(0xFF8B0000) , // Cor do botão
                                 foregroundColor: Colors.white,
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 50, vertical: 15),
@@ -123,7 +124,7 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
-                              onPressed: () async {
+                              onPressed: provider.validarFormulario() ? () async {
                                 
                                 await provider.createSpot(user?.name);
                                 if( provider.errorCriarPico != null ){
@@ -131,7 +132,7 @@ class _ContainerTelasState extends State<ContainerTelas> {
                                 }
                                 if(context.mounted) Navigator.pop(context);
                                 
-                              },
+                              } : null,
                               child: const Text('POSTAR PICO',
                                   style: TextStyle(fontSize: 15)),
                             )
