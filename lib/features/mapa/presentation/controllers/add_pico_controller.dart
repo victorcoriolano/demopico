@@ -49,7 +49,7 @@ class AddPicoProvider extends ChangeNotifier{
 
   double progress = 0.0;
 
-  void setLocation(LatLng latlang) {
+  void getLocation(LatLng latlang) {
     this.latlang = latlang;
   }
   
@@ -263,8 +263,6 @@ class AddPicoProvider extends ChangeNotifier{
       
       await createSpotUc.createSpot(newPico);
       
-      
-
       // Limpa os campos após a criação bem-sucedida
       limpar();
     }on Failure catch (e) {

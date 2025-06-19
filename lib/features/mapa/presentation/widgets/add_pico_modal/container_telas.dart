@@ -52,7 +52,7 @@ class _ContainerTelasState extends State<ContainerTelas> {
   void initState() {
     super.initState();
     user = context.read<UserDatabaseProvider>().user;
-    context.read<AddPicoProvider>().setLocation(widget.latlang);
+    context.read<AddPicoProvider>().getLocation(widget.latlang);
   }
 
   
