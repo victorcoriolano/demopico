@@ -15,6 +15,10 @@ class CrudFirebase {
     return _instance!;
   }
 
+  CrudFirebase.test({
+    required this.table, 
+    required FirebaseFirestore firestore}): _firestore = firestore;
+
   CrudFirebase({required this.table})
     : _firestore = Firestore.getInstance;
 
