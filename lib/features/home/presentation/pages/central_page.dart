@@ -1,11 +1,11 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-import 'package:demopico/core/app/auth_wrapper.dart';
+import 'package:demopico/features/home/presentation/widgets/central_page_background.dart';
 import 'package:demopico/features/home/presentation/widgets/events_bottom_sheet.dart';
 import 'package:demopico/features/home/presentation/widgets/hub_upper_sheet.dart';
+import 'package:demopico/features/home/presentation/widgets/top_level_home_row.dart';
+import 'package:demopico/features/home/provider/weather_provider.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class CentralPage extends StatefulWidget {
@@ -19,141 +19,96 @@ class _CentralPageState extends State<CentralPage> {
   final ScrollController scrollController = ScrollController();
   late UserDatabaseProvider _userDatabaseProvider;
   late AuthUserProvider _authUserProvider;
-  String? userId;
-  String? userImage;
-  
+  String? _userId;
+  String? _userImage;
+
+  bool _isWeatherLoaded = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadUser();
+      if (!_isWeatherLoaded) {
+        if (Provider.of<OpenWeatherProvider>(context, listen: false)
+            .isUpdated()) {
+          debugPrint('Weather data already updated, skipping load.');
+          return;
+        }
+        _loadWeather();
+        _isWeatherLoaded = true;
+      }
     });
   }
 
-  Future<void> _loadUser() async {
-    _userDatabaseProvider = Provider.of<UserDatabaseProvider>(context, listen: false);
-    _authUserProvider = Provider.of<AuthUserProvider>(context, listen: false);
-    String? userId = _authUserProvider.pegarId();
+  void _loadWeather() async {
+    await Provider.of<OpenWeatherProvider>(context, listen: false)
+        .fetchWeatherData();
+    debugPrint('Weather data fetch called sucessfuly in HomePage');
+    debugPrint(
+        'Value ${Provider.of<OpenWeatherProvider>(context, listen: false).value}');
+  }
 
-    if (userId != null) {
-      await _userDatabaseProvider.retrieveUserProfileData(userId);
+  Future<void> _loadUser() async {
+    _userDatabaseProvider =
+        Provider.of<UserDatabaseProvider>(context, listen: false);
+    _authUserProvider = Provider.of<AuthUserProvider>(context, listen: false);
+    _userId = _authUserProvider.pegarId();
+    if (_userId != null) {
+      await _userDatabaseProvider.retrieveUserProfileData(_userId!);
     }
-    if (userId != null) {
+    if (_userId != null) {
       final user = _userDatabaseProvider.user;
-      
-      if (user!= null) userImage = user.pictureUrl;
+
+      if (user != null) _userImage = user.pictureUrl;
     }
-    
     return;
   }
-  
-
-    
-
 
   @override
   Widget build(BuildContext context) {
-    
-    
     return Scaffold(
       body: Stack(
         children: [
           Column(
             children: [
               Stack(children: [
-                Container(
-                    height: MediaQuery.maybeSizeOf(context)!.height * 0.9,
-                    width: MediaQuery.maybeSizeOf(context)!.width,
-                    decoration: BoxDecoration(
-                        gradient: RadialGradient(radius: 0.8, colors: [
-                      Color(0xFFD9D9D9),
-                      Color(0xFFE7E7E7),
-                      Color(0xFFECECEC),
-                      Color(0xFFEBEBEB),
-                      Color(0xFFF9F9F9)
-                    ], stops: [
-                      0.2,
-                      0.3,
-                      0.4,
-                      0.5,
-                      1.0
-                    ])),
-                    child: Center(
-                        child: Row(
-                      children: [
-                        Icon(Icons.chevron_left, size: 64),
-                        Spacer(),
-                        Transform(
-                          alignment: Alignment.center,
-                          transform: Matrix4.identity()..setRotationZ(10.2),
-                          child: Image.asset('assets/images/skatepico-icon.png',
-                              filterQuality: FilterQuality.high,
-                              width: 150,
-                              height: 150),
+                CentralPageBackground(),
+                Consumer<OpenWeatherProvider>(
+                  builder: (context, weatherProvider, child) {
+                    //Carrega os dados do clima de acordo com o estado
+                    if (weatherProvider.isLoading ||
+                        weatherProvider.value == null) {
+                      return Positioned(
+                          top: 110,
+                          left: 5,
+                          child: Center(
+                              child: CircularProgressIndicator(
+                            color: Theme.of(context).colorScheme.primary,
+                          )));
+                    } else if (weatherProvider.errorMessage != null) {
+                      return Positioned(
+                        top: 70,
+                        left: 5,
+                        child: Center(
+                          child: Text(
+                            weatherProvider.errorMessage!,
+                            style: TextStyle(color: Colors.red),
+                          ),
                         ),
-                        Spacer(),
-                        Icon(Icons.chevron_right, size: 64),
-                      ],
-                    ))),
-                Positioned(
-                  top: 70,
-                  child: SizedBox(
-                    width: MediaQuery.maybeSizeOf(context)!.width,
-                    height: 120,
-                    child: Row(children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        verticalDirection: VerticalDirection.down,
-                        children: [
-                          SizedBox(width: 140),
-                          ElevatedButton(
-                              onPressed: null,
-                              style: ButtonStyle(
-                                padding:
-                                    WidgetStateProperty.all<EdgeInsetsGeometry>(
-                                        EdgeInsets.fromLTRB(15, 10, 15, 10)),
-                                backgroundColor: WidgetStateProperty.all<Color>(
-                                    Color.fromARGB(255, 255, 255, 255)),
-                                shape: WidgetStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(90.0),
-                                )),
-                                elevation: WidgetStateProperty.all<double>(1),
-                                shadowColor: WidgetStateProperty.all<Color>(
-                                    Color.fromARGB(255, 0, 0, 0)),
-                              ),
-                              child: Row(
-                                children: [
-                                  Icon(Icons.sunny,
-                                      size: 39, color: Colors.black87),
-                                  SizedBox(width: 15),
-                                  Text('25°C',
-                                      style: TextStyle(
-                                          fontSize: 15, color: Colors.black87))
-                                ],
-                              )),
-                        ],
-                      ),
-                      Spacer(),
-                      GestureDetector(
-                          onTap: () => Get.to(
-                                AuthWrapper(),
-                                transition: Transition.rightToLeftWithFade,
-                                duration: const Duration(milliseconds: 600),
-                                curve: Curves.fastEaseInToSlowEaseOut,
-                              ),
-                          child: userImage == null
-                              ? Icon(Icons.supervised_user_circle, size: 64)
-                              : CircleAvatar(
-                                  radius: 32,
-                                  backgroundImage: 
-                                      NetworkImage(userImage!),
-                                  backgroundColor: Colors.transparent)),
-                    ]),
-                  ),
+                      );
+                    }
+                    //Obtém o modelo de clima atual, mapeia os iniciais e passa pro widget
+                    final currentWeatherModel = weatherProvider.value;
+                    final weatherData = {
+                      'temperature': currentWeatherModel?.tempC ?? 0,
+                      'isDay': currentWeatherModel?.isDay ?? true,
+                    };
+                    return TopLevelHomeRow(
+                      userImage: _userImage,
+                      initialWeatherInfo: weatherData,
+                    );
+                  },
                 ),
               ]),
             ],
