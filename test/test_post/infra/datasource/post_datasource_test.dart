@@ -16,7 +16,7 @@ void main(){
       firestore = FakeFirebaseFirestore();
       firebasePostDatasource = FirebasePostDatasource(
         crudFirebase: CrudFirebase.test(
-          table: Collections.posts, firestoreTest: firestore));
+          collection: Collections.posts, firestoreTest: firestore));
     });
 
     tearDown(() {

@@ -9,7 +9,7 @@ class FirebasePostDatasource implements IPostDatasource {
   static FirebasePostDatasource? _firebasePostDatasource;
   static FirebasePostDatasource get getInstance {
     _firebasePostDatasource ??= FirebasePostDatasource(
-      crudFirebase: CrudFirebase.getInstance..setTable(Collections.posts)
+      crudFirebase: CrudFirebase.getInstance..setcollection(Collections.posts)
     );
     return _firebasePostDatasource!;
   }
