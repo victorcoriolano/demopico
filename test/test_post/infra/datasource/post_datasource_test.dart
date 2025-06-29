@@ -17,7 +17,9 @@ void main(){
       firestore = FakeFirebaseFirestore();
       firebasePostDatasource = FirebasePostDatasource(
         crudFirebase: CrudFirebase.test(
-          collection: Collections.posts, firestoreTest: firestore));
+          collection: Collections.posts, firestoreTest: firestore
+        )
+      );
     });
 
     tearDown(() {
@@ -44,7 +46,9 @@ void main(){
      test("deve atualizar uma postagem ", ()  async{
       
       await firestore.collection("posts").doc("123").set(listDto[0].data);
-      final dto = await firebasePostDatasource.updatePost(listDto[0].copyWith(data: {"nome": "Tete da Silva"}));;
+      final dto = await firebasePostDatasource.updatePost(
+        listDto[0].copyWith(data: {"nome": "Tete da Silva"})
+      );
       expect(dto.data["nome"], "Tete da Silva");
     });
 
