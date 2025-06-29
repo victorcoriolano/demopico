@@ -84,6 +84,7 @@ class _UserPageState extends State<UserPage> {
   }
 
   Future<void> _loadUser() async {
+    debugPrint('Loading user...');
     final providerAuth = Provider.of<AuthUserProvider>(context, listen: false);
     final providerDatabase =
         Provider.of<UserDatabaseProvider>(context, listen: false);
@@ -91,6 +92,7 @@ class _UserPageState extends State<UserPage> {
     String? uid = providerAuth.pegarId();
 
     if (uid == null) {
+      debugPrint('User ID is null');
       setState(() {
         _isLoading = true;
       });
@@ -110,12 +112,16 @@ class _UserPageState extends State<UserPage> {
           ],
         ),
       );
+      setState(() {
+        _isLoading = false;
+      });
       return;
     }
     currentUserId = uid;
     await providerDatabase.retrieveUserProfileData(uid);
 
     if (providerDatabase.user == null) {
+      debugPrint('User not found');
       setState(() {
         _isLoading = true;
       });
@@ -240,6 +246,7 @@ class _UserPageState extends State<UserPage> {
                 ),
         ),
       ),
+      
     );
   }
 }
