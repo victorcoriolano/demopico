@@ -1,6 +1,5 @@
 import 'package:demopico/core/app/auth_wrapper.dart';
-import 'package:demopico/core/common/ui_context_extension.dart';
-import 'package:demopico/features/home/domain/model/forecast_weather_model.dart';
+
 import 'package:demopico/features/home/infra/dialog_page_route.dart';
 import 'package:demopico/features/home/presentation/widgets/weather_dialog.dart';
 import 'package:flutter/material.dart';
@@ -26,18 +25,17 @@ class TopLevelHomeRow extends StatefulWidget {
 class _TopLevelHomeRowState extends State<TopLevelHomeRow> {
   @override
   Widget build(BuildContext context) {
-    if (widget._initialWeatherInfo == null) {
-      return const SizedBox.shrink();
-    }
+    
     final bool isDay = widget._initialWeatherInfo?['isDay'] as bool? ?? true;
     final double temperature =
         (widget._initialWeatherInfo?['temperature'] as num?)?.toDouble() ?? 0.0;
     return Positioned(
-      top: 70,
+      top: 110,
       right: 10,
       left: 10,
       //Caixa que contém a row
       child: SizedBox(
+      
         width: MediaQuery.maybeSizeOf(context)!.width,
         height: 120,
         //Row
@@ -90,7 +88,7 @@ class _TopLevelHomeRowState extends State<TopLevelHomeRow> {
                     curve: Curves.fastEaseInToSlowEaseOut,
                   ),
               child: widget._userImage == null
-                  ? Icon(Icons.supervised_user_circle, size: 64)
+                  ? Icon(Icons.supervised_user_circle, size: 64, color: Colors.black,)
                   : CircleAvatar(
                       radius: 32,
                       backgroundImage: NetworkImage(widget._userImage!),
