@@ -69,7 +69,6 @@ class _HubUpperSheetState extends State<HubUpperSheet>
   @override
   void dispose() {
     _controller.dispose();
-    _loadAllPosts();
     super.dispose();
   }
 
