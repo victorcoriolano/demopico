@@ -4,6 +4,7 @@ import 'package:demopico/core/common/data/enums/collections.dart';
 import 'package:demopico/features/external/datasources/firebase/remote/firestore.dart';
 import 'package:demopico/features/external/interfaces/i_crud_datasource.dart';
 import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
+import 'package:flutter/foundation.dart';
 
 class CrudFirebase  implements ICrudDataSource<FirebaseDTO> {
 
@@ -72,15 +73,39 @@ class CrudFirebase  implements ICrudDataSource<FirebaseDTO> {
   }
   
   @override
-  Future<List<FirebaseDTO>> readAll() {
-    // TODO: implement readAll
-    throw UnimplementedError();
+  Future<List<FirebaseDTO>> readAll() async {
+    try{
+      final data = await _firestore.collection(collection.name).get();
+      return data.docs.map((doc) =>
+         FirebaseDTO(
+          id: doc.id,
+          data: doc.data() 
+        )).toList();
+      
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorsMapper.map(e);
+    } catch (e, st) {
+      debugPrint("${e.toString()} , ${st.toString()}");
+      rethrow;
+    }
   }
+
   
   @override
   Stream<List<FirebaseDTO>> watch() {
-    // TODO: implement watch
-    throw UnimplementedError();
-  }
+    try {
+      return _firestore.collection(collection.name).snapshots().map((snapshot) =>
+        snapshot.docs.map((doc) => FirebaseDTO(
+          id: doc.id,
+          data: doc.data()
+        )).toList()
+      );
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorsMapper.map(e);
+    } catch (e, st) {
+      debugPrint("${e.toString()}, ${st.toString()}");
 
+      rethrow;
+    }
+  }
 }
