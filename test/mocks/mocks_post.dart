@@ -38,5 +38,5 @@ Post mockPost2 = Post(
 
   final listPost = [mockPost1, mockPost2];
 
-  final listDto = listPost.map(
+  final   listDto = listPost.map(
     (post) => mapper.toDTO(post)).toList();

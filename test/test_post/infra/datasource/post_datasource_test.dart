@@ -3,6 +3,7 @@ import 'package:demopico/core/common/data/enums/collections.dart';
 import 'package:demopico/features/external/datasources/firebase/remote/crud_firebase.dart';
 import 'package:demopico/features/profile/infra/datasource/firebase_post_datasource.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:test/test.dart';
 
 import '../../../mocks/mocks_post.dart';
@@ -30,8 +31,14 @@ void main(){
     });
 
     test("deve retornar uma lista de postagens", ()  async{
-      // TODO: implement test
-      
+      await Future.wait([
+        firestore.collection("posts").doc("123").set(listDto[0].data),
+        firestore.collection("posts").doc("456").set(listDto[1].data),
+      ]).then((value) => debugPrint("Criou os documentos"));
+
+      final list = await firebasePostDatasource.getPosts(mockPost1.userId);
+      expect(list.length, equals(2));
+      expect(list[0].data["nome"], "João Silva");
     });
 
      test("deve atualizar uma postagem ", ()  async{

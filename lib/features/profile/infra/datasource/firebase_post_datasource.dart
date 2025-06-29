@@ -38,7 +38,7 @@ class FirebasePostDatasource implements IPostDatasource {
   Future<List<FirebaseDTO>> getPosts(String id) async {
     final query = await crudFirebase.firestore
       .collection(crudFirebase.collection.name)
-      .where("idUser", isEqualTo: id)
+      .where("userId", isEqualTo: id)
       .get();
 
     return query.docs.map(
