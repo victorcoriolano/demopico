@@ -20,12 +20,12 @@ class UserDatabaseProvider extends ChangeNotifier {
 
   Future<void> retrieveUserProfileData(String uid) async {
     try{
+      debugPrint("pegando dados do usuario");
     _user = await pegarDadosUserUc.getDados(uid);
     }catch (e) {
       debugPrint("erro ao pegar dados do usuario: $e");
       errorMessage = e.toString();
     }
-
     notifyListeners();
   }
 
