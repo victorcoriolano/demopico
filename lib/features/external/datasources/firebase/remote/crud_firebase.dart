@@ -9,21 +9,23 @@ import 'package:flutter/foundation.dart';
 class CrudFirebase  implements ICrudDataSource<FirebaseDTO> {
 
   Collections collection;
-  final FirebaseFirestore _firestore;
+  final FirebaseFirestore firestore;
   
 
+  //singleton
   static CrudFirebase? _instance;
   static CrudFirebase get getInstance {
     _instance ??= CrudFirebase(collection: Collections.users, firestore: Firestore.getInstance);
     return _instance!;
   }
 
+  //for testing
   CrudFirebase.test({
     required this.collection, 
-    required FirebaseFirestore firestoreTest}): _firestore = firestoreTest;
+    required FirebaseFirestore firestoreTest}): firestore = firestoreTest;
 
-  CrudFirebase({required this.collection, required FirebaseFirestore firestore}) 
-  : _firestore = firestore;
+  //constructor
+  CrudFirebase({required this.collection, required this.firestore});
     
 
   
@@ -35,7 +37,7 @@ class CrudFirebase  implements ICrudDataSource<FirebaseDTO> {
   @override
   Future<FirebaseDTO> create(FirebaseDTO model) async{
     try {
-      await _firestore.collection(collection.name).add(model.data);
+      await firestore.collection(collection.name).add(model.data);
       return model;
     } on FirebaseException catch (e) {
       throw FirebaseErrorsMapper.map(e);
@@ -45,7 +47,7 @@ class CrudFirebase  implements ICrudDataSource<FirebaseDTO> {
   @override
   Future<FirebaseDTO> read(String id)async{
     try {
-      final docRf = await _firestore.collection(collection.name).doc(id).get();
+      final docRf = await firestore.collection(collection.name).doc(id).get();
       return FirebaseDTO(
         id: id, 
         data: docRf.data() as Map<String, dynamic>);
@@ -57,7 +59,7 @@ class CrudFirebase  implements ICrudDataSource<FirebaseDTO> {
   @override
   Future<FirebaseDTO> update(FirebaseDTO firebaseDto) async {
     try {
-      await _firestore.collection(collection.name).doc(firebaseDto.id).update(firebaseDto.data);
+      await firestore.collection(collection.name).doc(firebaseDto.id).update(firebaseDto.data);
       return firebaseDto;
     } on FirebaseException catch (e) {
       throw FirebaseErrorsMapper.map(e);
@@ -66,16 +68,16 @@ class CrudFirebase  implements ICrudDataSource<FirebaseDTO> {
   @override
   Future<void> delete(String id) async {
     try {
-      await _firestore.collection(collection.name).doc(id).delete();
+      await firestore.collection(collection.name).doc(id).delete();
     } on FirebaseException catch (e) {
       throw FirebaseErrorsMapper.map(e);
     }
   }
   
   @override
-  Future<List<FirebaseDTO>> readAll() async {
+  Future<List<FirebaseDTO>>   readAll() async {
     try{
-      final data = await _firestore.collection(collection.name).get();
+      final data = await firestore.collection(collection.name).get();
       return data.docs.map((doc) =>
          FirebaseDTO(
           id: doc.id,
@@ -94,7 +96,7 @@ class CrudFirebase  implements ICrudDataSource<FirebaseDTO> {
   @override
   Stream<List<FirebaseDTO>> watch() {
     try {
-      return _firestore.collection(collection.name).snapshots().map((snapshot) =>
+      return firestore.collection(collection.name).snapshots().map((snapshot) =>
         snapshot.docs.map((doc) => FirebaseDTO(
           id: doc.id,
           data: doc.data()
@@ -104,7 +106,6 @@ class CrudFirebase  implements ICrudDataSource<FirebaseDTO> {
       throw FirebaseErrorsMapper.map(e);
     } catch (e, st) {
       debugPrint("${e.toString()}, ${st.toString()}");
-
       rethrow;
     }
   }
