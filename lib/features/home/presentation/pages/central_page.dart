@@ -42,11 +42,16 @@ class _CentralPageState extends State<CentralPage> {
   }
 
   void _loadWeather() async {
-    await Provider.of<OpenWeatherProvider>(context, listen: false)
+    try{
+      await Provider.of<OpenWeatherProvider>(context, listen: false)
         .fetchWeatherData();
-    debugPrint('Weather data fetch called sucessfuly in HomePage');
-    debugPrint(
-        'Value ${Provider.of<OpenWeatherProvider>(context, listen: false).value}');
+        debugPrint('Weather data fetch called sucessfuly in HomePage');
+        _isWeatherLoaded = false;
+    } catch (e) {
+      debugPrint('Error fetching weather data: $e');
+      _isWeatherLoaded = false;
+    }
+    
   }
 
   Future<void> _loadUser() async {
@@ -77,8 +82,7 @@ class _CentralPageState extends State<CentralPage> {
                 Consumer<OpenWeatherProvider>(
                   builder: (context, weatherProvider, child) {
                     //Carrega os dados do clima de acordo com o estado
-                    if (weatherProvider.isLoading ||
-                        weatherProvider.value == null) {
+                    if (weatherProvider.isLoading) {
                       return Positioned(
                           top: 110,
                           left: 5,
@@ -88,7 +92,7 @@ class _CentralPageState extends State<CentralPage> {
                           )));
                     } else if (weatherProvider.errorMessage != null) {
                       return Positioned(
-                        top: 70,
+                        top: 110,
                         left: 5,
                         child: Center(
                           child: Text(
@@ -123,8 +127,6 @@ class _CentralPageState extends State<CentralPage> {
   @override
   void dispose() {
     scrollController.dispose();
-    _userDatabaseProvider.dispose();
-    _authUserProvider.dispose();
     debugPrint('CentralPage disposed');
     super.dispose();
   }

@@ -9,7 +9,7 @@ class FirebasePostDatasource implements IPostDatasource {
   static FirebasePostDatasource? _firebasePostDatasource;
   static FirebasePostDatasource get getInstance {
     _firebasePostDatasource ??= FirebasePostDatasource(
-      crudFirebase: CrudFirebase.getInstance..setTable(Collections.posts)
+      crudFirebase: CrudFirebase.getInstance..setcollection(Collections.posts)
     );
     return _firebasePostDatasource!;
   }
@@ -36,8 +36,17 @@ class FirebasePostDatasource implements IPostDatasource {
 
   @override
   Future<List<FirebaseDTO>> getPosts(String id) async {
-    // TODO: implement getPosts
-    throw UnimplementedError();
+    final query = await crudFirebase.firestore
+      .collection(crudFirebase.collection.name)
+      .where("userId", isEqualTo: id)
+      .get();
+
+    return query.docs.map(
+      (doc) => FirebaseDTO(
+        id: doc.id,
+        data: doc.data()
+      )
+    ).toList();
   }
   
   @override
