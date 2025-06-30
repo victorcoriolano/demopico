@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:demopico/core/common/data/data_sources/remote/firebase_file_remote_datasource.dart';
 import 'package:demopico/core/common/data/interfaces/datasource/i_upload_task_datasource.dart';
-import 'package:demopico/core/common/data/models/upload_file_model.dart';
+import 'package:demopico/core/common/data/models/file_model.dart';
 import 'package:demopico/core/common/data/models/upload_result_file_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_test/flutter_test.dart';

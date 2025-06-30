@@ -1,7 +1,7 @@
 
 
 import 'package:demopico/core/common/data/interfaces/repository/i_pick_image_repository.dart';
-import 'package:demopico/core/common/data/models/upload_file_model.dart';
+import 'package:demopico/core/common/data/models/file_model.dart';
 import 'package:demopico/core/common/data/services/image_picker_service.dart';
 import 'package:demopico/core/common/errors/domain_failures.dart';
 
@@ -16,7 +16,7 @@ class PickFileUC {
 
   PickFileUC({required this.repositoryIMP});
 
-  Future<List<FileModel>> pick() async {
+  Future<List<FileModel>> execute() async {
     try {
       final files = await repositoryIMP.pickMultipleMedia();
       
