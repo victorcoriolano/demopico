@@ -1,8 +1,8 @@
-import 'dart:io';
+import 'package:demopico/core/common/data/models/file_model.dart';
 import 'package:flutter/material.dart';
 
 class MediaPreviewList extends StatelessWidget {
-  final List<String> mediaPaths;
+  final List<FileModel> mediaPaths;
   final Function(int) onRemoveMedia;
 
   const MediaPreviewList({
@@ -24,9 +24,7 @@ class MediaPreviewList extends StatelessWidget {
         itemBuilder: (context, index) {
           final mediaPath = mediaPaths[index];
           // Uma verificação simples para saber se é imagem ou vídeo
-          final isImage = mediaPath.toLowerCase().endsWith('.jpg') ||
-              mediaPath.toLowerCase().endsWith('.png') ||
-              mediaPath.toLowerCase().endsWith('.jpeg');
+          final isImage = mediaPath.isImage();
 
           return Stack(
             children: [
@@ -41,8 +39,8 @@ class MediaPreviewList extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: isImage
-                      ? Image.file(
-                          File(mediaPath),
+                      ? Image.memory(
+                          mediaPath.bytes,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) =>
                               const Center(child: Icon(Icons.broken_image)),
