@@ -1,5 +1,6 @@
 import 'package:demopico/core/app/home_page.dart';
 import 'package:demopico/core/common/widgets/back_widget.dart';
+import 'package:demopico/features/profile/presentation/pages/create_post_page.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_description_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_navigator_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_posts_widget.dart';
@@ -235,18 +236,21 @@ class _UserPageState extends State<UserPage> {
                           ),
                         ),
                       ),
-                      Container(
-                        height: 60,
-                        padding: const EdgeInsets.all(0),
-                        margin: const EdgeInsets.all(0),
-                        child: const ProfileNavigatorWidget(),
-                      ),
+                      
                     ],
                   ),
                 ),
         ),
       ),
-      
+      bottomNavigationBar: ProfileNavigatorWidget(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(
+            builder: (context) => CreatePostPage()));
+        },
+        tooltip: "Criar Postagem",
+        child: Icon(Icons.add),
+      ),
     );
   }
 }
