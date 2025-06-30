@@ -1,6 +1,4 @@
-import 'package:demopico/features/profile/presentation/pages/create_post_page.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class ProfileNavigatorWidget extends StatefulWidget {
   const ProfileNavigatorWidget({super.key});
