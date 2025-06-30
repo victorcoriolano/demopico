@@ -54,7 +54,7 @@ void main() {
         fileName: "teste.png",
         filePath: '/teste/teste.png',
         bytes: Uint8List.fromList([1, 2, 3]),
-        contentType: 'image/png',
+        contentType: ContentType.png,
       );
 
       
