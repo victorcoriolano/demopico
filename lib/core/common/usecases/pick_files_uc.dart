@@ -16,9 +16,9 @@ class PickFileUC {
 
   PickFileUC({required this.repositoryIMP});
 
-  Future<List<FileModel>> pick() async {
+  Future<List<FileModel>> execute() async {
     try {
-      final files = await repositoryIMP.pickImages();
+      final files = await repositoryIMP.pickMultipleMedia();
       
       if (files.length > 3) throw FileLimitExceededFailure();
 

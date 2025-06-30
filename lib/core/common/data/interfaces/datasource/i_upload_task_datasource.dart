@@ -1,7 +1,7 @@
 
 
 //classe para representar o upload de um arquivo
-import 'package:demopico/core/common/data/models/upload_file_model.dart';
+import 'package:demopico/core/common/data/models/file_model.dart';
 import 'package:demopico/core/common/data/models/upload_result_file_model.dart';
 
 abstract class UploadTaskInterface {
@@ -13,7 +13,7 @@ abstract class UploadTaskInterface {
 //interface para armazenamento remoto
 abstract class IFileRemoteDataSource {
   /// Dispara o upload e devolve a abstração.
-  List<UploadTaskInterface> uploadFile(List<UploadFileModel> file);
+  List<UploadTaskInterface> uploadFile(List<FileModel> file);
 
   Future<void> deleteFile(String path);
 }

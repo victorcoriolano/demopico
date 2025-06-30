@@ -1,6 +1,6 @@
 
 
-  import 'package:demopico/core/common/data/models/upload_file_model.dart';
+  import 'package:demopico/core/common/data/models/file_model.dart';
 import 'package:demopico/core/common/data/services/image_picker_service.dart';
 import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
   import 'package:flutter_test/flutter_test.dart';
@@ -56,7 +56,7 @@ import 'package:image_picker_platform_interface/image_picker_platform_interface.
       test("Deve retornar a lista de imagem como File", () async {
         final service = ImagePickerService();
         final result = await service.pickImages();
-        expect(result, isA<List<UploadFileModel>>());
+        expect(result, isA<List<FileModel>>());
         expect(result.length, 2); // Verifica se retorna 2 arquivos
       });
 

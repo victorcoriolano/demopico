@@ -1,7 +1,7 @@
 
 import 'dart:async';
 
-import 'package:demopico/core/common/data/models/upload_file_model.dart';
+import 'package:demopico/core/common/data/models/file_model.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
@@ -45,7 +45,7 @@ class AddPicoProvider extends ChangeNotifier{
 
   String? errosImages;
 
-  List<UploadFileModel> files = [];
+  List<FileModel> files = [];
 
   double progress = 0.0;
 

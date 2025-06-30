@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:demopico/core/common/data/data_sources/remote/firebase_file_remote_datasource.dart';
 import 'package:demopico/core/common/data/interfaces/datasource/i_upload_task_datasource.dart';
-import 'package:demopico/core/common/data/models/upload_file_model.dart';
+import 'package:demopico/core/common/data/models/file_model.dart';
 import 'package:demopico/core/common/data/models/upload_result_file_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -41,7 +41,7 @@ void main() {
     late FakeUploadTask fakeUploadTask;
     late MockTaskSnapshot mockTaskSnapshot;
     late MockStorageReference mockStorageReference;
-    late UploadFileModel fileMock;
+    late FileModel fileMock;
 
     setUp(() {
       mockFirebaseStorage = MockFirebaseStorage();
@@ -50,11 +50,11 @@ void main() {
       mockStorageReference = MockStorageReference();
       firebaseFilesRemoteDatasource = FirebaseFileRemoteDatasource(firebaseStorage: mockFirebaseStorage);
 
-      fileMock = UploadFileModel(
+      fileMock = FileModel(
         fileName: "teste.png",
         filePath: '/teste/teste.png',
         bytes: Uint8List.fromList([1, 2, 3]),
-        contentType: 'image/png',
+        contentType: ContentType.png,
       );
 
       

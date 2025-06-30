@@ -14,6 +14,7 @@ import 'package:demopico/features/mapa/presentation/controllers/spot_controller.
 import 'package:demopico/features/mapa/presentation/controllers/favorite_spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
 import 'package:demopico/features/profile/presentation/pages/user_page.dart';
+import 'package:demopico/features/profile/presentation/provider/post_creation_provider.dart';
 import 'package:demopico/features/user/infra/services/user_auth_firebase_service.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
@@ -53,6 +54,7 @@ class MyAppWidget extends StatelessWidget {
         ),
         ChangeNotifierProvider(create: (_) => HomeProvider.getInstance),
         ChangeNotifierProvider(create: (_) => CommentController.getInstance),
+        ChangeNotifierProvider(create: (_) => PostCreationProvider()),
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,

@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:demopico/core/common/data/interfaces/datasource/i_upload_task_datasource.dart';
-import 'package:demopico/core/common/data/models/upload_file_model.dart';
+import 'package:demopico/core/common/data/models/file_model.dart';
 import 'package:demopico/core/common/data/models/upload_result_file_model.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 
@@ -21,7 +21,7 @@ class FirebaseFileRemoteDatasource implements IFileRemoteDataSource {
   FirebaseFileRemoteDatasource({required this.firebaseStorage});
 
   @override
-  List<UploadTaskInterface> uploadFile(List<UploadFileModel> files) {
+  List<UploadTaskInterface> uploadFile(List<FileModel> files) {
     try{
       final String data = DateTime.now().toIso8601String();
       final tasks = files.map((file) {
