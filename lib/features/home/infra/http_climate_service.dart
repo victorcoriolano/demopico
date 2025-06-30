@@ -33,9 +33,12 @@ class HttpClimateService {
       } else if (response.statusCode == 403) {
         debugPrint('GET Request Failed. Status code: ${response.statusCode}');
         throw Exception('The Access is forbidden, check your API key');
-      } else {
+      } else if (response.statusCode == 401){
         debugPrint('GET Request Failed. Status code: ${response.statusCode}');
-        throw Exception('GET Request Failed.');
+        throw Exception('401: UNAUTHORIZED - ${response.body}');
+      } else{
+        debugPrint('GET Request Failed. Status code: ${response.statusCode}');
+        throw Exception("Error: ${response.statusCode}, ${response.body}");
       }
     } catch (e) {
       debugPrint(e.toString());
