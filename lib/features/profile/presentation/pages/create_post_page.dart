@@ -89,7 +89,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
                 // Pré-visualização das mídias adicionadas
                 MediaPreviewList(
-                  mediaPaths: provider.mediaPaths,
+                  mediaPaths: provider.filesModels,
                   onRemoveMedia: provider.removeMedia,
                 ),
                 const SizedBox(height: 24),
