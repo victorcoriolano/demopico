@@ -1,4 +1,6 @@
+import 'package:demopico/features/profile/presentation/pages/create_post_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ProfileNavigatorWidget extends StatefulWidget {
   const ProfileNavigatorWidget({super.key});
@@ -15,8 +17,7 @@ class _ProfileNavigatorWidgetState extends State<ProfileNavigatorWidget> {
   Widget build(BuildContext context) {
     return SizedBox( // <- controla o tamanho do scaffold (opcional)
       height: 60, 
-      child: Scaffold(
-        bottomNavigationBar: BottomNavigationBar(
+      child:  BottomNavigationBar(
           backgroundColor: Colors.white,
           currentIndex: _currentIndex,
           showUnselectedLabels: false,
@@ -71,7 +72,6 @@ class _ProfileNavigatorWidgetState extends State<ProfileNavigatorWidget> {
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 }
