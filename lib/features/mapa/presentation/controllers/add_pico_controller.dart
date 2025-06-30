@@ -45,7 +45,7 @@ class AddPicoProvider extends ChangeNotifier{
 
   String? errosImages;
 
-  List<UploadFileModel> files = [];
+  List<FileModel> files = [];
 
   double progress = 0.0;
 

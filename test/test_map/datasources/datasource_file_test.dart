@@ -41,7 +41,7 @@ void main() {
     late FakeUploadTask fakeUploadTask;
     late MockTaskSnapshot mockTaskSnapshot;
     late MockStorageReference mockStorageReference;
-    late UploadFileModel fileMock;
+    late FileModel fileMock;
 
     setUp(() {
       mockFirebaseStorage = MockFirebaseStorage();
@@ -50,7 +50,7 @@ void main() {
       mockStorageReference = MockStorageReference();
       firebaseFilesRemoteDatasource = FirebaseFileRemoteDatasource(firebaseStorage: mockFirebaseStorage);
 
-      fileMock = UploadFileModel(
+      fileMock = FileModel(
         fileName: "teste.png",
         filePath: '/teste/teste.png',
         bytes: Uint8List.fromList([1, 2, 3]),

@@ -19,7 +19,7 @@ class SaveImageUC{
 
   SaveImageUC({required this.saveImageRepositoryIMP});
 
-  List<UploadResultFileModel> saveImage(List<UploadFileModel> files) {
+  List<UploadResultFileModel> saveImage(List<FileModel> files) {
     final uploadTask = saveImageRepositoryIMP.saveFiles(files);
     return uploadTask.map((task) => task.upload).toList();
   }

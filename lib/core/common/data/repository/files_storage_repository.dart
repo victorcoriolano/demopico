@@ -20,7 +20,7 @@ class FilesStorageRepository implements ISaveFileRepository {
   FilesStorageRepository(this.dataSource);
 
   @override
-  List<UploadTaskInterface> saveFiles(List<UploadFileModel> files) {
+  List<UploadTaskInterface> saveFiles(List<FileModel> files) {
       return dataSource.uploadFile(files);
   }
 

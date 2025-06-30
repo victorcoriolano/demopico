@@ -16,7 +16,7 @@ class PickFileUC {
 
   PickFileUC({required this.repositoryIMP});
 
-  Future<List<UploadFileModel>> pick() async {
+  Future<List<FileModel>> pick() async {
     try {
       final files = await repositoryIMP.pickImages();
       
