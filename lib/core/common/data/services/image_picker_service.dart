@@ -35,7 +35,9 @@ class ImagePickerService implements IPickFileRepository {
             fileName: xFile.name,
             filePath: xFile.path,
             bytes: bytes,
-            contentType: xFile.mimeType!,
+            contentType: xFile.mimeType != null 
+              ? ContentTypeExtension.fromMime(xFile.mimeType!)
+              : ContentType.unavailable,
           );
         }).toList());
         return uploadModel;
@@ -62,7 +64,9 @@ class ImagePickerService implements IPickFileRepository {
             fileName: pickedFile.name,
             filePath: pickedFile.path,
             bytes: bytes,
-            contentType: pickedFile.mimeType!,
+            contentType: pickedFile.mimeType != null 
+              ? ContentTypeExtension.fromMime(pickedFile.mimeType!)
+              : ContentType.unavailable,
       );
       
     } catch (e) {
@@ -86,7 +90,9 @@ class ImagePickerService implements IPickFileRepository {
           fileName: xFile.name,
           filePath: xFile.path,
           bytes: bytes,
-          contentType: xFile.mimeType!,
+          contentType: xFile.mimeType != null 
+            ? ContentTypeExtension.fromMime(xFile.mimeType!)
+            : ContentType.unavailable,
         );
       }).toList());
 
