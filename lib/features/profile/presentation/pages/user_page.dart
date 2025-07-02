@@ -22,7 +22,7 @@ class UserPage extends StatefulWidget {
   State<UserPage> createState() => _UserPageState();
 }
 
-class _UserPageState extends State<UserPage> {
+class _UserPageState extends State<UserPage> with SingleTickerProviderStateMixin {
   late UserM? user;
   String? currentUserId;
   bool _isVisible = true;
@@ -33,6 +33,7 @@ class _UserPageState extends State<UserPage> {
 
   final ScrollController _scrollController = ScrollController();
   final TextEditingController bioController = TextEditingController();
+  late final TabController _tabController;
 
   @override
   void initState() {
@@ -40,6 +41,15 @@ class _UserPageState extends State<UserPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadUser();
     });
+    _tabController = TabController(length: 3, vsync: this);
+
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) {
+        // Atualiza o estado quando a aba muda
+        setState(() {});
+      }
+    });
+
     _scrollController.addListener(() {
       final currentOffset = _scrollController.offset;
       final direction = _scrollController.position.userScrollDirection;
@@ -80,6 +90,7 @@ class _UserPageState extends State<UserPage> {
 
   @override
   void dispose() {
+    _tabController.dispose();
     _scrollController.dispose();
     super.dispose();
   }
@@ -152,93 +163,88 @@ class _UserPageState extends State<UserPage> {
     }
   }
 
+
+
+  
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
+    
     return Scaffold(
       body: Consumer<UserDatabaseProvider>(
         builder: (context, provider, child) => SafeArea(
           child: _isLoading
               ? const Center(child: CircularProgressIndicator())
-              : Container(
+              : ListView(
                   padding: const EdgeInsets.all(0),
-                  margin: const EdgeInsets.all(0),
-                  height: double.infinity,
-                  color: const Color.fromARGB(80, 243, 240, 240),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: screenHeight * 0.35,
-                        padding: const EdgeInsets.all(0),
-                        margin: const EdgeInsets.all(0),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  const CustomBackButton(
-                                    iconSize: 30,
-                                    destination: HomePage(),
-                                  ),
-                                  Text(
-                                    user!.name ??
-                                        'Nome de usuário não encontrado...',
-                                    style: const TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  ProfileConfigureWidget(
-                                      bioController: bioController),
-                                ],
-                              ),
-                            ),
-                            ProfileTopSideDataWidget(
-                              avatarUrl: user?.pictureUrl,
-                              backgroundUrl: user?.backgroundPicture,
-                            ),
-
-                              ProfileStatsWidget(
-                                followers: user?.conexoes ?? 0,
-                                contributions: user?.picosAdicionados ?? 0,
-                              ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(0),
-                        margin: const EdgeInsets.all(0),
-                        height: screenHeight * 0.54,
-                        child: SingleChildScrollView(
-                          controller: _scrollController,
-                          child: Column(
+                  
+                  children:[ Container(
+                    color: const Color.fromARGB(255, 236, 235, 235),
+                    padding: const EdgeInsets.all(0),
+                    margin: const EdgeInsets.all(0),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 4.0),
+                          child: Row(
+                            mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                            
-                              AnimatedOpacity(
-                                opacity: _isVisible ? 1.0 : 0.0,
-                                duration: const Duration(milliseconds: 400),
-                                child: ProfileDescriptionWidget(
-                                  description: user?.description,
-                                ),
+                              const CustomBackButton(
+                                iconSize: 30,
+                                destination: HomePage(),
                               ),
-                              Container(
-                                padding: const EdgeInsets.all(0),
-                                height: screenHeight * 0.53,
-                                child: const ProfilePostsWidget(),
+                              Text(
+                                user!.name ??
+                                    'Nome de usuário não encontrado...',
+                                style: const TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold),
                               ),
+                              ProfileConfigureWidget(
+                                  bioController: bioController),
                             ],
                           ),
                         ),
-                      ),
-                      
-                    ],
+                        ProfileTopSideDataWidget(
+                          avatarUrl: user?.pictureUrl,
+                          backgroundUrl: user?.backgroundPicture,
+                        ),
+                  
+                          ProfileStatsWidget(
+                            followers: user?.conexoes ?? 0,
+                            contributions: user?.picosAdicionados ?? 0,
+                          ),
+                      ],
+                    ),
                   ),
+                  Container(
+                    padding: const EdgeInsets.all(0),
+                    margin: const EdgeInsets.all(0),
+                    
+                    child: SingleChildScrollView(
+                      controller: _scrollController,
+                      child: Column(
+                        children: [
+                        
+                          AnimatedOpacity(
+                            opacity: _isVisible ? 1.0 : 0.0,
+                            duration: const Duration(milliseconds: 400),
+                            child: ProfileDescriptionWidget(
+                              description: user?.description,
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.all(0),
+                            height:  screenHeight * 0.53,
+                            child: ProfilePostsWidget(controller: _tabController,),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),]
                 ),
         ),
       ),
@@ -249,7 +255,13 @@ class _UserPageState extends State<UserPage> {
             builder: (context) => CreatePostPage()));
         },
         tooltip: "Criar Postagem",
-        child: Icon(Icons.add),
+        child: Icon(
+          _tabController.index == 0
+              ? Icons.add
+              : _tabController.index == 1
+                  ? Icons.video_call
+                  : Icons.map_outlined,
+        ),
       ),
     );
   }
