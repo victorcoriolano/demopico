@@ -49,9 +49,9 @@ class MediaPreviewList extends StatelessWidget {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.play_circle_fill,
+                              Icon(Icons.construction,
                                   size: 30, color: Colors.blueAccent),
-                              Text('Vídeo', style: TextStyle(fontSize: 12)),
+                              Text('Esta funcionalidade está sendo implementada', style: TextStyle(fontSize: 12)),
                             ],
                           ),
                         ),
