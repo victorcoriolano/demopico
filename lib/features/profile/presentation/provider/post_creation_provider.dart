@@ -45,6 +45,7 @@ class PostCreationProvider extends ChangeNotifier {
     try{
       final files = await pickFileUC.execute();
       filesModels.addAll(files);
+      notifyListeners();
       debugPrint("arquivos selecionados com sucesso");
     } catch (e) {
       debugPrint("Erro ao pegar arquivos");
