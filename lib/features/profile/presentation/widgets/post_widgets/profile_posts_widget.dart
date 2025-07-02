@@ -2,16 +2,17 @@ import 'package:demopico/features/profile/presentation/widgets/post_widgets/cont
 import 'package:flutter/material.dart';
 
 class ProfilePostsWidget extends StatelessWidget {
-  const ProfilePostsWidget({super.key});
+  final TabController? controller;
+  const ProfilePostsWidget({super.key,required this.controller});
 
   @override
   Widget build(BuildContext context) {
-    return const DefaultTabController(
-      initialIndex: 0,
-      length: 3,
-      child: Column(
+    return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 236, 235, 235),
+      body: Column(
         children: [
           TabBar(
+            controller: controller,
             padding: EdgeInsets.all(0),
             labelColor: Color.fromARGB(255, 139, 0, 0),
             dividerColor: Color.fromARGB(64, 0, 0, 0),
@@ -23,9 +24,11 @@ class ProfilePostsWidget extends StatelessWidget {
               Tab(icon: Icon(Icons.map, size: 30)),
               
             ],
+            
           ),
           Expanded(
             child: TabBarView(
+              controller: controller,
               children: <Widget>[
                 ContainerPostsWidget(),
                 Center(child: Text("It's rainy here")),
