@@ -83,7 +83,7 @@ void main() {
       expect(result, isA<List<UploadTaskInterface>>());
 
       //verificando se o resultado contem uma uploadResultFileModel
-      expect(result[0].upload, isA<UploadResultFileModel>());
+      expect(result[0].uploadStream, isA<Stream<UploadStateFileModel>>());
 
       
     });
