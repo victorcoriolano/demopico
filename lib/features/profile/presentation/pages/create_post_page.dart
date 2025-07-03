@@ -3,6 +3,7 @@ import 'package:demopico/features/profile/presentation/widgets/create_post_widge
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/midia_input_card.dart';
 import 'package:demopico/features/user/domain/enums/type_post.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class CreatePostPage extends StatefulWidget {
@@ -106,7 +107,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                   icon: const Icon(Icons.location_on),
                   label: Text(
                     provider.selectedSpotId != null
-                        ? 'Pico Selecionado: ${provider.selectedSpotId}' // Aqui você mostraria o nome do pico
+                        ? 'Pico Selecionado: ${provider.selectedSpotId}' 
                         : 'Linkar a um Pico no Mapa',
                   ),
                   style: ElevatedButton.styleFrom(
@@ -143,6 +144,12 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 // Botão de Publicar
                 ElevatedButton(
                   onPressed: () async {
+                    if(provider.hasError){
+                      Get.snackbar(
+                        "Erro", 
+                        provider.messageError,
+                      );
+                    }
                     
                   },
                   style: ElevatedButton.styleFrom(
