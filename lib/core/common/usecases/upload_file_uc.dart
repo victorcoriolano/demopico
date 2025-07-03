@@ -6,21 +6,21 @@ import 'package:demopico/core/common/files/interfaces/repository/i_save_image_re
 
 
 
-class SaveImageUC{
+class UploadFileUC{
 
-  static SaveImageUC? _saveImageUC;
+  static UploadFileUC? _saveImageUC;
 
- static SaveImageUC  get getInstance{
-    _saveImageUC ??= SaveImageUC(saveImageRepositoryIMP: FilesStorageRepository.getInstance);
+ static UploadFileUC  get getInstance{
+    _saveImageUC ??= UploadFileUC(saveImageRepositoryIMP: FilesStorageRepository.getInstance);
     return _saveImageUC!;
   } 
 
   final ISaveFileRepository saveImageRepositoryIMP;
 
-  SaveImageUC({required this.saveImageRepositoryIMP});
+  UploadFileUC({required this.saveImageRepositoryIMP});
 
-  List<UploadResultFileModel> saveImage(List<FileModel> files) {
+  List<Stream<UploadStateFileModel>> saveFiles(List<FileModel> files) {
     final uploadTask = saveImageRepositoryIMP.saveFiles(files);
-    return uploadTask.map((task) => task.upload).toList();
+    return uploadTask.map((task) => task.uploadStream).toList();
   }
 }
