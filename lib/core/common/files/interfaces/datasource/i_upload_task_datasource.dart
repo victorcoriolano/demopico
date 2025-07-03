@@ -6,7 +6,7 @@ import 'package:demopico/core/common/files/models/upload_result_file_model.dart'
 
 abstract class UploadTaskInterface {
   //assinarura do retorno da model 
-  UploadResultFileModel get upload;
+  Stream<UploadStateFileModel> get uploadStream;
 }
 
 
