@@ -1,8 +1,8 @@
 
-import 'package:demopico/core/common/data/models/file_model.dart';
-import 'package:demopico/core/common/data/models/upload_result_file_model.dart';
-import 'package:demopico/core/common/data/repository/files_storage_repository.dart';
-import 'package:demopico/core/common/data/interfaces/repository/i_save_image_repository.dart';
+import 'package:demopico/core/common/files/models/file_model.dart';
+import 'package:demopico/core/common/files/models/upload_result_file_model.dart';
+import 'package:demopico/core/common/files/repository/files_storage_repository.dart';
+import 'package:demopico/core/common/files/interfaces/repository/i_save_image_repository.dart';
 
 
 

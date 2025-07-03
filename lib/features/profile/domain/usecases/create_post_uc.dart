@@ -10,7 +10,8 @@ class CreatePostUc {
 
  CreatePostUc({required PostRepository postRepository}) : _postRepository = postRepository;
 
- Future<void> execute(Post newPost) async {
-    await _postRepository.createPost(newPost);
+  Future<Post> execute(Post newPost) async {
+    final post = await _postRepository.createPost(newPost);
+    return post;
   }
 }

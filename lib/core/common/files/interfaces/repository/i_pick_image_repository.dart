@@ -1,5 +1,5 @@
 
-import 'package:demopico/core/common/data/models/file_model.dart';
+import 'package:demopico/core/common/files/models/file_model.dart';
 
 abstract interface class IPickFileRepository {
   Future<List<FileModel>> pickMultipleMedia();

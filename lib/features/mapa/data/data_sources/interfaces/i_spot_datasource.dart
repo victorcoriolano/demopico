@@ -1,5 +1,5 @@
 
-import 'package:demopico/core/common/data/dtos/firebase_dto.dart';
+import 'package:demopico/core/common/files/dtos/firebase_dto.dart';
 import 'package:demopico/features/mapa/domain/entities/filters.dart';
 
 abstract class ISpotRemoteDataSource {

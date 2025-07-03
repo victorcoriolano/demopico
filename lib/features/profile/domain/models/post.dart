@@ -2,7 +2,7 @@ class Post {
   String id;
   String nome;     
   String userId;
-  String postId;             
+  String? postId;             
   String urlUserPhoto;
   String description;
   List<String> urlMidia;
@@ -13,7 +13,6 @@ class Post {
     required this.id,
     required this.nome,
     required this.userId,
-    required this.postId,
     required this.urlUserPhoto,
     required this.description,
     required this.urlMidia,
@@ -85,7 +84,6 @@ class Post {
       id: id,
       nome: json['nome'],
       userId: json['userId'],
-      postId: json['postId'],
       urlUserPhoto: json['urlUserPhoto'],
       description: json['description'],
       urlMidia: List<String>.from(json['urlMidia']),
@@ -106,4 +104,6 @@ class Post {
       'curtidas': curtidas,
     };
   }
+
+  
 }
