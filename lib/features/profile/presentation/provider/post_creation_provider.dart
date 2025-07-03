@@ -19,6 +19,7 @@ class PostCreationProvider extends ChangeNotifier {
   String? _selectedSpotId;
   String? _messageError;
 
+  String get messageError => _messageError ?? '';
   List<FileModel> get filesModels => _filesModels;
   String get description => _description;
   String? get selectedSpotId => _selectedSpotId;
@@ -29,6 +30,8 @@ class PostCreationProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  bool get hasError => _messageError != null;
 
   void updateDescription(String newDescription) {
     _description = newDescription;
