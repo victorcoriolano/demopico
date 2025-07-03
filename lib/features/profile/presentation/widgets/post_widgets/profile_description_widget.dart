@@ -13,10 +13,13 @@ class ProfileDescriptionWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Center(
         child: Container(
+          margin: const EdgeInsets.only(top: 10, bottom: 10),
+          
           padding: const EdgeInsets.symmetric(horizontal: 10),
           decoration: BoxDecoration(
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(10),
+            color: const Color.fromARGB(255, 232, 232, 232),
           ),
           width: screenWidth > 600 ? 400 : null,
           alignment: Alignment.center,

@@ -1,4 +1,5 @@
 import 'package:demopico/core/common/data/models/file_model.dart';
+import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/video_player.dart';
 import 'package:flutter/material.dart';
 
 class MediaPreviewList extends StatelessWidget {
@@ -45,15 +46,8 @@ class MediaPreviewList extends StatelessWidget {
                           errorBuilder: (context, error, stackTrace) =>
                               const Center(child: Icon(Icons.broken_image)),
                         )
-                      : const Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.play_circle_fill,
-                                  size: 30, color: Colors.blueAccent),
-                              Text('Vídeo', style: TextStyle(fontSize: 12)),
-                            ],
-                          ),
+                      : Center(
+                          child: MyVideoPlayer(videoFile: mediaPath,),
                         ),
                 ),
               ),

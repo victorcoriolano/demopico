@@ -23,14 +23,16 @@ class ProfileTopSideDataWidget extends StatelessWidget {
           clipBehavior: Clip.none,
           children: [
             Container(
+              margin: const EdgeInsets.all(5),
               width: double.infinity,
               height: 175,
               decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
                 image: DecorationImage(
                   alignment: Alignment.center,
                   image: backgroundUrl != null && backgroundUrl!.isNotEmpty
                       ? NetworkImage(backgroundUrl!)
-                      : const AssetImage("images/backgroundPadrao.png")
+                      : const AssetImage("assets/images/background_vermelho.png")
                           as ImageProvider,
                   fit: BoxFit.cover,
                 ),

@@ -1,11 +1,13 @@
 import 'package:demopico/features/profile/presentation/provider/post_creation_provider.dart';
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/media_preview_list.dart';
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/midia_input_card.dart';
+import 'package:demopico/features/user/domain/enums/type_post.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CreatePostPage extends StatefulWidget {
-  const CreatePostPage({super.key});
+  final TypePost typePost;
+  const CreatePostPage({super.key, required this.typePost});
 
   @override
   State<CreatePostPage> createState() => _CreatePostPageState();
@@ -71,7 +73,11 @@ class _CreatePostPageState extends State<CreatePostPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Nova Postagem de Skate'),
+        title: Text(
+          widget.typePost == TypePost.post
+              ? "Criar Postagem"
+              : "Postar Rec"
+        )
       ),
       body: Consumer<PostCreationProvider>(
         builder: (context, provider, child) {
@@ -83,7 +89,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
               children: [
                 // Input para adicionar mídia
                 MediaInputCard(
-                  onAddMedia: () => {},
+                  onAddMedia: provider.getFile,
                 ),
                 const SizedBox(height: 16),
 

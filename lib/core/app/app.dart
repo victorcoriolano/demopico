@@ -1,4 +1,5 @@
 import 'package:demopico/core/app/home_page.dart';
+import 'package:demopico/core/common/usecases/pick_files_uc.dart';
 import 'package:demopico/features/home/provider/forecast_provider.dart';
 import 'package:demopico/features/home/provider/home_provider.dart';
 import 'package:demopico/features/home/provider/weather_provider.dart';
@@ -13,6 +14,7 @@ import 'package:demopico/features/mapa/presentation/controllers/map_controller.d
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/favorite_spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
+import 'package:demopico/features/profile/domain/usecases/create_post_uc.dart';
 import 'package:demopico/features/profile/presentation/pages/user_page.dart';
 import 'package:demopico/features/profile/presentation/provider/post_creation_provider.dart';
 import 'package:demopico/features/user/infra/services/user_auth_firebase_service.dart';
@@ -54,7 +56,10 @@ class MyAppWidget extends StatelessWidget {
         ),
         ChangeNotifierProvider(create: (_) => HomeProvider.getInstance),
         ChangeNotifierProvider(create: (_) => CommentController.getInstance),
-        ChangeNotifierProvider(create: (_) => PostCreationProvider()),
+        ChangeNotifierProvider(create: (_) => PostCreationProvider(
+          createPostUc: CreatePostUc.instace,
+          pickFileUC: PickFileUC.getInstance,
+        )),
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
