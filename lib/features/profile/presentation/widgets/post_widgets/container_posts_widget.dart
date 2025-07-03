@@ -12,10 +12,10 @@ class ContainerPostsWidget extends StatefulWidget {
 class _ContainerPostsWidgetState extends State<ContainerPostsWidget> {
 
   Post post = Post(
-    id: "",
+    id: "post123",
+      spotID: "spot123",
     nome: 'João Silva',
     userId: 'user123',
-    postId: 'post123',
     urlUserPhoto: 'https://example.com/user_photo.jpg',
     description: 'Curtindo um dia de sol no parque!',
     urlMidia: [
@@ -27,10 +27,10 @@ class _ContainerPostsWidgetState extends State<ContainerPostsWidget> {
   );
 
     Post post1 = Post(
-      id: "",
+      id: "post123",
+      spotID: "spot123",
     nome: 'João Silva',
     userId: 'user123',
-    postId: 'post123',
     urlUserPhoto: 'https://example.com/user_photo.jpg',
     description: 'Curtindo um dia de sol no parque!',
     urlMidia: [
