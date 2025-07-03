@@ -1,9 +1,19 @@
-class UploadResultFileModel {
-  final Stream<double> progress;
-  final Future<String> url;
+class UploadStateFileModel {
+  final double progress;
+  final String? url;
+  final UploadState state;
 
-  UploadResultFileModel({
+  UploadStateFileModel({
+    this.url,
     required this.progress,
-    required this.url,
+    required this.state,
   });
+
+  
+}
+
+enum UploadState {
+  uploading,
+  success,
+  failure,
 }
