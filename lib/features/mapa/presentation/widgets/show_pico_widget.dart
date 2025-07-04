@@ -1,5 +1,5 @@
-import 'package:demopico/core/common/denunciar/widgets/denunciar_widget.dart';
-import 'package:demopico/core/common/denunciar/denuncia_model.dart';
+import 'package:demopico/features/denunciar/widgets/denunciar_widget.dart';
+import 'package:demopico/features/denunciar/denuncia_model.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_favorito.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';

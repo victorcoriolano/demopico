@@ -1,6 +1,6 @@
 
 import 'package:demopico/core/common/data/models/file_model.dart';
-import 'package:demopico/core/common/usecases/pick_files_uc.dart';
+import 'package:demopico/core/common/util/file_manager/pick_files_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/create_post_uc.dart';
 import 'package:flutter/material.dart';
 

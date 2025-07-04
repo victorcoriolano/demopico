@@ -10,6 +10,7 @@ import 'package:demopico/features/profile/presentation/widgets/profile_top_side_
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
+import 'package:demopico/features/user/presentation/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -22,7 +23,8 @@ class UserPage extends StatefulWidget {
   State<UserPage> createState() => _UserPageState();
 }
 
-class _UserPageState extends State<UserPage> with SingleTickerProviderStateMixin {
+class _UserPageState extends State<UserPage>
+    with SingleTickerProviderStateMixin {
   late UserM? user;
   String? currentUserId;
   bool _isVisible = true;
@@ -146,7 +148,7 @@ class _UserPageState extends State<UserPage> with SingleTickerProviderStateMixin
             actions: [
               TextButton(
                 onPressed: () {
-                  Get.to(() => const HomePage());
+                  Get.to(() => const LoginPage());
                 },
                 child: const Text('OK'),
               )
@@ -163,33 +165,26 @@ class _UserPageState extends State<UserPage> with SingleTickerProviderStateMixin
     }
   }
 
-
-
-  
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    
+
     return Scaffold(
       body: Consumer<UserDatabaseProvider>(
         builder: (context, provider, child) => SafeArea(
           child: _isLoading
               ? const Center(child: CircularProgressIndicator())
-              : ListView(
-                  padding: const EdgeInsets.all(0),
-                  
-                  children:[ Container(
+              : ListView(padding: const EdgeInsets.all(0), children: [
+                  Container(
                     color: const Color.fromARGB(255, 236, 235, 235),
                     padding: const EdgeInsets.all(0),
                     margin: const EdgeInsets.all(0),
                     child: Column(
                       children: [
                         Padding(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 4.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
                           child: Row(
-                            mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               const CustomBackButton(
@@ -200,8 +195,7 @@ class _UserPageState extends State<UserPage> with SingleTickerProviderStateMixin
                                 user!.name ??
                                     'Nome de usuário não encontrado...',
                                 style: const TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.bold),
+                                    fontSize: 22, fontWeight: FontWeight.bold),
                               ),
                               ProfileConfigureWidget(
                                   bioController: bioController),
@@ -212,23 +206,20 @@ class _UserPageState extends State<UserPage> with SingleTickerProviderStateMixin
                           avatarUrl: user?.pictureUrl,
                           backgroundUrl: user?.backgroundPicture,
                         ),
-                  
-                          ProfileStatsWidget(
-                            followers: user?.conexoes ?? 0,
-                            contributions: user?.picosAdicionados ?? 0,
-                          ),
+                        ProfileStatsWidget(
+                          followers: user?.conexoes ?? 0,
+                          contributions: user?.picosAdicionados ?? 0,
+                        ),
                       ],
                     ),
                   ),
                   Container(
                     padding: const EdgeInsets.all(0),
                     margin: const EdgeInsets.all(0),
-                    
                     child: SingleChildScrollView(
                       controller: _scrollController,
                       child: Column(
                         children: [
-                        
                           AnimatedOpacity(
                             opacity: _isVisible ? 1.0 : 0.0,
                             duration: const Duration(milliseconds: 400),
@@ -238,21 +229,23 @@ class _UserPageState extends State<UserPage> with SingleTickerProviderStateMixin
                           ),
                           Container(
                             padding: const EdgeInsets.all(0),
-                            height:  screenHeight * 0.53,
-                            child: ProfilePostsWidget(controller: _tabController,),
+                            height: screenHeight * 0.53,
+                            child: ProfilePostsWidget(
+                              controller: _tabController,
+                            ),
                           ),
                         ],
                       ),
                     ),
-                  ),]
-                ),
+                  ),
+                ]),
         ),
       ),
       bottomNavigationBar: ProfileNavigatorWidget(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(
-            builder: (context) => CreatePostPage()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => CreatePostPage()));
         },
         tooltip: "Criar Postagem",
         child: Icon(

@@ -4,7 +4,7 @@ import 'package:demopico/features/mapa/domain/entities/filters.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/usecases/avaliar_spot_uc.dart';
-import 'package:demopico/core/common/usecases/delete_file_uc.dart';
+import 'package:demopico/core/common/util/file_manager/delete_file_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/delete_spot_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/load_spot_uc.dart';
 import 'package:demopico/features/mapa/presentation/view_services/marker_service.dart';
