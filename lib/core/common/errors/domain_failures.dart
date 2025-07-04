@@ -6,6 +6,10 @@ abstract class DomainFailure extends Failure {
   });
 }
 
+class InvalidUserFailure extends DomainFailure {
+  InvalidUserFailure(): super("Usuário inválido", code: 'invalid_user');
+}
+
 class EmailAlreadyExistsFailure extends DomainFailure {
   EmailAlreadyExistsFailure(): super("Email de usuário já está em uso em outra conta", code: 'email_already_exists');
 }

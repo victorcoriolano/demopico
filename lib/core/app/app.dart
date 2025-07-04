@@ -57,6 +57,7 @@ class MyAppWidget extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => HomeProvider.getInstance),
         ChangeNotifierProvider(create: (_) => CommentController.getInstance),
         ChangeNotifierProvider(create: (_) => PostCreationProvider(
+          uploadService: UploadService.getInstance,
           createPostUc: CreatePostUc.instace,
           pickFileUC: PickFileUC.getInstance,
         )),

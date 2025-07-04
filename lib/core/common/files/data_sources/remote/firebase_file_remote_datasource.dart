@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:demopico/core/common/data/interfaces/datasource/i_upload_task_datasource.dart';
-import 'package:demopico/core/common/data/models/file_model.dart';
-import 'package:demopico/core/common/data/models/upload_result_file_model.dart';
+import 'package:demopico/core/common/files/interfaces/datasource/i_upload_task_datasource.dart';
+import 'package:demopico/core/common/files/models/file_model.dart';
+import 'package:demopico/core/common/files/models/upload_result_file_model.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 
 import 'package:firebase_storage/firebase_storage.dart';
@@ -54,45 +54,36 @@ class FirebaseFileRemoteDatasource implements IFileRemoteDataSource {
 }
 
 class FirebaseUploadTask implements UploadTaskInterface {
-  final _controller = StreamController<double>();
+  
   final UploadTask uploadTask;
-  final Completer<String> _urlCompleter = Completer<String>();
+  
 
-  FirebaseUploadTask({required this.uploadTask}) {
-    uploadTask.snapshotEvents.listen(
-      (event) {
-        if (event.state == TaskState.running) {
-          final progress = event.bytesTransferred / event.totalBytes;
-          _controller.add(progress);
-          debugPrint("Progress: $progress");
-        }
-        else if (event.state == TaskState.success) {
-          debugPrint("Upload concluído");
-          final url = event.ref.getDownloadURL();
-          debugPrint("URL: $url");
-          _urlCompleter.complete(url);
-          _controller.add(1.0);
-          _controller.close();
-        }
-      },
-      onDone: () {
-        debugPrint("Caiu no ondone");
-        _controller.close();
-      } ,
-      onError: (error) {
-        debugPrint("Caiu no onerror");
-        _urlCompleter.completeError(error);
-        _controller.addError(error);
-        _controller.close();
-      } ,
-      cancelOnError: true,
-    );
-  }
+  FirebaseUploadTask({required this.uploadTask});
 
 
   @override
-  UploadResultFileModel get upload => UploadResultFileModel(
-        progress: _controller.stream,
-        url: _urlCompleter.future,
-      );
+  Stream<UploadStateFileModel> get uploadStream async* {
+    await for (final snapshot in uploadTask.snapshotEvents){
+      final progress = snapshot.bytesTransferred / snapshot.totalBytes;
+      yield UploadStateFileModel(
+        progress: progress, 
+        state: UploadState.uploading);
+      
+      if (snapshot.state == TaskState.success){
+        final url = await snapshot.ref.getDownloadURL();
+        yield UploadStateFileModel(
+          progress: 1.0, 
+          state: UploadState.success,
+          url: url,
+        );
+      }
+
+      if (snapshot.state == TaskState.error) {
+        yield UploadStateFileModel(
+          progress: progress, 
+          state: UploadState.failure
+        );
+      }
+    }
+  }
 }

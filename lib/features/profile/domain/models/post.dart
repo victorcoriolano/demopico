@@ -2,7 +2,7 @@ class Post {
   String id;
   String nome;     
   String userId;
-  String postId;             
+  String spotID;             
   String urlUserPhoto;
   String description;
   List<String> urlMidia;
@@ -13,7 +13,7 @@ class Post {
     required this.id,
     required this.nome,
     required this.userId,
-    required this.postId,
+    required this.spotID,
     required this.urlUserPhoto,
     required this.description,
     required this.urlMidia,
@@ -60,8 +60,8 @@ class Post {
     userId = value;
   }
 
-    void setPostId(String value) {
-    postId = value;
+  void setSpotId(String value) {
+    spotID = value;
   }
 
   void setUrlUserPhoto(String value) {
@@ -84,8 +84,8 @@ class Post {
     return Post(
       id: id,
       nome: json['nome'],
+      spotID: json['spotID'] ?? '', 
       userId: json['userId'],
-      postId: json['postId'],
       urlUserPhoto: json['urlUserPhoto'],
       description: json['description'],
       urlMidia: List<String>.from(json['urlMidia']),
@@ -98,7 +98,7 @@ class Post {
     return {
       'nome': nome,
       'userId': userId,
-      'postId': postId,
+      'spotId': spotID,
       'urlUserPhoto': urlUserPhoto,
       'description': description,
       'urlMidia': urlMidia,
@@ -106,4 +106,6 @@ class Post {
       'curtidas': curtidas,
     };
   }
+
+  
 }

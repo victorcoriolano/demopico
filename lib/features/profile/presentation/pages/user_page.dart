@@ -7,6 +7,7 @@ import 'package:demopico/features/profile/presentation/widgets/post_widgets/prof
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_stats_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_configure_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_top_side_data_widget.dart';
+import 'package:demopico/features/user/domain/enums/type_post.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
@@ -32,6 +33,9 @@ class _UserPageState extends State<UserPage>
   ScrollDirection? _lastDirection;
   double _accumulatedScroll = 0.0;
   double _lastOffset = 0.0;
+  
+  TypePost typePost = TypePost.post; // definindo o tipo de post
+  
 
   final ScrollController _scrollController = ScrollController();
   final TextEditingController bioController = TextEditingController();
@@ -46,8 +50,15 @@ class _UserPageState extends State<UserPage>
     _tabController = TabController(length: 3, vsync: this);
 
     _tabController.addListener(() {
-      if (_tabController.indexIsChanging) {
-        // Atualiza o estado quando a aba muda
+      
+      if (_tabController.index == 0) {
+        typePost = TypePost.post;
+        setState(() {});
+      } else if (_tabController.index == 1) {
+        typePost = TypePost.fullVideo;
+        setState(() {});
+      } else if (_tabController.index == 2) {
+        typePost = TypePost.spot;
         setState(() {});
       }
     });
@@ -165,6 +176,11 @@ class _UserPageState extends State<UserPage>
     }
   }
 
+  
+
+
+
+  
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -244,16 +260,17 @@ class _UserPageState extends State<UserPage>
       bottomNavigationBar: ProfileNavigatorWidget(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => CreatePostPage()));
+          Get.to(() => CreatePostPage(typePost: typePost,));
+          Navigator.push(context, MaterialPageRoute(
+            builder: (context) => CreatePostPage(typePost: typePost,)));
         },
         tooltip: "Criar Postagem",
         child: Icon(
-          _tabController.index == 0
+          typePost == TypePost.post
               ? Icons.add
-              : _tabController.index == 1
-                  ? Icons.video_call
-                  : Icons.map_outlined,
+              : typePost == TypePost.fullVideo
+                ? Icons.video_call
+                : Icons.map_outlined,
         ),
       ),
     );
