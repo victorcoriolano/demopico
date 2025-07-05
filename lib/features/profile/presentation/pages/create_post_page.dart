@@ -1,7 +1,10 @@
+import 'package:demopico/core/app/home_page.dart';
+import 'package:demopico/features/profile/presentation/pages/user_page.dart';
 import 'package:demopico/features/profile/presentation/provider/post_creation_provider.dart';
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/media_preview_list.dart';
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/midia_input_card.dart';
 import 'package:demopico/features/user/domain/enums/type_post.dart';
+import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -144,13 +147,32 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 // Botão de Publicar
                 ElevatedButton(
                   onPressed: () async {
-                    if(provider.hasError){
+                    final user = context.read<UserDatabaseProvider>().user;
+                    if (user == null) {
                       Get.snackbar(
-                        "Erro", 
-                        provider.messageError,
+                        'Erro',
+                        'Usuário não encontrado. Por favor, faça login novamente.',
+                        snackPosition: SnackPosition.BOTTOM,
+                      );
+                      Get.to((_) => const HomePage());
+                      return;
+                    }
+                    try{
+                      await provider.createPost(user);
+                      Get.snackbar(
+                        'Sucesso',
+                        'Postagem criada com sucesso!',
+                        snackPosition: SnackPosition.TOP,
+                      );
+                      Get.offAll(() => const UserPage());
+                    }catch (e){
+                      Get.snackbar(
+                        'Erro',
+                        'Não foi possível criar a postagem: ${e.toString()}',
+                        snackPosition: SnackPosition.BOTTOM,
                       );
                     }
-                    
+
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 15),
