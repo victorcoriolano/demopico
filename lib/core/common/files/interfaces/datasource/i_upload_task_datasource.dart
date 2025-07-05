@@ -17,3 +17,6 @@ abstract class IFileRemoteDataSource {
 
   Future<void> deleteFile(String path);
 }
+
+typedef StreamUploadState = Stream<UploadStateFileModel>;
+typedef ListUploadTask = List<StreamUploadState>;
