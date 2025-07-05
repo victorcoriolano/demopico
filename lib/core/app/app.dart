@@ -1,5 +1,4 @@
 import 'package:demopico/core/app/home_page.dart';
-import 'package:demopico/core/common/files/services/upload_service.dart';
 import 'package:demopico/core/common/usecases/pick_files_uc.dart';
 import 'package:demopico/features/home/provider/forecast_provider.dart';
 import 'package:demopico/features/home/provider/home_provider.dart';
@@ -58,7 +57,6 @@ class MyAppWidget extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => HomeProvider.getInstance),
         ChangeNotifierProvider(create: (_) => CommentController.getInstance),
         ChangeNotifierProvider(create: (_) => PostCreationProvider(
-          uploadService: UploadService.getInstance,
           createPostUc: CreatePostUc.instace,
           pickFileUC: PickFileUC.getInstance,
         )),
