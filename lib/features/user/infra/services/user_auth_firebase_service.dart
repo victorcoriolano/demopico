@@ -15,7 +15,8 @@ class UserAuthFirebaseService implements IUserAuthService {
     return _userAuthFirebaseService!;
   }
 
-  UserAuthFirebaseService({required this.auth, required this.userDatabaseRepositoryIMP});
+  UserAuthFirebaseService(
+      {required this.auth, required this.userDatabaseRepositoryIMP});
 
   final FirebaseAuth auth;
   final IUserDatabaseRepository userDatabaseRepositoryIMP;
@@ -24,44 +25,44 @@ class UserAuthFirebaseService implements IUserAuthService {
   bool get isAuthenticated => _isAuthenticated;
   set setAuthenticated(bool value) => _isAuthenticated = value;
 
-
   Stream<User?> getAuthStateChanges() {
     return auth.authStateChanges();
   }
 
-
   @override
-  Future<bool> signUp(String inputName, String inputEmail, String password, bool isColetivo) async {
+  Future<bool> signUp(String inputName, String inputEmail, String password,
+      bool isColetivo) async {
     try {
-      UserCredential authResult = await auth.createUserWithEmailAndPassword(email: inputEmail, password: password);
+      UserCredential authResult = await auth.createUserWithEmailAndPassword(
+          email: inputEmail, password: password);
       User? signedInUser = authResult.user;
 
       if (signedInUser == null) throw Exception("O usuario não pode ser criado");
 
       UserM localUser = UserM.userFromFirebaseAuthUser(signedInUser, inputName, isColetivo);
-
+      
+      // Adiciona o usuário ao banco de dados
       await userDatabaseRepositoryIMP.addUserDetails(localUser);
       return true;
-    }on FirebaseAuthException{
+    } on FirebaseAuthException {
       throw Exception("Erro no sistema de autenticação");
-    }
-     catch (e) {
-     throw Exception("Erro ao criar usuario");
-      
+    } catch (e) {
+      throw Exception("Erro ao criar usuario");
     }
   }
 
   @override
   Future<bool> loginByEmail(String email, String password) async {
     try {
-      final authResult = await auth.signInWithEmailAndPassword(email: email, password: password);
+      final authResult = await auth.signInWithEmailAndPassword(
+          email: email, password: password);
       User? signedUser = authResult.user;
-      if (signedUser == null)throw Exception("Não foi possível fazer o login, usuario não encontrado");
+      if (signedUser == null) throw Exception("Não foi possível fazer o login, usuario não encontrado");
       return true;
-    }on FirebaseAuthException{
+    } on FirebaseAuthException {
       throw Exception("Erro no sistema de autenticação");
     } catch (e) {
-    throw  Exception("Erro ao tentar realizar o login, tente novamente");
+      throw Exception("Erro ao tentar realizar o login, tente novamente");
     }
   }
 
@@ -69,7 +70,7 @@ class UserAuthFirebaseService implements IUserAuthService {
   Future<void> logout() async {
     try {
       await auth.signOut();
-    }on FirebaseAuthException{
+    } on FirebaseAuthException {
       throw Exception("Erro no sistema de autenticação");
     } catch (e) {
       if (kDebugMode) {
@@ -78,14 +79,14 @@ class UserAuthFirebaseService implements IUserAuthService {
       throw Exception("Não foi possível deslogar, erro desconhecido");
     }
   }
-  
+
   @override
   String currentUser() {
-        String? idUser;
-       if (auth.currentUser?.uid == null){
-         throw Exception("Erro ao pegar o currentUser");
-       }
-       idUser = auth.currentUser?.uid;
+    String? idUser;
+    if (auth.currentUser?.uid == null) {
+      throw Exception("Erro ao pegar o currentUser");
+    }
+    idUser = auth.currentUser?.uid;
     return idUser!;
   }
 }
