@@ -1,8 +1,8 @@
 
+import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/core/common/files/models/file_model.dart';
 import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
-import 'package:demopico/core/common/files/models/upload_result_file_model.dart';
 import 'package:demopico/core/common/files/services/upload_service.dart';
 import 'package:demopico/core/common/usecases/pick_files_uc.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';
@@ -13,13 +13,11 @@ import 'package:flutter/material.dart';
 class PostCreationProvider extends ChangeNotifier {
 
   final CreatePostUc createPostUc;
-  final UploadService _uploadService;
   final PickFileUC pickFileUC;
 
   PostCreationProvider({
-    required UploadService uploadService,
     required this.pickFileUC,
-    required this.createPostUc,}): _uploadService = uploadService;
+    required this.createPostUc,});
 
 
   final List<FileModel> _filesModels = [];
@@ -69,6 +67,8 @@ class PostCreationProvider extends ChangeNotifier {
     }
   }
 
+  
+
 
   Future<void> createPost(UserM user) async{
     try{
@@ -76,26 +76,15 @@ class PostCreationProvider extends ChangeNotifier {
         _messageError = "Usuário inválido";
         throw InvalidUserFailure();
       }
-      final uploadResults = _uploadService.uploadFiles(_filesModels);
-      uploadResults.map((task) {
-        task.listen((event) {
-          if (event.state == UploadState.uploading) {
-            progress = event.progress;
-            notifyListeners();
-          } else if (event.state == UploadState.success) {
-            _imgUrls.add(event.url!);
-            debugPrint("Imagem enviada com sucesso: ${event.url}");
-          } else if (event.state == UploadState.failure) {
-            _messageError = "Erro ao fazer upload das imagens";
-          }
-        },
-        onDone: () {
-          debugPrint("Upload concluido com sucesso");
-          
-        } 
-        );
-      });
+      final urls = await UploadService.getInstance.uploadFiles(filesModels);
+      _imgUrls.addAll(urls);
 
+      if (_imgUrls.isEmpty) {
+        _messageError = "Não foi possivel fazer o upload de imagens";
+        throw UploadFileFailure();
+      }
+
+      // Espera o upload terminar
       final newPost = Post(
         id: "",
         nome: user.name!, 
@@ -108,6 +97,7 @@ class PostCreationProvider extends ChangeNotifier {
       final post = await createPostUc.execute(newPost);
       _posts.add(post);
       clear();
+      
     }on Failure catch (e){
       _messageError = e.message;
       notifyListeners();
