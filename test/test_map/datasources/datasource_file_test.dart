@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:demopico/core/common/files/data_sources/remote/firebase_file_remote_datasource.dart';
-import 'package:demopico/core/common/files/interfaces/datasource/i_upload_task_datasource.dart';
-import 'package:demopico/core/common/files/models/file_model.dart';
-import 'package:demopico/core/common/files/models/upload_result_file_model.dart';
+import 'package:demopico/core/common/files_manager/data_sources/remote/firebase_file_remote_datasource.dart';
+import 'package:demopico/core/common/files_manager/interfaces/datasource/i_upload_task_datasource.dart';
+import 'package:demopico/core/common/files_manager/models/file_model.dart';
+import 'package:demopico/core/common/files_manager/models/upload_result_file_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';

@@ -1,10 +1,8 @@
 
-import 'package:demopico/core/common/data/models/file_model.dart';
-import 'package:demopico/core/common/data/models/upload_result_file_model.dart';
-import 'package:demopico/core/common/data/repository/files_storage_repository.dart';
-import 'package:demopico/core/common/data/interfaces/repository/i_save_image_repository.dart';
-
-
+import 'package:demopico/core/common/files_manager/interfaces/datasource/i_upload_task_datasource.dart';
+import 'package:demopico/core/common/files_manager/interfaces/repository/i_upload_file_repository.dart';
+import 'package:demopico/core/common/files_manager/models/file_model.dart';
+import 'package:demopico/core/common/files_manager/repository/files_storage_repository.dart';
 
 class SaveImageUC{
 
@@ -15,12 +13,12 @@ class SaveImageUC{
     return _saveImageUC!;
   } 
 
-  final ISaveFileRepository saveImageRepositoryIMP;
+  final IUploadFileRepository saveImageRepositoryIMP;
 
   SaveImageUC({required this.saveImageRepositoryIMP});
 
-  List<UploadResultFileModel> saveImage(List<FileModel> files) {
+  ListUploadTask saveImage(List<FileModel> files) {
     final uploadTask = saveImageRepositoryIMP.saveFiles(files);
-    return uploadTask.map((task) => task.upload).toList();
+    return uploadTask;
   }
 }

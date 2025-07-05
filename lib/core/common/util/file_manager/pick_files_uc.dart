@@ -1,8 +1,8 @@
 
 
-import 'package:demopico/core/common/files/interfaces/repository/i_pick_image_repository.dart';
-import 'package:demopico/core/common/files/models/file_model.dart';
-import 'package:demopico/core/common/files/services/image_picker_service.dart';
+import 'package:demopico/core/common/files_manager/interfaces/repository/i_pick_image_repository.dart';
+import 'package:demopico/core/common/files_manager/models/file_model.dart';
+import 'package:demopico/core/common/files_manager/services/image_picker_service.dart';
 import 'package:demopico/core/common/errors/domain_failures.dart';
 
 class PickFileUC {

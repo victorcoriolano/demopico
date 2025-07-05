@@ -1,5 +1,5 @@
-import 'package:demopico/core/common/files/dtos/firebase_dto.dart';
-import 'package:demopico/core/common/files/enums/collections.dart';
+import 'package:demopico/core/common/files_manager/dtos/firebase_dto.dart';
+import 'package:demopico/core/common/files_manager/enums/collections.dart';
 import 'package:demopico/features/external/datasources/firebase/remote/crud_firebase.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_post_datasource.dart';
 

@@ -1,9 +1,9 @@
 
 import 'dart:async';
 
-import 'package:demopico/core/common/files/models/file_model.dart';
+import 'package:demopico/core/common/files_manager/models/file_model.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
-import 'package:demopico/core/common/files/services/upload_service.dart';
+import 'package:demopico/core/common/files_manager/services/upload_service.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';

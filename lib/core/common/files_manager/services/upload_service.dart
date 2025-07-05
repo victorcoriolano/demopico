@@ -1,6 +1,6 @@
 import 'package:demopico/core/common/errors/repository_failures.dart';
-import 'package:demopico/core/common/files/models/file_model.dart';
-import 'package:demopico/core/common/files/models/upload_result_file_model.dart';
+import 'package:demopico/core/common/files_manager/models/file_model.dart';
+import 'package:demopico/core/common/files_manager/models/upload_result_file_model.dart';
 import 'package:demopico/core/common/usecases/upload_file_uc.dart';
 import 'package:flutter/material.dart';
 
