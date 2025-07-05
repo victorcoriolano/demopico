@@ -4,10 +4,10 @@
 
 import 'package:demopico/core/common/files/data_sources/remote/firebase_file_remote_datasource.dart';
 import 'package:demopico/core/common/files/interfaces/datasource/i_upload_task_datasource.dart';
-import 'package:demopico/core/common/files/interfaces/repository/i_save_image_repository.dart';
+import 'package:demopico/core/common/files/interfaces/repository/i_upload_file_repository.dart';
 import 'package:demopico/core/common/files/models/file_model.dart';
 
-class FilesStorageRepository implements ISaveFileRepository {
+class FilesStorageRepository implements IUploadFileRepository {
 
   static FilesStorageRepository? _filesStorageRepository;
 
@@ -20,8 +20,8 @@ class FilesStorageRepository implements ISaveFileRepository {
   FilesStorageRepository(this.dataSource);
 
   @override
-  List<UploadTaskInterface> saveFiles(List<FileModel> files) {
-      return dataSource.uploadFile(files);
+  ListUploadTask saveFiles(List<FileModel> files) {
+      return dataSource.uploadFile(files).map((task) => task.uploadStream).toList();
   }
 
   Future<void> deleteFiles(List<String> urls) async {
