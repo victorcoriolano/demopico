@@ -10,7 +10,7 @@ class Post {
   List<String> urlMidia;
   DateTime dateTime;
   int curtidas;
-  FileModel? videoFile;
+  List<FileModel>? files;
 
   Post({
     required this.id,
@@ -22,7 +22,7 @@ class Post {
     required this.urlMidia,
     DateTime? dateTime,
     int? curtidas,
-    this.videoFile,
+    this.files,
   })  : dateTime = dateTime ?? DateTime.now(),
         curtidas = curtidas ?? 0;
 
