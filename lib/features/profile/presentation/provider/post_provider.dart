@@ -91,7 +91,7 @@ class PostProvider extends ChangeNotifier {
         _isLoading = false;
         throw InvalidUserFailure();
       }
-      final urls = await UploadService.getInstance.uploadFiles(filesModels);
+      final urls = await UploadService.getInstance.uploadFiles(filesModels, "posts");
       _imgUrls.addAll(urls);
 
       if (_imgUrls.isEmpty) {
@@ -124,6 +124,9 @@ class PostProvider extends ChangeNotifier {
     try {
       _isLoading = true;
       notifyListeners();
+      if (post.isNotEmpty){
+        return;
+      }
       final posts = await _getPostUc.execute(userId);
       _posts.clear();
       _posts.addAll(posts);

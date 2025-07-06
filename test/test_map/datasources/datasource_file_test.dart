@@ -77,7 +77,7 @@ void main() {
       when(() => mockStorageReference.getDownloadURL())
           .thenAnswer((_) async => "http://test.com");
 
-      final result = firebaseFilesRemoteDatasource.uploadFile([fileMock]);
+      final result = firebaseFilesRemoteDatasource.uploadFile([fileMock], "spots");
 
       //veridicando se o resultado é uma instância de UploadTaskInterface
       expect(result, isA<List<UploadTaskInterface>>());
