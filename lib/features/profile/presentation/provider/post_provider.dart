@@ -7,17 +7,23 @@ import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/files_manager/services/upload_service.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';
 import 'package:demopico/features/profile/domain/usecases/create_post_uc.dart';
+import 'package:demopico/features/profile/domain/usecases/get_post_uc.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter/material.dart';
 
 class PostProvider extends ChangeNotifier {
 
-  final CreatePostUc createPostUc;
-  final PickFileUC pickFileUC;
+  final CreatePostUc _createPostUc;
+  final PickFileUC _pickFileUC;
+  final GetPostUc _getPostUc;
 
   PostProvider({
-    required this.pickFileUC,
-    required this.createPostUc,});
+    required CreatePostUc createPostUc,
+    required PickFileUC pickFileUC,
+    required GetPostUc getPosts}) 
+    : _createPostUc = createPostUc,
+      _pickFileUC = pickFileUC,
+      _getPostUc = getPosts;
 
 
   final List<FileModel> _filesModels = [];
@@ -62,7 +68,7 @@ class PostProvider extends ChangeNotifier {
     try{
       _isLoading = true;
       notifyListeners();
-      final files = await pickFileUC.execute();
+      final files = await _pickFileUC.execute();
       filesModels.addAll(files);
       _isLoading = false;
       notifyListeners();
@@ -103,7 +109,7 @@ class PostProvider extends ChangeNotifier {
         description: description, 
         urlMidia: _imgUrls);
       
-      final post = await createPostUc.execute(newPost);
+      final post = await _createPostUc.execute(newPost);
       _posts.add(post);
       _isLoading = false;
       notifyListeners();
@@ -114,7 +120,25 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
-
+  Future<void> getPost(String userId) async {
+    try {
+      _isLoading = true;
+      notifyListeners();
+      final posts = await _getPostUc.execute(userId);
+      _posts.clear();
+      _posts.addAll(posts);
+      _isLoading = false;
+      notifyListeners();
+    }on Failure catch (e) {
+      _messageError = e.message;
+      _isLoading = false;
+      notifyListeners();
+    }catch (e) {
+      _messageError = 'Erro desconhecido ao buscar postagens: ${e.toString()}';
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 
 
   void clear() {
