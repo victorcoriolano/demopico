@@ -10,12 +10,12 @@ import 'package:demopico/features/profile/domain/usecases/create_post_uc.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter/material.dart';
 
-class PostCreationProvider extends ChangeNotifier {
+class PostProvider extends ChangeNotifier {
 
   final CreatePostUc createPostUc;
   final PickFileUC pickFileUC;
 
-  PostCreationProvider({
+  PostProvider({
     required this.pickFileUC,
     required this.createPostUc,});
 
@@ -36,6 +36,7 @@ class PostCreationProvider extends ChangeNotifier {
   String get description => _description;
   String? get selectedSpotId => _selectedSpotId;
   bool get isLoading => _isLoading;
+  List<Post> get post => _posts;
   
   void removeMedia(int index) {
     if (index >= 0 && index < _filesModels.length) {
@@ -112,6 +113,10 @@ class PostCreationProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+
+
+
   void clear() {
     _filesModels.clear();
     _description = '';

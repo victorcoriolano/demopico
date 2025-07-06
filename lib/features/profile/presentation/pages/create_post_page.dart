@@ -1,6 +1,6 @@
 import 'package:demopico/core/app/home_page.dart';
 import 'package:demopico/features/profile/presentation/pages/user_page.dart';
-import 'package:demopico/features/profile/presentation/provider/post_creation_provider.dart';
+import 'package:demopico/features/profile/presentation/provider/post_provider.dart';
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/media_preview_list.dart';
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/midia_input_card.dart';
 import 'package:demopico/features/user/domain/enums/type_post.dart';
@@ -26,7 +26,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
     super.dispose();
   }
 
-  void _showSpotSelectionDialog(BuildContext context, PostCreationProvider provider) {
+  void _showSpotSelectionDialog(BuildContext context, PostProvider provider) {
     // Simulação de picos disponíveis
     final Map<String, String> availableSpots = {
       'spot123': 'Praça da Matriz',
@@ -83,7 +83,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
               : "Postar Rec"
         )
       ),
-      body: Consumer<PostCreationProvider>(
+      body: Consumer<PostProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading){
             return const Center(
