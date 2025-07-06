@@ -85,7 +85,11 @@ class _CreatePostPageState extends State<CreatePostPage> {
       ),
       body: Consumer<PostCreationProvider>(
         builder: (context, provider, child) {
-          
+          if (provider.isLoading){
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
             child: Column(
