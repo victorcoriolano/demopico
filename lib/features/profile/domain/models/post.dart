@@ -84,6 +84,10 @@ class Post {
     curtidas = value;
   }
 
+  void setFiles(List<FileModel> value) {
+    files = value;
+  }
+
   factory Post.fromJson(Map<String, dynamic> json, String id) {
     return Post(
       id: id,
