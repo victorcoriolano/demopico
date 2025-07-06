@@ -8,6 +8,7 @@ class Post {
   String urlUserPhoto;
   String description;
   List<String> urlMidia;
+  List<String>? urlVideos;
   DateTime dateTime;
   int curtidas;
   List<FileModel>? files;
@@ -23,6 +24,7 @@ class Post {
     DateTime? dateTime,
     int? curtidas,
     this.files,
+    this.urlVideos,
   })  : dateTime = dateTime ?? DateTime.now(),
         curtidas = curtidas ?? 0;
 
@@ -97,6 +99,9 @@ class Post {
       urlUserPhoto: json['urlUserPhoto'],
       description: json['description'],
       urlMidia: List<String>.from(json['urlMidia']),
+      urlVideos: json['urlVideos'] != null
+          ? List<String>.from(json['urlVideos'])
+          : null,
       dateTime: DateTime.parse(json['dateTime']),
       curtidas: json['curtidas'],
     );
@@ -110,6 +115,7 @@ class Post {
       'urlUserPhoto': urlUserPhoto,
       'description': description,
       'urlMidia': urlMidia,
+      'urlVideos': urlVideos ?? [],
       'dateTime': dateTime.toIso8601String(),
       'curtidas': curtidas,
     };
