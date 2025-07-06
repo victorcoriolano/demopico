@@ -27,10 +27,13 @@ class PostProvider extends ChangeNotifier {
 
 
   final List<FileModel> _filesModels = [];
+  final List<FileModel> _videos = [];
+  final List<FileModel> _images = [];
   String _description = '';
   String? _selectedSpotId;
   String? _messageError;
   final List<String> _imgUrls = [];
+  final List<String> _videoUrls = [];
   double progress = 0.0;
   final List<Post> _posts = [];
   bool _isLoading = false;
@@ -69,13 +72,31 @@ class PostProvider extends ChangeNotifier {
       _isLoading = true;
       notifyListeners();
       final files = await _pickFileUC.execute();
-      filesModels.addAll(files);
+      _filesModels.addAll(files);
+      debugPrint("Adicionou: ${_filesModels.length} na lista e arquivos selecionados");
+
+      for (var file in _filesModels) {
+        debugPrint("mapeando arquivos");
+        if (file.contentType.isVideo) {
+          _videos.add(file);
+          debugPrint("Arquivo de vídeo adicionado: ${file.fileName}");
+        } else if (file.contentType.isImage) {
+          _images.add(file);
+          debugPrint("Arquivo de imagem adicionado: ${file.fileName}");
+        }
+        else {
+          debugPrint("Não foi possivel mapear o arquivo: ${file.fileName}");
+        }
+      }
+
       _isLoading = false;
       notifyListeners();
       debugPrint("arquivos selecionados com sucesso");
     } catch (e) {
       debugPrint("Erro ao pegar arquivos");
       _messageError = e.toString();
+      _isLoading = false;
+      notifyListeners();
     }
   }
 
@@ -91,11 +112,16 @@ class PostProvider extends ChangeNotifier {
         _isLoading = false;
         throw InvalidUserFailure();
       }
-      final urls = await UploadService.getInstance.uploadFiles(filesModels, "posts");
-      _imgUrls.addAll(urls);
 
-      if (_imgUrls.isEmpty) {
-        _messageError = "Não foi possivel fazer o upload de imagens";
+        final urlsimages = await UploadService.getInstance.uploadFiles(_images, "posts/images");
+        final urlvideos = await UploadService.getInstance.uploadFiles(_videos, "posts/videos");
+          
+      
+      _imgUrls.addAll(urlsimages);
+      _videoUrls.addAll(urlvideos);
+
+      if (_imgUrls.isEmpty || _videoUrls.isEmpty) {
+        _messageError = "Não foi possivel fazer o upload dos arquivos";
         throw UploadFileFailure();
       }
 
@@ -106,6 +132,7 @@ class PostProvider extends ChangeNotifier {
         userId: user.id!,
         spotID: _selectedSpotId ?? '', 
         urlUserPhoto: user.pictureUrl!, 
+        urlVideos: _videoUrls,
         description: description, 
         urlMidia: _imgUrls);
       
@@ -116,6 +143,7 @@ class PostProvider extends ChangeNotifier {
       clear();
     }on Failure catch (e){
       _messageError = e.message;
+      _isLoading = false;
       notifyListeners();
     }
   }
@@ -124,12 +152,15 @@ class PostProvider extends ChangeNotifier {
     try {
       _isLoading = true;
       notifyListeners();
-      if (post.isNotEmpty){
+      final myPosts = await _getPostUc.execute(userId);
+      _posts.clear();
+      if (myPosts.isEmpty) {
+        _messageError = 'Nenhum post encontrado';
+        _isLoading = false;
+        notifyListeners();
         return;
       }
-      final posts = await _getPostUc.execute(userId);
-      _posts.clear();
-      _posts.addAll(posts);
+      _posts.addAll(myPosts);
       _isLoading = false;
       notifyListeners();
     }on Failure catch (e) {
