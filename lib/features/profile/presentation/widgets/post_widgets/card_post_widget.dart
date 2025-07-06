@@ -1,5 +1,6 @@
 import 'package:demopico/features/profile/domain/models/post.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/post_widget.dart';
+import 'package:demopico/features/profile/presentation/widgets/post_widgets/video_player_from_network.dart';
 import 'package:flutter/material.dart';
 
 class CardPostWidget extends StatelessWidget {
@@ -9,7 +10,8 @@ class CardPostWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String cardPhoto = post.urlMidia[0];
+    
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -23,12 +25,16 @@ class CardPostWidget extends StatelessWidget {
         margin: const EdgeInsets.all(0),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
         clipBehavior: Clip.antiAlias,
-        child: Image.network(
-          cardPhoto,
-          fit: BoxFit.cover,
-          width: double.infinity,
-          height: double.infinity,
-        ),
+        child: post.urlMidia.isNotEmpty 
+          ? Image.network(
+            post.urlMidia[0],
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          )
+          : VideoPlayerFromNetwork(url: post.urlVideos?.isNotEmpty == true 
+            ? post.urlVideos![0] 
+            : 'https://youtu.be/NdkK7ghqLdY?si=tO6fF542jOuoHK7U')
       ),
     );
   }

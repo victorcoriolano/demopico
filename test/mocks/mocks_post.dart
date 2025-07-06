@@ -3,9 +3,9 @@ import 'package:demopico/features/profile/domain/models/post.dart';
 
 Post mockPost1 = Post(
     id: "123",
+      spotID: "spot123",
     nome: 'João Silva',
     userId: 'user123',
-    postId: 'post123',
     urlUserPhoto: 'https://example.com/user_photo.jpg',
     description: 'Curtindo um dia de sol no parque!',
     urlMidia: [
@@ -18,9 +18,9 @@ Post mockPost1 = Post(
 
 Post mockPost2 = Post(
       id: "456",
+        spotID: "spot123",
     nome: 'Tete da Silva',
     userId: 'user123',
-    postId: 'post123',
     urlUserPhoto: 'https://example.com/user_photo.jpg',
     description: 'Curtindo um dia de sol no parque!',
     urlMidia: [

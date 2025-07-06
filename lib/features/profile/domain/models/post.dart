@@ -1,24 +1,30 @@
+import 'package:demopico/core/common/files_manager/models/file_model.dart';
+
 class Post {
   String id;
   String nome;     
   String userId;
-  String postId;             
+  String spotID;             
   String urlUserPhoto;
   String description;
   List<String> urlMidia;
+  List<String>? urlVideos;
   DateTime dateTime;
   int curtidas;
+  List<FileModel>? files;
 
   Post({
     required this.id,
     required this.nome,
     required this.userId,
-    required this.postId,
+    required this.spotID,
     required this.urlUserPhoto,
     required this.description,
     required this.urlMidia,
     DateTime? dateTime,
     int? curtidas,
+    this.files,
+    this.urlVideos,
   })  : dateTime = dateTime ?? DateTime.now(),
         curtidas = curtidas ?? 0;
 
@@ -60,8 +66,8 @@ class Post {
     userId = value;
   }
 
-    void setPostId(String value) {
-    postId = value;
+  void setSpotId(String value) {
+    spotID = value;
   }
 
   void setUrlUserPhoto(String value) {
@@ -80,15 +86,22 @@ class Post {
     curtidas = value;
   }
 
+  void setFiles(List<FileModel> value) {
+    files = value;
+  }
+
   factory Post.fromJson(Map<String, dynamic> json, String id) {
     return Post(
       id: id,
       nome: json['nome'],
+      spotID: json['spotID'] ?? '', 
       userId: json['userId'],
-      postId: json['postId'],
       urlUserPhoto: json['urlUserPhoto'],
       description: json['description'],
       urlMidia: List<String>.from(json['urlMidia']),
+      urlVideos: json['urlVideos'] != null
+          ? List<String>.from(json['urlVideos'])
+          : null,
       dateTime: DateTime.parse(json['dateTime']),
       curtidas: json['curtidas'],
     );
@@ -98,12 +111,15 @@ class Post {
     return {
       'nome': nome,
       'userId': userId,
-      'postId': postId,
+      'spotId': spotID,
       'urlUserPhoto': urlUserPhoto,
       'description': description,
       'urlMidia': urlMidia,
+      'urlVideos': urlVideos ?? [],
       'dateTime': dateTime.toIso8601String(),
       'curtidas': curtidas,
     };
   }
+
+  
 }

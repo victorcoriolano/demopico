@@ -1,4 +1,4 @@
-import 'package:demopico/core/common/data/dtos/firebase_dto.dart';
+import 'package:demopico/core/common/files_manager/dtos/firebase_dto.dart';
 
 abstract class ICommentSpotDataSource {
   Future<FirebaseDTO> create(FirebaseDTO newComment);

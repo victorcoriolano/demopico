@@ -1,8 +1,8 @@
 
-import 'package:demopico/core/common/data/mappers/i_mapper_dto.dart';
+import 'package:demopico/core/common/files_manager/mappers/i_mapper_dto.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto_mapper.dart';
 import 'package:demopico/features/mapa/data/data_sources/remote/firebase_spot_remote_datasource.dart';
-import 'package:demopico/core/common/data/dtos/firebase_dto.dart';
+import 'package:demopico/core/common/files_manager/dtos/firebase_dto.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter/foundation.dart';

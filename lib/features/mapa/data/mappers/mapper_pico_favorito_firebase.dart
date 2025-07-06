@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:demopico/core/common/data/dtos/firebase_dto.dart';
+import 'package:demopico/core/common/files_manager/dtos/firebase_dto.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_favorito.dart';
 import 'package:demopico/features/mapa/domain/models/pico_favorito_model.dart';
 

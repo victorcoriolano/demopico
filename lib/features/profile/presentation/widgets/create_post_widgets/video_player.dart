@@ -1,9 +1,9 @@
-import 'package:demopico/core/common/data/models/file_model.dart';
+import 'package:demopico/core/common/files_manager/models/file_model.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 class MyVideoPlayer extends StatefulWidget {
-  final FileModel? videoFile;
+  final FileModel videoFile;
   const MyVideoPlayer({super.key, required this.videoFile});
 
   @override
@@ -16,7 +16,7 @@ class _MyVideoPlayerState extends State<MyVideoPlayer> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset(widget.videoFile!.filePath!)
+    _controller = VideoPlayerController.asset(widget.videoFile.filePath!)
       ..initialize().then((_) {
         setState(() {});
       });

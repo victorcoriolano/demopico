@@ -1,13 +1,13 @@
 
 import 'dart:async';
 
-import 'package:demopico/core/common/data/models/file_model.dart';
+import 'package:demopico/core/common/files_manager/models/file_model.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
+import 'package:demopico/core/common/files_manager/services/upload_service.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
-import 'package:demopico/core/common/usecases/pick_image_uc.dart';
-import 'package:demopico/core/common/usecases/save_image_uc.dart';
+import 'package:demopico/core/common/util/file_manager/pick_image_uc.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -17,17 +17,20 @@ class AddPicoProvider extends ChangeNotifier{
   static AddPicoProvider get getInstance {
     _addPicoProvider ??= AddPicoProvider(
         pickImageUC: PickFileUC.getInstance,
-        saveImageUC: SaveImageUC.getInstance,
+        serviceImage: UploadService.getInstance,
         createSpotUc: CreateSpotUc.getInstance);
     return _addPicoProvider!;
   }
 
   //instanciando casos de uso
   final PickFileUC pickImageUC;
-  final SaveImageUC saveImageUC;
+  final UploadService _uploadService;
   final CreateSpotUc createSpotUc;
 
-  AddPicoProvider({required this.pickImageUC, required this.saveImageUC, required this.createSpotUc});
+  AddPicoProvider({
+    required this.pickImageUC, 
+    required UploadService serviceImage, 
+    required this.createSpotUc}): _uploadService = serviceImage;
 
   Pico? pico;
 
@@ -64,22 +67,7 @@ class AddPicoProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  Future<void> uploadFiles() async{
-    debugPrint("Iniciando upload de arquivos");
-    final listResultFileModel = saveImageUC.saveImage(files);
-
-    final urlFutures = <Future<String>>[];
-    
-    urlFutures.addAll(listResultFileModel.map((file) async => await file.url).toList());
-
-    
-
-    final urls = await Future.wait(urlFutures);
-    debugPrint("URLs geradas do firestore: $urls");
-    imgUrls.addAll(urls);
-    debugPrint("URLs finais: $imgUrls");
-    notifyListeners();
-  }
+  
 
   void removerImagens(int index){
     files.removeAt(index);
@@ -256,9 +244,9 @@ class AddPicoProvider extends ChangeNotifier{
     try {
       late PicoModel newPico;
       // Faz o upload das imagens e espera as urls
-      await uploadFiles().then((_) => newPico = getInfoPico(user));
-
-
+      final urls = await  _uploadService.uploadFiles(files, "spots");
+      newPico = getInfoPico(user);
+      newPico.imgUrls.addAll(urls);
       // Salva o pico no backend
       
       await createSpotUc.createSpot(newPico);
