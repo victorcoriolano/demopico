@@ -20,8 +20,9 @@ class FilesStorageRepository implements IUploadFileRepository {
   FilesStorageRepository(this.dataSource);
 
   @override
-  ListUploadTask saveFiles(List<FileModel> files) {
-      return dataSource.uploadFile(files).map((task) => task.uploadStream).toList();
+  ListUploadTask saveFiles(List<FileModel> files, String path) {
+      final tasks = dataSource.uploadFile(files, path);
+      return tasks.map((task) => task.uploadStream).toList();
   }
 
   Future<void> deleteFiles(List<String> urls) async {
