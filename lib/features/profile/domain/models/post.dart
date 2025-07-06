@@ -1,3 +1,5 @@
+import 'package:demopico/core/common/files_manager/models/file_model.dart';
+
 class Post {
   String id;
   String nome;     
@@ -8,6 +10,7 @@ class Post {
   List<String> urlMidia;
   DateTime dateTime;
   int curtidas;
+  FileModel? videoFile;
 
   Post({
     required this.id,
@@ -19,6 +22,7 @@ class Post {
     required this.urlMidia,
     DateTime? dateTime,
     int? curtidas,
+    this.videoFile,
   })  : dateTime = dateTime ?? DateTime.now(),
         curtidas = curtidas ?? 0;
 

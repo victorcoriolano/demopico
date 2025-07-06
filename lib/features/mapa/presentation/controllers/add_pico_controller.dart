@@ -8,7 +8,6 @@ import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
 import 'package:demopico/core/common/util/file_manager/pick_image_uc.dart';
-import 'package:demopico/core/common/util/file_manager/save_image_uc.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 

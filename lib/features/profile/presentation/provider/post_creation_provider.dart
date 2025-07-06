@@ -27,6 +27,7 @@ class PostCreationProvider extends ChangeNotifier {
   final List<String> _imgUrls = [];
   double progress = 0.0;
   final List<Post> _posts = [];
+  bool _isLoading = false;
   
   
 
@@ -34,6 +35,7 @@ class PostCreationProvider extends ChangeNotifier {
   List<FileModel> get filesModels => _filesModels;
   String get description => _description;
   String? get selectedSpotId => _selectedSpotId;
+  bool get isLoading => _isLoading;
   
   void removeMedia(int index) {
     if (index >= 0 && index < _filesModels.length) {
@@ -57,8 +59,11 @@ class PostCreationProvider extends ChangeNotifier {
   //get media
   void getFile() async {
     try{
+      _isLoading = true;
+      notifyListeners();
       final files = await pickFileUC.execute();
       filesModels.addAll(files);
+      _isLoading = false;
       notifyListeners();
       debugPrint("arquivos selecionados com sucesso");
     } catch (e) {
@@ -72,8 +77,11 @@ class PostCreationProvider extends ChangeNotifier {
 
   Future<void> createPost(UserM user) async{
     try{
+      _isLoading = true;
+      notifyListeners();
       if (user.id == null || user.pictureUrl == null || user.name == null) {
         _messageError = "Usuário inválido";
+        _isLoading = false;
         throw InvalidUserFailure();
       }
       final urls = await UploadService.getInstance.uploadFiles(filesModels);
@@ -96,8 +104,9 @@ class PostCreationProvider extends ChangeNotifier {
       
       final post = await createPostUc.execute(newPost);
       _posts.add(post);
+      _isLoading = false;
+      notifyListeners();
       clear();
-      
     }on Failure catch (e){
       _messageError = e.message;
       notifyListeners();
