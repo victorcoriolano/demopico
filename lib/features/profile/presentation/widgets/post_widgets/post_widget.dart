@@ -20,14 +20,13 @@ class _PostWidgetState extends State<PostWidget> {
   void initState() {
     super.initState();
     _pageController = PageController();
-      curtidas = widget.post.curtidas;
+    curtidas = widget.post.curtidas;
   }
 
   @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
-    
   }
 
   @override
@@ -120,30 +119,29 @@ class _PostWidgetState extends State<PostWidget> {
 
             // Curtidas
             Row(
-  children: [
-    GestureDetector(
-      onTap: () {
-        setState(() {
-          if (!jaCurtiu) {
-            curtidas++;
-            jaCurtiu = true;
-          } else {
-            curtidas--;
-            jaCurtiu = false;
-          }
-        });
-      },
-      child: Image.asset(
-        'assets/images/cumprimento_marreta.png',
-        width: 60,
-        height: 60,
-      ),
-    ),
-    const SizedBox(width: 8),
-    Text('$curtidas curtidas'),
-  ],
-),
-
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      if (!jaCurtiu) {
+                        curtidas++;
+                        jaCurtiu = true;
+                      } else {
+                        curtidas--;
+                        jaCurtiu = false;
+                      }
+                    });
+                  },
+                  child: Image.asset(
+                    'assets/images/cumprimento_marreta.png',
+                    width: 60,
+                    height: 60,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text('$curtidas curtidas'),
+              ],
+            ),
           ],
         ),
       ),
