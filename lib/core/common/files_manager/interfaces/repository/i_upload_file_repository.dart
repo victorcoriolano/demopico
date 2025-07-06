@@ -5,6 +5,6 @@ import 'package:demopico/core/common/files_manager/interfaces/datasource/i_uploa
 import 'package:demopico/core/common/files_manager/models/file_model.dart';
 
 abstract class IUploadFileRepository {
-  ListUploadTask saveFiles(List<FileModel> files);
+  ListUploadTask saveFiles(List<FileModel> files, String path);
 }
 
