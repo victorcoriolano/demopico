@@ -244,7 +244,7 @@ class AddPicoProvider extends ChangeNotifier{
     try {
       late PicoModel newPico;
       // Faz o upload das imagens e espera as urls
-      final urls = await  _uploadService.uploadFiles(files);
+      final urls = await  _uploadService.uploadFiles(files, "spots");
       newPico = getInfoPico(user);
       newPico.imgUrls.addAll(urls);
       // Salva o pico no backend

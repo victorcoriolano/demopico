@@ -19,8 +19,8 @@ class UploadFileUC{
 
   UploadFileUC({required this.saveImageRepositoryIMP});
 
-  ListUploadTask saveFiles(List<FileModel> files) {
-    final uploadTask = saveImageRepositoryIMP.saveFiles(files);
+  ListUploadTask saveFiles(List<FileModel> files, String path) {
+    final uploadTask = saveImageRepositoryIMP.saveFiles(files, path);
     return uploadTask;
   }
 }

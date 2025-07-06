@@ -16,10 +16,10 @@ class UploadService {
   }
   
 
-  URLs uploadFiles(List<FileModel> files) async {
+  URLs uploadFiles(List<FileModel> files, String path) async {
     final urls = <String>[];
     try {
-      final uploadTask = uploadFileUC.saveFiles(files);
+      final uploadTask = uploadFileUC.saveFiles(files, path);
       
       for (var task in uploadTask){
         final result = await task.firstWhere((state) => state.state == UploadState.success);
