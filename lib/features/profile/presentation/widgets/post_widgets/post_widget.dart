@@ -1,4 +1,5 @@
 import 'package:demopico/features/profile/domain/models/post.dart';
+import 'package:demopico/features/profile/presentation/widgets/post_widgets/video_player_from_network.dart';
 import 'package:flutter/material.dart';
 
 class PostWidget extends StatefulWidget {
@@ -15,12 +16,16 @@ class _PostWidgetState extends State<PostWidget> {
   late final PageController _pageController;
   bool jaCurtiu = false;
   int curtidas = 0;
+  final listMedia = <String>[];
+  
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
     curtidas = widget.post.curtidas;
+    listMedia.addAll(widget.post.urlMidia);
+    if (widget.post.urlVideos != null && widget.post.urlVideos!.isNotEmpty) listMedia.addAll(widget.post.urlVideos!);
   }
 
   @override
@@ -33,6 +38,7 @@ class _PostWidgetState extends State<PostWidget> {
   Widget build(BuildContext context) {
     final post = widget.post;
     final screenHeight = MediaQuery.of(context).size.height;
+
 
     return Card(
       margin: const EdgeInsets.all(12),
@@ -67,29 +73,31 @@ class _PostWidgetState extends State<PostWidget> {
             const SizedBox(height: 12),
 
             // Fotos com PageView
-            if (post.urlMidia.isNotEmpty)
+            if (listMedia.isNotEmpty)
               Column(
                 children: [
                   SizedBox(
                     height: screenHeight * 0.6,
-                    child: PageView.builder(
+                    child: PageView(
                       controller: _pageController,
-                      itemCount: post.urlMidia.length,
                       onPageChanged: (index) {
                         setState(() => _currentPage = index);
                       },
-                      itemBuilder: (context, index) {
-                        return ClipRRect(
+                      children: [
+                        ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: Image.network(
-                            post.urlMidia[index],
+                            post.urlMidia[0],
                             width: double.infinity,
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) =>
                                 const Icon(Icons.broken_image),
                           ),
-                        );
-                      },
+                        ),
+                        if (post.urlVideos != null && post.urlVideos!.isNotEmpty) VideoPlayerFromNetwork(
+                          url: post.urlVideos![0] // Ajusta o índice para vídeos,
+                        ), 
+                      ],
                     ),
                   ),
                   const SizedBox(height: 12),
