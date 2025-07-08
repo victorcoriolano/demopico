@@ -34,7 +34,8 @@ class _VideoPlayerFromNetworkState extends State<VideoPlayerFromNetwork> {
           child: _controller.value.isInitialized
               ? AspectRatio(
                   aspectRatio: _controller.value.aspectRatio,
-                  child: Stack(children:[ 
+                  child: Stack(
+                    children:[ 
                     VideoPlayer(_controller),
                     Positioned(
                       bottom: 10,
@@ -48,6 +49,7 @@ class _VideoPlayerFromNetworkState extends State<VideoPlayerFromNetwork> {
                         ),
                         onPressed: () {
                           setState(() {
+                            
                             _controller.value.isPlaying
                                 ? _controller.pause()
                                 : _controller.play();
