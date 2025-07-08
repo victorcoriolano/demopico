@@ -13,6 +13,8 @@ import 'package:flutter/material.dart';
 
 class PostProvider extends ChangeNotifier {
 
+  //TODO: Adicionar lógica de cache de imagens e videos para otimizar o carregamento
+
   final CreatePostUc _createPostUc;
   final PickFileUC _pickFileUC;
   final GetPostUc _getPostUc;
@@ -29,7 +31,6 @@ class PostProvider extends ChangeNotifier {
   final List<FileModel> _filesModels = [];
   final List<FileModel> _videos = [];
   final List<FileModel> _images = [];
-  final List<MediaUrlItem> _mediaUrls = [];
 
   String _description = '';
   String? _selectedSpotId;
@@ -44,7 +45,6 @@ class PostProvider extends ChangeNotifier {
 
   String get messageError => _messageError ?? '';
   List<FileModel> get filesModels => _filesModels;
-  List<MediaUrlItem> get mediaUrl => _mediaUrls;
   String get description => _description;
   String? get selectedSpotId => _selectedSpotId;
   bool get isLoading => _isLoading;
@@ -104,11 +104,21 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
-  void  getMediaUrlsFor(Post post){
-    post.urlImages.map((url) => _mediaUrls.add(MediaUrlItem(url: url, contentType: MediaType.image)));
-    if (post.urlVideos != null) {
-      post.urlVideos!.map((url) => _mediaUrls.add(MediaUrlItem(url: url, contentType: MediaType.video)));
-    }
+  List<MediaUrlItem> getMediaItemsFor(Post post) {
+  final items = <MediaUrlItem>[];
+
+  items.addAll(post.urlImages.map((e) =>MediaUrlItem(url: e, contentType: MediaType.image)));
+  items.addAll(post.urlVideos?.map((e) =>MediaUrlItem(url: e, contentType: MediaType.video)) ?? []);
+
+  return items;
+}
+
+
+  // Gateway carregar postagem para ui 
+  // retorna caso a requisição já tenha sido feita postagens ja tenha sido feitas
+  Future<void> loadPosts(String userId) async {
+    if (_posts.isNotEmpty) return;
+    getPosts(userId);
   }
 
 
@@ -153,7 +163,7 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> getPost(String userId) async {
+  Future<void> getPosts(String userId) async {
     try {
       _isLoading = true;
       notifyListeners();
@@ -187,8 +197,6 @@ class PostProvider extends ChangeNotifier {
     _messageError = null;
     _videos.clear();
     _images.clear();
-    _videoUrls.clear();
-    _imgUrls.clear();
     progress = 0.0;
     notifyListeners();
   }
