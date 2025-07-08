@@ -2,7 +2,7 @@ import 'package:demopico/core/app/home_page.dart';
 import 'package:demopico/core/common/widgets/back_widget.dart';
 import 'package:demopico/features/profile/presentation/pages/create_post_page.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_description_widget.dart';
-import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_navigator_widget.dart';
+import 'package:demopico/features/profile/presentation/widgets/profile_navigator_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_posts_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_stats_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_configure_widget.dart';
@@ -192,7 +192,7 @@ class _UserPageState extends State<UserPage>
               ? const Center(child: CircularProgressIndicator())
               : ListView(padding: const EdgeInsets.all(0), children: [
                   Container(
-                    color: const Color.fromARGB(255, 236, 235, 235),
+                    color: const Color.fromARGB(255, 248, 246, 246),
                     padding: const EdgeInsets.all(0),
                     margin: const EdgeInsets.all(0),
                     child: Column(

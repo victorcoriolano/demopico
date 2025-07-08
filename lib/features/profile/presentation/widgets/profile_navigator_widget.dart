@@ -62,7 +62,7 @@ class _ProfileNavigatorWidgetState extends State<ProfileNavigatorWidget> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
-                    Icons.person,
+                    Icons.chat,
                     color: Color.fromARGB(255, 139, 0, 0),
                   ),
                 ],
