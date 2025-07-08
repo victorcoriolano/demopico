@@ -1,7 +1,9 @@
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto_mapper.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';
+import 'package:demopico/features/user/domain/enums/type_post.dart';
 
 Post mockPost1 = Post(
+   typePost: TypePost.post,
     id: "123",
       spotID: "spot123",
     nome: 'João Silva',
@@ -17,6 +19,7 @@ Post mockPost1 = Post(
   );
 
 Post mockPost2 = Post(
+  typePost: TypePost.post,
       id: "456",
         spotID: "spot123",
     nome: 'Tete da Silva',
