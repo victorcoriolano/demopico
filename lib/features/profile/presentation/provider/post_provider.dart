@@ -137,7 +137,7 @@ class PostProvider extends ChangeNotifier {
         userId: user.id!,
         spotID: _selectedSpotId ?? '', 
         urlUserPhoto: user.pictureUrl!, 
-        urlVideos: _videoUrls,
+        urlVideos: _videoUrls.isEmpty ? null : _videoUrls,
         description: description, 
         urlImages: _imgUrls);
       
@@ -185,6 +185,9 @@ class PostProvider extends ChangeNotifier {
     _description = '';
     _selectedSpotId = null;
     _messageError = null;
+    _videos.clear();
+    _images.clear();
+    _videoUrls.clear();
     _imgUrls.clear();
     progress = 0.0;
     notifyListeners();
