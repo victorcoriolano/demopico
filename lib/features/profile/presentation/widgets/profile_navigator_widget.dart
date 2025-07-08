@@ -1,4 +1,6 @@
+import 'package:demopico/features/profile/presentation/provider/screen_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProfileNavigatorWidget extends StatefulWidget {
   const ProfileNavigatorWidget({super.key});
@@ -9,25 +11,18 @@ class ProfileNavigatorWidget extends StatefulWidget {
 }
 
 class _ProfileNavigatorWidgetState extends State<ProfileNavigatorWidget> {
-  int _currentIndex = 0;
-
   @override
   Widget build(BuildContext context) {
+      final navigatorProvider = context.watch<ScreenProvider>();
     return SizedBox( // <- controla o tamanho do scaffold (opcional)
       height: 60, 
       child:  BottomNavigationBar(
           backgroundColor: Colors.white,
-          currentIndex: _currentIndex,
+          currentIndex: navigatorProvider.currentIndex,
           showUnselectedLabels: false,
           showSelectedLabels: true,
           selectedIconTheme: const IconThemeData(size: 25),
-          
-    
-          onTap: (int index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
+          onTap: (index) => navigatorProvider.setIndex(index),
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
