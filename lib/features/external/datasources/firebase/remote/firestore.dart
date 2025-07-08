@@ -6,7 +6,6 @@ class Firestore {
     _firestore ??= FirebaseFirestore.instance;
     _firestore!.settings = const Settings(
       persistenceEnabled: true,
-      cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
     );
     return _firestore!;
   }
