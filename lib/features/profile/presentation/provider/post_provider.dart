@@ -8,6 +8,7 @@ import 'package:demopico/core/common/files_manager/services/upload_service.dart'
 import 'package:demopico/features/profile/domain/models/post.dart';
 import 'package:demopico/features/profile/domain/usecases/create_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_post_uc.dart';
+import 'package:demopico/features/profile/presentation/view_objects/media_url_item.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter/material.dart';
 
@@ -29,6 +30,8 @@ class PostProvider extends ChangeNotifier {
   final List<FileModel> _filesModels = [];
   final List<FileModel> _videos = [];
   final List<FileModel> _images = [];
+  final List<MediaUrlItem> _mediaUrls = [];
+
   String _description = '';
   String? _selectedSpotId;
   String? _messageError;
@@ -42,6 +45,7 @@ class PostProvider extends ChangeNotifier {
 
   String get messageError => _messageError ?? '';
   List<FileModel> get filesModels => _filesModels;
+  List<MediaUrlItem> get mediaUrl => _mediaUrls;
   String get description => _description;
   String? get selectedSpotId => _selectedSpotId;
   bool get isLoading => _isLoading;
@@ -76,6 +80,7 @@ class PostProvider extends ChangeNotifier {
       debugPrint("Adicionou: ${_filesModels.length} na lista e arquivos selecionados");
 
       for (var file in _filesModels) {
+        // Mapeando os arquivos para imagens e vídeos
         debugPrint("mapeando arquivos");
         if (file.contentType.isVideo) {
           _videos.add(file);
@@ -100,7 +105,12 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
-  
+  void  getMediaUrlsFor(Post post){
+    post.urlMidia.map((url) => _mediaUrls.add(MediaUrlItem(url: url, contentType: MediaType.image)));
+    if (post.urlVideos != null) {
+      post.urlVideos!.map((url) => _mediaUrls.add(MediaUrlItem(url: url, contentType: MediaType.video)));
+    }
+  }
 
 
   Future<void> createPost(UserM user) async{
@@ -112,7 +122,7 @@ class PostProvider extends ChangeNotifier {
         _isLoading = false;
         throw InvalidUserFailure();
       }
-
+        //cria urls separadas para imagens e vídeos
         final urlsimages = await UploadService.getInstance.uploadFiles(_images, "posts/images");
         final urlvideos = await UploadService.getInstance.uploadFiles(_videos, "posts/videos");
           
@@ -192,3 +202,4 @@ class PostProvider extends ChangeNotifier {
   }
 }
   
+
