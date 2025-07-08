@@ -5,8 +5,8 @@ import 'package:demopico/features/profile/presentation/widgets/post_widgets/prof
 import 'package:demopico/features/profile/presentation/widgets/profile_navigator_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_posts_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_stats_widget.dart';
-import 'package:demopico/features/profile/presentation/widgets/profile_configure_widget.dart';
-import 'package:demopico/features/profile/presentation/widgets/profile_top_side_data_widget.dart';
+import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_configure_widget.dart';
+import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_top_side_data_widget.dart';
 import 'package:demopico/features/user/domain/enums/type_post.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
@@ -17,14 +17,14 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-class UserPage extends StatefulWidget {
-  const UserPage({super.key});
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
 
   @override
-  State<UserPage> createState() => _UserPageState();
+  State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _UserPageState extends State<UserPage>
+class _ProfilePageState extends State<ProfilePage>
     with SingleTickerProviderStateMixin {
   late UserM? user;
   String? currentUserId;

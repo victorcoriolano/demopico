@@ -1,5 +1,5 @@
 import 'package:demopico/core/app/home_page.dart';
-import 'package:demopico/features/profile/presentation/widgets/about_page_widget.dart';
+import 'package:demopico/features/profile/presentation/widgets/profile_data/about_page_widget.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

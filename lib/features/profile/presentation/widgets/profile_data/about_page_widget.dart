@@ -1,4 +1,4 @@
-import 'package:demopico/features/profile/presentation/pages/user_page.dart';
+import 'package:demopico/features/profile/presentation/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 
 class AboutPage extends StatelessWidget {
@@ -19,7 +19,7 @@ class AboutPage extends StatelessWidget {
           onPressed: () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (_) => const UserPage()),
+              MaterialPageRoute(builder: (_) => const ProfilePage()),
             );
           },
         ),
