@@ -2,7 +2,6 @@ import 'package:demopico/core/app/home_page.dart';
 import 'package:demopico/core/common/widgets/back_widget.dart';
 import 'package:demopico/features/profile/presentation/pages/create_post_page.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_description_widget.dart';
-import 'package:demopico/features/profile/presentation/widgets/profile_navigator_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_posts_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_stats_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_configure_widget.dart';
@@ -33,9 +32,8 @@ class _ProfilePageState extends State<ProfilePage>
   ScrollDirection? _lastDirection;
   double _accumulatedScroll = 0.0;
   double _lastOffset = 0.0;
-  
+
   TypePost typePost = TypePost.post; // definindo o tipo de post
-  
 
   final ScrollController _scrollController = ScrollController();
   final TextEditingController bioController = TextEditingController();
@@ -50,7 +48,6 @@ class _ProfilePageState extends State<ProfilePage>
     _tabController = TabController(length: 3, vsync: this);
 
     _tabController.addListener(() {
-      
       if (_tabController.index == 0) {
         typePost = TypePost.post;
         setState(() {});
@@ -176,11 +173,6 @@ class _ProfilePageState extends State<ProfilePage>
     }
   }
 
-  
-
-
-
-  
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -257,20 +249,25 @@ class _ProfilePageState extends State<ProfilePage>
                 ]),
         ),
       ),
-      bottomNavigationBar: ProfileNavigatorWidget(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.to(() => CreatePostPage(typePost: typePost,));
-          Navigator.push(context, MaterialPageRoute(
-            builder: (context) => CreatePostPage(typePost: typePost,)));
+          Get.to(() => CreatePostPage(
+                typePost: typePost,
+              ));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => CreatePostPage(
+                        typePost: typePost,
+                      )));
         },
         tooltip: "Criar Postagem",
         child: Icon(
           typePost == TypePost.post
               ? Icons.add
               : typePost == TypePost.fullVideo
-                ? Icons.video_call
-                : Icons.map_outlined,
+                  ? Icons.video_call
+                  : Icons.map_outlined,
         ),
       ),
     );
