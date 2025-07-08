@@ -18,7 +18,9 @@ import 'package:demopico/features/profile/domain/usecases/create_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/delete_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_post_uc.dart';
 import 'package:demopico/features/profile/presentation/pages/profile_page.dart';
+import 'package:demopico/features/profile/presentation/pages/user_controller_page.dart';
 import 'package:demopico/features/profile/presentation/provider/post_provider.dart';
+import 'package:demopico/features/profile/presentation/provider/screen_provider.dart';
 import 'package:demopico/features/user/infra/services/user_auth_firebase_service.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
@@ -37,6 +39,7 @@ class MyAppWidget extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => OpenWeatherProvider()),
         ChangeNotifierProvider(create: (_) => ForecastProvider(null)),
         ChangeNotifierProvider(create: (_) => AuthUserProvider.getInstance),
+        ChangeNotifierProvider(create: (_) => ScreenProvider()),
         StreamProvider(
           create: (_) =>
               UserAuthFirebaseService.getInstance.getAuthStateChanges(),
@@ -77,7 +80,7 @@ class MyAppWidget extends StatelessWidget {
           '/': (context) => const HomePage(),
           '/HubPage': (context) => const HubPage(),
           '/MapPage': (context) => const MapPage(),
-          '/UserPage': (context) => const ProfilePage()
+          '/UserPage': (context) => const UserControllerPage()
         },
       ),
     );
