@@ -19,18 +19,20 @@ class _PostWidgetState extends State<PostWidget> {
   late final PageController _pageController;
   bool jaCurtiu = false;
   int curtidas = 0;
-  final listMedia = <String>[];
-  late PostProvider postProvider;
+  late final PostProvider _provider;
+  final urlsItems = [];
+  
 
   @override
   void initState() {
-    super.initState();
-    postProvider = Provider.of<PostProvider>(context, listen: false);
-    postProvider.getMediaUrlsFor(widget.post);
+    super.initState();    
     _pageController = PageController();
     curtidas = widget.post.curtidas;
-    listMedia.addAll(widget.post.urlImages);
-    if (widget.post.urlVideos != null && widget.post.urlVideos!.isNotEmpty) listMedia.addAll(widget.post.urlVideos!);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _provider = Provider.of(context, listen: false);
+      urlsItems.addAll(_provider.getMediaItemsFor(widget.post));
+      setState(() {});
+    });
   }
 
   @override
@@ -79,61 +81,69 @@ class _PostWidgetState extends State<PostWidget> {
             const SizedBox(height: 12),
 
             // Fotos com PageView
-            if (listMedia.isNotEmpty)
+            
               Column(
-                children: [
-                  SizedBox(
-                    height: screenHeight * 0.6,
-                    child: PageView.builder(
-                      itemCount: postProvider.mediaUrl.length,
-                      itemBuilder: (context, index) {
-                        var itemUrl = postProvider.mediaUrl[index];
-                        if (itemUrl.contentType == MediaType.image){
-                          return ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.network(
-                            itemUrl.url,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                const Icon(Icons.broken_image),
-                          ),
-                        );
-                        }
-                        else {
-                          return VideoPlayerFromNetwork(
-                            url: itemUrl.url 
-                          );
-                        }
-                      },
-                      controller: _pageController,
-                      onPageChanged: (index) {
-                        setState(() => _currentPage = index);
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  // Indicador de página
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(post.urlImages.length, (index) {
-                      final isActive = _currentPage == index;
-                      return AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                        width: isActive ? 12 : 8,
-                        height: isActive ? 12 : 8,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: isActive
-                              ? Colors.black87
-                              : Colors.grey.withOpacity(0.5),
+              children: [
+                SizedBox(
+                  height: screenHeight * 0.6,
+                  child: PageView.builder(
+                    itemCount: urlsItems.length,
+                    itemBuilder: (context, index) {
+                      debugPrint("post");
+                      var itemUrl = urlsItems[index];
+                      if (itemUrl.contentType == MediaType.image){
+                        return ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.network(
+                          itemUrl.url,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                          loadingBuilder: (contex, child, loadBuilder) {
+                            if (loadBuilder == null) return child;
+                            return Center(child: CircularProgressIndicator(),);
+                          },
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(Icons.broken_image),
                         ),
                       );
-                    }),
+                      }
+                      else if (itemUrl.contentType == MediaType.video) {
+                        return VideoPlayerFromNetwork(
+                          url: itemUrl.url 
+                        );
+                      }
+                      else {
+                        return Center(child: Text("Não suportado"),);
+                      }
+                    },
+                    controller: _pageController,
+                    onPageChanged: (index) {
+                      setState(() => _currentPage = index);
+                    },
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 12),
+                // Indicador de página
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(urlsItems.length, (index) {
+                    final isActive = _currentPage == index;
+                    return AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      width: isActive ? 12 : 8,
+                      height: isActive ? 12 : 8,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: isActive
+                            ? Colors.black87
+                            : Colors.grey.withOpacity(0.5),
+                      ),
+                    );
+                  }),
+                ),
+              ],
+                              ),
 
             const SizedBox(height: 16),
 
