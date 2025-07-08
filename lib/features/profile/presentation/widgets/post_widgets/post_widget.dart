@@ -1,6 +1,9 @@
 import 'package:demopico/features/profile/domain/models/post.dart';
+import 'package:demopico/features/profile/presentation/provider/post_provider.dart';
+import 'package:demopico/features/profile/presentation/view_objects/media_url_item.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/video_player_from_network.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PostWidget extends StatefulWidget {
   final Post post;
@@ -17,11 +20,13 @@ class _PostWidgetState extends State<PostWidget> {
   bool jaCurtiu = false;
   int curtidas = 0;
   final listMedia = <String>[];
-  
+  late PostProvider postProvider;
 
   @override
   void initState() {
     super.initState();
+    postProvider = Provider.of<PostProvider>(context, listen: false);
+    postProvider.getMediaUrlsFor(widget.post);
     _pageController = PageController();
     curtidas = widget.post.curtidas;
     listMedia.addAll(widget.post.urlMidia);
@@ -38,6 +43,7 @@ class _PostWidgetState extends State<PostWidget> {
   Widget build(BuildContext context) {
     final post = widget.post;
     final screenHeight = MediaQuery.of(context).size.height;
+    
 
 
     return Card(
@@ -78,26 +84,32 @@ class _PostWidgetState extends State<PostWidget> {
                 children: [
                   SizedBox(
                     height: screenHeight * 0.6,
-                    child: PageView(
-                      controller: _pageController,
-                      onPageChanged: (index) {
-                        setState(() => _currentPage = index);
-                      },
-                      children: [
-                        ClipRRect(
+                    child: PageView.builder(
+                      itemCount: postProvider.mediaUrl.length,
+                      itemBuilder: (context, index) {
+                        var itemUrl = postProvider.mediaUrl[index];
+                        if (itemUrl.contentType == MediaType.image){
+                          return ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: Image.network(
-                            post.urlMidia[0],
+                            itemUrl.url,
                             width: double.infinity,
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) =>
                                 const Icon(Icons.broken_image),
                           ),
-                        ),
-                        if (post.urlVideos != null && post.urlVideos!.isNotEmpty) VideoPlayerFromNetwork(
-                          url: post.urlVideos![0] // Ajusta o índice para vídeos,
-                        ), 
-                      ],
+                        );
+                        }
+                        else {
+                          return VideoPlayerFromNetwork(
+                            url: itemUrl.url 
+                          );
+                        }
+                      },
+                      controller: _pageController,
+                      onPageChanged: (index) {
+                        setState(() => _currentPage = index);
+                      },
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -140,10 +152,10 @@ class _PostWidgetState extends State<PostWidget> {
                       }
                     });
                   },
-                  child: Image.asset(
-                    'assets/images/cumprimento_marreta.png',
-                    width: 60,
-                    height: 60,
+                  child: ImageIcon(
+                    AssetImage('assets/images/cumprimento_marreta.png'),
+                    color: jaCurtiu ? Colors.red : Colors.grey,
+                    size: 80,
                   ),
                 ),
                 const SizedBox(width: 8),
