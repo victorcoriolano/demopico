@@ -6,6 +6,7 @@ import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/files_manager/services/upload_service.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';
 import 'package:demopico/features/profile/domain/usecases/create_post_uc.dart';
+import 'package:demopico/features/profile/domain/usecases/delete_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_post_uc.dart';
 import 'package:demopico/features/profile/presentation/view_objects/media_url_item.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
@@ -18,14 +19,17 @@ class PostProvider extends ChangeNotifier {
   final CreatePostUc _createPostUc;
   final PickFileUC _pickFileUC;
   final GetPostUc _getPostUc;
+  final DeletePostUc _deletePostUc;
 
   PostProvider({
+    required DeletePostUc deleteUc,
     required CreatePostUc createPostUc,
     required PickFileUC pickFileUC,
     required GetPostUc getPosts}) 
     : _createPostUc = createPostUc,
       _pickFileUC = pickFileUC,
-      _getPostUc = getPosts;
+      _getPostUc = getPosts,
+      _deletePostUc = deleteUc;
 
 
   final List<FileModel> _filesModels = [];
@@ -120,6 +124,13 @@ class PostProvider extends ChangeNotifier {
     if (_posts.isNotEmpty) return;
     getPosts(userId);
   }
+
+Future<void> deletePost(Post postagem) async {
+  final urls = <String>[];
+  urls.addAll(postagem.urlImages);
+  if (postagem.urlVideos != null) urls.addAll(postagem.urlVideos!);
+  await _deletePostUc.execute(postagem.id, urls);
+}
 
 
   Future<void> createPost(UserM user) async{
