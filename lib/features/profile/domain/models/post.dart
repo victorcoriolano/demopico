@@ -7,7 +7,7 @@ class Post {
   String spotID;             
   String urlUserPhoto;
   String description;
-  List<String> urlMidia;
+  List<String> urlImages;
   List<String>? urlVideos;
   DateTime dateTime;
   int curtidas;
@@ -20,7 +20,7 @@ class Post {
     required this.spotID,
     required this.urlUserPhoto,
     required this.description,
-    required this.urlMidia,
+    required this.urlImages,
     DateTime? dateTime,
     int? curtidas,
     this.files,
@@ -50,7 +50,7 @@ class Post {
   }
 
   List<String> geturlMidia() {
-    return urlMidia;
+    return urlImages;
   }
 
   DateTime getDateTime() {
@@ -79,7 +79,7 @@ class Post {
   }
 
   void seturlMidia(List<String> value) {
-    urlMidia = value;
+    urlImages = value;
   }
 
   void setCurtidas(int value) {
@@ -98,7 +98,7 @@ class Post {
       userId: json['userId'],
       urlUserPhoto: json['urlUserPhoto'],
       description: json['description'],
-      urlMidia: List<String>.from(json['urlMidia']),
+      urlImages: List<String>.from(json['urlMidia']),
       urlVideos: json['urlVideos'] != null
           ? List<String>.from(json['urlVideos'])
           : null,
@@ -114,7 +114,7 @@ class Post {
       'spotId': spotID,
       'urlUserPhoto': urlUserPhoto,
       'description': description,
-      'urlMidia': urlMidia,
+      'urlMidia': urlImages,
       'urlVideos': urlVideos ?? [],
       'dateTime': dateTime.toIso8601String(),
       'curtidas': curtidas,

@@ -29,7 +29,7 @@ class _PostWidgetState extends State<PostWidget> {
     postProvider.getMediaUrlsFor(widget.post);
     _pageController = PageController();
     curtidas = widget.post.curtidas;
-    listMedia.addAll(widget.post.urlMidia);
+    listMedia.addAll(widget.post.urlImages);
     if (widget.post.urlVideos != null && widget.post.urlVideos!.isNotEmpty) listMedia.addAll(widget.post.urlVideos!);
   }
 
@@ -116,7 +116,7 @@ class _PostWidgetState extends State<PostWidget> {
                   // Indicador de página
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(post.urlMidia.length, (index) {
+                    children: List.generate(post.urlImages.length, (index) {
                       final isActive = _currentPage == index;
                       return AnimatedContainer(
                         duration: const Duration(milliseconds: 300),
