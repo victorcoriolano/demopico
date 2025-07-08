@@ -32,9 +32,15 @@ class CardPostWidget extends StatelessWidget {
             width: double.infinity,
             height: double.infinity,
           )
-          : VideoPlayerFromNetwork(url: post.urlVideos?.isNotEmpty == true 
-            ? post.urlVideos![0] 
-            : 'https://youtu.be/NdkK7ghqLdY?si=tO6fF542jOuoHK7U')
+          : post.urlVideos != null && post.urlVideos!.isNotEmpty 
+            ? VideoPlayerFromNetwork(url: post.urlVideos![0])
+            : const Center(
+                child: Icon(
+                  Icons.broken_image,
+                  size: 50,
+                  color: Colors.grey,
+                ),
+              ),
       ),
     );
   }
