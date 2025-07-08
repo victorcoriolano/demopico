@@ -10,6 +10,9 @@ class FirebaseFavoriteSpotRemoteDataSource implements IFavoriteSpotRemoteDataSou
   static FirebaseFavoriteSpotRemoteDataSource? _favoriteSpotService;
   static FirebaseFavoriteSpotRemoteDataSource get getInstance {
     _favoriteSpotService ??= FirebaseFavoriteSpotRemoteDataSource(firebaseFirestore: FirebaseFirestore.instance);
+    _favoriteSpotService!.firebaseFirestore.settings = const Settings(
+      persistenceEnabled: true, 
+    );
     return _favoriteSpotService!;
   }
     
