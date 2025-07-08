@@ -1,4 +1,5 @@
 import 'package:demopico/core/app/home_page.dart';
+import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/util/file_manager/pick_files_uc.dart';
 import 'package:demopico/features/home/provider/forecast_provider.dart';
 import 'package:demopico/features/home/provider/home_provider.dart';
@@ -70,16 +71,12 @@ class MyAppWidget extends StatelessWidget {
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'SKATEPICO',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-              seedColor: const Color.fromARGB(255, 139, 0, 0)),
-          useMaterial3: true,
-        ),
+        theme: appTheme,
         routes: {
           '/': (context) => const HomePage(),
           '/HubPage': (context) => const HubPage(),
           '/MapPage': (context) => const MapPage(),
-          '/UserPage': (context) => const UserControllerPage()
+          '/UserPage': (context) => const UserControllerPage(),
         },
       ),
     );
