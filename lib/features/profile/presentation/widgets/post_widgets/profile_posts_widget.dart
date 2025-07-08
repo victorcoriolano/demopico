@@ -8,7 +8,7 @@ class ProfilePostsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 236, 235, 235),
+      backgroundColor:  const Color.fromARGB(255, 248, 246, 246),
       body: Column(
         children: [
           TabBar(
