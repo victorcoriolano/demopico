@@ -1,4 +1,6 @@
 
+import 'package:demopico/features/user/domain/enums/type_post.dart';
+
 class Post {
   String id;
   String nome;     
@@ -10,6 +12,7 @@ class Post {
   List<String>? urlVideos;
   DateTime dateTime;
   int curtidas;
+  TypePost typePost;
 
   Post({
     required this.id,
@@ -19,6 +22,7 @@ class Post {
     required this.urlUserPhoto,
     required this.description,
     required this.urlImages,
+    required this.typePost,
     DateTime? dateTime,
     int? curtidas,
     this.urlVideos,
@@ -97,6 +101,7 @@ class Post {
           : null,
       dateTime: DateTime.parse(json['dateTime']),
       curtidas: json['curtidas'],
+      typePost: TypePost.fromString(json["typePost"]),
     );
   }
 
@@ -111,6 +116,7 @@ class Post {
       'urlVideos': urlVideos ?? [],
       'dateTime': dateTime.toIso8601String(),
       'curtidas': curtidas,
+      'typePost': typePost.name
     };
   }
 
