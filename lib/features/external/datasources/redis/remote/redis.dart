@@ -49,8 +49,8 @@ class Redis {
       // message[0] = "message", message[1] = canal, message[2] = conteúdo
       final String payload = message[2];
       final Map<String, dynamic> data = jsonDecode(payload);
-      final dto = RedisDto.fromJson(data);
-      onMessage(dto);
+    //  final dto = RedisDto.fromJson(data);
+     // onMessage(dto);
     });
   }
 
@@ -65,8 +65,8 @@ class Redis {
     pubSub.getStream().listen((message) {
       final String payload = message[2];
       final Map<String, dynamic> data = jsonDecode(payload);
-      final dto = RedisDto.fromJson(data);
-      onMessage(dto);
+   //   final dto = RedisDto.fromJson(data);
+    //  onMessage(dto);
     });
   }
 
