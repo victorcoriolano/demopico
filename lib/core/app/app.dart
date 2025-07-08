@@ -15,6 +15,7 @@ import 'package:demopico/features/mapa/presentation/controllers/spot_controller.
 import 'package:demopico/features/mapa/presentation/controllers/favorite_spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
 import 'package:demopico/features/profile/domain/usecases/create_post_uc.dart';
+import 'package:demopico/features/profile/domain/usecases/delete_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_post_uc.dart';
 import 'package:demopico/features/profile/presentation/pages/user_page.dart';
 import 'package:demopico/features/profile/presentation/provider/post_provider.dart';
@@ -61,6 +62,7 @@ class MyAppWidget extends StatelessWidget {
           createPostUc: CreatePostUc.instace,
           pickFileUC: PickFileUC.getInstance,
           getPosts: GetPostUc.instance,
+          deleteUc: DeletePostUc.instance,
         )),
       ],
       child: GetMaterialApp(
