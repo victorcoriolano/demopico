@@ -1,5 +1,4 @@
 
-import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/core/common/files_manager/models/file_model.dart';
 import 'package:demopico/core/common/util/file_manager/pick_files_uc.dart';
 import 'package:demopico/core/common/errors/domain_failures.dart';
@@ -106,7 +105,7 @@ class PostProvider extends ChangeNotifier {
   }
 
   void  getMediaUrlsFor(Post post){
-    post.urlMidia.map((url) => _mediaUrls.add(MediaUrlItem(url: url, contentType: MediaType.image)));
+    post.urlImages.map((url) => _mediaUrls.add(MediaUrlItem(url: url, contentType: MediaType.image)));
     if (post.urlVideos != null) {
       post.urlVideos!.map((url) => _mediaUrls.add(MediaUrlItem(url: url, contentType: MediaType.video)));
     }
@@ -124,18 +123,14 @@ class PostProvider extends ChangeNotifier {
       }
         //cria urls separadas para imagens e vídeos
         final urlsimages = await UploadService.getInstance.uploadFiles(_images, "posts/images");
-        final urlvideos = await UploadService.getInstance.uploadFiles(_videos, "posts/videos");
-          
-      
-      _imgUrls.addAll(urlsimages);
-      _videoUrls.addAll(urlvideos);
+        _imgUrls.addAll(urlsimages);
 
-      if (_imgUrls.isEmpty || _videoUrls.isEmpty) {
-        _messageError = "Não foi possivel fazer o upload dos arquivos";
-        throw UploadFileFailure();
-      }
+        if (_videoUrls.isNotEmpty){
+          final urlvideos = await UploadService.getInstance.uploadFiles(_videos, "posts/videos");
+          _videoUrls.addAll(urlvideos);
+        }
+        
 
-      // Espera o upload terminar
       final newPost = Post(
         id: "",
         nome: user.name!, 
@@ -144,7 +139,7 @@ class PostProvider extends ChangeNotifier {
         urlUserPhoto: user.pictureUrl!, 
         urlVideos: _videoUrls,
         description: description, 
-        urlMidia: _imgUrls);
+        urlImages: _imgUrls);
       
       final post = await _createPostUc.execute(newPost);
       _posts.add(post);
