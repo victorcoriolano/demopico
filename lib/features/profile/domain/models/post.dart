@@ -1,4 +1,3 @@
-import 'package:demopico/core/common/files_manager/models/file_model.dart';
 
 class Post {
   String id;
@@ -11,7 +10,6 @@ class Post {
   List<String>? urlVideos;
   DateTime dateTime;
   int curtidas;
-  List<FileModel>? files;
 
   Post({
     required this.id,
@@ -23,7 +21,6 @@ class Post {
     required this.urlImages,
     DateTime? dateTime,
     int? curtidas,
-    this.files,
     this.urlVideos,
   })  : dateTime = dateTime ?? DateTime.now(),
         curtidas = curtidas ?? 0;
@@ -84,10 +81,6 @@ class Post {
 
   void setCurtidas(int value) {
     curtidas = value;
-  }
-
-  void setFiles(List<FileModel> value) {
-    files = value;
   }
 
   factory Post.fromJson(Map<String, dynamic> json, String id) {
