@@ -162,7 +162,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                       return;
                     }
                     try{
-                      await provider.createPost(user);
+                      await provider.createPost(user, widget.typePost);
                       Get.snackbar(
                         'Sucesso',
                         'Postagem criada com sucesso!',

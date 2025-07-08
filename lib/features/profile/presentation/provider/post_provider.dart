@@ -9,6 +9,7 @@ import 'package:demopico/features/profile/domain/usecases/create_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/delete_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_post_uc.dart';
 import 'package:demopico/features/profile/presentation/view_objects/media_url_item.dart';
+import 'package:demopico/features/user/domain/enums/type_post.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter/material.dart';
 
@@ -133,7 +134,7 @@ Future<void> deletePost(Post postagem) async {
 }
 
 
-  Future<void> createPost(UserM user) async{
+  Future<void> createPost(UserM user, TypePost type) async{
     try{
       _isLoading = true;
       notifyListeners();
@@ -154,6 +155,7 @@ Future<void> deletePost(Post postagem) async {
 
       final newPost = Post(
         id: "",
+        typePost: type,
         nome: user.name!, 
         userId: user.id!,
         spotID: _selectedSpotId ?? '', 
