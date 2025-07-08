@@ -34,7 +34,7 @@ class HubRepository implements IHubRepository {
 
   // Criar comunicado
   @override
-  Future<void> postHubCommuniqueToFirebase(String text, dynamic type) async {
+  Future<Communique> postHubCommuniqueToFirebase(String text, dynamic type) async {
     try {
       String userID = userAuthServiceIMP.currentUser();
       UserM? user = await userDatabaseRepositoryIMP.getUserDetails(userID);
@@ -53,6 +53,7 @@ class HubRepository implements IHubRepository {
           type: type,
         );
         await hubServiceIMP.createCommunique(newCommunique);
+        return newCommunique;
       } else {
         if (kDebugMode) print('Usuário não encontrado.');
         throw FirebaseAuthException(
