@@ -26,8 +26,8 @@ class HubProvider extends ChangeNotifier {
 
   Future<void> postHubCommunique(String text, String type) async {
     try {
-      await postarComunicado.postar(text, type);
-      getAllCommuniques();
+      final newCommunique = await postarComunicado.postar(text, type);
+      _allCommuniques.add(newCommunique);
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -60,7 +60,9 @@ class HubProvider extends ChangeNotifier {
   }
 
   Future<void> getAllCommuniques() async {
+    //TODO : IMPLEMENTAR STREAMS COM LÓGICA DE CACHE
     try {
+      if (_allCommuniques.isNotEmpty) return; 
       final allCommuniquesFromDb = await listarComunicado.listar();
       _allCommuniques = allCommuniquesFromDb.nonNulls.toList();
       notifyListeners();

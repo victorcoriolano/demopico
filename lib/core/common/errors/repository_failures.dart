@@ -80,7 +80,8 @@ class OperationCanceledFailure extends RepositoryFailures {
 
 // Erro desconhecido
 class UnknownFailure extends RepositoryFailures {
-  UnknownFailure({super.originalException, super.stackTrace}): super("Erro desconhecido", code: 'UNKNOWN');
+  final Object? unknownError;
+  UnknownFailure({super.originalException, super.stackTrace, this.unknownError}): super("Erro desconhecido", code: 'UNKNOWN');
 }
 
 // Internal server error 

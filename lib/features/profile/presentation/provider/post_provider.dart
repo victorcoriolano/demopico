@@ -1,5 +1,4 @@
 
-import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/core/common/files_manager/models/file_model.dart';
 import 'package:demopico/core/common/util/file_manager/pick_files_uc.dart';
 import 'package:demopico/core/common/errors/domain_failures.dart';
@@ -8,10 +7,13 @@ import 'package:demopico/core/common/files_manager/services/upload_service.dart'
 import 'package:demopico/features/profile/domain/models/post.dart';
 import 'package:demopico/features/profile/domain/usecases/create_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_post_uc.dart';
+import 'package:demopico/features/profile/presentation/view_objects/media_url_item.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter/material.dart';
 
 class PostProvider extends ChangeNotifier {
+
+  //TODO: Adicionar lógica de cache de imagens e videos para otimizar o carregamento
 
   final CreatePostUc _createPostUc;
   final PickFileUC _pickFileUC;
@@ -29,6 +31,7 @@ class PostProvider extends ChangeNotifier {
   final List<FileModel> _filesModels = [];
   final List<FileModel> _videos = [];
   final List<FileModel> _images = [];
+
   String _description = '';
   String? _selectedSpotId;
   String? _messageError;
@@ -76,6 +79,7 @@ class PostProvider extends ChangeNotifier {
       debugPrint("Adicionou: ${_filesModels.length} na lista e arquivos selecionados");
 
       for (var file in _filesModels) {
+        // Mapeando os arquivos para imagens e vídeos
         debugPrint("mapeando arquivos");
         if (file.contentType.isVideo) {
           _videos.add(file);
@@ -100,7 +104,22 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
-  
+  List<MediaUrlItem> getMediaItemsFor(Post post) {
+  final items = <MediaUrlItem>[];
+
+  items.addAll(post.urlImages.map((e) =>MediaUrlItem(url: e, contentType: MediaType.image)));
+  items.addAll(post.urlVideos?.map((e) =>MediaUrlItem(url: e, contentType: MediaType.video)) ?? []);
+
+  return items;
+}
+
+
+  // Gateway carregar postagem para ui 
+  // retorna caso a requisição já tenha sido feita postagens ja tenha sido feitas
+  Future<void> loadPosts(String userId) async {
+    if (_posts.isNotEmpty) return;
+    getPosts(userId);
+  }
 
 
   Future<void> createPost(UserM user) async{
@@ -112,29 +131,25 @@ class PostProvider extends ChangeNotifier {
         _isLoading = false;
         throw InvalidUserFailure();
       }
-
+        //cria urls separadas para imagens e vídeos
         final urlsimages = await UploadService.getInstance.uploadFiles(_images, "posts/images");
-        final urlvideos = await UploadService.getInstance.uploadFiles(_videos, "posts/videos");
-          
-      
-      _imgUrls.addAll(urlsimages);
-      _videoUrls.addAll(urlvideos);
+        _imgUrls.addAll(urlsimages);
 
-      if (_imgUrls.isEmpty || _videoUrls.isEmpty) {
-        _messageError = "Não foi possivel fazer o upload dos arquivos";
-        throw UploadFileFailure();
-      }
+        if (_videoUrls.isNotEmpty){
+          final urlvideos = await UploadService.getInstance.uploadFiles(_videos, "posts/videos");
+          _videoUrls.addAll(urlvideos);
+        }
+        
 
-      // Espera o upload terminar
       final newPost = Post(
         id: "",
         nome: user.name!, 
         userId: user.id!,
         spotID: _selectedSpotId ?? '', 
         urlUserPhoto: user.pictureUrl!, 
-        urlVideos: _videoUrls,
+        urlVideos: _videoUrls.isEmpty ? null : _videoUrls,
         description: description, 
-        urlMidia: _imgUrls);
+        urlImages: _imgUrls);
       
       final post = await _createPostUc.execute(newPost);
       _posts.add(post);
@@ -148,7 +163,7 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> getPost(String userId) async {
+  Future<void> getPosts(String userId) async {
     try {
       _isLoading = true;
       notifyListeners();
@@ -180,7 +195,8 @@ class PostProvider extends ChangeNotifier {
     _description = '';
     _selectedSpotId = null;
     _messageError = null;
-    _imgUrls.clear();
+    _videos.clear();
+    _images.clear();
     progress = 0.0;
     notifyListeners();
   }
@@ -192,3 +208,4 @@ class PostProvider extends ChangeNotifier {
   }
 }
   
+

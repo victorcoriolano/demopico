@@ -28,9 +28,11 @@ class UploadService {
 
       return urls;
        
-    }catch (e) {
+    }on Exception catch (e) {
       debugPrint("Erro ao fazer upload: $e");
-      throw UploadFileFailure();
+      throw UploadFileFailure(originalException: e);
+    }catch (e){
+      throw UnknownFailure(unknownError: e);
     }
   }
 }

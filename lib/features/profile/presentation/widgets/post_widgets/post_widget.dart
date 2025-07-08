@@ -1,5 +1,9 @@
 import 'package:demopico/features/profile/domain/models/post.dart';
+import 'package:demopico/features/profile/presentation/provider/post_provider.dart';
+import 'package:demopico/features/profile/presentation/view_objects/media_url_item.dart';
+import 'package:demopico/features/profile/presentation/widgets/post_widgets/video_player_from_network.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PostWidget extends StatefulWidget {
   final Post post;
@@ -15,12 +19,20 @@ class _PostWidgetState extends State<PostWidget> {
   late final PageController _pageController;
   bool jaCurtiu = false;
   int curtidas = 0;
+  late final PostProvider _provider;
+  final urlsItems = [];
+  
 
   @override
   void initState() {
-    super.initState();
+    super.initState();    
     _pageController = PageController();
     curtidas = widget.post.curtidas;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _provider = Provider.of(context, listen: false);
+      urlsItems.addAll(_provider.getMediaItemsFor(widget.post));
+      setState(() {});
+    });
   }
 
   @override
@@ -33,6 +45,8 @@ class _PostWidgetState extends State<PostWidget> {
   Widget build(BuildContext context) {
     final post = widget.post;
     final screenHeight = MediaQuery.of(context).size.height;
+    
+
 
     return Card(
       margin: const EdgeInsets.all(12),
@@ -67,53 +81,69 @@ class _PostWidgetState extends State<PostWidget> {
             const SizedBox(height: 12),
 
             // Fotos com PageView
-            if (post.urlMidia.isNotEmpty)
+            
               Column(
-                children: [
-                  SizedBox(
-                    height: screenHeight * 0.6,
-                    child: PageView.builder(
-                      controller: _pageController,
-                      itemCount: post.urlMidia.length,
-                      onPageChanged: (index) {
-                        setState(() => _currentPage = index);
-                      },
-                      itemBuilder: (context, index) {
+              children: [
+                SizedBox(
+                  height: screenHeight * 0.6,
+                  child: PageView.builder(
+                    itemCount: urlsItems.length,
+                    itemBuilder: (context, index) {
+                      debugPrint("post");
+                      var itemUrl = urlsItems[index];
+                      if (itemUrl.contentType == MediaType.image){
                         return ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.network(
-                            post.urlMidia[index],
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                const Icon(Icons.broken_image),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  // Indicador de página
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(post.urlMidia.length, (index) {
-                      final isActive = _currentPage == index;
-                      return AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                        width: isActive ? 12 : 8,
-                        height: isActive ? 12 : 8,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: isActive
-                              ? Colors.black87
-                              : Colors.grey.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.network(
+                          itemUrl.url,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                          loadingBuilder: (contex, child, loadBuilder) {
+                            if (loadBuilder == null) return child;
+                            return Center(child: CircularProgressIndicator(),);
+                          },
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(Icons.broken_image),
                         ),
                       );
-                    }),
+                      }
+                      else if (itemUrl.contentType == MediaType.video) {
+                        return VideoPlayerFromNetwork(
+                          url: itemUrl.url 
+                        );
+                      }
+                      else {
+                        return Center(child: Text("Não suportado"),);
+                      }
+                    },
+                    controller: _pageController,
+                    onPageChanged: (index) {
+                      setState(() => _currentPage = index);
+                    },
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 12),
+                // Indicador de página
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(urlsItems.length, (index) {
+                    final isActive = _currentPage == index;
+                    return AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      width: isActive ? 12 : 8,
+                      height: isActive ? 12 : 8,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: isActive
+                            ? Colors.black87
+                            : Colors.grey.withOpacity(0.5),
+                      ),
+                    );
+                  }),
+                ),
+              ],
+                              ),
 
             const SizedBox(height: 16),
 
@@ -132,10 +162,10 @@ class _PostWidgetState extends State<PostWidget> {
                       }
                     });
                   },
-                  child: Image.asset(
-                    'assets/images/cumprimento_marreta.png',
-                    width: 60,
-                    height: 60,
+                  child: ImageIcon(
+                    AssetImage('assets/images/cumprimento_marreta.png'),
+                    color: jaCurtiu ? Colors.red : Colors.grey,
+                    size: 80,
                   ),
                 ),
                 const SizedBox(width: 8),

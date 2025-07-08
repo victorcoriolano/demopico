@@ -25,16 +25,22 @@ class CardPostWidget extends StatelessWidget {
         margin: const EdgeInsets.all(0),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
         clipBehavior: Clip.antiAlias,
-        child: post.urlMidia.isNotEmpty 
+        child: post.urlImages.isNotEmpty 
           ? Image.network(
-            post.urlMidia[0],
+            post.urlImages[0],
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
           )
-          : VideoPlayerFromNetwork(url: post.urlVideos?.isNotEmpty == true 
-            ? post.urlVideos![0] 
-            : 'https://youtu.be/NdkK7ghqLdY?si=tO6fF542jOuoHK7U')
+          : post.urlVideos != null && post.urlVideos!.isNotEmpty 
+            ? VideoPlayerFromNetwork(url: post.urlVideos![0])
+            : const Center(
+                child: Icon(
+                  Icons.broken_image,
+                  size: 50,
+                  color: Colors.grey,
+                ),
+              ),
       ),
     );
   }
