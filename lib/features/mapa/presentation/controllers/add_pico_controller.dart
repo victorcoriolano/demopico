@@ -1,15 +1,13 @@
 
 import 'dart:async';
 
-import 'package:demopico/core/common/files/models/file_model.dart';
+import 'package:demopico/core/common/files_manager/models/file_model.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
-import 'package:demopico/core/common/files/models/upload_result_file_model.dart';
-import 'package:demopico/core/common/files/services/upload_service.dart';
+import 'package:demopico/core/common/files_manager/services/upload_service.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
 import 'package:demopico/core/common/util/file_manager/pick_image_uc.dart';
-import 'package:demopico/core/common/util/file_manager/save_image_uc.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -246,28 +244,9 @@ class AddPicoProvider extends ChangeNotifier{
     try {
       late PicoModel newPico;
       // Faz o upload das imagens e espera as urls
-      final uploadResults = _uploadService.uploadFiles(files);
-      uploadResults.map((task) {
-        task.listen((event) {
-          if (event.state == UploadState.uploading) {
-            progress = event.progress;
-            notifyListeners();
-          } else if (event.state == UploadState.success) {
-            imgUrls.add(event.url!);
-            debugPrint("Imagem enviada com sucesso: ${event.url}");
-          } else if (event.state == UploadState.failure) {
-            errosImages = "Erro ao fazer upload das imagens";
-          }
-        },
-        onDone: () {
-          debugPrint("Upload concluido com sucesso");
-
-          // criando o modelo depois do upload
-          newPico = getInfoPico(user);
-        } 
-        );
-      });
-
+      final urls = await  _uploadService.uploadFiles(files, "spots");
+      newPico = getInfoPico(user);
+      newPico.imgUrls.addAll(urls);
       // Salva o pico no backend
       
       await createSpotUc.createSpot(newPico);

@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:demopico/core/common/files/interfaces/datasource/i_upload_task_datasource.dart';
-import 'package:demopico/core/common/files/models/file_model.dart';
-import 'package:demopico/core/common/files/models/upload_result_file_model.dart';
+import 'package:demopico/core/common/files_manager/interfaces/datasource/i_upload_task_datasource.dart';
+import 'package:demopico/core/common/files_manager/models/file_model.dart';
+import 'package:demopico/core/common/files_manager/models/upload_result_file_model.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 
 import 'package:firebase_storage/firebase_storage.dart';
@@ -21,14 +21,18 @@ class FirebaseFileRemoteDatasource implements IFileRemoteDataSource {
   FirebaseFileRemoteDatasource({required this.firebaseStorage});
 
   @override
-  List<UploadTaskInterface> uploadFile(List<FileModel> files) {
+  List<UploadTaskInterface> uploadFile(List<FileModel> files, String path) {
     try{
       final String data = DateTime.now().toIso8601String();
       final tasks = files.map((file) {
         final task = firebaseStorage
             .ref()
-            .child("spots/${file.fileName}_$data")
-            .putData(file.bytes);
+            .child("$path/${file.fileName.split(".")[0]}_$data")
+            .putData(
+              file.bytes, 
+              SettableMetadata(
+                contentType: file.contentType.name),
+              );
         return FirebaseUploadTask(uploadTask: task);
       }).toList();
 

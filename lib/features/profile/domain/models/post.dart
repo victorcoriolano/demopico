@@ -1,3 +1,5 @@
+import 'package:demopico/core/common/files_manager/models/file_model.dart';
+
 class Post {
   String id;
   String nome;     
@@ -5,9 +7,11 @@ class Post {
   String spotID;             
   String urlUserPhoto;
   String description;
-  List<String> urlMidia;
+  List<String> urlImages;
+  List<String>? urlVideos;
   DateTime dateTime;
   int curtidas;
+  List<FileModel>? files;
 
   Post({
     required this.id,
@@ -16,9 +20,11 @@ class Post {
     required this.spotID,
     required this.urlUserPhoto,
     required this.description,
-    required this.urlMidia,
+    required this.urlImages,
     DateTime? dateTime,
     int? curtidas,
+    this.files,
+    this.urlVideos,
   })  : dateTime = dateTime ?? DateTime.now(),
         curtidas = curtidas ?? 0;
 
@@ -44,7 +50,7 @@ class Post {
   }
 
   List<String> geturlMidia() {
-    return urlMidia;
+    return urlImages;
   }
 
   DateTime getDateTime() {
@@ -73,11 +79,15 @@ class Post {
   }
 
   void seturlMidia(List<String> value) {
-    urlMidia = value;
+    urlImages = value;
   }
 
   void setCurtidas(int value) {
     curtidas = value;
+  }
+
+  void setFiles(List<FileModel> value) {
+    files = value;
   }
 
   factory Post.fromJson(Map<String, dynamic> json, String id) {
@@ -88,7 +98,10 @@ class Post {
       userId: json['userId'],
       urlUserPhoto: json['urlUserPhoto'],
       description: json['description'],
-      urlMidia: List<String>.from(json['urlMidia']),
+      urlImages: List<String>.from(json['urlMidia']),
+      urlVideos: json['urlVideos'] != null
+          ? List<String>.from(json['urlVideos'])
+          : null,
       dateTime: DateTime.parse(json['dateTime']),
       curtidas: json['curtidas'],
     );
@@ -101,7 +114,8 @@ class Post {
       'spotId': spotID,
       'urlUserPhoto': urlUserPhoto,
       'description': description,
-      'urlMidia': urlMidia,
+      'urlMidia': urlImages,
+      'urlVideos': urlVideos ?? [],
       'dateTime': dateTime.toIso8601String(),
       'curtidas': curtidas,
     };

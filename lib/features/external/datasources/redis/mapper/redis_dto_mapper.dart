@@ -1,4 +1,4 @@
-import 'package:demopico/core/common/files/mappers/i_mapper_dto.dart';
+import 'package:demopico/core/common/files_manager/mappers/i_mapper_dto.dart';
 import 'package:demopico/features/external/datasources/redis/dto/redis_dto.dart';
 
 class RedisDtoMapper<Model> implements IMapperDto<Model, RedisDto> {

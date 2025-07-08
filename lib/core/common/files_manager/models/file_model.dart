@@ -32,7 +32,7 @@ enum ContentType {
 }
 
 
-extension ContentTypeExtension on ContentType { 
+extension ContentTypeExtension on ContentType { // Para integrar com o mimeType 
   static ContentType fromMime(String mime) {
     if (mime.startsWith('image/')) {
       if (mime.contains('jpeg')) return ContentType.jpeg;
@@ -68,3 +68,4 @@ extension ContentTypeExtension on ContentType {
   bool get isAudio => this == ContentType.mp3;
 
 }
+

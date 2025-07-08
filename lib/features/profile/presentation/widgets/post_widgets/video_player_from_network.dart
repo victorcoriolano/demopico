@@ -1,22 +1,21 @@
-import 'package:demopico/core/common/files_manager/models/file_model.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-class MyVideoPlayer extends StatefulWidget {
-  final FileModel videoFile;
-  const MyVideoPlayer({super.key, required this.videoFile});
+class VideoPlayerFromNetwork extends StatefulWidget {
+  final String url;
+  const VideoPlayerFromNetwork({super.key, required this.url});
 
   @override
-  State<MyVideoPlayer> createState() => _MyVideoPlayerState();
+  State<VideoPlayerFromNetwork> createState() => _VideoPlayerFromNetworkState();
 }
 
-class _MyVideoPlayerState extends State<MyVideoPlayer> {
+class _VideoPlayerFromNetworkState extends State<VideoPlayerFromNetwork> {
   late VideoPlayerController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset(widget.videoFile.filePath!)
+    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.url))
       ..initialize().then((_) {
         setState(() {});
       });

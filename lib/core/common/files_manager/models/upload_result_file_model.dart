@@ -8,8 +8,6 @@ class UploadStateFileModel {
     required this.progress,
     required this.state,
   });
-
-  
 }
 
 enum UploadState {

@@ -1,5 +1,5 @@
-import 'package:demopico/core/common/files/interfaces/repository/i_pick_image_repository.dart';
-import 'package:demopico/core/common/files/services/image_picker_service.dart';
+import 'package:demopico/core/common/files_manager/interfaces/repository/i_pick_image_repository.dart';
+import 'package:demopico/core/common/files_manager/services/image_picker_service.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:flutter/material.dart';
 
