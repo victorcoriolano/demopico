@@ -3,6 +3,7 @@ import 'package:demopico/core/common/util/file_manager/pick_files_uc.dart';
 import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/files_manager/services/upload_service.dart';
+import 'package:demopico/core/common/util/file_manager/pick_video_uc.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';
 import 'package:demopico/features/profile/domain/usecases/create_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/delete_post_uc.dart';
@@ -18,6 +19,7 @@ class PostProvider extends ChangeNotifier {
 
   final CreatePostUc _createPostUc;
   final PickFileUC _pickFileUC;
+  final PickVideoUC _pickVideoUC;
   final GetPostUc _getPostUc;
   final DeletePostUc _deletePostUc;
   final UpdatePostUc _updateUc;
@@ -27,8 +29,10 @@ class PostProvider extends ChangeNotifier {
       required CreatePostUc createPostUc,
       required PickFileUC pickFileUC,
       required GetPostUc getPosts,
-      required UpdatePostUc updateUc})
+      required UpdatePostUc updateUc,
+      required PickVideoUC pickVideo})
       : _createPostUc = createPostUc,
+        _pickVideoUC = pickVideo,
         _pickFileUC = pickFileUC,
         _getPostUc = getPosts,
         _deletePostUc = deleteUc,
@@ -37,6 +41,7 @@ class PostProvider extends ChangeNotifier {
   final List<FileModel> _filesModels = [];
   final List<FileModel> _videos = [];
   final List<FileModel> _images = [];
+  late FileModel _rec;
 
   String _description = '';
   String? _selectedSpotId;
@@ -47,6 +52,7 @@ class PostProvider extends ChangeNotifier {
   final List<Post> _posts = [];
   bool _isLoading = false;
 
+  FileModel get rec => _rec;
   String get messageError => _messageError ?? '';
   List<FileModel> get filesModels => _filesModels;
   String get description => _description;
@@ -73,37 +79,35 @@ class PostProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  //get media
-  void getFile() async {
-    try {
-      _isLoading = true;
+  Future<void> getVideo() async {
+    
+    try{
+      _rec = await _pickVideoUC.execute();
+      _isLoading = false;
       notifyListeners();
+    }catch (e){
+      _messageError = e.toString();
+    } finally {
+      _isLoading = false;
+    }
+  }
+
+  //get media
+  Future<void> getFiles() async {
+    try {
+      
       final files = await _pickFileUC.execute();
       _filesModels.addAll(files);
       debugPrint(
           "Adicionou: ${_filesModels.length} na lista e arquivos selecionados");
 
-      for (var file in _filesModels) {
-        // Mapeando os arquivos para imagens e vídeos
-        debugPrint("mapeando arquivos");
-        if (file.contentType.isVideo) {
-          _videos.add(file);
-          debugPrint("Arquivo de vídeo adicionado: ${file.fileName}");
-        } else if (file.contentType.isImage) {
-          _images.add(file);
-          debugPrint("Arquivo de imagem adicionado: ${file.fileName}");
-        } else {
-          debugPrint("Não foi possivel mapear o arquivo: ${file.fileName}");
-        }
-      }
+      
 
-      _isLoading = false;
       notifyListeners();
       debugPrint("arquivos selecionados com sucesso");
     } catch (e) {
       debugPrint("Erro ao pegar arquivos");
       _messageError = e.toString();
-      _isLoading = false;
       notifyListeners();
     }
   }
@@ -120,6 +124,22 @@ class PostProvider extends ChangeNotifier {
     return items;
   }
 
+  void mapearFiles(){
+    for (var file in _filesModels) {
+        // Mapeando os arquivos para imagens e vídeos
+        debugPrint("mapeando arquivos");
+        if (file.contentType.isVideo) {
+          _videos.add(file);
+          debugPrint("Arquivo de vídeo adicionado: ${file.fileName}");
+        } else if (file.contentType.isImage) {
+          _images.add(file);
+          debugPrint("Arquivo de imagem adicionado: ${file.fileName}");
+        } else {
+          debugPrint("Não foi possivel mapear o arquivo: ${file.fileName}");
+        }
+      }
+  }
+
   // Gateway carregar postagem para ui
   // retorna caso a requisição já tenha sido feita postagens ja tenha sido feitas
   Future<void> loadPosts(String userId) async {
@@ -128,10 +148,24 @@ class PostProvider extends ChangeNotifier {
   }
 
   Future<void> deletePost(Post postagem) async {
+    _isLoading = true;
+    notifyListeners();
+
     final urls = <String>[];
     urls.addAll(postagem.urlImages);
     if (postagem.urlVideos != null) urls.addAll(postagem.urlVideos!);
-    await _deletePostUc.execute(postagem.id, urls);
+    try{
+      await _deletePostUc.execute(postagem.id, urls);
+      _isLoading = false;
+      notifyListeners();
+    } on Failure catch (e) {
+      _messageError = e.message;
+      _isLoading = false;
+      notifyListeners();
+    }finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<void> createPost(UserM user, TypePost type) async {
@@ -143,6 +177,9 @@ class PostProvider extends ChangeNotifier {
         _isLoading = false;
         throw InvalidUserFailure();
       }
+
+      mapearFiles();
+
       //cria urls separadas para imagens e vídeos
       final urlsimages =
           await UploadService.getInstance.uploadFiles(_images, "posts/images");
@@ -186,6 +223,7 @@ class PostProvider extends ChangeNotifier {
       final myPosts = await _getPostUc.execute(userId);
       _posts.clear();
       if (myPosts.isEmpty) {
+        debugPrint("Nenhum post encontrado no banco de dados");
         _messageError = 'Nenhum post encontrado';
         _isLoading = false;
         notifyListeners();
@@ -206,7 +244,7 @@ class PostProvider extends ChangeNotifier {
   }
 
   
-  Future<void> updatePerfil(Post updatedPost) async {
+  Future<void> updatePost(Post updatedPost) async {
     try{
       final result = await _updateUc.execute(updatedPost);
       _posts.add(result);

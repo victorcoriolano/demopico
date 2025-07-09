@@ -25,7 +25,7 @@ class MediaInputCard extends StatelessWidget {
               Icon(isPost ? Icons.add_a_photo: Icons.camera, size: 40, color: Colors.grey),
               SizedBox(height: 8),
               Text(
-                isPost ? 'Adicionar Mídia (Foto/Vídeo)' : "Suba aqui sua Rec",
+                isPost ? 'Adicionar Mídia (Máximo 3)' : "Suba aqui sua Rec",
                 style: TextStyle(color: Colors.grey, fontSize: 16),
               ),
             ],
