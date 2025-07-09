@@ -97,7 +97,13 @@ class _CreatePostPageState extends State<CreatePostPage> {
               children: [
                 // Input para adicionar mídia
                 MediaInputCard(
-                  onAddMedia: provider.getFiles,
+                  onAddMedia: () async {
+                    await provider.getFiles();
+                    if (provider.messageError != null) {
+                      Get.snackbar("Erro", provider.messageError!);
+                    } 
+                    
+                  },
                   typePost: widget.typePost,
                 ),
                 const SizedBox(height: 16),
@@ -196,3 +202,4 @@ class _CreatePostPageState extends State<CreatePostPage> {
     );
   }
 }
+
