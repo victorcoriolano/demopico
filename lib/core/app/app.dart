@@ -18,6 +18,7 @@ import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
 import 'package:demopico/features/profile/domain/usecases/create_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/delete_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_post_uc.dart';
+import 'package:demopico/features/profile/domain/usecases/update_post_uc.dart';
 import 'package:demopico/features/profile/presentation/pages/user_controller_page.dart';
 import 'package:demopico/features/profile/presentation/provider/post_provider.dart';
 import 'package:demopico/features/profile/presentation/provider/screen_provider.dart';
@@ -66,12 +67,15 @@ class MyAppWidget extends StatelessWidget {
           pickFileUC: PickFileUC.getInstance,
           getPosts: GetPostUc.instance,
           deleteUc: DeletePostUc.instance,
+          updateUc: UpdatePostUc.instance,
         )),
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'SKATEPICO',
         theme: appTheme,
+        checkerboardRasterCacheImages: true,
+
         routes: {
           '/': (context) => const HomePage(),
           '/HubPage': (context) => const HubPage(),
