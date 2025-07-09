@@ -7,6 +7,7 @@ import 'package:demopico/features/profile/domain/models/post.dart';
 import 'package:demopico/features/profile/domain/usecases/create_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/delete_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_post_uc.dart';
+import 'package:demopico/features/profile/domain/usecases/update_post_uc.dart';
 import 'package:demopico/features/profile/presentation/view_objects/media_url_item.dart';
 import 'package:demopico/features/user/domain/enums/type_post.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
@@ -19,16 +20,19 @@ class PostProvider extends ChangeNotifier {
   final PickFileUC _pickFileUC;
   final GetPostUc _getPostUc;
   final DeletePostUc _deletePostUc;
+  final UpdatePostUc _updateUc;
 
   PostProvider(
       {required DeletePostUc deleteUc,
       required CreatePostUc createPostUc,
       required PickFileUC pickFileUC,
-      required GetPostUc getPosts})
+      required GetPostUc getPosts,
+      required UpdatePostUc updateUc})
       : _createPostUc = createPostUc,
         _pickFileUC = pickFileUC,
         _getPostUc = getPosts,
-        _deletePostUc = deleteUc;
+        _deletePostUc = deleteUc,
+        _updateUc = updateUc;
 
   final List<FileModel> _filesModels = [];
   final List<FileModel> _videos = [];
@@ -195,9 +199,21 @@ class PostProvider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     } catch (e) {
-      _messageError = 'Erro desconhecido ao buscar postagens: ${e.toString()}';
+      _messageError = 'Erro desconhecido ao pegar postagens de usuário: ${e.toString()}';
       _isLoading = false;
       notifyListeners();
+    }
+  }
+
+  
+  Future<void> updatePerfil(Post updatedPost) async {
+    try{
+      final result = await _updateUc.execute(updatedPost);
+      _posts.add(result);
+    } on Failure catch (e) {
+      _messageError = e.toString();
+    } catch (e, st) {
+      debugPrint("Falha desconhecida ao atualizar postagem: $e, $st");
     }
   }
 
