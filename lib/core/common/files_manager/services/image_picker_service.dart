@@ -17,10 +17,10 @@ class ImagePickerService implements IPickFileRepository {
   final _imagePicker = ImagePicker();
 
   @override
-  Future<List<FileModel>> pickImages() async {
+  Future<List<FileModel>> pickImages(int limite) async {
     try {
       final pickedFiles = await _imagePicker.pickMultiImage(
-        limit: 3,
+        limit: limite,
       );
       if (pickedFiles.isEmpty) {
         throw Exception(
@@ -52,6 +52,7 @@ class ImagePickerService implements IPickFileRepository {
     try {
       final pickedFile = await _imagePicker.pickVideo(
         source: ImageSource.gallery,
+        
       );
       if (pickedFile == null) {
         throw Exception(
@@ -75,10 +76,10 @@ class ImagePickerService implements IPickFileRepository {
   }
   
   @override
-  Future<List<FileModel>> pickMultipleMedia() async {
+  Future<List<FileModel>> pickMultipleMedia(int limit) async {
     try{
       final xFiles = await _imagePicker.pickMultipleMedia(
-        limit: 3,
+        limit: limit,
       );
       if (xFiles.isEmpty) {
         throw NoFileSelectedFailure();
