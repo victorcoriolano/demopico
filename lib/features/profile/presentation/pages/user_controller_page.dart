@@ -1,4 +1,5 @@
 import 'package:demopico/features/profile/presentation/pages/profile_page.dart';
+import 'package:demopico/features/profile/presentation/pages/search_profile_page.dart';
 import 'package:demopico/features/profile/presentation/provider/screen_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +11,7 @@ class UserControllerPage extends StatelessWidget {
 
   final List<Widget> _pages = const [
     ProfilePage(),
-    Center(child: Text('Procurar')),
+    SearchProfilePage(),
     Center(child: Text('Página Mensagens')),
   ];
 
