@@ -182,7 +182,10 @@ class _ProfilePageState extends State<ProfilePage>
         builder: (context, provider, child) => SafeArea(
           child: _isLoading
               ? const Center(child: CircularProgressIndicator())
-              : ListView(padding: const EdgeInsets.all(0), children: [
+              : ListView(
+                shrinkWrap: true,
+                padding: const EdgeInsets.all(0), 
+                children: [
                   Container(
                     color: const Color.fromARGB(255, 248, 246, 246),
                     padding: const EdgeInsets.all(0),

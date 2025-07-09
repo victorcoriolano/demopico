@@ -85,7 +85,7 @@ class _PostWidgetState extends State<PostWidget> {
 
             // Fotos com PageView
             
-              Column(
+            Column(
               children: [
                 SizedBox(
                   height: screenHeight * 0.6,
@@ -146,7 +146,7 @@ class _PostWidgetState extends State<PostWidget> {
                   }),
                 ),
               ],
-                              ),
+            ),
 
             const SizedBox(height: 16),
 
@@ -176,6 +176,7 @@ class _PostWidgetState extends State<PostWidget> {
                 Visibility(
                   visible: isMypost,
                   child: Positioned(
+                    right: 10,
                     child: IconButton(
                       onPressed: () {
                         _provider.deletePost(widget.post);

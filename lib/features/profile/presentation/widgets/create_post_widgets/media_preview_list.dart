@@ -20,6 +20,7 @@ class MediaPreviewList extends StatelessWidget {
     return SizedBox(
       height: 120, // Altura fixa para a lista de pré-visualização
       child: ListView.builder(
+        shrinkWrap: true,
         scrollDirection: Axis.horizontal,
         itemCount: mediaPaths.length,
         itemBuilder: (context, index) {
