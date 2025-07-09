@@ -1,4 +1,5 @@
 import 'package:demopico/core/common/files_manager/interfaces/repository/i_pick_image_repository.dart';
+import 'package:demopico/core/common/files_manager/models/file_model.dart';
 import 'package:demopico/core/common/files_manager/services/image_picker_service.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +16,9 @@ class PickVideoUC {
 
   final IPickFileRepository pickFileRepository;
 
-  Future<void> call() async {
+  Future<FileModel> execute() async {
     try{
-      await pickFileRepository.pickVideo();
+      return await pickFileRepository.pickVideo();
     }on Failure catch(e){
       debugPrint("Erro ao selecionar o video: $e");
       rethrow;
