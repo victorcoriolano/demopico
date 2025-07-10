@@ -1,5 +1,6 @@
 
 
+import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/files_manager/interfaces/repository/i_pick_image_repository.dart';
 import 'package:demopico/core/common/files_manager/models/file_model.dart';
 import 'package:demopico/core/common/files_manager/services/image_picker_service.dart';
@@ -28,8 +29,8 @@ class PickFileUC {
       if (files.length > 3) throw FileLimitExceededFailure();
 
       return files;
-    } catch (e) {
-      debugPrint("Erro ao selecionar imagens no use case: $e");
+    } on Failure catch (e) {
+      debugPrint("Erro ao selecionar imagens no use case de pegar imagens: $e");
       rethrow;
     }
   }
