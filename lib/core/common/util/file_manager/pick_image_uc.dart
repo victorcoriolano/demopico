@@ -7,17 +7,17 @@ import 'package:demopico/core/common/files_manager/services/image_picker_service
 import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:flutter/material.dart';
 
-class PickFileUC {
-  static PickFileUC? _pickImageUC;
+class PickImageUc {
+  static PickImageUc? _pickImageUC;
 
-  static PickFileUC get getInstance{
-    _pickImageUC ??= PickFileUC(repositoryIMP: ImagePickerService.getInstance);
+  static PickImageUc get getInstance{
+    _pickImageUC ??= PickImageUc(repositoryIMP: ImagePickerService.getInstance);
     return _pickImageUC!;
   } 
   final IPickFileRepository repositoryIMP;
   int limit = 3;
 
-  PickFileUC({required this.repositoryIMP});
+  PickImageUc({required this.repositoryIMP});
 
   Future<List<FileModel>> pick() async {
     try {

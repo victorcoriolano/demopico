@@ -16,14 +16,14 @@ class AddPicoProvider extends ChangeNotifier{
 
   static AddPicoProvider get getInstance {
     _addPicoProvider ??= AddPicoProvider(
-        pickImageUC: PickFileUC.getInstance,
+        pickImageUC: PickImageUc.getInstance,
         serviceImage: UploadService.getInstance,
         createSpotUc: CreateSpotUc.getInstance);
     return _addPicoProvider!;
   }
 
   //instanciando casos de uso
-  final PickFileUC pickImageUC;
+  final PickImageUc pickImageUC;
   final UploadService _uploadService;
   final CreateSpotUc createSpotUc;
 
