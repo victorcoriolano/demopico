@@ -15,24 +15,35 @@ class PickFileUC {
     return _pickImageUC!;
   } 
   final IPickFileRepository repositoryIMP;
-  int limit = 3;
 
   PickFileUC({required this.repositoryIMP});
+
+
+  final List<FileModel> listFiles = [];
+  int limit = 3;
 
   Future<List<FileModel>> execute() async {
     try {
       debugPrint("Chamou use case de pegar múltiplos arquivos");
-      debugPrint("Limite de files atuais: $limit");
+      debugPrint("Quatidade de Files atuais: ${listFiles.length}");
 
-      if(limit == 0) throw FileLimitExceededFailure();
+      if(listFiles.length >= 3) {
+        throw FileLimitExceededFailure(messagemAdicional: "Voce só pode selecionar agora $limit imagens");
+      }
 
-      final files = await repositoryIMP.pickMultipleMedia(limit);
+      listFiles.addAll(await repositoryIMP.pickMultipleMedia(limit));
+      
+      if(listFiles.length > 3 ) {
+        listFiles.clear();
+        throw FileLimitExceededFailure();
+      }
 
-      if(files.any((file) => file.contentType == ContentType.unavailable)) throw InvalidFormatFileFailure();
+      limit -= listFiles.length;
+      
+      if(listFiles.any(
+        (file) => file.contentType == ContentType.unavailable)) throw InvalidFormatFileFailure();
 
-      limit -= files.length;
-
-      return files;
+      return listFiles;
     }on Failure catch (e) {
       debugPrint("Erro ao selecionar file caiu no use case: $e");
       rethrow;
