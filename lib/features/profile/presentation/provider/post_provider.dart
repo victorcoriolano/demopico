@@ -50,6 +50,7 @@ class PostProvider extends ChangeNotifier {
   final List<String> _videoUrls = [];
   double progress = 0.0;
   final List<Post> _posts = [];
+  final List<Post> _fullVideoPosts = [];
   bool _isLoading = false;
 
   FileModel get rec => _rec;
@@ -59,6 +60,7 @@ class PostProvider extends ChangeNotifier {
   String? get selectedSpotId => _selectedSpotId;
   bool get isLoading => _isLoading;
   List<Post> get post => _posts;
+  List<Post> get fullVideos => _fullVideoPosts;
 
   void removeMedia(int index) {
     if (index >= 0 && index < _filesModels.length) {
@@ -83,13 +85,11 @@ class PostProvider extends ChangeNotifier {
     
     try{
       _rec = await _pickVideoUC.execute();
-      _isLoading = false;
+      
       notifyListeners();
     }catch (e){
       _messageError = e.toString();
-    } finally {
-      _isLoading = false;
-    }
+    } 
   }
 
   //get media
@@ -229,7 +229,8 @@ class PostProvider extends ChangeNotifier {
         notifyListeners();
         return;
       }
-      _posts.addAll(myPosts);
+      _posts.addAll(myPosts.where((post) => post.typePost == TypePost.post));
+      _fullVideoPosts.addAll(myPosts.where((post) => post.typePost == TypePost.fullVideo));
       _isLoading = false;
       notifyListeners();
     } on Failure catch (e) {
