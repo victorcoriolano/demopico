@@ -1,3 +1,4 @@
+import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/core/common/files_manager/interfaces/repository/i_pick_image_repository.dart';
 import 'package:demopico/core/common/files_manager/models/file_model.dart';
 import 'package:demopico/core/common/errors/domain_failures.dart';
@@ -22,11 +23,8 @@ class ImagePickerService implements IPickFileRepository {
       final pickedFiles = await _imagePicker.pickMultiImage(
         limit: limite,
       );
-      if (pickedFiles.isEmpty) {
-        throw Exception(
-          "Nenhuma imagem foi selecionada",
-        );
-      }
+
+      if (pickedFiles.isEmpty) throw NoFileSelectedFailure();
 
       
         final uploadModel = Future.wait(pickedFiles.map((xFile) async {
@@ -43,7 +41,7 @@ class ImagePickerService implements IPickFileRepository {
         return uploadModel;
       
     } catch (e) {
-      throw Exception("Erro ao selecionar a imagem: $e");
+      throw UnknownError("Erro ao selecionar a multiplos arquivos: $e");
     }
   }
   
@@ -54,11 +52,8 @@ class ImagePickerService implements IPickFileRepository {
         source: ImageSource.gallery,
         
       );
-      if (pickedFile == null) {
-        throw Exception(
-          "Nenhuma video foi selecionado",
-        );
-      }
+      if (pickedFile == null) throw NoFileSelectedFailure();
+      
       final bytes = await pickedFile.readAsBytes();
       
       return FileModel(
@@ -71,7 +66,7 @@ class ImagePickerService implements IPickFileRepository {
       );
       
     } catch (e) {
-      throw Exception("Erro ao selecionar a imagem: $e");
+      throw UnknownError("Erro ao selecionar a video: $e");
     }
   }
   
@@ -100,7 +95,7 @@ class ImagePickerService implements IPickFileRepository {
       return files;
     } catch (e, st) {
       debugPrint("Erro ao selecionar multiplos arquivos : $e stackTrace: $st");
-      throw Exception("Erro ao selecionar multiplos arquivos: $e stackTrace: $st");
+      throw UnknownError("Erro ao selecionar multiplos arquivos: $e", stackTrace: st);
     }
   }
 }
