@@ -98,7 +98,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 // Input para adicionar mídia
                 MediaInputCard(
                   onAddMedia: () async {
-                    await provider.getFiles();
+                    widget.typePost == TypePost.post 
+                     ? await provider.getFiles()
+                     : await provider.getVideo();
                     if (provider.messageError != null) {
                       Get.snackbar("Erro", provider.messageError!);
                     } 
