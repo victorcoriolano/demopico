@@ -1,3 +1,5 @@
+import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/core/common/files_manager/models/file_model.dart';
 import 'package:demopico/core/common/util/file_manager/pick_files_uc.dart';
 import 'package:demopico/core/common/errors/domain_failures.dart';
@@ -13,6 +15,7 @@ import 'package:demopico/features/profile/presentation/view_objects/media_url_it
 import 'package:demopico/features/user/domain/enums/type_post.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class PostProvider extends ChangeNotifier {
   //TODO: Adicionar lógica de cache de imagens e videos para otimizar o carregamento
@@ -45,7 +48,6 @@ class PostProvider extends ChangeNotifier {
 
   String _description = '';
   String? _selectedSpotId;
-  String? _messageError;
   final List<String> _imgUrls = [];
   final List<String> _videoUrls = [];
   double progress = 0.0;
@@ -54,7 +56,6 @@ class PostProvider extends ChangeNotifier {
   bool _isLoading = false;
 
   FileModel get rec => _rec;
-  String? get messageError => _messageError;
   List<FileModel> get filesModels => _filesModels;
   String get description => _description;
   String? get selectedSpotId => _selectedSpotId;
@@ -62,14 +63,11 @@ class PostProvider extends ChangeNotifier {
   List<Post> get post => _posts;
   List<Post> get fullVideos => _fullVideoPosts;
 
-  void removeMedia(int index) {
-    if (index >= 0 && index < _filesModels.length) {
-      _filesModels.removeAt(index);
+  void removeMedia(FileModel file) {
+      _filesModels.remove(file);  
+      _pickFileUC.listFiles.remove(file);    
       notifyListeners();
-    }
   }
-
-  bool get hasError => _messageError != null;
 
   void updateDescription(String newDescription) {
     _description = newDescription;
@@ -87,15 +85,15 @@ class PostProvider extends ChangeNotifier {
       _rec = await _pickVideoUC.execute();
       
       notifyListeners();
-    }catch (e){
-      _messageError = e.toString();
+    }on Failure catch (e){
+      getError(e);
     } 
   }
 
   //get media
   Future<void> getFiles() async {
     try {
-      
+      _filesModels.clear();
       final files = await _pickFileUC.execute();
       _filesModels.addAll(files);
       debugPrint(
@@ -105,11 +103,19 @@ class PostProvider extends ChangeNotifier {
 
       notifyListeners();
       debugPrint("arquivos selecionados com sucesso");
-    } catch (e) {
+    } on Failure catch (e) {
       debugPrint("Erro ao pegar arquivos");
-      _messageError = e.toString();
-      notifyListeners();
+      getError(e);
     }
+  }
+
+  void getError(Failure e){
+    Get.snackbar(
+      "Erro", 
+      e.message, 
+      colorText: kBlack, 
+      icon: Icon(Icons.error_outline)
+    );
   }
 
   List<MediaUrlItem> getMediaItemsFor(Post post) {
@@ -159,7 +165,7 @@ class PostProvider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     } on Failure catch (e) {
-      _messageError = e.message;
+      getError(e);
       _isLoading = false;
       notifyListeners();
     }finally {
@@ -173,9 +179,8 @@ class PostProvider extends ChangeNotifier {
       _isLoading = true;
       notifyListeners();
       if (user.id == null || user.pictureUrl == null || user.name == null) {
-        _messageError = "Usuário inválido";
-        _isLoading = false;
-        throw InvalidUserFailure();
+        getError(InvalidUserFailure());
+        _isLoading = false;        
       }
 
       mapearFiles();
@@ -208,7 +213,7 @@ class PostProvider extends ChangeNotifier {
       notifyListeners();
       clear();
     } on Failure catch (e) {
-      _messageError = e.message;
+      getError(e);
       _isLoading = false;
       notifyListeners();
     }
@@ -223,8 +228,7 @@ class PostProvider extends ChangeNotifier {
       final myPosts = await _getPostUc.execute(userId);
       _posts.clear();
       if (myPosts.isEmpty) {
-        debugPrint("Nenhum post encontrado no banco de dados");
-        _messageError = 'Nenhum post encontrado';
+        debugPrint("Nenhum post encontrado no banco de dados");        
         _isLoading = false;
         notifyListeners();
         return;
@@ -234,25 +238,28 @@ class PostProvider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     } on Failure catch (e) {
-      _messageError = e.message;
+      getError(e);
       _isLoading = false;
       notifyListeners();
     } catch (e) {
-      _messageError = 'Erro desconhecido ao pegar postagens de usuário: ${e.toString()}';
+      getError(UnknownFailure(unknownError: e));
       _isLoading = false;
       notifyListeners();
     }
   }
 
   
-  Future<void> updatePost(Post updatedPost) async {
+  Future<void> updatePost(Post updatedPost, int index) async {
     try{
+      _posts.removeAt(index);
       final result = await _updateUc.execute(updatedPost);
       _posts.add(result);
+      notifyListeners();
     } on Failure catch (e) {
-      _messageError = e.toString();
+      getError(e);
     } catch (e, st) {
       debugPrint("Falha desconhecida ao atualizar postagem: $e, $st");
+      getError(UnknownFailure(unknownError: e, stackTrace: st));
     }
   }
 
@@ -260,7 +267,6 @@ class PostProvider extends ChangeNotifier {
     _filesModels.clear();
     _description = '';
     _selectedSpotId = null;
-    _messageError = null;
     _videos.clear();
     _images.clear();
     progress = 0.0;
