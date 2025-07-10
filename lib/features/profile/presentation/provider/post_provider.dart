@@ -53,7 +53,7 @@ class PostProvider extends ChangeNotifier {
   bool _isLoading = false;
 
   FileModel get rec => _rec;
-  String get messageError => _messageError ?? '';
+  String? get messageError => _messageError;
   List<FileModel> get filesModels => _filesModels;
   String get description => _description;
   String? get selectedSpotId => _selectedSpotId;

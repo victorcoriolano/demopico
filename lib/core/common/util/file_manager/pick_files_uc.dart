@@ -1,9 +1,9 @@
 
 
+import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/core/common/files_manager/interfaces/repository/i_pick_image_repository.dart';
 import 'package:demopico/core/common/files_manager/models/file_model.dart';
 import 'package:demopico/core/common/files_manager/services/image_picker_service.dart';
-import 'package:demopico/core/common/errors/domain_failures.dart';
 
 class PickFileUC {
   static PickFileUC? _pickImageUC;
@@ -13,14 +13,18 @@ class PickFileUC {
     return _pickImageUC!;
   } 
   final IPickFileRepository repositoryIMP;
+  int limit = 3;
 
   PickFileUC({required this.repositoryIMP});
 
   Future<List<FileModel>> execute() async {
     try {
-      final files = await repositoryIMP.pickMultipleMedia();
       
-      if (files.length > 3) throw FileLimitExceededFailure();
+
+      if(limit == 0) throw FileLimitExceededFailure();
+
+      final files = await repositoryIMP.pickMultipleMedia(limit);
+      limit -= files.length;
 
       return files;
     } catch (e) {

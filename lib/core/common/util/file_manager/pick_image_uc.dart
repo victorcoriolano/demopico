@@ -4,6 +4,7 @@ import 'package:demopico/core/common/files_manager/interfaces/repository/i_pick_
 import 'package:demopico/core/common/files_manager/models/file_model.dart';
 import 'package:demopico/core/common/files_manager/services/image_picker_service.dart';
 import 'package:demopico/core/common/errors/domain_failures.dart';
+import 'package:flutter/material.dart';
 
 class PickFileUC {
   static PickFileUC? _pickImageUC;
@@ -13,18 +14,23 @@ class PickFileUC {
     return _pickImageUC!;
   } 
   final IPickFileRepository repositoryIMP;
+  int limit = 3;
 
   PickFileUC({required this.repositoryIMP});
 
   Future<List<FileModel>> pick() async {
     try {
-      final files = await repositoryIMP.pickImages();
+      if (limit == 0) throw FileLimitExceededFailure();
+      final files = await repositoryIMP.pickImages(limit);
+      
+      limit -= files.length;
       
       if (files.length > 3) throw FileLimitExceededFailure();
 
       return files;
     } catch (e) {
-      throw Exception(e);
+      debugPrint("Erro ao selecionar imagens no use case: $e");
+      rethrow;
     }
   }
 }

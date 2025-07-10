@@ -151,6 +151,20 @@ class _PostWidgetState extends State<PostWidget> {
                   ),
                 ],
               ),
+              const SizedBox(height: 12,),
+
+              //Icon do pico
+              GestureDetector(
+                onTap: () {
+                  //TODO: IMPLEMENTAR DIRECIONAMENTO DO MAPA AO CLICAR
+                },
+                child: Row(                  
+                  children: [
+                    Icon(Icons.location_pin),
+                    Text(provider.selectedSpotId ?? "Pico dahora"),
+                  ],
+                ),
+              ),
 
               const SizedBox(height: 16),
 
@@ -201,7 +215,7 @@ class _PostWidgetState extends State<PostWidget> {
                           ),
                           IconButton(
                             onPressed: () {
-
+                                //TODO: IMPLEMENTAR EDIÇÃO DE POSTAGEM
                             },
                             icon: Icon(Icons.edit_outlined),
                           ),
