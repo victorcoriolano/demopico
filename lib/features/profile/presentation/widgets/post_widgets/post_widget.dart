@@ -61,147 +61,146 @@ class _PostWidgetState extends State<PostWidget> {
         elevation: 4,
         child: Padding(
           padding: const EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header com foto e nome
-              Row(
-                children: [
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(post.urlUserPhoto),
-                    radius: 24,
-                  ),
-                  const SizedBox(width: 12),
-                  Text(post.nome,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 16)),
-                  const Spacer(),
-                  Text(
-                    '${post.dateTime.day}/${post.dateTime.month}/${post.dateTime.year}',
-                    style: TextStyle(color: Colors.grey[600], fontSize: 12),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              // Descrição
-              Text(post.description),
-              const SizedBox(height: 12),
-
-              // Fotos com PageView
-
-              Column(
-                children: [
-                  SizedBox(
-                    height: screenHeight * 0.6,
-                    child: PageView.builder(
-                      itemCount: urlsItems.length,
-                      itemBuilder: (context, index) {
-                        debugPrint("post");
-                        var itemUrl = urlsItems[index];
-                        if (itemUrl.contentType == MediaType.image) {
-                          return ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: Image.network(
-                              itemUrl.url,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                              loadingBuilder: (contex, child, loadBuilder) {
-                                if (loadBuilder == null) return child;
-                                return Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              },
-                              errorBuilder: (context, error, stackTrace) =>
-                                  const Icon(Icons.broken_image),
-                            ),
-                          );
-                        } else if (itemUrl.contentType == MediaType.video) {
-                          return VideoPlayerFromNetwork(url: itemUrl.url);
-                        } else {
-                          return Center(
-                            child: Text("Não suportado"),
-                          );
-                        }
-                      },
-                      controller: _pageController,
-                      onPageChanged: (index) {
-                        setState(() => _currentPage = index);
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  // Indicador de página
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(urlsItems.length, (index) {
-                      final isActive = _currentPage == index;
-                      return AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                        width: isActive ? 12 : 8,
-                        height: isActive ? 12 : 8,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: isActive
-                              ? Colors.black87
-                              : Colors.grey.withOpacity(0.5),
-                        ),
-                      );
-                    }),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12,),
-
-              //Icon do pico
-              GestureDetector(
-                onTap: () {
-                  //TODO: IMPLEMENTAR DIRECIONAMENTO DO MAPA AO CLICAR
-                },
-                child: Row(                  
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header com foto e nome
+                Row(
                   children: [
-                    Icon(Icons.location_pin),
-                    Text(provider.selectedSpotId ?? "Pico dahora"),
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(post.urlUserPhoto),
+                      radius: 24,
+                    ),
+                    const SizedBox(width: 12),
+                    Text(post.nome,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16)),
+                    const Spacer(),
+                    Text(
+                      '${post.dateTime.day}/${post.dateTime.month}/${post.dateTime.year}',
+                      style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                    ),
                   ],
                 ),
-              ),
-
-              const SizedBox(height: 16),
-
-              // Curtidas
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            if (!jaCurtiu) {
-                              curtidas++;
-                              jaCurtiu = true;
-                            } else {
-                              curtidas--;
-                              jaCurtiu = false;
-                            }
-                          });
+                const SizedBox(height: 12),
+                // Descrição
+                Text(post.description),
+                const SizedBox(height: 12),
+            
+                // Fotos com PageView
+            
+                Column(
+                  children: [
+                    SizedBox(
+                      height: screenHeight * 0.6,
+                      child: PageView.builder(
+                        itemCount: urlsItems.length,
+                        itemBuilder: (context, index) {
+                          debugPrint("post");
+                          var itemUrl = urlsItems[index];
+                          if (itemUrl.contentType == MediaType.image) {
+                            return ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Image.network(
+                                itemUrl.url,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                                loadingBuilder: (contex, child, loadBuilder) {
+                                  if (loadBuilder == null) return child;
+                                  return Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                },
+                                errorBuilder: (context, error, stackTrace) =>
+                                    const Icon(Icons.broken_image),
+                              ),
+                            );
+                          } else if (itemUrl.contentType == MediaType.video) {
+                            return VideoPlayerFromNetwork(url: itemUrl.url);
+                          } else {
+                            return Center(
+                              child: Text("Não suportado"),
+                            );
+                          }
                         },
-                        child: ImageIcon(
-                          AssetImage('assets/images/cumprimento_marreta.png'),
-                          color: jaCurtiu ? kRed : kBlack,
-                          size: 80,
-                        ),
+                        controller: _pageController,
+                        onPageChanged: (index) {
+                          setState(() => _currentPage = index);
+                        },
                       ),
-                      const SizedBox(width: 8),
-                      Text('$curtidas curtidas'),
+                    ),
+                    const SizedBox(height: 12),
+                    // Indicador de página
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(urlsItems.length, (index) {
+                        final isActive = _currentPage == index;
+                        return AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          margin: const EdgeInsets.symmetric(horizontal: 4),
+                          width: isActive ? 12 : 8,
+                          height: isActive ? 12 : 8,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: isActive
+                                ? Colors.black87
+                                : Colors.grey.withOpacity(0.5),
+                          ),
+                        );
+                      }),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12,),
+            
+                //Icon do pico
+                GestureDetector(
+                  onTap: () {
+                    //TODO: IMPLEMENTAR DIRECIONAMENTO DO MAPA AO CLICAR
+                  },
+                  child: Row(                  
+                    children: [
+                      Icon(Icons.location_pin),
+                      Text(provider.selectedSpotId ?? "Localização não especificada"),
                     ],
                   ),
-                  
-                  Visibility(
-                    visible: isMypost,
-                    child: Positioned(
-                      right: 10,
+                ),
+            
+                const SizedBox(height: 10),
+            
+                // Curtidas
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+            
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              if (!jaCurtiu) {
+                                curtidas++;
+                                jaCurtiu = true;
+                              } else {
+                                curtidas--;
+                                jaCurtiu = false;
+                              }
+                            });
+                          },
+                          child: ImageIcon(
+                            AssetImage('assets/images/cumprimento_marreta.png'),
+                            color: jaCurtiu ? kRed : kBlack,
+                            size: 80,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text('$curtidas curtidas'),
+                      ],
+                    ),
+                    
+                    Visibility(
+                      visible: isMypost,
                       child: Row(
                         children: [
                           IconButton(
@@ -222,10 +221,10 @@ class _PostWidgetState extends State<PostWidget> {
                         ],
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       );
