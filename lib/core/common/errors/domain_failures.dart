@@ -44,5 +44,6 @@ class NoFileSelectedFailure extends DomainFailure {
 }
 
 class FileLimitExceededFailure extends DomainFailure {
-  FileLimitExceededFailure(): super("Limite de arquivos excedido", code: 'file_limit_exceeded');
+  final String? messagemAdicional;
+  FileLimitExceededFailure({this.messagemAdicional}): super("Limite de arquivos excedido - ${messagemAdicional ?? ""}", code: 'file_limit_exceeded');
 }
