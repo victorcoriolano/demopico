@@ -100,10 +100,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                   onAddMedia: () async {
                     widget.typePost == TypePost.post 
                      ? await provider.getFiles()
-                     : await provider.getVideo();
-                    if (provider.messageError != null) {
-                      Get.snackbar("Erro", provider.messageError!);
-                    } 
+                     : await provider.getVideo();                    
                     
                   },
                   typePost: widget.typePost,
