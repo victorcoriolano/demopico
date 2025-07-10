@@ -47,7 +47,10 @@ class CrudFirebase  implements ICrudDataSource<FirebaseDTO> {
   @override
   Future<FirebaseDTO> read(String id)async{
     try {
-      final docRf = await firestore.collection(collection.name).doc(id).get();
+      final docRf = await firestore.collection(collection.name).doc(id).get(
+        GetOptions(source: Source.serverAndCache)
+      );
+      
       return FirebaseDTO(
         id: id, 
         data: docRf.data() as Map<String, dynamic>);
@@ -77,7 +80,9 @@ class CrudFirebase  implements ICrudDataSource<FirebaseDTO> {
   @override
   Future<List<FirebaseDTO>>   readAll() async {
     try{
-      final data = await firestore.collection(collection.name).get();
+      final data = await firestore.collection(collection.name).get(
+        GetOptions(source: Source.serverAndCache)
+      );
       return data.docs.map((doc) =>
          FirebaseDTO(
           id: doc.id,
