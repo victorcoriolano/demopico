@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class MediaPreviewList extends StatelessWidget {
   final List<FileModel> mediaPaths;
-  final Function(int) onRemoveMedia;
+  final Function(FileModel) onRemoveMedia;
 
   const MediaPreviewList({
     super.key,
@@ -56,7 +56,7 @@ class MediaPreviewList extends StatelessWidget {
                 top: 0,
                 right: 0,
                 child: GestureDetector(
-                  onTap: () => onRemoveMedia(index),
+                  onTap: () => onRemoveMedia(mediaPath),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.redAccent,
