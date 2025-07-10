@@ -20,6 +20,15 @@ class ImagePickerService implements IPickFileRepository {
   @override
   Future<List<FileModel>> pickImages(int limite) async {
     try {
+      if (limite ==1 ) {
+        // Não é possivel execultar o pickMultImage com somente
+        // 1 de limite (não faz sentido também )
+        // executando o pick Image
+        final listForOneFile = <FileModel>[];
+        listForOneFile.add(await pickImage());
+        return listForOneFile;
+
+      }
       final pickedFiles = await _imagePicker.pickMultiImage(
         limit: limite,
       );
@@ -73,6 +82,15 @@ class ImagePickerService implements IPickFileRepository {
   @override
   Future<List<FileModel>> pickMultipleMedia(int limit) async {
     try{
+      if (limit ==1 ) {
+        // Não é possivel execultar o pickMultpleMedia com somente
+        // 1 de limite (não faz sentido também )
+        // executando o pick Image e retornando na lista
+        final listForOneFile = <FileModel>[];
+        listForOneFile.add(await pickImage());
+        return listForOneFile;
+      }
+      
       final xFiles = await _imagePicker.pickMultipleMedia(
         limit: limit,
       );
@@ -96,6 +114,28 @@ class ImagePickerService implements IPickFileRepository {
     } catch (e, st) {
       debugPrint("Erro ao selecionar multiplos arquivos : $e stackTrace: $st");
       throw UnknownError("Erro ao selecionar multiplos arquivos: $e", stackTrace: st);
+    }
+  }
+  
+  @override
+  Future<FileModel> pickImage() async {
+    try {
+      final image = await _imagePicker.pickImage(
+        source: ImageSource.gallery);
+
+      if (image == null) throw NoFileSelectedFailure();
+
+      final bytes = await image.readAsBytes();
+      return FileModel(
+          fileName: image.name,
+          filePath: image.path,
+          bytes: bytes,
+          contentType: image.mimeType != null 
+            ? ContentTypeExtension.fromMime(image.mimeType!)
+            : ContentType.unavailable,
+        );
+    } catch (e) {
+      throw UnknownFailure(unknownError: e);
     }
   }
 }
