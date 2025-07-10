@@ -21,6 +21,7 @@ import 'package:demopico/features/profile/presentation/provider/screen_provider.
 import 'package:demopico/features/user/infra/services/user_auth_firebase_service.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
 final myProviders = [
@@ -28,7 +29,7 @@ final myProviders = [
         ChangeNotifierProvider(create: (_) => ForecastProvider(null)),
         ChangeNotifierProvider(create: (_) => AuthUserProvider.getInstance),
         ChangeNotifierProvider(create: (_) => ScreenProvider()),
-        StreamProvider(
+        StreamProvider<User?>(
           create: (_) =>
               UserAuthFirebaseService.getInstance.getAuthStateChanges(),
           initialData: null,
