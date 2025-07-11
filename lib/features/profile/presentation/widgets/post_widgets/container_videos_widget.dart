@@ -1,3 +1,4 @@
+import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/features/profile/presentation/provider/post_provider.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/video_player_from_network.dart';
 import 'package:flutter/material.dart';
@@ -23,9 +24,10 @@ class _ContainerVideosWidgetState extends State<ContainerVideosWidget> {
       return Stack(
         children: [
           ListWheelScrollView.useDelegate(
-            itemExtent: 250,
+            itemExtent: 350,
             diameterRatio: 0.8,
             physics: FixedExtentScrollPhysics(),
+            perspective: 0.0009,
             onSelectedItemChanged: (index) {},
             childDelegate: ListWheelChildBuilderDelegate(
               builder: (context, count) {
@@ -44,7 +46,10 @@ class _ContainerVideosWidgetState extends State<ContainerVideosWidget> {
             top: 10,
             child: IconButton(
               onPressed: () {},
-              icon: Icon(Icons.fullscreen),
+              icon: Icon(
+                Icons.fullscreen,
+                color: kWhite,
+              ),
             ),
           ),
         ],
