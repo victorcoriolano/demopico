@@ -1,9 +1,11 @@
+import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/features/profile/presentation/widgets/profile_data/text_stats_profile_widget.dart';
 import 'package:flutter/material.dart';
 
 class ProfileBottomSideDataWidget extends StatelessWidget {
-  final int? followers;
-  final int? contributions;
-  final String? description;
+  final int followers;
+  final int contributions;
+  final String description;
   final bool isScrolling;
 
 
@@ -22,67 +24,28 @@ class ProfileBottomSideDataWidget extends StatelessWidget {
       children: [
         Container(
           margin: EdgeInsets.symmetric(
-              horizontal: (screenWidth * 0.10) / 2, vertical: 30),
+              horizontal: (screenWidth * 0.10) / 2, vertical: 20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                children: [
-                  Text(
-                    '$followers',
-                    style: const TextStyle(
-                      fontSize: 18, // maior para o número
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const Text(
-                    'SEGUIDORES',
-                    style: TextStyle(
-                      fontSize: 10, // menor para o texto
-                      letterSpacing: 1,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  Text(
-                    '$contributions',
-                    style: const TextStyle(
-                      fontSize: 18, // maior para o número
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const Text(
-                    'CONTRIBUIÇÕES',
-                    style: TextStyle(
-                      fontSize: 10, // menor para o texto
-                      letterSpacing: 1,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
-              ),
+              TextStatsProfileWidget(info: followers.toString(), legend: 'SEGUIDORES'),
+              TextStatsProfileWidget(info: contributions.toString(), legend: 'CONTRIBUIÇÕES'),
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Center(
-            child: Container(
-              padding: const EdgeInsets.symmetric( horizontal: 10),
-              decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              width: screenWidth > 600 ? 400 : null,
-              alignment: Alignment.center,
-              child: Text(
-                textAlign: TextAlign.center,
-                description ?? '',
-                style: const TextStyle(fontSize: 16),
-              ),
+        Center(
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: kWhite,
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            width: screenWidth > 600 ? screenWidth - 100 : screenWidth - 50,
+            child: Text(
+              textAlign: TextAlign.center,
+              description,
+              style: const TextStyle(fontSize: 16),
             ),
           ),
         )
