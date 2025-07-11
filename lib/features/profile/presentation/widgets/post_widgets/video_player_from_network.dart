@@ -29,37 +29,35 @@ class _VideoPlayerFromNetworkState extends State<VideoPlayerFromNetwork> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-          child: _controller.value.isInitialized
-              ? AspectRatio(
-                  aspectRatio: _controller.value.aspectRatio,
-                  child: Stack(
-                    children:[ 
-                    VideoPlayer(_controller),
-                    Positioned(
-                      bottom: 10,
-                      left: 10,
-                      child: IconButton(
-                        icon: Icon(
-                          _controller.value.isPlaying
-                              ? Icons.pause
-                              : Icons.play_arrow,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            
-                            _controller.value.isPlaying
-                                ? _controller.pause()
-                                : _controller.play();
-                          });
-                        },
+    return Center(
+        child: _controller.value.isInitialized
+            ? AspectRatio(
+                aspectRatio: _controller.value.aspectRatio,
+                child: Stack(
+                  children:[ 
+                  VideoPlayer(_controller),
+                  Positioned(
+                    bottom: 10,
+                    left: 10,
+                    child: IconButton(
+                      icon: Icon(
+                        _controller.value.isPlaying
+                            ? Icons.pause
+                            : Icons.play_arrow,
+                        color: Colors.white,
                       ),
-                    ),])
-                )
-              : Container(),
-        ),
-    );
+                      onPressed: () {
+                        setState(() {
+                          
+                          _controller.value.isPlaying
+                              ? _controller.pause()
+                              : _controller.play();
+                        });
+                      },
+                    ),
+                  ),])
+              )
+            : Container(),
+      );
   }
 }
