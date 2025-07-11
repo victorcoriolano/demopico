@@ -5,6 +5,7 @@ import 'package:demopico/features/profile/presentation/pages/create_post_page.da
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_posts_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_bottom_side_data_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_configure_widget.dart';
+import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_drawer_config.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_top_side_data_widget.dart';
 import 'package:demopico/features/user/domain/enums/type_post.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
@@ -176,8 +177,10 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
+    final userDrawer = context.read<UserDatabaseProvider>().user;
 
     return Scaffold(
+      drawer: MyCustomDrawer(user: userDrawer!),
       backgroundColor: kAlmostWhite,
       body: Consumer<UserDatabaseProvider>(
         builder: (context, provider, child) => SafeArea(
@@ -210,7 +213,10 @@ class _ProfilePageState extends State<ProfilePage>
                                     fontSize: 22, fontWeight: FontWeight.bold),
                               ),
                               ProfileConfigureWidget(
-                                  bioController: bioController),
+                                  onPressed: () {
+                                    debugPrint("Abrindo drawer"); 
+                                    Scaffold.of(context).openDrawer();
+                                  }),
                             ],
                           ),
                         ),
@@ -228,6 +234,8 @@ class _ProfilePageState extends State<ProfilePage>
                           contributions: user?.picosAdicionados ?? 0, 
                           description: user?.description ?? '',
                         ),
+                        SizedBox(height: 12,),
+                  
                   Container(
                     padding: const EdgeInsets.all(0),
                     margin: const EdgeInsets.all(0),
