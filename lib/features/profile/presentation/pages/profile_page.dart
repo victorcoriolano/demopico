@@ -1,9 +1,9 @@
 import 'package:demopico/core/app/home_page.dart';
+import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/widgets/back_widget.dart';
 import 'package:demopico/features/profile/presentation/pages/create_post_page.dart';
-import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_description_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_posts_widget.dart';
-import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_stats_widget.dart';
+import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_bottom_side_data_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_configure_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_top_side_data_widget.dart';
 import 'package:demopico/features/user/domain/enums/type_post.dart';
@@ -178,6 +178,7 @@ class _ProfilePageState extends State<ProfilePage>
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      backgroundColor: kAlmostWhite,
       body: Consumer<UserDatabaseProvider>(
         builder: (context, provider, child) => SafeArea(
           child: _isLoading
@@ -187,7 +188,7 @@ class _ProfilePageState extends State<ProfilePage>
                 padding: const EdgeInsets.all(0), 
                 children: [
                   Container(
-                    color: const Color.fromARGB(255, 248, 246, 246),
+                    color: kWhite,
                     padding: const EdgeInsets.all(0),
                     margin: const EdgeInsets.all(0),
                     child: Column(
@@ -213,17 +214,20 @@ class _ProfilePageState extends State<ProfilePage>
                             ],
                           ),
                         ),
-                        ProfileTopSideDataWidget(
-                          avatarUrl: user?.pictureUrl,
-                          backgroundUrl: user?.backgroundPicture,
-                        ),
-                        ProfileStatsWidget(
-                          followers: user?.conexoes ?? 0,
-                          contributions: user?.picosAdicionados ?? 0,
-                        ),
+                        
                       ],
                     ),
                   ),
+                  ProfileTopSideDataWidget(
+                          onEdit: () {},
+                          avatarUrl: user?.pictureUrl,
+                          backgroundUrl: user?.backgroundPicture,
+                        ),
+                        ProfileBottomSideDataWidget(
+                          followers: user?.conexoes ?? 0, 
+                          contributions: user?.picosAdicionados ?? 0, 
+                          description: user?.description ?? '',
+                        ),
                   Container(
                     padding: const EdgeInsets.all(0),
                     margin: const EdgeInsets.all(0),
@@ -231,13 +235,6 @@ class _ProfilePageState extends State<ProfilePage>
                       controller: _scrollController,
                       child: Column(
                         children: [
-                          AnimatedOpacity(
-                            opacity: _isVisible ? 1.0 : 0.0,
-                            duration: const Duration(milliseconds: 400),
-                            child: ProfileDescriptionWidget(
-                              description: user?.description,
-                            ),
-                          ),
                           Container(
                             padding: const EdgeInsets.all(0),
                             height: screenHeight * 0.55,
