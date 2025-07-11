@@ -1,5 +1,3 @@
-import 'package:demopico/core/app/theme/theme.dart';
-import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_action_button.dart';
 import 'package:flutter/material.dart';
 
 class ProfileTopSideDataWidget extends StatelessWidget {
@@ -34,7 +32,7 @@ class ProfileTopSideDataWidget extends StatelessWidget {
                 image: DecorationImage(
                   alignment: Alignment.center,
                   image: backgroundUrl != null && backgroundUrl!.isNotEmpty
-                      ? NetworkImage(backgroundUrl!)
+                      ?NetworkImage(backgroundUrl!) 
                       : const AssetImage("assets/images/background_vermelho.png")
                           as ImageProvider,
                   fit: BoxFit.cover,
@@ -44,41 +42,25 @@ class ProfileTopSideDataWidget extends StatelessWidget {
             Positioned(
               bottom: -avatarSize,
               left: (screenWidth - avatarSize * 2) / 2,
-              child: Container(
-                width: (avatarSize * 2) + 10,
-                decoration: BoxDecoration(
-                  color: Colors.transparent
-                ),
-                height: (avatarSize * 2) + 10,
-                child: Stack(
-                  children: [
-                    CircleAvatar(
-                      radius: avatarSize,
-                      backgroundColor: Colors.white,
-                      
-                      child: ClipOval(
-                        child: avatarUrl != null && avatarUrl!.isNotEmpty
-                            ? Image.network(
-                                avatarUrl!,
-                                width: avatarSize * 1.9,
-                                height: avatarSize * 1.9,
-                                fit: BoxFit.cover,
-                              )
-                            : const Icon(Icons.person, size: 40),
-                      ),
+              child: Stack(
+                children: [
+                  CircleAvatar(
+                    radius: avatarSize,
+                    backgroundColor: Colors.white,
+                    
+                    child: ClipOval(
+                      child: avatarUrl != null && avatarUrl!.isNotEmpty
+                          ? Image.network(
+                              avatarUrl!,
+                              width: avatarSize * 1.9,
+                              height: avatarSize * 1.9,
+                              fit: BoxFit.cover,
+                            )
+                          : const Icon(Icons.person, size: 40),
                     ),
-                    Positioned(
-                      bottom: 1,
-                      right: 1,
-                      child: ProfileActionButton(
-                        icon: Icons.edit_outlined, 
-                        onPressed: () {
-                          debugPrint("Clicou em editar");
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                  
+                ],
               ),
             ),
           ],
