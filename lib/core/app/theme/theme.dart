@@ -11,7 +11,7 @@ const Color kBlack = Color(0xFF000000);
 const Color kDarkGrey = Color(0xFF1F1D1D);
 const Color kMediumGrey = Color.fromARGB(255, 169, 168, 168);
 const Color kLightGrey = Color.fromARGB(255, 206, 205, 205);
-const Color kAlmostWhite = Color.fromARGB(255, 217, 217, 217);
+const Color kAlmostWhite = Color.fromARGB(255, 236, 236, 236);
 const Color kWhite = Colors.white;
 
 // ==== Backgrounds ====
