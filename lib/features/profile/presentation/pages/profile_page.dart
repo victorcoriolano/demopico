@@ -240,7 +240,7 @@ class _ProfilePageState extends State<ProfilePage>
                           ),
                           Container(
                             padding: const EdgeInsets.all(0),
-                            height: screenHeight * 0.53,
+                            height: screenHeight * 0.55,
                             child: ProfilePostsWidget(
                               controller: _tabController,
                             ),
