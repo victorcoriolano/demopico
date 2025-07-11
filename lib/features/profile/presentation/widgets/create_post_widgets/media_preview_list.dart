@@ -15,7 +15,7 @@ class MediaPreviewList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (mediaPaths.isEmpty) {
-      return const Center(child: Text("Nenhuma imagem selecionada"),);
+      return const Center(child: Text("Nenhum arquivo selecionado"),);
     }
     return SizedBox(
       height: 120, // Altura fixa para a lista de pré-visualização
