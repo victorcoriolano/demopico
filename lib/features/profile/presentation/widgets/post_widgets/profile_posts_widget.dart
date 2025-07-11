@@ -1,4 +1,5 @@
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/container_posts_widget.dart';
+import 'package:demopico/features/profile/presentation/widgets/post_widgets/container_videos_widget.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePostsWidget extends StatelessWidget {
@@ -7,9 +8,8 @@ class ProfilePostsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor:  const Color.fromARGB(255, 248, 246, 246),
-      body: Column(
+    return 
+       Column(
         children: [
           TabBar(
             controller: controller,
@@ -27,17 +27,17 @@ class ProfilePostsWidget extends StatelessWidget {
             
           ),
           Expanded(
+            
             child: TabBarView(
               controller: controller,
               children: <Widget>[
                 ContainerPostsWidget(),
-                Center(child: Text("It's rainy here")),
+                ContainerVideosWidget(),
                 Center(child: Text("It's sunny here")),
               ],
             ),
           ),
         ],
-      ),
     );
   }
 }
