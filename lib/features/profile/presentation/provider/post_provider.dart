@@ -44,7 +44,7 @@ class PostProvider extends ChangeNotifier {
   final List<FileModel> _filesModels = [];
   final List<FileModel> _videos = [];
   final List<FileModel> _images = [];
-  late FileModel _rec;
+  FileModel? _rec;
 
   String _description = '';
   String? _selectedSpotId;
@@ -55,7 +55,7 @@ class PostProvider extends ChangeNotifier {
   final List<Post> _fullVideoPosts = [];
   bool _isLoading = false;
 
-  FileModel get rec => _rec;
+  FileModel? get rec => _rec;
   List<FileModel> get filesModels => _filesModels;
   String get description => _description;
   String? get selectedSpotId => _selectedSpotId;
@@ -88,6 +88,11 @@ class PostProvider extends ChangeNotifier {
     }on Failure catch (e){
       getError(e);
     } 
+  }
+
+  void resetVideo(){
+    _rec = null;
+    notifyListeners();
   }
 
   //get media
@@ -130,12 +135,18 @@ class PostProvider extends ChangeNotifier {
     return items;
   }
 
-  void mapearFiles(){
+  void mapearFiles(TypePost typePost){
+    if (typePost == TypePost.fullVideo){
+      _videos.add(_rec!);
+      return;
+    }
+    
     for (var file in _filesModels) {
         // Mapeando os arquivos para imagens e vídeos
         debugPrint("mapeando arquivos");
         if (file.contentType.isVideo) {
           _videos.add(file);
+          
           debugPrint("Arquivo de vídeo adicionado: ${file.fileName}");
         } else if (file.contentType.isImage) {
           _images.add(file);
@@ -183,7 +194,7 @@ class PostProvider extends ChangeNotifier {
         _isLoading = false;        
       }
 
-      mapearFiles();
+      mapearFiles(type);
 
       //cria urls separadas para imagens e vídeos
       final urlsimages =
@@ -195,6 +206,7 @@ class PostProvider extends ChangeNotifier {
             .uploadFiles(_videos, "posts/videos");
         _videoUrls.addAll(urlvideos);
       }
+
 
       final newPost = Post(
           id: "",
@@ -208,7 +220,7 @@ class PostProvider extends ChangeNotifier {
           urlImages: _imgUrls);
 
       final post = await _createPostUc.execute(newPost);
-      _posts.add(post);
+      type == TypePost.post ? _posts.add(post) : _fullVideoPosts.add(post);
       _isLoading = false;
       notifyListeners();
       clear();
@@ -234,7 +246,9 @@ class PostProvider extends ChangeNotifier {
         return;
       }
       _posts.addAll(myPosts.where((post) => post.typePost == TypePost.post));
+      debugPrint("lista atual de posts: $_posts");
       _fullVideoPosts.addAll(myPosts.where((post) => post.typePost == TypePost.fullVideo));
+      debugPrint("lista atual de recs: $_fullVideoPosts tamanho da lista: ${_fullVideoPosts.length}");
       _isLoading = false;
       notifyListeners();
     } on Failure catch (e) {
