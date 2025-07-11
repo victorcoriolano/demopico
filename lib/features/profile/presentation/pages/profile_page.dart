@@ -4,7 +4,6 @@ import 'package:demopico/core/common/widgets/back_widget.dart';
 import 'package:demopico/features/profile/presentation/pages/create_post_page.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_posts_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_bottom_side_data_widget.dart';
-import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_configure_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_drawer_config.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_top_side_data_widget.dart';
 import 'package:demopico/features/user/domain/enums/type_post.dart';
@@ -108,6 +107,7 @@ class _ProfilePageState extends State<ProfilePage>
 
   Future<void> _loadUser() async {
     debugPrint('Loading user...');
+    _isLoading =true;
     final providerAuth = Provider.of<AuthUserProvider>(context, listen: false);
     final providerDatabase =
         Provider.of<UserDatabaseProvider>(context, listen: false);
@@ -117,7 +117,7 @@ class _ProfilePageState extends State<ProfilePage>
     if (uid == null) {
       debugPrint('User ID is null');
       setState(() {
-        _isLoading = true;
+        _isLoading = false;
       });
 
       showDialog(
@@ -146,7 +146,7 @@ class _ProfilePageState extends State<ProfilePage>
     if (providerDatabase.user == null) {
       debugPrint('User not found');
       setState(() {
-        _isLoading = true;
+        _isLoading = false;
       });
       if (mounted) {
         showDialog(
@@ -177,64 +177,57 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final userDrawer = context.read<UserDatabaseProvider>().user;
+    final thisUser = context.read<UserDatabaseProvider>().user;
+    if(_isLoading){
+      return Center(child: CircularProgressIndicator(),);
+    }
 
     return Scaffold(
-      drawer: MyCustomDrawer(user: userDrawer!),
+      appBar:  AppBar(
       backgroundColor: kAlmostWhite,
-      body: Consumer<UserDatabaseProvider>(
-        builder: (context, provider, child) => SafeArea(
-          child: _isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : ListView(
+      centerTitle: true,
+      title: Text(thisUser?.name ?? "", style: TextStyle(
+        color: kBlack,
+        fontSize: 22,
+        fontWeight: FontWeight.bold),
+      ),
+      leading: CustomBackButton(destination: HomePage()),
+      actions: [
+        Builder(
+          builder: (context) {
+            return IconButton(
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              }, 
+              icon: const Icon(Icons.settings),
+              iconSize: 30,
+              color: const Color.fromARGB(255, 0, 0, 0),
+            );
+          }
+        ),
+      ],
+      ),
+      drawer: MyCustomDrawer(user: thisUser!),
+      backgroundColor: kAlmostWhite,
+      body: Builder(
+        builder: (context) {
+          return SafeArea(
+            child: ListView(
                 shrinkWrap: true,
-                padding: const EdgeInsets.all(0), 
+                padding: const EdgeInsets.all(0),
                 children: [
-                  Container(
-                    color: kWhite,
-                    padding: const EdgeInsets.all(0),
-                    margin: const EdgeInsets.all(0),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const CustomBackButton(
-                                iconSize: 30,
-                                destination: HomePage(),
-                              ),
-                              Text(
-                                user!.name ??
-                                    'Nome de usuário não encontrado...',
-                                style: const TextStyle(
-                                    fontSize: 22, fontWeight: FontWeight.bold),
-                              ),
-                              ProfileConfigureWidget(
-                                  onPressed: () {
-                                    debugPrint("Abrindo drawer"); 
-                                    Scaffold.of(context).openDrawer();
-                                  }),
-                            ],
-                          ),
-                        ),
-                        
-                      ],
-                    ),
-                  ),
                   ProfileTopSideDataWidget(
-                          onEdit: () {},
-                          avatarUrl: user?.pictureUrl,
-                          backgroundUrl: user?.backgroundPicture,
-                        ),
-                        ProfileBottomSideDataWidget(
-                          followers: user?.conexoes ?? 0, 
-                          contributions: user?.picosAdicionados ?? 0, 
-                          description: user?.description ?? '',
-                        ),
-                        SizedBox(height: 12,),
+                    avatarUrl: user?.pictureUrl,
+                    backgroundUrl: user?.backgroundPicture,
+                  ),
+                  ProfileBottomSideDataWidget(
+                    followers: user?.conexoes ?? 0,
+                    contributions: user?.picosAdicionados ?? 0,
+                    description: user?.description ?? '',
+                  ),
+                  SizedBox(
+                    height: 12,
+                  ),
                   
                   Container(
                     padding: const EdgeInsets.all(0),
@@ -255,19 +248,14 @@ class _ProfilePageState extends State<ProfilePage>
                     ),
                   ),
                 ]),
-        ),
+          );
+        }
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Get.to(() => CreatePostPage(
                 typePost: typePost,
               ));
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => CreatePostPage(
-                        typePost: typePost,
-                      )));
         },
         tooltip: "Criar Postagem",
         child: Icon(
