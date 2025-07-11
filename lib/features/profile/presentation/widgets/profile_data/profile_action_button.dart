@@ -1,17 +1,16 @@
+import 'package:demopico/core/app/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class ProfileActionButton extends StatelessWidget {
   final IconData icon;
-  final String label;
   final VoidCallback onPressed;
   final double iconSize;
 
   const ProfileActionButton({
     super.key,
     required this.icon,
-    required this.label,
     required this.onPressed,
-    this.iconSize = 30,
+    this.iconSize = 40,
   });
 
   @override
@@ -23,12 +22,8 @@ class ProfileActionButton extends StatelessWidget {
         IconButton(
           icon: Icon(icon),
           iconSize: iconSize,
-          color: Colors.black,
+          color: kBlack,
           onPressed: onPressed,
-        ),
-        Text(
-          label,
-          style: const TextStyle(fontSize: 12),
         ),
       ],
     );
