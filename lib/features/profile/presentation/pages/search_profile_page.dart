@@ -1,3 +1,4 @@
+import 'package:demopico/features/profile/presentation/widgets/search_page_widgets/container_suggestion_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/search_page_widgets/suggetions_profiles_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -16,12 +17,24 @@ class _SearchProfilePageState extends State<SearchProfilePage> {
         title: const Text('Buscar Perfil'),
         centerTitle: true,
       ),
-      body: Center(
-         child: SuggestionProfilesWidget(
-            name: 'Arthur Selingin',
-            imageUrl:'https://avatars.githubusercontent.com/u/102646626?v=4', // Exemplo de URL de imagem
-          )
+      body:  Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Pesquisar',
+                prefixIcon: const Icon(Icons.search),
+              ),
+            ),
+          ),
+          Expanded(child: ContainerSuggestionWidget()),
+        ],
       ),
+          
     );
   }
 }
