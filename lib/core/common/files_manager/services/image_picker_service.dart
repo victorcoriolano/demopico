@@ -82,14 +82,6 @@ class ImagePickerService implements IPickFileRepository {
   @override
   Future<List<FileModel>> pickMultipleMedia(int limit) async {
     try{
-      if (limit < 2) {
-        // Não é possivel execultar o pickMultpleMedia com somente
-        // 1 de limite (não faz sentido também )
-        // executando o pick Image e retornando na lista
-        final listForOneFile = <FileModel>[];
-        listForOneFile.add(await pickImage());
-        return listForOneFile;
-      }
 
       final xFiles = await _imagePicker.pickMultipleMedia(
         limit: limit,
