@@ -16,21 +16,25 @@ class AddPicoProvider extends ChangeNotifier{
 
   static AddPicoProvider get getInstance {
     _addPicoProvider ??= AddPicoProvider(
-        pickImageUC: PickImageUc.getInstance,
+        pickImageUC: PickImageUc.getInstance(),
         serviceImage: UploadService.getInstance,
         createSpotUc: CreateSpotUc.getInstance);
     return _addPicoProvider!;
   }
 
   //instanciando casos de uso
-  final PickImageUc pickImageUC;
+  final PickImageUc _pickImageUC;
   final UploadService _uploadService;
-  final CreateSpotUc createSpotUc;
+  final CreateSpotUc _createSpotUc;
 
   AddPicoProvider({
-    required this.pickImageUC, 
+    required PickImageUc pickImageUC, 
     required UploadService serviceImage, 
-    required this.createSpotUc}): _uploadService = serviceImage;
+    required CreateSpotUc createSpotUc})
+    : _uploadService = serviceImage,
+     _createSpotUc = createSpotUc,
+     _pickImageUC = pickImageUC
+    ;
 
   Pico? pico;
 
@@ -48,18 +52,19 @@ class AddPicoProvider extends ChangeNotifier{
 
   String? errosImages;
 
-  List<FileModel> files = [];
+  List<FileModel> get files => _pickImageUC.listFile;
 
   double progress = 0.0;
 
   void getLocation(LatLng latlang) {
     this.latlang = latlang;
   }
+
   
 
   Future<void> pickImages() async{
     try{
-      files = await pickImageUC.pick();
+      await _pickImageUC.pick();
     }on Exception catch(e) {
       debugPrint("Erro ao selecionar imagens: $e");
       errosImages = e.toString();
@@ -223,6 +228,7 @@ class AddPicoProvider extends ChangeNotifier{
   }
 
   void limpar() {
+    _pickImageUC.listFile.clear();
     atributos.clear();
     obstaculos.clear();
     nomePico = '';
@@ -249,7 +255,7 @@ class AddPicoProvider extends ChangeNotifier{
       newPico.imgUrls.addAll(urls);
       // Salva o pico no backend
       
-      await createSpotUc.createSpot(newPico);
+      await _createSpotUc.createSpot(newPico);
       
       // Limpa os campos após a criação bem-sucedida
       limpar();
@@ -260,7 +266,7 @@ class AddPicoProvider extends ChangeNotifier{
 
   @override
   void dispose() {
-    super.dispose();
     limpar();
+    super.dispose();
   }
 }
