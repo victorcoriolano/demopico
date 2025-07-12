@@ -52,7 +52,7 @@ final myProviders = [
         ChangeNotifierProvider(create: (_) => CommentController.getInstance),
         ChangeNotifierProvider(create: (_) => PostProvider(
           createPostUc: CreatePostUc.instace,
-          pickFileUC: PickFileUC.getInstance,
+          pickFileUC: PickFileUC.getInstance(),
           getPosts: GetPostUc.instance,
           deleteUc: DeletePostUc.instance,
           updateUc: UpdatePostUc.instance,
