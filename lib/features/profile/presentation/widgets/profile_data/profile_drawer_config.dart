@@ -139,6 +139,7 @@ class MyCustomDrawer extends StatelessWidget {
             icon: Icons.info_outline,
             text: 'Sobre o App',
             onTap: () {
+              Get.back();
               Get.to((_) => AboutPage());
             },
           ),
