@@ -5,10 +5,8 @@ class ProfileTopSideDataWidget extends StatelessWidget {
   final String? avatarUrl;
   final String? backgroundUrl;
   final double avatarSize;
-  final VoidCallback onEdit;
   const ProfileTopSideDataWidget({
     super.key,
-    required this.onEdit,
     required this.avatarUrl,
     required this.backgroundUrl,
     this.avatarSize = 80,
