@@ -239,7 +239,6 @@ class AddPicoProvider extends ChangeNotifier{
     imgUrls.clear();
     tipo = 'Pico de Rua';
     utilidades.clear();
-    files.clear();
     notifyListeners();
   }
    
