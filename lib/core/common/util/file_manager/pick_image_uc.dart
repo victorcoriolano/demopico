@@ -1,5 +1,6 @@
 
 
+
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/files_manager/interfaces/repository/i_pick_image_repository.dart';
 import 'package:demopico/core/common/files_manager/models/file_model.dart';
@@ -8,30 +9,40 @@ import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:flutter/material.dart';
 
 class PickImageUc {
-  static PickImageUc? _pickImageUC;
 
-  static PickImageUc get getInstance{
-    _pickImageUC ??= PickImageUc(repositoryIMP: ImagePickerService.getInstance);
-    return _pickImageUC!;
+  factory PickImageUc.getInstance(){
+    return PickImageUc(repositoryIMP: ImagePickerService.getInstance);
   } 
   final IPickFileRepository repositoryIMP;
-  int limit = 3;
+  final List<FileModel> listFile = [];
+  final int _limit = 3;
 
   PickImageUc({required this.repositoryIMP});
 
-  Future<List<FileModel>> pick() async {
+  Future<void> pick() async {
+    if (!_validateListFile(listFile)){
+      throw FileLimitExceededFailure(messagemAdicional: "Você já selecionou 3 fotos");
+    }
+    final selectedFile = <FileModel>[];
     try {
-      if (limit == 0) throw FileLimitExceededFailure();
-      final files = await repositoryIMP.pickImages(limit);
-      
-      limit -= files.length;
-      
-      if (files.length > 3) throw FileLimitExceededFailure();
-
-      return files;
+      debugPrint("Selecionando arquivos");
+      selectedFile.addAll(await repositoryIMP.pickImages(_limit));
     } on Failure catch (e) {
-      debugPrint("Erro ao selecionar imagens no use case de pegar imagens: $e");
+      debugPrint("Erro ao selecionar imagens vindo de outra camada: $e");
       rethrow;
     }
+
+    //validando arquivos selecionados 
+    if (!_validateListFile(selectedFile)){
+      throw FileLimitExceededFailure(messagemAdicional: "Selecione apenas 3 imagens");
+    } 
+
+    if (selectedFile.any((file) => file.contentType == ContentType.unavailable)) throw InvalidFormatFileFailure();
+
+    //arquivos valido adicionando na lista
+
+    listFile.addAll(selectedFile);
   }
+  bool _validateListFile(List<FileModel> files) =>
+      files.length <= _limit && listFile.length + files.length <= _limit;
 }
