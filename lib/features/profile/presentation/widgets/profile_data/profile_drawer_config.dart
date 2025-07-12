@@ -139,6 +139,7 @@ class MyCustomDrawer extends StatelessWidget {
             icon: Icons.info_outline,
             text: 'Sobre o App',
             onTap: () {
+              // TODO: RESOLVER ERRO DE NAVEGAR PARA ABOUT PAGE
               Get.back();
               Get.to((_) => AboutPage());
             },
