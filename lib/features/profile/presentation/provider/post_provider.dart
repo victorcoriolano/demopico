@@ -41,7 +41,6 @@ class PostProvider extends ChangeNotifier {
         _deletePostUc = deleteUc,
         _updateUc = updateUc;
 
-  final List<FileModel> _filesModels = [];
   final List<FileModel> _videos = [];
   final List<FileModel> _images = [];
   FileModel? _rec;
@@ -56,7 +55,7 @@ class PostProvider extends ChangeNotifier {
   bool _isLoading = false;
 
   FileModel? get rec => _rec;
-  List<FileModel> get filesModels => _filesModels;
+  List<FileModel> get filesModels => _pickFileUC.listFiles;
   String get description => _description;
   String? get selectedSpotId => _selectedSpotId;
   bool get isLoading => _isLoading;
@@ -64,7 +63,6 @@ class PostProvider extends ChangeNotifier {
   List<Post> get fullVideos => _fullVideoPosts;
 
   void removeMedia(FileModel file) {
-      _filesModels.remove(file);  
       _pickFileUC.listFiles.remove(file);    
       notifyListeners();
   }
@@ -98,11 +96,9 @@ class PostProvider extends ChangeNotifier {
   //get media
   Future<void> getFiles() async {
     try {
-      _filesModels.clear();
-      final files = await _pickFileUC.execute();
-      _filesModels.addAll(files);
+      await _pickFileUC.execute();
       debugPrint(
-          "Adicionou: ${_filesModels.length} na lista e arquivos selecionados");
+          "Adicionou: ${_pickFileUC.listFiles.length} na lista e arquivos selecionados");
 
       
 
@@ -141,7 +137,7 @@ class PostProvider extends ChangeNotifier {
       return;
     }
     
-    for (var file in _filesModels) {
+    for (var file in _pickFileUC.listFiles) {
         // Mapeando os arquivos para imagens e vídeos
         debugPrint("mapeando arquivos");
         if (file.contentType.isVideo) {
@@ -277,8 +273,9 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
+
   void clear() {
-    _filesModels.clear();
+    _pickFileUC.listFiles.clear();
     _description = '';
     _selectedSpotId = null;
     _videos.clear();
