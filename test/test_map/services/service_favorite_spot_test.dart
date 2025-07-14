@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/mapa/data/data_sources/remote/firebase_favorite_spot_service.dart';
-import 'package:demopico/core/common/files_manager/dtos/firebase_dto.dart';
+import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 import 'package:demopico/features/mapa/data/mappers/mapper_pico_favorito_firebase.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_favorito.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
