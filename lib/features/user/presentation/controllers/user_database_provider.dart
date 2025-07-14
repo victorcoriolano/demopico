@@ -24,7 +24,7 @@ class UserDatabaseProvider extends ChangeNotifier {
       if (_user != null ) {
         debugPrint("Retornando por que os dados do user já foram pegos");
         return;
-      };
+      }
       debugPrint("pegando dados do usuario");
       _user = await pegarDadosUserUc.getDados(uid);
     }catch (e) {

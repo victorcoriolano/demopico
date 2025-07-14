@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:demopico/features/external/datasources/redis/dto/redis_dto.dart';
 import 'package:redis/redis.dart';
 
 class Redis {
@@ -20,19 +23,51 @@ class Redis {
   })  : host = host ?? 'localhost',
         port = port ?? 6379;
 
-  Future<void> publish(String message) async {
+  Future<void> publish(RedisDto dto) async {
     final connection = RedisConnection();
     Command command = await connection.connect(host, port);
-    await command.send_object(["PUBLISH", channel, message]);
+    await command.send_object(["PUBLISH", channel, dto]);
     await connection.close();
   }
 
-  Future<void> publishToEspecial(String message) async {
+  Future<void> publishToEspecial(RedisDto dto) async {
     final connection = RedisConnection();
     Command command = await connection.connect(host, port);
     final fullChannel = '$channel:$especialChannel';
-    await command.send_object(["PUBLISH", fullChannel, message]);
+    await command.send_object(["PUBLISH", fullChannel, dto]);
     await connection.close();
+  }
+
+   Future<void> subscribe(void Function(RedisDto) onMessage) async {
+    final connection = RedisConnection();
+    final command = await connection.connect(host, port);
+    final pubSub = PubSub(command);
+
+     pubSub.subscribe([channel]);
+
+    pubSub.getStream().listen((message) {
+      // message[0] = "message", message[1] = canal, message[2] = conteúdo
+      final String payload = message[2];
+      final Map<String, dynamic> data = jsonDecode(payload);
+    //  final dto = RedisDto.fromJson(data);
+     // onMessage(dto);
+    });
+  }
+
+  Future<void> subscribeToEspecial(void Function(RedisDto) onMessage) async {
+    final connection = RedisConnection();
+    final command = await connection.connect(host, port);
+    final pubSub = PubSub(command);
+    final fullChannel = '$channel:$especialChannel';
+
+     pubSub.subscribe([fullChannel]);
+
+    pubSub.getStream().listen((message) {
+      final String payload = message[2];
+      final Map<String, dynamic> data = jsonDecode(payload);
+   //   final dto = RedisDto.fromJson(data);
+    //  onMessage(dto);
+    });
   }
 
   // Outros métodos como subscribe() podem ser adicionados aqui

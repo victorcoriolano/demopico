@@ -1,4 +1,5 @@
-import 'package:demopico/core/common/files_manager/models/file_model.dart';
+
+import 'package:demopico/features/user/domain/enums/type_post.dart';
 
 class Post {
   String id;
@@ -11,7 +12,7 @@ class Post {
   List<String>? urlVideos;
   DateTime dateTime;
   int curtidas;
-  List<FileModel>? files;
+  TypePost typePost;
 
   Post({
     required this.id,
@@ -21,9 +22,9 @@ class Post {
     required this.urlUserPhoto,
     required this.description,
     required this.urlImages,
+    required this.typePost,
     DateTime? dateTime,
     int? curtidas,
-    this.files,
     this.urlVideos,
   })  : dateTime = dateTime ?? DateTime.now(),
         curtidas = curtidas ?? 0;
@@ -86,10 +87,6 @@ class Post {
     curtidas = value;
   }
 
-  void setFiles(List<FileModel> value) {
-    files = value;
-  }
-
   factory Post.fromJson(Map<String, dynamic> json, String id) {
     return Post(
       id: id,
@@ -104,6 +101,7 @@ class Post {
           : null,
       dateTime: DateTime.parse(json['dateTime']),
       curtidas: json['curtidas'],
+      typePost: TypePost.fromString(json["typePost"]),
     );
   }
 
@@ -118,6 +116,7 @@ class Post {
       'urlVideos': urlVideos ?? [],
       'dateTime': dateTime.toIso8601String(),
       'curtidas': curtidas,
+      'typePost': typePost.name
     };
   }
 

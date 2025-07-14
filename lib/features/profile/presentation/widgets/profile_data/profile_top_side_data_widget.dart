@@ -7,7 +7,6 @@ class ProfileTopSideDataWidget extends StatelessWidget {
   final double avatarSize;
   const ProfileTopSideDataWidget({
     super.key,
-
     required this.avatarUrl,
     required this.backgroundUrl,
     this.avatarSize = 80,
@@ -31,7 +30,7 @@ class ProfileTopSideDataWidget extends StatelessWidget {
                 image: DecorationImage(
                   alignment: Alignment.center,
                   image: backgroundUrl != null && backgroundUrl!.isNotEmpty
-                      ? NetworkImage(backgroundUrl!)
+                      ?NetworkImage(backgroundUrl!) 
                       : const AssetImage("assets/images/background_vermelho.png")
                           as ImageProvider,
                   fit: BoxFit.cover,
@@ -41,19 +40,25 @@ class ProfileTopSideDataWidget extends StatelessWidget {
             Positioned(
               bottom: -avatarSize,
               left: (screenWidth - avatarSize * 2) / 2,
-              child: CircleAvatar(
-                radius: avatarSize,
-                backgroundColor: Colors.white,
-                child: ClipOval(
-                  child: avatarUrl != null && avatarUrl!.isNotEmpty
-                      ? Image.network(
-                          avatarUrl!,
-                          width: avatarSize * 1.9,
-                          height: avatarSize * 1.9,
-                          fit: BoxFit.cover,
-                        )
-                      : const Icon(Icons.person, size: 40),
-                ),
+              child: Stack(
+                children: [
+                  CircleAvatar(
+                    radius: avatarSize,
+                    backgroundColor: Colors.white,
+                    
+                    child: ClipOval(
+                      child: avatarUrl != null && avatarUrl!.isNotEmpty
+                          ? Image.network(
+                              avatarUrl!,
+                              width: avatarSize * 1.9,
+                              height: avatarSize * 1.9,
+                              fit: BoxFit.cover,
+                            )
+                          : const Icon(Icons.person, size: 40),
+                    ),
+                  ),
+                  
+                ],
               ),
             ),
           ],

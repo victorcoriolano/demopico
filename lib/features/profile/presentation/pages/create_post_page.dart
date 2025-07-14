@@ -1,7 +1,8 @@
 import 'package:demopico/core/app/home_page.dart';
-import 'package:demopico/features/profile/presentation/pages/user_page.dart';
+import 'package:demopico/features/profile/presentation/pages/profile_page.dart';
 import 'package:demopico/features/profile/presentation/provider/post_provider.dart';
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/media_preview_list.dart';
+import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/media_preview_video.dart';
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/midia_input_card.dart';
 import 'package:demopico/features/user/domain/enums/type_post.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
@@ -75,10 +76,11 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isPost = widget.typePost == TypePost.post;
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.typePost == TypePost.post
+          isPost
               ? "Criar Postagem"
               : "Postar Rec"
         )
@@ -97,15 +99,23 @@ class _CreatePostPageState extends State<CreatePostPage> {
               children: [
                 // Input para adicionar mídia
                 MediaInputCard(
-                  onAddMedia: provider.getFile,
+                  onAddMedia: () async {
+                    isPost
+                     ? await provider.getFiles()
+                     : await provider.getVideo();                    
+                    
+                  },
+                  typePost: widget.typePost,
                 ),
                 const SizedBox(height: 16),
 
                 // Pré-visualização das mídias adicionadas
-                MediaPreviewList(
-                  mediaPaths: provider.filesModels,
-                  onRemoveMedia: provider.removeMedia,
-                ),
+                isPost
+                  ? MediaPreviewList(
+                    mediaPaths: provider.filesModels,
+                    onRemoveMedia: provider.removeMedia,
+                  )
+                  : MediaPreviewVideo(),
                 const SizedBox(height: 24),
 
                 // Botão para linkar ao pico no mapa
@@ -162,13 +172,13 @@ class _CreatePostPageState extends State<CreatePostPage> {
                       return;
                     }
                     try{
-                      await provider.createPost(user);
+                      await provider.createPost(user, widget.typePost);
                       Get.snackbar(
                         'Sucesso',
                         'Postagem criada com sucesso!',
                         snackPosition: SnackPosition.TOP,
                       );
-                      Get.offAll(() => const UserPage());
+                      Get.offAll(() => const ProfilePage());
                     }catch (e){
                       Get.snackbar(
                         'Erro',
@@ -195,3 +205,4 @@ class _CreatePostPageState extends State<CreatePostPage> {
     );
   }
 }
+

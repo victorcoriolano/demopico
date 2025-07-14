@@ -1,12 +1,11 @@
 import 'package:demopico/core/app/home_page.dart';
+import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/widgets/back_widget.dart';
 import 'package:demopico/features/profile/presentation/pages/create_post_page.dart';
-import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_description_widget.dart';
-import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_navigator_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_posts_widget.dart';
-import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_stats_widget.dart';
-import 'package:demopico/features/profile/presentation/widgets/profile_configure_widget.dart';
-import 'package:demopico/features/profile/presentation/widgets/profile_top_side_data_widget.dart';
+import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_bottom_side_data_widget.dart';
+import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_drawer_config.dart';
+import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_top_side_data_widget.dart';
 import 'package:demopico/features/user/domain/enums/type_post.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
@@ -17,14 +16,14 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-class UserPage extends StatefulWidget {
-  const UserPage({super.key});
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
 
   @override
-  State<UserPage> createState() => _UserPageState();
+  State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _UserPageState extends State<UserPage>
+class _ProfilePageState extends State<ProfilePage>
     with SingleTickerProviderStateMixin {
   late UserM? user;
   String? currentUserId;
@@ -33,9 +32,8 @@ class _UserPageState extends State<UserPage>
   ScrollDirection? _lastDirection;
   double _accumulatedScroll = 0.0;
   double _lastOffset = 0.0;
-  
+
   TypePost typePost = TypePost.post; // definindo o tipo de post
-  
 
   final ScrollController _scrollController = ScrollController();
   final TextEditingController bioController = TextEditingController();
@@ -50,7 +48,6 @@ class _UserPageState extends State<UserPage>
     _tabController = TabController(length: 3, vsync: this);
 
     _tabController.addListener(() {
-      
       if (_tabController.index == 0) {
         typePost = TypePost.post;
         setState(() {});
@@ -110,6 +107,7 @@ class _UserPageState extends State<UserPage>
 
   Future<void> _loadUser() async {
     debugPrint('Loading user...');
+    _isLoading =true;
     final providerAuth = Provider.of<AuthUserProvider>(context, listen: false);
     final providerDatabase =
         Provider.of<UserDatabaseProvider>(context, listen: false);
@@ -119,7 +117,7 @@ class _UserPageState extends State<UserPage>
     if (uid == null) {
       debugPrint('User ID is null');
       setState(() {
-        _isLoading = true;
+        _isLoading = false;
       });
 
       showDialog(
@@ -148,7 +146,7 @@ class _UserPageState extends State<UserPage>
     if (providerDatabase.user == null) {
       debugPrint('User not found');
       setState(() {
-        _isLoading = true;
+        _isLoading = false;
       });
       if (mounted) {
         showDialog(
@@ -176,59 +174,61 @@ class _UserPageState extends State<UserPage>
     }
   }
 
-  
-
-
-
-  
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
+    final thisUser = context.read<UserDatabaseProvider>().user;
+    if(_isLoading){
+      return Center(child: CircularProgressIndicator(),);
+    }
 
     return Scaffold(
-      body: Consumer<UserDatabaseProvider>(
-        builder: (context, provider, child) => SafeArea(
-          child: _isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : ListView(padding: const EdgeInsets.all(0), children: [
-                  Container(
-                    color: const Color.fromARGB(255, 236, 235, 235),
-                    padding: const EdgeInsets.all(0),
-                    margin: const EdgeInsets.all(0),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const CustomBackButton(
-                                iconSize: 30,
-                                destination: HomePage(),
-                              ),
-                              Text(
-                                user!.name ??
-                                    'Nome de usuário não encontrado...',
-                                style: const TextStyle(
-                                    fontSize: 22, fontWeight: FontWeight.bold),
-                              ),
-                              ProfileConfigureWidget(
-                                  bioController: bioController),
-                            ],
-                          ),
-                        ),
-                        ProfileTopSideDataWidget(
-                          avatarUrl: user?.pictureUrl,
-                          backgroundUrl: user?.backgroundPicture,
-                        ),
-                        ProfileStatsWidget(
-                          followers: user?.conexoes ?? 0,
-                          contributions: user?.picosAdicionados ?? 0,
-                        ),
-                      ],
-                    ),
+      appBar:  AppBar(
+      backgroundColor: kAlmostWhite,
+      centerTitle: true,
+      title: Text(thisUser?.name ?? "", style: TextStyle(
+        color: kBlack,
+        fontSize: 22,
+        fontWeight: FontWeight.bold),
+      ),
+      leading: CustomBackButton(destination: HomePage()),
+      actions: [
+        Builder(
+          builder: (context) {
+            return IconButton(
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              }, 
+              icon: const Icon(Icons.settings),
+              iconSize: 30,
+              color: const Color.fromARGB(255, 0, 0, 0),
+            );
+          }
+        ),
+      ],
+      ),
+      drawer: MyCustomDrawer(user: thisUser!),
+      backgroundColor: kAlmostWhite,
+      body: Builder(
+        builder: (context) {
+          return SafeArea(
+            child: ListView(
+                shrinkWrap: true,
+                padding: const EdgeInsets.all(0),
+                children: [
+                  ProfileTopSideDataWidget(
+                    avatarUrl: user?.pictureUrl,
+                    backgroundUrl: user?.backgroundPicture,
                   ),
+                  ProfileBottomSideDataWidget(
+                    followers: user?.conexoes ?? 0,
+                    contributions: user?.picosAdicionados ?? 0,
+                    description: user?.description ?? '',
+                  ),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  
                   Container(
                     padding: const EdgeInsets.all(0),
                     margin: const EdgeInsets.all(0),
@@ -236,16 +236,9 @@ class _UserPageState extends State<UserPage>
                       controller: _scrollController,
                       child: Column(
                         children: [
-                          AnimatedOpacity(
-                            opacity: _isVisible ? 1.0 : 0.0,
-                            duration: const Duration(milliseconds: 400),
-                            child: ProfileDescriptionWidget(
-                              description: user?.description,
-                            ),
-                          ),
                           Container(
                             padding: const EdgeInsets.all(0),
-                            height: screenHeight * 0.53,
+                            height: screenHeight * 0.55,
                             child: ProfilePostsWidget(
                               controller: _tabController,
                             ),
@@ -255,22 +248,22 @@ class _UserPageState extends State<UserPage>
                     ),
                   ),
                 ]),
-        ),
+          );
+        }
       ),
-      bottomNavigationBar: ProfileNavigatorWidget(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.to(() => CreatePostPage(typePost: typePost,));
-          Navigator.push(context, MaterialPageRoute(
-            builder: (context) => CreatePostPage(typePost: typePost,)));
+          Get.to(() => CreatePostPage(
+                typePost: typePost,
+              ));
         },
         tooltip: "Criar Postagem",
         child: Icon(
           typePost == TypePost.post
               ? Icons.add
               : typePost == TypePost.fullVideo
-                ? Icons.video_call
-                : Icons.map_outlined,
+                  ? Icons.video_call
+                  : Icons.map_outlined,
         ),
       ),
     );

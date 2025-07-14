@@ -134,6 +134,8 @@ class UserM {
     }
   }
 
+  bool isMy(String idPost) => idPost == id; 
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||

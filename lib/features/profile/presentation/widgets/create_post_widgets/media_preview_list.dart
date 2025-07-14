@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class MediaPreviewList extends StatelessWidget {
   final List<FileModel> mediaPaths;
-  final Function(int) onRemoveMedia;
+  final Function(FileModel) onRemoveMedia;
 
   const MediaPreviewList({
     super.key,
@@ -15,11 +15,12 @@ class MediaPreviewList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (mediaPaths.isEmpty) {
-      return const Center(child: Text("Nenhuma imagem selecionada"),);
+      return const Center(child: Text("Nenhum arquivo selecionado"),);
     }
     return SizedBox(
       height: 120, // Altura fixa para a lista de pré-visualização
       child: ListView.builder(
+        shrinkWrap: true,
         scrollDirection: Axis.horizontal,
         itemCount: mediaPaths.length,
         itemBuilder: (context, index) {
@@ -55,7 +56,7 @@ class MediaPreviewList extends StatelessWidget {
                 top: 0,
                 right: 0,
                 child: GestureDetector(
-                  onTap: () => onRemoveMedia(index),
+                  onTap: () => onRemoveMedia(mediaPath),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.redAccent,

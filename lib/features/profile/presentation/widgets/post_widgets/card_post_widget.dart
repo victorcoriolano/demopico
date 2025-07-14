@@ -8,11 +8,16 @@ class CardPostWidget extends StatelessWidget {
 
   const CardPostWidget({super.key, required this.post});
 
+  
+
   @override
   Widget build(BuildContext context) {
     
 
     return GestureDetector(
+      onLongPress: () {
+        
+      }, 
       onTap: () {
         Navigator.push(
           context,
@@ -22,8 +27,9 @@ class CardPostWidget extends StatelessWidget {
         );
       },
       child: Card(
+        
         margin: const EdgeInsets.all(0),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+        shape: LinearBorder(),
         clipBehavior: Clip.antiAlias,
         child: post.urlImages.isNotEmpty 
           ? Image.network(
