@@ -1,19 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
+import 'package:demopico/core/common/files_manager/enums/collections.dart';
+import 'package:demopico/features/external/datasources/firebase/remote/crud_firebase.dart';
 import 'package:demopico/features/mapa/data/data_sources/interfaces/i_spot_datasource.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
 import 'package:demopico/features/mapa/domain/entities/filters.dart';
 import 'package:flutter/foundation.dart';
 
-class FirebaseSpotRemoteDataSource implements ISpotRemoteDataSource {
+class FirebaseSpotRemoteDataSource implements ISpotRemoteDataSource<FirebaseDTO> {
   static FirebaseSpotRemoteDataSource? _firebaseSpotRemoteDataSource;
 
   static FirebaseSpotRemoteDataSource get getInstance =>
       _firebaseSpotRemoteDataSource ??=
-          FirebaseSpotRemoteDataSource(FirebaseFirestore.instance);
+          FirebaseSpotRemoteDataSource(CrudFirebase.getInstance..setcollection(Collections.spots));
 
-  final FirebaseFirestore _firebaseFirestore;
+  final CrudFirebase _firebaseFirestore;
   final String _collectionName = 'spots';
 
   FirebaseSpotRemoteDataSource(this._firebaseFirestore);
@@ -23,7 +25,7 @@ class FirebaseSpotRemoteDataSource implements ISpotRemoteDataSource {
     // Salvando os dados no Firestore
     try {
       final doc =
-          await _firebaseFirestore.collection(_collectionName).add(data.data);
+          await _firebaseFirestore.create(data);
       //retornando id do spot criado
       final newPico = data.copyWith(id: doc.id);
       return newPico;
@@ -38,24 +40,21 @@ class FirebaseSpotRemoteDataSource implements ISpotRemoteDataSource {
   @override
   Future<void> delete(String id) async {
     try {
-      await _firebaseFirestore.collection(_collectionName).doc(id).delete();
+      await _firebaseFirestore.delete(id);
     } on FirebaseException catch (e) {
       throw FirebaseErrorsMapper.map(e);
-    } catch (e, stacktrace) {
+    } on Exception catch (e, stacktrace) {
       throw UnknownFailure(
-          originalException: e as Exception, stackTrace: stacktrace);
+          originalException: e, stackTrace: stacktrace);
+    }catch (e) {
+      throw UnknownFailure(unknownError: e);
     }
   }
 
   @override
   Future<FirebaseDTO> getbyID(String id) async {
-    final doc =
-        await _firebaseFirestore.collection(_collectionName).doc(id).get();
-    if (!doc.exists) {
-      throw PicoNotFoundFailure();
-    }
-    final FirebaseDTO pico = FirebaseDTO(id: id, data: doc.data()!);
-    return pico;
+
+    return await _firebaseFirestore.read(id);
   }
 
   @override
@@ -81,7 +80,8 @@ class FirebaseSpotRemoteDataSource implements ISpotRemoteDataSource {
   }
 
   Query executeQuery([Filters? filtro]) {
-    Query querySnapshot = _firebaseFirestore.collection(_collectionName);
+    //acessando a instancia do crud para realizar consultas com where
+    Query querySnapshot = _firebaseFirestore.firestore.collection(_collectionName);
 
     try {
       if (filtro != null) {
@@ -114,17 +114,10 @@ class FirebaseSpotRemoteDataSource implements ISpotRemoteDataSource {
 
   @override
   Future<void> update(FirebaseDTO picoDto) async {
-    try {
-      await _firebaseFirestore
-          .collection(_collectionName)
-          .doc(picoDto.id)
-          .update(picoDto.data);
+      await _firebaseFirestore.update(picoDto);
       return;
-    } on FirebaseException catch (e) {
-      throw FirebaseErrorsMapper.map(e);
-    } catch (e, stacktrace) {
-      throw UnknownFailure(
-          originalException: e as Exception, stackTrace: stacktrace);
-    }
   }
+  
+  @override
+  Future<List<FirebaseDTO>> getList(String id) async => await _firebaseFirestore.readWithFilter("userID", id); 
 }
