@@ -107,9 +107,9 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
 
     bool isMine(){
       
-      bool isMyPico = widget.pico.userCreator != null &&
+      bool isMyPico = widget.pico.user != null &&
         user != null &&
-        widget.pico.userCreator! == user.name;
+        widget.pico.user?.id == user.id ;
       debugPrint("isMine: $isMyPico");
         return isMyPico;
     }
@@ -469,7 +469,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                       ),
                                       const SizedBox(height: 5),
                                       Text(
-                                        widget.pico.userCreator ??
+                                        widget.pico.user?.name ??
                                             "ANÔNIMO", // Nome fixo abaixo da foto
                                         textAlign: TextAlign.center,
                                         style: const TextStyle(
