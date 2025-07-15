@@ -28,7 +28,7 @@ final myProviders = [
   ChangeNotifierProvider(create: (_) => OpenWeatherProvider()),
         ChangeNotifierProvider(create: (_) => ForecastProvider(null)),
         ChangeNotifierProvider(create: (_) => AuthUserProvider.getInstance),
-        ChangeNotifierProvider(create: (_) => ScreenProvider()),
+        ChangeNotifierProvider(create: (_) => ScreenProvider(0)),
         StreamProvider<User?>(
           create: (_) =>
               UserAuthFirebaseService.getInstance.getAuthStateChanges(),
