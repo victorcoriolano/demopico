@@ -6,29 +6,32 @@ import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 const _padrao = "Não informado";
 
 class PicoModel extends Pico {
+  final String? userName;
+  final String? userID;
   PicoModel(
       {
-        super.idUser,
+        required this.userID,
+        required this.userName,
         required super.imgUrls,
-      required super.modalidade,
-      required super.tipoPico,
-      required super.nota,
-      required super.numeroAvaliacoes,
+        required super.modalidade,
+        required super.tipoPico,
+        required super.nota,
+        required super.numeroAvaliacoes,
       required super.long,
       required super.lat,
       required super.description,
       required super.atributos,
       required super.obstaculos,
       required super.utilidades,
-      required super.userCreator,
       required super.picoName,
-      required super.id});
+      required super.id}) 
+      ;
 
       
 
   factory PicoModel.fromJson(Map<String, dynamic> json, String id) {
   return PicoModel(
-    idUser: json['idUser'],
+    userID: json['idUser'],
     id: id,
     imgUrls: List<String>.from(json['imageUrl'] ?? []),
     tipoPico: json['tipo'] ?? _padrao,
@@ -41,14 +44,14 @@ class PicoModel extends Pico {
     atributos: Map<String, int>.from(json['atributos'] ?? {}),
     obstaculos: List<String>.from(json['obstaculos'] ?? []),
     utilidades: List<String>.from(json['utilidades'] ?? []),
-    userCreator: json['criador'] ?? _padrao,
+    userName: json['criador'],
     picoName: json['name'] ?? _padrao,
   );
 }
 
   factory PicoModel.fromEntity(Pico pico){
     return PicoModel(
-      idUser: pico.idUser,
+      userID: pico.user?.id,
       id: pico.id,
       imgUrls: pico.imgUrls,
       tipoPico: pico.tipoPico,
@@ -61,7 +64,7 @@ class PicoModel extends Pico {
       atributos: pico.atributos,
       obstaculos: pico.obstaculos,
       utilidades: pico.utilidades,
-      userCreator: pico.userCreator,
+      userName: pico.user?.name,
       picoName: pico.picoName,
     );
   }
@@ -69,7 +72,7 @@ class PicoModel extends Pico {
 
   Map<String, dynamic> toMap() {
     return {
-      'idUser': super.idUser,
+      'idUser': userID,
       'imageUrl': super.imgUrls,
       'tipo': super.tipoPico,
       'modalidade': super.modalidade,
@@ -81,7 +84,7 @@ class PicoModel extends Pico {
       'atributos': super.atributos,
       'obstaculos': super.obstaculos,
       'utilidades': super.utilidades,
-      'criador': super.userCreator,
+      'criador': userName,
       'name': super.picoName,
     };
   }
@@ -106,7 +109,7 @@ class PicoModel extends Pico {
     String? idUser,
   }){
     return PicoModel(
-      idUser: idUser ?? this.idUser,
+      userID: idUser ?? userID,
       imgUrls: imgUrls ?? this.imgUrls,
       tipoPico: tipoPico ?? this.tipoPico,
       modalidade: modalidade ?? this.modalidade,
@@ -118,7 +121,7 @@ class PicoModel extends Pico {
       atributos: atributos ?? this.atributos,
       obstaculos: obstaculos ?? this.obstaculos,
       utilidades: utilidades ?? this.utilidades,
-      userCreator: userCreator ?? this.userCreator,
+      userName: userCreator ?? userName,
       picoName: picoName ?? this.picoName,
       id: id ?? this.id,
     );
