@@ -8,6 +8,7 @@ import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
 import 'package:demopico/core/common/util/file_manager/pick_image_uc.dart';
+import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -208,9 +209,10 @@ class AddPicoProvider extends ChangeNotifier{
   
   
 
-  PicoModel getInfoPico(String? userCriador) {
+  PicoModel getInfoPico(UserM? userCriador) {
     return PicoModel(
       id: "",
+      userID: userCriador?.id ,
       picoName: nomePico,
       description: descricao,
       nota: nota,
@@ -222,7 +224,7 @@ class AddPicoProvider extends ChangeNotifier{
       long: latlang!.longitude,
       atributos: atributos,
       modalidade: selectedModalidade,
-      userCreator: userCriador ?? "Anônimo",
+      userName: userCriador?.name ?? "Anônimo",
       obstaculos: obstaculos,
     );
   }
@@ -245,7 +247,7 @@ class AddPicoProvider extends ChangeNotifier{
 
   String? errorCriarPico;
 
-  Future<void> createSpot(String? user) async {
+  Future<void> createSpot(UserM? user) async {
     try {
       late PicoModel newPico;
       // Faz o upload das imagens e espera as urls
