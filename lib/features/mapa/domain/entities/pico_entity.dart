@@ -1,5 +1,8 @@
 
+import 'package:demopico/features/user/domain/models/user.dart';
+
 class Pico {
+  final UserM? user;
   final String id;
   final String modalidade;
   final String tipoPico;
@@ -8,8 +11,6 @@ class Pico {
   final String? description;
   final double long;
   final double lat;
-  final String userCreator; 
-  final String? idUser;
   final List<String> utilidades; 
   final Map<String, int> atributos;
   final List<String> obstaculos;
@@ -18,7 +19,7 @@ class Pico {
 
   Pico(
     {
-      this.idUser,
+      this.user,
       required this.imgUrls,
       required this.modalidade,
       required this.tipoPico,
@@ -29,7 +30,6 @@ class Pico {
       required this.atributos,
       required this.obstaculos,
     required this.utilidades,
-    required this.userCreator,
     required this.id,
     required this.picoName,
   });
