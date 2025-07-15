@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 import 'package:demopico/core/common/files_manager/enums/collections.dart';
 import 'package:demopico/features/external/datasources/firebase/remote/firestore.dart';
@@ -6,7 +7,7 @@ import 'package:demopico/features/external/interfaces/i_crud_datasource.dart';
 import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
 import 'package:flutter/foundation.dart';
 
-class CrudFirebase  implements ICrudDataSource<FirebaseDTO> {
+class CrudFirebase implements ICrudDataSource<FirebaseDTO> {
 
   Collections collection;
   final FirebaseFirestore firestore;
@@ -114,4 +115,22 @@ class CrudFirebase  implements ICrudDataSource<FirebaseDTO> {
       rethrow;
     }
   }
+  
+  @override
+  Future<List<FirebaseDTO>> readWithFilter(String field, String value) async {
+    try {
+      final query = await firestore.collection(collection.name).where(field, isEqualTo: value).get();
+      return query.docs.map((doc) {
+        return FirebaseDTO(id: doc.id, data: doc.data());
+      }).toList();
+    } on FirebaseException catch (firebaseException) {
+      throw FirebaseErrorsMapper.map(firebaseException);
+    } on Exception catch (exception) {
+      throw UnknownFailure(originalException: exception);
+    } catch (unknown) {
+      throw UnknownFailure(unknownError: unknown);
+    }
+  }
+  
+  
 }
