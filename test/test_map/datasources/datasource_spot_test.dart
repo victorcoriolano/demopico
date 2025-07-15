@@ -1,6 +1,8 @@
 
+import 'package:demopico/core/common/files_manager/enums/collections.dart';
 import 'package:demopico/core/common/files_manager/mappers/i_mapper_dto.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto_mapper.dart';
+import 'package:demopico/features/external/datasources/firebase/remote/crud_firebase.dart';
 import 'package:demopico/features/mapa/data/data_sources/remote/firebase_spot_remote_datasource.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
@@ -19,7 +21,7 @@ import '../../mocks/mocks_spots.dart';
 
       setUpAll(() {
         fakeFirestore = FakeFirebaseFirestore();
-        dataSource = FirebaseSpotRemoteDataSource(fakeFirestore);
+        dataSource = FirebaseSpotRemoteDataSource(CrudFirebase.test(collection: Collections.spots, firestoreTest: fakeFirestore));
         mapper = FirebaseDtoMapper<PicoModel>(
           fromJson: (data, id) => PicoModel.fromJson(data, id),
           toMap: (model) => model.toMap() ,
