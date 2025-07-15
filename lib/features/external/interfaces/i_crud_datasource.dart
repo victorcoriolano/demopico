@@ -5,4 +5,5 @@ abstract class ICrudDataSource<T> {
   Future<void> delete(String id);
   Future<List<T>> readAll();
   Stream<List<T>> watch(); 
+  Future<List<T>> readWithFilter(String field, String value);
 }
