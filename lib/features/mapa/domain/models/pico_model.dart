@@ -7,7 +7,9 @@ const _padrao = "Não informado";
 
 class PicoModel extends Pico {
   PicoModel(
-      {required super.imgUrls,
+      {
+        super.idUser,
+        required super.imgUrls,
       required super.modalidade,
       required super.tipoPico,
       required super.nota,
@@ -26,6 +28,7 @@ class PicoModel extends Pico {
 
   factory PicoModel.fromJson(Map<String, dynamic> json, String id) {
   return PicoModel(
+    idUser: json['idUser'],
     id: id,
     imgUrls: List<String>.from(json['imageUrl'] ?? []),
     tipoPico: json['tipo'] ?? _padrao,
@@ -45,6 +48,7 @@ class PicoModel extends Pico {
 
   factory PicoModel.fromEntity(Pico pico){
     return PicoModel(
+      idUser: pico.idUser,
       id: pico.id,
       imgUrls: pico.imgUrls,
       tipoPico: pico.tipoPico,
@@ -65,6 +69,7 @@ class PicoModel extends Pico {
 
   Map<String, dynamic> toMap() {
     return {
+      'idUser': super.idUser,
       'imageUrl': super.imgUrls,
       'tipo': super.tipoPico,
       'modalidade': super.modalidade,
@@ -98,8 +103,10 @@ class PicoModel extends Pico {
     List<String>? utilidades,
     String? userCreator,
     String? picoName,
+    String? idUser,
   }){
     return PicoModel(
+      idUser: idUser ?? this.idUser,
       imgUrls: imgUrls ?? this.imgUrls,
       tipoPico: tipoPico ?? this.tipoPico,
       modalidade: modalidade ?? this.modalidade,
