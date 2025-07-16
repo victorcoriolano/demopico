@@ -19,8 +19,8 @@ void main() {
     test('Este teste deve subir uma nova bio', () async {
       String novaBio = 'teste';
 
-      fakeFirebaseProfileUpdateDatasource.updateBio(
-          novaBio, mockUserProfile.id!);
+      await fakeFirebaseProfileUpdateDatasource.updateBio(
+          novaBio, mockUserProfile.id);
 
       final referenceGet = await fakeFirebaseFirestore
           .collection("users")
@@ -33,8 +33,8 @@ void main() {
     });
 
     test('Este teste deve adicionar um novo seguidor ', () async {
-      fakeFirebaseProfileUpdateDatasource
-          .updateFollowers(mockUserProfile.id!);
+      await fakeFirebaseProfileUpdateDatasource
+          .updateFollowers(mockUserProfile.id);
 
           
       final referenceGet = await fakeFirebaseFirestore
@@ -48,8 +48,8 @@ void main() {
     });
 
     test('Este teste deve adicionar uma nova contribuição ', () async {
-      fakeFirebaseProfileUpdateDatasource
-          .updateContributions(mockUserProfile.id!);
+      await fakeFirebaseProfileUpdateDatasource
+          .updateContributions(mockUserProfile.id);
 
           
       final referenceGet = await fakeFirebaseFirestore
@@ -65,8 +65,8 @@ void main() {
     test('Este teste deve subir uma nova foto ', () async {
       String newImage = 'foto.jpg';
 
-      fakeFirebaseProfileUpdateDatasource.updatePhoto(
-          newImage, mockUserProfile.id!);
+      await fakeFirebaseProfileUpdateDatasource.updatePhoto(
+          newImage, mockUserProfile.id);
         
         final referenceGet = await fakeFirebaseFirestore
           .collection("users")
