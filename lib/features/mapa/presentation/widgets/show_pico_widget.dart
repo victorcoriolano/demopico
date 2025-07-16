@@ -637,32 +637,13 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                         final picoFav = PicoFavorito(
                                             idPico: widget.pico.id,
                                             idUsuario: user.id!);
-                                        final salvar =
+                                        
                                             await provider.savePico(picoFav);
-                                        if (salvar) {
+                                        if (provider.error != null) {
                                           if (context.mounted) {
                                             Navigator.pop(context);
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content:
-                                                    const Text("Pico Salvo"),
-                                                action: SnackBarAction(
-                                                    label: "Ver pico salvo",
-                                                    onPressed: () {
-                                                      Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (_) =>
-                                                              SavePicoPage(
-                                                            userID:
-                                                                user.id ?? "",
-                                                          ),
-                                                        ),
-                                                      );
-                                                    }),
-                                              ),
-                                            );
+                                            
+                                            Get.snackbar("Ocorreu um erro ao salvar o Pico", provider.error!);
                                           }
                                         }
                                       },
