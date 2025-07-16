@@ -1,3 +1,4 @@
+import 'package:demopico/features/mapa/data/repositories/spot_repository_impl.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_spot_repository.dart';
 
@@ -6,7 +7,10 @@ class GetMySpotsUc {
 
   GetMySpotsUc({required ISpotRepository repository}): _spotRepository = repository;
 
+  static GetMySpotsUc? _instance;
+  static GetMySpotsUc get instance => _instance ?? GetMySpotsUc(repository: SpotRepositoryImpl.getInstance);
+
   Future<List<Pico>> execute(String userID) async {
-    return await _spotRepository.getMySpot(userID);  
+    return await _spotRepository.getMySpots(userID);  
   }
 }
