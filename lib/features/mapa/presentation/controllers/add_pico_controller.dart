@@ -216,7 +216,7 @@ class AddPicoProvider extends ChangeNotifier{
       picoName: nomePico,
       description: descricao,
       nota: nota,
-      numeroAvaliacoes: numAval,
+      numeroDeAvaliacoes: numAval,
       tipoPico: tipo,
       utilidades: utilidades,
       imgUrls: imgUrls,
