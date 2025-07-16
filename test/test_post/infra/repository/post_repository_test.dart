@@ -17,8 +17,8 @@ void main(){
     setUpAll(() async {
       firestore = FakeFirebaseFirestore();
       firebasePostDatasource = FirebasePostDatasource(
-        crudFirebase: CrudFirebase.test(
-          collection: Collections.posts, firestoreTest: firestore
+        crudFirebase: CrudFirebase(
+          collection: Collections.posts, firestore: firestore
         )
       );
 

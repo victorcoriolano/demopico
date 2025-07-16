@@ -2,10 +2,13 @@
 import 'package:demopico/features/mapa/data/repositories/spot_repository_impl.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
+import 'package:demopico/features/profile/infra/repository/profile_update_repository.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
+
 final class MockPicoRepository extends Mock implements SpotRepositoryImpl {}
+final class MockUserRepository extends Mock implements ProfileUpdateRepository {}
 final class MockPico extends Mock implements PicoModel {}
 
     final testPico = PicoModel(
@@ -31,7 +34,8 @@ void main() {
       test("deve retornar uma pico model ao criar pico", () async {
         //testar se o pico foi criado e retornar true
         final mockRepository =  MockPicoRepository();
-        final useCase = CreateSpotUc(spotRepositoryIMP: mockRepository);
+        final mockUserRepository = MockUserRepository();
+        final useCase = CreateSpotUc(spotRepositoryIMP: mockRepository, userRepository: mockUserRepository);
         final mockPico = MockPico();
 
         when(() => mockRepository.createSpot(mockPico)).thenAnswer((_) async => testPico);
@@ -43,7 +47,8 @@ void main() {
 
       test("deve propagar exception do repository", () async {
         final mockRepository = MockPicoRepository();
-        final useCase = CreateSpotUc(spotRepositoryIMP: mockRepository);
+        final mockUserProfile = MockUserRepository();
+        final useCase = CreateSpotUc(spotRepositoryIMP: mockRepository, userRepository: mockUserProfile);
         final mockPico = MockPico();
 
         when(() => mockRepository.createSpot(mockPico)).thenThrow(Exception("Erro ao criar pico"));

@@ -21,7 +21,7 @@ import '../../mocks/mocks_spots.dart';
 
       setUpAll(() {
         fakeFirestore = FakeFirebaseFirestore();
-        dataSource = FirebaseSpotRemoteDataSource(CrudFirebase.test(collection: Collections.spots, firestoreTest: fakeFirestore));
+        dataSource = FirebaseSpotRemoteDataSource(CrudFirebase(collection: Collections.spots, firestore: fakeFirestore));
         mapper = FirebaseDtoMapper<PicoModel>(
           fromJson: (data, id) => PicoModel.fromJson(data, id),
           toMap: (model) => model.toMap() ,
