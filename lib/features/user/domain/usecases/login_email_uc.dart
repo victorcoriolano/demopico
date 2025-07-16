@@ -1,6 +1,8 @@
+import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/user/domain/entity/user_credentials.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_auth_repository.dart';
 import 'package:demopico/features/user/infra/repositories/user_auth_firebase_repository.dart';
+import 'package:flutter/foundation.dart';
 
 class LoginEmailUc {
   static LoginEmailUc? _loginEmailUc;
@@ -13,11 +15,12 @@ class LoginEmailUc {
 
   LoginEmailUc({required this.userAuthRepository});
 
-  Future<bool> logar(UserCredentialsSignIn credentials) async {
+  Future<void> logar(UserCredentialsSignIn credentials) async {
     try {
-      return await userAuthRepository.loginByEmail(credentials);
-    } catch (e) {
-      return false;
+      await userAuthRepository.loginByEmail(credentials);
+    }on Failure catch (e, st) {
+      debugPrint("Erro ao logar caiu no use case: $e, $st");
+      rethrow;
     }
   }
 }
