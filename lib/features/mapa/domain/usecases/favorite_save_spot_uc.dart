@@ -1,4 +1,5 @@
 import 'package:demopico/core/common/errors/failure_server.dart';
+import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/mapa/data/repositories/favorite_spot_repository.dart';
 import 'package:demopico/features/mapa/data/repositories/spot_repository_impl.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_favorito.dart';
@@ -22,12 +23,15 @@ class SaveSpotUc {
   SaveSpotUc(
       {required this.spotFavRepositoryIMP, required this.spotRepositoryIMP});
 
-  Future<bool> saveSpot(PicoFavorito picoFav) async {
+  Future<void> saveSpot(PicoFavorito picoFav) async {
     try {
       await spotFavRepositoryIMP.saveSpot(picoFav);
-      return true;
-    } catch (e) {
-      return false;
+
+    } on Failure catch (e) {
+      debugPrint("Erro ao salvar o pico favorito caiu no use case: $e");
+      rethrow;
+    }catch (e) {
+      throw UnknownFailure(unknownError: e);
     }
   }
 
@@ -53,11 +57,14 @@ class SaveSpotUc {
       
   }
 
-  Future<void> deleteSaveSpot(String idPicoFavModel) async {
+  Future<void> removeSaveSpot(String idPicoFavModel) async {
     try {
       await spotFavRepositoryIMP.deleteSave(idPicoFavModel);
-    } catch (e) {
-      throw Exception("Erro ao deletar o pico favorito: $e");
+    } on Failure catch (e) {
+      debugPrint("Erro ao remover o pico favorito caiu no use case: $e");
+      rethrow;
+    }catch (e) {
+      throw UnknownFailure(unknownError: e);
     }
   }
 }
