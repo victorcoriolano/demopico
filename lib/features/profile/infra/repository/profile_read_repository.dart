@@ -9,7 +9,7 @@ class ProfileReadRepository implements IProfileReadRepository {
 
   static ProfileReadRepository get getInstance {
     _profileReadRepository ??= ProfileReadRepository(
-        userRepositoryIMP: UserFirebaseRepository.getInstance);
+        userRepositoryIMP: UserRepositoryImpl.getInstance);
     return _profileReadRepository!;
   }
 
