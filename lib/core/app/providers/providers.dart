@@ -18,7 +18,7 @@ import 'package:demopico/features/profile/domain/usecases/get_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/update_post_uc.dart';
 import 'package:demopico/features/profile/presentation/provider/post_provider.dart';
 import 'package:demopico/features/profile/presentation/provider/screen_provider.dart';
-import 'package:demopico/features/user/infra/services/user_auth_firebase_service.dart';
+import 'package:demopico/features/user/infra/datasource/remote/user_auth_firebase_service.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
