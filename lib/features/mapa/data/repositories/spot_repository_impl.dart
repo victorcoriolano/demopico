@@ -19,7 +19,7 @@ class SpotRepositoryImpl implements ISpotRepository {
     );
     
 
-  final ISpotRemoteDataSource dataSource;
+  final ISpotDataSource dataSource;
   SpotRepositoryImpl(this.dataSource);
 
   final IMapperDto<PicoModel, FirebaseDTO> _mapper = FirebaseDtoMapper<PicoModel>(
@@ -75,9 +75,9 @@ class SpotRepositoryImpl implements ISpotRepository {
   }
   
   @override
-  Future<List<PicoModel>> getMySpot(String userID) {
-    // TODO: implement getMySpot
-    throw UnimplementedError();
+  Future<List<PicoModel>> getMySpots(String userID) async {
+    final listDto = await dataSource.getList(userID);
+    return listDto.map((dto) => _mapper.toModel(dto)).toList();
   }
 }
 
