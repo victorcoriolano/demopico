@@ -36,7 +36,7 @@ class HubRepository implements IHubRepository {
   @override
   Future<Communique> postHubCommuniqueToFirebase(String text, dynamic type) async {
     try {
-      String userID = userAuthServiceIMP.currentUser();
+      String userID = userAuthServiceIMP.currentUser;
       UserM? user = await userDatabaseRepositoryIMP.getUserDetails(userID);
       final id = FirebaseFirestore.instance.collection('comunicados').doc().id;
 
