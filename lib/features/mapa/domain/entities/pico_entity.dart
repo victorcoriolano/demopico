@@ -14,17 +14,21 @@ class Pico {
   final List<String> utilidades; 
   final Map<String, int> atributos;
   final List<String> obstaculos;
-  double? nota;
-  int? numeroAvaliacoes;
+  final String? userName;
+  final String? userID;
+  double initialNota = 0;
+  int numeroAvaliacoes = 0;
 
   Pico(
     {
+      double? nota,
+      int? numeroDeAvaliacoes,
+      this.userName,
+      this.userID,
       this.user,
       required this.imgUrls,
       required this.modalidade,
       required this.tipoPico,
-      required this.nota,
-      required this.numeroAvaliacoes,
       required this.long, required this.lat, 
       required this.description,
       required this.atributos,
@@ -32,6 +36,7 @@ class Pico {
     required this.utilidades,
     required this.id,
     required this.picoName,
-  });
+  }): initialNota = nota ?? 0,
+    numeroAvaliacoes = numeroDeAvaliacoes ?? 0;
 }
 
