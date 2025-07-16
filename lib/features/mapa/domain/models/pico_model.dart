@@ -6,25 +6,24 @@ import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 const _padrao = "Não informado";
 
 class PicoModel extends Pico {
-  final String? userName;
-  final String? userID;
+
   PicoModel(
       {
-        required this.userID,
-        required this.userName,
+        required super.userID,
+        required super.userName,
         required super.imgUrls,
         required super.modalidade,
         required super.tipoPico,
         required super.nota,
-        required super.numeroAvaliacoes,
-      required super.long,
-      required super.lat,
-      required super.description,
-      required super.atributos,
-      required super.obstaculos,
-      required super.utilidades,
-      required super.picoName,
-      required super.id}) 
+        required super.numeroDeAvaliacoes,
+        required super.long,
+        required super.lat,
+        required super.description,
+        required super.atributos,
+        required super.obstaculos,
+        required super.utilidades,
+        required super.picoName,
+        required super.id}) 
       ;
 
       
@@ -37,7 +36,7 @@ class PicoModel extends Pico {
     tipoPico: json['tipo'] ?? _padrao,
     modalidade: json['modalidade'] ?? _padrao,
     nota: (json['nota'] as num?)?.toDouble() ?? 0.0,
-    numeroAvaliacoes: json['avaliacoes'] ?? 0,
+    numeroDeAvaliacoes: json['avaliacoes'],
     long: (json['longitude'] as num?)?.toDouble() ?? 0.0,
     lat: (json['latitude'] as num?)?.toDouble() ?? 0.0,
     description: json['description'] ?? _padrao,
@@ -56,8 +55,8 @@ class PicoModel extends Pico {
       imgUrls: pico.imgUrls,
       tipoPico: pico.tipoPico,
       modalidade: pico.modalidade,
-      nota: pico.nota,
-      numeroAvaliacoes: pico.numeroAvaliacoes,
+      nota: pico.initialNota,
+      numeroDeAvaliacoes: pico.numeroAvaliacoes,
       long: pico.long,
       lat: pico.lat,
       description: pico.description,
@@ -76,7 +75,7 @@ class PicoModel extends Pico {
       'imageUrl': super.imgUrls,
       'tipo': super.tipoPico,
       'modalidade': super.modalidade,
-      'nota': super.nota,
+      'nota': super.initialNota,
       'avaliacoes': super.numeroAvaliacoes,
       'longitude': super.long,
       'latitude': super.lat,
@@ -113,8 +112,8 @@ class PicoModel extends Pico {
       imgUrls: imgUrls ?? this.imgUrls,
       tipoPico: tipoPico ?? this.tipoPico,
       modalidade: modalidade ?? this.modalidade,
-      nota: nota ?? this.nota,
-      numeroAvaliacoes: numeroAvaliacoes ?? this.numeroAvaliacoes,
+      nota: nota ?? initialNota,
+      numeroDeAvaliacoes: numeroAvaliacoes ?? this.numeroAvaliacoes,
       long: long ?? this.long,
       lat: lat ?? this.lat,
       description: description ?? this.description,
