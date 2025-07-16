@@ -1,3 +1,4 @@
+import 'package:demopico/core/app/auth_wrapper.dart';
 import 'package:demopico/features/denunciar/widgets/denunciar_widget.dart';
 import 'package:demopico/features/denunciar/denuncia_model.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
@@ -9,6 +10,7 @@ import 'package:demopico/features/mapa/presentation/pages/save_pico_page.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:get/get.dart';
 
 import 'package:provider/provider.dart';
 
@@ -107,9 +109,9 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
 
     bool isMine(){
       
-      bool isMyPico = widget.pico.user != null &&
+      bool isMyPico = 
         user != null &&
-        widget.pico.user?.id == user.id ;
+        widget.pico.userName == user.name ;
       debugPrint("isMine: $isMyPico");
         return isMyPico;
     }
@@ -469,7 +471,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                       ),
                                       const SizedBox(height: 5),
                                       Text(
-                                        widget.pico.user?.name ??
+                                        widget.pico.userName ??
                                             "ANÔNIMO", // Nome fixo abaixo da foto
                                         textAlign: TextAlign.center,
                                         style: const TextStyle(
@@ -622,9 +624,12 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                         if (user == null) {
                                           Navigator.pop(context);
                                           ScaffoldMessenger.of(context)
-                                              .showSnackBar(const SnackBar(
+                                              .showSnackBar(SnackBar(
                                             content: Text(
                                                 'Você precisa estar logado para salvar um pico!'),
+                                              action: SnackBarAction(label: "Fazer Login", onPressed: () {
+                                                Get.to((_) => AuthWrapper());
+                                              }),  
                                           ));
                                           return;
                                         }
