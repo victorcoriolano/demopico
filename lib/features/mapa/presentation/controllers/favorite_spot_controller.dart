@@ -21,15 +21,12 @@ class FavoriteSpotController extends ChangeNotifier {
   List<SpotCardUIDto> picosFavoritos = [];
   String? error;
 
-
-  Future<bool> savePico(PicoFavorito picoFav) async {
-    final salvar = await saveSpot.saveSpot(picoFav);
-    if (salvar) {
-      notifyListeners();
-      return true;
-    } else {
-      notifyListeners();
-      return false;
+  Future<void> savePico(PicoFavorito picoFav) async {
+    try {
+      await saveSpot.saveSpot(picoFav);
+    } on Failure catch (e) {
+      debugPrint("Ocorreu um erro ao salvar pico");
+      error = e.message;
     }
   }
 
@@ -42,17 +39,15 @@ class FavoriteSpotController extends ChangeNotifier {
       debugPrint("Picos salvos: ${picosFavoritos.length}");
       isLoading = false;
       notifyListeners();
-      
     } on Failure catch (e) {
       error = "Um erro ao buscar picos salvos foi identificado: $e";
       notifyListeners();
     }
-
   }
 
   Future<bool> deleteSave(String idPicoFavModel) async {
     try {
-      await saveSpot.deleteSaveSpot(idPicoFavModel);
+      await saveSpot.removeSaveSpot(idPicoFavModel);
       notifyListeners();
       return true;
     } catch (e) {
