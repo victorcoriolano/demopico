@@ -371,7 +371,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                           Row(
                                             children: [
                                               Text(
-                                                widget.pico.nota!
+                                                widget.pico.initialNota
                                                     .toStringAsFixed(2),
                                                 style: const TextStyle(
                                                     fontSize: 16,
@@ -383,16 +383,16 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                                 children:
                                                     List.generate(5, (index) {
                                                   if (index <
-                                                      widget.pico.nota!
+                                                      widget.pico.initialNota
                                                           .floor()) {
                                                     // Estrela cheia
                                                     return const Icon(
                                                         Icons.star,
                                                         color: Colors.black);
                                                   } else if (index ==
-                                                          widget.pico.nota!
+                                                          widget.pico.initialNota
                                                               .floor() &&
-                                                      (widget.pico.nota! % 1) >=
+                                                      (widget.pico.initialNota % 1) >=
                                                           0.5) {
                                                     // Meia estrela se a parte decimal for >= 0.5
                                                     return const Icon(
