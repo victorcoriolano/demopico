@@ -26,13 +26,13 @@ class AvaliarSpotUc {
       novoTotalAvaliacoes = 1;
     } else {
       // Atualiza média com base nas avaliações existentes
-      novaMedia = ((pico.nota! * pico.numeroAvaliacoes!) + novaNota) /
-          (pico.numeroAvaliacoes! + 1);
-      novoTotalAvaliacoes = pico.numeroAvaliacoes! + 1;
+      novaMedia = ((pico.initialNota * pico.numeroAvaliacoes) + novaNota) /
+          (pico.numeroAvaliacoes + 1);
+      novoTotalAvaliacoes = pico.numeroAvaliacoes + 1;
     }
 
     // Atualizar no repositório
-    pico.nota = novaMedia;
+    pico.initialNota = novaMedia;
     pico.numeroAvaliacoes = novoTotalAvaliacoes;
 
     await notaRepositoryIMP.updateSpot(pico);
