@@ -81,7 +81,7 @@ class FirebaseSpotRemoteDataSource implements ISpotDataSource<FirebaseDTO> {
 
   Query executeQuery([Filters? filtro]) {
     //acessando a instancia do crud para realizar consultas com where
-    Query querySnapshot = _firebaseFirestore.firestore.collection(_collectionName);
+    Query querySnapshot = _firebaseFirestore.dataSource.collection(_collectionName);
 
     try {
       if (filtro != null) {
