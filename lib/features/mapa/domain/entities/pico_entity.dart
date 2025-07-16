@@ -19,6 +19,8 @@ class Pico {
   double initialNota = 0;
   int numeroAvaliacoes = 0;
 
+
+
   Pico(
     {
       double? nota,
@@ -33,9 +35,9 @@ class Pico {
       required this.description,
       required this.atributos,
       required this.obstaculos,
-    required this.utilidades,
-    required this.id,
-    required this.picoName,
+      required this.utilidades,
+      required this.id,
+      required this.picoName,
   }): initialNota = nota ?? 0,
     numeroAvaliacoes = numeroDeAvaliacoes ?? 0;
 }
