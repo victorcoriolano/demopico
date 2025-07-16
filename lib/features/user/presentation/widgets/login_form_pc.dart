@@ -65,6 +65,7 @@ class _LoginFormState extends State<LoginForm> with Validators {
                 () => isNotEmpty(value),
                 () => isValidEmail(value),
               ]),
+              
             ),
 
             const SizedBox(
@@ -84,32 +85,15 @@ class _LoginFormState extends State<LoginForm> with Validators {
             ),
             // text input(esqueceu senha)
             TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  //TODO: IMPLEMENTAR LÓGICA DE ESQUECEU A SENHA 
+                },
                 child: const Text(
                   "Esqueceu senha",
                   style: TextStyle(color: Color.fromARGB(255, 189, 198, 214)),
                 )),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.adb),
-                  color: Colors.white,
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.account_circle),
-                  color: Colors.white,
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.email_rounded),
-                  color: Colors.white,
-                ),
-              ],
-            ),
+            
             const SizedBox(
               height: 12,
             ),
@@ -117,43 +101,7 @@ class _LoginFormState extends State<LoginForm> with Validators {
             // button (entrar)
             ElevatedButton(
               onPressed: () async {
-                if (FormFieldValidator.toString().isNotEmpty ||
-                    _vulgoController.text.isNotEmpty &&
-                        _senhaController.text.isNotEmpty) {
-                  String vulgo = _vulgoController.text.trim();
-                  String password = _senhaController.text.trim();
-
-                  bool loginSuccess;
-
-                  try {
-                    if (vulgo.contains("@")) {
-                      UserCredentialsSignIn credential = UserCredentialsSignIn(
-                          email: vulgo, password: password);
-                      loginSuccess =
-                          await _authUserProvider.loginEmail(credential);
-                    } else {
-                      UserCredentialsSignInVulgo credential =
-                          UserCredentialsSignInVulgo(
-                              vulgo: vulgo, password: password);
-
-                      loginSuccess =
-                          await _authUserProvider.loginVulgo(credential);
-                    }
-                  } catch (e) {
-                    debugPrint("erro aou fazer login: ${e.toString()}");
-                    loginSuccess = false;
-                  }
                 
-                    if (loginSuccess) {
-                      Get.to(() => const HomePage());
-                    } else {
-                      debugPrint('Login falhou');
-                      showSnackbar(vulgo.contains("@") ? 'email' : 'user');
-                    }
-                  
-                } else {
-                  showSnackbar('default');
-                }
               },
               style: buttonStyle(),
               child: const Text(
@@ -183,25 +131,4 @@ class _LoginFormState extends State<LoginForm> with Validators {
     ));
   }
 
-  String loginTry(String? value) {
-    if (value == null || value.isEmpty) {
-      return "Campo obrigatório";
-    } else {
-      return value;
-    }
-  }
-
-  void showSnackbar(errorType) {
-    switch (errorType) {
-      case 'email':
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(InvalidEmailFailure().message)));
-      case 'user':
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(UserNotFoundFailure().message)));
-      case 'default':
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("Algo deu errado")));
-    }
-  }
 }
