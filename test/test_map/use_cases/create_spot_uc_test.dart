@@ -9,19 +9,20 @@ final class MockPicoRepository extends Mock implements SpotRepositoryImpl {}
 final class MockPico extends Mock implements PicoModel {}
 
     final testPico = PicoModel(
+      userID: "490320",
       id: "1",
       imgUrls: ["url"],
       tipoPico: "rua",
       modalidade: "street",
       nota: 4.5,
-      numeroAvaliacoes: 10,
+      numeroDeAvaliacoes: 10,
       long: -46.57421,
       lat: -23.55052,
       description: "Teste",
       atributos: {"teste": 2},
       obstaculos: ["corrimão"],
       utilidades: ["banheiro"],
-      userCreator: "user123",
+      userName: "user123",
       picoName: "Pico Legal",
     );
 
