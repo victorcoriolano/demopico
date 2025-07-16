@@ -36,7 +36,7 @@ class FirebasePostDatasource implements IPostDatasource {
 
   @override
   Future<List<FirebaseDTO>> getPosts(String id) async {
-    final query = await crudFirebase.firestore
+    final query = await crudFirebase.dataSource
       .collection(crudFirebase.collection.name)
       .where("userId", isEqualTo: id)
       .get();
