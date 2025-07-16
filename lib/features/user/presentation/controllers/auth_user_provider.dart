@@ -32,33 +32,39 @@ class AuthUserProvider  extends ChangeNotifier {
   final LogoutUc logoutUc;
   final PegarIdUsuario pegarIdUsuario;
 
-  Future<bool> loginEmail(UserCredentialsSignIn credentials) async {
+  bool isColetivo = false;
+
+  void changeIsColetivo(){
+    isColetivo = !isColetivo;
+  }
+
+  Future<void> loginEmail(UserCredentialsSignIn credentials) async {
     try {
       return await loginEmailUc.logar(credentials);
     } catch (e) {
-      return false;
+      
     }
   }
 
-  Future<bool> loginVulgo(UserCredentialsSignInVulgo credentials) async {
+  Future<void> loginVulgo(UserCredentialsSignInVulgo credentials) async {
     try {
       return await loginVulgoUc.logar(credentials);
     } catch (e) {
-      return false;
+      
     }
   }
 
-  Future<bool> logout() async {
+  Future<void> logout() async {
     try {
       await logoutUc.deslogar();
-      return true;
+      
     } catch (e) {
-      return false;
+      
     }
   }
 
-  Future<bool> signUp(UserCredentialsSignUp credentials) async {
-    return await criarContaUc.criar(credentials);
+  Future<void> signUp(UserCredentialsSignUp credentials) async {
+     await criarContaUc.criar(credentials);
   }
 
   String? pegarId(){
