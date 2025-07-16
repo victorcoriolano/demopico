@@ -20,26 +20,26 @@ class ProfileUpdateRepository
   final IProfileUpdateDatasource databaseProfileUpdateServiceIMP;
 
   @override
-  void updateBio(String newBio, UserM user) async {
+  Future<void> updateBio(String newBio, UserM user) async {
     String uid = user.id!;
-    databaseProfileUpdateServiceIMP.updateBio(newBio, uid);
+    await databaseProfileUpdateServiceIMP.updateBio(newBio, uid);
   }
 
   @override
-  void updateContributions(UserM user) async {
+  Future<void> updateContributions(UserM user) async {
     String uid = user.id!;
-    databaseProfileUpdateServiceIMP.updateContributions(uid);
+    await databaseProfileUpdateServiceIMP.updateContributions(uid);
   }
 
   @override
-  void updatePhoto(String newFoto, UserM user) async {
+  Future<void> updatePhoto(String newFoto, UserM user) async {
     String uid = user.id!;
-    databaseProfileUpdateServiceIMP.updatePhoto(newFoto, uid);
+    await databaseProfileUpdateServiceIMP.updatePhoto(newFoto, uid);
   }
 
   @override
-  void updateFollowers(UserM user) async {
+  Future<void> updateFollowers(UserM user) async {
     String uid = user.id!;
-    databaseProfileUpdateServiceIMP.updateFollowers(uid);
+    await databaseProfileUpdateServiceIMP.updateFollowers(uid);
   }
 }
