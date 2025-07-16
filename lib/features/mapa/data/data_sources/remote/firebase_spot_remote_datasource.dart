@@ -8,7 +8,7 @@ import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart'
 import 'package:demopico/features/mapa/domain/entities/filters.dart';
 import 'package:flutter/foundation.dart';
 
-class FirebaseSpotRemoteDataSource implements ISpotRemoteDataSource<FirebaseDTO> {
+class FirebaseSpotRemoteDataSource implements ISpotDataSource<FirebaseDTO> {
   static FirebaseSpotRemoteDataSource? _firebaseSpotRemoteDataSource;
 
   static FirebaseSpotRemoteDataSource get getInstance =>
@@ -119,5 +119,6 @@ class FirebaseSpotRemoteDataSource implements ISpotRemoteDataSource<FirebaseDTO>
   }
   
   @override
-  Future<List<FirebaseDTO>> getList(String id) async => await _firebaseFirestore.readWithFilter("userID", id); 
+  Future<List<FirebaseDTO>> getList(String id) async => 
+      await _firebaseFirestore.readWithFilter("userID", id); 
 }
