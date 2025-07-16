@@ -1,5 +1,7 @@
+import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_auth_repository.dart';
 import 'package:demopico/features/user/infra/repositories/user_auth_firebase_repository.dart';
+import 'package:flutter/foundation.dart';
 
 class LogoutUc {
   static LogoutUc? _logoutUc;
@@ -15,8 +17,9 @@ class LogoutUc {
   Future<void> deslogar() async {
     try {
       return await userAuthRepository.logout();
-    } catch (e) {
-      throw Exception("Erro ao deslogar: $e");
+    }on Failure catch (e) {
+      debugPrint("Erro ao deslogar tratado no usecase - relançando: $e");
+      rethrow;
     }
   }
 }
