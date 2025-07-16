@@ -8,6 +8,6 @@ abstract class ISpotRepository {
   Future<PicoModel> updateSpot(PicoModel pico);
   Stream<List<Pico>> loadSpots([Filters? filtro]);
   Future<PicoModel> getPicoByID(String id);
-  Future<List<PicoModel>> getMySpot(String userID);
+  Future<List<PicoModel>> getMySpots(String userID);
   Future<void> deleteSpot(String id);
 }
