@@ -1,5 +1,4 @@
 import 'package:demopico/features/profile/presentation/widgets/search_page_widgets/container_suggestion_widget.dart';
-import 'package:demopico/features/profile/presentation/widgets/search_page_widgets/suggetions_profiles_widget.dart';
 import 'package:flutter/material.dart';
 
 class SearchProfilePage extends StatefulWidget {

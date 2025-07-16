@@ -21,25 +21,25 @@ class ProfileUpdateRepository
 
   @override
   Future<void> updateBio(String newBio, UserM user) async {
-    String uid = user.id!;
+    String uid = user.id;
     await databaseProfileUpdateServiceIMP.updateBio(newBio, uid);
   }
 
   @override
   Future<void> updateContributions(UserM user) async {
-    String uid = user.id!;
+    String uid = user.id;
     await databaseProfileUpdateServiceIMP.updateContributions(uid);
   }
 
   @override
   Future<void> updatePhoto(String newFoto, UserM user) async {
-    String uid = user.id!;
+    String uid = user.id;
     await databaseProfileUpdateServiceIMP.updatePhoto(newFoto, uid);
   }
 
   @override
   Future<void> updateFollowers(UserM user) async {
-    String uid = user.id!;
+    String uid = user.id;
     await databaseProfileUpdateServiceIMP.updateFollowers(uid);
   }
 }

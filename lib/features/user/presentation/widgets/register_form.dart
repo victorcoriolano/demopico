@@ -1,13 +1,10 @@
-import 'package:demopico/core/app/home_page.dart';
-import 'package:demopico/features/user/domain/entity/user_credentials.dart';
-import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
+
 
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
 import 'package:demopico/features/user/presentation/widgets/tipo_conta_dropdown.dart';
 import 'package:demopico/features/user/presentation/widgets/textfield_decoration.dart';
 import 'package:demopico/features/user/presentation/widgets/form_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class RegisterForm extends StatefulWidget {
   const RegisterForm({super.key});

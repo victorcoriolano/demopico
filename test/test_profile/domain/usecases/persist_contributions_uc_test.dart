@@ -33,7 +33,7 @@ void main() {
 
     test('Deve retornar número de contribuições', () async {
       when(() => fakeRepositoryRead.getContributions(mockUserProfile))
-          .thenAnswer((_) async => mockUserProfile.picosAdicionados!);
+          .thenAnswer((_) async => mockUserProfile.picosAdicionados);
 
       final result = await fakePersistContributionsUc.get(mockUserProfile);
       expect(result, mockUserProfile.picosAdicionados);

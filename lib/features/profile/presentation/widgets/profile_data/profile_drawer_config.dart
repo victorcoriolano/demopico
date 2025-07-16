@@ -55,7 +55,7 @@ class MyCustomDrawer extends StatelessWidget {
         children: <Widget>[
           UserAccountsDrawerHeader(
             accountName: Text(
-              user.name ?? "anonimo",
+              user.name,
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -63,7 +63,7 @@ class MyCustomDrawer extends StatelessWidget {
               ),
             ),
             accountEmail: Text(
-              user.email ?? "anonimo@gmail.com",
+              user.email,
               style: TextStyle(
                 color: Colors.white70,
                 fontSize: 14,

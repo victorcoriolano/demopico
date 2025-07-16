@@ -68,14 +68,12 @@ class _SuggestionProfilestState extends State<SuggestionProfilesWidget> {
             ),
           ),
           const SizedBox(height: 8),
-          Container(
-            child: ElevatedButton(
-              onPressed: toggleFollow,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: isFollowing ? Colors.grey : Colors.blue,
-              ),
-              child: Text(isFollowing ? 'Seguindo' : 'Seguir'),
+          ElevatedButton(
+            onPressed: toggleFollow,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: isFollowing ? Colors.grey : Colors.blue,
             ),
+            child: Text(isFollowing ? 'Seguindo' : 'Seguir'),
           ),
         ],
       ),

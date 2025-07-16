@@ -6,7 +6,6 @@ import 'package:demopico/features/mapa/domain/entities/pico_favorito.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/favorite_spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/pages/comment_page.dart';
-import 'package:demopico/features/mapa/presentation/pages/save_pico_page.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -636,7 +635,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
 
                                         final picoFav = PicoFavorito(
                                             idPico: widget.pico.id,
-                                            idUsuario: user.id!);
+                                            idUsuario: user.id);
                                         
                                             await provider.savePico(picoFav);
                                         if (provider.error != null) {

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_profile_read_repository.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_profile_update_repository.dart';
@@ -27,14 +28,16 @@ class PersistBioUc {
 
   void set(String newBio, UserM user) {
     try {
-      if (user.id == null) throw UserNotFoundFailure();
+      
       profileUpdateRepositoryIMP.updateBio(newBio , user);
     } on FirebaseException catch (e) {
       if (kDebugMode) print(e);
       rethrow;
-    } catch (e) {
+    } on Failure catch (e) {
       if (kDebugMode) print('Erro inesperado: $e');
       rethrow;
+    } catch (e) {
+      throw UnknownFailure(unknownError: e);
     }
   }
 

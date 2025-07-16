@@ -1,7 +1,4 @@
-import 'package:demopico/core/app/home_page.dart';
-import 'package:demopico/core/common/errors/repository_failures.dart';
-import 'package:demopico/features/user/domain/entity/user_credentials.dart';
-import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
+
 import 'package:demopico/features/user/presentation/pages/register_page.dart';
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
 import 'package:demopico/features/user/presentation/widgets/textfield_decoration.dart';
@@ -20,7 +17,6 @@ class _LoginFormState extends State<LoginForm> with Validators {
   final TextEditingController _vulgoController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
 
-  final _authUserProvider = AuthUserProvider.getInstance;
 
   @override
   Widget build(BuildContext context) {

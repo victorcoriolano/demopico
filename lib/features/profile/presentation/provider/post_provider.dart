@@ -2,7 +2,6 @@ import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/core/common/files_manager/models/file_model.dart';
 import 'package:demopico/core/common/util/file_manager/pick_files_uc.dart';
-import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/files_manager/services/upload_service.dart';
 import 'package:demopico/core/common/util/file_manager/pick_video_uc.dart';
@@ -185,10 +184,6 @@ class PostProvider extends ChangeNotifier {
     try {
       _isLoading = true;
       notifyListeners();
-      if (user.id == null || user.pictureUrl == null || user.name == null) {
-        getError(InvalidUserFailure());
-        _isLoading = false;        
-      }
 
       mapearFiles(type);
 
@@ -207,8 +202,8 @@ class PostProvider extends ChangeNotifier {
       final newPost = Post(
           id: "",
           typePost: type,
-          nome: user.name!,
-          userId: user.id!,
+          nome: user.name,
+          userId: user.id,
           spotID: _selectedSpotId ?? '',
           urlUserPhoto: user.pictureUrl!,
           urlVideos: _videoUrls.isEmpty ? null : _videoUrls,
