@@ -1,35 +1,41 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:demopico/features/user/domain/enums/auth_enum.dart';
+import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
+import 'package:demopico/features/profile/domain/models/post.dart';
+import 'package:demopico/features/user/domain/entity/user_credentials.dart';
 import 'package:demopico/features/user/domain/enums/sign_methods.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 
 class UserM {
-  String? id;
-  String? name;
-  String? email;
-  bool? isColetivo;
-  String? dob;
-  SignMethods? signMethod;
-  AuthEnumState? authEnumState = AuthEnumState.notLoggedIn;
+  String id;
+  String name;
+  String email;
+  bool isColetivo;
+  String dob;
+  SignMethods signMethod;
 
   //dados profile
   String? description;
   String? pictureUrl;
   String? location;
-  int? conexoes;
-  int? picosAdicionados;
-  int? picosSalvos;
-  String? backgroundPicture;
+  int conexoes;
+  int picosAdicionados;
+  int picosSalvos;
+  String backgroundPicture;
+  List<Pico>? favoritePicosEntities;
+  List<Post>? myPostsEntities;
+  List<String> myIdPosts;
+  List<String> favoritesIdPicos;
 
   UserM copyWith({
+    List<String>? myIdPosts,
+    List<String>? favoritesIdPicos,
+    List<Post>? myPosts,
     String? id,
     String? name,
     String? email,
     bool? isColetivo,
     String? dob,
     SignMethods? signMethod,
-    AuthEnumState? authEnumState,
+    List<Pico>? favoriteSpots,
     String? description,
     String? pictureUrl,
     String? location,
@@ -39,13 +45,16 @@ class UserM {
     String? backgroundPicture
   }) {
     return UserM(
+      favoritePicosEntities: favoriteSpots ?? favoritePicosEntities,
+      myPostsEntities: myPosts ?? myPostsEntities,
+      myIdPosts: myIdPosts ?? this.myIdPosts,
+      favoritesIdPicos: favoritesIdPicos ?? this.favoritesIdPicos,
       id: id ?? this.id,
       name: name ?? this.name,
       email: email ?? this.email,
       isColetivo: isColetivo ?? this.isColetivo,
       dob: dob ?? this.dob,
       signMethod: signMethod ?? this.signMethod,
-      authEnumState: authEnumState ?? this.authEnumState,
       description: description ?? this.description,
       pictureUrl: pictureUrl ?? this.pictureUrl,
       location: location ?? this.location,
@@ -57,53 +66,50 @@ class UserM {
   }
   
 
-  //transforma dados do firebase em dados na model
+  //transforma dados de autenticação em dados na model
   //cria um user model de acordo com a nova conta criada
-  factory UserM.userFromFirebaseAuthUser(
-      User user, String name, bool coletivo) {
+  factory UserM.initial(UserCredentialsSignUp authUser) {
     String todayDate =
         '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}';
     return UserM(
-      name: name,
-      email: user.email,
+      myIdPosts: [],
+      favoritesIdPicos: [],
+      signMethod: authUser.credentials.signMethods,
+      name: authUser.nome,
+      email: authUser.credentials.email,
       description: 'Edite para atualizar sua bio',
-      id: user.uid,
+      id: authUser.uid,
       picosAdicionados: 0,
       picosSalvos: 0,
       location: '',
       conexoes: 0,
       dob: todayDate,
-      authEnumState: AuthEnumState.notDetermined,
       pictureUrl: "https://firebasestorage.googleapis.com/v0/b/pico-skatepico.appspot.com/o/users%2FfotoPadrao%2FuserPhoto.png?alt=media&token=c48f5406-fac1-4b35-b2a7-453e2fb57427",
-      isColetivo: coletivo,
+      isColetivo: authUser.isColetivo,
       backgroundPicture: "",
     );
   }
 
-  factory UserM.fromDocument(DocumentSnapshot doc) {
-    return UserM.withRequired(
-      name: doc['name'] ?? "",
-      description: doc['description'] ?? "",
-      id: doc['id'] ?? "",
-      location: doc['location'] ?? '',
-      picosSalvos: doc['picosSalvos'] ?? 0,
-      pictureUrl: doc['pictureUrl'] ?? '',
-      backgroundPicture: doc['backgroundPicture'] ?? '',
-      isColetivo: doc['isColetivo'] ?? false,
-      signMethod: SignMethods.fromString(doc['signMethod'] ?? "email"),
-      authEnumState: AuthEnumState.loggedIn,
-      email: doc['email'] ?? "",
-      dob: doc['dob'] ?? "2022-01-01",
-      conexoes: doc['conexoes'] ?? 0,
-      picosAdicionados: doc['picosAdicionados'] ?? 0,
+  factory UserM.fromJson(Map<String,dynamic> json, String id) {
+    return UserM(
+      myIdPosts: json['myPosts'] ?? [],
+      favoritesIdPicos: json['favoritesSpots'] ?? [],
+      name: json['name'] ?? "",
+      description: json['description'] ?? "",
+      id: json['id'] ?? "",
+      location: json['location'] ?? '',
+      picosSalvos: json['picosSalvos'] ?? 0,
+      pictureUrl: json['pictureUrl'] ?? '',
+      backgroundPicture: json['backgroundPicture'] ?? '',
+      isColetivo: json['isColetivo'] ?? false,
+      signMethod: SignMethods.fromString(json['signMethod'] ?? "email"),
+      email: json['email'] ?? "",
+      dob: json['dob'] ?? "2022-01-01",
+      conexoes: json['conexoes'] ?? 0,
+      picosAdicionados: json['picosAdicionados'] ?? 0,
     );
   }
 
-  
-
-  factory UserM.fromSnapshot(QuerySnapshot doc) {
-    return UserM(email: "email");
-  }
   Map<String, dynamic> toJsonMap() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['name'] = name;
@@ -117,9 +123,10 @@ class UserM {
     data['picosAdicionados'] = picosAdicionados;
     data['picosSalvos'] = picosSalvos;
     data['isColetivo'] = isColetivo;
-    data['signMethod'] = signMethod!.name;
+    data['signMethod'] = signMethod.name;
     data['email'] = email;
-    data['authEnumState'] = authEnumState.toString().split('.').last;
+    data['favoriteSpot'] = favoritesIdPicos;
+    data['myPosts'] = myIdPosts;
     return data;
   }
 
@@ -128,7 +135,7 @@ class UserM {
   @override
   String toString() {
     if (stringify) {
-      return 'User{name: $name, description: $description, id: $id, pictureUrl: $pictureUrl, isColetivo: $isColetivo, signMethod: $signMethod, email: $email, authEnumState: $authEnumState, location: $location, dob: $dob, conexoes: $conexoes, picosAdicionados: $picosAdicionados, picosSalvos: $picosSalvos}';
+      return 'User{name: $name, description: $description, id: $id, pictureUrl: $pictureUrl, isColetivo: $isColetivo, signMethod: $signMethod, email: $email, signMethod: $signMethod, location: $location, dob: $dob, conexoes: $conexoes, picosAdicionados: $picosAdicionados, picosSalvos: $picosSalvos}';
     } else {
       return 'String data was not reached.';
     }
@@ -170,23 +177,12 @@ class UserM {
   noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 
   UserM(
-      {this.name,
-      this.description,
-      this.id,
-      this.pictureUrl,
-      this.isColetivo,
-      this.signMethod,
-      this.location,
-      this.dob,
-      this.conexoes,
-      this.picosAdicionados,
-      this.picosSalvos,
-      this.authEnumState,
-      this.email, 
-      this.backgroundPicture});
-
-      UserM.withRequired(
-      {required this.name,
+      {
+         this.favoritePicosEntities,
+        this.myPostsEntities,
+        required this.favoritesIdPicos,
+        required this.myIdPosts,
+        required this.name,
       required this.description,
       required this.id,
       required this.pictureUrl,
@@ -197,7 +193,7 @@ class UserM {
       required this.conexoes,
       required this.picosAdicionados,
       required this.picosSalvos,
-      required this.authEnumState,
       required this.email, 
       required this.backgroundPicture});
+
 }
