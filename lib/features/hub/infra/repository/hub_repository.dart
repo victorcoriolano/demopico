@@ -7,7 +7,7 @@ import 'package:demopico/features/user/domain/interfaces/i_user_auth_service.dar
 import 'package:demopico/features/user/domain/interfaces/i_user_database_repository.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/infra/repositories/user_firebase_repository.dart';
-import 'package:demopico/features/user/infra/services/user_auth_firebase_service.dart';
+import 'package:demopico/features/user/infra/datasource/remote/user_auth_firebase_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
@@ -18,7 +18,7 @@ class HubRepository implements IHubRepository {
     _hubRepository ??= HubRepository(
         userAuthServiceIMP: UserAuthFirebaseService.getInstance,
         hubServiceIMP: HubService.getInstance,
-        userDatabaseRepositoryIMP: UserFirebaseRepository.getInstance);
+        userDatabaseRepositoryIMP: UserRepositoryImpl.getInstance);
     return _hubRepository!;
   }
 
