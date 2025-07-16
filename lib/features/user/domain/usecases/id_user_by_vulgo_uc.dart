@@ -1,11 +1,13 @@
+import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_database_repository.dart';
 import 'package:demopico/features/user/infra/repositories/user_firebase_repository.dart';
+import 'package:flutter/foundation.dart';
 
 class IDUserByVulgoUc {
   static IDUserByVulgoUc? _idUserByVulgoUc;
   static IDUserByVulgoUc get getInstance {
     _idUserByVulgoUc ??= IDUserByVulgoUc(
-      userDatabaseRepositoryIMP: UserFirebaseRepository.getInstance,
+      userDatabaseRepositoryIMP: UserRepositoryImpl.getInstance,
     );
     return _idUserByVulgoUc!;
   }
@@ -14,11 +16,12 @@ class IDUserByVulgoUc {
 
   IDUserByVulgoUc({required this.userDatabaseRepositoryIMP});
 
-  Future<String?> getID(String vulgo) async {
+  Future<String> getID(String vulgo) async {
     try {
       return await userDatabaseRepositoryIMP.getUserIDByVulgo(vulgo);
-    } catch (e) {
-      return null;
+    } on Failure catch (e) {
+      debugPrint("UC - Erro ao pegar o email: $e");
+      rethrow;
     }
   }
 }

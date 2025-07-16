@@ -31,7 +31,7 @@ void main() {
 
       repositoryUpdate.updateBio(novaBio, mockUserProfile);
 
-      verify(() => datasourceUpdate.updateBio(novaBio, mockUserProfile.id!))
+      verify(() => datasourceUpdate.updateBio(novaBio, mockUserProfile.id))
           .called(1);
     });
 
@@ -40,14 +40,14 @@ void main() {
       final datasourceUpdate = fakeFirebaseProfileUpdateDatasource;
 
       repositoryUpdate.updateFollowers(mockUserProfile);
-      verify(() => datasourceUpdate.updateFollowers(mockUserProfile.id!));
+      verify(() => datasourceUpdate.updateFollowers(mockUserProfile.id));
     });
 
     test('Este teste deve passar um id compativel com o do datasource', () async {
       final repositoryUpdate = fakeProfileUpdateRepository;
       final datasourceUpdate = fakeFirebaseProfileUpdateDatasource;
       repositoryUpdate.updateContributions(mockUserProfile);
-      verify(() => datasourceUpdate.updateContributions(mockUserProfile.id!));
+      verify(() => datasourceUpdate.updateContributions(mockUserProfile.id));
     });
 
     test('Este teste deve passar uma foto e um id compativel com o do datasource ', () async {
@@ -57,7 +57,7 @@ void main() {
 
       repositoryUpdate.updatePhoto(novaImage, mockUserProfile);
       verify(
-          () => datasourceUpdate.updatePhoto(novaImage, mockUserProfile.id!));
+          () => datasourceUpdate.updatePhoto(novaImage, mockUserProfile.id));
     });
   });
 }

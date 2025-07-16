@@ -1,7 +1,11 @@
 
+import 'package:demopico/features/user/domain/entity/user_credentials.dart';
+import 'package:demopico/features/user/domain/models/user.dart';
+
 abstract class IUserAuthService {
-  Future<bool> signUp(String inputName, String inputEmail, String password, bool isColetivo);
-  Future<bool> loginByEmail(String email, String password);
+  Future<UserM> signUp(UserCredentialsSignUp authUser);
+  
+  Future<void> loginByEmail(UserCredentialsSignIn credentials);
   Future<void> logout();
-  String currentUser();
+  String get currentUser;
 }

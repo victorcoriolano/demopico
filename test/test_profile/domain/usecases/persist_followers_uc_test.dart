@@ -33,7 +33,7 @@ void main() {
 
     test('Deve retornar número de seguidores', () async {
       when(() => fakeRepositoryRead.getFollowers(mockUserProfile))
-          .thenAnswer((_) async => mockUserProfile.conexoes!);
+          .thenAnswer((_) async => mockUserProfile.conexoes);
 
       final result = await fakePersistFollowersUc.get(mockUserProfile);
       expect(result, mockUserProfile.conexoes);

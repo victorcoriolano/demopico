@@ -6,58 +6,64 @@ import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 const _padrao = "Não informado";
 
 class PicoModel extends Pico {
+
   PicoModel(
-      {required super.imgUrls,
-      required super.modalidade,
-      required super.tipoPico,
-      required super.nota,
-      required super.numeroAvaliacoes,
-      required super.long,
-      required super.lat,
-      required super.description,
-      required super.atributos,
-      required super.obstaculos,
-      required super.utilidades,
-      required super.userCreator,
-      required super.picoName,
-      required super.id});
+      {
+        required super.userID,
+        required super.userName,
+        required super.imgUrls,
+        required super.modalidade,
+        required super.tipoPico,
+        required super.nota,
+        required super.numeroDeAvaliacoes,
+        required super.long,
+        required super.lat,
+        required super.description,
+        required super.atributos,
+        required super.obstaculos,
+        required super.utilidades,
+        required super.picoName,
+        required super.id}) 
+      ;
 
       
 
   factory PicoModel.fromJson(Map<String, dynamic> json, String id) {
   return PicoModel(
+    userID: json['idUser'],
     id: id,
     imgUrls: List<String>.from(json['imageUrl'] ?? []),
     tipoPico: json['tipo'] ?? _padrao,
     modalidade: json['modalidade'] ?? _padrao,
     nota: (json['nota'] as num?)?.toDouble() ?? 0.0,
-    numeroAvaliacoes: json['avaliacoes'] ?? 0,
+    numeroDeAvaliacoes: json['avaliacoes'],
     long: (json['longitude'] as num?)?.toDouble() ?? 0.0,
     lat: (json['latitude'] as num?)?.toDouble() ?? 0.0,
     description: json['description'] ?? _padrao,
     atributos: Map<String, int>.from(json['atributos'] ?? {}),
     obstaculos: List<String>.from(json['obstaculos'] ?? []),
     utilidades: List<String>.from(json['utilidades'] ?? []),
-    userCreator: json['criador'] ?? _padrao,
+    userName: json['criador'],
     picoName: json['name'] ?? _padrao,
   );
 }
 
   factory PicoModel.fromEntity(Pico pico){
     return PicoModel(
+      userID: pico.user?.id,
       id: pico.id,
       imgUrls: pico.imgUrls,
       tipoPico: pico.tipoPico,
       modalidade: pico.modalidade,
-      nota: pico.nota,
-      numeroAvaliacoes: pico.numeroAvaliacoes,
+      nota: pico.initialNota,
+      numeroDeAvaliacoes: pico.numeroAvaliacoes,
       long: pico.long,
       lat: pico.lat,
       description: pico.description,
       atributos: pico.atributos,
       obstaculos: pico.obstaculos,
       utilidades: pico.utilidades,
-      userCreator: pico.userCreator,
+      userName: pico.user?.name,
       picoName: pico.picoName,
     );
   }
@@ -65,10 +71,11 @@ class PicoModel extends Pico {
 
   Map<String, dynamic> toMap() {
     return {
+      'idUser': userID,
       'imageUrl': super.imgUrls,
       'tipo': super.tipoPico,
       'modalidade': super.modalidade,
-      'nota': super.nota,
+      'nota': super.initialNota,
       'avaliacoes': super.numeroAvaliacoes,
       'longitude': super.long,
       'latitude': super.lat,
@@ -76,7 +83,7 @@ class PicoModel extends Pico {
       'atributos': super.atributos,
       'obstaculos': super.obstaculos,
       'utilidades': super.utilidades,
-      'criador': super.userCreator,
+      'criador': userName,
       'name': super.picoName,
     };
   }
@@ -98,20 +105,22 @@ class PicoModel extends Pico {
     List<String>? utilidades,
     String? userCreator,
     String? picoName,
+    String? idUser,
   }){
     return PicoModel(
+      userID: idUser ?? userID,
       imgUrls: imgUrls ?? this.imgUrls,
       tipoPico: tipoPico ?? this.tipoPico,
       modalidade: modalidade ?? this.modalidade,
-      nota: nota ?? this.nota,
-      numeroAvaliacoes: numeroAvaliacoes ?? this.numeroAvaliacoes,
+      nota: nota ?? initialNota,
+      numeroDeAvaliacoes: numeroAvaliacoes ?? this.numeroAvaliacoes,
       long: long ?? this.long,
       lat: lat ?? this.lat,
       description: description ?? this.description,
       atributos: atributos ?? this.atributos,
       obstaculos: obstaculos ?? this.obstaculos,
       utilidades: utilidades ?? this.utilidades,
-      userCreator: userCreator ?? this.userCreator,
+      userName: userCreator ?? userName,
       picoName: picoName ?? this.picoName,
       id: id ?? this.id,
     );

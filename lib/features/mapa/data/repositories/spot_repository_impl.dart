@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:demopico/core/common/files_manager/dtos/firebase_dto.dart';
+import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 import 'package:demopico/core/common/files_manager/mappers/i_mapper_dto.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto_mapper.dart';
 import 'package:demopico/features/mapa/data/data_sources/interfaces/i_spot_datasource.dart';
@@ -19,7 +19,7 @@ class SpotRepositoryImpl implements ISpotRepository {
     );
     
 
-  final ISpotRemoteDataSource dataSource;
+  final ISpotDataSource dataSource;
   SpotRepositoryImpl(this.dataSource);
 
   final IMapperDto<PicoModel, FirebaseDTO> _mapper = FirebaseDtoMapper<PicoModel>(
@@ -72,6 +72,12 @@ class SpotRepositoryImpl implements ISpotRepository {
     final dto = _mapper.toDTO(pico);
     await dataSource.update(dto);
     return  pico;
+  }
+  
+  @override
+  Future<List<PicoModel>> getMySpots(String userID) async {
+    final listDto = await dataSource.getList(userID);
+    return listDto.map((dto) => _mapper.toModel(dto)).toList();
   }
 }
 

@@ -1,10 +1,13 @@
 enum SignMethods {
+  notDetermined,
   email,
   google,
   phone;
 
   String get name {
     switch (this) {
+      case SignMethods.notDetermined:
+        return 'notDetermined';
       case SignMethods.email:
         return 'email';
       case SignMethods.google:
@@ -15,6 +18,8 @@ enum SignMethods {
   }
   factory SignMethods.fromString(String value) {
     switch (value) {
+      case 'notDetermined':
+        return SignMethods.notDetermined;
       case 'email':
         return SignMethods.email;
       case 'google':

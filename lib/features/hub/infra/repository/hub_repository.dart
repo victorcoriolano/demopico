@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:demopico/features/hub/domain/interfaces/i_hub_repository.dart';
 import 'package:demopico/features/hub/domain/interfaces/i_hub_service.dart';
@@ -7,8 +8,7 @@ import 'package:demopico/features/user/domain/interfaces/i_user_auth_service.dar
 import 'package:demopico/features/user/domain/interfaces/i_user_database_repository.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/infra/repositories/user_firebase_repository.dart';
-import 'package:demopico/features/user/infra/services/user_auth_firebase_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:demopico/features/user/infra/datasource/remote/user_auth_firebase_service.dart';
 import 'package:flutter/foundation.dart';
 
 class HubRepository implements IHubRepository {
@@ -18,7 +18,7 @@ class HubRepository implements IHubRepository {
     _hubRepository ??= HubRepository(
         userAuthServiceIMP: UserAuthFirebaseService.getInstance,
         hubServiceIMP: HubService.getInstance,
-        userDatabaseRepositoryIMP: UserFirebaseRepository.getInstance);
+        userDatabaseRepositoryIMP: UserRepositoryImpl.getInstance);
     return _hubRepository!;
   }
 
@@ -36,15 +36,15 @@ class HubRepository implements IHubRepository {
   @override
   Future<Communique> postHubCommuniqueToFirebase(String text, dynamic type) async {
     try {
-      String userID = userAuthServiceIMP.currentUser();
-      UserM? user = await userDatabaseRepositoryIMP.getUserDetails(userID);
+      String userID = userAuthServiceIMP.currentUser;
+      UserM user = await userDatabaseRepositoryIMP.getUserDetails(userID);
       final id = FirebaseFirestore.instance.collection('comunicados').doc().id;
 
-      if (user != null) {
+      
         final newCommunique = Communique(
           id: id,
-          uid: user.id!,
-          vulgo: user.name!,
+          uid: user.id,
+          vulgo: user.name,
           pictureUrl: user.pictureUrl ?? '',
           text: text,
           timestamp: DateTime.now().toString(),
@@ -54,11 +54,6 @@ class HubRepository implements IHubRepository {
         );
         await hubServiceIMP.createCommunique(newCommunique);
         return newCommunique;
-      } else {
-        if (kDebugMode) print('Usuário não encontrado.');
-        throw FirebaseAuthException(
-            code: 'permission-denied', message: 'Usuário não encontrado.');
-      }
     } on FirebaseException catch (e) {
       if (kDebugMode) {
         print(e.code);
@@ -66,6 +61,9 @@ class HubRepository implements IHubRepository {
         print(e.stackTrace);
       }
       throw UnimplementedError('Erro ao criar comunicado: ${e.message}');
+    } on Failure catch (e) {
+      debugPrint("HUB-REP: ERRO AO CRIAR COMUNICADO: $e");
+      rethrow;
     }
   }
 

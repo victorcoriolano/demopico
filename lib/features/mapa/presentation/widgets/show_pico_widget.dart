@@ -1,3 +1,4 @@
+import 'package:demopico/core/app/auth_wrapper.dart';
 import 'package:demopico/features/denunciar/widgets/denunciar_widget.dart';
 import 'package:demopico/features/denunciar/denuncia_model.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
@@ -5,10 +6,10 @@ import 'package:demopico/features/mapa/domain/entities/pico_favorito.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/favorite_spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/pages/comment_page.dart';
-import 'package:demopico/features/mapa/presentation/pages/save_pico_page.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:get/get.dart';
 
 import 'package:provider/provider.dart';
 
@@ -107,9 +108,9 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
 
     bool isMine(){
       
-      bool isMyPico = widget.pico.userCreator != null &&
+      bool isMyPico = 
         user != null &&
-        widget.pico.userCreator! == user.name;
+        widget.pico.userName == user.name ;
       debugPrint("isMine: $isMyPico");
         return isMyPico;
     }
@@ -371,7 +372,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                           Row(
                                             children: [
                                               Text(
-                                                widget.pico.nota!
+                                                widget.pico.initialNota
                                                     .toStringAsFixed(2),
                                                 style: const TextStyle(
                                                     fontSize: 16,
@@ -383,16 +384,16 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                                 children:
                                                     List.generate(5, (index) {
                                                   if (index <
-                                                      widget.pico.nota!
+                                                      widget.pico.initialNota
                                                           .floor()) {
                                                     // Estrela cheia
                                                     return const Icon(
                                                         Icons.star,
                                                         color: Colors.black);
                                                   } else if (index ==
-                                                          widget.pico.nota!
+                                                          widget.pico.initialNota
                                                               .floor() &&
-                                                      (widget.pico.nota! % 1) >=
+                                                      (widget.pico.initialNota % 1) >=
                                                           0.5) {
                                                     // Meia estrela se a parte decimal for >= 0.5
                                                     return const Icon(
@@ -469,7 +470,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                       ),
                                       const SizedBox(height: 5),
                                       Text(
-                                        widget.pico.userCreator ??
+                                        widget.pico.userName ??
                                             "ANÔNIMO", // Nome fixo abaixo da foto
                                         textAlign: TextAlign.center,
                                         style: const TextStyle(
@@ -622,42 +623,26 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                         if (user == null) {
                                           Navigator.pop(context);
                                           ScaffoldMessenger.of(context)
-                                              .showSnackBar(const SnackBar(
+                                              .showSnackBar(SnackBar(
                                             content: Text(
                                                 'Você precisa estar logado para salvar um pico!'),
+                                              action: SnackBarAction(label: "Fazer Login", onPressed: () {
+                                                Get.to((_) => AuthWrapper());
+                                              }),  
                                           ));
                                           return;
                                         }
 
                                         final picoFav = PicoFavorito(
                                             idPico: widget.pico.id,
-                                            idUsuario: user.id!);
-                                        final salvar =
+                                            idUsuario: user.id);
+                                        
                                             await provider.savePico(picoFav);
-                                        if (salvar) {
+                                        if (provider.error != null) {
                                           if (context.mounted) {
                                             Navigator.pop(context);
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content:
-                                                    const Text("Pico Salvo"),
-                                                action: SnackBarAction(
-                                                    label: "Ver pico salvo",
-                                                    onPressed: () {
-                                                      Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (_) =>
-                                                              SavePicoPage(
-                                                            userID:
-                                                                user.id ?? "",
-                                                          ),
-                                                        ),
-                                                      );
-                                                    }),
-                                              ),
-                                            );
+                                            
+                                            Get.snackbar("Ocorreu um erro ao salvar o Pico", provider.error!);
                                           }
                                         }
                                       },

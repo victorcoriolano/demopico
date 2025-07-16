@@ -91,7 +91,7 @@ class _SavePicoPageState extends State<SavePicoPage> {
                       ),
                     ),
                     subtitle: Text(
-                      pico.picoModel.userCreator ?? 'Anônimmo',
+                      pico.picoModel.userName ?? 'Anônimmo',
                       style: const TextStyle(
                         fontSize: 14,
                         color: Colors.grey,

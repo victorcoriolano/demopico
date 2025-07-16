@@ -126,7 +126,7 @@ class _ContainerTelasState extends State<ContainerTelas> {
                               ),
                               onPressed: provider.validarFormulario() ? () async {
                                 
-                                await provider.createSpot(user?.name);
+                                await provider.createSpot(user);
                                 if( provider.errorCriarPico != null ){
                                   Get.snackbar("Erro ao criar pico", provider.errorCriarPico.toString(),);
                                 }

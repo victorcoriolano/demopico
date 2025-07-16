@@ -1,43 +1,53 @@
+import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
+import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto_mapper.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_database_repository.dart';
+import 'package:demopico/features/user/domain/interfaces/i_user_database_service.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
-import 'package:demopico/features/user/infra/services/user_firebase_service.dart';
+import 'package:demopico/features/user/infra/datasource/remote/user_firebase_service.dart';
 
-class UserFirebaseRepository implements IUserDatabaseRepository {
-  static UserFirebaseRepository? _userFirebaseRepository;
+class UserRepositoryImpl implements IUserDatabaseRepository {
+  static UserRepositoryImpl? _userFirebaseRepository;
 
-  static UserFirebaseRepository get getInstance {
-    _userFirebaseRepository ??= UserFirebaseRepository(
-        userFirebaseService: UserFirebaseService.getInstance);
+  static UserRepositoryImpl get getInstance {
+    _userFirebaseRepository ??= UserRepositoryImpl(
+        userFirebaseService: UserFirebaseDataSource.getInstance);
     return _userFirebaseRepository!;
   }
 
-  UserFirebaseRepository({required this.userFirebaseService});
+  UserRepositoryImpl({required this.userFirebaseService});
 
-  final UserFirebaseService userFirebaseService;
+  final IUserDataSource<FirebaseDTO> userFirebaseService;
+
+  final _mapper = FirebaseDtoMapper<UserM>(
+    fromJson: (data, id) => UserM.fromJson(data, id),
+    toMap: (user) => user.toJsonMap(),
+    getId: (model) => model.id);
 
   @override
   Future<void> addUserDetails(UserM newUser) async {
-    String uid = newUser.id!;
-    await userFirebaseService.addUserDetails(newUser, uid);
+    final dto = _mapper.toDTO(newUser);
+    await userFirebaseService.addUserDetails(dto);
   }
 
   @override
-  Future<String?> getEmailByUserID(String uid) async {
-    return await userFirebaseService.getEmailByUserID(uid);
+  Future<String> getEmailByUserID(String uid) async {
+    return await userFirebaseService.getUserData(uid, "email");
   }
 
   @override
-  Future<UserM?> getUserDetails(String uid) async {
-    return await userFirebaseService.getUserDetails(uid);
+  Future<UserM> getUserDetails(String uid) async {
+    return _mapper.toModel(await userFirebaseService.getUserDetails(uid));
   }
 
   @override
-  Future<String?> getUserIDByVulgo(String vulgo) async {
-    return await userFirebaseService.getUserIDByVulgo(vulgo);
+  Future<String> getUserIDByVulgo(String vulgo) async {
+    final user = await userFirebaseService.getUserByField("vulgo", vulgo);
+    return user.id;
   }
   
   @override
-  Future<String?> getEmailByVulgo(String vulgo) async {
-   return await userFirebaseService.getEmailByVulgo(vulgo);
+  Future<String> getEmailByVulgo(String vulgo) async {
+   final dto = await userFirebaseService.getUserByField("vulgo", vulgo);
+   return dto.data["email"];
 }
 }

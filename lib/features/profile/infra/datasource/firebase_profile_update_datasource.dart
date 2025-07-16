@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/external/datasources/firebase/remote/firestore.dart';
+import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_profile_update_datasource.dart';
 
 class FirebaseProfileUpdateDatasource implements IProfileUpdateDatasource {
@@ -15,30 +17,65 @@ class FirebaseProfileUpdateDatasource implements IProfileUpdateDatasource {
   final FirebaseFirestore firestore;
 
   @override
-  void updateBio(String newBio, String uid) async {
-    await firestore
+  Future<void> updateBio(String newBio, String uid) async {
+    try {
+      await firestore
         .collection('users')
         .doc(uid)
         .update({'description': newBio});
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorsMapper.map(e);
+    }on Exception catch (e){
+      throw UnknownFailure(originalException: e);
+    }catch (e){
+      throw UnknownFailure(unknownError: e);
+    }
+    
+  }
+
+
+  @override
+  Future<void> updateContributions(String uid) async {
+    try {
+      await firestore.collection('users').doc(uid).update({
+        'picosAdicionados': FieldValue.increment(1),
+      });
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorsMapper.map(e);
+    } on Exception catch (e) {
+      throw UnknownFailure(originalException: e);
+    } catch (e) {
+      throw UnknownFailure(unknownError: e);
+    }
+  }
+
+
+  @override
+  Future<void> updatePhoto(String newImg, String uid) async {
+    try {
+      await firestore.collection('users').doc(uid).update({'pictureUrl': newImg});
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorsMapper.map(e);
+    } on Exception catch (e) {
+      throw UnknownFailure(originalException: e);
+    } catch (e) {
+      throw UnknownFailure(unknownError: e);
+    }
   }
 
   @override
-  void updateContributions(String uid) async {
-    await firestore.collection('users').doc(uid).update({
-      'picosAdicionados': FieldValue.increment(1),
-    });
-  }
-
-  @override
-  void updatePhoto(String newImg, String uid) async {
-    await firestore.collection('users').doc(uid).update({'pictureUrl': newImg});
-  }
-
-  @override
-  void updateFollowers(String uid) async {
-    await firestore
-        .collection('users')
-        .doc(uid)
-        .update({'conexoes': FieldValue.increment(1)});
+  Future<void> updateFollowers(String uid) async {
+    try {
+      await firestore
+          .collection('users')
+          .doc(uid)
+          .update({'conexoes': FieldValue.increment(1)});
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorsMapper.map(e);
+    } on Exception catch (e) {
+      throw UnknownFailure(originalException: e);
+    } catch (e) {
+      throw UnknownFailure(unknownError: e);
+    }
   }
 }

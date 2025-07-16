@@ -1,6 +1,11 @@
+import 'package:demopico/core/common/errors/domain_failures.dart';
+import 'package:demopico/core/common/errors/failure_server.dart';
+import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/user/domain/entity/user_credentials.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_auth_repository.dart';
+import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/infra/repositories/user_auth_firebase_repository.dart';
+import 'package:flutter/foundation.dart';
 
 
 class CriarContaUc {
@@ -17,15 +22,16 @@ class CriarContaUc {
   CriarContaUc(
       {required this.userAuthRepositoryIMP});
 
-  Future<bool> criar(UserCredentialsSignUp credentials) async {
+  Future<UserM> criar(UserCredentialsSignUp credentials) async {
+     if (credentials.credentials.password.length <= 7) throw InvalidPasswordFailure();
+      if (!credentials.credentials.email.contains('@'))throw InvalidEmailFailure();
+      if(credentials.nome.length <= 2) throw InvalidVulgoFailure();
     try {
-      if (credentials.credentials.password.length <= 7) throw Exception("Senha muito curta");
-      if (!credentials.credentials.email.contains('@'))throw Exception("Email inválido");
-      if(credentials.nome.length <= 2) throw Exception("Nome muito curto");
 
       return await userAuthRepositoryIMP.signUp(credentials);
-    } catch (e) {
-      return false;
+    } on Failure catch (e, st) {
+      debugPrint("Ocorreu um erro conhecido ao criar usuário e caiu no use case: $e, $st");
+      rethrow;
     }
   }
 }

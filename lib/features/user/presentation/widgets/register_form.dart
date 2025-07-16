@@ -1,13 +1,10 @@
-import 'package:demopico/core/app/home_page.dart';
-import 'package:demopico/features/user/domain/entity/user_credentials.dart';
-import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
+
 
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
 import 'package:demopico/features/user/presentation/widgets/tipo_conta_dropdown.dart';
 import 'package:demopico/features/user/presentation/widgets/textfield_decoration.dart';
 import 'package:demopico/features/user/presentation/widgets/form_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class RegisterForm extends StatefulWidget {
   const RegisterForm({super.key});
@@ -21,7 +18,7 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
   final TextEditingController _senhaController2 = TextEditingController();
-  final AuthUserProvider _authUserProvider = AuthUserProvider.getInstance;
+  
   final _formkey = GlobalKey<FormState>();
   String _tipoConta = '';
   bool isColetivo = false;
@@ -141,37 +138,7 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                 // button (cadastrar)
                 ElevatedButton(
                   onPressed: () async {
-                    if (_formkey.currentState!.validate()) {
-                      String vulgo = _vulgoCadastro.text.trim();
-                      String email = _emailController.text.trim();
-                      String password = _senhaController.text.trim();
-                  
-
-                      UserCredentialsSignIn credentialsSignIn =
-                          UserCredentialsSignIn(
-                              email: email, password: password);
-
-                      UserCredentialsSignUp credential = UserCredentialsSignUp(
-                          nome: vulgo,
-                          isColetivo: isColetivo,
-                          credentials: credentialsSignIn);
-
-                      final resultadoRegistro =
-                          await _authUserProvider.signUp(credential);
-                      
-            
-                      if (resultadoRegistro == true) {
-                        _vulgoCadastro.clear();
-                        _emailController.clear();
-                        _senhaController.clear();
-                        _senhaController2.clear();
-                        
-                        Get.to(() => const HomePage());
-                      } else {
-                        Get.snackbar('Erro', 'Falha ao registrar usuário');
-                      }
-                      // ir pra página de perfil se der tudo certo
-                    }
+                    // TODO: IMPLEMENTAR CRIAÇÃO DE USER
                   },
                   style: buttonStyle(),
                   child: const Text(

@@ -1,7 +1,7 @@
 import 'package:demopico/features/user/domain/enums/sign_methods.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 
-final mockUserProfile = UserM.withRequired(
+final mockUserProfile = UserM(
   name: 'artu',
   description: 'marretando',
   id: '1',
@@ -13,7 +13,8 @@ final mockUserProfile = UserM.withRequired(
   conexoes: 0,
   picosAdicionados: 0,
   picosSalvos: 0,
-  authEnumState: null,
+  favoritesIdPicos: [],
+  myIdPosts: [],
   email: '',
   backgroundPicture: '',
 );
@@ -21,13 +22,19 @@ final mockUserProfile = UserM.withRequired(
   final testeProfileErrado = UserM(
    name: 'artu' ,
    description: null,
-   id: null,
+   id: "ID",
    pictureUrl: null,
    isColetivo: false,
    signMethod: SignMethods.email,
    location:'',
    dob:'',
-   conexoes: null,
-   picosAdicionados: null,
+   conexoes: 0,
+   picosAdicionados: 0,
+    favoritesIdPicos: [],
+    backgroundPicture: "HTTP.COM",
+    email: "EMAILiNVAÁLIDO",
+    myIdPosts: [],
+    picosSalvos: -1,
+    
   );
 
