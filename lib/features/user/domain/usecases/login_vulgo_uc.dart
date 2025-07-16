@@ -1,6 +1,8 @@
+import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/user/domain/entity/user_credentials.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_auth_repository.dart';
 import 'package:demopico/features/user/infra/repositories/user_auth_firebase_repository.dart';
+import 'package:flutter/foundation.dart';
 
 class LoginVulgoUc {
   static LoginVulgoUc? _loginVulgoUc;
@@ -13,11 +15,12 @@ class LoginVulgoUc {
 
   LoginVulgoUc({required this.userAuthRepository});
 
-  Future<bool> logar(UserCredentialsSignInVulgo userCredential) async {
+  Future<void> logar(UserCredentialsSignInVulgo userCredential) async {
     try {
       return await userAuthRepository.loginByVulgo(userCredential);
-    } catch (e) {
-      return false;
+    }on Failure catch (e) {
+      debugPrint("Erro ao logar por Vulgo: $e");
+      rethrow;
     }
   }
 }
