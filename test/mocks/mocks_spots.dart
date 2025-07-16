@@ -5,53 +5,56 @@ import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 
 final testPico = PicoModel(
+      userID: "980302",
       id: "1",
       imgUrls: ["url"],
       tipoPico: "rua",
       modalidade: "Skate",
       nota: 4.5,
-      numeroAvaliacoes: 10,
+      numeroDeAvaliacoes: 10,
       long: -46.57421,
       lat: -23.55052,
       description: "Teste",
       atributos: {"teste": 2},
       obstaculos: ["corrimão"],
       utilidades: ["banheiro"],
-      userCreator: "user123",
+      userName: "user123",
       picoName: "Pico Legal",
     );
 
     final testPico2 = PicoModel(
+      userID: "209094",
       id: "1",
       imgUrls: ["url"],
       tipoPico: "rua",
       modalidade: "BMX",
       nota: 4.5,
-      numeroAvaliacoes: 10,
+      numeroDeAvaliacoes: 10,
       long: -46.57421,
       lat: -23.55052,
       description: "Teste",
       atributos: {"teste": 2},
       obstaculos: ["corrimão"],
       utilidades: ["banheiro"],
-      userCreator: "user123",
+      userName: "user123",
       picoName: "Pico Chave",
     );
 
      final testPico3 = PicoModel(
+      userID: "23413",
       id: "",
       imgUrls: ["url"],
       tipoPico: "rua",
       modalidade: "Skate",
       nota: 4.5,
-      numeroAvaliacoes: 10,
+      numeroDeAvaliacoes: 10,
       long: -46.57421,
       lat: -23.55052,
       description: "Teste",
       atributos: {"teste": 2},
       obstaculos: ["corrimão"],
       utilidades: ["banheiro"],
-      userCreator: "user123",
+      userName  : "user123",
       picoName: "Pico Dhora",
     );
 
