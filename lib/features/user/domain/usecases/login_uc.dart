@@ -23,14 +23,15 @@ class LoginUc {
 
   LoginUc({required this.userAuthRepository, required this.userDataRepository});
 
-  Future<UserM?> logar(UserCredentialsSignIn credentials) async {
+  Future<UserM> logar(UserCredentialsSignIn credentials) async {
     
     try {
       if (credentials.identifier == Identifiers.vulgo){
         final email = await userDataRepository.getEmailByVulgo(credentials.login);
         credentials.setLogin(email);
       }
-      return userAuthRepository.login(credentials);
+      final id = await userAuthRepository.login(credentials);
+      return await userDataRepository.getUserDetailsByID(id);
     }on Failure catch (e, st) {
       debugPrint("Erro ao logar caiu no use case: $e, $st");
       rethrow;
