@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:demopico/features/hub/domain/interfaces/i_hub_repository.dart';
@@ -36,7 +37,10 @@ class HubRepository implements IHubRepository {
   @override
   Future<Communique> postHubCommuniqueToFirebase(String text, dynamic type) async {
     try {
-      String userID = userAuthServiceIMP.currentUser;
+      String? userID = userAuthServiceIMP.currentIdUser;
+
+      if(userID == null) throw InvalidUserFailure();
+
       UserM user = await userDatabaseRepositoryIMP.getUserDetailsByID(userID);
       final id = FirebaseFirestore.instance.collection('comunicados').doc().id;
 
