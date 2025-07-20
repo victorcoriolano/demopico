@@ -61,7 +61,7 @@ class AuthUserProvider  extends ChangeNotifier {
       final validatedCredentials = await _validateUserCredentials.validateForLogin(credentials);
       await loginEmailUc.logar(validatedCredentials);  
     } catch (e) {
-
+      //TODO IMPLEMENTAR TRATAMENTO DE ERROS COM MENSAGENS CLARAS 
     }
   }
 
@@ -72,7 +72,7 @@ class AuthUserProvider  extends ChangeNotifier {
       await logoutUc.deslogar();
       
     } catch (e) {
-      
+      //TODO IMPLEMENTAR TRATAMENTO DE ERROS COM MENSAGENS CLARAS 
     }
   }
 
@@ -84,7 +84,8 @@ class AuthUserProvider  extends ChangeNotifier {
     try{
       return pegarIdUsuario.pegar();
     }catch(e){
-      return null;
+      //TODO IMPLEMENTAR TRATAMENTO DE ERROS COM MENSAGENS CLARAS 
+      
     }
     
   }
