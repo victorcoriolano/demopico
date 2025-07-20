@@ -33,8 +33,7 @@ class UserAuthFirebaseRepository implements IUserAuthRepository {
   }
   
   @override
-  Future<UserM> login(UserCredentialsSignIn loginCredentials) {
-    // TODO: implement login
-    throw UnimplementedError();
+  Future<String> login(UserCredentialsSignIn loginCredentials) async {
+      return await userAuthServiceIMP.loginByEmail(loginCredentials);
   }
 }
