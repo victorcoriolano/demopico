@@ -6,5 +6,5 @@ abstract class IUserAuthService {
   Future<UserM> signUp(UserCredentialsSignUp authUser);
   Future<String> loginByEmail(UserCredentialsSignIn credentials);
   Future<void> logout();
-  String get currentUser;
+  String? get currentIdUser;
 }
