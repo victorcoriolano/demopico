@@ -121,7 +121,7 @@ class _LoginFormState extends State<LoginForm> with Validators {
                   senha: _senhaController.text.trim());
                 
                 final user = await authProvider.login(credential);
-                dataUserProvider.setUser(user);
+                dataUserProvider.setUser=user;
               },
 
               style: buttonStyle(),
