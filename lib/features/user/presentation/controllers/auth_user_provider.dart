@@ -40,6 +40,12 @@ class AuthUserProvider  extends ChangeNotifier {
   bool isColetivo = false;
   bool isEmail = true;
   Identifiers identifier = Identifiers.email;
+  String? _idUser;
+
+  set setIdUser(String? id){
+    _idUser = id;
+  }
+   String? get idUser => _idUser;
   
 
   void changeIsEmail(){
@@ -57,7 +63,9 @@ class AuthUserProvider  extends ChangeNotifier {
     
     try {
       final validatedCredentials = await _validateUserCredentials.validateForLogin(credentials);
-      return await loginEmailUc.logar(validatedCredentials);  
+      final user = await loginEmailUc.logar(validatedCredentials); 
+      setIdUser=user.id;
+      return user;
     }on Failure catch (e) {
       getError(e);
       rethrow;
@@ -85,13 +93,10 @@ class AuthUserProvider  extends ChangeNotifier {
      await criarContaUc.criar(credentials);
   }
 
-  String? pegarId(){
-    try{
-      return pegarIdUsuario.pegar();
-    }catch(e){
-      //TODO IMPLEMENTAR TRATAMENTO DE ERROS COM MENSAGENS CLARAS 
-      
-    }
-    
-  }
+  String? get currentIdUser {
+    final id = pegarIdUsuario.pegar();
+    setIdUser=id;
+    return id;
+  } 
+  
 }
