@@ -1,5 +1,6 @@
 
 import 'package:demopico/core/common/errors/failure_server.dart';
+import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/user/domain/entity/user_credentials.dart';
 import 'package:demopico/features/user/domain/enums/identifiers.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_auth_repository.dart';
@@ -35,6 +36,9 @@ class LoginUc {
     }on Failure catch (e, st) {
       debugPrint("Erro ao logar caiu no use case: $e, $st");
       rethrow;
+    }catch (e){
+      debugPrint("Erro desconhecido ao logar no use case: $e");
+      throw UnknownFailure(unknownError: e);
     }
   }
 }
