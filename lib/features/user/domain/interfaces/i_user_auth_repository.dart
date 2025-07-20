@@ -3,7 +3,6 @@ import 'package:demopico/features/user/domain/models/user.dart';
 
 abstract class IUserAuthRepository {
   Future<UserM> signUp(UserCredentialsSignUp cadastroCredentials);
-  Future<void> loginByEmail(UserCredentialsSignIn loginCredentials);
-  Future<void> loginByVulgo(UserCredentialsSignInVulgo loginCredentials);
+  Future<UserM> login(UserCredentialsSignIn loginCredentials);
   Future<void> logout();
 }
