@@ -1,4 +1,5 @@
 
+import 'package:demopico/features/user/domain/entity/user_credentials.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/features/user/presentation/pages/register_page.dart';
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
@@ -17,7 +18,7 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> with Validators {
-  final TextEditingController _vulgoController = TextEditingController();
+  final TextEditingController _loginController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
 
 
@@ -68,7 +69,7 @@ class _LoginFormState extends State<LoginForm> with Validators {
                   decoration: customTextField(provider.isEmail ? "Digite seu Email": "Digite seu vulgo"),
                   cursorColor: Colors.white,
                   style: const TextStyle(color: Colors.white),
-                  controller: _vulgoController,
+                  controller: _loginController,
                   validator: (value) => combineValidators([
                     () => isNotEmpty(value),
                     () => isValidEmail(value),
@@ -110,8 +111,15 @@ class _LoginFormState extends State<LoginForm> with Validators {
             // button (entrar)
             ElevatedButton(
               onPressed: () async {
-                //TODO: IMPLEMENTAR LÓGICA DE FAZER LOGIN 
+                final provider = context.read<AuthUserProvider>();
+                final credential = UserCredentialsSignIn(
+                  identifier: provider.identifier, 
+                  login: _loginController.text.trim(), 
+                  senha: _senhaController.text.trim());
+
+                provider.login(credential);
               },
+
               style: buttonStyle(),
               child: const Text(
                 "Entrar",
