@@ -52,13 +52,13 @@ class UserAuthFirebaseService implements IUserAuthService {
   }
 
   @override
-  Future<void> loginByEmail(UserCredentialsSignIn credentials) async {
+  Future<String> loginByEmail(UserCredentialsSignIn credentials) async {
     try {
       final authResult = await auth.signInWithEmailAndPassword(
           email: credentials.login, password: credentials.senha);
       User? signedUser = authResult.user;
       if (signedUser == null) throw Exception("Não foi possível fazer o login, usuario não encontrado");
-
+      return signedUser.uid;
     } on FirebaseAuthException {
       throw Exception("Erro no sistema de autenticação");
     } catch (e) {
