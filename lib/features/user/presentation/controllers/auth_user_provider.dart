@@ -3,7 +3,7 @@ import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/user/domain/aplication/validate_credentials.dart';
 import 'package:demopico/features/user/domain/entity/user_credentials.dart';
 import 'package:demopico/features/user/domain/enums/identifiers.dart';
-import 'package:demopico/features/user/domain/enums/sign_methods.dart';
+import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/domain/usecases/criar_conta_uc.dart';
 import 'package:demopico/features/user/domain/usecases/login_uc.dart';
 import 'package:demopico/features/user/domain/usecases/logout_uc.dart';
@@ -53,15 +53,17 @@ class AuthUserProvider  extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> login(UserCredentialsSignIn credentials) async {
+  Future<UserM> login(UserCredentialsSignIn credentials) async {
     
     try {
       final validatedCredentials = await _validateUserCredentials.validateForLogin(credentials);
-      await loginEmailUc.logar(validatedCredentials);  
+      return await loginEmailUc.logar(validatedCredentials);  
     }on Failure catch (e) {
       getError(e);
+      rethrow;
     }catch (e){
       getError(UnknownFailure(unknownError: e));
+      rethrow;
     }
   }
 
