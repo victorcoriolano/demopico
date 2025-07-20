@@ -43,7 +43,7 @@ class UserDataRepositoryImpl implements IUserDataRepository {
   
   @override
   Future<String> getEmailByVulgo(String value) async {
-    final data = await userFirebaseService.getUserByField("vulgo", value);
+    final data = await userFirebaseService.getUserByField("name", value);
     final model = _mapper.toModel(data);
     return model.email;
   }
