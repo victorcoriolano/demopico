@@ -10,13 +10,13 @@ import 'package:demopico/features/user/domain/enums/type_post.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
-import 'package:demopico/features/user/presentation/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
+
   const ProfilePage({super.key});
 
   @override
@@ -26,7 +26,6 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage>
     with SingleTickerProviderStateMixin {
   late UserM? user;
-  String? currentUserId;
   bool _isVisible = true;
   bool _isLoading = true;
   ScrollDirection? _lastDirection;
@@ -38,6 +37,24 @@ class _ProfilePageState extends State<ProfilePage>
   final ScrollController _scrollController = ScrollController();
   final TextEditingController bioController = TextEditingController();
   late final TabController _tabController;
+
+  void showAlertError(context){
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Error'),
+          content: const Text('User not found.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.to(() => const HomePage());
+              },
+              child: const Text('OK'),
+            )
+          ],
+        ),
+      );
+  }
 
   @override
   void initState() {
@@ -112,35 +129,17 @@ class _ProfilePageState extends State<ProfilePage>
     final providerDatabase =
         Provider.of<UserDatabaseProvider>(context, listen: false);
 
-    String? uid = providerAuth.pegarId();
+    String? uid = providerAuth.currentIdUser;
 
     if (uid == null) {
       debugPrint('User ID is null');
       setState(() {
         _isLoading = false;
       });
-
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Error'),
-          content: const Text('User not found.'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Get.to(() => const HomePage());
-              },
-              child: const Text('OK'),
-            )
-          ],
-        ),
-      );
-      setState(() {
-        _isLoading = false;
-      });
+      showAlertError(context);
       return;
     }
-    currentUserId = uid;
+
     await providerDatabase.retrieveUserProfileData(uid);
 
     if (providerDatabase.user == null) {
@@ -149,21 +148,7 @@ class _ProfilePageState extends State<ProfilePage>
         _isLoading = false;
       });
       if (mounted) {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text('Error'),
-            content: const Text('User not found.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Get.to(() => const LoginPage());
-                },
-                child: const Text('OK'),
-              )
-            ],
-          ),
-        );
+        showAlertError(context);
       }
       return;
     } else {
