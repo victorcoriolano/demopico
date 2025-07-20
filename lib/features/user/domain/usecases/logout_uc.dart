@@ -1,12 +1,12 @@
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_auth_repository.dart';
-import 'package:demopico/features/user/infra/repositories/user_auth_firebase_repository.dart';
+import 'package:demopico/features/user/infra/repositories/user_auth_repository.dart';
 import 'package:flutter/foundation.dart';
 
 class LogoutUc {
   static LogoutUc? _logoutUc;
   static LogoutUc get getInstance {
-  _logoutUc ??= LogoutUc(userAuthRepository: UserAuthFirebaseRepository.getInstance);
+  _logoutUc ??= LogoutUc(userAuthRepository: UserAuthRepository.getInstance);
     return _logoutUc!;
   }
 
