@@ -19,6 +19,7 @@ class _CentralPageState extends State<CentralPage> {
   final ScrollController scrollController = ScrollController();
   late UserDatabaseProvider _userDatabaseProvider;
   late AuthUserProvider _authUserProvider;
+
   String? _userId;
   String? _userImage;
 
@@ -41,7 +42,7 @@ class _CentralPageState extends State<CentralPage> {
     });
   }
 
-  void _loadWeather() async {
+  Future<void> _loadWeather() async {
     try{
       await Provider.of<OpenWeatherProvider>(context, listen: false)
         .fetchWeatherData();
@@ -57,16 +58,25 @@ class _CentralPageState extends State<CentralPage> {
   Future<void> _loadUser() async {
     _userDatabaseProvider =
         Provider.of<UserDatabaseProvider>(context, listen: false);
-    _authUserProvider = Provider.of<AuthUserProvider>(context, listen: false);
-    _userId = _authUserProvider.pegarId();
-    if (_userId != null) {
-      await _userDatabaseProvider.retrieveUserProfileData(_userId!);
-    }
-    if (_userId != null) {
-      final user = _userDatabaseProvider.user;
+    
+    _authUserProvider = context.read<AuthUserProvider>();
 
-      if (user != null) _userImage = user.pictureUrl;
+    if (_userDatabaseProvider.user != null) {    
+      var user =  _userDatabaseProvider.user!; 
+      _userId = user.id;
+      _userImage = user.pictureUrl; 
+      return;
     }
+    _userId = _authUserProvider.currentIdUser;
+    if(_userId == null){
+      debugPrint("Id do user nullo");
+      return;
+    }
+
+    await _userDatabaseProvider.retrieveUserProfileData(_userId!);
+    _userImage = _userDatabaseProvider.user?.pictureUrl;
+
+
     return;
   }
 
