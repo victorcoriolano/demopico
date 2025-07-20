@@ -4,7 +4,7 @@ import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/user/domain/entity/user_credentials.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_auth_repository.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
-import 'package:demopico/features/user/infra/repositories/user_auth_firebase_repository.dart';
+import 'package:demopico/features/user/infra/repositories/user_auth_repository.dart';
 import 'package:flutter/foundation.dart';
 
 
@@ -12,7 +12,7 @@ class CriarContaUc {
   static CriarContaUc? _criarContaUc;
   static CriarContaUc get getInstance {
     _criarContaUc ??= CriarContaUc(
-        userAuthRepositoryIMP: UserAuthFirebaseRepository.getInstance);
+        userAuthRepositoryIMP: UserAuthRepository.getInstance);
     return _criarContaUc!;
   }
 
@@ -32,6 +32,9 @@ class CriarContaUc {
     } on Failure catch (e, st) {
       debugPrint("Ocorreu um erro conhecido ao criar usuário e caiu no use case: $e, $st");
       rethrow;
+    }catch (e, st){
+      debugPrint("Erro desconhecido o criar conta: $e, $st");
+      throw UnknownFailure(unknownError: e, stackTrace: st);
     }
   }
 }
