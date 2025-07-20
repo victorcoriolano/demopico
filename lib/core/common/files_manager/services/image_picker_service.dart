@@ -50,7 +50,7 @@ class ImagePickerService implements IPickFileRepository {
         return uploadModel;
       
     } catch (e) {
-      throw UnknownError("Erro ao selecionar a multiplos arquivos: $e");
+      throw UnknownError(message: "Erro ao selecionar a multiplos arquivos: $e");
     }
   }
   
@@ -75,7 +75,7 @@ class ImagePickerService implements IPickFileRepository {
       );
       
     } catch (e) {
-      throw UnknownError("Erro ao selecionar a video: $e");
+      throw UnknownError(message: "Erro ao selecionar a video: $e");
     }
   }
   
@@ -105,7 +105,7 @@ class ImagePickerService implements IPickFileRepository {
       return files;
     } catch (e, st) {
       debugPrint("Erro ao selecionar multiplos arquivos : $e stackTrace: $st");
-      throw UnknownError("Erro ao selecionar multiplos arquivos: $e", stackTrace: st);
+      throw UnknownError(message: "Erro ao selecionar multiplos arquivos: $e", stackTrace: st);
     }
   }
   
