@@ -9,11 +9,11 @@ class UserCredentialsSignIn {
   final SignMethods signMethod;
 
   UserCredentialsSignIn({
-    required this.signMethod, 
+    SignMethods? signMethods, 
     required this.identifier,
     required this.login,
     required this.senha,
-  });
+  }) : signMethod = signMethods ?? SignMethods.email;
 
   // método para alterar login no caso de ir logar 
   void setLogin(String login){
