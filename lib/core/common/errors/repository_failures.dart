@@ -81,7 +81,7 @@ class OperationCanceledFailure extends RepositoryFailures {
 // Erro desconhecido
 class UnknownFailure extends RepositoryFailures {
   final Object? unknownError;
-  UnknownFailure({super.originalException, super.stackTrace, this.unknownError}): super(message: "Erro desconhecido", code: 'UNKNOWN');
+  UnknownFailure({super.originalException, super.stackTrace, this.unknownError}): super(message: "Erro desconhecido: ${unknownError.toString()} - StackTrace: $stackTrace", code: 'UNKNOWN');
 }
 
 // Internal server error 
@@ -102,7 +102,6 @@ class TooManyAttemptsFailure extends RepositoryFailures {
 } 
 
 class DuplicateFailure extends RepositoryFailures {
-
   DuplicateFailure({required super.message}): super(code: "DUPLICATE_DATA_FAILURE");
 }
 
