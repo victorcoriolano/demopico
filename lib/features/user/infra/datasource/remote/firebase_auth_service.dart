@@ -78,11 +78,11 @@ class FirebaseAuthService implements IUserAuthService {
   }
 
   @override
-  String get currentUser {
+  String? get currentIdUser {
     try {
-      final String? idUser = auth.currentUser?.uid;
-      if (idUser == null) throw InvalidUserFailure();
-      return idUser;
+      return auth.currentUser?.uid;
+    } on FirebaseAuthException catch (firebaseAuthException) {
+      throw FirebaseErrorsMapper.map(firebaseAuthException);
     } on Exception catch (e, st) {
       throw UnknownFailure(originalException: e, stackTrace: st);
     }
