@@ -5,7 +5,7 @@ import 'package:demopico/features/user/domain/entity/user_credentials.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_auth_service.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_database_repository.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
-import 'package:demopico/features/user/infra/repositories/user_firebase_repository.dart';
+import 'package:demopico/features/user/infra/repositories/user_data_repository_impl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UserAuthFirebaseService implements IUserAuthService {
@@ -14,7 +14,7 @@ class UserAuthFirebaseService implements IUserAuthService {
   static UserAuthFirebaseService get getInstance {
     _userAuthFirebaseService ??= UserAuthFirebaseService(
         auth: FirebaseAuth.instance,
-        userDatabaseRepositoryIMP: UserRepositoryImpl.getInstance);
+        userDatabaseRepositoryIMP: UserDataRepositoryImpl.getInstance);
     return _userAuthFirebaseService!;
   }
 
@@ -22,7 +22,7 @@ class UserAuthFirebaseService implements IUserAuthService {
       {required this.auth, required this.userDatabaseRepositoryIMP});
 
   final FirebaseAuth auth;
-  final IUserDatabaseRepository userDatabaseRepositoryIMP;
+  final IUserDataRepository userDatabaseRepositoryIMP;
 
   bool _isAuthenticated = false;
   bool get isAuthenticated => _isAuthenticated;
@@ -36,7 +36,7 @@ class UserAuthFirebaseService implements IUserAuthService {
   Future<UserM> signUp(UserCredentialsSignUp authUser) async {
     try {
       UserCredential authResult = await auth.createUserWithEmailAndPassword(
-          email: authUser.credentials.email, password: authUser.credentials.password);
+          email: authUser.email, password: authUser.password);
       User? signedInUser = authResult.user;
 
       if (signedInUser == null) throw InvalidUserFailure();
@@ -55,7 +55,7 @@ class UserAuthFirebaseService implements IUserAuthService {
   Future<void> loginByEmail(UserCredentialsSignIn credentials) async {
     try {
       final authResult = await auth.signInWithEmailAndPassword(
-          email: credentials.email, password: credentials.password);
+          email: credentials.login, password: credentials.senha);
       User? signedUser = authResult.user;
       if (signedUser == null) throw Exception("Não foi possível fazer o login, usuario não encontrado");
 
