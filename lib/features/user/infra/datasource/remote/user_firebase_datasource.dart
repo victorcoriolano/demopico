@@ -119,8 +119,8 @@ class UserFirebaseDataSource implements IUserDataSource<FirebaseDTO> {
       return query.docs.first.exists;
     } on FirebaseException catch (firebaseException) {
       throw FirebaseErrorsMapper.map(firebaseException);
-    } on Exception catch (exception) {
-      throw UnknownFailure(originalException: exception);
+    } on Exception catch (exception, st) {
+      throw UnknownFailure(originalException: exception, stackTrace: st);
     } catch (unknown) {
       throw UnknownFailure(unknownError: unknown);
     }
