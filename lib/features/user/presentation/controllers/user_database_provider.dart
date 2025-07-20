@@ -34,9 +34,8 @@ class UserDatabaseProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setUser(UserM user){
-    _user = user;
-    notifyListeners();
+  set setUser(UserM? authUser){
+    _user = authUser;
   }
 
 
