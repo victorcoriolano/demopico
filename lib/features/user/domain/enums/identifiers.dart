@@ -1,0 +1,4 @@
+enum Identifiers {
+  email,
+  vulgo,
+}
