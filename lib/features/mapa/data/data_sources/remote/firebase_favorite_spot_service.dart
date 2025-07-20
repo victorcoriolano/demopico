@@ -35,7 +35,7 @@ class FirebaseFavoriteSpotRemoteDataSource implements IFavoriteSpotRemoteDataSou
     } on Exception catch (e, stackTrace) {
       throw UnknownFailure(originalException: e ,stackTrace: stackTrace);
     }catch (e, st) {
-      throw UnknownError("Erro desconhecido: $e", stackTrace: st);
+      throw UnknownError(message: "Erro desconhecido: $e", stackTrace: st);
     }
   }
 
