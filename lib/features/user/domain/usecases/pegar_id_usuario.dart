@@ -16,6 +16,6 @@ class PegarIdUsuario {
   final IUserAuthService userAuthServiceIMP;
 
 
-  String pegar() => userAuthServiceIMP.currentUser;
+  String? pegar() => userAuthServiceIMP.currentIdUser;
 
 }
