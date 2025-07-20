@@ -1,10 +1,13 @@
 
+import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/features/user/presentation/pages/register_page.dart';
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
+import 'package:demopico/features/user/presentation/widgets/swith_type_login.dart';
 import 'package:demopico/features/user/presentation/widgets/textfield_decoration.dart';
 import 'package:demopico/features/user/presentation/widgets/form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -21,6 +24,7 @@ class _LoginFormState extends State<LoginForm> with Validators {
   @override
   Widget build(BuildContext context) {
     return Form(
+
         child: SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(70.0),
@@ -48,20 +52,29 @@ class _LoginFormState extends State<LoginForm> with Validators {
             ),
 
             const SizedBox(
-              height: 30,
+              height: 15,
+            ),
+
+            SwithTypeLogin(),
+
+            const SizedBox(
+              height: 15,
             ),
 
             //email ou vulgo
-            TextFormField(
-              decoration: customTextField("E-mail ou vulgo"),
-              cursorColor: Colors.white,
-              style: const TextStyle(color: Colors.white),
-              controller: _vulgoController,
-              validator: (value) => combineValidators([
-                () => isNotEmpty(value),
-                () => isValidEmail(value),
-              ]),
-              
+            Consumer<AuthUserProvider>(
+              builder: (context, provider, child) {
+                return TextFormField(
+                  decoration: customTextField(provider.isEmail ? "Digite seu Email": "Digite seu vulgo"),
+                  cursorColor: Colors.white,
+                  style: const TextStyle(color: Colors.white),
+                  controller: _vulgoController,
+                  validator: (value) => combineValidators([
+                    () => isNotEmpty(value),
+                    () => isValidEmail(value),
+                  ]),
+                );
+              }
             ),
 
             const SizedBox(
@@ -97,7 +110,7 @@ class _LoginFormState extends State<LoginForm> with Validators {
             // button (entrar)
             ElevatedButton(
               onPressed: () async {
-                
+                //TODO: IMPLEMENTAR LÓGICA DE FAZER LOGIN 
               },
               style: buttonStyle(),
               child: const Text(
