@@ -7,7 +7,7 @@ import 'package:demopico/features/hub/infra/services/hub_service.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_auth_service.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_database_repository.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
-import 'package:demopico/features/user/infra/repositories/user_firebase_repository.dart';
+import 'package:demopico/features/user/infra/repositories/user_data_repository_impl.dart';
 import 'package:demopico/features/user/infra/datasource/remote/user_auth_firebase_service.dart';
 import 'package:flutter/foundation.dart';
 
@@ -18,11 +18,11 @@ class HubRepository implements IHubRepository {
     _hubRepository ??= HubRepository(
         userAuthServiceIMP: UserAuthFirebaseService.getInstance,
         hubServiceIMP: HubService.getInstance,
-        userDatabaseRepositoryIMP: UserRepositoryImpl.getInstance);
+        userDatabaseRepositoryIMP: UserDataRepositoryImpl.getInstance);
     return _hubRepository!;
   }
 
-  final IUserDatabaseRepository userDatabaseRepositoryIMP;
+  final IUserDataRepository userDatabaseRepositoryIMP;
   final IUserAuthService userAuthServiceIMP;
   final IHubService hubServiceIMP;
 
@@ -37,7 +37,7 @@ class HubRepository implements IHubRepository {
   Future<Communique> postHubCommuniqueToFirebase(String text, dynamic type) async {
     try {
       String userID = userAuthServiceIMP.currentUser;
-      UserM user = await userDatabaseRepositoryIMP.getUserDetails(userID);
+      UserM user = await userDatabaseRepositoryIMP.getUserDetailsByID(userID);
       final id = FirebaseFirestore.instance.collection('comunicados').doc().id;
 
       
