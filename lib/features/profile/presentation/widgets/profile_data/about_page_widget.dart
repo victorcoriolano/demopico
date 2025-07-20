@@ -1,5 +1,6 @@
-import 'package:demopico/features/profile/presentation/pages/profile_page.dart';
+import 'package:demopico/features/profile/presentation/pages/user_controller_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
@@ -17,10 +18,7 @@ class AboutPage extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => const ProfilePage()),
-            );
+            Get.to(() => UserControllerPage());
           },
         ),
       ),
