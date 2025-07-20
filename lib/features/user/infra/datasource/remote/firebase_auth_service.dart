@@ -8,17 +8,17 @@ import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/infra/repositories/user_data_repository_impl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class UserAuthFirebaseService implements IUserAuthService {
-  static UserAuthFirebaseService? _userAuthFirebaseService;
+class FirebaseAuthService implements IUserAuthService {
+  static FirebaseAuthService? _userAuthFirebaseService;
 
-  static UserAuthFirebaseService get getInstance {
-    _userAuthFirebaseService ??= UserAuthFirebaseService(
+  static FirebaseAuthService get getInstance {
+    _userAuthFirebaseService ??= FirebaseAuthService(
         auth: FirebaseAuth.instance,
         userDatabaseRepositoryIMP: UserDataRepositoryImpl.getInstance);
     return _userAuthFirebaseService!;
   }
 
-  UserAuthFirebaseService(
+  FirebaseAuthService(
       {required this.auth, required this.userDatabaseRepositoryIMP});
 
   final FirebaseAuth auth;
@@ -44,10 +44,10 @@ class UserAuthFirebaseService implements IUserAuthService {
       final UserM localUser = UserM.initial(authUser);
       
       return localUser;
-    } on FirebaseAuthException {
-      throw Exception("Erro no sistema de autenticação");
-    } catch (e) {
-      throw Exception("Erro ao criar usuario");
+    } on FirebaseAuthException catch (firebaseAuthExceptio) {
+      throw FirebaseErrorsMapper.map(firebaseAuthExceptio);
+    } on Exception catch (e, st) {
+      throw UnknownFailure(originalException: e, stackTrace: st);
     }
   }
 
@@ -57,12 +57,12 @@ class UserAuthFirebaseService implements IUserAuthService {
       final authResult = await auth.signInWithEmailAndPassword(
           email: credentials.login, password: credentials.senha);
       User? signedUser = authResult.user;
-      if (signedUser == null) throw Exception("Não foi possível fazer o login, usuario não encontrado");
+      if (signedUser == null) throw InvalidUserFailure();
       return signedUser.uid;
-    } on FirebaseAuthException {
-      throw Exception("Erro no sistema de autenticação");
-    } catch (e) {
-      throw Exception("Erro ao tentar realizar o login, tente novamente");
+    } on FirebaseAuthException catch (firebaseAuthException) {
+      throw FirebaseErrorsMapper.map(firebaseAuthException);
+    } on Exception catch (e, st) {
+      throw UnknownFailure(originalException: e, stackTrace: st);
     }
   }
 
@@ -70,20 +70,21 @@ class UserAuthFirebaseService implements IUserAuthService {
   Future<void> logout() async {
     try {
       await auth.signOut();
-    } on FirebaseAuthException catch (e){
-      throw FirebaseErrorsMapper.map(e);
-    } catch (e, st) {
-      throw UnknownFailure(unknownError: e, stackTrace: st);
+    } on FirebaseAuthException catch (firebaseAuthException) {
+      throw FirebaseErrorsMapper.map(firebaseAuthException);
+    } on Exception catch (e, st) {
+      throw UnknownFailure(originalException: e, stackTrace: st);
     }
   }
 
   @override
   String get currentUser {
-    String? idUser;
-    if (auth.currentUser?.uid == null) {
-      throw InvalidUserFailure();
+    try {
+      final String? idUser = auth.currentUser?.uid;
+      if (idUser == null) throw InvalidUserFailure();
+      return idUser;
+    } on Exception catch (e, st) {
+      throw UnknownFailure(originalException: e, stackTrace: st);
     }
-    idUser = auth.currentUser?.uid;
-    return idUser!;
   }
 }
