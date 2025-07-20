@@ -6,27 +6,31 @@ import 'package:demopico/features/user/infra/repositories/user_data_repository_i
 import 'package:flutter/foundation.dart';
 
 class ValidateUserCredentials {
-
   final IUserDataRepository repository;
   ValidateUserCredentials({required this.repository});
 
   static ValidateUserCredentials? _instance;
-  static ValidateUserCredentials get instance => _instance ??= 
-    ValidateUserCredentials(repository: UserDataRepositoryImpl.getInstance);
+  static ValidateUserCredentials get instance => _instance ??=
+      ValidateUserCredentials(repository: UserDataRepositoryImpl.getInstance);
 
-  Future<UserCredentialsSignIn> validateForLogin(UserCredentialsSignIn credentials) async {
+  Future<UserCredentialsSignIn> validateForLogin(
+      UserCredentialsSignIn credentials) async {
+    
     bool isValid = false;
-    if (credentials.identifier == Identifiers.vulgo){
-      isValid = await repository.validateDataUserAfter(data: credentials.login, field: "name");
-    }else {
-      isValid = await repository.validateDataUserAfter(data: credentials.login, field: "email");
+    if (credentials.identifier == Identifiers.vulgo) {
+      isValid = await repository.validateDataUserAfter(
+          data: credentials.login, field: "name");
+    } else {
+      isValid = await repository.validateDataUserAfter(
+          data: credentials.login, field: "email");
     }
 
     if (isValid) {
       debugPrint("Credenciais válidas");
-        return credentials;
-      } else {
-        throw InvalidCredentialsFailure();
-      }
+      return credentials;
+    } else {
+      debugPrint("Credenciais inválidas");
+      throw InvalidCredentialsFailure();
+    }
   }
 }
