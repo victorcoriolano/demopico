@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:demopico/features/hub/domain/interfaces/i_hub_repository.dart';
@@ -7,8 +8,8 @@ import 'package:demopico/features/hub/infra/services/hub_service.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_auth_service.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_database_repository.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
-import 'package:demopico/features/user/infra/repositories/user_firebase_repository.dart';
-import 'package:demopico/features/user/infra/datasource/remote/user_auth_firebase_service.dart';
+import 'package:demopico/features/user/infra/repositories/user_data_repository_impl.dart';
+import 'package:demopico/features/user/infra/datasource/remote/firebase_auth_service.dart';
 import 'package:flutter/foundation.dart';
 
 class HubRepository implements IHubRepository {
@@ -16,13 +17,13 @@ class HubRepository implements IHubRepository {
 
   static HubRepository get getInstance {
     _hubRepository ??= HubRepository(
-        userAuthServiceIMP: UserAuthFirebaseService.getInstance,
+        userAuthServiceIMP: FirebaseAuthService.getInstance,
         hubServiceIMP: HubService.getInstance,
-        userDatabaseRepositoryIMP: UserRepositoryImpl.getInstance);
+        userDatabaseRepositoryIMP: UserDataRepositoryImpl.getInstance);
     return _hubRepository!;
   }
 
-  final IUserDatabaseRepository userDatabaseRepositoryIMP;
+  final IUserDataRepository userDatabaseRepositoryIMP;
   final IUserAuthService userAuthServiceIMP;
   final IHubService hubServiceIMP;
 
@@ -36,8 +37,11 @@ class HubRepository implements IHubRepository {
   @override
   Future<Communique> postHubCommuniqueToFirebase(String text, dynamic type) async {
     try {
-      String userID = userAuthServiceIMP.currentUser;
-      UserM user = await userDatabaseRepositoryIMP.getUserDetails(userID);
+      String? userID = userAuthServiceIMP.currentIdUser;
+
+      if(userID == null) throw InvalidUserFailure();
+
+      UserM user = await userDatabaseRepositoryIMP.getUserDetailsByID(userID);
       final id = FirebaseFirestore.instance.collection('comunicados').doc().id;
 
       

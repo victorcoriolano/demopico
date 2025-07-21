@@ -34,6 +34,10 @@ class UserDatabaseProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  set setUser(UserM? authUser){
+    _user = authUser;
+  }
+
 
   // Future<void> updateUserBio(String newBio) async {
   //   final success = await AtualizarBioUserUc.getInstance.updateBio(_user!.id!, newBio);

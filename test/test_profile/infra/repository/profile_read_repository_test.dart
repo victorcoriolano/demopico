@@ -5,7 +5,7 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../../mocks/mocks_profile.dart';
 
-class MockUserRepository extends Mock implements IUserDatabaseRepository {}
+class MockUserRepository extends Mock implements IUserDataRepository {}
 
 void main() {
   group("Este group possui todas as operações de read do Profile", () {
@@ -19,7 +19,7 @@ void main() {
     });
 
     test("Este teste deve retornar uma string de nova foto ", () async {
-      when(() => fakeUserRepository.getUserDetails(mockUserProfile.id))
+      when(() => fakeUserRepository.getUserDetailsByID(mockUserProfile.id))
           .thenAnswer((_) async => mockUserProfile);
 
       final result =
@@ -27,42 +27,42 @@ void main() {
 
       expect(result, equals(mockUserProfile.pictureUrl));
 
-      verify(() => fakeUserRepository.getUserDetails(mockUserProfile.id))
+      verify(() => fakeUserRepository.getUserDetailsByID(mockUserProfile.id))
           .called(1);
     });
 
     test("Este teste deve retornar uma string de uma nova bio", () async {
-      when(() => fakeUserRepository.getUserDetails(mockUserProfile.id))
+      when(() => fakeUserRepository.getUserDetailsByID(mockUserProfile.id))
           .thenAnswer((_) async => mockUserProfile);
 
       final result = await fakeProfileReadRepository.getBio(mockUserProfile);
 
       expect(result, equals(mockUserProfile.description));
-      verify(() => fakeUserRepository.getUserDetails(mockUserProfile.id))
+      verify(() => fakeUserRepository.getUserDetailsByID(mockUserProfile.id))
           .called(1);
     });
 
     test("Este teste deve retornar um novo int de seguidor", () async {
-      when(() => fakeUserRepository.getUserDetails(mockUserProfile.id))
+      when(() => fakeUserRepository.getUserDetailsByID(mockUserProfile.id))
           .thenAnswer((_) async => mockUserProfile);
 
       final result =
           await fakeProfileReadRepository.getFollowers(mockUserProfile);
 
       expect(result, equals(mockUserProfile.conexoes));
-      verify(() => fakeUserRepository.getUserDetails(mockUserProfile.id))
+      verify(() => fakeUserRepository.getUserDetailsByID(mockUserProfile.id))
           .called(1);
     });
 
     test("Este teste deve retornar um novo int de contribuições", () async {
-      when(() => fakeUserRepository.getUserDetails(mockUserProfile.id))
+      when(() => fakeUserRepository.getUserDetailsByID(mockUserProfile.id))
           .thenAnswer((_) async => mockUserProfile);
 
       final result =
           await fakeProfileReadRepository.getContributions(mockUserProfile);
 
       expect(result, equals(mockUserProfile.picosAdicionados));
-      verify(() => fakeUserRepository.getUserDetails(mockUserProfile.id))
+      verify(() => fakeUserRepository.getUserDetailsByID(mockUserProfile.id))
           .called(1);
     });
   });

@@ -1,52 +1,42 @@
+import 'package:demopico/features/user/domain/enums/identifiers.dart';
 import 'package:demopico/features/user/domain/enums/sign_methods.dart';
 
-abstract class UserCredentials {
-  SignMethods get signMethods => SignMethods.notDetermined;
-  
-}
 
-class UserCredentialsSignIn implements UserCredentials {
-  final String email;
-  final String password;
+class UserCredentialsSignIn {
+  final Identifiers identifier;
+  String login; // não é final por que pode mudar no caso de logar com o vulgo no qual irá alterar o login em tempo de execução
+  final String senha;
   final SignMethods signMethod;
 
   UserCredentialsSignIn({
-    required this.signMethod, 
-    required this.email,
-    required this.password,
-  });
-  
-  @override
-  SignMethods get signMethods => signMethod;
+    SignMethods? signMethods, 
+    required this.identifier,
+    required this.login,
+    required this.senha,
+  }) : signMethod = signMethods ?? SignMethods.email;
+
+  // método para alterar login no caso de ir logar 
+  void setLogin(String login){
+    this.login = login;
+  }
 }
 
-class UserCredentialsSignInVulgo implements UserCredentials {
-  final String vulgo;
-  final String password;
-  final SignMethods signMethod;
-
-  UserCredentialsSignInVulgo({
-    required this.signMethod,
-    required this.vulgo,
-    required this.password,
-  });
-  
-  @override
-  SignMethods get signMethods => signMethod;
-
-  
-}
 
 class UserCredentialsSignUp {
   final String uid;
   final String nome;
   final bool isColetivo;
-  final UserCredentialsSignIn credentials;
+  final String email;
+  final SignMethods signMethod;
+  final String password;
+  
 
   UserCredentialsSignUp({
+    required this.password,
+    required this.signMethod,
     required this.uid,
     required this.nome,
     required this.isColetivo,
-    required this.credentials,
+    required this.email,
   });
 }

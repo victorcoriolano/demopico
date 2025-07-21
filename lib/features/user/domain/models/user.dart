@@ -74,9 +74,9 @@ class UserM {
     return UserM(
       myIdPosts: [],
       favoritesIdPicos: [],
-      signMethod: authUser.credentials.signMethods,
+      signMethod: authUser.signMethod,
       name: authUser.nome,
-      email: authUser.credentials.email,
+      email: authUser.email,
       description: 'Edite para atualizar sua bio',
       id: authUser.uid,
       picosAdicionados: 0,

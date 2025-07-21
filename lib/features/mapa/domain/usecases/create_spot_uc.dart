@@ -30,7 +30,7 @@ class CreateSpotUc {
       debugPrint("Falha conhecida capturada: $e");
       rethrow;
     } catch (e, st) {
-      throw UnknownError("Erro inesperado criar piquerson: $e $st");
+      throw UnknownError(message: "Erro inesperado criar piquerson: $e $st");
     }
   }
 }

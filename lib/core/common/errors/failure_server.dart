@@ -7,7 +7,8 @@ abstract class Failure implements Exception {
   final StackTrace? stackTrace;
   final Exception? originalException;
 
-  Failure(this.message,{
+  Failure({
+    required this.message,
     this.code,
     this.originalException,
     this.stackTrace,

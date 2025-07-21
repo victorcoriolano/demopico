@@ -1,5 +1,5 @@
+import 'package:demopico/core/app/auth_wrapper.dart';
 import 'package:demopico/core/app/home_page.dart';
-import 'package:demopico/features/profile/presentation/pages/profile_page.dart';
 import 'package:demopico/features/profile/presentation/provider/post_provider.dart';
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/media_preview_list.dart';
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/media_preview_video.dart';
@@ -178,7 +178,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                         'Postagem criada com sucesso!',
                         snackPosition: SnackPosition.TOP,
                       );
-                      Get.offAll(() => const ProfilePage());
+                      Get.offAll(() => const AuthWrapper());
                     }catch (e){
                       Get.snackbar(
                         'Erro',
