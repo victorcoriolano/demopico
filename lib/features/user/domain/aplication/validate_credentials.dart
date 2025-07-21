@@ -43,8 +43,8 @@ class ValidateUserCredentials {
       if (!isValidVulgo) throw VulgoAlreadyExistsFailure();
       if(!isValidEmail) throw EmailAlreadyInUseFailure();
       return credentials;
-    } on Failure catch (e, st) {
-      debugPrint("Erro ao validar credenciais: $e, $st");
+    } on Failure catch (e) {
+      debugPrint("Erro ao validar credenciais: $e");
       rethrow;
     }
   }
