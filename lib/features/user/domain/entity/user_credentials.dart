@@ -23,7 +23,7 @@ class UserCredentialsSignIn {
 
 
 class UserCredentialsSignUp {
-  final String uid;
+  String uid;
   final String nome;
   final bool isColetivo;
   final String email;
@@ -33,10 +33,14 @@ class UserCredentialsSignUp {
 
   UserCredentialsSignUp({
     required this.password,
-    required this.signMethod,
+    SignMethods? signMethods, 
     required this.uid,
     required this.nome,
     required this.isColetivo,
     required this.email,
-  });
+  }): signMethod = signMethods ?? SignMethods.email;
+
+  set id(String value){
+    uid = value;
+  }
 }
