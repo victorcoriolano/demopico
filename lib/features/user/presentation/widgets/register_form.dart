@@ -1,5 +1,6 @@
 
 
+import 'package:demopico/features/user/domain/entity/user_credentials.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
 import 'package:demopico/features/user/presentation/widgets/tipo_conta_dropdown.dart';
@@ -49,7 +50,7 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
           return Center(child: CircularProgressIndicator(),);
         }
         return Form(
-          autovalidateMode: AutovalidateMode.onUnfocus,
+          autovalidateMode: AutovalidateMode.disabled,
             key: _formkey,
             child: SingleChildScrollView(
               child: Padding(
@@ -85,8 +86,8 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                         () => isNotEmpty(value),
                         () => isValidVulgo(value),
                       ]),
+                      onChanged: (value) => provider.errorMessageVulgo == null,
                     ),
-        
                     const SizedBox(
                       height: 20,
                     ),
@@ -102,7 +103,8 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                           () => isValidEmail(value),
                         ]);
 
-                      }
+                      },
+                      onChanged: (value) => provider.errorMessageEmail == null,
                     ),
         
                     const SizedBox(
@@ -153,7 +155,13 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                     ElevatedButton(
                       onPressed: () async {
                         if(_formkey.currentState!.validate()){
-                          
+                          final credentialsSignUp = UserCredentialsSignUp(
+                            password: _senhaController.text.trim(), 
+                            uid: "", 
+                            nome: _vulgoCadastro.text.trim(), 
+                            isColetivo: isColetivo,
+                            email: _emailController.text.trim());
+                          await provider.signUp(credentialsSignUp);
                         }
                       },
                       style: buttonStyle(),
