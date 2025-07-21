@@ -95,7 +95,11 @@ class UserFirebaseDataSource implements IUserDataSource<FirebaseDTO> {
         throw DuplicateFailure(
             message: "Dados duplicados: $field como esse $value");
       }
-      return query.docs.first.exists;
+      if (query.docs.isEmpty){
+        return true;
+      }// Dados não existem então pode criar 
+
+      return false;
     } on FirebaseException catch (firebaseException) {
       throw FirebaseErrorsMapper.map(firebaseException);
     } on Exception catch (exception) {
@@ -116,13 +120,17 @@ class UserFirebaseDataSource implements IUserDataSource<FirebaseDTO> {
       if (query.docs.length > 1) {
         debugPrint("Dados duplicados encontrados na base");
       }
-      return query.docs.first.exists;
+      if(query.docs.isEmpty){
+        return false;
+      }
+      
+      return true;
     } on FirebaseException catch (firebaseException) {
       throw FirebaseErrorsMapper.map(firebaseException);
     } on Exception catch (exception, st) {
       throw UnknownFailure(originalException: exception, stackTrace: st);
-    } catch (unknown) {
-      throw UnknownFailure(unknownError: unknown);
+    } catch (unknown, st) {
+      throw UnknownFailure(unknownError: unknown, stackTrace: st);
     }
   }
 }
