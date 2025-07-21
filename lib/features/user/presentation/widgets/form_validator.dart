@@ -14,6 +14,11 @@ mixin Validators {
     return null;
   }
 
+  String? isValidVulgo(String? vulgo){
+    if(vulgo!.length < 3) return "Vulgo muito curto";
+    return null;
+  }
+
   String? combineValidators(List<String? Function()> validators){
     for(final val in validators){
       final validar = val();
