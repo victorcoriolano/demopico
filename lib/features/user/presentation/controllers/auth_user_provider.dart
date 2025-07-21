@@ -98,6 +98,9 @@ class AuthUserProvider  extends ChangeNotifier {
 
 
   Future<void> signUp(UserCredentialsSignUp credentials) async {
+    errorMessageEmail = null;
+    errorMessageVulgo = null;
+    genericError = null;
     isLoading =true;
     notifyListeners();
     try{
@@ -110,18 +113,22 @@ class AuthUserProvider  extends ChangeNotifier {
       errorMessageVulgo = e.message;
       isLoading = false;
       notifyListeners();
+      getError(e);
     }on EmailAlreadyInUseFailure catch (e) {
       errorMessageEmail = e.message;
       isLoading = false;
       notifyListeners();
+      getError(e);
     } on Failure catch (e) {
       genericError = e.message;
       isLoading = false;
       notifyListeners();
+      getError(e);
     } catch (e) {
       genericError = e.toString();
       isLoading = false;
       notifyListeners();
+      getError(UnknownFailure(unknownError: e));
     }
 
   }
