@@ -1,4 +1,6 @@
 import 'package:demopico/core/common/errors/domain_failures.dart';
+import 'package:demopico/core/common/errors/failure_server.dart';
+import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/user/domain/entity/user_credentials.dart';
 import 'package:demopico/features/user/domain/enums/identifiers.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_database_repository.dart';
@@ -31,6 +33,19 @@ class ValidateUserCredentials {
     } else {
       debugPrint("Credenciais inválidas");
       throw InvalidCredentialsFailure();
+    }
+  }
+
+  Future<UserCredentialsSignUp> validateForSignUp(UserCredentialsSignUp credentials) async {
+    try {
+      final isValidEmail = await repository.validateDataUserBefore(data: credentials.email, field: "email");
+      final isValidVulgo = await repository.validateDataUserBefore(data: credentials.nome, field: "name");
+      if (!isValidVulgo) throw VulgoAlreadyExistsFailure();
+      if(!isValidEmail) throw EmailAlreadyInUseFailure();
+      return credentials;
+    } on Failure catch (e, st) {
+      debugPrint("Erro ao validar credenciais: $e, $st");
+      rethrow;
     }
   }
 }
