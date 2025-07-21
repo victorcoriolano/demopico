@@ -1,3 +1,4 @@
+import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/user/domain/aplication/validate_credentials.dart';
@@ -8,6 +9,7 @@ import 'package:demopico/features/user/domain/usecases/criar_conta_uc.dart';
 import 'package:demopico/features/user/domain/usecases/login_uc.dart';
 import 'package:demopico/features/user/domain/usecases/logout_uc.dart';
 import 'package:demopico/features/user/domain/usecases/pegar_id_usuario.dart';
+import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -59,13 +61,13 @@ class AuthUserProvider  extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<UserM> login(UserCredentialsSignIn credentials) async {
+  Future<void> login(UserCredentialsSignIn credentials) async {
     
     try {
       final validatedCredentials = await _validateUserCredentials.validateForLogin(credentials);
       final user = await loginEmailUc.logar(validatedCredentials); 
       setIdUser=user.id;
-      return user;
+      UserDatabaseProvider.getInstance.setUser=user;
     }on Failure catch (e) {
       getError(e);
       rethrow;
@@ -89,8 +91,26 @@ class AuthUserProvider  extends ChangeNotifier {
     }
   }
 
+  String? errorMessageEmail;
+  String? errorMessageVulgo;
+  String? genericError;
+
+
   Future<void> signUp(UserCredentialsSignUp credentials) async {
-     await criarContaUc.criar(credentials);
+    try{
+      final validCredentials = await _validateUserCredentials.validateForSignUp(credentials);
+      final newUser = await criarContaUc.criar(validCredentials);
+      UserDatabaseProvider.getInstance.setUser=newUser;
+    }on VulgoAlreadyExistsFailure catch (e){
+      errorMessageVulgo = e.message;
+    }on EmailAlreadyInUseFailure catch (e) {
+      errorMessageEmail = e.message;
+    } on Failure catch (e) {
+      genericError = e.message;
+    } catch (e) {
+      genericError = e.toString();
+    }
+
   }
 
   String? get currentIdUser {
