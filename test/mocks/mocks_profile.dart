@@ -2,6 +2,7 @@ import 'package:demopico/features/user/domain/enums/sign_methods.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 
 final mockUserProfile = UserM(
+  idMySpots: [],
   name: 'artu',
   description: 'marretando',
   id: '1',
@@ -20,6 +21,7 @@ final mockUserProfile = UserM(
 );
 
   final testeProfileErrado = UserM(
+      idMySpots: [],
    name: 'artu' ,
    description: null,
    id: "ID",
