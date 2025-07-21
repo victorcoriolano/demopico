@@ -45,6 +45,9 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
   Widget build(BuildContext context) {
     return Consumer<AuthUserProvider>(
       builder: (context, provider, child) {
+        if (provider.isLoading){
+          return Center(child: CircularProgressIndicator(),);
+        }
         return Form(
           autovalidateMode: AutovalidateMode.onUnfocus,
             key: _formkey,
@@ -78,7 +81,10 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                       cursorColor: Colors.white,
                       style: const TextStyle(color: Colors.white),
                       controller: _vulgoCadastro,
-                      validator: isNotEmpty,
+                      validator: (value) => provider.errorMessageVulgo ?? combineValidators([
+                        () => isNotEmpty(value),
+                        () => isValidVulgo(value),
+                      ]),
                     ),
         
                     const SizedBox(
@@ -90,12 +96,12 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                       cursorColor: Colors.white,
                       style: const TextStyle(color: Colors.white),
                       controller: _emailController,
-                      validator: (value) { 
-                        final stringError = combineValidators([
+                      validator: (value) {
+                        return provider.errorMessageEmail ?? combineValidators([
                           () => isNotEmpty(value),
                           () => isValidEmail(value),
                         ]);
-                        return stringError;
+
                       }
                     ),
         
