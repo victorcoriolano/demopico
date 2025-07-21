@@ -1,6 +1,5 @@
 import 'package:demopico/features/user/domain/entity/user_credentials.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
-import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:demopico/features/user/presentation/pages/register_page.dart';
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
 import 'package:demopico/features/user/presentation/widgets/swith_type_login.dart';
@@ -113,16 +112,14 @@ class _LoginFormState extends State<LoginForm> with Validators {
                   onPressed: () async {
                     if (formKey.currentState!.validate()) {
                       final authProvider = context.read<AuthUserProvider>();
-                      final dataUserProvider =
-                          context.read<UserDatabaseProvider>();
 
                       final credential = UserCredentialsSignIn(
                           identifier: authProvider.identifier,
                           login: _loginController.text.trim(),
                           senha: _senhaController.text.trim());
 
-                      final user = await authProvider.login(credential);
-                      dataUserProvider.setUser = user;
+                       await authProvider.login(credential);
+                      
                     }
                   },
                   style: buttonStyle(),
