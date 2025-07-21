@@ -4,7 +4,6 @@ import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/user/domain/aplication/validate_credentials.dart';
 import 'package:demopico/features/user/domain/entity/user_credentials.dart';
 import 'package:demopico/features/user/domain/enums/identifiers.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/domain/usecases/criar_conta_uc.dart';
 import 'package:demopico/features/user/domain/usecases/login_uc.dart';
 import 'package:demopico/features/user/domain/usecases/logout_uc.dart';
@@ -44,6 +43,12 @@ class AuthUserProvider  extends ChangeNotifier {
   Identifiers identifier = Identifiers.email;
   String? _idUser;
 
+  bool isLoading = false;
+
+  String? errorMessageEmail;
+  String? errorMessageVulgo;
+  String? genericError;
+
   set setIdUser(String? id){
     _idUser = id;
   }
@@ -70,10 +75,8 @@ class AuthUserProvider  extends ChangeNotifier {
       UserDatabaseProvider.getInstance.setUser=user;
     }on Failure catch (e) {
       getError(e);
-      rethrow;
     }catch (e){
       getError(UnknownFailure(unknownError: e));
-      rethrow;
     }
   }
 
@@ -91,24 +94,34 @@ class AuthUserProvider  extends ChangeNotifier {
     }
   }
 
-  String? errorMessageEmail;
-  String? errorMessageVulgo;
-  String? genericError;
+
 
 
   Future<void> signUp(UserCredentialsSignUp credentials) async {
+    isLoading =true;
+    notifyListeners();
     try{
       final validCredentials = await _validateUserCredentials.validateForSignUp(credentials);
       final newUser = await criarContaUc.criar(validCredentials);
       UserDatabaseProvider.getInstance.setUser=newUser;
+      isLoading = false;
+      notifyListeners();
     }on VulgoAlreadyExistsFailure catch (e){
       errorMessageVulgo = e.message;
+      isLoading = false;
+      notifyListeners();
     }on EmailAlreadyInUseFailure catch (e) {
       errorMessageEmail = e.message;
+      isLoading = false;
+      notifyListeners();
     } on Failure catch (e) {
       genericError = e.message;
+      isLoading = false;
+      notifyListeners();
     } catch (e) {
       genericError = e.toString();
+      isLoading = false;
+      notifyListeners();
     }
 
   }
