@@ -46,10 +46,12 @@ class _ProfilePageState extends State<ProfilePage>
           content: const Text('User not found.'),
           actions: [
             TextButton(
-              onPressed: () {
+              onPressed: () async {
+                final provider = context.read<AuthUserProvider>();
+                await provider.logout();
                 Get.to(() => const HomePage());
               },
-              child: const Text('OK'),
+              child: const Text('SAIR E DESLOGAR'),
             )
           ],
         ),
@@ -143,7 +145,7 @@ class _ProfilePageState extends State<ProfilePage>
     await providerDatabase.retrieveUserProfileData(uid);
 
     if (providerDatabase.user == null) {
-      debugPrint('User not found');
+      debugPrint('User not found even with id');
       setState(() {
         _isLoading = false;
       });
@@ -166,12 +168,14 @@ class _ProfilePageState extends State<ProfilePage>
     if(_isLoading){
       return Center(child: CircularProgressIndicator(),);
     }
-
+    if (thisUser == null){
+      return SizedBox.shrink();
+    }
     return Scaffold(
       appBar:  AppBar(
       backgroundColor: kAlmostWhite,
       centerTitle: true,
-      title: Text(thisUser?.name ?? "", style: TextStyle(
+      title: Text(thisUser.name, style: TextStyle(
         color: kBlack,
         fontSize: 22,
         fontWeight: FontWeight.bold),
@@ -192,7 +196,7 @@ class _ProfilePageState extends State<ProfilePage>
         ),
       ],
       ),
-      drawer: MyCustomDrawer(user: thisUser!),
+      drawer: MyCustomDrawer(user: thisUser),
       backgroundColor: kAlmostWhite,
       body: Builder(
         builder: (context) {
