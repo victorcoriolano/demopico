@@ -1,3 +1,4 @@
+import 'package:demopico/core/app/auth_wrapper.dart';
 import 'package:demopico/features/user/domain/entity/user_credentials.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/features/user/presentation/pages/register_page.dart';
@@ -119,6 +120,8 @@ class _LoginFormState extends State<LoginForm> with Validators {
                           senha: _senhaController.text.trim());
 
                        await authProvider.login(credential);
+                       debugPrint("UI - Conta criada com sucesso - indo pra tela de user");
+                       Get.to((_) => AuthWrapper());
                       
                     }
                   },
