@@ -92,14 +92,14 @@ class UserFirebaseDataSource implements IUserDataSource<FirebaseDTO> {
           .limit(2)
           .get();
       if (query.docs.length > 1) {
-        throw DuplicateFailure(
-            message: "Dados duplicados: $field como esse $value");
+        debugPrint("DADOS DUPLICADOS NA BASE");
+        //TODO: IMPLEMENTAR AVISO DE DADOS DUPLICADOS NA BASE 
       }
-      if (query.docs.isEmpty){
-        return true;
+      if (query.docs.isNotEmpty){
+        debugPrint("Dados inválidos");
+        return false;
       }// Dados não existem então pode criar 
-
-      return false;
+      return true;
     } on FirebaseException catch (firebaseException) {
       throw FirebaseErrorsMapper.map(firebaseException);
     } on Exception catch (exception) {
