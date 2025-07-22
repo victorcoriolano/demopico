@@ -44,40 +44,37 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AuthUserProvider>(
-      builder: (context, provider, child) {
-        if (provider.isLoading){
-          return Center(child: CircularProgressIndicator(),);
-        }
-        return Form(
-          autovalidateMode: AutovalidateMode.disabled,
-            key: _formkey,
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(70.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(
-                        height: 200,
-                        width: 250,
-                        child: Image(
-                          image: AssetImage('assets/images/skatepico-icon.png'),
-                        )),
-                    const Text(
-                      "Bem vindo ao PICO!",
-                      style: TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Colors.white,
-                        fontSize: 25,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 40,
-                    ),
-        
-                    // vulgo
-                    TextFormField(
+    return Form(
+      autovalidateMode: AutovalidateMode.disabled,
+        key: _formkey,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(70.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(
+                    height: 200,
+                    width: 250,
+                    child: Image(
+                      image: AssetImage('assets/images/skatepico-icon.png'),
+                    )),
+                const Text(
+                  "Bem vindo ao PICO!",
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    color: Colors.white,
+                    fontSize: 25,
+                  ),
+                ),
+                const SizedBox(
+                  height: 40,
+                ),
+    
+                // vulgo
+                Consumer<AuthUserProvider>(
+                  builder: (context, provider, child) {
+                    return TextFormField(
                       decoration: customTextField("Vulgo"),
                       cursorColor: Colors.white,
                       style: const TextStyle(color: Colors.white),
@@ -86,13 +83,17 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                         () => isNotEmpty(value),
                         () => isValidVulgo(value),
                       ]),
-                      onChanged: (value) => provider.errorMessageVulgo == null,
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    //email
-                    TextFormField(
+                      onChanged: (value) => provider.clearMessageErrors(),
+                    );
+                  }
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                //email
+                Consumer<AuthUserProvider>(
+                  builder: (context, provider, child) {
+                    return TextFormField(
                       decoration: customTextField("Email"),
                       cursorColor: Colors.white,
                       style: const TextStyle(color: Colors.white),
@@ -102,59 +103,63 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                           () => isNotEmpty(value),
                           () => isValidEmail(value),
                         ]);
-
+                        
                       },
-                      onChanged: (value) => provider.errorMessageEmail == null,
-                    ),
-        
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    //senha
-                    TextFormField(
-                      decoration: customTextField("Senha"),
-                      cursorColor: Colors.white,
-                      style: const TextStyle(color: Colors.white),
-                      obscureText: true,
-                      controller: _senhaController,
-                      validator: (value) => combineValidators([
-                        () => isNotEmpty(value),
-                        () => isValidPassword(value),
-                      ]),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-        
-                    // confirmar senha
-                    TextFormField(
-                      decoration: customTextField("Confirmar senha "),
-                      cursorColor: Colors.white,
-                      style: const TextStyle(color: Colors.white),
-                      obscureText: true,
-                      controller: _senhaController2,
-                      validator: (value) => combineValidators([
-                        () => isNotEmpty(value),
-                        () => checkPassword(_senhaController.text, value),
-                      ]),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    //tipo de onta
-                    TipoContaDropdownButton(
-                        onChanged: (String newValue) =>
-                            _onTipoContaChanged(newValue),
-                        validator: (value) => isNotEmpty(value)),
-        
-                    const SizedBox(
-                      height: 12,
-                    ),
-        
-                    // button (cadastrar)
-                    ElevatedButton(
-                      onPressed: () async {
-                        if(_formkey.currentState!.validate()){
+                      onChanged: (value) =>  provider.clearMessageErrors(),
+                    );
+                  }
+                ),
+    
+                const SizedBox(
+                  height: 20,
+                ),
+                //senha
+                TextFormField(
+                  decoration: customTextField("Senha"),
+                  cursorColor: Colors.white,
+                  style: const TextStyle(color: Colors.white),
+                  obscureText: true,
+                  controller: _senhaController,
+                  validator: (value) => combineValidators([
+                    () => isNotEmpty(value),
+                    () => isValidPassword(value),
+                  ]),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+    
+                // confirmar senha
+                TextFormField(
+                  decoration: customTextField("Confirmar senha "),
+                  cursorColor: Colors.white,
+                  style: const TextStyle(color: Colors.white),
+                  obscureText: true,
+                  controller: _senhaController2,
+                  validator: (value) => combineValidators([
+                    () => isNotEmpty(value),
+                    () => checkPassword(_senhaController.text, value),
+                  ]),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                //tipo de onta
+                TipoContaDropdownButton(
+                    onChanged: (String newValue) =>
+                        _onTipoContaChanged(newValue),
+                    validator: (value) => isNotEmpty(value)),
+    
+                const SizedBox(
+                  height: 12,
+                ),
+    
+                // button (cadastrar)
+                Consumer<AuthUserProvider>(
+                  builder: (context, provider, child) {
+                    return ElevatedButton(
+                      onPressed:  provider.isLoading ? null : () async {
+                        if(_formkey.currentState?.validate() ?? false){
                           final credentialsSignUp = UserCredentialsSignUp(
                             password: _senhaController.text.trim(), 
                             uid: "", 
@@ -162,19 +167,20 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                             isColetivo: isColetivo,
                             email: _emailController.text.trim());
                           await provider.signUp(credentialsSignUp);
+                          _formkey.currentState?.validate();  /// validando formulário para mostrar a 
+                                                              ///mensagem de erro no campo específico do erro
                         }
                       },
                       style: buttonStyle(),
-                      child: const Text(
-                        "Cadastrar",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ],
+                      child: provider.isLoading
+                                ? const CircularProgressIndicator()
+                                : const Text("Cadastrar"),
+                    );
+                  }
                 ),
-              ),
-            ));
-      }
-    );
+              ],
+            ),
+          ),
+        ));
   }
 }
