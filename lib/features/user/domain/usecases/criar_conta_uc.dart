@@ -23,9 +23,9 @@ class CriarContaUc {
       {required this.userAuthRepositoryIMP});
 
   Future<UserM> criar(UserCredentialsSignUp credentials) async {
-     if (credentials.password.length <= 7) throw InvalidPasswordFailure();
-      if (!credentials.email.contains('@'))throw InvalidEmailFailure();
-      if(credentials.nome.length <= 2) throw InvalidVulgoFailure();
+    if (credentials.password.length <= 7) throw InvalidPasswordFailure();
+    if (!credentials.email.contains('@'))throw InvalidEmailFailure();
+    if(credentials.nome.length <= 2) throw InvalidVulgoFailure();
     try {
 
       return await userAuthRepositoryIMP.signUp(credentials);
