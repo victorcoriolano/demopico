@@ -36,16 +36,37 @@ class ValidateUserCredentials {
     }
   }
 
-  Future<UserCredentialsSignUp> validateForSignUp(UserCredentialsSignUp credentials) async {
-    try {
-      final isValidEmail = await repository.validateDataUserBefore(data: credentials.email, field: "email");
-      final isValidVulgo = await repository.validateDataUserBefore(data: credentials.nome, field: "name");
-      if (!isValidVulgo) throw VulgoAlreadyExistsFailure();
-      if(!isValidEmail) throw EmailAlreadyInUseFailure();
-      return credentials;
-    } on Failure catch (e) {
-      debugPrint("Erro ao validar credenciais: $e");
-      rethrow;
-    }
+ Future<UserCredentialsSignUp> validateForSignUp(UserCredentialsSignUp credentials) async {
+  try {
+
+    
+    final isValidEmail = repository.validateDataUserBefore(
+      data: credentials.email, 
+      field: "email",
+    );
+
+    final isValidVulgo = repository.validateDataUserBefore(
+      data: credentials.nome, 
+      field: "name",
+    );
+    
+
+    if (isValidEmail == false) throw EmailAlreadyInUseFailure();
+    if (isValidVulgo == false) throw VulgoAlreadyExistsFailure() ;
+
+    debugPrint("Credenciais válidas");
+    return credentials;
+  } on EmailAlreadyInUseFailure catch (e) {
+    debugPrint("Erro ao validar: email já está em uso - $e");
+    rethrow;
+  } on VulgoAlreadyExistsFailure catch (e) {
+    debugPrint("Erro ao validar: vulgo já existente - $e");
+    rethrow;
+  } on Failure catch (e) {
+    // Tratamento genérico para outras falhas conhecidas
+    debugPrint("Erro genérico ao validar credenciais: $e");
+    rethrow;
   }
+}
+
 }
