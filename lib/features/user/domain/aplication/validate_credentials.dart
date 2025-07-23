@@ -1,5 +1,4 @@
 import 'package:demopico/core/common/errors/domain_failures.dart';
-import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/user/domain/entity/user_credentials.dart';
 import 'package:demopico/features/user/domain/enums/identifiers.dart';
@@ -19,12 +18,14 @@ class ValidateUserCredentials {
       UserCredentialsSignIn credentials) async {
     
     bool isValid = false;
-    if (credentials.identifier == Identifiers.vulgo) {
-      isValid = await repository.validateDataUserAfter(
-          data: credentials.login, field: "name");
-    } else {
-      isValid = await repository.validateDataUserAfter(
+    switch (credentials.identifier){
+      case (Identifiers.email):
+        isValid = await repository.validateDataUserAfter(
           data: credentials.login, field: "email");
+
+      case (Identifiers.vulgo):
+        isValid = await repository.validateDataUserAfter(
+          data: credentials.login, field: "name");    
     }
 
     if (isValid) {
@@ -39,20 +40,31 @@ class ValidateUserCredentials {
  Future<UserCredentialsSignUp> validateForSignUp(UserCredentialsSignUp credentials) async {
   try {
 
-    
-    final isValidEmail = repository.validateDataUserBefore(
+    debugPrint("Validando email");
+
+    final isValidEmail = await repository.validateDataUserBefore(
       data: credentials.email, 
       field: "email",
     );
+    debugPrint("Email valido: $isValidEmail");
 
-    final isValidVulgo = repository.validateDataUserBefore(
+    debugPrint("Validando vulgo");
+    final isValidVulgo = await  repository.validateDataUserBefore(
       data: credentials.nome, 
       field: "name",
     );
+    debugPrint("Vulgo válido: $isValidVulgo");
     
 
-    if (isValidEmail == false) throw EmailAlreadyInUseFailure();
-    if (isValidVulgo == false) throw VulgoAlreadyExistsFailure() ;
+    if (!isValidEmail) {
+      debugPrint("Lançando exception para email inválido");
+      throw EmailAlreadyInUseFailure();
+    }
+
+    if (!isValidVulgo) {
+      debugPrint("Lançando exception para vulgo inválido");
+      throw VulgoAlreadyExistsFailure() ;
+    }
 
     debugPrint("Credenciais válidas");
     return credentials;
@@ -62,10 +74,10 @@ class ValidateUserCredentials {
   } on VulgoAlreadyExistsFailure catch (e) {
     debugPrint("Erro ao validar: vulgo já existente - $e");
     rethrow;
-  } on Failure catch (e) {
+  } catch (e,st) {
     // Tratamento genérico para outras falhas conhecidas
     debugPrint("Erro genérico ao validar credenciais: $e");
-    rethrow;
+    throw UnknownFailure(unknownError: e, stackTrace: st);
   }
 }
 
