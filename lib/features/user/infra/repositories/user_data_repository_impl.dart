@@ -49,11 +49,11 @@ class UserDataRepositoryImpl implements IUserDataRepository {
   }
   
   @override
-  Future<bool> validateDataUserAfter({required  String data, required  String field}) =>
-    userFirebaseService.validateDataAfter(field, data);
+  Future<bool> validateDataUserAfter({required  String data, required  String field}) async =>
+    await userFirebaseService.validateDataAfter(field, data);
   
   @override
-  Future<bool> validateDataUserBefore({required String data, required String field}) =>
-    userFirebaseService.validateDataAfter(field, data);
+  Future<bool> validateDataUserBefore({required String data, required String field}) async =>
+    await userFirebaseService.validateDataBefore(field, data);
 
 }
