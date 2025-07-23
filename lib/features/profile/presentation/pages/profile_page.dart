@@ -38,12 +38,12 @@ class _ProfilePageState extends State<ProfilePage>
   final TextEditingController bioController = TextEditingController();
   late final TabController _tabController;
 
-  void showAlertError(context){
+  void showAlertError(context, String messageError){
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Error'),
-          content: const Text('User not found.'),
+          content: Text('Algum erro aconteceu: $messageError'),
           actions: [
             TextButton(
               onPressed: () async {
@@ -138,7 +138,7 @@ class _ProfilePageState extends State<ProfilePage>
       setState(() {
         _isLoading = false;
       });
-      showAlertError(context);
+      showAlertError(context, "Não foi possível encontrar o id do user!\n Tente entrar novamente");
       return;
     }
 
@@ -150,7 +150,7 @@ class _ProfilePageState extends State<ProfilePage>
         _isLoading = false;
       });
       if (mounted) {
-        showAlertError(context);
+        showAlertError(context, "Dados não encontrados na base");
       }
       return;
     } else {
