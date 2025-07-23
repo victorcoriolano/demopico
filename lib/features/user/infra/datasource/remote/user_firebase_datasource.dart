@@ -86,11 +86,14 @@ class UserFirebaseDataSource implements IUserDataSource<FirebaseDTO> {
   @override
   Future<bool> validateDataBefore(String field, String value) async {
     try {
+      debugPrint("VALIDANDO DADOS");
       final query = await _dataSource.dataSource
           .collection("users")
           .where(field, isEqualTo: value)
           .limit(2)
           .get();
+      debugPrint("Lista atual: ${query.docs}");
+      
       if (query.docs.length > 1) {
         debugPrint("DADOS DUPLICADOS NA BASE");
         //TODO: IMPLEMENTAR AVISO DE DADOS DUPLICADOS NA BASE 
