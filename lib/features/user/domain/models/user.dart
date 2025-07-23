@@ -96,8 +96,8 @@ class UserM {
 
   factory UserM.fromJson(Map<String,dynamic> json, String id) {
     return UserM(
-      idMySpots: List.from(json['mySpots'] ?? []),
-      myIdPosts: json['myPosts'] ?? [],
+      idMySpots: List<String>.from(json['mySpots'] ?? []),
+      myIdPosts: List<String>.from(json['myPosts'] ?? []),
       favoritesIdPicos: json['favoritesSpots'] ?? [],
       name: json['name'] ?? "",
       description: json['description'] ?? "",
