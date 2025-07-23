@@ -55,17 +55,16 @@ class ValidateUserCredentials {
     );
     debugPrint("Vulgo válido: $isValidVulgo");
     
-
-    if (!isValidEmail) {
-      debugPrint("Lançando exception para email inválido");
-      throw EmailAlreadyInUseFailure();
-    }
-
     if (!isValidVulgo) {
       debugPrint("Lançando exception para vulgo inválido");
       throw VulgoAlreadyExistsFailure() ;
     }
 
+    if (!isValidEmail) {
+      debugPrint("Lançando exception para email inválido");
+      throw EmailAlreadyInUseFailure();
+    }
+    
     debugPrint("Credenciais válidas");
     return credentials;
   } on EmailAlreadyInUseFailure catch (e) {
