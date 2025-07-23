@@ -1,5 +1,6 @@
 
 
+import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/features/user/domain/entity/user_credentials.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
@@ -173,7 +174,7 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                       },
                       style: buttonStyle(),
                       child: provider.isLoading
-                                ? const CircularProgressIndicator()
+                                ? const Center(child: CircularProgressIndicator(color: kWhite,),)
                                 : const Text("Cadastrar"),
                     );
                   }
