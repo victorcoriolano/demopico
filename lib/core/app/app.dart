@@ -1,9 +1,9 @@
+import 'package:demopico/core/app/auth_wrapper.dart';
 import 'package:demopico/core/app/home_page.dart';
 import 'package:demopico/core/app/providers/providers.dart';
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
-import 'package:demopico/features/profile/presentation/pages/user_controller_page.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,7 +27,7 @@ class MyAppWidget extends StatelessWidget {
           '/': (context) => const HomePage(),
           '/HubPage': (context) => const HubPage(),
           '/MapPage': (context) => const MapPage(),
-          '/UserPage': (context) => const UserControllerPage(),
+          '/AuthWrapper': (context) => const AuthWrapper(),
         },
       ),
     );
