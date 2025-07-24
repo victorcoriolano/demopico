@@ -24,6 +24,7 @@ class UserM {
   List<Post>? myPostsEntities;
   List<String> myIdPosts;
   List<String> favoritesIdPicos;
+  List<String> idMySpots;
 
   UserM copyWith({
     List<String>? myIdPosts,
@@ -42,9 +43,11 @@ class UserM {
     int? conexoes,
     int? picosAdicionados,
     int? picosSalvos,
-    String? backgroundPicture
+    String? backgroundPicture,
+    List<String>? idMySpots
   }) {
     return UserM(
+      idMySpots: idMySpots ?? this.idMySpots,
       favoritePicosEntities: favoriteSpots ?? favoritePicosEntities,
       myPostsEntities: myPosts ?? myPostsEntities,
       myIdPosts: myIdPosts ?? this.myIdPosts,
@@ -72,6 +75,7 @@ class UserM {
     String todayDate =
         '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}';
     return UserM(
+      idMySpots: [],
       myIdPosts: [],
       favoritesIdPicos: [],
       signMethod: authUser.signMethod,
@@ -92,11 +96,12 @@ class UserM {
 
   factory UserM.fromJson(Map<String,dynamic> json, String id) {
     return UserM(
-      myIdPosts: json['myPosts'] ?? [],
+      idMySpots: List<String>.from(json['mySpots'] ?? []),
+      myIdPosts: List<String>.from(json['myPosts'] ?? []),
       favoritesIdPicos: json['favoritesSpots'] ?? [],
       name: json['name'] ?? "",
       description: json['description'] ?? "",
-      id: json['id'] ?? "",
+      id: id,
       location: json['location'] ?? '',
       picosSalvos: json['picosSalvos'] ?? 0,
       pictureUrl: json['pictureUrl'] ?? '',
@@ -125,8 +130,9 @@ class UserM {
     data['isColetivo'] = isColetivo;
     data['signMethod'] = signMethod.name;
     data['email'] = email;
-    data['favoriteSpot'] = favoritesIdPicos;
+    data['favoriteSpots'] = favoritesIdPicos;
     data['myPosts'] = myIdPosts;
+    data['mySpots'] = idMySpots;
     return data;
   }
 
@@ -194,6 +200,7 @@ class UserM {
       required this.picosAdicionados,
       required this.picosSalvos,
       required this.email, 
-      required this.backgroundPicture});
+      required this.backgroundPicture,
+      required this.idMySpots});
 
 }

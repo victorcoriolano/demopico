@@ -84,21 +84,21 @@ class UserFirebaseDataSource implements IUserDataSource<FirebaseDTO> {
   }
 
   @override
-  Future<bool> validateDataBefore(String field, String value) async {
+  Future<bool> validateExistsData(String field, String value) async {
     try {
+      debugPrint("VALIDANDO DADOS");
       final query = await _dataSource.dataSource
           .collection("users")
           .where(field, isEqualTo: value)
           .limit(2)
           .get();
-      if (query.docs.length > 1) {
-        throw DuplicateFailure(
-            message: "Dados duplicados: $field como esse $value");
-      }
-      if (query.docs.isEmpty){
+      debugPrint("Lista atual: ${query.docs}");
+      
+      if (query.docs.isNotEmpty){
+        debugPrint("Dados existem");
         return true;
-      }// Dados não existem então pode criar 
-
+      }
+      // Dados não existem 
       return false;
     } on FirebaseException catch (firebaseException) {
       throw FirebaseErrorsMapper.map(firebaseException);
@@ -109,28 +109,4 @@ class UserFirebaseDataSource implements IUserDataSource<FirebaseDTO> {
     }
   }
 
-  @override
-  Future<bool> validateDataAfter(String field, String value) async {
-    try {
-      final query = await _dataSource.dataSource
-          .collection("users")
-          .where(field, isEqualTo: value)
-          .limit(2)
-          .get();
-      if (query.docs.length > 1) {
-        debugPrint("Dados duplicados encontrados na base");
-      }
-      if(query.docs.isEmpty){
-        return false;
-      }
-      
-      return true;
-    } on FirebaseException catch (firebaseException) {
-      throw FirebaseErrorsMapper.map(firebaseException);
-    } on Exception catch (exception, st) {
-      throw UnknownFailure(originalException: exception, stackTrace: st);
-    } catch (unknown, st) {
-      throw UnknownFailure(unknownError: unknown, stackTrace: st);
-    }
-  }
 }

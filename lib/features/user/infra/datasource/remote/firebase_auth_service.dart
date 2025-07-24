@@ -40,6 +40,8 @@ class FirebaseAuthService implements IUserAuthService {
       User? signedInUser = authResult.user;
 
       if (signedInUser == null) throw InvalidUserFailure();
+      
+      authUser.id=signedInUser.uid;
 
       final UserM localUser = UserM.initial(authUser);
       

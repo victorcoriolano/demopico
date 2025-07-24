@@ -1,10 +1,14 @@
 
 
+import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/features/user/domain/entity/user_credentials.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
 import 'package:demopico/features/user/presentation/widgets/tipo_conta_dropdown.dart';
 import 'package:demopico/features/user/presentation/widgets/textfield_decoration.dart';
 import 'package:demopico/features/user/presentation/widgets/form_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RegisterForm extends StatefulWidget {
   const RegisterForm({super.key});
@@ -42,6 +46,7 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
   @override
   Widget build(BuildContext context) {
     return Form(
+      autovalidateMode: AutovalidateMode.disabled,
         key: _formkey,
         child: SingleChildScrollView(
           child: Padding(
@@ -66,31 +71,46 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                 const SizedBox(
                   height: 40,
                 ),
-
+    
                 // vulgo
-                TextFormField(
-                  decoration: customTextField("Vulgo"),
-                  cursorColor: Colors.white,
-                  style: const TextStyle(color: Colors.white),
-                  controller: _vulgoCadastro,
-                  validator: isNotEmpty,
+                Consumer<AuthUserProvider>(
+                  builder: (context, provider, child) {
+                    return TextFormField(
+                      decoration: customTextField("Vulgo"),
+                      cursorColor: Colors.white,
+                      style: const TextStyle(color: Colors.white),
+                      controller: _vulgoCadastro,
+                      validator: (value) => provider.errorMessageVulgo ?? combineValidators([
+                        () => isNotEmpty(value),
+                        () => isValidVulgo(value),
+                      ]),
+                      onChanged: (value) => provider.clearMessageErrors(),
+                    );
+                  }
                 ),
-
                 const SizedBox(
                   height: 20,
                 ),
                 //email
-                TextFormField(
-                  decoration: customTextField("Email"),
-                  cursorColor: Colors.white,
-                  style: const TextStyle(color: Colors.white),
-                  controller: _emailController,
-                  validator: (value) => combineValidators([
-                    () => isNotEmpty(value),
-                    () => isValidEmail(value),
-                  ]),
+                Consumer<AuthUserProvider>(
+                  builder: (context, provider, child) {
+                    return TextFormField(
+                      decoration: customTextField("Email"),
+                      cursorColor: Colors.white,
+                      style: const TextStyle(color: Colors.white),
+                      controller: _emailController,
+                      validator: (value) {
+                        return provider.errorMessageEmail ?? combineValidators([
+                          () => isNotEmpty(value),
+                          () => isValidEmail(value),
+                        ]);
+                        
+                      },
+                      onChanged: (value) =>  provider.clearMessageErrors(),
+                    );
+                  }
                 ),
-
+    
                 const SizedBox(
                   height: 20,
                 ),
@@ -109,7 +129,7 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                 const SizedBox(
                   height: 20,
                 ),
-
+    
                 // confirmar senha
                 TextFormField(
                   decoration: customTextField("Confirmar senha "),
@@ -130,21 +150,34 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                     onChanged: (String newValue) =>
                         _onTipoContaChanged(newValue),
                     validator: (value) => isNotEmpty(value)),
-
+    
                 const SizedBox(
                   height: 12,
                 ),
-
+    
                 // button (cadastrar)
-                ElevatedButton(
-                  onPressed: () async {
-                    // TODO: IMPLEMENTAR CRIAÇÃO DE USER
-                  },
-                  style: buttonStyle(),
-                  child: const Text(
-                    "Cadastrar",
-                    style: TextStyle(color: Colors.white),
-                  ),
+                Consumer<AuthUserProvider>(
+                  builder: (context, provider, child) {
+                    return ElevatedButton(
+                      onPressed:  provider.isLoading ? null : () async {
+                        if(_formkey.currentState?.validate() ?? false){
+                          final credentialsSignUp = UserCredentialsSignUp(
+                            password: _senhaController.text.trim(), 
+                            uid: "", 
+                            nome: _vulgoCadastro.text.trim(), 
+                            isColetivo: isColetivo,
+                            email: _emailController.text.trim());
+                          await provider.signUp(credentialsSignUp);
+                          _formkey.currentState?.validate();  /// validando formulário para mostrar a 
+                                                              ///mensagem de erro no campo específico do erro
+                        }
+                      },
+                      style: buttonStyle(),
+                      child: provider.isLoading
+                                ? const Center(child: CircularProgressIndicator(color: kWhite,),)
+                                : const Text("Cadastrar"),
+                    );
+                  }
                 ),
               ],
             ),

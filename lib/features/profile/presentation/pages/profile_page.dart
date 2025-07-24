@@ -38,18 +38,20 @@ class _ProfilePageState extends State<ProfilePage>
   final TextEditingController bioController = TextEditingController();
   late final TabController _tabController;
 
-  void showAlertError(context){
+  void showAlertError(context, String messageError){
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Error'),
-          content: const Text('User not found.'),
+          content: Text('Algum erro aconteceu: $messageError'),
           actions: [
             TextButton(
-              onPressed: () {
+              onPressed: () async {
+                final provider = context.read<AuthUserProvider>();
+                await provider.logout();
                 Get.to(() => const HomePage());
               },
-              child: const Text('OK'),
+              child: const Text('SAIR E DESLOGAR'),
             )
           ],
         ),
@@ -136,19 +138,19 @@ class _ProfilePageState extends State<ProfilePage>
       setState(() {
         _isLoading = false;
       });
-      showAlertError(context);
+      showAlertError(context, "Não foi possível encontrar o id do user!\n Tente entrar novamente");
       return;
     }
 
     await providerDatabase.retrieveUserProfileData(uid);
 
     if (providerDatabase.user == null) {
-      debugPrint('User not found');
+      debugPrint('User not found even with id');
       setState(() {
         _isLoading = false;
       });
       if (mounted) {
-        showAlertError(context);
+        showAlertError(context, "Dados não encontrados na base");
       }
       return;
     } else {
@@ -166,12 +168,14 @@ class _ProfilePageState extends State<ProfilePage>
     if(_isLoading){
       return Center(child: CircularProgressIndicator(),);
     }
-
+    if (thisUser == null){
+      return SizedBox.shrink();
+    }
     return Scaffold(
       appBar:  AppBar(
       backgroundColor: kAlmostWhite,
       centerTitle: true,
-      title: Text(thisUser?.name ?? "", style: TextStyle(
+      title: Text(thisUser.name, style: TextStyle(
         color: kBlack,
         fontSize: 22,
         fontWeight: FontWeight.bold),
@@ -192,7 +196,7 @@ class _ProfilePageState extends State<ProfilePage>
         ),
       ],
       ),
-      drawer: MyCustomDrawer(user: thisUser!),
+      drawer: MyCustomDrawer(user: thisUser),
       backgroundColor: kAlmostWhite,
       body: Builder(
         builder: (context) {

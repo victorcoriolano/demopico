@@ -29,7 +29,8 @@ class InvalidVulgoFailure extends DomainFailure {
 }
 
 class InvalidCredentialsFailure extends DomainFailure {
-  InvalidCredentialsFailure(): super(message: "Credenciais inválidas", code: "invalid_credentials");
+  final String? personalizedMessage;
+  InvalidCredentialsFailure([this.personalizedMessage]): super(message: personalizedMessage ?? "Credenciais inválidas", code: "invalid_credentials");
 }
 
 class InvalidFormatFileFailure extends DomainFailure {
