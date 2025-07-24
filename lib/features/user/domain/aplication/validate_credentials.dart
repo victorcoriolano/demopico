@@ -17,18 +17,18 @@ class ValidateUserCredentials {
   Future<UserCredentialsSignIn> validateForLogin(
       UserCredentialsSignIn credentials) async {
     
-    bool isValid = false;
+    bool exists = false;
     switch (credentials.identifier){
       case (Identifiers.email):
-        isValid = await repository.validateDataUserAfter(
+        exists = await repository.validateExist(
           data: credentials.login, field: "email");
 
       case (Identifiers.vulgo):
-        isValid = await repository.validateDataUserAfter(
+        exists = await repository.validateExist(
           data: credentials.login, field: "name");    
     }
 
-    if (isValid) {
+    if (exists) {
       debugPrint("Credenciais válidas");
       return credentials;
     } else {
@@ -42,29 +42,29 @@ class ValidateUserCredentials {
 
     debugPrint("Validando email");
 
-    final isValidEmail = await repository.validateDataUserBefore(
+    final existEmail = await repository.validateExist(
       data: credentials.email, 
       field: "email",
     );
-    debugPrint("Email valido: $isValidEmail");
+    debugPrint("Email já existe: $existEmail");
 
     debugPrint("Validando vulgo");
-    final isValidVulgo = await  repository.validateDataUserBefore(
+    final existVulgo = await repository.validateExist(
       data: credentials.nome, 
       field: "name",
     );
-    debugPrint("Vulgo válido: $isValidVulgo");
+    debugPrint("Vulgo já existe: $existVulgo");
     
-    if (!isValidVulgo) {
+    if (existVulgo) {
       debugPrint("Lançando exception para vulgo inválido");
       throw VulgoAlreadyExistsFailure() ;
     }
 
-    if (!isValidEmail) {
+    if (existEmail) {
       debugPrint("Lançando exception para email inválido");
       throw EmailAlreadyInUseFailure();
     }
-    
+
     debugPrint("Credenciais válidas");
     return credentials;
   } on EmailAlreadyInUseFailure catch (e) {
