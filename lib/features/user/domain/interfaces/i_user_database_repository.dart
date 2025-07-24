@@ -6,6 +6,5 @@ abstract class IUserDataRepository{
   Future<UserM> getUserDetailsByID(String uid);
   Future<String> getEmailByVulgo(String vulgo);
   Future<UserM> updateUserDetails(UserM user);
-  Future<bool> validateDataUserAfter({required String data,required  String field});
-  Future<bool> validateDataUserBefore({required String data, required  String field});
+  Future<bool> validateExist({required String data,required  String field});
 }
