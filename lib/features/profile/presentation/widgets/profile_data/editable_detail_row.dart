@@ -1,3 +1,4 @@
+import 'package:demopico/core/app/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class EditableDetailRow extends StatelessWidget {
@@ -38,14 +39,14 @@ class EditableDetailRow extends StatelessWidget {
                   firstChild: Text(
                     value,
                     style: TextStyle(
-                      color: Colors.white,
+                      color: kBlack,
                       fontSize: 18,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
                   secondChild: TextField(
                     controller: controller,
-                    style: TextStyle(color: Colors.white, fontSize: 18),
+                    style: TextStyle(color: kBlack, fontSize: 18),
                     decoration: InputDecoration(
                       hintText: 'Digite o novo $label',
                       hintStyle: TextStyle(color: Colors.grey),
@@ -53,7 +54,7 @@ class EditableDetailRow extends StatelessWidget {
                         borderSide: BorderSide(color: Colors.grey),
                       ),
                       focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blueAccent),
+                        borderSide: BorderSide(color: kRed),
                       ),
                       contentPadding: EdgeInsets.zero, // Remove default padding
                     ),
