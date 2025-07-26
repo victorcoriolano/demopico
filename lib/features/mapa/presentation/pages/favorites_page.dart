@@ -27,8 +27,7 @@ class _SavePicoPageState extends State<SavePicoPage> {
 
   @override
   Widget build(BuildContext context) {
-    final mapProvider =
-        Provider.of<MapControllerProvider>(context, listen: true);
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -48,7 +47,7 @@ class _SavePicoPageState extends State<SavePicoPage> {
       ),
       body: Consumer<FavoriteSpotController>(
         builder: (context, provider, child) {
-            
+            final mapController = MapControllerProvider();
             if (provider.isLoading) {
               return const Center(
                 child: CircularProgressIndicator(),
@@ -105,7 +104,8 @@ class _SavePicoPageState extends State<SavePicoPage> {
                           icon:
                               const Icon(Icons.location_on, color: Colors.blue),
                           onPressed: () {
-                            mapProvider.reajustarCameraPosition(LatLng(
+                            
+                            mapController.reajustarCameraPosition(LatLng(
                                 pico.picoModel.lat, pico.picoModel.long));
                             if (context.mounted) Navigator.pop(context);
                           },
@@ -138,7 +138,8 @@ class _SavePicoPageState extends State<SavePicoPage> {
                       ],
                     ),
                     onTap: () {
-                      mapProvider.reajustarCameraPosition(
+
+                      mapController.reajustarCameraPosition(
                           LatLng(pico.picoModel.lat, pico.picoModel.long));
                       Navigator.pop(context);
                     },
