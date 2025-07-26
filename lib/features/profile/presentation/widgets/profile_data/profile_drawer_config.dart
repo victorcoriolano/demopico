@@ -1,6 +1,7 @@
 import 'package:demopico/core/app/home_page.dart';
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
+import 'package:demopico/features/profile/presentation/pages/edit_profile_page.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/about_page_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/drawer_item.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
@@ -9,9 +10,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-class MyCustomDrawer extends StatelessWidget {
+class MyCustomDrawer extends StatefulWidget {
   final UserM user;
   const MyCustomDrawer({super.key, required this.user});
+
+  @override
+  State<MyCustomDrawer> createState() => _MyCustomDrawerState();
+}
+
+class _MyCustomDrawerState extends State<MyCustomDrawer> {
+  bool isEditing = false;
 
   void logout(BuildContext context) {
     showDialog(
@@ -55,25 +63,30 @@ class MyCustomDrawer extends StatelessWidget {
         children: <Widget>[
           UserAccountsDrawerHeader(
             accountName: Text(
-              user.name,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
+                widget.user.name,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
               ),
-            ),
+              
             accountEmail: Text(
-              user.email,
+              widget.user.email,
               style: TextStyle(
                 color: Colors.white70,
                 fontSize: 14,
               ),
             ),
-            currentAccountPicture: CircleAvatar(
-              backgroundImage: user.pictureUrl != null
-                  ? NetworkImage(user.pictureUrl!)
-                  : AssetImage("assets/images/userPhoto.png") as ImageProvider,
-              backgroundColor: Colors.white,
+            currentAccountPicture: Row(
+              children: [
+                CircleAvatar(
+                  
+                  backgroundImage: widget.user.pictureUrl != null
+                      ? NetworkImage(widget.user.pictureUrl!)
+                      : AssetImage("assets/images/userPhoto.png") as ImageProvider,
+                ),
+              ],
             ),
             decoration: const BoxDecoration(
               color: kRed,
@@ -102,8 +115,7 @@ class MyCustomDrawer extends StatelessWidget {
             icon: Icons.edit,
             text: 'Editar Perfil',
             onTap: () {
-              // TODO: IMPLEMENTAR EDIÇÃO DE PERFIL
-              Navigator.pop(context);
+              Get.to(() => EditProfilePage(user: widget.user,));
             },
           ),
           DrawerItem(
@@ -140,7 +152,6 @@ class MyCustomDrawer extends StatelessWidget {
             text: 'Sobre o App',
             onTap: () {
               // TODO: RESOLVER ERRO DE NAVEGAR PARA ABOUT PAGE
-              Get.back();
               Get.to((_) => AboutPage());
             },
           ),
