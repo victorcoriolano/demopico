@@ -2,6 +2,7 @@ import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/editable_detail_row.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class EditProfilePage extends StatefulWidget {
   final UserM user;
@@ -12,61 +13,49 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-   // Mock user data
-  String _userName = 'Akhil newman';
-  String _userPhone = '+91 99951 80585';
-  String _userEmail = 'akhilnew@gmail.com';
   final String _userPassword = '**********'; // Representing a masked password
 
   // Controllers for editing
   late TextEditingController _nameController;
-  late TextEditingController _phoneController;
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
 
   // States for AnimatedCrossFade
   bool _isEditingName = false;
-  bool _isEditingPhone = false;
   bool _isEditingEmail = false;
   bool _isEditingPassword = false;
 
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: _userName);
-    _phoneController = TextEditingController(text: _userPhone);
-    _emailController = TextEditingController(text: _userEmail);
-    _passwordController = TextEditingController(text: _userPassword); // Display masked initially
+    _nameController = TextEditingController(text: widget.user.name);
+    _emailController = TextEditingController(text: widget.user.email);
+    _passwordController = TextEditingController(text: _userPassword); 
   }
 
   @override
   void dispose() {
     _nameController.dispose();
-    _phoneController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
-  void _toggleEditState(String field) {
+  void toggleEditState(String field) {
     setState(() {
+      //TODO : IMPLEMENTAR LÓGICA DE ATUALIZAR NA BASE DE DADOS
       switch (field) {
         case 'name':
           _isEditingName = !_isEditingName;
-          if (!_isEditingName) _userName = _nameController.text;
-          break;
-        case 'phone':
-          _isEditingPhone = !_isEditingPhone;
-          if (!_isEditingPhone) _userPhone = _phoneController.text;
+          if (!_isEditingName) widget.user.name = _nameController.text;
           break;
         case 'email':
           _isEditingEmail = !_isEditingEmail;
-          if (!_isEditingEmail) _userEmail = _emailController.text;
+          if (!_isEditingEmail) widget.user.email = _emailController.text;
           break;
         case 'password':
           _isEditingPassword = !_isEditingPassword;
-          // For password, we might not update directly from text field due to masking
-          // A dialog or separate screen might be better for password changes
+          
           break;
       }
     });
@@ -74,14 +63,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black, // Dark background
+    return Scaffold( 
       appBar: AppBar(
-        backgroundColor: Colors.black,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back,),
           onPressed: () {
-            // Handle back button press
+            Get.back();
           },
         ),
         elevation: 0, // No shadow
@@ -101,15 +88,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         : AssetImage("assets/images/userPhoto.png") as ImageProvider,
                   ),
                   SizedBox(width: 16),
-                  Expanded( // Use Expanded to give ElevatedButton space
+                  Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        // Handle "Alterar Imagem" button press
-                        print('Alterar Imagem button pressed');
+                        // TODO: Handle "Alterar Imagem" button press
+                        debugPrint('Alterar Imagem button pressed');
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueAccent, // Button background color
-                        foregroundColor: Colors.white,     // Text color
+                        backgroundColor: kRed, // Button background color
+                        foregroundColor: kWhite,     // Text color
                         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
@@ -137,14 +124,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
               value: widget.user.name,
               controller: _nameController,
               isEditing: _isEditingName,
-              onToggleEdit: () => _toggleEditState('name'),
+              onToggleEdit: () => toggleEditState('name'),
             ),
             EditableDetailRow(
               label: 'Email',
               value: widget.user.email,
               controller: _emailController,
               isEditing: _isEditingEmail,
-              onToggleEdit: () => _toggleEditState('email'),
+              onToggleEdit: () => toggleEditState('email'),
               keyboardType: TextInputType.emailAddress,
             ),
             EditableDetailRow(
@@ -152,7 +139,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               value: _userPassword, // TODO PEGAR O PASSWORD 
               controller: _passwordController,
               isEditing: _isEditingPassword,
-              onToggleEdit: () => _toggleEditState('password'),
+              onToggleEdit: () => toggleEditState('password'),
               isPassword: true,
             ),
           ],
