@@ -1,10 +1,11 @@
-import 'package:demopico/core/app/home_page.dart';
-import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
+import 'package:demopico/core/app/auth_wrapper.dart';
+import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/features/mapa/presentation/pages/historico_page.dart';
-import 'package:demopico/features/mapa/presentation/pages/save_pico_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:demopico/features/mapa/presentation/pages/favorites_page.dart';
+import 'package:demopico/features/mapa/presentation/view_services/modal_helper.dart';
+import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class MyDrawer extends StatefulWidget {
@@ -15,73 +16,72 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
-  final user = FirebaseAuth.instance.currentUser;
-  
   
 
   @override
   Widget build(BuildContext context) {
+    final user = context.read<UserDatabaseProvider>().user;
+
     return Drawer(
       child: Container(
-        padding: const EdgeInsets.all(16.0), // Espaçamento interno do menu
-        color: Colors.white, // Cor de fundo do Drawer
-        child: ListView(
-          padding: EdgeInsets.zero, // Remove o padding padrão
+        padding: const EdgeInsets.all(16.0),
+        color: Colors.white,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            MenuItem(
+              icon: Icons.spoke, 
+              text: " MEUS PICOS", 
+              onPressed: () {
+                //TODO: CRIAR TELA DE MEUS PICOS
+              },),
+            MenuItem(
+                  icon: Icons.bookmark, 
+                  text: 'PICOS SALVOS', 
+                  onPressed: () {
+                    if(user == null){
+                      Get.snackbar("Usuário não logado", "Faça login para acessar seus picos salvos",
+                      showProgressIndicator: true, 
+                      onTap: (snackbar) {
+                        Get.to(() => AuthWrapper());
+                      });
+                    }
+
+                    final userId = user!.id;
+                    Get.to(() => FavoriteSpotPage(userID: userId));
+                    
+                  },
+                ),
+              
+            Divider(),
             // Botão Configurar Mapa
             MenuItem(
-              icon: Icons.map, // Ícone para Configurar Mapa
-              text: 'CONFIGURAR MAPA', // Texto do botão
+              icon: Icons.map, 
+              text: 'CONFIGURAR MAPA', 
               onPressed: () {
-                // Ação ao clicar (adicione a funcionalidade necessária)
-                Navigator.of(context).pop(); // Fecha o Drawer
-                abrirModalConfgMap(context);
+                Get.back();
+                ModalHelper.abrirModalConfgMap(context);
               },
             ),
             // Botão Picos Salvos
-            MenuItem(
-              icon: Icons.bookmark, // Ícone para Picos Salvos
-              text: 'PICOS SALVOS', // Texto do botão
-              onPressed: () {
-                // Ação ao clicar (adicione a funcionalidade necessária)
-                Navigator.of(context).pop(); // Fecha o Drawer
-                if(user != null){
-                  Navigator.push(context, MaterialPageRoute(builder: (_) =>  SavePicoPage(userID: user!.uid)));
-                }else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        "Faça login para ver seus picos salvos",
-                      ),
-                    ),
-                  );
-                }
+            
                 
-              },
-            ),
             // Botão Histórico
             MenuItem(
               icon: Icons.history, // Ícone para Histórico
               text: 'HISTÓRICO', // Texto do botão
               onPressed: () {
-                // Ação ao clicar (adicione a funcionalidade necessária)
-                Navigator.of(context).pop(); // Fecha o Drawer
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) {
-                      return const HistoricoPage();
-                    } ));
+                Get.to(() => const HistoricoPage());
               },
             ),
+
             // Botão Home
             MenuItem(
               icon: Icons.home, // Ícone para Home
               text: 'HOME', // Texto do botão
               onPressed: () {
                 // Navega de volta para a tela inicial
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const HomePage()),
-                );
+                Get.offAndToNamed('/');
               },
             ),
           ],
@@ -90,66 +90,7 @@ class _MyDrawerState extends State<MyDrawer> {
     );
   }
 
-  Future<void> abrirModalConfgMap(BuildContext context) {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Consumer<MapControllerProvider>(
-          builder: (context, mapProvider, child) => AlertDialog(
-            title: const Text('Configure seu mapa'),
-            content: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text("Zoom do mapa"),
-                  Slider(
-                    min: 5.0,
-                    max: 20.0,
-                    value: mapProvider
-                        .zoomInicial, 
-                    onChanged: (value) {
-                      mapProvider.setZoom(value);
-                    },
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text("Tipo do mapa"),
-                      DropdownButton<MapType>(
-                        value: mapProvider
-                            .myMapType, 
-                        items: const [
-                          DropdownMenuItem(
-                              value: MapType.normal, child: Text("Normal")),
-                          DropdownMenuItem(
-                              value: MapType.satellite, child: Text("Satélite")),
-                          DropdownMenuItem(
-                              value: MapType.terrain, child: Text("Terreno")),
-                          DropdownMenuItem(
-                              value: MapType.hybrid, child: Text("Híbrido")),
-                        ],
-                        onChanged: (mapType) {
-                          if (mapType != null) mapProvider.setMapType(mapType);
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('Fechar'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+  
 }
 
 class MenuItem extends StatelessWidget {
@@ -167,10 +108,10 @@ class MenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: const Color(0xFF8B0000)), // Ícone do item
+      leading: Icon(icon, color: kRed), // Ícone do item
       title: Text(text,
           style:
-              const TextStyle(color: Colors.black)), // Texto do item em preto
+              const TextStyle(color: kBlack)), // Texto do item em preto
       onTap: onPressed, // Ação a ser realizada ao pressionar o item
     );
   }
