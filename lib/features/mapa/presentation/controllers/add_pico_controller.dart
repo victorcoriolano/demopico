@@ -57,7 +57,7 @@ class AddPicoProvider extends ChangeNotifier{
 
   double progress = 0.0;
 
-  void getLocation(LatLng latlang) {
+  void setLocation(LatLng latlang) {
     this.latlang = latlang;
   }
 
