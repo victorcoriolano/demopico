@@ -1,4 +1,3 @@
-import 'package:demopico/core/app/auth_wrapper.dart';
 import 'package:demopico/features/user/presentation/widgets/login_form.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -36,7 +35,7 @@ class LoginPage extends StatelessWidget {
                 size: 50,
               ),
               onPressed: () {
-                Get.off(() => const AuthWrapper());
+                Get.offNamed("/");
               },
             ),
           ),
