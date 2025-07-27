@@ -25,7 +25,9 @@ class MapWidgetState extends State<MapWidget> {
     super.initState();
     _spotControllerProvider = context.read<SpotControllerProvider>();
     _mapControllerProvider = context.read<MapControllerProvider>();
-    _initializeProviders();
+    WidgetsBinding.instance.addPostFrameCallback((_) { 
+      _initializeProviders();  
+    });
   }
 
   Future<void> _initializeProviders() async {
@@ -41,17 +43,17 @@ class MapWidgetState extends State<MapWidget> {
     
     // consome os dados do provider para manter a tela atualizada
     return Scaffold(
-      body: Consumer<SpotControllerProvider>(
-        builder: (context, provider, child) => GoogleMap(
+      body: Consumer2<SpotControllerProvider, MapControllerProvider>(
+        builder: (context, provider, mapProvider, child) => GoogleMap(
           onMapCreated: (GoogleMapController controller) {
             _mapControllerProvider.setGoogleMapController(controller);
           },
           zoomControlsEnabled: false,
           initialCameraPosition: CameraPosition(
-            target: _mapControllerProvider.center,
-            zoom: _mapControllerProvider.zoomInicial,
+            target: mapProvider.center,
+            zoom: mapProvider.zoomInicial,
           ),
-          mapType: context.watch<MapControllerProvider>().myMapType,
+          mapType: mapProvider.myMapType,
           scrollGesturesEnabled: true,
           rotateGesturesEnabled: true,
           myLocationEnabled: true,
