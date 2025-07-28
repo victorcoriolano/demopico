@@ -5,7 +5,7 @@ import 'package:demopico/features/mapa/presentation/widgets/top_side_map_widget.
 import 'package:flutter/material.dart';
 
 
-class MapPage extends StatelessWidget { // convertendo pra stl pq eh imutalvel 
+class MapPage extends StatelessWidget { 
   const MapPage({super.key});
 
   @override

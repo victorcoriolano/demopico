@@ -91,8 +91,6 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
               width: 28,
             );
           }),
-          // Adicionando o texto
-          // Substitua por qualquer texto ou valor desejado
         ],
       ),
     ]);

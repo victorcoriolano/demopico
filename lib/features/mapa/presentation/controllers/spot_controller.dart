@@ -184,7 +184,7 @@ class SpotControllerProvider extends ChangeNotifier {
     try {
       // Use case para avaliar e obter o pico atualizado
       final picoAtualizado =
-          await avaliarUseCase.executar(novaNota, pico as PicoModel);
+          await avaliarUseCase.executar(novaNota, PicoModel.fromEntity(pico));
 
       // Encontrar o índice do pico a ser atualizado
       final index =

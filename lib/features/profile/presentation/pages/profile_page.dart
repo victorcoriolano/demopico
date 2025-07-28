@@ -24,7 +24,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late UserM? user;
   bool _isVisible = true;
   bool _isLoading = true;
@@ -64,6 +64,7 @@ class _ProfilePageState extends State<ProfilePage>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadUser();
     });
+
     _tabController = TabController(length: 3, vsync: this);
 
     _tabController.addListener(() {
@@ -172,7 +173,9 @@ class _ProfilePageState extends State<ProfilePage>
       return SizedBox.shrink();
     }
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar:  AppBar(
+
       backgroundColor: kAlmostWhite,
       centerTitle: true,
       title: Text(thisUser.name, style: TextStyle(
@@ -198,61 +201,61 @@ class _ProfilePageState extends State<ProfilePage>
       ),
       drawer: MyCustomDrawer(user: thisUser),
       backgroundColor: kAlmostWhite,
-      body: Builder(
-        builder: (context) {
-          return SafeArea(
-            child: ListView(
-                shrinkWrap: true,
+      body: SafeArea(
+        child: ListView(
+            shrinkWrap: true,
+            padding: const EdgeInsets.all(0),
+            children: [
+              ProfileTopSideDataWidget(
+                avatarUrl: user?.pictureUrl,
+                backgroundUrl: user?.backgroundPicture,
+              ),
+              ProfileBottomSideDataWidget(
+                followers: user?.conexoes ?? 0,
+                contributions: user?.picosAdicionados ?? 0,
+                description: user?.description ?? '',
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              
+              Container(
                 padding: const EdgeInsets.all(0),
-                children: [
-                  ProfileTopSideDataWidget(
-                    avatarUrl: user?.pictureUrl,
-                    backgroundUrl: user?.backgroundPicture,
-                  ),
-                  ProfileBottomSideDataWidget(
-                    followers: user?.conexoes ?? 0,
-                    contributions: user?.picosAdicionados ?? 0,
-                    description: user?.description ?? '',
-                  ),
-                  SizedBox(
-                    height: 12,
-                  ),
-                  
-                  Container(
-                    padding: const EdgeInsets.all(0),
-                    margin: const EdgeInsets.all(0),
-                    child: SingleChildScrollView(
-                      controller: _scrollController,
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(0),
-                            height: screenHeight * 0.55,
-                            child: ProfilePostsWidget(
-                              controller: _tabController,
-                            ),
-                          ),
-                        ],
+                margin: const EdgeInsets.all(0),
+                child: SingleChildScrollView(
+                  controller: _scrollController,
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(0),
+                        height: screenHeight * 0.55,
+                        child: ProfilePostsWidget(
+                          controller: _tabController,
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ]),
-          );
-        }
+                ),
+              ),
+            ]),
       ),
+      extendBody: true,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
+        shape: CircleBorder(),
         onPressed: () {
           Get.to(() => CreatePostPage(
                 typePost: typePost,
               ));
         },
         tooltip: "Criar Postagem",
-        child: Icon(
-          typePost == TypePost.post
-              ? Icons.add
-              : typePost == TypePost.fullVideo
-                  ? Icons.video_call
-                  : Icons.map_outlined,
+        child: Icon( 
+
+            typePost == TypePost.post
+                ? Icons.add
+                : typePost == TypePost.fullVideo
+                    ? Icons.video_call
+                    : Icons.map_outlined,
         ),
       ),
     );

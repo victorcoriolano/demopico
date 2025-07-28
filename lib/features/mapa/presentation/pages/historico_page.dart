@@ -4,28 +4,32 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
-class HistoricoPage extends StatelessWidget {
+class HistoricoPage extends StatefulWidget {
   const HistoricoPage({super.key});
 
+  @override
+  State<HistoricoPage> createState() => _HistoricoPageState();
+}
+
+class _HistoricoPageState extends State<HistoricoPage> {
+  late HistoricoController controller;
+
   void _verPicoNoMapa(BuildContext context, LatLng location) async {
-    //final mapProvider = context.read<MapControllerProvider>();
-
-    // Ajustar a câmera antes de navegar para a página do mapa.
-    //mapProvider.reajustarCameraPosition(location);
-
-    // Navegar para a página do mapa.
     Navigator.push(context, MaterialPageRoute(builder: (_) => const MapPage()));
   }
+
+  @override
+  void initState() {
+    super.initState();
+    controller = context.read<HistoricoController>();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+        controller.carregarHistoricoInicial();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final controller = context.read<HistoricoController>();
-
-  // Garante que o carregamento inicial só aconteça uma vez
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    if (!controller.isLoading && controller.historico.isEmpty) {
-      controller.carregarHistoricoInicial();
-    }
-  });
+  
     return Scaffold(
       appBar: AppBar(
         title: const Text("Histórico"),
@@ -79,7 +83,7 @@ class HistoricoPage extends StatelessWidget {
 
     );
   }
-  
+
   Future<void> _confirmarDeletarHistorico(BuildContext context) {
     final controller = context.read<HistoricoController>();
     return showDialog(
