@@ -149,6 +149,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
   Future<List<FirebaseDTO>> readWithFilter(String field, String value) async {
      try {
       final query = await _firestore.collection(collection.name).where(field, isEqualTo: value).get();
+      debugPrint("QUERY length: ${query.docs.length}");
       return query.docs.map((doc) {
         return FirebaseDTO(id: doc.id, data: doc.data());
       }).toList();
