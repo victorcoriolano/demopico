@@ -19,8 +19,6 @@ class Pico {
   double initialNota = 0;
   int numeroAvaliacoes = 0;
 
-
-
   Pico(
     {
       double? nota,
@@ -40,5 +38,20 @@ class Pico {
       required this.picoName,
   }): initialNota = nota ?? 0,
     numeroAvaliacoes = numeroDeAvaliacoes ?? 0;
+
+  void updateNota(double newNota){
+    
+    if (numeroAvaliacoes == 0) {
+      // Primeira avaliação
+      initialNota = newNota;
+      numeroAvaliacoes ++;
+      return;
+    } else {
+      // Atualiza média com base nas avaliações existentes
+      initialNota = ((initialNota * numeroAvaliacoes) + newNota) /
+          (numeroAvaliacoes + 1);
+      numeroAvaliacoes ++;
+    }
+  }
 }
 
