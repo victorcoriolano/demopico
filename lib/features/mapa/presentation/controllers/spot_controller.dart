@@ -6,6 +6,7 @@ import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/usecases/avaliar_spot_uc.dart';
 import 'package:demopico/core/common/util/file_manager/delete_file_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/delete_spot_uc.dart';
+import 'package:demopico/features/mapa/domain/usecases/get_my_spots_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/load_spot_uc.dart';
 import 'package:demopico/features/mapa/presentation/view_services/marker_service.dart';
 import 'package:flutter/foundation.dart';
@@ -20,7 +21,8 @@ class SpotControllerProvider extends ChangeNotifier {
         deleteFile: DeleteFileUc.instance,
         deleteSpotUC: DeleteSpotUC.instance,
         avaliarUseCase: AvaliarSpotUc.getInstance,
-        showAllPicoUseCase: LoadSpotUc.getInstance);
+        showAllPicoUseCase: LoadSpotUc.getInstance,
+        getMySpotsUc: GetMySpotsUc.instance,);
     return _spotControllerProvider!;
   }
 
@@ -29,20 +31,27 @@ class SpotControllerProvider extends ChangeNotifier {
       required this.deleteFile,
       required this.deleteSpotUC,
       required this.avaliarUseCase,
-      required this.showAllPicoUseCase
+      required this.showAllPicoUseCase,
+      required this.getMySpotsUc,
     });
 
+  // use cases
   final DeleteFileUc deleteFile;
   final DeleteSpotUC deleteSpotUC;
   final LoadSpotUc showAllPicoUseCase;
   final AvaliarSpotUc avaliarUseCase;
+  final GetMySpotsUc getMySpotsUc;
 
 
+  // states
   List<Pico> spots = [];
   List<Pico> picosPesquisados = [];
+  List<Pico> mySpots = [];
   Filters? filtrosAtivos;
   Set<Marker> markers = {};
   void Function(Pico)? _onTapMarker;
+  bool isLoading = false;
+  
 
   String? error;
 
@@ -195,6 +204,22 @@ class SpotControllerProvider extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       throw Exception("Erro ao avaliar o pico: $e");
+    }
+  }
+
+  Future<void> getMySpots(String idUser) async{
+    isLoading = true;
+    notifyListeners();
+    try {
+      mySpots = await getMySpotsUc.execute(idUser);
+      debugPrint('MysposLength: ${mySpots.length}');
+      isLoading = false;
+      notifyListeners();
+    } catch (e){
+      error = e.toString();
+      debugPrint(error);
+      isLoading = false;
+      notifyListeners();
     }
   }
 }
