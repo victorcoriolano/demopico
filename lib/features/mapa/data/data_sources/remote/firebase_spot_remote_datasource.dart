@@ -120,5 +120,5 @@ class FirebaseSpotRemoteDataSource implements ISpotDataSource<FirebaseDTO> {
   
   @override
   Future<List<FirebaseDTO>> getList(String id) async => 
-      await _firebaseFirestore.readWithFilter("userID", id); 
+      await _firebaseFirestore.readWithFilter("criador", id); 
 }
