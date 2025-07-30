@@ -57,10 +57,9 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
     debugPrint("show pico widget");
 
     return DraggableScrollableSheet(
-        controller: DraggableScrollableController(),
         initialChildSize: 0.7,
         minChildSize: 0.2,
-        maxChildSize: 0.89,
+        maxChildSize: 0.95,
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(
             decoration: const BoxDecoration(
