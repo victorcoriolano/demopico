@@ -14,5 +14,5 @@ class WatchSpotUc {
 
   WatchSpotUc({required ISpotRepository repository}): _repository = repository;
 
-  Stream<Pico> execute(String idPico) => _repository.watchSpot(idPico);
+  Stream<Pico> execute(String idPico) => _repository.watchSpot(idPico).map((picoModel) => picoModel.toEntity());
 }
