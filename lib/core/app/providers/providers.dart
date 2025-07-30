@@ -11,7 +11,7 @@ import 'package:demopico/features/mapa/presentation/controllers/comment_controll
 import 'package:demopico/features/mapa/presentation/controllers/favorite_spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/historico_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
-import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
+import 'package:demopico/features/mapa/presentation/controllers/spots_controller.dart';
 import 'package:demopico/features/profile/domain/usecases/create_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/delete_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_post_uc.dart';
