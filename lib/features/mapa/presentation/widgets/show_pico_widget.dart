@@ -1,27 +1,30 @@
+import 'dart:math';
+
 import 'package:demopico/core/app/auth_wrapper.dart';
+import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/features/denunciar/widgets/denunciar_widget.dart';
 import 'package:demopico/features/denunciar/denuncia_model.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_favorito.dart';
-import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
+import 'package:demopico/features/mapa/presentation/controllers/spot_provider.dart';
+import 'package:demopico/features/mapa/presentation/controllers/spots_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/favorite_spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/pages/comment_page.dart';
+import 'package:demopico/features/mapa/presentation/view_services/modal_helper.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 
 import 'package:provider/provider.dart';
 
 class ShowPicoWidget extends StatefulWidget {
-  final Pico pico;
-
+  final String idPico;
   final void Function(Pico) deletarPico;
 
   const ShowPicoWidget({
     super.key,
     required this.deletarPico,
-    required this.pico,
+    required this.idPico,
   });
 
   @override
@@ -31,7 +34,6 @@ class ShowPicoWidget extends StatefulWidget {
 int _currentPage = 0;
 
 class _ShowPicoWidgetState extends State<ShowPicoWidget> {
-  List<String> images = [];
   final Map<String, String> obstaculosMap = {
     "45° graus": "assets/images/icons/45graus.png",
     "Barreira newjersey": "assets/images/icons/barreira.png",
@@ -55,14 +57,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
     "Lixeira": "assets/images/icons/lixeira.png",
   };
 
-  void _loadImages() {
-    setState(() {
-      debugPrint("carregando imagens");
-      debugPrint("imagens disponive is: ${widget.pico.imgUrls.length}");
-      images.addAll(widget.pico.imgUrls.cast<String>()); //url pico
-      debugPrint("carregou imagens: ${images.length}");
-    });
-  }
+  
 
   @override
   void dispose() {
@@ -74,44 +69,22 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
   @override
   void initState() {
     super.initState();
-    _loadImages(); // carregar img
+    WidgetsBinding.instance.addPostFrameCallback((_) { 
+      context.read<SpotProvider>().initializeWatch(widget.idPico);
+    });
   }
 
-  Widget buildAttributeIcons(int value) {
-    return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-      Row(
-        children: [
-          // Gerando 5 ícones
-          ...List.generate(5, (index) {
-            return Image.asset(
-              'assets/images/iconPico.png',
-              color: index < value
-                  ? const Color.fromARGB(255, 169, 41, 41)
-                  : Colors.grey,
-              width: 28,
-            );
-          }),
-        ],
-      ),
-    ]);
-  }
+  bool isMine(){
+    final user = context.read<UserDatabaseProvider>().user;
+    final pico = context.read<SpotProvider>().pico;
+
+      return user != null && pico != null 
+        && pico.userName == user.name;
+    }
 
   @override
   Widget build(BuildContext context) {
     debugPrint("show pico widget");
-    final provider = context.read<FavoriteSpotController>();
-    final user = context.read<UserDatabaseProvider>().user;
-
-    
-
-    bool isMine(){
-      
-      bool isMyPico = 
-        user != null &&
-        widget.pico.userName == user.name ;
-      debugPrint("isMine: $isMyPico");
-        return isMyPico;
-    }
 
     return DraggableScrollableSheet(
         initialChildSize: 0.8,
@@ -120,7 +93,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(
             decoration: const BoxDecoration(
-              color: Colors.white,
+              color: kAlmostWhite,
               borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
               boxShadow: [
                 BoxShadow(
@@ -132,189 +105,8 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
             ),
             child: Column(
               children: [
-                Stack(
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      height: 250, // Altura ajustada para incluir o indicador
-                      child: images.isNotEmpty
-                          ? Stack(
-                              children: [
-                                PageView.builder(
-                                  itemCount: images.length,
-                                  onPageChanged: (int page) {
-                                    setState(() {
-                                      _currentPage =
-                                          page; // Atualiza a página atual
-                                    });
-                                  },
-                                  itemBuilder: (context, pagePosition) {
-                                    return Stack(
-                                      alignment: Alignment.topRight,
-                                      children: [
-                                        Container(
-                                          decoration: const BoxDecoration(
-                                            borderRadius: BorderRadius.vertical(
-                                                top: Radius.circular(30)),
-                                          ),
-                                          clipBehavior: Clip.hardEdge,
-                                          child: Image.network(
-                                            images[pagePosition],
-                                            fit: BoxFit.cover,
-                                            width: double.infinity,
-                                          ),
-                                        ),
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            IconButton(
-                                              icon: const Icon(
-                                                Icons.close,
-                                                color: Color.fromARGB(
-                                                    255, 243, 243, 243),
-                                              ),
-                                              padding: const EdgeInsets.all(10),
-                                              iconSize: 36,
-                                              onPressed: () {
-                                                Navigator.pop(
-                                                    context); // Retorna para a tela anterior
-                                              },
-                                            ),
-                                            Visibility(
-                                              visible: isMine(),
-                                              child: IconButton(
-                                                onPressed: () {
-                                                  showDialog(
-                                                    context: context,
-                                                    builder: (context) {
-                                                      return AlertDialog(
-                                                        title: const Text(
-                                                            'Excluir Pico'),
-                                                        content: const Text(
-                                                            'Tem certeza que deseja excluir este pico?'),
-                                                        actions: [
-                                                          TextButton(
-                                                            onPressed: () {
-                                                              Navigator.pop(
-                                                                  context);
-                                                            },
-                                                            child: const Text(
-                                                                'Cancelar'),
-                                                          ),
-                                                          TextButton(
-                                                            onPressed: () {
-                                                              context
-                                                                  .read<
-                                                                      SpotControllerProvider>()
-                                                                  .deletarPico(
-                                                                      widget.pico);
-                                                              Navigator.pop(
-                                                                  context);
-                                                            },
-                                                            child: const Text(
-                                                                'Excluir'),
-                                                          ),
-                                                        ],
-                                                      );
-                                                    },
-                                                  );
-                                                } ,
-                                                icon: const Icon(
-                                                  Icons.delete,
-                                                  color: Colors.black,
-                                                ),
-                                                padding:
-                                                    const EdgeInsets.all(10),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                ),
-                                Positioned(
-                                  bottom: 10, // Posição do indicador
-                                  left: 0,
-                                  right: 0,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children:
-                                        List.generate(images.length, (index) {
-                                      return Container(
-                                        margin: const EdgeInsets.symmetric(
-                                            horizontal: 5),
-                                        child: AnimatedContainer(
-                                          duration:
-                                              const Duration(milliseconds: 300),
-                                          margin: const EdgeInsets.symmetric(
-                                              horizontal: 4),
-                                          width: _currentPage == index ? 10 : 6,
-                                          height:
-                                              _currentPage == index ? 10 : 6,
-                                          decoration: BoxDecoration(
-                                            color: _currentPage == index
-                                                ? Colors.white
-                                                : Colors.white54,
-                                            shape: BoxShape.circle,
-                                          ),
-                                        ),
-                                      );
-                                    }),
-                                  ),
-                                ),
-                              ],
-                            )
-                          : Stack(children: [
-                              const Center(
-                                child: Text('Sem imagens disponíveis'),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.close,
-                                      color: Color.fromARGB(255, 0, 0, 0),
-                                    ),
-                                    iconSize: 36,
-                                    onPressed: () {
-                                      Navigator.pop(
-                                          context); // Retorna para a tela anterior
-                                    },
-                                  ),
-                                  IconButton(
-                                    tooltip: "Deletar pico",
-                                    onPressed: () async {
-                                      await context
-                                          .read<SpotControllerProvider>()
-                                          .deletarPico(widget.pico);
-                                      if (context.mounted) Navigator.pop(context);
-                                    },
-                                    icon: const Icon(
-                                      Icons.delete,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ]),
-                    ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        margin: const EdgeInsets.only(top: 10),
-                        height: 5,
-                        width: 80,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 240, 238, 238),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                // widget da imagem dos spots
+                
                 Expanded(
                   child: ListView(
                     controller: scrollController,
@@ -607,7 +399,6 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                 ],
                               ),
                             ),
-                            // Ícones à direita (salvar, sinalizar, etc.)
                             Container(
                               margin: const EdgeInsets.only(top: 15),
                               child: Align(
@@ -651,10 +442,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                     IconButton(
                                         tooltip: "Denunciar Pico",
                                         onPressed: () {
-                                          denunciarPico(
-                                              context,
-                                              user?.id ?? "anonimo",
-                                              widget.pico.id);
+                                          ModalHelper.openReportSpotModal(context, idUser, idPub, type)
                                         },
                                         icon: const Icon(Icons.flag),
                                         iconSize: 35),
@@ -676,89 +464,5 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
             ),
           );
         });
-  }
-
-  Future<void> avaliarPico(BuildContext context, Pico pico) async {
-    double nota = 0;
-    String mensagem = "";
-    final provider = context.read<SpotControllerProvider>();
-
-    await showDialog(
-      context: context,
-      builder: (context) {
-        return StatefulBuilder(builder: (context, setState) {
-          return AlertDialog(
-            title: const Text("AVALIAR PICO"),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(mensagem),
-                const SizedBox(height: 10),
-                RatingBar.builder(
-                  initialRating: 0,
-                  minRating: 1,
-                  direction: Axis.horizontal,
-                  allowHalfRating: true,
-                  itemCount: 5,
-                  itemBuilder: (context, _) => const Icon(
-                    Icons.star,
-                    color: Colors.amber,
-                  ),
-                  onRatingUpdate: (rating) {
-                    setState(() {
-                      nota = rating; // Atualiza a nota com base no índice
-                      mensagem = getMensagemPico(nota);
-                    });
-                  },
-                ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text("Cancelar"),
-              ),
-              TextButton(
-                onPressed: () async {
-                  await provider.avaliarPico(pico, nota);
-                  if (context.mounted) {
-                    Navigator.of(context).pop();
-                  }
-                },
-                child: const Text("Avaliar"),
-              ),
-            ],
-          );
-        });
-      },
-    );
-  }
-
-  String getMensagemPico(double nota) {
-    if (nota >= 4.0) {
-      return "Muito Marreta!";
-    } else if (nota >= 3.5) {
-      return "Suave pra Marreta!";
-    } else if (nota >= 2.5) {
-      return "Da pra andar";
-    } else if (nota >= 1.5) {
-      return "Meio ruim";
-    } else {
-      return "Horrivel!";
-    }
-  }
-
-  Future<void> denunciarPico(
-      BuildContext context, String? urlIdPico, String idPico) {
-    return showDialog(
-      context: context,
-      builder: (context) => DenunciaDialog(
-        idUser: urlIdPico, // Substituir pelo ID do usuário logado
-        typePublication: TypePublication.pico, // Tipo de publicação
-        idPub: idPico,
-      ),
-    );
   }
 }
