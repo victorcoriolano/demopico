@@ -4,7 +4,6 @@ import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/presentation/controllers/historico_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_provider.dart';
-import 'package:demopico/features/mapa/presentation/controllers/spots_controller.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/container_telas.dart';
 import 'package:demopico/features/mapa/presentation/widgets/config_mapa_widget.dart';
 import 'package:demopico/features/mapa/presentation/widgets/show_pico_widget.dart';
@@ -57,8 +56,7 @@ class ModalHelper{
         builder: (context) {
           debugPrint("chamou o modal para o pico ${pico.picoName}");
           return ShowPicoWidget(
-            deletarPico: onDelete,
-            pico: pico,
+            idPico: pico.id,
           );
         },
       );
@@ -105,9 +103,9 @@ class ModalHelper{
               child: const Text('Cancelar'),
             ),
             TextButton(
-              onPressed: () {
-                context.read<SpotControllerProvider>().deletarPico(pico);
-                Navigator.pop(context);
+              onPressed: () async {
+                await context.read<SpotProvider>().deletarPico(pico);
+                if(context.mounted) Navigator.pop(context);
               },
               child: const Text('Excluir'),
             ),
@@ -142,6 +140,7 @@ class ModalHelper{
                     Text(provider.classification.name),
                     const SizedBox(height: 10),
                     RatingBar.builder(
+                      
                       initialRating: 0,
                       minRating: 1,
                       direction: Axis.horizontal,
