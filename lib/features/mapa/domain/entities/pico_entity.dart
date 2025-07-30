@@ -8,7 +8,7 @@ class Pico {
   final String tipoPico;
   final String picoName;
   final List<String> imgUrls;
-  final String? description;
+  final String description;
   final double long;
   final double lat;
   final List<String> utilidades; 
@@ -39,18 +39,19 @@ class Pico {
   }): initialNota = nota ?? 0,
     numeroAvaliacoes = numeroDeAvaliacoes ?? 0;
 
-  void updateNota(double newNota){
+  (double, int) updateNota(double newNota){
     
     if (numeroAvaliacoes == 0) {
       // Primeira avaliação
       initialNota = newNota;
       numeroAvaliacoes ++;
-      return;
+      return (initialNota, numeroAvaliacoes);
     } else {
       // Atualiza média com base nas avaliações existentes
       initialNota = ((initialNota * numeroAvaliacoes) + newNota) /
           (numeroAvaliacoes + 1);
       numeroAvaliacoes ++;
+      return (initialNota, numeroAvaliacoes);
     }
   }
 }
