@@ -65,7 +65,7 @@ void main() {
       when(() => mockDatasource.load())
           .thenAnswer((_) => Stream.value(listDto));
 
-      final result = repositoryImpl.loadSpots();
+      final result = repositoryImpl.watchListSpots();
       expect(result, isA<Stream<List<PicoModel>>>());
 
       //verificando se retora a lista de picos
