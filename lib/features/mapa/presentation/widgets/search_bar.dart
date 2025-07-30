@@ -46,7 +46,7 @@ class _SearchBarSpotsState extends State<SearchBarSpots> {
                     .read<MapControllerProvider>()
                     .reajustarCameraPosition(LatLng(pico.lat, pico.long));
                 ModalHelper.openModalInfoPico(
-                    context, pico, provider.deletarPico);
+                    context, pico);
               },
             );
           }).toList();
