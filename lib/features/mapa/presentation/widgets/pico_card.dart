@@ -97,7 +97,7 @@ class PicoCard extends StatelessWidget {
 
                   // Descrição 
                     Text(
-                      pico.description!,
+                      pico.description,
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.grey[800],
