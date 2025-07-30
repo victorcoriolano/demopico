@@ -52,7 +52,7 @@ class SpotRepositoryImpl implements ISpotRepository {
   }
 
   @override
-  Stream<List<PicoModel>> loadSpots([Filters? filtros]) {    
+  Stream<List<PicoModel>> watchListSpots([Filters? filtros]) {    
 
     final dataStream = dataSource.load(filtros);
 
