@@ -2,9 +2,6 @@ import 'dart:async';
 
 import 'package:demopico/features/mapa/domain/entities/filters.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
-import 'package:demopico/features/mapa/domain/usecases/avaliar_spot_uc.dart';
-import 'package:demopico/core/common/util/file_manager/delete_file_uc.dart';
-import 'package:demopico/features/mapa/domain/usecases/delete_spot_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/get_my_spots_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/load_spot_uc.dart';
 import 'package:demopico/features/mapa/presentation/view_services/marker_service.dart';
@@ -17,9 +14,6 @@ class SpotControllerProvider extends ChangeNotifier {
   static SpotControllerProvider? _spotControllerProvider;
   static SpotControllerProvider get getInstance {
     _spotControllerProvider ??= SpotControllerProvider(
-        deleteFile: DeleteFileUc.instance,
-        deleteSpotUC: DeleteSpotUC.instance,
-        avaliarUseCase: AvaliarSpotUc.getInstance,
         showAllPicoUseCase: LoadSpotUc.getInstance,
         getMySpotsUc: GetMySpotsUc.instance,);
     return _spotControllerProvider!;
@@ -27,18 +21,12 @@ class SpotControllerProvider extends ChangeNotifier {
 
   SpotControllerProvider(
     {
-      required this.deleteFile,
-      required this.deleteSpotUC,
-      required this.avaliarUseCase,
       required this.showAllPicoUseCase,
       required this.getMySpotsUc,
     });
 
   // use cases
-  final DeleteFileUc deleteFile;
-  final DeleteSpotUC deleteSpotUC;
   final LoadSpotUc showAllPicoUseCase;
-  final AvaliarSpotUc avaliarUseCase;
   final GetMySpotsUc getMySpotsUc;
 
 
@@ -58,16 +46,7 @@ class SpotControllerProvider extends ChangeNotifier {
     _onTapMarker = onTapMarker;
   }
 
-  Future<void> deletarPico(Pico pico) async {
-    try{
-     await Future.wait([
-      deleteFile.deletarFile(pico.imgUrls),
-      deleteSpotUC.callDelete(pico.id),
-     ]);
-    }catch (e) {
-      error = e.toString(); 
-    }
-  }
+  
 
   final MarkerService markerService = MarkerService.getInstance;
 
