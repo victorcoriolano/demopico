@@ -1,6 +1,6 @@
 import 'package:demopico/core/app/auth_wrapper.dart';
 import 'package:demopico/core/app/theme/theme.dart';
-import 'package:demopico/features/mapa/presentation/pages/historico_page.dart';
+import 'package:demopico/features/mapa/presentation/pages/history_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/favorites_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/my_spots_page.dart';
 import 'package:demopico/features/mapa/presentation/view_services/modal_helper.dart';
@@ -8,7 +8,6 @@ import 'package:demopico/features/user/presentation/controllers/user_database_pr
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'dart:developer' as devoloper;
 
 class MyDrawer extends StatefulWidget {
   const MyDrawer({super.key});
@@ -42,11 +41,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 }
                 
                 else {
-                  devoloper.log(
-                    "PASSANDO O NAME MAIS DEVE PASSAR O ID",
-                    name: 'DESENVOLVIMENTO.AVISO',
-                    level: 900,
-                  );
+                  // FIXME: PASSANDO O NOME AO INVÉS DE PASSAR O ID Pq nossa infra n tem o id
                   Get.to(() => MySpotsPage(idUser: user.name,));
                 }
               },),
