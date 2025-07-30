@@ -162,5 +162,24 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
     }
   }
   
+  @override
+  Stream<FirebaseDTO> watchDoc(String id) {
+    try {
+      return _firestore.collection(collection.name)
+      .doc(id)
+      .snapshots().map((doc) {
+        if (!doc.exists || doc.data() == null){
+          throw DataNotFoundFailure();
+        }
+        return FirebaseDTO(id: doc.id, data: doc.data()!);
+      });
+    } on FirebaseException catch (firebaseException) {
+      throw FirebaseErrorsMapper.map(firebaseException);
+    } on Exception catch (exception) {
+      throw UnknownFailure(originalException: exception);
+    } catch (unknown) {
+      throw UnknownFailure(unknownError: unknown);
+    }
+  }
   
 }
