@@ -54,6 +54,7 @@ class SpotProvider with ChangeNotifier {
 
   void initializeWatch(String idPico) {
     isLoading = true;
+    notifyListeners();
     spotSubscription = _watchSpot.execute(idPico).listen(
         //on data
         
@@ -65,6 +66,7 @@ class SpotProvider with ChangeNotifier {
     }, onError: (error) {
       isLoading = false;
       error = error.toString();
+      notifyListeners();
     });
   }
 
