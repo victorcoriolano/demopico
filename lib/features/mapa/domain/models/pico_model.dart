@@ -1,54 +1,49 @@
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 
 //mensagem de erro padrao caso o
-//usuario nao tenha preenchido algum campo 
+//usuario nao tenha preenchido algum campo
 // ou o campo retornar null do bd
 const _padrao = "Não informado";
 
 class PicoModel extends Pico {
-
   PicoModel(
-      {
-        required super.userID,
-        required super.userName,
-        required super.imgUrls,
-        required super.modalidade,
-        required super.tipoPico,
-        required super.nota,
-        required super.numeroDeAvaliacoes,
-        required super.long,
-        required super.lat,
-        required super.description,
-        required super.atributos,
-        required super.obstaculos,
-        required super.utilidades,
-        required super.picoName,
-        required super.id}) 
-      ;
-
-      
+      {required super.userID,
+      required super.userName,
+      required super.imgUrls,
+      required super.modalidade,
+      required super.tipoPico,
+      required super.nota,
+      required super.numeroDeAvaliacoes,
+      required super.long,
+      required super.lat,
+      required super.description,
+      required super.atributos,
+      required super.obstaculos,
+      required super.utilidades,
+      required super.picoName,
+      required super.id});
 
   factory PicoModel.fromJson(Map<String, dynamic> json, String id) {
-  return PicoModel(
-    userID: json['idUser'],
-    id: id,
-    imgUrls: List<String>.from(json['imageUrl'] ?? []),
-    tipoPico: json['tipo'] ?? _padrao,
-    modalidade: json['modalidade'] ?? _padrao,
-    nota: (json['nota'] as num?)?.toDouble() ?? 0.0,
-    numeroDeAvaliacoes: json['avaliacoes'],
-    long: (json['longitude'] as num?)?.toDouble() ?? 0.0,
-    lat: (json['latitude'] as num?)?.toDouble() ?? 0.0,
-    description: json['description'] ?? _padrao,
-    atributos: Map<String, int>.from(json['atributos'] ?? {}),
-    obstaculos: List<String>.from(json['obstaculos'] ?? []),
-    utilidades: List<String>.from(json['utilidades'] ?? []),
-    userName: json['criador'],
-    picoName: json['name'] ?? _padrao,
-  );
-}
+    return PicoModel(
+      userID: json['idUser'],
+      id: id,
+      imgUrls: List<String>.from(json['imageUrl'] ?? []),
+      tipoPico: json['tipo'] ?? _padrao,
+      modalidade: json['modalidade'] ?? _padrao,
+      nota: (json['nota'] as num?)?.toDouble() ?? 0.0,
+      numeroDeAvaliacoes: json['avaliacoes'],
+      long: (json['longitude'] as num?)?.toDouble() ?? 0.0,
+      lat: (json['latitude'] as num?)?.toDouble() ?? 0.0,
+      description: json['description'] ?? _padrao,
+      atributos: Map<String, int>.from(json['atributos'] ?? {}),
+      obstaculos: List<String>.from(json['obstaculos'] ?? []),
+      utilidades: List<String>.from(json['utilidades'] ?? []),
+      userName: json['criador'],
+      picoName: json['name'] ?? _padrao,
+    );
+  }
 
-  factory PicoModel.fromEntity(Pico pico){
+  factory PicoModel.fromEntity(Pico pico) {
     return PicoModel(
       userID: pico.user?.id,
       id: pico.id,
@@ -68,6 +63,25 @@ class PicoModel extends Pico {
     );
   }
 
+  Pico toEntity() {
+    return Pico(
+        imgUrls: imgUrls,
+        modalidade: modalidade,
+        tipoPico: tipoPico,
+        long: long,
+        lat: lat,
+        description: description,
+        atributos: atributos,
+        obstaculos: obstaculos,
+        utilidades: utilidades,
+        id: id,
+        picoName: picoName,
+        nota: initialNota,
+        numeroDeAvaliacoes: numeroAvaliacoes,
+        user: user,
+        userID: userID,
+        userName: userName);
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -88,8 +102,6 @@ class PicoModel extends Pico {
     };
   }
 
-
-
   PicoModel copyWith({
     String? id,
     List<String>? imgUrls,
@@ -106,7 +118,7 @@ class PicoModel extends Pico {
     String? userCreator,
     String? picoName,
     String? idUser,
-  }){
+  }) {
     return PicoModel(
       userID: idUser ?? userID,
       imgUrls: imgUrls ?? this.imgUrls,
