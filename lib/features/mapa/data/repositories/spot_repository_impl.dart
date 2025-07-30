@@ -19,7 +19,7 @@ class SpotRepositoryImpl implements ISpotRepository {
     );
     
 
-  final ISpotDataSource dataSource;
+  final ISpotDataSource<FirebaseDTO> dataSource;
   SpotRepositoryImpl(this.dataSource);
 
   final IMapperDto<PicoModel, FirebaseDTO> _mapper = FirebaseDtoMapper<PicoModel>(
@@ -78,6 +78,20 @@ class SpotRepositoryImpl implements ISpotRepository {
   Future<List<PicoModel>> getMySpots(String userID) async {
     final listDto = await dataSource.getList(userID);
     return listDto.map((dto) => _mapper.toModel(dto)).toList();
+  }
+
+  @override
+  Future<void> evaluateSpot(PicoModel pico, double newRating) async {
+    // Atribuindo a função para uma variável para poder passar para o datasource 
+    // Pensei em passar aqui por conta que essa camada de repository esta mesmo mais
+    // relacionada as models já que ela cuida de mapear dto para models.
+    var updateFunction = pico.updateNota;
+    await dataSource.updateRealtime(pico.id, newRating, updateFunction);
+  }
+
+  @override
+  Stream<PicoModel> watchSpot(String id)  {
+    return dataSource.watchData(id).map((dto) => _mapper.toModel(dto));
   }
 }
 
