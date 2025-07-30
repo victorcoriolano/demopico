@@ -40,7 +40,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) { 
-      context.read<SpotProvider>().initializeWatch(widget.idPico);
+       context.read<SpotProvider>().initializeWatch(widget.idPico);
     });
   }
 
@@ -57,9 +57,10 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
     debugPrint("show pico widget");
 
     return DraggableScrollableSheet(
-        initialChildSize: 0.8,
+        controller: DraggableScrollableController(),
+        initialChildSize: 0.7,
         minChildSize: 0.2,
-        maxChildSize: 0.83,
+        maxChildSize: 0.89,
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(
             decoration: const BoxDecoration(
@@ -74,7 +75,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
               ],
             ),
             child: Consumer<SpotProvider>(
-                builder: (_, spotProvider, __) {
+                builder: (context, spotProvider, child) {
                     if (spotProvider.isLoading){
                       return Center(child: CircularProgressIndicator());
                     }
@@ -143,11 +144,15 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                         // TODO: implementar o icon de excluir em algum lugar
                                         const SizedBox(height: 9),
                                         Container(
+                                          padding: EdgeInsets.all(10),
+                                          margin: EdgeInsets.all(15),
                                           decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(Radius.circular(8)),
                                             border: Border.all(
                                               width: 0,
                                               color: const Color.fromARGB(0, 70, 70, 70),
                                             ),
+                                            color: kGrey100,                                            
                                           ),
                                           child: Column(
                                             children: [
