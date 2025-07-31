@@ -8,4 +8,9 @@ abstract class ISpotDataSource<DTO> {
   Future<DTO> getbyID(String id);
   Future<List<DTO>> getList(String id);
   Future<void> delete(String id);
+  Stream<DTO> watchData(String id);
+
+
+  //método para atualizar a nota em tempo real
+  Future<void> updateRealtime(String id, double newRating, Function updateFunction);
 }

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
-import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
+import 'package:demopico/features/mapa/presentation/controllers/spots_controller.dart';
 import 'package:demopico/features/mapa/presentation/view_services/modal_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -33,7 +33,7 @@ class MapWidgetState extends State<MapWidget> {
   Future<void> _initializeProviders() async {
     await _mapControllerProvider.getLocation();
     _spotControllerProvider.setOnTapMarker(
-      (pico) => ModalHelper.openModalInfoPico(context, pico, _spotControllerProvider.deletarPico),
+      (pico) => ModalHelper.openModalInfoPico(context, pico),
     );
     _spotControllerProvider.initialize();
   }

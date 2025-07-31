@@ -12,8 +12,8 @@ class FirebaseSpotRemoteDataSource implements ISpotDataSource<FirebaseDTO> {
   static FirebaseSpotRemoteDataSource? _firebaseSpotRemoteDataSource;
 
   static FirebaseSpotRemoteDataSource get getInstance =>
-      _firebaseSpotRemoteDataSource ??=
-          FirebaseSpotRemoteDataSource(CrudFirebase.getInstance..setcollection(Collections.spots));
+      _firebaseSpotRemoteDataSource ??= FirebaseSpotRemoteDataSource(
+          CrudFirebase.getInstance..setcollection(Collections.spots));
 
   final CrudFirebase _firebaseFirestore;
   final String _collectionName = 'spots';
@@ -24,8 +24,7 @@ class FirebaseSpotRemoteDataSource implements ISpotDataSource<FirebaseDTO> {
   Future<FirebaseDTO> create(FirebaseDTO data) async {
     // Salvando os dados no Firestore
     try {
-      final doc =
-          await _firebaseFirestore.create(data);
+      final doc = await _firebaseFirestore.create(data);
       //retornando id do spot criado
       final newPico = data.copyWith(id: doc.id);
       return newPico;
@@ -44,16 +43,14 @@ class FirebaseSpotRemoteDataSource implements ISpotDataSource<FirebaseDTO> {
     } on FirebaseException catch (e) {
       throw FirebaseErrorsMapper.map(e);
     } on Exception catch (e, stacktrace) {
-      throw UnknownFailure(
-          originalException: e, stackTrace: stacktrace);
-    }catch (e) {
+      throw UnknownFailure(originalException: e, stackTrace: stacktrace);
+    } catch (e) {
       throw UnknownFailure(unknownError: e);
     }
   }
 
   @override
   Future<FirebaseDTO> getbyID(String id) async {
-
     return await _firebaseFirestore.read(id);
   }
 
@@ -81,7 +78,8 @@ class FirebaseSpotRemoteDataSource implements ISpotDataSource<FirebaseDTO> {
 
   Query executeQuery([Filters? filtro]) {
     //acessando a instancia do crud para realizar consultas com where
-    Query querySnapshot = _firebaseFirestore.dataSource.collection(_collectionName);
+    Query querySnapshot =
+        _firebaseFirestore.dataSource.collection(_collectionName);
 
     try {
       if (filtro != null) {
@@ -102,8 +100,7 @@ class FirebaseSpotRemoteDataSource implements ISpotDataSource<FirebaseDTO> {
           querySnapshot =
               querySnapshot.where("modalidade", isEqualTo: filtro.modalidade);
         }
-      }
-      else {
+      } else {
         querySnapshot = querySnapshot;
       }
     } catch (e, st) {
@@ -114,11 +111,52 @@ class FirebaseSpotRemoteDataSource implements ISpotDataSource<FirebaseDTO> {
 
   @override
   Future<void> update(FirebaseDTO picoDto) async {
-      await _firebaseFirestore.update(picoDto);
-      return;
+    await _firebaseFirestore.update(picoDto);
+    return;
   }
-  
+
   @override
-  Future<List<FirebaseDTO>> getList(String id) async => 
-      await _firebaseFirestore.readWithFilter("userID", id); 
+  Future<List<FirebaseDTO>> getList(String id) async =>
+      await _firebaseFirestore.readWithFilter("criador", id);
+
+  @override
+  Future<void> updateRealtime(String idPico, double newRating, Function updateFunction ) async {
+    // Acessando o datasource pela interface do datasource
+    // parece meio estranho e errado porém o datasource tente a ter essa função de se relacionar
+    //e o crud firebase é somente um boilerplate para evitar duplicação de código desnecessário 
+    final datasource = _firebaseFirestore.dataSource;
+    final spotRef = datasource.collection(_collectionName).doc(idPico);
+
+    await datasource.runTransaction((transaction) async {
+      /// Lendo o documento mais recente DENTRO DA TRANSAÇÃO para não houver
+      /// conflito de usuários atualizar ao mesmo tempo ou tentar atualizar 
+      /// com dados desatualizados
+      final DocumentSnapshot freshSpotDoc = await transaction.get(spotRef);
+
+      if (!freshSpotDoc.exists) {
+        throw DataNotFoundFailure();
+      }
+
+      
+      // Aqui, o DataSource está recebendo o a função de execultar a atualização que faz parte da
+      // lógica de negocio ou seja com isso não teremos necessidade de saber quem é a model no datasource pq
+      // a responsabilidade dele em si deve ser se relacionar com o banco ou infra preterida e execultar requisições
+      // O importante é que o CÁLCULO não é do DataSource, mas sim a GARANTIA de que a leitura é fresca.
+
+
+      // Para manter o Clean, a lógica de cálculo deve vir do DOMÍNIO.
+      // Aqui execultamos a função q vem do domínio  e atualizamos os dados frescos 
+      final (double, int) updatedSpot = updateFunction(newRating);
+      
+      transaction.update(spotRef, {
+        'nota': updatedSpot.$1,
+        'avaliacoes': updatedSpot.$2,
+      });
+    });
+  }
+
+  @override
+  Stream<FirebaseDTO> watchData(String id) {
+    return _firebaseFirestore.watchDoc(id);
+  }
 }

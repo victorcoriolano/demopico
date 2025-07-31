@@ -107,7 +107,7 @@ class _FavoriteSpotPageState extends State<FavoriteSpotPage> {
                         },
                       ),
                       IconButton(
-                        tooltip: "Deletar Pico",
+                        tooltip: "Remover Favorito",
                         icon: const Icon(Icons.delete, color: Colors.red),
                         onPressed: () async {
                           final deletar = await provider

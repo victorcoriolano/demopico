@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:demopico/core/app/auth_wrapper.dart';
 
 import 'package:demopico/features/home/infra/dialog_page_route.dart';
@@ -91,7 +92,7 @@ class _TopLevelHomeRowState extends State<TopLevelHomeRow> {
                   ? Icon(Icons.supervised_user_circle, size: 64, color: Colors.black,)
                   : CircleAvatar(
                       radius: 32,
-                      backgroundImage: NetworkImage(widget._userImage!),
+                      backgroundImage: CachedNetworkImageProvider(widget._userImage!),
                       backgroundColor: Colors.transparent)),
         ]),
       ),

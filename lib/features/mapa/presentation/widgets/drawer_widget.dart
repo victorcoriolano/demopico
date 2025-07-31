@@ -1,7 +1,8 @@
 import 'package:demopico/core/app/auth_wrapper.dart';
 import 'package:demopico/core/app/theme/theme.dart';
-import 'package:demopico/features/mapa/presentation/pages/historico_page.dart';
+import 'package:demopico/features/mapa/presentation/pages/history_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/favorites_page.dart';
+import 'package:demopico/features/mapa/presentation/pages/my_spots_page.dart';
 import 'package:demopico/features/mapa/presentation/view_services/modal_helper.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +34,16 @@ class _MyDrawerState extends State<MyDrawer> {
               icon: Icons.spoke, 
               text: " MEUS PICOS", 
               onPressed: () {
-                //TODO: CRIAR TELA DE MEUS PICOS
+                if (user == null){
+                  Get.snackbar("Erro", "Usuário não logado faça login para acessar seus picos", colorText: kWhite);
+                  Get.to(() => AuthWrapper());
+                  return;
+                }
+                
+                else {
+                  // FIXME: PASSANDO O NOME AO INVÉS DE PASSAR O ID Pq nossa infra n tem o id
+                  Get.to(() => MySpotsPage(idUser: user.name,));
+                }
               },),
             MenuItem(
                   icon: Icons.bookmark, 
@@ -46,8 +56,7 @@ class _MyDrawerState extends State<MyDrawer> {
                         Get.to(() => AuthWrapper());
                       });
                     }
-
-                    final userId = user!.id;
+                    final userId = user!.id; 
                     Get.to(() => FavoriteSpotPage(userID: userId));
                     
                   },
@@ -62,9 +71,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 Get.back();
                 ModalHelper.abrirModalConfgMap(context);
               },
-            ),
-            // Botão Picos Salvos
-            
+            ),            
                 
             // Botão Histórico
             MenuItem(
