@@ -61,8 +61,6 @@ class AddPicoProvider extends ChangeNotifier{
     this.latlang = latlang;
   }
 
-  
-
   Future<void> pickImages() async{
     try{
       await _pickImageUC.pick();
@@ -73,18 +71,11 @@ class AddPicoProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  
-
   void removerImagens(int index){
     files.removeAt(index);
     notifyListeners();
   }
-  
 
-  
-  /* - */
-
-  //variaveis de mensagem de erro
   String? errors;
 
   Map<String, List<String>> utilidadesPorModalidade = {
