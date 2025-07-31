@@ -102,7 +102,7 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 20),
             // Título da seção de utilidades
             const Align(
               alignment: Alignment.centerLeft,
@@ -143,43 +143,43 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
   }
 }
 
-// Widget para os botões de modalidade
 class ModalidadeButtons extends StatelessWidget {
-  final Function(String) onSelected; // Callback para seleção da modalidade
-  final String selectedModalidade; // Modalidade selecionada
+  final Function(String) onSelected; 
+  final String selectedModalidade; 
 
   const ModalidadeButtons({super.key, required this.onSelected, required this.selectedModalidade});
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Espaçamento uniforme entre os botões
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly, 
       children: [
-        // Botão para modalidade Skate
-        _buildModalidadeButton('Skate'),
-        // Botão para modalidade Parkour
-        _buildModalidadeButton('Parkour'),
-        // Botão para modalidade BMX
-        _buildModalidadeButton('BMX'),
+        ModalidadeItens(isSelectedModalidade: selectedModalidade == "Skate", modalidade: "Skate", onPressed: onSelected),
+        ModalidadeItens(isSelectedModalidade: selectedModalidade == "BMX", modalidade: "BMX", onPressed: onSelected),
+        ModalidadeItens(isSelectedModalidade: selectedModalidade == "Parkour", modalidade: "Parkour", onPressed: onSelected),
       ],
     );
   }
+}
 
-  // Método para construir cada botão de modalidade
-  Widget _buildModalidadeButton(String modalidade) {
-    bool isSelected = selectedModalidade == modalidade; // Verifica se a modalidade está selecionada
+class ModalidadeItens extends StatelessWidget {
+  final bool isSelectedModalidade;
+  final String modalidade;
+  final Function(String) onPressed;
+  const ModalidadeItens({super.key, required this.isSelectedModalidade, required this.modalidade, required this.onPressed,});
+
+  @override
+  Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        backgroundColor: isSelected ? const Color(0xFF8B0000) : Colors.grey[300], // Cor do botão
-        foregroundColor: isSelected ? Colors.white : Colors.black,
+        backgroundColor: isSelectedModalidade ? const Color(0xFF8B0000) : Colors.grey[300], // Cor do botão
+        foregroundColor: isSelectedModalidade ? Colors.white : Colors.black,
         padding: const EdgeInsets.symmetric(horizontal: 25),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20), // Bordas arredondadas
         ),
       ),
-      onPressed: () {
-        onSelected(modalidade); // Chama o callback com a modalidade selecionada
-      },
+      onPressed: () => onPressed(modalidade), // Chama o callback com a modalidade selecionada
       child: Text(modalidade, style: const TextStyle(fontSize: 15)),
     );
   }
