@@ -55,6 +55,7 @@ class ModalHelper{
         backgroundColor: Colors.transparent, // Transparência para o fundo
         builder: (context) {
           debugPrint("chamou o modal para o pico ${pico.picoName}");
+          context.read<SpotProvider>().setPico(pico);
           return ShowPicoWidget(
             idPico: pico.id,
           );
