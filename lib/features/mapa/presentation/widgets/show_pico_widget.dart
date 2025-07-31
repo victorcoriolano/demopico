@@ -1,4 +1,3 @@
-
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/features/denunciar/denuncia_model.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_provider.dart';
@@ -78,13 +77,13 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                     if (spotProvider.isLoading){
                       return Center(child: CircularProgressIndicator());
                     }
-                    if (spotProvider.pico == null && spotProvider.error != null){
+                    if (spotProvider.error != null){
                       return Center(child: Text(spotProvider.error!),);
                     }
                     return Column(
                           children: [
                             // widget da imagem dos spots
-                            ImagesTop(images: spotProvider.pico!.imgUrls, isMine: isMine()),
+                            ImagesTop(images: spotProvider.pico?.imgUrls ?? [], isMine: isMine()),
                             Expanded(
                               child: ListView(
                                 controller: scrollController,
@@ -110,7 +109,6 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                         Row(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            // Foto e Nome
                                             PhotoAndNameWidget(
                                               nameUserCreator: spotProvider.pico!.userName ?? "Anônimo", 
                                               //FIXME: PASSANDO A IMAGEM COMO NULL MAIS FUTURAMENTE passar a imagem do user
@@ -118,7 +116,6 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                             ),
                                             const SizedBox(width: 15),
             
-                                            // Nome do local e descrição
                                             NameDescription(name: spotProvider.pico!.picoName, description: spotProvider.pico!.description),
                                           ],
                                         ),
