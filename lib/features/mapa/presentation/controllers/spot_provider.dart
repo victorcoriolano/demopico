@@ -56,18 +56,22 @@ class SpotProvider with ChangeNotifier {
     isLoading = true;
     notifyListeners();
     spotSubscription = _watchSpot.execute(idPico).listen(
-        //on data
-        
         (data) {
           pico = data;
           debugPrint("pico: $pico");
           isLoading = false;
           notifyListeners();
-    }, onError: (error) {
-      isLoading = false;
-      error = error.toString();
-      notifyListeners();
-    });
+        }, 
+        onError: (error) {
+          isLoading = false;
+          error = error.toString();
+          notifyListeners();
+        }
+      );
+  }
+
+  void setPico(Pico spot){
+    pico = spot;
   }
 
   Future<void> avaliarSpot() async {
@@ -98,5 +102,11 @@ class SpotProvider with ChangeNotifier {
     } catch (e) {
       error = e.toString();
     }
+  }
+
+  @override
+  void dispose() {
+    spotSubscription?.cancel();
+    super.dispose();
   }
 }
