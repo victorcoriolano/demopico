@@ -89,8 +89,8 @@ class AuthUserProvider extends ChangeNotifier {
   Future<void> logout() async {
     try {
       await logoutUc.deslogar();
-    } catch (e) {
-      //TODO IMPLEMENTAR TRATAMENTO DE ERROS COM MENSAGENS CLARAS
+    } on Failure catch (e) {
+      getError(e, "Erro ao deslogar");
     }
   }
 
