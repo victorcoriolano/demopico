@@ -1,18 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/core/common/widgets/glass_widget.dart';
+import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ImagesTop extends StatefulWidget {
+class TopInfoSpot extends StatefulWidget {
   final List<String> images;
   final bool isMine;
-  const ImagesTop({super.key, required this.images, required this.isMine});
+  const TopInfoSpot({super.key, required this.images, required this.isMine});
 
   @override
-  State<ImagesTop> createState() => _ImagesTopState();
+  State<TopInfoSpot> createState() => _TopInfoSpotState();
 }
 
-class _ImagesTopState extends State<ImagesTop> {
+class _TopInfoSpotState extends State<TopInfoSpot> {
   late final PageController _pageController;
   int currentIndex = 0;
 
@@ -69,18 +71,28 @@ class _ImagesTopState extends State<ImagesTop> {
                 ),
           Align(
             alignment: Alignment.topRight,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.close, color: kRed),
-                  padding: const EdgeInsets.all(10),
-                  iconSize: 36,
-                  onPressed: () {
-                    Get.back(); // Retorna para a tela anterior
-                  },
-                ),
-              ],
+            child: GlassWidget(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.close, color: kRed),
+                    padding: const EdgeInsets.all(10),
+                    iconSize: 36,
+                    onPressed: () {
+                      Get.back(); // Retorna para a tela anterior
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.map, color: kRed),
+                    padding: const EdgeInsets.all(10),
+                    iconSize: 36,
+                    onPressed: () {
+                      Get.to(() => MapPage()); // Retorna para a tela anterior
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
           Align(
