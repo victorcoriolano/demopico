@@ -20,16 +20,13 @@ class _ContainerPostsWidgetState extends State<ContainerPostsWidget> {
     
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _postProvider = context.read<PostProvider>();
-      // This ensures that the provider is initialized before calling _getPost
       _getPost();
     });
   }
 
   Future<void> _getPost() async {
     final userId = context.read<UserDatabaseProvider>().user?.id;
-
     await _postProvider.loadPosts(userId!);
-    
   }
 
   @override
