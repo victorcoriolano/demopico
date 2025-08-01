@@ -7,7 +7,7 @@ import 'package:demopico/features/mapa/presentation/view_services/modal_helper.d
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/atribute_icons.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/custom_buttons.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/evaluate_widget.dart';
-import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/images_top.dart';
+import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/top_info_spot.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/name_description.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/obstacle_widget.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/photo_and_name_widget.dart';
@@ -83,7 +83,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                     return Column(
                           children: [
                             // widget da imagem dos spots
-                            ImagesTop(images: spotProvider.pico?.imgUrls ?? [], isMine: isMine()),
+                            TopInfoSpot(images: spotProvider.pico?.imgUrls ?? [], isMine: isMine()),
                             Expanded(
                               child: ListView(
                                 controller: scrollController,
