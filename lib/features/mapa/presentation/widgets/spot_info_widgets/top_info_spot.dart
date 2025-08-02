@@ -71,27 +71,31 @@ class _TopInfoSpotState extends State<TopInfoSpot> {
                 ),
           Align(
             alignment: Alignment.topRight,
-            child: GlassWidget(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.close, color: kRed),
-                    padding: const EdgeInsets.all(10),
-                    iconSize: 36,
-                    onPressed: () {
-                      Get.back(); // Retorna para a tela anterior
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.map, color: kRed),
-                    padding: const EdgeInsets.all(10),
-                    iconSize: 36,
-                    onPressed: () {
-                      Get.to(() => MapPage()); // Retorna para a tela anterior
-                    },
-                  ),
-                ],
+            child: Container(
+              margin: EdgeInsets.all(12),
+              height: 200,
+              child: GlassWidget(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.close, color: kRed),
+                      padding: const EdgeInsets.all(10),
+                      iconSize: 36,
+                      onPressed: () {
+                        Get.back(); // Retorna para a tela anterior
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.map, color: kRed),
+                      padding: const EdgeInsets.all(10),
+                      iconSize: 36,
+                      onPressed: () {
+                        Get.to(() => MapPage()); // Retorna para a tela anterior
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
