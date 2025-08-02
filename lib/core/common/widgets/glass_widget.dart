@@ -12,7 +12,6 @@ class GlassWidget extends StatelessWidget {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
         child: Container(
-          margin: EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: Colors.white.withOpacity(0.2), // Cor com transparência
             borderRadius: BorderRadius.circular(20),
