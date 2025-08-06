@@ -8,7 +8,8 @@ import 'package:get/get.dart';
 class TopInfoSpot extends StatefulWidget {
   final List<String> images;
   final bool isMine;
-  const TopInfoSpot({super.key, required this.images, required this.isMine});
+  final VoidCallback onPressedDelete;
+  const TopInfoSpot({super.key, required this.images, required this.isMine, required this.onPressedDelete});
 
   @override
   State<TopInfoSpot> createState() => _TopInfoSpotState();
@@ -93,6 +94,15 @@ class _TopInfoSpotState extends State<TopInfoSpot> {
                       onPressed: () {
                         Get.to(() => MapPage()); // Retorna para a tela anterior
                       },
+                    ),
+                    Visibility(
+                      visible: widget.isMine,
+                      child: IconButton(
+                      icon: const Icon(Icons.delete, color: kRed),
+                      padding: const EdgeInsets.all(10),
+                      iconSize: 36,
+                      onPressed: widget.onPressedDelete,
+                    ),
                     ),
                   ],
                 ),
