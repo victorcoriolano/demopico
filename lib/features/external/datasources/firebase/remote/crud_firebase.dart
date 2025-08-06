@@ -47,10 +47,10 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
       final docRf = await _firestore.collection(collection.name).doc(id).get(
         GetOptions(source: Source.serverAndCache)
       );
-      
+      if (!docRf.exists || docRf.data() == null) throw DataNotFoundFailure(); 
       return FirebaseDTO(
         id: id, 
-        data: docRf.data() as Map<String, dynamic>);
+        data: docRf.data()!);
     } on FirebaseException catch (e) {
       throw FirebaseErrorsMapper.map(e);
     }
@@ -68,7 +68,8 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
   @override
   Future<void> delete(String id) async {
     try {
-      await _firestore.collection(collection.name).doc(id).delete();
+      debugPrint("Called Delete");
+      await _firestore.collection(collection.name).doc(id).delete(). then((_) => debugPrint('SUCCESSFULLY DELETED DOC'));
     } on FirebaseException catch (e) {
       throw FirebaseErrorsMapper.map(e);
     }
