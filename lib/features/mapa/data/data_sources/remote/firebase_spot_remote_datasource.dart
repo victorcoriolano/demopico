@@ -122,7 +122,7 @@ class FirebaseSpotRemoteDataSource implements ISpotDataSource<FirebaseDTO> {
   @override
   Future<void> updateRealtime(String idPico, double newRating, Function updateFunction ) async {
     // Acessando o datasource pela interface do datasource
-    // parece meio estranho e errado porém o datasource tente a ter essa função de se relacionar
+    // parece meio estranho e errado porém o datasource tende a ser de mais baixo nível 
     //e o crud firebase é somente um boilerplate para evitar duplicação de código desnecessário 
     final datasource = _firebaseFirestore.dataSource;
     final spotRef = datasource.collection(_collectionName).doc(idPico);
@@ -152,6 +152,7 @@ class FirebaseSpotRemoteDataSource implements ISpotDataSource<FirebaseDTO> {
         'nota': updatedSpot.$1,
         'avaliacoes': updatedSpot.$2,
       });
+      return;
     });
   }
 
