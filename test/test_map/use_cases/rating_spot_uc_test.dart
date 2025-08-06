@@ -9,12 +9,12 @@ void main() {
     test('deve fazer uma avaliação inicial', () async {
       final spotRatingZero = spots_mock.testPico.copyWith(nota: 0, numeroAvaliacoes: 0);
       spotRatingZero.updateNota(0.2);
-      expect(spotRatingZero.initialNota, equals(0.2));
-      expect(spotRatingZero.numeroAvaliacoes, equals(1) );
+      expect(spotRatingZero.rating, equals(0.2));
+      expect(spotRatingZero.numberOfReviews, equals(1) );
     });
     test('deve fazer uma avaliação com uma avaliação já feita', () async {
       spots_mock.testPico2.updateNota(5.0);
-      expect(spots_mock.testPico2.initialNota, equals(4.55));
+      expect(spots_mock.testPico2.rating, equals(4.55));
     });
   });  
 }

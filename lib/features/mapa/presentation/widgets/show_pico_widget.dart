@@ -99,7 +99,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             ObstacleWidget(obstacles: spotProvider.pico!.obstaculos),
-                                            EvaluateWidget(rate: spotProvider.pico!.initialNota, numberReviews: spotProvider.pico!.numeroAvaliacoes),
+                                            EvaluateWidget(rate: spotProvider.pico!.rating, numberReviews: spotProvider.pico!.numberOfReviews),
                                             
                                           ],
                                         ),

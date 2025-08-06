@@ -113,7 +113,7 @@ class PicoCard extends StatelessWidget {
                       const Icon(Icons.star_rate_rounded, color: Colors.amber, size: 20),
                       const SizedBox(width: 4),
                       Text(
-                        pico.initialNota.toStringAsFixed(1),
+                        pico.rating.toStringAsFixed(1),
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -121,7 +121,7 @@ class PicoCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        ' (${pico.numeroAvaliacoes} avaliações)',
+                        ' (${pico.numberOfReviews} avaliações)',
                         style: TextStyle(
                           fontSize: 13,
                           color: Colors.grey[600],

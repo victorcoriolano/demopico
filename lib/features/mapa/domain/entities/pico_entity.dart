@@ -16,13 +16,13 @@ class Pico {
   final List<String> obstaculos;
   final String? userName;
   final String? userID;
-  double initialNota = 0;
-  int numeroAvaliacoes = 0;
+  double rating;
+  int numberOfReviews;
 
   Pico(
     {
-      double? nota,
-      int? numeroDeAvaliacoes,
+      double? newRating,
+      int? countReviews,
       this.userName,
       this.userID,
       this.user,
@@ -36,23 +36,29 @@ class Pico {
       required this.utilidades,
       required this.id,
       required this.picoName,
-  }): initialNota = nota ?? 0,
-    numeroAvaliacoes = numeroDeAvaliacoes ?? 0;
+  }): rating = newRating ?? 0,
+    numberOfReviews = countReviews ?? 0;
 
   (double, int) updateNota(double newNota){
     
-    if (numeroAvaliacoes == 0) {
+    if (numberOfReviews == 0) {
       // Primeira avaliação
-      initialNota = newNota;
-      numeroAvaliacoes ++;
-      return (initialNota, numeroAvaliacoes);
+      rating = newNota;
+      numberOfReviews ++;
+      return (rating, numberOfReviews);
     } else {
       // Atualiza média com base nas avaliações existentes
-      initialNota = double.parse((((initialNota * numeroAvaliacoes) + newNota) /
-          (numeroAvaliacoes + 1)).toStringAsFixed(2));
-      numeroAvaliacoes ++;
-      return (initialNota, numeroAvaliacoes);
+      rating = double.parse((((rating * numberOfReviews) + newNota) /
+          (numberOfReviews + 1)).toStringAsFixed(2));
+      numberOfReviews ++;
+      return (rating, numberOfReviews);
     }
   }
+  
+  set newRating(double rating){
+    this.rating = rating;
+  }
+
+  
 }
 
