@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:demopico/core/common/errors/failure_server.dart';
+import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/core/common/util/file_manager/delete_file_uc.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/enums/classification_spot.dart';
@@ -100,6 +101,22 @@ class SpotProvider with ChangeNotifier {
         _deleteSpotUC.callDelete(pico.id),
       ]);
     } catch (e) {
+      error = e.toString();
+    }
+  }
+
+  Future<void> rating(double newRating) async {
+    if(pico == null) {
+      error = PicoNotFoundFailure().message;
+      return;
+    }
+    try {
+      await _avaliarSpotUc.executar(pico!, newRating);
+    }on Failure catch (e){
+      error = e.message;
+      debugPrint(e.toString());
+    } catch (e){
+      debugPrint("Erro sem tratamento");
       error = e.toString();
     }
   }
