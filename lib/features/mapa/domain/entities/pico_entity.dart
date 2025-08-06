@@ -48,8 +48,8 @@ class Pico {
       return (initialNota, numeroAvaliacoes);
     } else {
       // Atualiza média com base nas avaliações existentes
-      initialNota = ((initialNota * numeroAvaliacoes) + newNota) /
-          (numeroAvaliacoes + 1);
+      initialNota = double.parse((((initialNota * numeroAvaliacoes) + newNota) /
+          (numeroAvaliacoes + 1)).toStringAsFixed(2));
       numeroAvaliacoes ++;
       return (initialNota, numeroAvaliacoes);
     }
