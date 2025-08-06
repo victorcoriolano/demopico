@@ -83,7 +83,13 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                     return Column(
                           children: [
                             // widget da imagem dos spots
-                            TopInfoSpot(images: spotProvider.pico?.imgUrls ?? [], isMine: isMine()),
+                            TopInfoSpot(
+                              images: spotProvider.pico?.imgUrls ?? [], 
+                              isMine: isMine(), 
+                              onPressedDelete: () async {
+                                  await spotProvider.deletarPico(spotProvider.pico!);
+                                  Get.back();
+                              },),
                             Expanded(
                               child: ListView(
                                 controller: scrollController,
@@ -137,7 +143,6 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                             )
                                           ],
                                         ),
-                                        // TODO: implementar o icon de excluir em algum lugar
                                         const SizedBox(height: 9),
                                         Container(
                                           padding: EdgeInsets.all(10),
