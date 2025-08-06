@@ -86,7 +86,7 @@ class SpotRepositoryImpl implements ISpotRepository {
     // Pensei em passar aqui por conta que essa camada de repository esta mesmo mais
     // relacionada as models já que ela cuida de mapear dto para models.
     var updateFunction = pico.updateNota;
-    await dataSource.updateRealtime(pico.id, newRating, updateFunction);
+    return await dataSource.updateRealtime(pico.id, newRating, updateFunction);
   }
 
   @override
