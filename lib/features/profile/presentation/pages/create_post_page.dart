@@ -1,5 +1,6 @@
 import 'package:demopico/core/app/auth_wrapper.dart';
 import 'package:demopico/core/app/home_page.dart';
+import 'package:demopico/features/mapa/presentation/widgets/search_bar.dart';
 import 'package:demopico/features/profile/presentation/provider/post_provider.dart';
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/media_preview_list.dart';
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/media_preview_video.dart';
@@ -28,47 +29,15 @@ class _CreatePostPageState extends State<CreatePostPage> {
   }
 
   void _showSpotSelectionDialog(BuildContext context, PostProvider provider) {
-    // Simulação de picos disponíveis
-    final Map<String, String> availableSpots = {
-      'spot123': 'Praça da Matriz',
-      'spot456': 'Skatepark do Centro',
-      'spot789': 'Rua do Comércio',
-    };
-
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: const Text('Selecionar Pico'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: availableSpots.entries.map((entry) {
-                return RadioListTile<String>(
-                  title: Text(entry.value),
-                  value: entry.key,
-                  groupValue: provider.selectedSpotId,
-                  onChanged: (String? value) {
-                    provider.selectSpot(value);
-                    Navigator.pop(dialogContext);
-                  },
-                );
-              }).toList(),
-            ),
+        return Center(
+          child:SearchBarSpots(
+            onTapSuggestion: (selectedSpot) {
+              provider.selectSpot(selectedSpot);
+            },
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                provider.selectSpot(null); // Opção para desmarcar o pico
-                Navigator.pop(dialogContext);
-              },
-              child: const Text('Nenhum Pico'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(dialogContext),
-              child: const Text('Cancelar'),
-            ),
-          ],
         );
       },
     );
@@ -124,7 +93,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                   icon: const Icon(Icons.location_on),
                   label: Text(
                     provider.selectedSpotId != null
-                        ? 'Pico Selecionado: ${provider.selectedSpotId}' 
+                        ? 'Pico Selecionado: ${provider.selectedSpotId!.picoName}' 
                         : 'Linkar a um Pico no Mapa',
                   ),
                   style: ElevatedButton.styleFrom(
