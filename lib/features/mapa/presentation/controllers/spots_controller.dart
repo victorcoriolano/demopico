@@ -136,6 +136,9 @@ class SpotControllerProvider extends ChangeNotifier {
 
   // Método para pesquisar picos
   void pesquisandoPico(String word) {
+    if(spots.isEmpty){
+      _loadSpots();
+    }
     word = word.toLowerCase();
     picosPesquisados = spots
         .where((argument) =>
