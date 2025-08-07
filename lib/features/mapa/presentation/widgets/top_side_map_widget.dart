@@ -1,7 +1,10 @@
 import 'package:demopico/features/mapa/domain/entities/filters.dart';
+import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spots_controller.dart';
+import 'package:demopico/features/mapa/presentation/view_services/modal_helper.dart';
 import 'package:demopico/features/mapa/presentation/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 
@@ -31,8 +34,16 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Expanded(              
-              child: SearchBarSpots(),
+            Expanded(              
+              child: SearchBarSpots(
+                onTapSuggestion: (pico) {
+                context
+                    .read<MapControllerProvider>()
+                    .reajustarCameraPosition(LatLng(pico.lat, pico.long));
+                ModalHelper.openModalInfoPico(
+                    context, pico);
+              },
+              ),
             ),
             const SizedBox(width: 10),
             PopupMenuButton<String>(
