@@ -162,7 +162,7 @@ class _PostWidgetState extends State<PostWidget> {
                       child: Row(                  
                         children: [
                           Icon(Icons.location_pin),
-                          Text(provider.selectedSpotId ?? "Localização não especificada"),
+                          Text(provider.selectedSpotId?.picoName ?? "Localização não especificada"),
                         ],
                       ),
                     ),
@@ -173,7 +173,6 @@ class _PostWidgetState extends State<PostWidget> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                
                         Row(
                           children: [
                             GestureDetector(
