@@ -1,5 +1,6 @@
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/features/denunciar/denuncia_model.dart';
+import 'package:demopico/features/mapa/presentation/controllers/favorite_spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_provider.dart';
 
 import 'package:demopico/features/mapa/presentation/pages/comment_page.dart';
@@ -43,6 +44,9 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
     });
   }
 
+
+  // FIXME: REMOVER ESSA LÓGICA DA VIEW E MODELAR PARA DENTRO DO DOMÍNIO
+  
   bool isMine(){
     user = context.read<UserDatabaseProvider>().user;
     final pico = context.read<SpotProvider>().pico;
@@ -187,11 +191,13 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                                 MainAxisAlignment.spaceAround,
                                             children: [
                                               IconButton(
-                                                onPressed: () {
+                                                onPressed: () async {
                                                   //TODO: REFATORAR LÓGICA DE SALVAR SPOT PARA PASSAR 
                                                   //TER UMA LÓGICA PARA SALVAR E UMA PARA FAVORITAR
+                                                  
+                                                  context.read<FavoriteSpotController>().favPico();
                                                 },
-                                                icon: const Icon(Icons.bookmark_border),
+                                                icon: const Icon(Icons.favorite),
                                                 tooltip: "Salvar Pico",
                                                 iconSize: 35,
                                               ),
