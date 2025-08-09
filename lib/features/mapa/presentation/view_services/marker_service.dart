@@ -14,6 +14,7 @@ class MarkerService {
 
   final Map<String, BitmapDescriptor> _markerIcons = {};
   Set<Marker> markers = {};
+  
 
  
 
@@ -48,3 +49,4 @@ class MarkerService {
     }
   }
 }
+
