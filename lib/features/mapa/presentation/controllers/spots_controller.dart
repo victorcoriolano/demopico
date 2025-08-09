@@ -5,6 +5,7 @@ import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/usecases/get_my_spots_uc.dart';
 import 'package:demopico/features/mapa/domain/usecases/load_spot_uc.dart';
 import 'package:demopico/features/mapa/presentation/view_services/marker_service.dart';
+import 'package:demopico/features/mapa/presentation/view_services/marker_service_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -104,6 +105,8 @@ class SpotControllerProvider extends ChangeNotifier {
       return;
     }
     markers.clear();
+    var markerServiceFlutterMap = MarkerServiceFlutter();
+    markerServiceFlutterMap.preloadIcons(spots, _onTapMarker!); 
     
     markerService.preloadIcons(spots, _onTapMarker!).listen(
       (marker) {
