@@ -9,6 +9,7 @@ import 'package:demopico/features/hub/presentation/providers/hub_provider.dart';
 import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/comment_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/favorite_spot_controller.dart';
+import 'package:demopico/features/mapa/presentation/controllers/flutter_map_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/historico_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_provider.dart';
@@ -27,6 +28,7 @@ import 'package:provider/provider.dart';
 
 final myProviders = [
   ChangeNotifierProvider(create: (_) => OpenWeatherProvider()),
+        ChangeNotifierProvider(create: (_) => FlutterMapControllerProvider()),
         ChangeNotifierProvider(create: (_) => ForecastProvider(null)),
         ChangeNotifierProvider(create: (_) => AuthUserProvider.getInstance),
         ChangeNotifierProvider(create: (_) => ScreenProvider()),
