@@ -19,9 +19,6 @@ class FlutterMapControllerProvider extends ChangeNotifier {
 
   //setando o controller para manipular em qualquer lugar do código
   void setGoogleMapController(MapControllerImpl controller) {
-    if (_mapController != null) {
-      return;
-    }
     _mapController = controller;
     completer.complete(controller);
     notifyListeners();
@@ -30,12 +27,8 @@ class FlutterMapControllerProvider extends ChangeNotifier {
   void reajustarCameraPosition(LatLng position)  {
     //movendo a camera position
     debugPrint("Reajustando a camera position");
-    completer.future.then((controller) {
-      controller.moveAndRotate(center, 15, 12);
-    });
-    
-    
-    notifyListeners();
+    _mapController?. moveAndRotateAnimatedRaw(position , 15, 0,source: MapEventSource.flingAnimationController,hasGesture: true, curve: Curves.linear,duration: Duration(milliseconds: 200), offset: Offset.zero);
+
   }
 
   void setZoom(double zoomLevel) {

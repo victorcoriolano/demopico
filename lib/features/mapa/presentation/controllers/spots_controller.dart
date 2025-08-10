@@ -10,6 +10,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+typedef OnTapMarker = void Function(Pico);
 class SpotControllerProvider extends ChangeNotifier {
 
   static SpotControllerProvider? _spotControllerProvider;
@@ -37,13 +38,14 @@ class SpotControllerProvider extends ChangeNotifier {
   List<Pico> mySpots = [];
   Filters? filtrosAtivos;
   Set<Marker> markers = {};
-  void Function(Pico)? _onTapMarker;
+  OnTapMarker? _onTapMarker;
   bool isLoading = false;
-  
 
+  OnTapMarker? get onTapMarker => _onTapMarker;
+  
   String? error;
 
-  void setOnTapMarker(void Function(Pico) onTapMarker) {
+  void setOnTapMarker(OnTapMarker onTapMarker) {
     _onTapMarker = onTapMarker;
   }
 

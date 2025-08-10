@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/presentation/controllers/flutter_map_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spots_controller.dart';
 import 'package:demopico/features/mapa/presentation/view_services/marker_service_flutter.dart';
 import 'package:demopico/features/mapa/presentation/view_services/modal_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
 class MapWidgetFlutter extends StatefulWidget {
@@ -26,8 +28,9 @@ class MapWidgetFlutterState extends State<MapWidgetFlutter> {
     super.initState();
     _spotControllerProvider = context.read<SpotControllerProvider>();
     _mapControllerProvider = context.read<FlutterMapControllerProvider>();
-    WidgetsBinding.instance.addPostFrameCallback((_) { 
-      _initializeProviders();  
+    _mapControllerProvider.setGoogleMapController(MapControllerImpl());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeProviders();
     });
   }
 
@@ -40,30 +43,41 @@ class MapWidgetFlutterState extends State<MapWidgetFlutter> {
 
   @override
   Widget build(BuildContext context) {
-    
     // consome os dados do provider para manter a tela atualizada
     return Scaffold(
       body: Consumer2<SpotControllerProvider, FlutterMapControllerProvider>(
         builder: (context, provider, mapProvider, child) => FlutterMap(
           options: MapOptions(
             initialCenter: mapProvider.center,
-            initialZoom: 15.5,  
+            initialZoom: 15.5,
           ),
           mapController: mapProvider.mapController,
           children: [
             TileLayer(
-                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                  userAgentPackageName: 'com.example.app',
-                  
-              ),
+              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+              userAgentPackageName: 'com.example.app',
+            ),
             MarkerLayer(
-              markers: MarkerServiceFlutter.getInstance.markers,
+              markers: buildMarkers(provider.spots, provider.onTapMarker!),
               alignment: Alignment.center,
-              
             ),
           ],
         ),
       ),
     );
+  }
+
+  List<Marker> buildMarkers(List<Pico> picos, OnTapMarker onTap) {
+    return picos.map((pico) {
+      return Marker(
+          point: LatLng(pico.lat, pico.long),
+          child:
+              GestureDetector(child: Image.asset("assets/images/Location.png"),
+              onTap: () {
+                onTap(pico);
+              },),
+          width: 30,
+          height: 30);
+    }).toList();
   }
 }
