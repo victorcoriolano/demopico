@@ -1,4 +1,5 @@
 
+import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/mapa/data/repositories/spot_repository_impl.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
@@ -30,7 +31,7 @@ final class MockPico extends Mock implements PicoModel {}
     );
 
 void main() {
-    group("deve execultar a lógica de negócio corretamente",() {
+    group("deve criar um spot corretamente",() {
       test("deve retornar uma pico model ao criar pico", () async {
         //testar se o pico foi criado e retornar true
         final mockRepository =  MockPicoRepository();
@@ -51,7 +52,7 @@ void main() {
         final useCase = CreateSpotUc(spotRepositoryIMP: mockRepository, userRepository: mockUserProfile);
         final mockPico = MockPico();
 
-        when(() => mockRepository.createSpot(mockPico)).thenThrow(Exception("Erro ao criar pico"));
+        when(() => mockRepository.createSpot(mockPico)).thenThrow(UnknownError(message: "Erro ao criar pico"));
         
         expect(
           () async => await useCase.createSpot(mockPico),

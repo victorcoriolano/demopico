@@ -1,3 +1,4 @@
+import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -45,7 +46,7 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
                 value.atualizarModalidade(
                     modalidade); // Atualiza utilidades ao selecionar uma modalidade
               },
-              selectedModalidade: value.selectedModalidade,
+              selectedModalidade: value.selectedModalidade.name,
             ),
             const SizedBox(height: 20),
             // Título da seção de tipo de pico
@@ -72,24 +73,20 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
                 child: DropdownButton<String>(
                   menuWidth: 400,
                   dropdownColor: Colors.white,
-                  value: value.tipo,
+                  value: value.tipo.name,
                   isExpanded: true,
                   onChanged: (String? newValue) {
                     value.atualizarDropdown(newValue!);
                   },
-                  items: <String>[
-                    'Pico de Rua',
-                    'Half',
-                    'Bowl',
-                    'Street',
-                    'SkatePark'
-                  ].map<DropdownMenuItem<String>>((String value) {
+                  items: 
+                    
+                  TypeSpot.values.map<DropdownMenuItem<String>>((TypeSpot value) {
                     return DropdownMenuItem<String>(
-                      value: value,
+                      value: value.name,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Text(
-                          value,
+                          value.name,
                           style: const TextStyle(
                             fontSize: 15,
                             color: Color.fromARGB(255, 0, 0, 0),
@@ -118,7 +115,7 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
             const SizedBox(height: 10),
             // Lista de utilidades com checkboxes
             Column(
-              children: value.utilidadesAtuais.map((utilidade) {
+              children: value.selectedModalidade.utilitiesByModality.map((utilidade) {
                 return CheckboxListTile(
                   contentPadding: const EdgeInsets.all(0),
                   title: Text(utilidade), // Nome da utilidade
