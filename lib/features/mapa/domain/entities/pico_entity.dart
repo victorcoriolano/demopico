@@ -58,7 +58,90 @@ class Pico {
   set newRating(double rating){
     this.rating = rating;
   }
+}
+
+
+// TODO SEPARAR EM OUTROS ARQUIVOS 
+
+enum TypeSpot {
+  rua,
+  half,
+  bowl,
+  street,
+  skatePark;
+
+  String get name {
+    switch(this){
+      case TypeSpot.rua: return "Pico de rua";
+      case TypeSpot.half: return 'Half';
+      case TypeSpot.bowl: return 'Bowl';
+      case TypeSpot.street: return 'Street';
+      case TypeSpot.skatePark: return 'SkatePark';
+    }
+  }  
+
+  factory TypeSpot.fromString(String value){
+    switch (value){
+      case ("Pico de rua"): return TypeSpot.rua;
+      case ('Half'): return TypeSpot.half;
+      case ('Bowl'): return TypeSpot.bowl;
+      case ('Street'): return TypeSpot.street;
+      case ('SkatePark'): return TypeSpot.skatePark;
+      default: return TypeSpot.rua;
+    }
+  }               
+}
+
+enum ModalitySpot{
+  skate,
+  parkour,
+  bmx;
+
+  factory ModalitySpot.fromString(String value){
+    switch (value) {
+      case 'Skate': return ModalitySpot.skate;
+      case 'Parkour': return ModalitySpot.parkour;
+      case 'BMX': return ModalitySpot.bmx;
+      default: return  ModalitySpot.skate;
+    }
+  }
+
+  String get name{
+    switch (this) {
+      case ModalitySpot.skate:
+        return "Skate";
+      case ModalitySpot.parkour:
+        return "Parkour";
+      case ModalitySpot.bmx:
+        return "BMX";
+    }
+  }
+
+  List get utilitiesByModality{
+    switch (this){
+      case ModalitySpot.skate:
+        return [
+          'Água',
+          'Teto',
+          'Banheiro',
+          'Suave Arcadiar',
+          'Público / Gratuito'
+        ];
+      case ModalitySpot.parkour:
+        return ['Água', 'Banheiro', 'Ar Livre'];
+      case ModalitySpot.bmx:
+        return ['Água', 'Banheiro', 'Mecânicas Próximas', 'Ar Livre'];
+    }
+  }
+  
+}
+
+class Modality {
+  final ModalitySpot modalidade;
+
+  Modality({required this.modalidade});
 
   
 }
+
 
