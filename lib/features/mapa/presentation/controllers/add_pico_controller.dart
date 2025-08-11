@@ -43,10 +43,10 @@ class AddPicoProvider extends ChangeNotifier{
   List<String> obstaculos = [];
   String nomePico = '';
   String descricao = '';
-  String selectedModalidade = 'Skate';
+  ModalitySpot selectedModalidade = ModalitySpot.skate;
   double nota = 0.0;
   int numAval = 0;
-  String tipo = 'Pico de Rua';
+  TypeSpot tipo = TypeSpot.rua;
   List<String> utilidades = [];
   List<String> imgUrls = [];
   LatLng? latlang;
@@ -78,19 +78,6 @@ class AddPicoProvider extends ChangeNotifier{
 
   String? errors;
 
-  Map<String, List<String>> utilidadesPorModalidade = {
-    'Skate': [
-      'Água',
-      'Teto',
-      'Banheiro',
-      'Suave Arcadiar',
-      'Público / Gratuito'
-    ],
-    'Parkour': ['Água', 'Banheiro', 'Mecânicas Próximas', 'Ar Livre'],
-    'BMX': ['Água'],
-  };
-
-  List<String> utilidadesAtuais = [];
   Map<String, bool> utilidadesSelecionadas = {};
 
   void initialize() {
@@ -106,13 +93,12 @@ class AddPicoProvider extends ChangeNotifier{
   }
 // notificar o estado de modalidade, tipo e utilidades
   void atualizarModalidade(String modalidade) {
-    selectedModalidade = modalidade;
-    _atualizarUtilidades();
+    selectedModalidade = ModalitySpot.fromString(modalidade);
     notifyListeners();
   }
 
   void atualizarDropdown(String novoValor) {
-    tipo = novoValor;
+    tipo = TypeSpot.fromString(novoValor);
     notifyListeners();
   }
 
@@ -122,9 +108,8 @@ class AddPicoProvider extends ChangeNotifier{
   }
 
   void _atualizarUtilidades() {
-    utilidadesAtuais = utilidadesPorModalidade[selectedModalidade] ?? [];
     utilidadesSelecionadas.clear();
-    for (var utilidade in utilidadesAtuais) {
+    for (var utilidade in selectedModalidade.utilitiesByModality) {
       utilidadesSelecionadas[utilidade] = false;
     }
   }
@@ -208,13 +193,13 @@ class AddPicoProvider extends ChangeNotifier{
       description: descricao,
       newRating: nota,
       countReviews: numAval,
-      tipoPico: tipo,
+      tipoPico: tipo.name,
       utilidades: utilidades,
       imgUrls: imgUrls,
       lat: latlang!.latitude,
       long: latlang!.longitude,
       atributos: atributos,
-      modalidade: selectedModalidade,
+      modalidade: selectedModalidade.name,
       userName: userCriador?.name ?? "Anônimo",
       obstaculos: obstaculos,
     );
@@ -226,11 +211,11 @@ class AddPicoProvider extends ChangeNotifier{
     obstaculos.clear();
     nomePico = '';
     descricao = '';
-    selectedModalidade = 'Skate';
+    selectedModalidade = ModalitySpot.skate;
     nota = 0.0;
     numAval = 0;
     imgUrls.clear();
-    tipo = 'Pico de Rua';
+    tipo = TypeSpot.rua;
     utilidades.clear();
     notifyListeners();
   }
