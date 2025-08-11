@@ -1,8 +1,7 @@
-import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 
-abstract class ICommentSpotDataSource {
-  Future<FirebaseDTO> create(FirebaseDTO newComment);
+abstract class ICommentSpotDataSource<DTO> {
+  Future<DTO> create(DTO newComment);
   Future<void> delete(String id);
-  Future<List<FirebaseDTO>> getBySpotId(String spotId);
-  Future<void> update(FirebaseDTO commentDto);
+  Future<List<DTO>> getBySpotId(String spotId);
+  Future<void> update(DTO commentDto);
 }

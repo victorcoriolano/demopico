@@ -5,7 +5,7 @@ import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto
 import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
 import 'package:demopico/features/mapa/data/mappers/mapper_pico_favorito_firebase.dart';
 
-class FirebaseFavoriteSpotRemoteDataSource implements IFavoriteSpotRemoteDataSource {
+class FirebaseFavoriteSpotRemoteDataSource implements IFavoriteSpotRemoteDataSource<FirebaseDTO> {
 
   static FirebaseFavoriteSpotRemoteDataSource? _favoriteSpotService;
   static FirebaseFavoriteSpotRemoteDataSource get getInstance {
