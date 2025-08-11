@@ -1,6 +1,6 @@
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 import 'package:demopico/core/common/files_manager/enums/collections.dart';
-import 'package:demopico/features/external/datasources/firebase/remote/crud_firebase.dart';
+import 'package:demopico/features/external/datasources/firebase/crud_firebase.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_post_datasource.dart';
 
 class FirebasePostDatasource implements IPostDatasource {

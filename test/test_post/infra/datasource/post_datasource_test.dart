@@ -1,6 +1,6 @@
 
 import 'package:demopico/core/common/files_manager/enums/collections.dart';
-import 'package:demopico/features/external/datasources/firebase/remote/crud_firebase.dart';
+import 'package:demopico/features/external/datasources/firebase/crud_firebase.dart';
 import 'package:demopico/features/profile/infra/datasource/firebase_post_datasource.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter/foundation.dart';

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
-import 'package:demopico/features/external/datasources/firebase/remote/firestore.dart';
+import 'package:demopico/features/external/datasources/firebase/firestore.dart';
 import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_profile_update_datasource.dart';
 
