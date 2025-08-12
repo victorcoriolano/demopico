@@ -1,20 +1,22 @@
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/favorite_spot_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 class FavoriteSpotPage extends StatefulWidget {
-  final String userID;
-  const FavoriteSpotPage({super.key, required this.userID});
+  const FavoriteSpotPage({super.key, });
 
   @override
   State<FavoriteSpotPage> createState() => _FavoriteSpotPageState();
 }
 
 class _FavoriteSpotPageState extends State<FavoriteSpotPage> {
+  final String userID = Get.arguments as String;
+
   void getSpots() async {
-    await context.read<FavoriteSpotController>().getPicosSalvos(widget.userID);
+    await context.read<FavoriteSpotController>().getPicosSalvos(userID);
   }
 
   @override
