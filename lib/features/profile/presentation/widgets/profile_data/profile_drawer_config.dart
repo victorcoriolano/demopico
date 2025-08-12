@@ -115,7 +115,7 @@ class _MyCustomDrawerState extends State<MyCustomDrawer> {
             icon: Icons.edit,
             text: 'Editar Perfil',
             onTap: () {
-              Get.to(() => EditProfilePage(user: widget.user,));
+              Get.to(() => EditProfilePage(), arguments: widget.user);
             },
           ),
           DrawerItem(
