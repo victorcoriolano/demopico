@@ -5,14 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class EditProfilePage extends StatefulWidget {
-  final UserM user;
-  const EditProfilePage({ super.key, required this.user });
+  const EditProfilePage({ super.key});
 
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
+  final UserM user = Get.arguments as UserM;
+
   final String _userPassword = '**********'; // Representing a masked password
 
   // Controllers for editing
@@ -28,8 +29,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: widget.user.name);
-    _emailController = TextEditingController(text: widget.user.email);
+    _nameController = TextEditingController(text: user.name);
+    _emailController = TextEditingController(text: user.email);
     _passwordController = TextEditingController(text: _userPassword); 
   }
 
@@ -47,11 +48,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
       switch (field) {
         case 'name':
           _isEditingName = !_isEditingName;
-          if (!_isEditingName) widget.user.name = _nameController.text;
+          if (!_isEditingName) user.name = _nameController.text;
           break;
         case 'email':
           _isEditingEmail = !_isEditingEmail;
-          if (!_isEditingEmail) widget.user.email = _emailController.text;
+          if (!_isEditingEmail) user.email = _emailController.text;
           break;
         case 'password':
           _isEditingPassword = !_isEditingPassword;
@@ -83,8 +84,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 children: [
                   CircleAvatar(
                     radius: 40,
-                    backgroundImage: widget.user.pictureUrl != null 
-                        ? NetworkImage(widget.user.pictureUrl!)
+                    backgroundImage: user.pictureUrl != null 
+                        ? NetworkImage(user.pictureUrl!)
                         : AssetImage("assets/images/userPhoto.png") as ImageProvider,
                   ),
                   SizedBox(width: 16),
@@ -121,14 +122,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
             ),
             EditableDetailRow(
               label: 'Nome',
-              value: widget.user.name,
+              value: user.name,
               controller: _nameController,
               isEditing: _isEditingName,
               onToggleEdit: () => toggleEditState('name'),
             ),
             EditableDetailRow(
               label: 'Email',
-              value: widget.user.email,
+              value: user.email,
               controller: _emailController,
               isEditing: _isEditingEmail,
               onToggleEdit: () => toggleEditState('email'),
