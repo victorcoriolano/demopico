@@ -55,10 +55,10 @@ class _MyDrawerState extends State<MyDrawer> {
                       onTap: (snackbar) {
                         Get.to(() => AuthWrapper());
                       });
+                      return;
                     }
-                    final userId = user!.id; 
-                    Get.to(() => FavoriteSpotPage(userID: userId));
-                    
+                    final userId = user.id; 
+                    Get.to(() => FavoriteSpotPage(), arguments: userId);
                   },
                 ),
               
