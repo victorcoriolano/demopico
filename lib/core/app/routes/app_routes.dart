@@ -13,5 +13,6 @@ abstract class Paths {
   static const mySpots = '/my-spots';
   static const historySpot = '/spot-history';
   static const createPostPage = '/create-post-page';
+  static const signUp = '/sign-up';
 
 }
