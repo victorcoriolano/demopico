@@ -2,8 +2,7 @@
 import 'package:demopico/core/app/providers/providers.dart';
 import 'package:demopico/core/app/routes/app_pages.dart';
 import 'package:demopico/core/app/routes/app_routes.dart';
-import 'package:demopico/core/app/theme/theme.dart';
-  
+import 'package:demopico/core/app/theme/theme.dart';  
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -17,11 +16,11 @@ class MyAppWidget extends StatelessWidget {
     return MultiProvider(
       providers: myProviders,
       child: GetMaterialApp(
+        initialRoute: Paths.home,
         debugShowCheckedModeBanner: false,
         title: 'SKATEPICO',
         theme: appTheme,
         checkerboardRasterCacheImages: true,
-        initialRoute: Paths.home,
         getPages: AppPages.routes,
       ),
     );
