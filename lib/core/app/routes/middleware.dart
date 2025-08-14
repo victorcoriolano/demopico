@@ -3,13 +3,14 @@ import 'package:demopico/features/user/presentation/controllers/user_database_pr
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AuthGard extends GetMiddleware {
-  final authService = UserDatabaseProvider.getInstance;
+class Middleware extends GetMiddleware {
 
+  final _authProvider = Get.find<UserDatabaseProvider>();
+  
   @override
   RouteSettings? redirect(String? route) {
 
-      if (authService.user == null) return RouteSettings(name: Paths.login);
+      if (_authProvider.user == null) return RouteSettings(name: Paths.login);
       return null; // não redireciona caso o user esteja logado 
   }
 }
