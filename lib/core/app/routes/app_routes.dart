@@ -10,6 +10,8 @@ abstract class Paths {
   static const favoriteSpot = '/favorites-spot';
   static const editProfile = '/edit-profile';
   static const map = '/map-page';
+  static const mySpots = '/my-spots';
   static const historySpot = '/spot-history';
+  static const createPostPage = '/create-post-page';
 
 }
