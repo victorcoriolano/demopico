@@ -1,4 +1,4 @@
-import 'package:demopico/features/profile/presentation/pages/user_controller_page.dart';
+import 'package:demopico/features/profile/presentation/pages/screens_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,7 +18,7 @@ class AboutPage extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Get.to(() => UserControllerPage());
+            Get.to(() => ScreensProfile());
           },
         ),
       ),
