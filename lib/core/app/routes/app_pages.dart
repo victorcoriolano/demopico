@@ -8,45 +8,52 @@ import 'package:demopico/features/profile/presentation/bidings/auth_biding.dart'
 import 'package:demopico/features/profile/presentation/pages/chat_room_page.dart';
 import 'package:demopico/features/profile/presentation/pages/create_post_page.dart';
 import 'package:demopico/features/profile/presentation/pages/edit_profile_page.dart';
-import 'package:demopico/features/profile/presentation/pages/profile_page.dart';
 import 'package:demopico/features/profile/presentation/pages/search_profile_page.dart';
+import 'package:demopico/features/profile/presentation/pages/user_controller_page.dart';
 import 'package:demopico/features/user/presentation/pages/login_page.dart';
+import 'package:demopico/features/user/presentation/pages/register_page.dart';
 import 'package:get/get.dart';
 
 class AppPages {
   AppPages._();
 
-  static final routes = [
+  static final routes = <GetPage>[
     GetPage(
       binding: AuthBiding(),
       name: Paths.createPostPage,
       page: () => CreatePostPage(),
+      transition: Transition.downToUp
     ),
     GetPage(
       binding: AuthBiding(),
       name: Paths.home,
       page: () => HomePage(),
+      transition:  Transition.native,
     ),
     GetPage(
         binding: AuthBiding(),
         name: Paths.editProfile,
         page: () => EditProfilePage(),
+        transition: Transition.circularReveal,
         middlewares: [Middleware()]),
     GetPage(
       name: Paths.login,
       page: () => LoginPage(),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
       binding: AuthBiding(),
       name: Paths.profile,
-      page: () => ProfilePage(),
+      page: () => UserControllerPage(),
       middlewares: [Middleware()],
+      transition: Transition.rightToLeft
     ),
     GetPage(
       binding: AuthBiding(),
       name: Paths.chat,
       page: () => ChatRoomPage(),
       middlewares: [Middleware()],
+      transition: Transition.rightToLeft
     ),
     GetPage(
       binding: AuthBiding(),
@@ -67,6 +74,11 @@ class AppPages {
     GetPage(
       name: Paths.map,
       page: () => MapPage(),
+    ),
+    GetPage(
+      page: () => RegisterPage(),
+      name:Paths.signUp,
+      transition: Transition.circularReveal,
     ),
   ];
 }
