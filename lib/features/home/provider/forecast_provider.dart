@@ -3,9 +3,9 @@ import 'package:demopico/features/home/infra/http_climate_service.dart';
 import 'package:flutter/widgets.dart';
 
 class ForecastProvider extends ValueNotifier<ForecastWeatherModel?> {
-  ForecastProvider(super.value);
+    ForecastProvider(super.value ,{required HttpClimateService climaService}): _climateProvider = climaService;
 
-  final HttpClimateService _climateProvider = HttpClimateService();
+  final HttpClimateService _climateProvider;
   HttpClimateService get climateProvider => _climateProvider;
   bool isLoading = false;
 
