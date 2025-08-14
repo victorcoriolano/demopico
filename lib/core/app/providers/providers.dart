@@ -1,4 +1,3 @@
-import 'package:demopico/core/app/controller/controller_home_page.dart';
 import 'package:demopico/core/common/util/file_manager/pick_files_uc.dart';
 import 'package:demopico/core/common/util/file_manager/pick_video_uc.dart';
 import 'package:demopico/features/home/infra/http_climate_service.dart';
@@ -28,7 +27,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
 final myProviders = [
-  ChangeNotifierProvider(create: (_) => ControllerHomePage.instance),
   ChangeNotifierProvider(create: (_) => OpenWeatherProvider()),
   ChangeNotifierProvider(
       create: (_) =>
