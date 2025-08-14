@@ -35,7 +35,7 @@ class LoginPage extends StatelessWidget {
                 size: 50,
               ),
               onPressed: () {
-                Get.offNamed("/");
+                Get.back();
               },
             ),
           ),
