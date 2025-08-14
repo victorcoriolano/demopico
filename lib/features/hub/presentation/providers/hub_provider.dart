@@ -1,4 +1,4 @@
-import 'package:demopico/core/app/auth_wrapper.dart';
+import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:demopico/features/hub/domain/usecases/listar_comunicados_uc.dart';
 import 'package:demopico/features/hub/domain/usecases/postar_comunicado_uc.dart';
@@ -47,7 +47,7 @@ class HubProvider extends ChangeNotifier {
           colorText: Colors.black,
         );
         Future.delayed(const Duration(seconds: 2), () {
-          Get.to(const AuthWrapper());
+          Get.toNamed(Paths.profile);
         });
       }
       Get.snackbar(
