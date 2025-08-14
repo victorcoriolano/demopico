@@ -6,6 +6,5 @@ class AuthBiding implements Bindings {
   @override
   void dependencies() {
     Get.put<UserDatabaseProvider>(UserDatabaseProvider.getInstance);
-    Get.find<UserDatabaseProvider>();
   }
 }
