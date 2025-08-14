@@ -69,14 +69,28 @@ class _ProfilePageState extends State<ProfilePage>
 
     _tabController.addListener(() {
       if (_tabController.index == 0) {
-        typePost = TypePost.post;
-        setState(() {});
+       
       } else if (_tabController.index == 1) {
         typePost = TypePost.fullVideo;
         setState(() {});
       } else if (_tabController.index == 2) {
         typePost = TypePost.spot;
         setState(() {});
+      }
+      
+      switch (_tabController.index){
+        case 0:
+          typePost = TypePost.post;
+          setState(() {});
+        case 1:
+          typePost = TypePost.fullVideo;
+          setState(() {});
+        case 2:
+          typePost = TypePost.spot;
+          setState(() {});
+        default:
+           typePost = TypePost.post;
+          setState(() {});
       }
     });
 
@@ -244,9 +258,7 @@ class _ProfilePageState extends State<ProfilePage>
       floatingActionButton: FloatingActionButton(
         shape: CircleBorder(),
         onPressed: () {
-          Get.to(() => CreatePostPage(
-                typePost: typePost,
-              ));
+          Get.to(() => CreatePostPage(), arguments: typePost);
         },
         tooltip: "Criar Postagem",
         child: Icon( 
