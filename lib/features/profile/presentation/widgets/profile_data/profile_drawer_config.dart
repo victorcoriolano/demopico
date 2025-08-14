@@ -1,6 +1,6 @@
 import 'package:demopico/core/app/home_page.dart';
+import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/theme/theme.dart';
-import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
 import 'package:demopico/features/profile/presentation/pages/edit_profile_page.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/about_page_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/drawer_item.dart';
@@ -98,7 +98,7 @@ class _MyCustomDrawerState extends State<MyCustomDrawer> {
                 icon: const Icon(Icons.chevron_left,
                     color: Colors.white, size: 30),
                 onPressed: () {
-                  Navigator.pop(context); // Fecha o drawer
+                  Get.back(); // Fecha o drawer
                 },
               ),
             ],
@@ -122,21 +122,21 @@ class _MyCustomDrawerState extends State<MyCustomDrawer> {
             icon: Icons.map_outlined,
             text: 'Acessar o mapa',
             onTap: () {
-              Get.to((_) => MapPage());
+              Get.toNamed(Paths.map);
             },
           ),
           DrawerItem(
             icon: Icons.search,
             text: 'Pesquisar',
             onTap: () {
-              Navigator.pop(context);
+              Get.back();
             },
           ),
           DrawerItem(
             icon: Icons.notifications,
             text: 'Notificações',
             onTap: () {
-              Navigator.pop(context);
+              Get.back();
             },
           ),
           const Divider(color: Colors.white54),
