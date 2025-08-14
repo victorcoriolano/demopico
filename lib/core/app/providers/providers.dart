@@ -1,5 +1,7 @@
+import 'package:demopico/core/app/controller/controller_home_page.dart';
 import 'package:demopico/core/common/util/file_manager/pick_files_uc.dart';
 import 'package:demopico/core/common/util/file_manager/pick_video_uc.dart';
+import 'package:demopico/features/home/infra/http_climate_service.dart';
 import 'package:demopico/features/home/provider/forecast_provider.dart';
 import 'package:demopico/features/home/provider/home_provider.dart';
 import 'package:demopico/features/home/provider/weather_provider.dart';
@@ -26,38 +28,39 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
 final myProviders = [
+  ChangeNotifierProvider(create: (_) => ControllerHomePage.instance),
   ChangeNotifierProvider(create: (_) => OpenWeatherProvider()),
-        ChangeNotifierProvider(create: (_) => ForecastProvider(null)),
-        ChangeNotifierProvider(create: (_) => AuthUserProvider.getInstance),
-        ChangeNotifierProvider(create: (_) => ScreenProvider()),
-        StreamProvider<User?>(
-          create: (_) =>
-              FirebaseAuthService.getInstance.getAuthStateChanges(),
-          initialData: null,
-        ),
-        ChangeNotifierProvider(create: (_) => AddPicoProvider.getInstance),
-        ChangeNotifierProvider(create: (_) => MapControllerProvider()),
-        ChangeNotifierProvider(
-            create: (_) => FavoriteSpotController.getInstance),
-        ChangeNotifierProvider(
-            create: (_) => SpotControllerProvider.getInstance),
-        ChangeNotifierProvider(create: (_) => UserDatabaseProvider.getInstance),
-        ChangeNotifierProvider(create: (_) => HistoricoController.getInstance),
-        ChangeNotifierProvider(
-          create: (_) => HubProvider(
-            postarComunicado: PostarComunicado.getInstance,
-            listarComunicado: ListarComunicado.getInstance,
-          ),
-        ),
-        ChangeNotifierProvider(create: (_) => HomeProvider.getInstance),
-        ChangeNotifierProvider(create: (_) => CommentController.getInstance),
-        ChangeNotifierProvider(create: (_) => PostProvider(
-          createPostUc: CreatePostUc.instace,
-          pickFileUC: PickFileUC.getInstance(),
-          getPosts: GetPostUc.instance,
-          deleteUc: DeletePostUc.instance,
-          updateUc: UpdatePostUc.instance,
-          pickVideo: PickVideoUC.getInstance,
-        )),
-      ChangeNotifierProvider(create: (_) => SpotProvider.instance)
+  ChangeNotifierProvider(
+      create: (_) =>
+          ForecastProvider(null, climaService: HttpClimateService())),
+  ChangeNotifierProvider(create: (_) => AuthUserProvider.getInstance),
+  ChangeNotifierProvider(create: (_) => ScreenProvider()),
+  StreamProvider<User?>(
+    create: (_) => FirebaseAuthService.getInstance.getAuthStateChanges(),
+    initialData: null,
+  ),
+  ChangeNotifierProvider(create: (_) => AddPicoProvider.getInstance),
+  ChangeNotifierProvider(create: (_) => MapControllerProvider()),
+  ChangeNotifierProvider(create: (_) => FavoriteSpotController.getInstance),
+  ChangeNotifierProvider(create: (_) => SpotControllerProvider.getInstance),
+  ChangeNotifierProvider(create: (_) => UserDatabaseProvider.getInstance),
+  ChangeNotifierProvider(create: (_) => HistoricoController.getInstance),
+  ChangeNotifierProvider(
+    create: (_) => HubProvider(
+      postarComunicado: PostarComunicado.getInstance,
+      listarComunicado: ListarComunicado.getInstance,
+    ),
+  ),
+  ChangeNotifierProvider(create: (_) => HomeProvider.getInstance),
+  ChangeNotifierProvider(create: (_) => CommentController.getInstance),
+  ChangeNotifierProvider(
+      create: (_) => PostProvider(
+            createPostUc: CreatePostUc.instace,
+            pickFileUC: PickFileUC.getInstance(),
+            getPosts: GetPostUc.instance,
+            deleteUc: DeletePostUc.instance,
+            updateUc: UpdatePostUc.instance,
+            pickVideo: PickVideoUC.getInstance,
+          )),
+  ChangeNotifierProvider(create: (_) => SpotProvider.instance)
 ];
