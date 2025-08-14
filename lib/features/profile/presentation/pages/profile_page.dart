@@ -1,7 +1,6 @@
-import 'package:demopico/core/app/home_page.dart';
+import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/widgets/back_widget.dart';
-import 'package:demopico/features/profile/presentation/pages/create_post_page.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_posts_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_bottom_side_data_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_drawer_config.dart';
@@ -49,7 +48,7 @@ class _ProfilePageState extends State<ProfilePage>
               onPressed: () async {
                 final provider = context.read<AuthUserProvider>();
                 await provider.logout();
-                Get.to(() => const HomePage());
+                Get.toNamed(Paths.home);
               },
               child: const Text('SAIR E DESLOGAR'),
             )
@@ -197,7 +196,7 @@ class _ProfilePageState extends State<ProfilePage>
         fontSize: 22,
         fontWeight: FontWeight.bold),
       ),
-      leading: CustomBackButton(destination: HomePage()),
+      leading: CustomBackButton(destination: Paths.home),
       actions: [
         Builder(
           builder: (context) {
@@ -258,7 +257,7 @@ class _ProfilePageState extends State<ProfilePage>
       floatingActionButton: FloatingActionButton(
         shape: CircleBorder(),
         onPressed: () {
-          Get.to(() => CreatePostPage(), arguments: typePost);
+          Get.toNamed(Paths.createPostPage, arguments: typePost);
         },
         tooltip: "Criar Postagem",
         child: Icon( 
