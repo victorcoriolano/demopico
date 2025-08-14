@@ -1,5 +1,5 @@
 // test/home_page_test.dart
-import 'package:demopico/core/app/controller/controller_home_page.dart';
+import 'package:demopico/core/app/app.dart';
 import 'package:demopico/core/app/home_page.dart';
 import 'package:demopico/core/app/providers/providers.dart';
 import 'package:demopico/features/home/infra/http_climate_service.dart';
@@ -8,6 +8,7 @@ import 'package:demopico/features/home/provider/home_provider.dart';
 import 'package:demopico/features/home/provider/weather_provider.dart';
 import 'package:demopico/features/hub/domain/interfaces/i_hub_repository.dart';
 import 'package:demopico/features/hub/domain/usecases/listar_comunicados_uc.dart';
+import 'package:demopico/features/mapa/presentation/controllers/spots_controller.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
 import 'package:demopico/features/profile/presentation/pages/profile_page.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_database_repository.dart';
@@ -30,18 +31,24 @@ class MockHomeProvider extends Mock implements HomeProvider {}
 
 class MockUserDatabaseProvider extends Mock implements UserDatabaseProvider {}
 
+class MockSpotControllerProvider extends Mock implements SpotControllerProvider {}
+
+// TODO: CORRIGIR ESSES TESTES
 void main() {
   group('HomePage Widget Testes', () {
     late HomeProvider homeProvider;
     late UserDatabaseProvider userProvider;
     late OpenWeatherProvider openWeatherProvider;
-    late ControllerHomePage controller;
-    
+    late SpotControllerProvider spotControllerProvider;
+
     setUpAll(() {
-      controller = MockControllerHomePage();
       homeProvider = MockHomeProvider();
       userProvider = MockUserDatabaseProvider();
       openWeatherProvider = MockOpenWeatherProvider();
+      spotControllerProvider = MockSpotControllerProvider();
+
+      Get.testMode = true;
+      Get.put<UserDatabaseProvider>(userProvider);
     });
 
     testWidgets('Deve renderizar a CentralPage na inicialização',
@@ -56,6 +63,7 @@ void main() {
           ChangeNotifierProvider(create: (_) => homeProvider),
           ChangeNotifierProvider(create: (_) => openWeatherProvider),
           ChangeNotifierProvider(create: (_) => userProvider),
+          ChangeNotifierProvider(create: (_) => spotControllerProvider),
         ],
         child: const GetMaterialApp(home: HomePage()),
       ));
