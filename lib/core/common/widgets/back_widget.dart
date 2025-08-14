@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CustomBackButton extends StatelessWidget {
-  final Widget destination;
+  final String destination;
   final double iconSize;
 
   const CustomBackButton({
@@ -15,12 +15,9 @@ class CustomBackButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: () {
-        Get.to(
-          () => destination,
-          popGesture: true,
+        Get.toNamed(
+          destination,
           preventDuplicates: true,
-          curve: Curves.ease,
-          transition: Transition.leftToRight,
         );
       },
       icon: const Icon(Icons.arrow_back),
