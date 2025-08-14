@@ -1,5 +1,4 @@
-import 'package:demopico/core/app/auth_wrapper.dart';
-import 'package:demopico/core/app/home_page.dart';
+import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/features/mapa/presentation/widgets/search_bar.dart';
 import 'package:demopico/features/profile/presentation/pages/profile_page.dart';
 import 'package:demopico/features/profile/presentation/provider/post_provider.dart';
@@ -139,7 +138,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                         'Usuário não encontrado. Por favor, faça login novamente.',
                         snackPosition: SnackPosition.BOTTOM,
                       );
-                      Get.to((_) => const HomePage());
+                      Get.toNamed(Paths.home);
                       return;
                     }
                     try{
