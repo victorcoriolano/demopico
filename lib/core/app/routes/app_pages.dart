@@ -9,7 +9,7 @@ import 'package:demopico/features/profile/presentation/pages/chat_room_page.dart
 import 'package:demopico/features/profile/presentation/pages/create_post_page.dart';
 import 'package:demopico/features/profile/presentation/pages/edit_profile_page.dart';
 import 'package:demopico/features/profile/presentation/pages/search_profile_page.dart';
-import 'package:demopico/features/profile/presentation/pages/user_controller_page.dart';
+import 'package:demopico/features/profile/presentation/pages/screens_profile.dart';
 import 'package:demopico/features/user/presentation/pages/login_page.dart';
 import 'package:demopico/features/user/presentation/pages/register_page.dart';
 import 'package:get/get.dart';
@@ -44,7 +44,7 @@ class AppPages {
     GetPage(
       binding: AuthBiding(),
       name: Paths.profile,
-      page: () => UserControllerPage(),
+      page: () => ScreensProfile(),
       middlewares: [Middleware()],
       transition: Transition.rightToLeft
     ),
