@@ -1,6 +1,6 @@
 import 'package:demopico/core/common/ui_context_extension.dart';
-import 'package:demopico/features/home/provider/forecast_provider.dart';
-import 'package:demopico/features/home/provider/weather_provider.dart';
+import 'package:demopico/features/home/presentation/provider/forecast_provider.dart';
+import 'package:demopico/features/home/presentation/provider/weather_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

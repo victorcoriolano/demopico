@@ -1,9 +1,9 @@
 import 'package:demopico/core/common/util/file_manager/pick_files_uc.dart';
 import 'package:demopico/core/common/util/file_manager/pick_video_uc.dart';
 import 'package:demopico/features/home/infra/http_climate_service.dart';
-import 'package:demopico/features/home/provider/forecast_provider.dart';
-import 'package:demopico/features/home/provider/home_provider.dart';
-import 'package:demopico/features/home/provider/weather_provider.dart';
+import 'package:demopico/features/home/presentation/provider/forecast_provider.dart';
+import 'package:demopico/features/home/presentation/provider/home_provider.dart';
+import 'package:demopico/features/home/presentation/provider/weather_provider.dart';
 import 'package:demopico/features/hub/domain/usecases/listar_comunicados_uc.dart';
 import 'package:demopico/features/hub/domain/usecases/postar_comunicado_uc.dart';
 import 'package:demopico/features/hub/presentation/providers/hub_provider.dart';
