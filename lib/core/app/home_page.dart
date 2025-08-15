@@ -1,8 +1,10 @@
 // home_page.dart
 import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/features/home/presentation/pages/central_page.dart';
+import 'package:demopico/features/home/presentation/provider/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,16 +24,16 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: SafeArea(
           child: GestureDetector(
-        onHorizontalDragEnd: (details) {
+                  onHorizontalDragEnd: (details) {
           if (details.primaryVelocity! > 0) {
             Get.toNamed(Paths.map);
-
+          
           } else if (details.primaryVelocity! < 0) {
             Get.toNamed(Paths.profile);
           }
-        },
-        child: CentralPage()
-      ),
+                  },
+                  child: CentralPage()
+                ),
       ),
     );
   }

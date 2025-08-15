@@ -2,7 +2,7 @@ import 'package:demopico/features/home/presentation/widgets/central_page_backgro
 import 'package:demopico/features/home/presentation/widgets/events_bottom_sheet.dart';
 import 'package:demopico/features/home/presentation/widgets/hub_upper_sheet.dart';
 import 'package:demopico/features/home/presentation/widgets/top_level_home_row.dart';
-import 'package:demopico/features/home/provider/weather_provider.dart';
+import 'package:demopico/features/home/presentation/provider/weather_provider.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:flutter/material.dart';

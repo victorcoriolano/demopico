@@ -3,7 +3,9 @@ import 'package:demopico/features/home/infra/http_climate_service.dart';
 import 'package:flutter/widgets.dart';
 
 class OpenWeatherProvider extends ValueNotifier<CurrentWeatherModel?> {
-  OpenWeatherProvider() : super(null);
+  OpenWeatherProvider({required HttpClimateService httpClimateService})
+      : _httpClimateService = httpClimateService,
+        super(null);
   bool isLoading = false;
   String? errorMessage;
 
@@ -23,7 +25,9 @@ class OpenWeatherProvider extends ValueNotifier<CurrentWeatherModel?> {
         !imOld();
   }
 
-  final HttpClimateService _httpClimateService = HttpClimateService();
+  final HttpClimateService _httpClimateService;
+
+
 
   Future<void> fetchWeatherData() async {
     if (isLoading) return; //Retorna se já estiver carregando uma requisição

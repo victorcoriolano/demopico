@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
 
-import 'package:demopico/features/home/provider/home_provider.dart';
+import 'package:demopico/features/home/presentation/provider/home_controller.dart';
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
 import 'package:demopico/features/home/presentation/widgets/efemero_scroll_text.dart';
 import 'package:flutter/material.dart';
@@ -28,8 +28,8 @@ class HubUpperSheet extends StatefulWidget {
 class _HubUpperSheetState extends State<HubUpperSheet>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late final listenProvider = Provider.of<HomeProvider>(context);
-  late final db = Provider.of<HomeProvider>(context, listen: false);
+  late final listenProvider = Provider.of<HomeController>(context);
+  late final db = Provider.of<HomeController>(context, listen: false);
 
   //método base
   double lerp(double min, double max) =>

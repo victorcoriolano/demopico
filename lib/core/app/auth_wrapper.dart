@@ -1,4 +1,4 @@
-import 'package:demopico/features/profile/presentation/pages/screens_profile.dart';
+/* import 'package:demopico/features/profile/presentation/pages/screens_profile.dart';
 import 'package:demopico/features/user/presentation/pages/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,3 +12,4 @@ class AuthWrapper extends StatelessWidget {
     return user == null ? const LoginPage() : const ScreensProfile();
   }
 }
+ */

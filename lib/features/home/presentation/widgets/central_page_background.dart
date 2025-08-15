@@ -1,4 +1,6 @@
+import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CentralPageBackground extends StatelessWidget {
   const CentralPageBackground({
@@ -10,7 +12,7 @@ class CentralPageBackground extends StatelessWidget {
     return Container(
         height: MediaQuery.maybeSizeOf(context)!.height * 0.9,
         width: MediaQuery.maybeSizeOf(context)!.width,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             gradient: RadialGradient(radius: 0.8, colors: [
           Color(0xFFD9D9D9),
           Color(0xFFE7E7E7),
@@ -27,7 +29,7 @@ class CentralPageBackground extends StatelessWidget {
         child: Center(
             child: Row(
           children: [
-            Icon(Icons.chevron_left, size: 64),
+            IconButton(onPressed: () => Get.toNamed(Paths.map), icon: Icon(Icons.chevron_left, size: 64)),
             Spacer(),
             Transform(
               alignment: Alignment.center,
@@ -38,7 +40,7 @@ class CentralPageBackground extends StatelessWidget {
                   height: 150),
             ),
             Spacer(),
-            Icon(Icons.chevron_right, size: 64),
+            IconButton(onPressed: () => Get.toNamed(Paths.profile), icon: Icon(Icons.chevron_right, size: 64)),
           ],
         )));
   }
