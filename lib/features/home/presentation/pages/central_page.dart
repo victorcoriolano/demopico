@@ -3,7 +3,6 @@ import 'package:demopico/features/home/presentation/widgets/events_bottom_sheet.
 import 'package:demopico/features/home/presentation/widgets/hub_upper_sheet.dart';
 import 'package:demopico/features/home/presentation/widgets/top_level_home_row.dart';
 import 'package:demopico/features/home/presentation/provider/weather_provider.dart';
-import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,11 +16,7 @@ class CentralPage extends StatefulWidget {
 
 class _CentralPageState extends State<CentralPage> {
   final ScrollController scrollController = ScrollController();
-  late UserDatabaseProvider _userDatabaseProvider;
-  late AuthUserProvider _authUserProvider;
 
-  String? _userId;
-  String? _userImage;
 
   bool _isWeatherLoaded = false;
 
@@ -29,9 +24,8 @@ class _CentralPageState extends State<CentralPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadUser();
       if (!_isWeatherLoaded) {
-        if (Provider.of<OpenWeatherProvider>(context, listen: false)
+        if (context.read<OpenWeatherProvider>()
             .isUpdated()) {
           debugPrint('Weather data already updated, skipping load.');
           return;
@@ -44,7 +38,7 @@ class _CentralPageState extends State<CentralPage> {
 
   Future<void> _loadWeather() async {
     try{
-      await Provider.of<OpenWeatherProvider>(context, listen: false)
+      await context.read<OpenWeatherProvider>()
         .fetchWeatherData();
         debugPrint('Weather data fetch called sucessfuly in HomePage');
         _isWeatherLoaded = false;
@@ -55,30 +49,7 @@ class _CentralPageState extends State<CentralPage> {
     
   }
 
-  Future<void> _loadUser() async {
-    _userDatabaseProvider =
-        Provider.of<UserDatabaseProvider>(context, listen: false);
-    
-    _authUserProvider = context.read<AuthUserProvider>();
 
-    if (_userDatabaseProvider.user != null) {    
-      var user =  _userDatabaseProvider.user!; 
-      _userId = user.id;
-      _userImage = user.pictureUrl; 
-      return;
-    }
-    _userId = _authUserProvider.currentIdUser;
-    if(_userId == null){
-      debugPrint("Id do user nullo");
-      return;
-    }
-
-    await _userDatabaseProvider.retrieveUserProfileData(_userId!);
-    _userImage = _userDatabaseProvider.user?.pictureUrl;
-
-
-    return;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,8 +60,8 @@ class _CentralPageState extends State<CentralPage> {
             children: [
               Stack(children: [
                 CentralPageBackground(),
-                Consumer<OpenWeatherProvider>(
-                  builder: (context, weatherProvider, child) {
+                Consumer2<OpenWeatherProvider, UserDatabaseProvider>(
+                  builder: (context, weatherProvider, userDatabaseProvider, child) {
                     //Carrega os dados do clima de acordo com o estado
                     if (weatherProvider.isLoading) {
                       return Positioned(
@@ -119,7 +90,7 @@ class _CentralPageState extends State<CentralPage> {
                       'isDay': currentWeatherModel?.isDay ?? true,
                     };
                     return TopLevelHomeRow(
-                      userImage: _userImage,
+                      userImage: userDatabaseProvider.user?.pictureUrl,
                       initialWeatherInfo: weatherData,
                     );
                   },
