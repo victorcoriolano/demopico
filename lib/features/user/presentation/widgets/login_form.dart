@@ -1,4 +1,5 @@
 import 'package:demopico/core/app/routes/app_routes.dart';
+import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/features/user/domain/entity/user_credentials.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
@@ -46,7 +47,7 @@ class _LoginFormState extends State<LoginForm> with Validators {
                   "Bem vindo de volta",
                   style: TextStyle(
                     fontWeight: FontWeight.normal,
-                    color: Colors.white,
+                    color: kWhite,
                     fontSize: 25,
                   ),
                 ),
@@ -67,12 +68,11 @@ class _LoginFormState extends State<LoginForm> with Validators {
                     decoration: customTextField(provider.isEmail
                         ? "Digite seu Email"
                         : "Digite seu vulgo"),
-                    cursorColor: Colors.white,
-                    style: const TextStyle(color: Colors.white),
+                    cursorColor: kWhite,
+                    style: const TextStyle(color: kWhite),
                     controller: _loginController,
                     validator: (value) => combineValidators([
                       () => isNotEmpty(value),
-                      () => isValidEmail(value),
                     ]),
                   );
                 }),
@@ -83,8 +83,8 @@ class _LoginFormState extends State<LoginForm> with Validators {
                 //senha
                 TextFormField(
                   decoration: customTextField("Senha"),
-                  cursorColor: Colors.white,
-                  style: const TextStyle(color: Colors.white),
+                  cursorColor: kWhite,
+                  style: const TextStyle(color: kWhite),
                   obscureText: true,
                   controller: _senhaController,
                   validator: (value) => combineValidators([
@@ -118,15 +118,15 @@ class _LoginFormState extends State<LoginForm> with Validators {
                           login: _loginController.text.trim(),
                           senha: _senhaController.text.trim());
 
-                       await authProvider.login(credential);
-                       Get.toNamed(Paths.profile);
+                      await authProvider.login(credential);
+                      Get.toNamed(Paths.profile);
                     }
                   },
                   style: buttonStyle(),
                   child: const Text(
                     "Entrar",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: kWhite,
                     ),
                   ),
                 ),
@@ -136,11 +136,13 @@ class _LoginFormState extends State<LoginForm> with Validators {
                 //button (fazer parte)
                 ElevatedButton(
                   onPressed: () {
-                    Get.toNamed(Paths.signUp,);
+                    Get.toNamed(
+                      Paths.signUp,
+                    );
                   },
                   style: buttonStyle(),
                   child: const Text("FAZER PARTE",
-                      style: TextStyle(color: Colors.white)),
+                      style: TextStyle(color: kWhite)),
                 ),
               ],
             ),
