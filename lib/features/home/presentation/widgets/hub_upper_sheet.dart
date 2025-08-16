@@ -29,7 +29,6 @@ class _HubUpperSheetState extends State<HubUpperSheet>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late final listenProvider = Provider.of<HomeProvider>(context);
-  late final db = Provider.of<HomeProvider>(context, listen: false);
 
   //método base
   double lerp(double min, double max) =>
@@ -49,8 +48,8 @@ class _HubUpperSheetState extends State<HubUpperSheet>
     return lerp(index * (iconsHorizontalSpacing + iconStartSize), 0);
   }
 
-  Future<void> _loadAllPosts() async {
-    await db.getAllCommuniques();
+  Future<void> _loadRecentComuniques() async {
+    await context.read<HomeProvider>().fetchRecentCommuniques();
   }
 
   @override
@@ -62,7 +61,7 @@ class _HubUpperSheetState extends State<HubUpperSheet>
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadAllPosts(); // chama uma vez
+      _loadRecentComuniques();
     });
   }
 
