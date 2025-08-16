@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demopico/features/user/domain/models/user.dart';
 
 class Communique {
   final String id;
@@ -7,9 +7,9 @@ class Communique {
   final String vulgo;
   final String text;
   final String timestamp;
-  int likeCount;
+  final int likeCount;
   final List<String> likedBy;
-  final String type;
+  final TypeCommunique type;
 
   Communique({
     required this.id,
@@ -23,18 +23,32 @@ class Communique {
     required this.type,
   });
 
-  //converte doc em objeto
-  factory Communique.fromDocument(DocumentSnapshot doc) {
+  factory Communique.initial(String content, TypeCommunique type, UserM user) {
     return Communique(
-      id: doc.id,
-      uid: doc['uid'],
-      vulgo: doc['vulgo'],
-      text: doc['text'],
-      timestamp: doc['timestamp'],
-      pictureUrl: doc['pictureUrl'],
-      likeCount: doc['likeCount'],
-      likedBy: List<String>.from(doc['likedBy'] ?? []),
-      type: doc['type'],
+      id: '',
+      uid: user.id,
+      vulgo: user.name,
+      text: content,
+      pictureUrl: user.pictureUrl ?? '',
+      timestamp: DateTime.now().toIso8601String(),
+      likeCount: 0,
+      likedBy: [],
+      type: type,
+    );
+  }
+
+  //converte doc em objeto
+  factory Communique.fromJson(Map<String, dynamic> json, String id) {
+    return Communique(
+      id: id,
+      uid: json['uid'],
+      vulgo: json['vulgo'],
+      text: json['text'],
+      timestamp: json['timestamp'],
+      pictureUrl: json['pictureUrl'],
+      likeCount: json['likeCount'],
+      likedBy: List<String>.from(json['likedBy'] ?? []),
+      type: TypeCommunique.fromString(json['type']),
     );
   }
 
@@ -49,7 +63,29 @@ class Communique {
       'timestamp': timestamp,
       'likeCount': likeCount,
       'likedBy': likedBy,
-      'type': type,
+      'type': type.name,
     };
+  }
+}
+
+enum TypeCommunique {
+  donation,
+  event,
+  normal,
+  announcement;
+
+  factory TypeCommunique.fromString(String type) {
+    switch (type) {
+      case 'donation':
+        return TypeCommunique.donation;
+      case 'event':
+        return TypeCommunique.event;
+      case 'normal':
+        return TypeCommunique.normal;
+      case 'announcement':
+        return TypeCommunique.announcement;
+      default:
+        throw ArgumentError('Unknown type: $type');
+    }
   }
 }
