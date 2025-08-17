@@ -61,7 +61,6 @@ class Pico {
 }
 
 
-// TODO SEPARAR EM OUTROS ARQUIVOS 
 
 enum TypeSpot {
   rua,
