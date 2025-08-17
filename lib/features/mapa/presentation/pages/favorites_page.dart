@@ -1,3 +1,4 @@
+import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/favorite_spot_controller.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 class FavoriteSpotPage extends StatefulWidget {
-  const FavoriteSpotPage({super.key, });
+  const FavoriteSpotPage({
+    super.key,
+  });
 
   @override
   State<FavoriteSpotPage> createState() => _FavoriteSpotPageState();
@@ -16,14 +19,16 @@ class _FavoriteSpotPageState extends State<FavoriteSpotPage> {
   final String userID = Get.arguments as String;
 
   void getSpots() async {
-    await context.read<FavoriteSpotController>().getPicosSalvos(userID);
+    final provider = context.read<FavoriteSpotController>();
+    provider.error = null;
+    await provider.getPicosSalvos(userID);
   }
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) { 
-      getSpots();  
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getSpots();
     });
   }
 
@@ -53,15 +58,15 @@ class _FavoriteSpotPageState extends State<FavoriteSpotPage> {
               child: CircularProgressIndicator(),
             );
           }
+          if (provider.error != null) {
+            return Center(
+                child: Text("Erro ao carregar os dados: ${provider.error}"));
+          }
           if (provider.picosFavoritos.isEmpty) {
             return const Center(
                 child: Text("Você não possui nenhum pico salvo"));
           }
 
-          if (provider.error != null) {
-            return Center(
-                child: Text("Erro ao carregar os dados: ${provider.error}"));
-          }
           return ListView.builder(
             itemCount: provider.picosFavoritos.length,
             itemBuilder: (context, index) {
@@ -75,12 +80,19 @@ class _FavoriteSpotPageState extends State<FavoriteSpotPage> {
                   contentPadding: const EdgeInsets.all(16),
                   leading: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Image.network(
-                      pico.picoModel.imgUrls.first,
-                      width: 70,
-                      height: 70,
-                      fit: BoxFit.cover,
-                    ),
+                    child: pico.picoModel.imgUrls.firstOrNull != null
+                        ? Image.network(
+                            pico.picoModel.imgUrls.first,
+                            width: 70,
+                            height: 70,
+                            fit: BoxFit.cover,
+                          )
+                        : Container(
+                            width: 70,
+                            height: 70,
+                            color: Colors.grey,
+                            child: const Icon(Icons.image, color: Colors.white),
+                          ),
                   ),
                   title: Text(
                     pico.picoModel.picoName,
@@ -136,9 +148,9 @@ class _FavoriteSpotPageState extends State<FavoriteSpotPage> {
                     ],
                   ),
                   onTap: () {
-                    mapController.reajustarCameraPosition(
-                        LatLng(pico.picoModel.lat, pico.picoModel.long));
-                    Navigator.pop(context);
+                    final latlang = LatLng(pico.picoModel.lat, pico.picoModel.long);
+                    mapController.reajustarCameraPosition(latlang);
+                    Get.toNamed(Paths.map, arguments: latlang);
                   },
                 ),
               );
