@@ -1,15 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/widgets/glass_widget.dart';
-import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class TopInfoSpot extends StatefulWidget {
+  final LatLng location;
   final List<String> images;
   final bool isMine;
   final VoidCallback onPressedDelete;
-  const TopInfoSpot({super.key, required this.images, required this.isMine, required this.onPressedDelete});
+  const TopInfoSpot({super.key, required this.images, required this.isMine, required this.onPressedDelete, required this.location});
 
   @override
   State<TopInfoSpot> createState() => _TopInfoSpotState();
@@ -18,6 +20,7 @@ class TopInfoSpot extends StatefulWidget {
 class _TopInfoSpotState extends State<TopInfoSpot> {
   late final PageController _pageController;
   int currentIndex = 0;
+
 
   @override
   void initState() {
@@ -75,6 +78,7 @@ class _TopInfoSpotState extends State<TopInfoSpot> {
             child: Container(
               margin: EdgeInsets.all(12),
               height: 200,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
               child: GlassWidget(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -82,7 +86,7 @@ class _TopInfoSpotState extends State<TopInfoSpot> {
                     IconButton(
                       icon: const Icon(Icons.close, color: kRed),
                       padding: const EdgeInsets.all(10),
-                      iconSize: 36,
+                      iconSize: 30,
                       onPressed: () {
                         Get.back(); // Retorna para a tela anterior
                       },
@@ -90,9 +94,9 @@ class _TopInfoSpotState extends State<TopInfoSpot> {
                     IconButton(
                       icon: const Icon(Icons.map, color: kRed),
                       padding: const EdgeInsets.all(10),
-                      iconSize: 36,
+                      iconSize: 30,
                       onPressed: () {
-                        Get.to(() => MapPage()); // Retorna para a tela anterior
+                        Get.toNamed(Paths.map, arguments: widget.location); // Retorna para a tela anterior
                       },
                     ),
                     Visibility(
@@ -100,7 +104,7 @@ class _TopInfoSpotState extends State<TopInfoSpot> {
                       child: IconButton(
                       icon: const Icon(Icons.delete, color: kRed),
                       padding: const EdgeInsets.all(10),
-                      iconSize: 36,
+                      iconSize: 30,
                       onPressed: widget.onPressedDelete,
                     ),
                     ),
