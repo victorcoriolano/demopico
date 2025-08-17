@@ -1,4 +1,5 @@
 import 'package:demopico/core/common/errors/failure_server.dart';
+import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/mapa/domain/usecases/favorite_save_spot_uc.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_provider.dart';
 import 'package:demopico/features/mapa/presentation/dtos/spot_cart_ui_dto.dart';
@@ -44,8 +45,15 @@ class FavoriteSpotController extends ChangeNotifier {
       debugPrint("Picos salvos: ${picosFavoritos.length}");
       isLoading = false;
       notifyListeners();
-    } on Failure catch (e) {
-      error = "Um erro ao buscar picos salvos foi identificado: $e";
+    } on DataNotFoundFailure catch (e) {
+      isLoading = false;
+      debugPrint("Documento inexistente: ${e.dataID}");
+      error = e.message;
+      notifyListeners();
+    } on Failure catch (e){
+      isLoading = false;
+      debugPrint("CONTROLLER: ERRO AO BUSCAR PICOS FAVORITOS - $e ${e.runtimeType}");
+      error = e.message;
       notifyListeners();
     }
   }
@@ -59,5 +67,11 @@ class FavoriteSpotController extends ChangeNotifier {
       error = e.toString();
       return false;
     }
+  }
+
+  @override
+  void dispose() {
+    error = null;
+    super.dispose();
   }
 }
