@@ -4,6 +4,7 @@ import 'package:demopico/features/mapa/presentation/controllers/map_controller.d
 import 'package:demopico/features/mapa/presentation/controllers/spots_controller.dart';
 import 'package:demopico/features/mapa/presentation/view_services/modal_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -40,6 +41,7 @@ class MapWidgetState extends State<MapWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final LatLng? location = Get.arguments as LatLng?;
     
     // consome os dados do provider para manter a tela atualizada
     return Scaffold(
@@ -50,7 +52,7 @@ class MapWidgetState extends State<MapWidget> {
           },
           zoomControlsEnabled: false,
           initialCameraPosition: CameraPosition(
-            target: mapProvider.center,
+            target: location ?? mapProvider.center,
             zoom: mapProvider.zoomInicial,
           ),
           mapType: mapProvider.myMapType,
