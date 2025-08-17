@@ -47,7 +47,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
       final docRf = await _firestore.collection(collection.name).doc(id).get(
         GetOptions(source: Source.serverAndCache)
       );
-      if (!docRf.exists || docRf.data() == null) throw DataNotFoundFailure(); 
+      if (!docRf.exists || docRf.data() == null) throw DataNotFoundFailure(dataID: id); 
       return FirebaseDTO(
         id: id, 
         data: docRf.data()!);
