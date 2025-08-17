@@ -1,6 +1,7 @@
 import 'package:demopico/core/app/home_page.dart';
 import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/routes/middleware.dart';
+import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/favorites_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/history_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
@@ -19,16 +20,15 @@ class AppPages {
 
   static final routes = <GetPage>[
     GetPage(
-      binding: AuthBiding(),
-      name: Paths.createPostPage,
-      page: () => CreatePostPage(),
-      transition: Transition.downToUp
-    ),
+        binding: AuthBiding(),
+        name: Paths.createPostPage,
+        page: () => CreatePostPage(),
+        transition: Transition.downToUp),
     GetPage(
       binding: AuthBiding(),
       name: Paths.home,
       page: () => HomePage(),
-      transition:  Transition.native,
+      transition: Transition.native,
     ),
     GetPage(
         binding: AuthBiding(),
@@ -42,19 +42,17 @@ class AppPages {
       transition: Transition.rightToLeft,
     ),
     GetPage(
-      binding: AuthBiding(),
-      name: Paths.profile,
-      page: () => ScreensProfile(),
-      middlewares: [Middleware()],
-      transition: Transition.rightToLeft
-    ),
+        binding: AuthBiding(),
+        name: Paths.profile,
+        page: () => ScreensProfile(),
+        middlewares: [Middleware()],
+        transition: Transition.rightToLeft),
     GetPage(
-      binding: AuthBiding(),
-      name: Paths.chat,
-      page: () => ChatRoomPage(),
-      middlewares: [Middleware()],
-      transition: Transition.rightToLeft
-    ),
+        binding: AuthBiding(),
+        name: Paths.chat,
+        page: () => ChatRoomPage(),
+        middlewares: [Middleware()],
+        transition: Transition.rightToLeft),
     GetPage(
       binding: AuthBiding(),
       name: Paths.searchProfile,
@@ -77,8 +75,13 @@ class AppPages {
     ),
     GetPage(
       page: () => RegisterPage(),
-      name:Paths.signUp,
+      name: Paths.signUp,
       transition: Transition.circularReveal,
     ),
+    GetPage(
+      name: Paths.hub,
+      page: () => HubPage(),
+      transition: Transition.upToDown,
+    )
   ];
 }
