@@ -24,9 +24,10 @@ class UserCredentialsSignIn {
 
 class UserCredentialsSignUp {
   String uid;
-  final String nome;
+  //não é final em caso de validação no use case.
+  String nome;
+  String email;
   final bool isColetivo;
-  final String email;
   final SignMethods signMethod;
   final String password;
   
