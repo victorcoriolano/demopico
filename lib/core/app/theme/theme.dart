@@ -88,14 +88,14 @@ final ThemeData appTheme = ThemeData(
     color: kRed,
   ),
 
-  cardTheme: CardTheme(
+  cardTheme: CardThemeData(
     color: kLightGrey,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(12),
     ),
   ),
 
-  dialogTheme: const DialogTheme(
+  dialogTheme: const DialogThemeData(
     backgroundColor: kDialogBackground,
     titleTextStyle: TextStyle(
       fontSize: 20,
