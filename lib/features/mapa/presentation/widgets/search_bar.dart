@@ -15,7 +15,7 @@ class SearchBarSpots extends StatefulWidget {
 class _SearchBarSpotsState extends State<SearchBarSpots> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<SpotControllerProvider>(
+    return Consumer<SpotsControllerProvider>(
       builder: (context, provider, child) => SearchAnchor.bar(
         viewHeaderHeight: 42,
         barLeading: Icon(

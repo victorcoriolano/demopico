@@ -40,7 +40,7 @@ final myProviders = [
   ChangeNotifierProvider(create: (_) => AddPicoProvider.getInstance),
   ChangeNotifierProvider(create: (_) => MapControllerProvider()),
   ChangeNotifierProvider(create: (_) => FavoriteSpotController.getInstance),
-  ChangeNotifierProvider(create: (_) => SpotControllerProvider.getInstance),
+  ChangeNotifierProvider(create: (_) => SpotsControllerProvider.getInstance),
   ChangeNotifierProvider(create: (_) => UserDatabaseProvider.getInstance),
   ChangeNotifierProvider(create: (_) => HistoricoController.getInstance),
   ChangeNotifierProvider(

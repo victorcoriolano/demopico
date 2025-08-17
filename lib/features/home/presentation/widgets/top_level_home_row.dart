@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:demopico/core/app/auth_wrapper.dart';
 import 'package:demopico/core/app/routes/app_routes.dart';
 
 import 'package:demopico/features/home/infra/dialog_page_route.dart';

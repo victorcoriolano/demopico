@@ -26,7 +26,7 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
   @override
   Widget build(BuildContext context) {
 
-    return Consumer<SpotControllerProvider>(
+    return Consumer<SpotsControllerProvider>(
       builder: (context, spotProvider, child) => AppBar(
         automaticallyImplyLeading: false,
         toolbarHeight: 100,
@@ -160,8 +160,8 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Consumer<SpotControllerProvider>(
-          builder: (BuildContext context, SpotControllerProvider provider, Widget? child) => AlertDialog(
+        return Consumer<SpotsControllerProvider>(
+          builder: (BuildContext context, SpotsControllerProvider provider, Widget? child) => AlertDialog(
             title: const Text("Selecione as Utilidades"),
             content: Column(
               children: provider.utilidades.map((utilidade) {
