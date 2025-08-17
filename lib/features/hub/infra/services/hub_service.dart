@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/core/common/files_manager/enums/collections.dart';
 import 'package:demopico/features/external/datasources/firebase/crud_firebase.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 import 'package:demopico/features/external/datasources/firebase/firestore.dart';
 import 'package:demopico/features/external/interfaces/i_crud_datasource.dart';
 import 'package:demopico/features/hub/domain/interfaces/i_hub_service.dart';
+import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
 
 class HubService implements IHubService<FirebaseDTO> {
   static HubService? _hubService;
@@ -20,21 +22,53 @@ class HubService implements IHubService<FirebaseDTO> {
   
   @override
   Future<FirebaseDTO> create(FirebaseDTO communique) async {
-    return await crudBoilerplate.create(communique);
+    try {
+      return await crudBoilerplate.create(communique);
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorsMapper.map(e);
+    } on Exception catch (e, stacktrace) {
+      throw UnknownFailure(originalException: e, stackTrace: stacktrace);
+    } catch (e) {
+      throw UnknownFailure(unknownError: e);
+    }
   }
   
   @override
   Future<void> delete(String id) async {
-    await crudBoilerplate.delete(id);
+    try {
+      await crudBoilerplate.delete(id);
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorsMapper.map(e);
+    } on Exception catch (e, stacktrace) {
+      throw UnknownFailure(originalException: e, stackTrace: stacktrace);
+    } catch (e) {
+      throw UnknownFailure(unknownError: e);
+    }
   }
   
   @override
   Stream<List<FirebaseDTO>> list() {
-    return crudBoilerplate.watch();
+    try {
+      return crudBoilerplate.watch();
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorsMapper.map(e);
+    } on Exception catch (e, stacktrace) {
+      throw UnknownFailure(originalException: e, stackTrace: stacktrace);
+    } catch (e) {
+      throw UnknownFailure(unknownError: e);
+    }
   }
   
   @override
   Future<FirebaseDTO> update(FirebaseDTO communique) async {
-    return await crudBoilerplate.update(communique);
+    try {
+      return await crudBoilerplate.update(communique);
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorsMapper.map(e);
+    } on Exception catch (e, stacktrace) {
+      throw UnknownFailure(originalException: e, stackTrace: stacktrace);
+    } catch (e) {
+      throw UnknownFailure(unknownError: e);
+    }
   }
 }
