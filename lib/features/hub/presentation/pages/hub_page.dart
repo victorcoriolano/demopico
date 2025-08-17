@@ -179,10 +179,10 @@ class _HubPageState extends State<HubPage> {
                                   children: [
                                     CupertinoSwitch(
                                       value: _isDonation,
-                                      activeColor: const Color(
+                                      activeTrackColor: const Color(
                                           0xFF970202), // Vermelho escuro quando ativado
 
-                                      trackColor: const Color(
+                                      inactiveTrackColor: const Color(
                                           0xFFE0E0E0), // Cinza claro quando desativado
                                       thumbColor: Colors.black,
                                       onChanged: (bool value) {
@@ -194,8 +194,8 @@ class _HubPageState extends State<HubPage> {
                                     ),
                                     CupertinoSwitch(
                                       value: _isEvent,
-                                      activeColor: const Color(0xFF970202),
-                                      trackColor:
+                                      activeTrackColor: const Color(0xFF970202),
+                                      inactiveTrackColor:
                                           const Color(0xFFE0E0E0),
                                       thumbColor: Colors.black,
                                       onChanged: (bool value) {
