@@ -47,9 +47,7 @@ class HubProvider extends ChangeNotifier {
         _allCommuniques = allCommuniquesFromDb.toList();
         notifyListeners();
       }, onError: (error) {
-        if (kDebugMode) {
-          print(error);
-        }
+        debugPrint(error.toString());
         Get.snackbar(
           'Erro',
           'Não foi possível listar os comunicados',
