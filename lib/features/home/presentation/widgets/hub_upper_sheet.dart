@@ -2,7 +2,6 @@
 
 import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/features/home/presentation/provider/home_provider.dart';
-import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
 import 'package:demopico/features/home/presentation/widgets/efemero_scroll_text.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
@@ -140,7 +139,6 @@ class _HubUpperSheetState extends State<HubUpperSheet>
     _controller.fling(velocity: isOpen ? -2 : 2);
     Get.toNamed(
       Paths.hub,
-      
     );
     _controller.value = 0;
   }
@@ -153,11 +151,8 @@ class _HubUpperSheetState extends State<HubUpperSheet>
     if (_controller.status == AnimationStatus.completed ||
         _controller.value >= 0.5) {
       _controller.fling(velocity: _controller.value < 0.5 ? -2 : 2);
-      Get.to(
-        () => HubPage(),
-        transition: Transition.upToDown,
-        duration: const Duration(milliseconds: 600),
-        curve: Curves.fastEaseInToSlowEaseOut,
+      Get.toNamed(
+        Paths.hub,
       );
     }
 
