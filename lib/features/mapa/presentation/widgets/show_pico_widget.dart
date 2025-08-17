@@ -16,6 +16,7 @@ import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:provider/provider.dart';
 
@@ -60,7 +61,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
     debugPrint("show pico widget");
 
     return DraggableScrollableSheet(
-        initialChildSize: 0.7,
+        initialChildSize: 0.8,
         minChildSize: 0.2,
         maxChildSize: 0.95,
         builder: (BuildContext context, ScrollController scrollController) {
@@ -88,6 +89,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                           children: [
                             // widget da imagem dos spots
                             TopInfoSpot(
+                              location: LatLng(spotProvider.pico?.lat ?? 0, spotProvider.pico?.long ?? 0),
                               images: spotProvider.pico?.imgUrls ?? [], 
                               isMine: isMine(), 
                               onPressedDelete: () async {
@@ -213,7 +215,9 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                                   icon: const Icon(Icons.flag),
                                                   iconSize: 35),
                                               IconButton(
-                                                  onPressed: () {},
+                                                  onPressed: () {
+                                                    // TODO: IMPLEMENTAR COMPARTILHAR
+                                                  },
                                                   icon: const Icon(Icons.share_rounded),
                                                   iconSize: 35),
                                             ],
