@@ -12,7 +12,6 @@ import 'package:provider/provider.dart';
 class MyAppWidget extends StatelessWidget {
   const MyAppWidget({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     Get.put<AuthBiding>(AuthBiding());
