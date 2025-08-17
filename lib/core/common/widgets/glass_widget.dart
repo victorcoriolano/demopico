@@ -13,10 +13,10 @@ class GlassWidget extends StatelessWidget {
         filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.2), // Cor com transparência
+            color: Colors.white.withValues(alpha: 0.2), // Cor com transparência
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: Colors.white.withOpacity(0.5), // Borda translúcida
+              color: Colors.white.withValues(alpha: 0.5), // Borda translúcida
               width: 2,
             ),
           ),
