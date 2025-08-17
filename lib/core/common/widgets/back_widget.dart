@@ -1,15 +1,17 @@
+import 'package:demopico/core/app/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CustomBackButton extends StatelessWidget {
   final String destination;
   final double iconSize;
+  final Color colorIcon;
 
-  const CustomBackButton({
-    super.key,
-    required this.destination,
-    this.iconSize = 35,
-  });
+  const CustomBackButton(
+      {super.key,
+      required this.destination,
+      this.iconSize = 35,
+      this.colorIcon = kBlack});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class CustomBackButton extends StatelessWidget {
         );
       },
       icon: const Icon(Icons.arrow_back),
-      color: const Color.fromARGB(255, 0, 0, 0),
+      color: colorIcon,
       splashRadius: 0.5,
       tooltip: "Voltar",
       splashColor: null,
