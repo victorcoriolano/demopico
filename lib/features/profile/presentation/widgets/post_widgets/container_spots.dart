@@ -19,13 +19,13 @@ class _ContainerSpotsState extends State<ContainerSpots> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async { 
       final nameUser = context.read<UserDatabaseProvider>().user!.name;
-      await context.read<SpotControllerProvider>().getMySpots(nameUser);
+      await context.read<SpotsControllerProvider>().getMySpots(nameUser);
     });
   }
 
    @override
    Widget build(BuildContext context) {
-       return Consumer<SpotControllerProvider>(builder: (context, provider, child) {
+       return Consumer<SpotsControllerProvider>(builder: (context, provider, child) {
       if (provider.isLoading) {
         return const Center(
           child: CircularProgressIndicator(),

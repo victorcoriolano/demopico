@@ -17,7 +17,7 @@ class _MySpotsPageState extends State<MySpotsPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) { 
-      context.read<SpotControllerProvider>().getMySpots(widget.idUser);
+      context.read<SpotsControllerProvider>().getMySpots(widget.idUser);
     });
   }
   
@@ -28,7 +28,7 @@ class _MySpotsPageState extends State<MySpotsPage> {
         title: const Text('MEUS PICOS'),
         centerTitle: true,
       ),
-      body: Consumer<SpotControllerProvider>(
+      body: Consumer<SpotsControllerProvider>(
         builder: (context, provider, child) {
           if(provider.isLoading) Center(child: CircularProgressIndicator(),);
           if(provider.mySpots.isEmpty) Center(child: Text("Nenhum pico encontrado", style: TextStyle(color: kRed),),); 
