@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
 
+import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/features/home/presentation/provider/home_provider.dart';
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
 import 'package:demopico/features/home/presentation/widgets/efemero_scroll_text.dart';
@@ -137,11 +138,9 @@ class _HubUpperSheetState extends State<HubUpperSheet>
   void _toggle() {
     final bool isOpen = _controller.status == AnimationStatus.completed;
     _controller.fling(velocity: isOpen ? -2 : 2);
-    Get.to(
-      () => HubPage(),
-      transition: Transition.upToDown,
-      duration: const Duration(milliseconds: 600),
-      curve: Curves.fastEaseInToSlowEaseOut,
+    Get.toNamed(
+      Paths.hub,
+      
     );
     _controller.value = 0;
   }
