@@ -39,7 +39,8 @@ class AccountExistsFailure extends RepositoryFailures {
 }
 
 class DataNotFoundFailure extends RepositoryFailures {
-  DataNotFoundFailure({super.originalException}): super(message: "Dados não encontrados",code: 'DATA_NOT_FOUND');
+  final String? dataID;
+  DataNotFoundFailure({super.originalException, this.dataID}): super(message: "Dados do id: ${dataID ?? ''} não encontrados",code: 'DATA_NOT_FOUND');
 }
 
 // Pico
