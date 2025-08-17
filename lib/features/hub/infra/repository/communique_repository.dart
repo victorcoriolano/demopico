@@ -59,7 +59,7 @@ class CommuniqueRepository implements ICommuniqueRepository {
     try {
       await hubServiceIMP.delete(communiqueId);
     } on Failure catch (e) {
-      debugPrint("HUB-REPO: ERRO CONHECIDO - $e");
+      debugPrint("HUB-REPO: ERRO CONHECIDO - ${e.runtimeType} - $e");
       rethrow;
     } catch (e) {
       throw UnknownFailure(unknownError: e.toString());
