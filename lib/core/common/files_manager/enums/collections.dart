@@ -1,4 +1,5 @@
 enum Collections {
+  connections,
   spots,
   users,
   picosFavoritados,
@@ -7,22 +8,24 @@ enum Collections {
   comments,
   posts;
 
-  String fromString(String value) {
+  factory Collections.fromString(String value) {
     switch (value) {
+      case 'connections':
+        return Collections.connections;
       case 'spots':
-        return Collections.spots.name;
+        return Collections.spots;
       case 'users':
-        return Collections.users.name;
+        return Collections.users;
       case 'picosFavoritados':
-        return Collections.picosFavoritados.name;
+        return Collections.picosFavoritados;
       case 'denuncias':
-        return Collections.denuncias.name;
+        return Collections.denuncias;
       case 'communique':
-        return Collections.communique.name;
+        return Collections.communique;
       case 'comments':
-        return Collections.comments.name;
+        return Collections.comments;
       case 'posts':
-        return Collections.posts.name;
+        return Collections.posts;
       default:
         throw Exception("Invalid Tables name");
     }
@@ -44,6 +47,8 @@ enum Collections {
         return 'comments';
       case Collections.posts:
         return 'posts';
+      case Collections.connections:
+        return 'connections';
     }
   }
 }
