@@ -25,7 +25,7 @@ class FirebaseDtoMapper<Model> implements IMapperDto<Model, FirebaseDTO> {
 
   @override
   Model toModel(FirebaseDTO dto) {
-    return this.fromJson(dto.data, dto.id);
+    return fromJson(dto.data, dto.id);
   }
   
   @override
