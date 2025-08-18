@@ -32,10 +32,11 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
 
 
   @override
-  Future<FirebaseDTO> create(FirebaseDTO model) async{
+  Future<FirebaseDTO> create(FirebaseDTO dto) async{
     try {
-      await _firestore.collection(collection.name).add(model.data);
-      return model;
+      final docRef = await _firestore.collection(collection.name).add(dto.data);
+      dto.setId=docRef.id;
+      return dto;
     } on FirebaseException catch (e) {
       throw FirebaseErrorsMapper.map(e);
     }
@@ -147,9 +148,12 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
   FirebaseFirestore get dataSource => _firestore;
   
   @override
-  Future<List<FirebaseDTO>> readWithFilter(String field, String value) async {
-     try {
-      final query = await _firestore.collection(collection.name).where(field, isEqualTo: value).get();
+  Future<List<FirebaseDTO>> readWithTwoFilters({required String field1, required String value1, required String field2, required String value2}) async {
+    try {
+      final query = await _firestore.collection(collection.name)
+          .where(field1, isEqualTo: value1)
+          .where(field2, isEqualTo: value2)
+          .get();
       debugPrint("QUERY length: ${query.docs.length}");
       return query.docs.map((doc) {
         return FirebaseDTO(id: doc.id, data: doc.data());
