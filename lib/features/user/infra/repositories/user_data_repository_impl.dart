@@ -60,5 +60,17 @@ class UserDataRepositoryImpl implements IUserDataRepository {
   @override
   UserM? get localUser => _userLocalDetails;
   
+  @override
+  Future<List<UserM>> getSuggestions(List<String> arguments) {
+    // TODO: implement getSuggestions
+    throw UnimplementedError();
+  }
+  
+  @override
+  Stream<List<UserM>> searchUsers(String query) {
+    // TODO: implement searchUsers
+    throw UnimplementedError();
+  }
+  
 
 }
