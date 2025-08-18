@@ -1,0 +1,37 @@
+
+import 'package:demopico/core/common/files_manager/enums/collections.dart';
+import 'package:demopico/features/external/datasources/firebase/crud_firebase.dart';
+import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
+import 'package:demopico/features/profile/domain/interfaces/i_network_datasource.dart';
+
+class FirebaseNetworkDatasource implements INetworkDatasource<FirebaseDTO>{
+
+  final CrudFirebase _crudFirebaseBoilerplate;
+
+  FirebaseNetworkDatasource({required CrudFirebase crudFirebase})
+      : _crudFirebaseBoilerplate = crudFirebase;
+
+  static FirebaseNetworkDatasource? _instance;
+
+  static FirebaseNetworkDatasource get instance {
+    _instance ??= FirebaseNetworkDatasource(
+      crudFirebase: CrudFirebase.getInstance..collection = Collections.connections,
+    );
+    return _instance!;
+  }
+
+  @override
+  Future<void> connectionUser(FirebaseDTO dto) async {
+    await _crudFirebaseBoilerplate.create(dto);
+  }
+
+  @override
+  Future<List<FirebaseDTO>> getConnections(String userID) {
+    return _crudFirebaseBoilerplate.readWithFilter("userID", userID);
+
+  }
+  @override
+  Future<void> disconnectionUser(FirebaseDTO dto) async{
+    await _crudFirebaseBoilerplate.delete(dto.id);
+  }
+}
