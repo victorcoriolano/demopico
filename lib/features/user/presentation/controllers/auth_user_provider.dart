@@ -68,6 +68,7 @@ class AuthUserProvider extends ChangeNotifier {
   }
 
   Future<void> login(UserCredentialsSignIn credentials) async {
+    credentials.login = credentials.login.toLowerCase();
     try {
       final validatedCredentials =
           await _validateUserCredentials.validateForLogin(credentials);
