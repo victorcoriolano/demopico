@@ -20,6 +20,24 @@ final mockUserProfile = UserM(
   backgroundPicture: '',
 );
 
+final mockUserProfile2 = UserM(
+  idMySpots: [],
+  name: 'artu',
+  description: 'aaaaaa',
+  id: '2',
+  pictureUrl: '',
+  isColetivo: false,
+  signMethod: SignMethods.email,
+  location: '',
+  dob: '',
+  conexoes: 0,
+  picosAdicionados: 0,
+  picosSalvos: 0,
+  favoritesIdPicos: [],
+  myIdPosts: [],
+  email: '',
+  backgroundPicture: '',
+);
   final testeProfileErrado = UserM(
       idMySpots: [],
    name: 'artu' ,
