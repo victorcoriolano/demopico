@@ -73,7 +73,7 @@ void main() {
 
       debugPrint(snapshot.docs.map((doc) => doc.data()).toList().toString());
 
-      final requests = await networkDatasource.getConnectionRequests('userID1');
+      final requests = await networkDatasource.fetchRequestConnections('userID1');
 
       expect(requests, isNotEmpty);
       expect(requests.length, equals(1));
