@@ -1,0 +1,185 @@
+import 'package:demopico/core/common/files_manager/mappers/i_mapper_dto.dart';
+import 'package:demopico/features/profile/domain/models/connection.dart';
+import 'package:demopico/features/profile/infra/datasource/firebase_network_datasource.dart';
+import 'package:demopico/features/profile/infra/repository/network_repository.dart';
+import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+
+import '../../../mocks/mocks_profile.dart';
+
+
+
+// Mock class for any external services, like a Firebase or HTTP client
+class MockNetworkService extends Mock implements FirebaseNetworkDatasource {}
+
+void main() {
+  late NetworkRepository repository;
+  late MockNetworkService mockNetworkService;
+  late IMapperDto mapper;
+  late IMapperDto mapperConnection;
+
+
+  setUpAll(() {
+        mockNetworkService = MockNetworkService();
+    // Initialize the repository with the mock service
+    repository = NetworkRepository(datasource: mockNetworkService);
+    mapper = repository.mapperUser;
+    mapperConnection = repository.mapperConnection;
+    // Register the mapper for UserM and Connection
+    registerFallbackValue(mockUserProfile);
+    registerFallbackValue(mockUserProfile2);
+    registerFallbackValue(mapperConnection.toDTO(dummyConnections[0]));
+  });
+
+  group('getConnections', () {
+    const String userID = 'user123';
+
+    test('should return a list of users when connections exist', () async {
+      // Arrange
+      when(() => mockNetworkService.getConnections(any()))
+          .thenAnswer((_) async => [
+            mapper.toDTO(mockUserProfile),
+            mapper.toDTO(mockUserProfile2)
+          ]);
+
+      // Act
+      final result = await repository.getConnections(userID);
+
+      // Assert
+      expect(result, isA<List<UserM>>());
+      expect(result, isNotEmpty);
+      expect(result.length, 2);
+      verify(() => mockNetworkService.getConnections(userID)).called(1);
+    });
+
+    test('should return an empty list when no connections exist', () async {
+      // Arrange
+      when(() => mockNetworkService.getConnections(any()))
+          .thenAnswer((_) async => []);
+
+      // Act
+      final result = await repository.getConnections(userID);
+
+      // Assert
+      expect(result, isEmpty);
+      verify(() => mockNetworkService.getConnections(userID)).called(1);
+    });
+
+    test('should throw an exception on a server error', () async {
+      // Arrange
+      when(() => mockNetworkService.getConnections(any()))
+          .thenThrow(Exception('Server error'));
+
+      // Act & Assert
+      expect(() => repository.getConnections(userID), throwsA(isA<Exception>()));
+      verify(() => mockNetworkService.getConnections(userID)).called(1);
+    });
+  });
+  
+  
+  group('connectUser', () {
+
+
+    test('should complete successfully when connecting two valid users', () async {
+      // Arrange
+      when(() => mockNetworkService.connectUser(any())).thenAnswer((_) async => Future.value(mapperConnection.toDTO(dummyConnections[0])));
+
+      // Act
+      await repository.connectUser(dummyConnections[0]);
+
+      // Assert
+      verify(() => mockNetworkService.connectUser(mapperConnection.toDTO(dummyConnections[0]))).called(1);
+    });
+
+    test('should throw an exception if users are already connected', () async {
+      // Arrange
+      when(() => mockNetworkService.connectUser(any())).thenThrow(Exception('Already connected'));
+
+      // Act & Assert
+      expect(() => repository.connectUser(dummyConnections[0]), throwsA(isA<Exception>()));
+      verify(() => mockNetworkService.connectUser(mapperConnection.toDTO(dummyConnections[0]))).called(1);
+    });
+  });
+  
+  
+  
+  group('disconnectUser', () {
+
+    test('should complete successfully when disconnecting two connected users', () async {
+      // Arrange
+      when(() => mockNetworkService.disconnectUser(any())).thenAnswer((_) async => Future.value());
+
+      // Act
+      await repository.disconnectUser(dummyConnections[0]);
+
+      // Assert
+      verify(() => mockNetworkService.disconnectUser(mapperConnection.toDTO(dummyConnections[0]))).called(1);
+    });
+
+    test('should throw an exception if users are not connected', () async {
+      // Arrange
+      when(() => mockNetworkService.disconnectUser(any())).thenThrow(Exception('Not connected'));
+
+      // Act & Assert
+      expect(() => repository.disconnectUser(dummyConnections[2]), throwsA(isA<Exception>()));
+      verify(() => mockNetworkService.disconnectUser(mapperConnection.toDTO(dummyConnections[2]))).called(1);
+    });
+  });
+  
+  
+  
+  group('getConnectionRequests', () {
+    const String userID = 'user123';
+
+    test('should return a list of connections when requests exist', () async {
+      // Arrange
+      when(() => mockNetworkService.fetchRequestConnections(any()))
+          .thenAnswer((_) async => Future.value([
+            mapperConnection.toDTO(dummyConnections[1]),
+            mapperConnection.toDTO(dummyConnections[2])
+          ]));
+
+      // Act
+      final result = await repository.getConnectionRequests(userID);
+
+      // Assert
+      expect(result, isA<List<Connection>>());
+      expect(result, isNotEmpty);
+      expect(result.length, 2);
+      verify(() => mockNetworkService.fetchRequestConnections(userID)).called(1);
+    });
+
+    test('should return an empty list when no requests exist', () async {
+      // Arrange
+      when(() => mockNetworkService.fetchRequestConnections(any()))
+          .thenAnswer((_) async => []);
+
+      // Act
+      final result = await repository.getConnectionRequests(userID);
+
+      // Assert
+      expect(result, isEmpty);
+      verify(() => mockNetworkService.fetchRequestConnections(userID)).called(1);
+    });
+
+    test('should throw an exception on a server error', () async {
+      // Arrange
+      when(() => mockNetworkService.fetchRequestConnections(any()))
+          .thenThrow(Exception('Server error'));
+
+      // Act & Assert
+      expect(() => repository.getConnectionRequests(userID), throwsA(isA<Exception>()));
+      verify(() => mockNetworkService.fetchRequestConnections(userID)).called(1);
+    });
+  });
+}
+
+
+var dummyConnections = [
+  Connection(id: "id", userID: 'userID1', connectedUserID: 'userID4', status: RequestConnectionStatus.pending),
+
+  Connection(id: "id", userID: 'userID2', connectedUserID: 'userID1', status: RequestConnectionStatus.pending),
+
+  Connection(id: "id", userID: 'userID3', connectedUserID: 'userID1', status: RequestConnectionStatus.pending)
+];
