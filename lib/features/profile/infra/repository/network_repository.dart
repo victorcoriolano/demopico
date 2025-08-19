@@ -1,31 +1,60 @@
-
+import 'package:demopico/core/common/files_manager/mappers/i_mapper_dto.dart';
+import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
+import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto_mapper.dart';
+import 'package:demopico/features/profile/domain/interfaces/i_network_datasource.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_network_repository.dart';
 import 'package:demopico/features/profile/domain/models/connection.dart';
+import 'package:demopico/features/profile/infra/datasource/firebase_network_datasource.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 
 class NetworkRepository implements INetworkRepository {
+  final INetworkDatasource _datasource;
+
+  NetworkRepository({required INetworkDatasource datasource})
+      : _datasource = datasource;
+
+  static NetworkRepository? _instance;
+
+  static NetworkRepository get instance => _instance ??=
+      NetworkRepository(datasource: FirebaseNetworkDatasource.instance);
+
+  final IMapperDto<UserM, FirebaseDTO> _mapperDtoUser = FirebaseDtoMapper<UserM>(
+    fromJson: (Map<String, dynamic> map, String id) => UserM.fromJson(map, id), 
+    toMap: (UserM model) => model.toJsonMap(), 
+    getId: (UserM model) => model.id
+  );
+
+  final IMapperDto<Connection, FirebaseDTO> _mapperDtoConnection = FirebaseDtoMapper<Connection>(
+    fromJson: (Map<String, dynamic> map, String id) => Connection.fromJson(map, id), 
+    toMap: (Connection model) => model.toJson(), 
+    getId: (Connection model) => model.id
+  );
+
+  IMapperDto<UserM, FirebaseDTO> get mapperUser => _mapperDtoUser;
+
+  IMapperDto<Connection, FirebaseDTO> get mapperConnection => _mapperDtoConnection;
 
   @override
   Future<List<UserM>> getConnections(String userID) {
-    // TODO: implement getConnections
-    throw UnimplementedError();
+    return _datasource.getConnections(userID).then((dtos) {
+      return dtos.map((dto) => mapperUser.toModel(dto)).toList();
+    });
   }
 
   @override
-  Future<void> disconnectUser(String userId, String followerId) {
-    // TODO: implement followUser
-    throw UnimplementedError();
+  Future<void> disconnectUser(Connection connection) {
+    return _datasource.disconnectUser(mapperConnection.toDTO(connection));
   }
 
   @override
-  Future<void> connectUser(String userId, String followerId) {
-    // TODO: implement unfollowUser
-    throw UnimplementedError();
+  Future<void> connectUser(Connection connection) {
+    return _datasource.connectUser(mapperConnection.toDTO(connection));
   }
 
   @override
   Future<List<Connection>> getConnectionRequests(String userID) {
-    // TODO: implement getConnectionRequests
-    throw UnimplementedError();
+    return _datasource.fetchRequestConnections(userID).then((dtos) {
+      return dtos.map((dto) => mapperConnection.toModel(dto)).toList();
+    });
   }
 }
