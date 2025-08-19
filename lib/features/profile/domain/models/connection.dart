@@ -17,9 +17,9 @@ class Connection {
     };
   }
 
-  factory Connection.fromJson(Map<String, dynamic> json) {
+  factory Connection.fromJson(Map<String, dynamic> json, String id) {
     return Connection(
-      id: json['id'],
+      id: id,
       userID: json['userID'],
       status: RequestConnectionStatus.fromString(json['status']),
       connectedUserID: json['connectedUserID'],
