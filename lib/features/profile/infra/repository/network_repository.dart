@@ -51,10 +51,23 @@ class NetworkRepository implements INetworkRepository {
     return _datasource.connectUser(mapperConnection.toDTO(connection));
   }
 
+  
+
   @override
   Future<List<Connection>> getConnectionRequests(String userID) {
     return _datasource.fetchRequestConnections(userID).then((dtos) {
       return dtos.map((dto) => mapperConnection.toModel(dto)).toList();
     });
+  }
+  
+  @override
+  Future<Connection> updateConnection(Connection connection) async {
+    final output = await _datasource.updateConnection(mapperConnection.toDTO(connection));
+    return mapperConnection.toModel(output);
+  }
+  
+  @override
+  Future<bool> checkConnection(String idConnection) {
+    return _datasource.checkConnection(idConnection);
   }
 }
