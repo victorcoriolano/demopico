@@ -22,6 +22,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: SafeArea(
           child: GestureDetector(
+            key: const Key('home_page_gesture_detector_navigate'),
         onHorizontalDragEnd: (details) {
           if (details.primaryVelocity! > 0) {
             Get.toNamed(Paths.map);
