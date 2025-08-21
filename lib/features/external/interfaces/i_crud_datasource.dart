@@ -23,4 +23,8 @@ abstract class ICrudDataSource<DTO, DataSource> {
 
   //delete
   Future<void> delete(String id);
+
+  //exists
+  Future<bool> existsDataById(String id);
+  Future<bool> existsDataWithField(String field, String value);
 }
