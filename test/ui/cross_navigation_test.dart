@@ -1,86 +1,125 @@
-// test/home_page_test.dart
 import 'package:demopico/core/app/home_page.dart';
-import 'package:demopico/features/home/presentation/pages/central_page.dart';
+import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/features/home/presentation/provider/home_provider.dart';
 import 'package:demopico/features/home/presentation/provider/weather_provider.dart';
-import 'package:demopico/features/mapa/presentation/controllers/spots_controller.dart';
-import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
-import 'package:demopico/features/profile/presentation/pages/profile_page.dart';
+import 'package:demopico/features/hub/domain/entities/communique.dart';
+import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 
 import '../features/mocks/mocks_profile.dart';
 
-class MockOpenWeatherProvider extends Mock implements OpenWeatherProvider {}
+final mockCommunique = Communique(
+  id: '1',
+  text: 'Test Communique',
+  timestamp: 'This is a test communique.',
+  likeCount: 0,
+  likedBy: [],
+  pictureUrl: "",
+  type: TypeCommunique.announcement,
+  uid: "fdstrsfgfd",
+  vulgo: "vkfdlsmp2"
 
-class MockHomeProvider extends Mock implements HomeProvider {}
+);
 
-class MockUserDatabaseProvider extends Mock implements UserDatabaseProvider {}
+class MockWeatherProvider extends Mock implements OpenWeatherProvider {
+  @override
+  bool get isLoading => false;
 
-class MockSpotControllerProvider extends Mock implements SpotsControllerProvider {}
+  @override
+  String? get errorMessage => null;
 
-// TODO: CORRIGIR ESSES TESTES
+  @override
+  bool isUpdated() => true;
+
+  @override
+  bool imOld() => false;
+
+  @override
+  Future<void> fetchWeatherData() => Future.value();
+}
+
+class MockUserDatabaseProvider extends Mock implements UserDatabaseProvider {
+  @override
+  UserM? get user => mockUserProfile;
+}
+
+class MockHomeProvider extends Mock implements HomeProvider {
+  @override
+  List<Communique> get allCommuniques => [mockCommunique];
+
+  @override
+  Future<void> fetchRecentCommuniques() => Future.value();
+}
+
 void main() {
-  group('HomePage Widget Testes', () {
-    late HomeProvider homeProvider;
-    late UserDatabaseProvider userProvider;
-    late OpenWeatherProvider openWeatherProvider;
-    late SpotsControllerProvider spotControllerProvider;
+  late MockWeatherProvider mockWeatherProvider;
+  late MockUserDatabaseProvider mockUserDatabaseProvider;
 
-    setUpAll(() {
-      homeProvider = MockHomeProvider();
-      userProvider = MockUserDatabaseProvider();
-      openWeatherProvider = MockOpenWeatherProvider();
-      spotControllerProvider = MockSpotControllerProvider();
+  setUp(() {
+    mockWeatherProvider = MockWeatherProvider();
+    mockUserDatabaseProvider = MockUserDatabaseProvider();
+  });
 
-      Get.testMode = true;
-      Get.put<UserDatabaseProvider>(userProvider);
-    });
-
-    testWidgets('Deve renderizar a CentralPage na inicialização',
-        (WidgetTester tester) async {
-      
-      await tester.pumpWidget(MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => homeProvider),
-          ChangeNotifierProvider(create: (_) => openWeatherProvider),
-          ChangeNotifierProvider(create: (_) => userProvider),
-          ChangeNotifierProvider(create: (_) => spotControllerProvider),
+  Widget makeTestableWidget({required Widget child}) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<OpenWeatherProvider>(
+          create: (_) => mockWeatherProvider,
+        ),
+        ChangeNotifierProvider<UserDatabaseProvider>(
+          create: (_) => mockUserDatabaseProvider,
+        ),
+        ChangeNotifierProvider<HomeProvider>(create: (_) => MockHomeProvider())
+      ],
+      child: GetMaterialApp(
+        initialRoute: Paths.home,
+        getPages: [
+          GetPage(name: Paths.home, page: () => HomePage()),
+          GetPage(name: Paths.map, page: () => Scaffold(body: Text('Map Page'))),
+          GetPage(
+              name: Paths.profile, page: () => Scaffold(body: Text('Profile Page'))),
         ],
-        child: const GetMaterialApp(home: HomePage()),
-      ));
-      await tester.pumpAndSettle();
-      // Verifica se a CentralPage é exibida por padrão (índice 1).
-      expect(find.byType(CentralPage), findsOneWidget);
-    });
+        home: child,
+      ),
+    );
+  }
 
-    testWidgets('Deve exibir a MapPage quando deslizar pra direita ',
+  group('HomePage Navigation Tests', () {
+    testWidgets('Navigates to MapPage on right swipe',
         (WidgetTester tester) async {
-      when(() => userProvider.user).thenReturn(null);
-      
-      await tester.pumpWidget(const GetMaterialApp(home: HomePage()));
+      await tester.pumpWidget(makeTestableWidget(child: HomePage()));
 
-      // Simula a mudança de página diretamente no controlador.
-      await tester.pumpAndSettle(); // Aguarda a UI reconstruir.
+      // Find the GestureDetector
+      final gestureDetector = find.byKey(const Key('home_page_gesture_detector_navigate'));
 
-      // Verifica se a MapPage é exibida.
-      expect(find.byType(MapPage), findsOneWidget);
-    });
-
-    testWidgets('Deve exibir a ProfilePage quando deslizar pra esquerda',
-        (WidgetTester tester) async {
-      when(() => userProvider.user).thenReturn(mockUserProfile);
-      await tester.pumpWidget(const GetMaterialApp(home: HomePage()));
-
-      // Simula a mudança de página para o índice 2.
+      // Simulate a right swipe
+      await tester.drag(gestureDetector, Offset(500, 0));
       await tester.pumpAndSettle();
 
-      // Verifica se a ProfilePage é exibida.
-      expect(find.byType(ProfilePage), findsOneWidget);
+      // Verify that we navigated to the map page
+      expect(Get.currentRoute, Paths.map);
+      expect(find.text('Map Page'), findsOneWidget);
     });
 
+    testWidgets('Navigates to ProfilePage on left swipe',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(makeTestableWidget(child: HomePage()));
+
+      // Find the GestureDetector
+      final gestureDetector = find.byType(GestureDetector);
+
+      // Simulate a left swipe
+      await tester.drag(gestureDetector, Offset(-500, 0));
+      await tester.pumpAndSettle();
+
+      // Verify that we navigated to the profile page
+      expect(Get.currentRoute, Paths.profile);
+      expect(find.text('Profile Page'), findsOneWidget);
+    });
   });
 }
