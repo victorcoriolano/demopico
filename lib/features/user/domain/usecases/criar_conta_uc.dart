@@ -31,8 +31,9 @@ class CriarContaUc {
     if (credentials.password.length <= 7) throw InvalidPasswordFailure();
     if (!credentials.email.contains('@'))throw InvalidEmailFailure();
     if(credentials.nome.length <= 2) throw InvalidVulgoFailure();
+      credentials.nome = credentials.nome.toLowerCase();
+      credentials.email = credentials.email.toLowerCase();
     try {
-
       final newUser = await userAuthRepositoryIMP.signUp(credentials);
       await userDataRepository.addUserDetails(newUser);
       return newUser; // retornando user para já setar no provider de dados do user e precisar fazer outra requisição
