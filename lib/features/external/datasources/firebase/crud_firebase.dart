@@ -187,4 +187,33 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
     }
   }
   
+  @override
+  Future<bool> existsDataById(String id) async {
+    try {
+      final doc = await _firestore.collection(collection.name).doc(id).get();
+      return doc.exists;
+    } on FirebaseException catch (firebaseException) {
+      throw FirebaseErrorsMapper.map(firebaseException);
+    } on Exception catch (exception) {
+      throw UnknownFailure(originalException: exception);
+    } catch (unknown) {
+      throw UnknownFailure(unknownError: unknown);
+    }
+  }
+  
+  @override
+  Future<bool> existsDataWithField(String field, String value) async {
+    try {
+      final query = await _firestore.collection(collection.name)
+          .where(field, isEqualTo: value)
+          .get();
+      return query.docs.isNotEmpty;
+    } on FirebaseException catch (firebaseException) {
+      throw FirebaseErrorsMapper.map(firebaseException);
+    } on Exception catch (exception) {
+      throw UnknownFailure(originalException: exception);
+    } catch (unknown) {
+      throw UnknownFailure(unknownError: unknown);
+    }
+  }
 }
