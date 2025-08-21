@@ -43,4 +43,14 @@ class FirebaseNetworkDatasource implements INetworkDatasource<FirebaseDTO> {
         field2: 'status',
         value2: RequestConnectionStatus.pending.name);
   }
+  
+  @override
+  Future<bool> checkConnection(String idConnection) {
+    return _crudFirebaseBoilerplate.existsDataWithField("id", idConnection);
+  }
+  
+  @override
+  Future<FirebaseDTO> updateConnection(FirebaseDTO dto) {
+    return _crudFirebaseBoilerplate.update(dto);
+  }
 }
