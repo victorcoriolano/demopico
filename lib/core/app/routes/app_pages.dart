@@ -19,46 +19,7 @@ class AppPages {
   AppPages._();
 
   static final routes = <GetPage>[
-    GetPage(
-        binding: AuthBiding(),
-        name: Paths.createPostPage,
-        page: () => CreatePostPage(),
-        transition: Transition.downToUp),
-    GetPage(
-      binding: AuthBiding(),
-      name: Paths.home,
-      page: () => HomePage(),
-      transition: Transition.native,
-    ),
-    GetPage(
-        binding: AuthBiding(),
-        name: Paths.editProfile,
-        page: () => EditProfilePage(),
-        transition: Transition.circularReveal,
-        middlewares: [Middleware()]),
-    GetPage(
-      name: Paths.login,
-      page: () => LoginPage(),
-      transition: Transition.rightToLeft,
-    ),
-    GetPage(
-        binding: AuthBiding(),
-        name: Paths.profile,
-        page: () => ScreensProfile(),
-        middlewares: [Middleware()],
-        transition: Transition.rightToLeft),
-    GetPage(
-        binding: AuthBiding(),
-        name: Paths.chat,
-        page: () => ChatRoomPage(),
-        middlewares: [Middleware()],
-        transition: Transition.rightToLeft),
-    GetPage(
-      binding: AuthBiding(),
-      name: Paths.searchProfile,
-      page: () => SearchProfilePage(),
-      middlewares: [Middleware()],
-    ),
+    //mapa
     GetPage(
       binding: AuthBiding(),
       name: Paths.favoriteSpot,
@@ -73,15 +34,63 @@ class AppPages {
       name: Paths.map,
       page: () => MapPage(),
     ),
+    
+    //profile
+    GetPage(
+      binding: AuthBiding(),
+      name: Paths.searchProfile,
+      page: () => SearchProfilePage(),
+      middlewares: [Middleware()],
+    ),
+    GetPage(
+        binding: AuthBiding(),
+        name: Paths.profile,
+        page: () => ScreensProfile(),
+        middlewares: [Middleware()],
+        transition: Transition.rightToLeft),
+    GetPage(
+        binding: AuthBiding(),
+        name: Paths.chat,
+        page: () => ChatRoomPage(),
+        middlewares: [Middleware()],
+        transition: Transition.rightToLeft),
+    GetPage(
+        binding: AuthBiding(),
+        name: Paths.createPostPage,
+        page: () => CreatePostPage(),
+        transition: Transition.downToUp),
+    GetPage(
+        binding: AuthBiding(),
+        name: Paths.editProfile,
+        page: () => EditProfilePage(),
+        transition: Transition.circularReveal,
+        middlewares: [Middleware()]),
+    
+    //hub
+    GetPage(
+      name: Paths.hub,
+      page: () => HubPage(),
+      transition: Transition.upToDown,
+    ),
+
+    //auth
+    GetPage(
+      name: Paths.login,
+      page: () => LoginPage(),
+      transition: Transition.rightToLeft,
+    ),
     GetPage(
       page: () => RegisterPage(),
       name: Paths.signUp,
       transition: Transition.circularReveal,
     ),
+
+    //home
     GetPage(
-      name: Paths.hub,
-      page: () => HubPage(),
-      transition: Transition.upToDown,
-    )
+      binding: AuthBiding(),
+      name: Paths.home,
+      page: () => HomePage(),
+      transition: Transition.native,
+    ),
   ];
 }
