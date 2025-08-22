@@ -6,6 +6,6 @@ abstract class INetworkRepository {
   Future<Connection> updateConnection(Connection connection);
   Future<List<UserM>> getConnections(String userID);
   Future<List<Connection>> getConnectionRequests(String userID);
-  Future<void> connectUser(Connection connection);
+  Future<Connection> connectUser(Connection connection);
   Future<void> disconnectUser(Connection connection);
 }
