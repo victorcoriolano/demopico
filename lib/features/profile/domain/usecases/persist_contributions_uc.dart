@@ -28,10 +28,10 @@ class PersistContributionsUc {
     try {
       profileUpdateRepositoryIMP.updateContributions(user);
     } on FirebaseException catch (e) {
-      if (kDebugMode) print(e);
+      debugPrint('UC PERSIST CONTRIBUTIONS - Erro inesperado: $e');
       rethrow;
     } catch (e) {
-      if (kDebugMode) print('Erro inesperado: $e');
+     debugPrint('UC PERSIST CONTRIBUTIONS - Erro inesperado: $e');
       rethrow;
     }
   }
@@ -40,10 +40,10 @@ class PersistContributionsUc {
     try {
       return await profileReadRepositoryIMP.getContributions(userModel);
     } on FirebaseException catch (e) {
-      if (kDebugMode) print(e);
+      debugPrint(e.toString());
       rethrow;
     } catch (e) {
-      if (kDebugMode) print('Erro inesperado: $e');
+      debugPrint('UC PERSIST CONTRIBUTIONS - Erro inesperado: $e');
       rethrow;
     }
   }
