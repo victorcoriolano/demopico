@@ -45,8 +45,8 @@ class FirebaseNetworkDatasource implements INetworkDatasource<FirebaseDTO> {
   }
   
   @override
-  Future<bool> checkConnection(String idConnection) {
-    return _crudFirebaseBoilerplate.existsDataWithField("id", idConnection);
+  Future<FirebaseDTO> checkConnection(String idConnection) {
+    return _crudFirebaseBoilerplate.read(idConnection);
   }
   
   @override
