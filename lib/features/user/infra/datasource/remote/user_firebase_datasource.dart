@@ -89,4 +89,21 @@ class UserFirebaseDataSource implements IUserDataSource<FirebaseDTO> {
       throw UnknownFailure(unknownError: unknown, stackTrace: st);
     }
   }
+  
+  @override
+  Future<void> update(FirebaseDTO user) async {
+    await _dataSource.update(user); 
+  }
+  
+  @override
+  Future<List<FirebaseDTO>> getSuggestions(List<String> arguments) {
+    // TODO: implement getSuggestions
+    throw UnimplementedError();
+  }
+  
+  @override
+  Stream<List<FirebaseDTO>> searchUsers(String query) {
+    // TODO: implement searchUsers
+    throw UnimplementedError();
+  }
 }
