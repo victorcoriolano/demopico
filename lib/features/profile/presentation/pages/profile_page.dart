@@ -224,8 +224,8 @@ class _ProfilePageState extends State<ProfilePage>
                 backgroundUrl: user?.backgroundPicture,
               ),
               ProfileBottomSideDataWidget(
-                followers: user?.conexoes ?? 0,
-                contributions: user?.picosAdicionados ?? 0,
+                followers: user?.connections.length ?? 0,
+                contributions: user?.idMySpots.length ?? 0,
                 description: user?.description ?? '',
               ),
               SizedBox(
