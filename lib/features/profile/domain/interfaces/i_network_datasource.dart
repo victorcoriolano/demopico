@@ -4,5 +4,5 @@ abstract class INetworkDatasource<DTO> {
   Future<DTO> connectUser(DTO dto);
   Future<void> disconnectUser(DTO dto);
   Future<DTO> updateConnection(DTO dto);
-  Future<bool> checkConnection(String idConnection);
+  Future<DTO> checkConnection(String idConnection);
 }
