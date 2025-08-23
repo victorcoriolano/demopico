@@ -1,3 +1,4 @@
+import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 import 'package:demopico/features/user/domain/enums/sign_methods.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 
@@ -12,10 +13,10 @@ final mockUserProfile = UserM(
   location: '',
   dob: '',
   connections: [],
-  picosSalvos: 0,
+  picosSalvos: [],
   favoritesIdPicos: [],
   myIdPosts: [],
-  email: '',
+  email: 'test@email.com',
   backgroundPicture: '',
 );
 
@@ -30,7 +31,7 @@ final mockUserProfile2 = UserM(
   location: '',
   dob: '',
   connections: [],
-  picosSalvos: 0,
+  picosSalvos: [],
   favoritesIdPicos: [],
   myIdPosts: [],
   email: '',
@@ -39,7 +40,7 @@ final mockUserProfile2 = UserM(
   final testeProfileErrado = UserM(
       idMySpots: [],
    name: 'artu' ,
-   description: null,
+   description: "",
    id: "ID",
    pictureUrl: null,
    isColetivo: false,
@@ -51,7 +52,15 @@ final mockUserProfile2 = UserM(
     backgroundPicture: "HTTP.COM",
     email: "EMAILiNVAÁLIDO",
     myIdPosts: [],
-    picosSalvos: -1,
-    
+    picosSalvos: [],
   );
 
+  final listUsers = [
+    mockUserProfile,
+    mockUserProfile2,
+    testeProfileErrado
+  ];
+
+  final listDtosUser = listUsers.map((user) {
+    return FirebaseDTO(id: user.id, data: user.toJsonMap());
+  }).toList();
