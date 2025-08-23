@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
@@ -28,6 +29,24 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
   
   void setcollection(Collections collection) {
     _instance?.collection = collection;
+  }
+
+  @override
+  Future<List<FirebaseDTO>> readByMultipleIDs(List<String> ids) async {
+    final query = await Future.wait(
+      ids.map((id) => _firestore.collection(collection.name)
+        .doc(id)
+        .get()
+        .then((doc) {
+          if (doc.exists && doc.data() != null) {
+            return FirebaseDTO(id: doc.id, data: doc.data()!);
+          } else {
+            return null;
+          }
+        })
+      )
+    );
+    return query.whereType<FirebaseDTO>().toList();
   }
 
 
