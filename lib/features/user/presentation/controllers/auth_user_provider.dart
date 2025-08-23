@@ -21,13 +21,15 @@ class AuthUserProvider extends ChangeNotifier {
         loginEmailUc: LoginUc.getInstance,
         validateUserCredentials: ValidateUserCredentials.instance,
         logoutUc: LogoutUc.getInstance,
-        pegarIdUsuario: PegarIdUsuario.getInstance);
+        pegarIdUsuario: PegarIdUsuario.getInstance, 
+        userDatabaseProvider: UserDatabaseProvider.getInstance);
     return _authUserProvider!;
   }
 
   AuthUserProvider(
       {required this.pegarIdUsuario,
       required ValidateUserCredentials validateUserCredentials,
+      required this.userDatabaseProvider,
       required this.criarContaUc,
       required this.loginEmailUc,
       required this.logoutUc})
@@ -38,6 +40,7 @@ class AuthUserProvider extends ChangeNotifier {
   final LogoutUc logoutUc;
   final PegarIdUsuario pegarIdUsuario;
   final ValidateUserCredentials _validateUserCredentials;
+  final UserDatabaseProvider userDatabaseProvider;
 
   bool isColetivo = false;
   bool isEmail = true;
@@ -68,12 +71,13 @@ class AuthUserProvider extends ChangeNotifier {
   }
 
   Future<void> login(UserCredentialsSignIn credentials) async {
+    credentials.login = credentials.login.toLowerCase();
     try {
       final validatedCredentials =
           await _validateUserCredentials.validateForLogin(credentials);
       final user = await loginEmailUc.logar(validatedCredentials);
       setIdUser = user.id;
-      UserDatabaseProvider.getInstance.setUser = user;
+      userDatabaseProvider.setUser = user;
     } on Failure catch (e) {
       getError(e);
     } catch (e) {
@@ -88,9 +92,10 @@ class AuthUserProvider extends ChangeNotifier {
 
   Future<void> logout() async {
     try {
+      userDatabaseProvider.setUser =  null; // Limpando o usuário do provider   
       await logoutUc.deslogar();
-    } catch (e) {
-      //TODO IMPLEMENTAR TRATAMENTO DE ERROS COM MENSAGENS CLARAS
+    } on Failure catch (e) {
+      getError(e, "Erro ao deslogar");
     }
   }
 

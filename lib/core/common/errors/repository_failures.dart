@@ -29,13 +29,6 @@ class UnavailableFailure extends RepositoryFailures {
   UnavailableFailure({super.originalException}): super(message: "Serviço indisponível",code: 'UNAVAILABLE');
 }
 
-class UnauthorizedFailure extends RepositoryFailures {
-  UnauthorizedFailure({super.originalException}): super(message: "Usuário não autorizado",code: 'UNAUTHORIZED');
-}
-
-class UnauthenticatedFailure extends RepositoryFailures {
-  UnauthenticatedFailure({super.originalException}): super(message: "Usuário não autenticado",code: 'UNAUTHENTICATED');
-}
 
 class ExpiredTokenFailure extends RepositoryFailures {
   ExpiredTokenFailure({super.originalException}): super(message: "Token expirado, refaça login",code: 'EXPIRED_TOKEN');
@@ -46,7 +39,8 @@ class AccountExistsFailure extends RepositoryFailures {
 }
 
 class DataNotFoundFailure extends RepositoryFailures {
-  DataNotFoundFailure({super.originalException}): super(message: "Dados não encontrados",code: 'DATA_NOT_FOUND');
+  final String? dataID;
+  DataNotFoundFailure({super.originalException, this.dataID}): super(message: "Dados do id: ${dataID ?? ''} não encontrados",code: 'DATA_NOT_FOUND');
 }
 
 // Pico
@@ -101,8 +95,8 @@ class TooManyAttemptsFailure extends RepositoryFailures {
   TooManyAttemptsFailure({super.originalException}): super(message: "Limite de tentativas excedido", code: 'TOO_MANY_ATTEMPTS');
 } 
 
-class DuplicateFailure extends RepositoryFailures {
-  DuplicateFailure({required super.message}): super(code: "DUPLICATE_DATA_FAILURE");
+class DuplicateDataFailure extends RepositoryFailures {
+  DuplicateDataFailure({required super.message}): super(code: "DUPLICATE_DATA_FAILURE");
 }
 
 

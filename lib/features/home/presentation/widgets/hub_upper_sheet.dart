@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
 
-import 'package:demopico/features/home/provider/home_provider.dart';
-import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
+import 'package:demopico/core/app/routes/app_routes.dart';
+import 'package:demopico/features/home/presentation/provider/home_provider.dart';
 import 'package:demopico/features/home/presentation/widgets/efemero_scroll_text.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
@@ -29,7 +29,6 @@ class _HubUpperSheetState extends State<HubUpperSheet>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late final listenProvider = Provider.of<HomeProvider>(context);
-  late final db = Provider.of<HomeProvider>(context, listen: false);
 
   //método base
   double lerp(double min, double max) =>
@@ -49,8 +48,8 @@ class _HubUpperSheetState extends State<HubUpperSheet>
     return lerp(index * (iconsHorizontalSpacing + iconStartSize), 0);
   }
 
-  Future<void> _loadAllPosts() async {
-    await db.getAllCommuniques();
+  Future<void> _loadRecentComuniques() async {
+    await context.read<HomeProvider>().fetchRecentCommuniques();
   }
 
   @override
@@ -62,7 +61,7 @@ class _HubUpperSheetState extends State<HubUpperSheet>
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadAllPosts(); // chama uma vez
+      _loadRecentComuniques();
     });
   }
 
@@ -138,11 +137,8 @@ class _HubUpperSheetState extends State<HubUpperSheet>
   void _toggle() {
     final bool isOpen = _controller.status == AnimationStatus.completed;
     _controller.fling(velocity: isOpen ? -2 : 2);
-    Get.to(
-      () => HubPage(),
-      transition: Transition.upToDown,
-      duration: const Duration(milliseconds: 600),
-      curve: Curves.fastEaseInToSlowEaseOut,
+    Get.toNamed(
+      Paths.hub,
     );
     _controller.value = 0;
   }
@@ -155,11 +151,8 @@ class _HubUpperSheetState extends State<HubUpperSheet>
     if (_controller.status == AnimationStatus.completed ||
         _controller.value >= 0.5) {
       _controller.fling(velocity: _controller.value < 0.5 ? -2 : 2);
-      Get.to(
-        () => HubPage(),
-        transition: Transition.upToDown,
-        duration: const Duration(milliseconds: 600),
-        curve: Curves.fastEaseInToSlowEaseOut,
+      Get.toNamed(
+        Paths.hub,
       );
     }
 

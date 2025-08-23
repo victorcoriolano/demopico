@@ -26,6 +26,7 @@ class DeleteSpotUC {
       await spotRepository.deleteSpot(id);
     }on Failure catch (e) {
       debugPrint("Erro ao deletar: $e");
+      rethrow;
     }
   }
 }

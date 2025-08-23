@@ -1,5 +1,6 @@
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/features/denunciar/denuncia_model.dart';
+import 'package:demopico/features/mapa/presentation/controllers/favorite_spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_provider.dart';
 
 import 'package:demopico/features/mapa/presentation/pages/comment_page.dart';
@@ -7,7 +8,7 @@ import 'package:demopico/features/mapa/presentation/view_services/modal_helper.d
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/atribute_icons.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/custom_buttons.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/evaluate_widget.dart';
-import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/images_top.dart';
+import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/top_info_spot.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/name_description.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/obstacle_widget.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/photo_and_name_widget.dart';
@@ -15,6 +16,7 @@ import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:provider/provider.dart';
 
@@ -43,6 +45,9 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
     });
   }
 
+
+  // FIXME: REMOVER ESSA LÓGICA DA VIEW E MODELAR PARA DENTRO DO DOMÍNIO
+  
   bool isMine(){
     user = context.read<UserDatabaseProvider>().user;
     final pico = context.read<SpotProvider>().pico;
@@ -56,7 +61,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
     debugPrint("show pico widget");
 
     return DraggableScrollableSheet(
-        initialChildSize: 0.7,
+        initialChildSize: 0.8,
         minChildSize: 0.2,
         maxChildSize: 0.95,
         builder: (BuildContext context, ScrollController scrollController) {
@@ -83,7 +88,14 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                     return Column(
                           children: [
                             // widget da imagem dos spots
-                            ImagesTop(images: spotProvider.pico?.imgUrls ?? [], isMine: isMine()),
+                            TopInfoSpot(
+                              location: LatLng(spotProvider.pico?.lat ?? 0, spotProvider.pico?.long ?? 0),
+                              images: spotProvider.pico?.imgUrls ?? [], 
+                              isMine: isMine(), 
+                              onPressedDelete: () async {
+                                  await spotProvider.deletarPico(spotProvider.pico!);
+                                  Get.back();
+                              },),
                             Expanded(
                               child: ListView(
                                 controller: scrollController,
@@ -99,7 +111,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             ObstacleWidget(obstacles: spotProvider.pico!.obstaculos),
-                                            EvaluateWidget(rate: spotProvider.pico!.initialNota, numberReviews: spotProvider.pico!.numeroAvaliacoes),
+                                            EvaluateWidget(rate: spotProvider.pico!.rating, numberReviews: spotProvider.pico!.numberOfReviews),
                                             
                                           ],
                                         ),
@@ -137,7 +149,6 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                             )
                                           ],
                                         ),
-                                        // TODO: implementar o icon de excluir em algum lugar
                                         const SizedBox(height: 9),
                                         Container(
                                           padding: EdgeInsets.all(10),
@@ -182,11 +193,13 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                                 MainAxisAlignment.spaceAround,
                                             children: [
                                               IconButton(
-                                                onPressed: () {
+                                                onPressed: () async {
                                                   //TODO: REFATORAR LÓGICA DE SALVAR SPOT PARA PASSAR 
                                                   //TER UMA LÓGICA PARA SALVAR E UMA PARA FAVORITAR
+                                                  
+                                                  context.read<FavoriteSpotController>().favPico();
                                                 },
-                                                icon: const Icon(Icons.bookmark_border),
+                                                icon: const Icon(Icons.favorite),
                                                 tooltip: "Salvar Pico",
                                                 iconSize: 35,
                                               ),
@@ -202,7 +215,9 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                                   icon: const Icon(Icons.flag),
                                                   iconSize: 35),
                                               IconButton(
-                                                  onPressed: () {},
+                                                  onPressed: () {
+                                                    // TODO: IMPLEMENTAR COMPARTILHAR
+                                                  },
                                                   icon: const Icon(Icons.share_rounded),
                                                   iconSize: 35),
                                             ],

@@ -1,12 +1,14 @@
+import 'package:demopico/core/common/errors/domain_failures.dart';
+import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class FirebaseErrorsMapper {
-  static RepositoryFailures map(FirebaseException exception) {
+  static Failure map(FirebaseException exception) {
     switch (exception.code) {
      // Firestore
       case 'firestore/permission-denied':
-        return UnauthorizedFailure(originalException: exception);
+        return UnauthorizedFailure();
       case 'firestore/deadline-exceeded':
         return TimeoutFailure(originalException: exception);
       case 'cloud-firestore/unavailable':
@@ -14,7 +16,7 @@ class FirebaseErrorsMapper {
       
      // Storage
       case 'firebase_storage/unauthorized':
-        return UnauthorizedFailure(originalException: exception);
+        return UnauthorizedFailure();
       case 'firebase_storage/canceled':
         return OperationCanceledFailure(originalException: exception);
       case 'firebase_storage/quota-exceeded':

@@ -1,4 +1,5 @@
 import 'package:demopico/core/common/errors/domain_failures.dart';
+import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
 import 'package:demopico/features/user/domain/entity/user_credentials.dart';
@@ -7,6 +8,7 @@ import 'package:demopico/features/user/domain/interfaces/i_user_database_reposit
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/infra/repositories/user_data_repository_impl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 class FirebaseAuthService implements IUserAuthService {
   static FirebaseAuthService? _userAuthFirebaseService;
@@ -27,6 +29,7 @@ class FirebaseAuthService implements IUserAuthService {
   bool _isAuthenticated = false;
   bool get isAuthenticated => _isAuthenticated;
   set setAuthenticated(bool value) => _isAuthenticated = value;
+  
 
   Stream<User?> getAuthStateChanges() {
     return auth.authStateChanges();
@@ -48,9 +51,12 @@ class FirebaseAuthService implements IUserAuthService {
       return localUser;
     } on FirebaseAuthException catch (firebaseAuthExceptio) {
       throw FirebaseErrorsMapper.map(firebaseAuthExceptio);
-    } on Exception catch (e, st) {
+    } on Failure catch (e){
+      debugPrint("DATASOURCE: falha conhecida - $e. Relançando...");
+      rethrow;
+    }on Exception catch (e, st) {
       throw UnknownFailure(originalException: e, stackTrace: st);
-    }
+    } 
   }
 
   @override
@@ -89,4 +95,6 @@ class FirebaseAuthService implements IUserAuthService {
       throw UnknownFailure(originalException: e, stackTrace: st);
     }
   }
+  
+
 }

@@ -47,8 +47,8 @@ class _ObstacleWidgetState extends State<ObstacleWidget> {
             child: iconPath != null
                 ? Image.asset(
                     iconPath,
-                    width: 40, // Largura da imagem
-                    height: 40, // Altura da imagem
+                    width: 30, 
+                    height: 30, 
                   )
                 : const Icon(
                     Icons.broken_image_rounded, // Ícone padrão caso o obstáculo não exista no Map

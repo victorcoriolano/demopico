@@ -54,3 +54,10 @@ class FileLimitExceededFailure extends DomainFailure {
   FileLimitExceededFailure({this.messagemAdicional}): super(message: "Limite de arquivos excedido - ${messagemAdicional ?? ""}", code: 'file_limit_exceeded');
 }
 
+class UnauthorizedFailure extends DomainFailure {
+  UnauthorizedFailure(): super(message: "Usuário não autorizado",code: 'UNAUTHORIZED');
+}
+
+class UnauthenticatedFailure extends DomainFailure {
+  UnauthenticatedFailure(): super(message: "Usuário não autenticado",code: 'UNAUTHENTICATED');
+}

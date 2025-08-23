@@ -23,8 +23,11 @@ class UserDataRepositoryImpl implements IUserDataRepository {
     toMap: (user) => user.toJsonMap(),
     getId: (model) => model.id);
 
+  UserM? _userLocalDetails;
+
   @override
   Future<void> addUserDetails(UserM newUser) async {
+    _userLocalDetails = newUser;
     final dto = _mapper.toDTO(newUser);
     await userFirebaseService.addUserDetails(dto);
   }
@@ -32,13 +35,16 @@ class UserDataRepositoryImpl implements IUserDataRepository {
 
   @override
   Future<UserM> getUserDetailsByID(String uid) async {
-    return _mapper.toModel(await userFirebaseService.getUserDetails(uid));
+    if(_userLocalDetails != null) return _userLocalDetails!;
+    _userLocalDetails = _mapper.toModel(await userFirebaseService.getUserDetails(uid));
+    return _userLocalDetails!;
   }
   
   @override
   Future<UserM> updateUserDetails(UserM user) {
-    // TODO: implement updateUserDetails
-    throw UnimplementedError();
+    _userLocalDetails = user;
+    final dto = _mapper.toDTO(user);
+    return userFirebaseService.update(dto).then((_) => user);
   }
   
   @override
@@ -51,6 +57,21 @@ class UserDataRepositoryImpl implements IUserDataRepository {
   @override
   Future<bool> validateExist({required  String data, required  String field}) async =>
     await userFirebaseService.validateExistsData(field, data);
+    
+  @override
+  UserM? get localUser => _userLocalDetails;
+  
+  @override
+  Future<List<UserM>> getSuggestions(List<String> arguments) {
+    // TODO: implement getSuggestions
+    throw UnimplementedError();
+  }
+  
+  @override
+  Stream<List<UserM>> searchUsers(String query) {
+    // TODO: implement searchUsers
+    throw UnimplementedError();
+  }
   
 
 }

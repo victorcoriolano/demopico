@@ -1,9 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class InputBox extends StatefulWidget {
-  final Future<bool> Function(String) sendAction;
+  final Future<void> Function(String) sendAction;
   final void Function() chooseAction;
   const InputBox(
       {super.key, required this.sendAction, required this.chooseAction});
@@ -14,7 +12,7 @@ class InputBox extends StatefulWidget {
 
 class _InputBoxState extends State<InputBox> {
   final TextEditingController postController = TextEditingController();
-  Future<bool> Function(String) get sendAction => widget.sendAction;
+  Future<void> Function(String) get sendAction => widget.sendAction;
   void Function() get chooseAction => widget.chooseAction;
 
   bool isTapped = false;
@@ -106,35 +104,7 @@ class _InputBoxState extends State<InputBox> {
           child: IconButton(
               icon: const Icon(Icons.send_rounded, color: Colors.black),
               iconSize: 30,
-              onPressed: () async {
-                try {
-                  await sendAction(postController.text).then(
-                      (value) => value == true ? null : throw Exception());
-                  postController.clear();
-                } on Exception catch (_) {
-                  if (Exception is FirebaseAuthException) {
-                    Get.snackbar('Erro de Usuário',
-                        'Por favor, entre para fazer uma publicação',
-                        backgroundColor: const Color.fromARGB(255, 122, 49, 49),
-                        snackPosition: SnackPosition.BOTTOM);
-                  }
-                  if (Exception is FormatException) {
-                    Get.snackbar('Erro de Formato',
-                        'O texto e o tipo da publicação são obrigatórios.',
-                        backgroundColor: const Color.fromARGB(255, 122, 49, 49),
-                        snackPosition: SnackPosition.BOTTOM);
-                  }
-                  if (Exception is FirebaseException ||
-                      Exception is UnimplementedError) {
-                    Get.snackbar('Erro Inesperado',
-                        'Um erro inesperado aconteceu. Por favor, tente novamente.',
-                        backgroundColor: const Color.fromARGB(255, 122, 49, 49),
-                        snackPosition: SnackPosition.BOTTOM);
-                  }
-                }
-                await Future.delayed(const Duration(milliseconds: 300));
-                return;
-              },
+              onPressed: () async => sendAction(postController.text),
               disabledColor: const Color.fromARGB(255, 255, 72, 0)),
         ),
       ],

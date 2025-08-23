@@ -13,20 +13,20 @@ class UserM {
   SignMethods signMethod;
 
   //dados profile
-  String? description;
+  String description;
   String? pictureUrl;
   String? location;
-  int conexoes;
-  int picosAdicionados;
-  int picosSalvos;
+  List<String> picosSalvos;
   String backgroundPicture;
   List<Pico>? favoritePicosEntities;
   List<Post>? myPostsEntities;
   List<String> myIdPosts;
   List<String> favoritesIdPicos;
   List<String> idMySpots;
+  List<String> connections;
 
   UserM copyWith({
+    List<String>? connectionsUser,
     List<String>? myIdPosts,
     List<String>? favoritesIdPicos,
     List<Post>? myPosts,
@@ -40,13 +40,12 @@ class UserM {
     String? description,
     String? pictureUrl,
     String? location,
-    int? conexoes,
-    int? picosAdicionados,
-    int? picosSalvos,
+    List<String>? picosSalvos,
     String? backgroundPicture,
     List<String>? idMySpots
   }) {
     return UserM(
+      connections: connectionsUser ?? connections,
       idMySpots: idMySpots ?? this.idMySpots,
       favoritePicosEntities: favoriteSpots ?? favoritePicosEntities,
       myPostsEntities: myPosts ?? myPostsEntities,
@@ -61,8 +60,6 @@ class UserM {
       description: description ?? this.description,
       pictureUrl: pictureUrl ?? this.pictureUrl,
       location: location ?? this.location,
-      conexoes: conexoes ?? this.conexoes,
-      picosAdicionados: picosAdicionados ?? this.picosAdicionados,
       picosSalvos: picosSalvos ?? this.picosSalvos,
       backgroundPicture: backgroundPicture ?? this.backgroundPicture,
     );
@@ -78,15 +75,14 @@ class UserM {
       idMySpots: [],
       myIdPosts: [],
       favoritesIdPicos: [],
+      connections: List.empty(),
       signMethod: authUser.signMethod,
       name: authUser.nome,
       email: authUser.email,
       description: 'Edite para atualizar sua bio',
       id: authUser.uid,
-      picosAdicionados: 0,
-      picosSalvos: 0,
+      picosSalvos: [],
       location: '',
-      conexoes: 0,
       dob: todayDate,
       pictureUrl: "https://firebasestorage.googleapis.com/v0/b/pico-skatepico.appspot.com/o/users%2FfotoPadrao%2FuserPhoto.png?alt=media&token=c48f5406-fac1-4b35-b2a7-453e2fb57427",
       isColetivo: authUser.isColetivo,
@@ -98,25 +94,25 @@ class UserM {
     return UserM(
       idMySpots: List<String>.from(json['mySpots'] ?? []),
       myIdPosts: List<String>.from(json['myPosts'] ?? []),
+      connections: List<String>.from(json["connections"] ?? []),
       favoritesIdPicos: json['favoritesSpots'] ?? [],
       name: json['name'] ?? "",
       description: json['description'] ?? "",
       id: id,
       location: json['location'] ?? '',
-      picosSalvos: json['picosSalvos'] ?? 0,
+      picosSalvos: List<String>.from(json['picosSalvos'] ?? []),
       pictureUrl: json['pictureUrl'] ?? '',
       backgroundPicture: json['backgroundPicture'] ?? '',
       isColetivo: json['isColetivo'] ?? false,
       signMethod: SignMethods.fromString(json['signMethod'] ?? "email"),
       email: json['email'] ?? "",
       dob: json['dob'] ?? "2022-01-01",
-      conexoes: json['conexoes'] ?? 0,
-      picosAdicionados: json['picosAdicionados'] ?? 0,
     );
   }
 
   Map<String, dynamic> toJsonMap() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['connections'] = connections;
     data['name'] = name;
     data['description'] = description;
     data['id'] = id;
@@ -124,8 +120,6 @@ class UserM {
     data['backgroundPicture'] = backgroundPicture;
     data['location'] = location;
     data['dob'] = dob;
-    data['conexoes'] = conexoes;
-    data['picosAdicionados'] = picosAdicionados;
     data['picosSalvos'] = picosSalvos;
     data['isColetivo'] = isColetivo;
     data['signMethod'] = signMethod.name;
@@ -141,7 +135,7 @@ class UserM {
   @override
   String toString() {
     if (stringify) {
-      return 'User{name: $name, description: $description, id: $id, pictureUrl: $pictureUrl, isColetivo: $isColetivo, signMethod: $signMethod, email: $email, signMethod: $signMethod, location: $location, dob: $dob, conexoes: $conexoes, picosAdicionados: $picosAdicionados, picosSalvos: $picosSalvos}';
+      return 'User{name: $name, description: $description, id: $id, pictureUrl: $pictureUrl, isColetivo: $isColetivo, signMethod: $signMethod, email: $email, signMethod: $signMethod, location: $location, dob: $dob, conexoes: $connections, picosAdicionados: $idMySpots, picosSalvos: $picosSalvos}';
     } else {
       return 'String data was not reached.';
     }
@@ -183,24 +177,30 @@ class UserM {
   noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 
   UserM(
-      {
+      { 
          this.favoritePicosEntities,
         this.myPostsEntities,
+        required this.connections,
         required this.favoritesIdPicos,
         required this.myIdPosts,
         required this.name,
-      required this.description,
-      required this.id,
-      required this.pictureUrl,
-      required this.isColetivo,
+        required this.description,
+        required this.id,
+        required this.pictureUrl,
+        required this.isColetivo,
       required this.signMethod,
       required this.location,
       required this.dob,
-      required this.conexoes,
-      required this.picosAdicionados,
       required this.picosSalvos,
       required this.email, 
       required this.backgroundPicture,
       required this.idMySpots});
 
 }
+
+
+sealed class UnionTypeUser {}
+
+class UserModel extends UnionTypeUser {}
+
+class ColetivoModel extends UnionTypeUser {}

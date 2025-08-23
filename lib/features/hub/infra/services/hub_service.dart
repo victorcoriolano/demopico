@@ -1,51 +1,74 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:demopico/features/external/datasources/firebase/remote/firestore.dart';
-import 'package:demopico/features/hub/domain/entities/communique.dart';
+import 'package:demopico/core/common/errors/repository_failures.dart';
+import 'package:demopico/core/common/files_manager/enums/collections.dart';
+import 'package:demopico/features/external/datasources/firebase/crud_firebase.dart';
+import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
+import 'package:demopico/features/external/datasources/firebase/firestore.dart';
+import 'package:demopico/features/external/interfaces/i_crud_datasource.dart';
 import 'package:demopico/features/hub/domain/interfaces/i_hub_service.dart';
+import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
 
-class HubService implements IHubService {
+class HubService implements IHubService<FirebaseDTO> {
   static HubService? _hubService;
-  final FirebaseFirestore firestore;
 
-  HubService({required this.firestore});
+  HubService({required this.crudBoilerplate});
 
   static HubService get getInstance {
-    _hubService ??= HubService(firestore: Firestore.getInstance);
+    _hubService ??= HubService(crudBoilerplate: CrudFirebase(collection: Collections.communique, firestore: Firestore.getInstance));
     return _hubService!;
   }
 
+  final ICrudDataSource<FirebaseDTO, FirebaseFirestore> crudBoilerplate;
+  
   @override
-  Future<void> createCommunique(Communique communique) async {
+  Future<FirebaseDTO> create(FirebaseDTO communique) async {
     try {
-      firestore.collection('communique').add(communique.toJsonMap());
+      return await crudBoilerplate.create(communique);
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorsMapper.map(e);
+    } on Exception catch (e, stacktrace) {
+      throw UnknownFailure(originalException: e, stackTrace: stacktrace);
     } catch (e) {
-      throw Exception('Error ao criar comunicado');
+      throw UnknownFailure(unknownError: e);
     }
   }
-
+  
   @override
-  Future<void> deleteCommunique(String id) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<Communique>> listCommuniques() async {
+  Future<void> delete(String id) async {
     try {
-      QuerySnapshot querySnapshot = await firestore
-          .collection('communique')
-          .orderBy('timestamp', descending: true)
-          .get();
-
-      return querySnapshot.docs
-          .map((doc) => Communique.fromDocument(doc))
-          .toList();
+      await crudBoilerplate.delete(id);
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorsMapper.map(e);
+    } on Exception catch (e, stacktrace) {
+      throw UnknownFailure(originalException: e, stackTrace: stacktrace);
     } catch (e) {
-      throw Exception('Não foi possível listar os comunicados');
+      throw UnknownFailure(unknownError: e);
     }
   }
-
+  
   @override
-  Future<void> updateCommunique(Communique communique) {
-    throw UnimplementedError();
+  Stream<List<FirebaseDTO>> list() {
+    try {
+      return crudBoilerplate.watch();
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorsMapper.map(e);
+    } on Exception catch (e, stacktrace) {
+      throw UnknownFailure(originalException: e, stackTrace: stacktrace);
+    } catch (e) {
+      throw UnknownFailure(unknownError: e);
+    }
+  }
+  
+  @override
+  Future<FirebaseDTO> update(FirebaseDTO communique) async {
+    try {
+      return await crudBoilerplate.update(communique);
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorsMapper.map(e);
+    } on Exception catch (e, stacktrace) {
+      throw UnknownFailure(originalException: e, stackTrace: stacktrace);
+    } catch (e) {
+      throw UnknownFailure(unknownError: e);
+    }
   }
 }

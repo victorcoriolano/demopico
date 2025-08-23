@@ -1,10 +1,6 @@
-import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
-
-
-abstract class IFavoriteSpotRemoteDataSource {
-  Future<FirebaseDTO> saveSpot(FirebaseDTO pico);
-  Future<List<FirebaseDTO>> listFavoriteSpot(String idUser);
+abstract class IFavoriteSpotRemoteDataSource<DTO> {
+  Future<DTO> saveSpot(DTO pico);
+  Future<List<DTO>> listFavoriteSpot(String idUser);
   Future<void> removeFavorito(String id);
-
 }
 

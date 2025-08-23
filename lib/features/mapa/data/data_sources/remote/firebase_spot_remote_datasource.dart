@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/core/common/files_manager/enums/collections.dart';
-import 'package:demopico/features/external/datasources/firebase/remote/crud_firebase.dart';
+import 'package:demopico/features/external/datasources/firebase/crud_firebase.dart';
 import 'package:demopico/features/mapa/data/data_sources/interfaces/i_spot_datasource.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
@@ -117,12 +117,12 @@ class FirebaseSpotRemoteDataSource implements ISpotDataSource<FirebaseDTO> {
 
   @override
   Future<List<FirebaseDTO>> getList(String id) async =>
-      await _firebaseFirestore.readWithFilter("criador", id);
+      await _firebaseFirestore.readAllWithFilter("criador", id);
 
   @override
   Future<void> updateRealtime(String idPico, double newRating, Function updateFunction ) async {
     // Acessando o datasource pela interface do datasource
-    // parece meio estranho e errado porém o datasource tente a ter essa função de se relacionar
+    // parece meio estranho e errado porém o datasource tende a ser de mais baixo nível 
     //e o crud firebase é somente um boilerplate para evitar duplicação de código desnecessário 
     final datasource = _firebaseFirestore.dataSource;
     final spotRef = datasource.collection(_collectionName).doc(idPico);
@@ -152,6 +152,7 @@ class FirebaseSpotRemoteDataSource implements ISpotDataSource<FirebaseDTO> {
         'nota': updatedSpot.$1,
         'avaliacoes': updatedSpot.$2,
       });
+      return;
     });
   }
 

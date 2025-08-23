@@ -1,8 +1,5 @@
-import 'package:demopico/core/app/auth_wrapper.dart';
+import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/theme/theme.dart';
-import 'package:demopico/features/mapa/presentation/pages/history_page.dart';
-import 'package:demopico/features/mapa/presentation/pages/favorites_page.dart';
-import 'package:demopico/features/mapa/presentation/pages/my_spots_page.dart';
 import 'package:demopico/features/mapa/presentation/view_services/modal_helper.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:flutter/material.dart';
@@ -36,13 +33,13 @@ class _MyDrawerState extends State<MyDrawer> {
               onPressed: () {
                 if (user == null){
                   Get.snackbar("Erro", "Usuário não logado faça login para acessar seus picos", colorText: kWhite);
-                  Get.to(() => AuthWrapper());
+                  Get.toNamed(Paths.login);
                   return;
                 }
                 
                 else {
                   // FIXME: PASSANDO O NOME AO INVÉS DE PASSAR O ID Pq nossa infra n tem o id
-                  Get.to(() => MySpotsPage(idUser: user.name,));
+                  Get.toNamed(Paths.mySpots, arguments: user.name);
                 }
               },),
             MenuItem(
@@ -53,12 +50,12 @@ class _MyDrawerState extends State<MyDrawer> {
                       Get.snackbar("Usuário não logado", "Faça login para acessar seus picos salvos",
                       showProgressIndicator: true, 
                       onTap: (snackbar) {
-                        Get.to(() => AuthWrapper());
+                        Get.toNamed(Paths.login);
                       });
+                      return;
                     }
-                    final userId = user!.id; 
-                    Get.to(() => FavoriteSpotPage(userID: userId));
-                    
+                    final userId = user.id; 
+                    Get.toNamed(Paths.favoriteSpot, arguments: userId);
                   },
                 ),
               
@@ -78,7 +75,7 @@ class _MyDrawerState extends State<MyDrawer> {
               icon: Icons.history, // Ícone para Histórico
               text: 'HISTÓRICO', // Texto do botão
               onPressed: () {
-                Get.to(() => const HistoricoPage());
+                Get.toNamed(Paths.historySpot);
               },
             ),
 
@@ -88,7 +85,7 @@ class _MyDrawerState extends State<MyDrawer> {
               text: 'HOME', // Texto do botão
               onPressed: () {
                 // Navega de volta para a tela inicial
-                Get.offAndToNamed('/');
+                Get.offAndToNamed(Paths.home);
               },
             ),
           ],

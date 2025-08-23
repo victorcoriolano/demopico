@@ -1,7 +1,6 @@
-import 'package:demopico/core/app/home_page.dart';
+import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/widgets/back_widget.dart';
-import 'package:demopico/features/profile/presentation/pages/create_post_page.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_posts_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_bottom_side_data_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_drawer_config.dart';
@@ -16,7 +15,6 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
-
   const ProfilePage({super.key});
 
   @override
@@ -38,24 +36,24 @@ class _ProfilePageState extends State<ProfilePage>
   final TextEditingController bioController = TextEditingController();
   late final TabController _tabController;
 
-  void showAlertError(context, String messageError){
+  void showAlertError(context, String messageError) {
     showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Error'),
-          content: Text('Algum erro aconteceu: $messageError'),
-          actions: [
-            TextButton(
-              onPressed: () async {
-                final provider = context.read<AuthUserProvider>();
-                await provider.logout();
-                Get.to(() => const HomePage());
-              },
-              child: const Text('SAIR E DESLOGAR'),
-            )
-          ],
-        ),
-      );
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Error'),
+        content: Text('Algum erro aconteceu: $messageError'),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              final provider = context.read<AuthUserProvider>();
+              await provider.logout();
+              Get.toNamed(Paths.home);
+            },
+            child: const Text('SAIR E DESLOGAR'),
+          )
+        ],
+      ),
+    );
   }
 
   @override
@@ -69,14 +67,27 @@ class _ProfilePageState extends State<ProfilePage>
 
     _tabController.addListener(() {
       if (_tabController.index == 0) {
-        typePost = TypePost.post;
-        setState(() {});
       } else if (_tabController.index == 1) {
         typePost = TypePost.fullVideo;
         setState(() {});
       } else if (_tabController.index == 2) {
         typePost = TypePost.spot;
         setState(() {});
+      }
+
+      switch (_tabController.index) {
+        case 0:
+          typePost = TypePost.post;
+          setState(() {});
+        case 1:
+          typePost = TypePost.fullVideo;
+          setState(() {});
+        case 2:
+          typePost = TypePost.spot;
+          setState(() {});
+        default:
+          typePost = TypePost.post;
+          setState(() {});
       }
     });
 
@@ -127,7 +138,7 @@ class _ProfilePageState extends State<ProfilePage>
 
   Future<void> _loadUser() async {
     debugPrint('Loading user...');
-    _isLoading =true;
+    _isLoading = true;
     final providerAuth = Provider.of<AuthUserProvider>(context, listen: false);
     final providerDatabase =
         Provider.of<UserDatabaseProvider>(context, listen: false);
@@ -139,7 +150,8 @@ class _ProfilePageState extends State<ProfilePage>
       setState(() {
         _isLoading = false;
       });
-      showAlertError(context, "Não foi possível encontrar o id do user!\n Tente entrar novamente");
+      showAlertError(context,
+          "Não foi possível encontrar o id do user!\n Tente entrar novamente");
       return;
     }
 
@@ -166,38 +178,39 @@ class _ProfilePageState extends State<ProfilePage>
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final thisUser = context.read<UserDatabaseProvider>().user;
-    if(_isLoading){
-      return Center(child: CircularProgressIndicator(),);
+    if (_isLoading) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
     }
-    if (thisUser == null){
+    if (thisUser == null) {
       return SizedBox.shrink();
     }
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar:  AppBar(
-
-      backgroundColor: kAlmostWhite,
-      centerTitle: true,
-      title: Text(thisUser.name, style: TextStyle(
-        color: kBlack,
-        fontSize: 22,
-        fontWeight: FontWeight.bold),
-      ),
-      leading: CustomBackButton(destination: HomePage()),
-      actions: [
-        Builder(
-          builder: (context) {
-            return IconButton(
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              }, 
-              icon: const Icon(Icons.settings),
-              iconSize: 30,
-              color: const Color.fromARGB(255, 0, 0, 0),
-            );
-          }
+      appBar: AppBar(
+        backgroundColor: kRed,
+        centerTitle: true,
+        title: Text(
+          thisUser.name,
+          style: TextStyle(
+              color: kWhite, fontSize: 22, fontWeight: FontWeight.bold),
         ),
-      ],
+        leading: CustomBackButton(
+          destination: Paths.home,
+          colorIcon: kWhite,
+        ),
+        actions: [
+          Builder(builder: (context) {
+            return IconButton(
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+                icon: const Icon(Icons.settings),
+                iconSize: 30,
+                color: kWhite);
+          }),
+        ],
       ),
       drawer: MyCustomDrawer(user: thisUser),
       backgroundColor: kAlmostWhite,
@@ -211,14 +224,13 @@ class _ProfilePageState extends State<ProfilePage>
                 backgroundUrl: user?.backgroundPicture,
               ),
               ProfileBottomSideDataWidget(
-                followers: user?.conexoes ?? 0,
-                contributions: user?.picosAdicionados ?? 0,
+                followers: user?.connections.length ?? 0,
+                contributions: user?.idMySpots.length ?? 0,
                 description: user?.description ?? '',
               ),
               SizedBox(
                 height: 12,
               ),
-              
               Container(
                 padding: const EdgeInsets.all(0),
                 margin: const EdgeInsets.all(0),
@@ -244,18 +256,15 @@ class _ProfilePageState extends State<ProfilePage>
       floatingActionButton: FloatingActionButton(
         shape: CircleBorder(),
         onPressed: () {
-          Get.to(() => CreatePostPage(
-                typePost: typePost,
-              ));
+          Get.toNamed(Paths.createPostPage, arguments: typePost);
         },
         tooltip: "Criar Postagem",
-        child: Icon( 
-
-            typePost == TypePost.post
-                ? Icons.add
-                : typePost == TypePost.fullVideo
-                    ? Icons.video_call
-                    : Icons.map_outlined,
+        child: Icon(
+          typePost == TypePost.post
+              ? Icons.add
+              : typePost == TypePost.fullVideo
+                  ? Icons.video_call
+                  : Icons.map_outlined,
         ),
       ),
     );

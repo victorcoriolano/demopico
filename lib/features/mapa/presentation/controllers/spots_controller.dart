@@ -9,17 +9,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class SpotControllerProvider extends ChangeNotifier {
+class SpotsControllerProvider extends ChangeNotifier {
 
-  static SpotControllerProvider? _spotControllerProvider;
-  static SpotControllerProvider get getInstance {
-    _spotControllerProvider ??= SpotControllerProvider(
+  static SpotsControllerProvider? _spotControllerProvider;
+  static SpotsControllerProvider get getInstance {
+    _spotControllerProvider ??= SpotsControllerProvider(
         showAllPicoUseCase: LoadSpotUc.getInstance,
         getMySpotsUc: GetMySpotsUc.instance,);
     return _spotControllerProvider!;
   }
 
-  SpotControllerProvider(
+  SpotsControllerProvider(
     {
       required this.showAllPicoUseCase,
       required this.getMySpotsUc,
@@ -136,6 +136,9 @@ class SpotControllerProvider extends ChangeNotifier {
 
   // Método para pesquisar picos
   void pesquisandoPico(String word) {
+    if(spots.isEmpty){
+      _loadSpots();
+    }
     word = word.toLowerCase();
     picosPesquisados = spots
         .where((argument) =>

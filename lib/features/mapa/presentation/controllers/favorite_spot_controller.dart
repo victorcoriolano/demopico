@@ -1,6 +1,7 @@
 import 'package:demopico/core/common/errors/failure_server.dart';
-import 'package:demopico/features/mapa/domain/entities/pico_favorito.dart';
+import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/mapa/domain/usecases/favorite_save_spot_uc.dart';
+import 'package:demopico/features/mapa/presentation/controllers/spot_provider.dart';
 import 'package:demopico/features/mapa/presentation/dtos/spot_cart_ui_dto.dart';
 import 'package:flutter/material.dart';
 
@@ -8,24 +9,29 @@ class FavoriteSpotController extends ChangeNotifier {
   static FavoriteSpotController? _spotSaveController;
   static FavoriteSpotController get getInstance {
     _spotSaveController ??=
-        FavoriteSpotController(saveSpot: SaveSpotUc.getInstance);
+        FavoriteSpotController(saveSpot: FavoriteSpotUC.getInstance);
     return _spotSaveController!;
   }
 
   FavoriteSpotController({required this.saveSpot});
 
-  final SaveSpotUc saveSpot;
+  final FavoriteSpotUC saveSpot;
 
   bool isLoading = false;
 
   List<SpotCardUIDto> picosFavoritos = [];
   String? error;
 
-  Future<void> savePico(PicoFavorito picoFav) async {
+  Future<void> favPico() async {
+    final pico = SpotProvider.instance.pico;
+    if(pico == null){
+      error = "Não foi possível identificar o Pico";
+      return;
+    } 
     try {
-      await saveSpot.saveSpot(picoFav);
+      await saveSpot.execute(pico);
     } on Failure catch (e) {
-      debugPrint("Ocorreu um erro ao salvar pico");
+      debugPrint("Ocorreu um erro ao favoritar pico");
       error = e.message;
     }
   }
@@ -39,8 +45,15 @@ class FavoriteSpotController extends ChangeNotifier {
       debugPrint("Picos salvos: ${picosFavoritos.length}");
       isLoading = false;
       notifyListeners();
-    } on Failure catch (e) {
-      error = "Um erro ao buscar picos salvos foi identificado: $e";
+    } on DataNotFoundFailure catch (e) {
+      isLoading = false;
+      debugPrint("Documento inexistente: ${e.dataID}");
+      error = e.message;
+      notifyListeners();
+    } on Failure catch (e){
+      isLoading = false;
+      debugPrint("CONTROLLER: ERRO AO BUSCAR PICOS FAVORITOS - $e ${e.runtimeType}");
+      error = e.message;
       notifyListeners();
     }
   }
@@ -54,5 +67,11 @@ class FavoriteSpotController extends ChangeNotifier {
       error = e.toString();
       return false;
     }
+  }
+
+  @override
+  void dispose() {
+    error = null;
+    super.dispose();
   }
 }
