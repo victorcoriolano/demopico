@@ -42,8 +42,9 @@ class UserDataRepositoryImpl implements IUserDataRepository {
   
   @override
   Future<UserM> updateUserDetails(UserM user) {
-    // TODO: implement updateUserDetails
-    throw UnimplementedError();
+    _userLocalDetails = user;
+    final dto = _mapper.toDTO(user);
+    return userFirebaseService.update(dto).then((_) => user);
   }
   
   @override
