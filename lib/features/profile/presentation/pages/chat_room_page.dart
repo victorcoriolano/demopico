@@ -15,7 +15,6 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
    @override
    Widget build(BuildContext context) {
        return Scaffold(
-           appBar: AppBar(title: const Text(''),),
            body: ListView(
             children: const [
               InMessage(message: 'Hello'),
