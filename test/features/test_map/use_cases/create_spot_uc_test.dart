@@ -3,13 +3,13 @@ import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/mapa/data/repositories/spot_repository_impl.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
-import 'package:demopico/features/profile/infra/repository/profile_update_repository.dart';
+import 'package:demopico/features/user/infra/repositories/user_data_repository_impl.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 
 final class MockPicoRepository extends Mock implements SpotRepositoryImpl {}
-final class MockUserRepository extends Mock implements ProfileUpdateRepository {}
+final class MockUserRepository extends Mock implements UserDataRepositoryImpl {}
 final class MockPico extends Mock implements PicoModel {}
 
     final testPico = PicoModel(
