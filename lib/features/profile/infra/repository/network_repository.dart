@@ -8,9 +8,9 @@ import 'package:demopico/features/profile/infra/datasource/firebase_network_data
 import 'package:demopico/features/user/domain/models/user.dart';
 
 class NetworkRepository implements INetworkRepository {
-  final INetworkDatasource _datasource;
+  final INetworkDatasource<FirebaseDTO> _datasource;
 
-  NetworkRepository({required INetworkDatasource datasource})
+  NetworkRepository({required INetworkDatasource<FirebaseDTO> datasource})
       : _datasource = datasource;
 
   static NetworkRepository? _instance;
@@ -69,7 +69,7 @@ class NetworkRepository implements INetworkRepository {
   }
   
   @override
-  Future<bool> checkConnection(String idConnection) {
-    return _datasource.checkConnection(idConnection);
+  Future<Connection> checkConnection(String idConnection) async {
+    return _mapperDtoConnection.toModel(await _datasource.checkConnection(idConnection));
   }
 }
