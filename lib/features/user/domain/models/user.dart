@@ -13,10 +13,10 @@ class UserM {
   SignMethods signMethod;
 
   //dados profile
-  String? description;
+  String description;
   String? pictureUrl;
   String? location;
-  int picosSalvos;
+  List<String> picosSalvos;
   String backgroundPicture;
   List<Pico>? favoritePicosEntities;
   List<Post>? myPostsEntities;
@@ -40,7 +40,7 @@ class UserM {
     String? description,
     String? pictureUrl,
     String? location,
-    int? picosSalvos,
+    List<String>? picosSalvos,
     String? backgroundPicture,
     List<String>? idMySpots
   }) {
@@ -81,7 +81,7 @@ class UserM {
       email: authUser.email,
       description: 'Edite para atualizar sua bio',
       id: authUser.uid,
-      picosSalvos: 0,
+      picosSalvos: [],
       location: '',
       dob: todayDate,
       pictureUrl: "https://firebasestorage.googleapis.com/v0/b/pico-skatepico.appspot.com/o/users%2FfotoPadrao%2FuserPhoto.png?alt=media&token=c48f5406-fac1-4b35-b2a7-453e2fb57427",
@@ -100,7 +100,7 @@ class UserM {
       description: json['description'] ?? "",
       id: id,
       location: json['location'] ?? '',
-      picosSalvos: json['picosSalvos'] ?? 0,
+      picosSalvos: List<String>.from(json['picosSalvos'] ?? []),
       pictureUrl: json['pictureUrl'] ?? '',
       backgroundPicture: json['backgroundPicture'] ?? '',
       isColetivo: json['isColetivo'] ?? false,
