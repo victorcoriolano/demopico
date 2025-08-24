@@ -47,8 +47,8 @@ class NetworkRepository implements INetworkRepository {
   }
 
   @override
-  Future<Connection> connectUser(Connection connection) {
-    return _datasource.connectUser(mapperConnection.toDTO(connection)).then((dto) {
+  Future<Connection> createConnection(Connection connection) {
+    return _datasource.createConnection(mapperConnection.toDTO(connection)).then((dto) {
       return mapperConnection.toModel(dto);
     });
   }
