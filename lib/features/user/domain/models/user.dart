@@ -153,7 +153,12 @@ class UserM {
           id == other.id &&
           pictureUrl == other.pictureUrl &&
           isColetivo == other.isColetivo &&
-          signMethod == other.signMethod;
+          signMethod == other.signMethod &&
+          email == other.email &&
+          location == other.location &&
+          dob == other.dob &&
+          connections == other.connections &&
+          picosSalvos == other.picosSalvos;
 
   @override
   int get hashCode =>
@@ -162,7 +167,12 @@ class UserM {
       id.hashCode ^
       pictureUrl.hashCode ^
       isColetivo.hashCode ^
-      signMethod.hashCode;
+      signMethod.hashCode ^
+      email.hashCode ^
+      location.hashCode ^
+      dob.hashCode ^
+      connections.hashCode ^
+      picosSalvos.hashCode;
 
   List<Object?> get props => [
         name,
@@ -171,6 +181,11 @@ class UserM {
         pictureUrl,
         isColetivo,
         signMethod,
+        email,
+        location,
+        dob,
+        connections,
+        picosSalvos
       ];
 
   @override
