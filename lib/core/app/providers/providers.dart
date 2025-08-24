@@ -18,6 +18,7 @@ import 'package:demopico/features/profile/domain/usecases/create_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/delete_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/update_post_uc.dart';
+import 'package:demopico/features/profile/presentation/provider/network_view_model.dart';
 import 'package:demopico/features/profile/presentation/provider/post_provider.dart';
 import 'package:demopico/features/profile/presentation/provider/screen_provider.dart';
 import 'package:demopico/features/user/infra/datasource/remote/firebase_auth_service.dart';
@@ -27,6 +28,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
 final myProviders = [
+  ChangeNotifierProvider(create: (_) => NetworkViewModel.instance),
   ChangeNotifierProvider(create: (_) => OpenWeatherProvider()),
   ChangeNotifierProvider(
       create: (_) =>
