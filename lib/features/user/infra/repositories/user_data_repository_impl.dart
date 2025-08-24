@@ -63,14 +63,20 @@ class UserDataRepositoryImpl implements IUserDataRepository {
   
   @override
   Future<List<UserM>> getSuggestions(List<String> arguments) {
-    // TODO: implement getSuggestions
-    throw UnimplementedError();
+    return userFirebaseService.getSuggestions(arguments)
+      .then((dtos) => dtos.map((dto) => _mapper.toModel(dto)).toList());
   }
   
   @override
   Stream<List<UserM>> searchUsers(String query) {
-    // TODO: implement searchUsers
-    throw UnimplementedError();
+    return userFirebaseService.searchUsers(query)
+      .map((dtos) => dtos.map((dto) => _mapper.toModel(dto)).toList());
+  }
+  
+  @override
+  Future<List<UserM>> getUsers() {
+    return userFirebaseService.getUsers()
+      .then((dtos) => dtos.map((dto) => _mapper.toModel(dto)).toList());
   }
   
 

@@ -104,4 +104,9 @@ class UserFirebaseDataSource implements IUserDataSource<FirebaseDTO> {
   Stream<List<FirebaseDTO>> searchUsers(String query) {
     return _dataSource.watchWithFilter("name", query);
   }
+  
+  @override
+  Future<List<FirebaseDTO>> getUsers() {
+    return _dataSource.readAll();
+  }
 }
