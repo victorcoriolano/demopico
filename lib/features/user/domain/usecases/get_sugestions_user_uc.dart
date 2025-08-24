@@ -1,23 +1,32 @@
 
-import 'package:demopico/features/profile/domain/interfaces/i_network_repository.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_database_repository.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/features/user/infra/repositories/user_data_repository_impl.dart';
+import 'package:flutter/cupertino.dart';
 
-class GetSugestionsUser {
+class GetSugestionsUserUc {
   final IUserDataRepository _repository;
-  final INetworkRepository _networkRepository;
 
-  GetSugestionsUser({required IUserDataRepository repository, required INetworkRepository networkRepository})
-      : _repository = repository,
-        _networkRepository = networkRepository;
+  static GetSugestionsUserUc? _instance;
+  static GetSugestionsUserUc get instance {
+    _instance ??= GetSugestionsUserUc(
+      repository: UserDataRepositoryImpl.getInstance,
+    );
+    return _instance!;
+  }
 
-  Future<List<UserM>> call(String idUser) async {
-    final connectionsUser = await _networkRepository.getConnections(idUser);
-    if (connectionsUser.isEmpty) {
+  GetSugestionsUserUc({required IUserDataRepository repository})
+      : _repository = repository;
+
+  Future<List<UserM>> execute(UserM user) async {
+    if (user.connections.isEmpty) {
       //não tem conexões então a lista de sugestões será a lista de usuários
-      return _repository.getUsers();
+      final listUsers = await _repository.getUsers();
+      debugPrint("Lista de usuários: ${listUsers.length}");
+      listUsers.remove(user);
+      debugPrint("Lista de usuários após remover o usuário atual: ${listUsers.length} - removeu $user");
+      return listUsers;
     }
-    final ids = connectionsUser.map((e) => e.id).toList();
-    return await _repository.getSuggestions(ids);
+    return await _repository.getSuggestions(user.connections);
   }
 }
