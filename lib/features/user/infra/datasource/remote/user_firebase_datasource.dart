@@ -97,13 +97,11 @@ class UserFirebaseDataSource implements IUserDataSource<FirebaseDTO> {
   
   @override
   Future<List<FirebaseDTO>> getSuggestions(List<String> arguments) {
-    // TODO: implement getSuggestions
-    throw UnimplementedError();
+    return _dataSource.readByMultipleIDs(arguments);
   }
   
   @override
   Stream<List<FirebaseDTO>> searchUsers(String query) {
-    // TODO: implement searchUsers
-    throw UnimplementedError();
+    return _dataSource.watchWithFilter("name", query);
   }
 }
