@@ -1,6 +1,7 @@
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/domain/usecases/get_sugestions_user_uc.dart';
+import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:flutter/material.dart';
 
 class NetworkViewModel extends ChangeNotifier {
@@ -19,12 +20,16 @@ class NetworkViewModel extends ChangeNotifier {
 
   List<UserM> sugestions = [];  
 
-  Future<void> fetchSugestions(String userId) async {
+  Future<void> fetchSugestions() async {
+    final user = UserDatabaseProvider.getInstance.user;
+    if (user == null) return;
+
     try{
-      sugestions = await _getSugestionsUser.call(userId);
+      sugestions = await _getSugestionsUser.execute(user);
     } on Failure catch (e) {
       FailureServer.showError(e);
-    } 
+    }
+     
     notifyListeners();
   }
 }
