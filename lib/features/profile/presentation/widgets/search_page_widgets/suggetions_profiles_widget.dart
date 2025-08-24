@@ -54,7 +54,9 @@ class _SuggestionProfilestState extends State<SuggestionProfilesWidget> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CircleAvatar(
-                  backgroundImage: NetworkImage(widget.imageUrl),
+                  backgroundImage: widget.imageUrl.isNotEmpty
+                      ? NetworkImage(widget.imageUrl)
+                      : null,
                   radius: 20,
                 ),
                 SizedBox(
