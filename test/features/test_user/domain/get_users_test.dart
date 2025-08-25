@@ -20,8 +20,8 @@ void main() {
     });
 
     test("Deve retornar uma lista de todos os usuários exeto o user se o user não tiver conexões", () async {
-      when(() => repository.getUsers())
-          .thenAnswer((_) async => listUsers);
+      when(() => repository.getUsersExcept(any()))
+          .thenAnswer((_) async => [mockUserProfile2, testeProfileErrado]);
 
       final userTest = listUsers.first;
 
