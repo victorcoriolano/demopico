@@ -15,6 +15,7 @@ abstract class ICrudDataSource<DTO, DataSource> {
       required String field2,
       required String value2});
   Future<List<DTO>> readByMultipleIDs(List<String> ids);
+  Future<List<DTO>> readExcept(String field, String value);
   //update
   Future<DTO> update(DTO dto);
 
