@@ -31,9 +31,12 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
     _instance?.collection = collection;
   }
 
+  
+
   @override
   Future<List<FirebaseDTO>> readByMultipleIDs(List<String> ids) async {
-    final query = await Future.wait(
+    try {
+      final query = await Future.wait(
       ids.map((id) => _firestore.collection(collection.name)
         .doc(id)
         .get()
@@ -47,6 +50,15 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
       )
     );
     return query.whereType<FirebaseDTO>().toList();
+    }on FirebaseException catch (firebaseException) {
+      
+      throw FirebaseErrorsMapper.map(firebaseException);
+    } on Exception catch (exception) {
+      throw UnknownFailure(originalException: exception);
+    } catch (unknown) {
+      throw UnknownFailure(unknownError: unknown);
+    }
+    
   }
 
 
@@ -57,6 +69,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
       dto.setId=docRef.id;
       return dto;
     } on FirebaseException catch (e) {
+      debugPrint("Data Source Error: $e");
       throw FirebaseErrorsMapper.map(e);
     }
   }
@@ -72,6 +85,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
         id: id, 
         data: docRf.data()!);
     } on FirebaseException catch (e) {
+      debugPrint("Data Source Error: $e");
       throw FirebaseErrorsMapper.map(e);
     }
   }
@@ -82,6 +96,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
       await _firestore.collection(collection.name).doc(firebaseDto.id).update(firebaseDto.data);
       return firebaseDto;
     } on FirebaseException catch (e) {
+      debugPrint("Data Source Error: $e");
       throw FirebaseErrorsMapper.map(e);
     }
   }
@@ -91,6 +106,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
       debugPrint("Called Delete");
       await _firestore.collection(collection.name).doc(id).delete(). then((_) => debugPrint('SUCCESSFULLY DELETED DOC'));
     } on FirebaseException catch (e) {
+      debugPrint("Data Source Error: $e");
       throw FirebaseErrorsMapper.map(e);
     }
   }
@@ -108,6 +124,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
         )).toList();
       
     } on FirebaseException catch (e) {
+      debugPrint("Data Source Error: $e");
       throw FirebaseErrorsMapper.map(e);
     } catch (e, st) {
       debugPrint("${e.toString()} , ${st.toString()}");
@@ -126,6 +143,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
         )).toList()
       );
     } on FirebaseException catch (e) {
+      debugPrint("Data Source Error: $e");
       throw FirebaseErrorsMapper.map(e);
     } catch (e, st) {
       debugPrint("${e.toString()}, ${st.toString()}");
@@ -141,6 +159,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
         return FirebaseDTO(id: doc.id, data: doc.data());
       }).toList();
     } on FirebaseException catch (firebaseException) {
+    debugPrint("Data Source Error: $firebaseException");
       throw FirebaseErrorsMapper.map(firebaseException);
     } on Exception catch (exception) {
       throw UnknownFailure(originalException: exception);
@@ -155,6 +174,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
       await _firestore.collection(collection.name).doc(id).set(data.data);
       return data.copyWith(id: id);
     } on FirebaseException catch (firebaseException) {
+    debugPrint("Data Source Error: $firebaseException");
       throw FirebaseErrorsMapper.map(firebaseException);
     } on Exception catch (exception) {
       throw UnknownFailure(originalException: exception);
@@ -178,6 +198,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
         return FirebaseDTO(id: doc.id, data: doc.data());
       }).toList();
     } on FirebaseException catch (firebaseException) {
+    debugPrint("Data Source Error: $firebaseException");
       throw FirebaseErrorsMapper.map(firebaseException);
     } on Exception catch (exception) {
       throw UnknownFailure(originalException: exception);
@@ -198,6 +219,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
         return FirebaseDTO(id: doc.id, data: doc.data()!);
       });
     } on FirebaseException catch (firebaseException) {
+    debugPrint("Data Source Error: $firebaseException");
       throw FirebaseErrorsMapper.map(firebaseException);
     } on Exception catch (exception) {
       throw UnknownFailure(originalException: exception);
@@ -212,6 +234,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
       final doc = await _firestore.collection(collection.name).doc(id).get();
       return doc.exists;
     } on FirebaseException catch (firebaseException) {
+    debugPrint("Data Source Error: $firebaseException");
       throw FirebaseErrorsMapper.map(firebaseException);
     } on Exception catch (exception) {
       throw UnknownFailure(originalException: exception);
@@ -228,6 +251,38 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
           .get();
       return query.docs.isNotEmpty;
     } on FirebaseException catch (firebaseException) {
+    debugPrint("Data Source Error: $firebaseException");
+      throw FirebaseErrorsMapper.map(firebaseException);
+    } on Exception catch (exception) {
+      throw UnknownFailure(originalException: exception);
+    } catch (unknown) {
+      throw UnknownFailure(unknownError: unknown);
+    }
+  }
+  
+  @override
+  Stream<List<FirebaseDTO>> watchWithFilter(String field, String value) {
+    return _firestore.collection(collection.name)
+        .where(field, isEqualTo: value)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return FirebaseDTO(id: doc.id, data: doc.data());
+      }).toList();
+    });
+  }
+  
+  @override
+  Future<List<FirebaseDTO>> readExcept(String field, String value) async  {
+    try {
+      final query = await _firestore.collection(collection.name)
+          .where(field, isNotEqualTo: value)
+          .get();
+      return query.docs.map((doc) {
+        return FirebaseDTO(id: doc.id, data: doc.data());
+      }).toList();
+    } on FirebaseException catch (firebaseException) {
+      debugPrint("Data Source Error: $firebaseException");
       throw FirebaseErrorsMapper.map(firebaseException);
     } on Exception catch (exception) {
       throw UnknownFailure(originalException: exception);

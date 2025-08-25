@@ -15,12 +15,14 @@ abstract class ICrudDataSource<DTO, DataSource> {
       required String field2,
       required String value2});
   Future<List<DTO>> readByMultipleIDs(List<String> ids);
+  Future<List<DTO>> readExcept(String field, String value);
   //update
   Future<DTO> update(DTO dto);
 
   //watch
   Stream<List<DTO>> watch();
   Stream<DTO> watchDoc(String id);
+  Stream<List<DTO>> watchWithFilter(String field, String value);
 
   //delete
   Future<void> delete(String id);

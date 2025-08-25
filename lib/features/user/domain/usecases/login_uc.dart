@@ -36,10 +36,12 @@ class LoginUc {
       return await userDataRepository.getUserDetailsByID(id);
     }on Failure catch (e, st) {
       debugPrint("Erro ao logar caiu no use case: $e, $st");
+      userAuthRepository.logout();
       rethrow;
-    }catch (e){
-      debugPrint("Erro desconhecido ao logar no use case: $e");
-      throw UnknownFailure(unknownError: e);
+    }catch (e, st){
+      debugPrint("Erro desconhecido ao logar no use case: $e, $st");
+      userAuthRepository.logout();
+      throw UnknownFailure(unknownError: e, stackTrace: st);
     }
   }
 }

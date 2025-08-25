@@ -83,21 +83,21 @@ void main() {
 
     test('should complete successfully when connecting two valid users', () async {
       // Arrange
-      when(() => mockNetworkService.connectUser(any())).thenAnswer((_) async => Future.value(mapperConnection.toDTO(dummyConnections[0])));
+      when(() => mockNetworkService.createConnection(any())).thenAnswer((_) async => Future.value(mapperConnection.toDTO(dummyConnections[0])));
 
       // Act
-      await repository.connectUser(dummyConnections[0]);
+      await repository.createConnection(dummyConnections[0]);
 
       // Assert
-      verifyNever(() => mockNetworkService.connectUser(mapperConnection.toDTO(dummyConnections[0])));
+      verifyNever(() => mockNetworkService.createConnection(mapperConnection.toDTO(dummyConnections[0])));
     });
 
     test('should throw an exception if users are already connected', () async {
       // Arrange
-      when(() => mockNetworkService.connectUser(any())).thenThrow(Exception('Already connected'));
+      when(() => mockNetworkService.createConnection(any())).thenThrow(Exception('Already connected'));
 
       // Act & Assert
-      expect(() => repository.connectUser(dummyConnections[0]), throwsA(isA<Exception>()));    });
+      expect(() => repository.createConnection(dummyConnections[0]), throwsA(isA<Exception>()));    });
   });
   
   

@@ -9,6 +9,6 @@ class CreateConnectionUsersUc {
       : _repository = repository;
 
   Future<Connection> execute(Connection connection) {
-    return _repository.connectUser(connection);
+    return _repository.createConnection(connection);
   }
 }

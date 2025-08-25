@@ -21,13 +21,13 @@ class FirebaseNetworkDatasource implements INetworkDatasource<FirebaseDTO> {
   }
 
   @override
-  Future<FirebaseDTO> connectUser(FirebaseDTO dto) async {
+  Future<FirebaseDTO> createConnection(FirebaseDTO dto) async {
     return await _crudFirebaseBoilerplate.create(dto);
   }
 
   @override
-  Future<List<FirebaseDTO>> getConnections(String userID) {
-    return _crudFirebaseBoilerplate.readAllWithFilter("userID", userID);
+  Future<List<FirebaseDTO>> getConnections(String userID) async{
+    return await _crudFirebaseBoilerplate.readAllWithFilter("userID", userID);
   }
 
   @override

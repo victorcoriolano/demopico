@@ -36,7 +36,7 @@ void main() {
       );
     });
     test("Deve criar uma conexão entre user", () async {
-      final connection = await networkDatasource.connectUser(mocksConnectionDTO[1]);
+      final connection = await networkDatasource.createConnection(mocksConnectionDTO[1]);
 
       expect(connection, isNotNull);
       expect(connection.id, isNotEmpty);
