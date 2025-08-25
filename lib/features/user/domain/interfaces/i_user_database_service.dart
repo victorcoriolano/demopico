@@ -7,7 +7,7 @@ abstract class IUserDataSource<DTO>{
   Future<String> getUserData(String id, String field);
   Future<DTO> getUserByField(String field, String value);
   Future<List<DTO>> getSuggestions(List<String> arguments);
-  Future<List<DTO>> getUsers();
+  Future<List<DTO>> getUsersExcept(String uid);
   //SEARCH
   Stream<List<DTO>> searchUsers(String query);
   //VALIDATE
