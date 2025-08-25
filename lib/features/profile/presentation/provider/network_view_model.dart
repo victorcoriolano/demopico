@@ -18,18 +18,19 @@ class NetworkViewModel extends ChangeNotifier {
   NetworkViewModel({required GetSugestionsUserUc getSugestionsUser})
       : _getSugestionsUser = getSugestionsUser;
 
-  List<UserM> sugestions = [];  
+  List<UserM> get sugestions => _sugestions;
+
+  List<UserM> _sugestions = [];  
 
   Future<void> fetchSugestions() async {
     final user = UserDatabaseProvider.getInstance.user;
     if (user == null) return;
 
     try{
-      sugestions = await _getSugestionsUser.execute(user);
+      _sugestions = await _getSugestionsUser.execute(user);
     } on Failure catch (e) {
       FailureServer.showError(e);
     }
-     
     notifyListeners();
   }
 }
