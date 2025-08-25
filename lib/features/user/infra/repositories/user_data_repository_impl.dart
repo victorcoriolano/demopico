@@ -74,8 +74,8 @@ class UserDataRepositoryImpl implements IUserDataRepository {
   }
   
   @override
-  Future<List<UserM>> getUsers() {
-    return userFirebaseService.getUsers()
+  Future<List<UserM>> getUsersExcept(String uid) {
+    return userFirebaseService.getUsersExcept(uid)
       .then((dtos) => dtos.map((dto) => _mapper.toModel(dto)).toList());
   }
   
