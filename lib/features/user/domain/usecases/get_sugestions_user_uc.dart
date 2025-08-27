@@ -18,11 +18,14 @@ class GetSugestionsUserUc {
       : _repository = repository;
 
   Future<List<UserM>> execute(UserM user) async {
-    if (user.connections.isEmpty) {
-      //não tem conexões então a lista de sugestões será a lista de usuários
-      final listUsers = await _repository.getUsersExcept(user.id);
+    if (user.connections.length < 10) {
+      final listUsers = await _repository.getSuggestionsProfileExcept(user.id);
       return listUsers;
     }
-    return await _repository.getSuggestions(user.connections);
+    final listExcept = user.connections;
+    listExcept.add(user.id);
+
+    final suggestions  = await _repository.getSuggestionsExceptConnections(listExcept.toSet());
+    return suggestions;
   }
 }
