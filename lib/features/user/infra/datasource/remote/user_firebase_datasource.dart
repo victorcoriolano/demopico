@@ -96,8 +96,8 @@ class UserFirebaseDataSource implements IUserDataSource<FirebaseDTO> {
   }
   
   @override
-  Future<List<FirebaseDTO>> getSuggestions(List<String> arguments) {
-    return _dataSource.readByMultipleIDs(arguments);
+  Future<List<FirebaseDTO>> getSuggestions(Set<String> exceptionsIDs) async {
+    return await _dataSource.readMultiplesExcept("id", exceptionsIDs);
   }
   
   @override
