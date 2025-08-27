@@ -31,36 +31,6 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
     _instance?.collection = collection;
   }
 
-  
-
-  @override
-  Future<List<FirebaseDTO>> readByMultipleIDs(List<String> ids) async {
-    try {
-      final query = await Future.wait(
-      ids.map((id) => _firestore.collection(collection.name)
-        .doc(id)
-        .get()
-        .then((doc) {
-          if (doc.exists && doc.data() != null) {
-            return FirebaseDTO(id: doc.id, data: doc.data()!);
-          } else {
-            return null;
-          }
-        })
-      )
-    );
-    return query.whereType<FirebaseDTO>().toList();
-    }on FirebaseException catch (firebaseException) {
-      
-      throw FirebaseErrorsMapper.map(firebaseException);
-    } on Exception catch (exception) {
-      throw UnknownFailure(originalException: exception);
-    } catch (unknown) {
-      throw UnknownFailure(unknownError: unknown);
-    }
-    
-  }
-
 
   @override
   Future<FirebaseDTO> create(FirebaseDTO dto) async{
@@ -277,6 +247,25 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
     try {
       final query = await _firestore.collection(collection.name)
           .where(field, isNotEqualTo: value)
+          .get();
+      return query.docs.map((doc) {
+        return FirebaseDTO(id: doc.id, data: doc.data());
+      }).toList();
+    } on FirebaseException catch (firebaseException) {
+      debugPrint("Data Source Error: $firebaseException");
+      throw FirebaseErrorsMapper.map(firebaseException);
+    } on Exception catch (exception) {
+      throw UnknownFailure(originalException: exception);
+    } catch (unknown) {
+      throw UnknownFailure(unknownError: unknown);
+    }
+  }
+  
+  @override
+  Future<List<FirebaseDTO>> readMultiplesExcept(String field, Set<String> values) async {
+    try {
+      final query = await _firestore.collection(collection.name)
+          .where(field, whereNotIn: values.toList())
           .get();
       return query.docs.map((doc) {
         return FirebaseDTO(id: doc.id, data: doc.data());
