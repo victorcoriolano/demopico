@@ -62,8 +62,8 @@ class UserDataRepositoryImpl implements IUserDataRepository {
   UserM? get localUser => _userLocalDetails;
   
   @override
-  Future<List<UserM>> getSuggestions(List<String> arguments) {
-    return userFirebaseService.getSuggestions(arguments)
+  Future<List<UserM>> getSuggestionsExceptConnections(Set<String> connections) {
+    return userFirebaseService.getSuggestions(connections)
       .then((dtos) => dtos.map((dto) => _mapper.toModel(dto)).toList());
   }
   
@@ -74,8 +74,8 @@ class UserDataRepositoryImpl implements IUserDataRepository {
   }
   
   @override
-  Future<List<UserM>> getUsersExcept(String uid) {
-    return userFirebaseService.getUsersExcept(uid)
+  Future<List<UserM>> getSuggestionsProfileExcept(String uid) {
+     return userFirebaseService.getUsersExcept(uid)
       .then((dtos) => dtos.map((dto) => _mapper.toModel(dto)).toList());
   }
   
