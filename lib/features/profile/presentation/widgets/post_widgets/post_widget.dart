@@ -145,7 +145,7 @@ class _PostWidgetState extends State<PostWidget> {
                                 shape: BoxShape.circle,
                                 color: isActive
                                     ? Colors.black87
-                                    : Colors.grey.withOpacity(0.5),
+                                    : Colors.grey.withValues(alpha: 0.5),
                               ),
                             );
                           }),
