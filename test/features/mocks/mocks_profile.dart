@@ -30,37 +30,44 @@ final mockUserProfile2 = UserM(
   signMethod: SignMethods.email,
   location: '',
   dob: '',
-  connections: [],
+  connections: [
+    "1",
+    "ID",
+    "3",
+    '4',
+    "5",
+    "6",
+    "7",
+    "7",
+    "7",
+    "7",
+  ],
   picosSalvos: [],
   favoritesIdPicos: [],
   myIdPosts: [],
   email: '',
   backgroundPicture: '',
 );
-  final testeProfileErrado = UserM(
-      idMySpots: [],
-   name: 'artu' ,
-   description: "",
-   id: "ID",
-   pictureUrl: null,
-   isColetivo: false,
-   signMethod: SignMethods.email,
-   location:'',
-   dob:'',
-    connections: [],
-    favoritesIdPicos: [],
-    backgroundPicture: "HTTP.COM",
-    email: "EMAILiNVAÁLIDO",
-    myIdPosts: [],
-    picosSalvos: [],
-  );
+final testeProfileErrado = UserM(
+  idMySpots: [],
+  name: 'artu',
+  description: "",
+  id: "ID",
+  pictureUrl: null,
+  isColetivo: false,
+  signMethod: SignMethods.email,
+  location: '',
+  dob: '',
+  connections: [],
+  favoritesIdPicos: [],
+  backgroundPicture: "HTTP.COM",
+  email: "EMAILiNVAÁLIDO",
+  myIdPosts: [],
+  picosSalvos: [],
+);
 
-  final listUsers = [
-    mockUserProfile,
-    mockUserProfile2,
-    testeProfileErrado
-  ];
+final listUsers = [mockUserProfile, mockUserProfile2, testeProfileErrado];
 
-  final listDtosUser = listUsers.map((user) {
-    return FirebaseDTO(id: user.id, data: user.toJsonMap());
-  }).toList();
+final listDtosUser = listUsers.map((user) {
+  return FirebaseDTO(id: user.id, data: user.toJsonMap());
+}).toList();
