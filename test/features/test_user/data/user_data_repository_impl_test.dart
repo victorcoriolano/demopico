@@ -1,3 +1,4 @@
+import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:demopico/features/user/infra/repositories/user_data_repository_impl.dart';
@@ -61,12 +62,19 @@ void main() {
       verify(() => mockDataSource.validateExistsData('email', 'test@email.com')).called(1);
     });
 
-    test('getSuggestions throws UnimplementedError', () {
-      expect(() => repository.getSuggestionsExceptConnections({'test'}), throwsUnimplementedError);
+    test('getSuggestions returns usermodels', () async {
+      when(() => mockDataSource.getSuggestions(any())).thenAnswer((_) async => listDtosUser);
+      final result = await repository.getSuggestionsExceptConnections({'test'});
+      expect(result, isA<List<UserM>>());
+      expect(result, isNotEmpty);
     });
 
-    test('searchUsers throws UnimplementedError', () {
-      expect(() => repository.searchUsers('test'), throwsUnimplementedError);
+    test('searchUsers returns stream of users', () {
+      when(() => mockDataSource.searchUsers(any())).thenAnswer((_) async* {
+        yield listDtosUser;
+      });
+      final result = repository.searchUsers('test');
+      expect(result, isA<Stream<List<UserM>>>());
     });
   });
 }
