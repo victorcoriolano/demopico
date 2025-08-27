@@ -62,7 +62,7 @@ void main() {
     });
 
     test('getSuggestions throws UnimplementedError', () {
-      expect(() => repository.getSuggestions(['test']), throwsUnimplementedError);
+      expect(() => repository.getSuggestionsExceptConnections({'test'}), throwsUnimplementedError);
     });
 
     test('searchUsers throws UnimplementedError', () {
