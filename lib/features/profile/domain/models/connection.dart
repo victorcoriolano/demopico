@@ -4,9 +4,9 @@ class Connection {
   String userID;
   String connectedUserID;
   RequestConnectionStatus status;
+  DateTime createdAt;
 
-
-  Connection({required this.id, required this.userID, required this.connectedUserID, required this.status});
+  Connection({required this.id, required this.userID, required this.connectedUserID, required this.status, required this.createdAt});
 
   Map<String, dynamic> toJson() {
     return {
@@ -14,12 +14,14 @@ class Connection {
       'userID': userID,
       'connectedUserID': connectedUserID,
       'status': status.name,
+      'createdAt': createdAt.toIso8601String(),
     };
   }
 
   factory Connection.fromJson(Map<String, dynamic> json, String id) {
     return Connection(
       id: id,
+      createdAt: DateTime.parse(json['createdAt']),
       userID: json['userID'],
       status: RequestConnectionStatus.fromString(json['status']),
       connectedUserID: json['connectedUserID'],
