@@ -20,10 +20,23 @@ void main() {
     });
 
     test("Deve retornar uma lista de todos os usuários exeto o user se o user não tiver conexões", () async {
-      when(() => repository.getUsersExcept(any()))
+      when(() => repository.getSuggestionsProfileExcept(any()))
           .thenAnswer((_) async => [mockUserProfile2, testeProfileErrado]);
 
       final userTest = listUsers.first;
+
+      final result = await useCase.execute(userTest);
+
+      expect(result.isEmpty, false);
+      expect(result.contains(userTest), false);
+      expect(result, isA<List<UserM>>());
+    });
+
+    test("deve retornar uma lista conexões que não contenha nem as conexões nem o user", () async {
+      when(() => repository.getSuggestionsExceptConnections(any()))
+          .thenAnswer((_) async => [mockUserProfile, testeProfileErrado]);
+
+      final userTest = listUsers[1];
 
       final result = await useCase.execute(userTest);
 
