@@ -9,9 +9,9 @@ import 'package:flutter/foundation.dart';
 import 'package:test/test.dart';
 
 final mocksConections = [
-  Connection(id: "id1", userID: 'userID1', connectedUserID: "connectedUserID1", status: RequestConnectionStatus.accepted),
-  Connection(id: "id1", userID: 'userID1', connectedUserID: "connectedUserID2", status: RequestConnectionStatus.pending),
-  Connection(id: "id1", userID: 'userID1', connectedUserID: "connectedUserID3", status: RequestConnectionStatus.rejected),
+  Connection(id: "id1", userID: 'userID1',createdAt: DateTime.now(), connectedUserID: "connectedUserID1", status: RequestConnectionStatus.accepted),
+  Connection(id: "id1", userID: 'userID1',createdAt: DateTime.now(), connectedUserID: "connectedUserID2", status: RequestConnectionStatus.pending),
+  Connection(id: "id1", userID: 'userID1',createdAt: DateTime.now(), connectedUserID: "connectedUserID3", status: RequestConnectionStatus.rejected),
 ];
 
 final mocksConnectionDTO = [
