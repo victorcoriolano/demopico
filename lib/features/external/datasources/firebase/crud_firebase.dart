@@ -70,6 +70,23 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
       throw FirebaseErrorsMapper.map(e);
     }
   }
+
+  @override
+  Future<void> updateField(String id, String field, dynamic value) async {
+    try {
+      await _firestore.collection(collection.name).doc(id).update({field: value});
+    } on FirebaseException catch (e) {
+      debugPrint("Data Source Error: $e");
+      throw FirebaseErrorsMapper.map(e);
+    } on Exception catch (e) {
+      debugPrint("Unknown Error: $e");
+      throw UnknownFailure(originalException: e);
+    } on Error catch (e) {
+      debugPrint("Unknown Error: $e");
+      throw UnknownFailure(unknownError: e);
+    }
+  }
+
   @override
   Future<void> delete(String id) async {
     try {
