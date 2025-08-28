@@ -46,6 +46,7 @@ void main(){
      test("deve atualizar uma postagem ", ()  async{
       
       await firestore.collection("posts").doc("123").set(listDto[0].data);
+      
       final dto = await firebasePostDatasource.updatePost(
         listDto[0].copyWith(data: {"nome": "Tete da Silva"})
       );

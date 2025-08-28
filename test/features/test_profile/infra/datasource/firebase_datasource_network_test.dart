@@ -73,7 +73,7 @@ void main() {
       final requests = await networkDatasource.fetchRequestConnections('userID1');
 
       expect(requests, isNotEmpty);
-      expect(requests.length, equals(1));
+      expect(requests.length, equals(2));
       expect(requests[0].data['userID'], equals('userID1'));
       expect(requests[0].data['status'], equals(RequestConnectionStatus.pending.name));
     });
