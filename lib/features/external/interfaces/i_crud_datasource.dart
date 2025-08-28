@@ -18,6 +18,7 @@ abstract class ICrudDataSource<DTO, DataSource> {
   Future<List<DTO>> readMultiplesExcept(String field, Set<String> values);
   //update
   Future<DTO> update(DTO dto);
+  Future<void> updateField(String id, String field, dynamic value);
 
   //watch
   Stream<List<DTO>> watch();
