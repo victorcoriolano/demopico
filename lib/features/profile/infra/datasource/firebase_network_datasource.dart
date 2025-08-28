@@ -50,7 +50,7 @@ class FirebaseNetworkDatasource implements INetworkDatasource<FirebaseDTO> {
   }
   
   @override
-  Future<FirebaseDTO> updateConnection(FirebaseDTO dto) {
-    return _crudFirebaseBoilerplate.update(dto);
+  Future<FirebaseDTO> updateConnection(FirebaseDTO dto) async {
+    return await _crudFirebaseBoilerplate.update(dto);
   }
 }
