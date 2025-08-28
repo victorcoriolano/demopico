@@ -6,6 +6,7 @@ import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../../mocks/mocks_connections.dart';
 import '../../../mocks/mocks_profile.dart';
 
 
@@ -172,10 +173,3 @@ void main() {
 }
 
 
-var dummyConnections = [
-  Connection(id: "id",createdAt: DateTime.now(), userID: 'userID1', connectedUserID: 'userID4', status: RequestConnectionStatus.pending),
-
-  Connection(id: "id",createdAt: DateTime.now(), userID: 'userID2', connectedUserID: 'userID1', status: RequestConnectionStatus.pending),
-
-  Connection(id: "id",createdAt: DateTime.now(), userID: 'userID3', connectedUserID: 'userID1', status: RequestConnectionStatus.pending)
-];
