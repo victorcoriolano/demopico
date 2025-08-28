@@ -64,8 +64,13 @@ class NetworkRepository implements INetworkRepository {
   
   @override
   Future<Connection> updateConnection(Connection connection) async {
-    final output = await _datasource.updateConnection(mapperConnection.toDTO(connection));
-    return mapperConnection.toModel(output);
+    await _datasource.updateConnection(
+      FirebaseDTO(id: connection.id, data: {
+        'status': connection.status.name,
+        'updatedAt': connection.updatedAt.toIso8601String(),
+      })
+    );
+    return connection;
   }
   
   @override
