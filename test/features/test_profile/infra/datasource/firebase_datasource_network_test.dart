@@ -8,16 +8,13 @@ import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:test/test.dart';
 
-final mocksConections = [
-  Connection(id: "id1", userID: 'userID1',createdAt: DateTime.now(), connectedUserID: "connectedUserID1", status: RequestConnectionStatus.accepted),
-  Connection(id: "id1", userID: 'userID1',createdAt: DateTime.now(), connectedUserID: "connectedUserID2", status: RequestConnectionStatus.pending),
-  Connection(id: "id1", userID: 'userID1',createdAt: DateTime.now(), connectedUserID: "connectedUserID3", status: RequestConnectionStatus.rejected),
-];
+import '../../../mocks/mocks_connections.dart';
+
 
 final mocksConnectionDTO = [
-  FirebaseDTO(id: 'id1', data: mocksConections[0].toJson()),
-  FirebaseDTO(id: 'id2', data: mocksConections[1].toJson()),
-  FirebaseDTO(id: 'id3', data: mocksConections[2].toJson()),
+  FirebaseDTO(id: 'id1', data: dummyConnections[0].toJson()),
+  FirebaseDTO(id: 'id2', data: dummyConnections[1].toJson()),
+  FirebaseDTO(id: 'id3', data: dummyConnections[2].toJson()),
 ];
 void main() {
 
@@ -63,7 +60,7 @@ void main() {
 
     test("Deve pegar uma lista de requisições de conexão", () async {
 
-      await Future.wait(mocksConections.map((connection) {
+      await Future.wait(dummyConnections.map((connection) {
         return fakeFirebaseFirestore.collection(Collections.connections.name).add(
           connection.toJson()
         );
