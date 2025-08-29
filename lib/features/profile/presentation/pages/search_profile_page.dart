@@ -17,6 +17,7 @@ class _SearchProfilePageState extends State<SearchProfilePage> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<NetworkViewModel>().fetchSugestions();
+      context.read<NetworkViewModel>().fetchConnections();
     });
   }
   @override
