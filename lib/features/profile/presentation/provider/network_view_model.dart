@@ -3,7 +3,7 @@ import 'package:demopico/features/profile/domain/models/connection.dart';
 import 'package:demopico/features/profile/domain/usecases/accept_connection_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/create_connection_users_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_connections_requests_uc.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/features/profile/presentation/view_objects/suggestion_profile.dart';
 import 'package:demopico/features/user/domain/usecases/get_sugestions_user_uc.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:flutter/material.dart';
@@ -36,10 +36,10 @@ class NetworkViewModel extends ChangeNotifier {
         _getConnectionsRequests = getConnectionsRequests,
         _acceptConnection = acceptConnection;
 
-  List<UserM> get sugestions => _sugestions;
+  List<SuggestionProfile> get suggestions => _suggestions;
   List<Connection> get connections => _connectionsRequests;
 
-  List<UserM> _sugestions = [];  
+  List<SuggestionProfile> _suggestions = [];
   List<Connection> _connectionsRequests = [];
 
   Future<void> fetchSugestions() async {
@@ -47,14 +47,14 @@ class NetworkViewModel extends ChangeNotifier {
     if (user == null) return;
 
     try{
-      _sugestions = await _getSugestionsUser.execute(user);
+      _suggestions = await _getSugestionsUser.execute(user);
     } on Failure catch (e) {
       FailureServer.showError(e);
     }
     notifyListeners();
   }
 
-  Future<void> fetchConnections(UserM user) async {
+  Future<void> fetchConnections() async {
     final userLogged = UserDatabaseProvider.getInstance.user;
     if (userLogged == null) return;
 
@@ -66,14 +66,16 @@ class NetworkViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> createConnections(UserM user) async {
+  Future<void> requestConnection(SuggestionProfile userSuggestion) async {
     final userLogged = UserDatabaseProvider.getInstance.user;
     if (userLogged == null) return;
+
+    _suggestions.firstWhere((element) => element == userSuggestion).updateConnection(RequestConnectionStatus.pending);
 
     final connection = Connection(
       id: '',
       userID: userLogged.id,
-      connectedUserID: user.id,
+      connectedUserID: userSuggestion.idUser,
       status: RequestConnectionStatus.pending,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
@@ -89,7 +91,11 @@ class NetworkViewModel extends ChangeNotifier {
 
   Future<void> acceptConnection(Connection connection) async {
     try {
+      final userLogged = UserDatabaseProvider.getInstance.user;
+    if (userLogged == null) return;
+
       
+
       await _acceptConnection.execute(connection);
     } on Failure catch (e) {
       FailureServer.showError(e);
