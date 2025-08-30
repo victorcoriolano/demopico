@@ -60,24 +60,4 @@ class UserDataRepositoryImpl implements IUserDataRepository {
     
   @override
   UserM? get localUser => _userLocalDetails;
-  
-  @override
-  Future<List<UserM>> getSuggestionsExceptConnections(Set<String> connections) {
-    return userFirebaseService.getSuggestions(connections)
-      .then((dtos) => dtos.map((dto) => _mapper.toModel(dto)).toList());
-  }
-  
-  @override
-  Stream<List<UserM>> searchUsers(String query) {
-    return userFirebaseService.searchUsers(query)
-      .map((dtos) => dtos.map((dto) => _mapper.toModel(dto)).toList());
-  }
-  
-  @override
-  Future<List<UserM>> getSuggestionsProfileExcept(String uid) {
-     return userFirebaseService.getUsersExcept(uid)
-      .then((dtos) => dtos.map((dto) => _mapper.toModel(dto)).toList());
-  }
-  
-
 }
