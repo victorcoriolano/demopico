@@ -3,6 +3,7 @@ import 'package:demopico/features/profile/domain/interfaces/i_network_repository
 import 'package:demopico/features/profile/domain/models/connection.dart';
 import 'package:demopico/features/profile/infra/repository/network_repository.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_database_repository.dart';
+import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/infra/repositories/user_data_repository_impl.dart';
 
 class CreateConnectionUsersUc {
@@ -23,8 +24,10 @@ class CreateConnectionUsersUc {
       : _repository = repository,
         _userDataRepository = userDataRepository;
 
-  Future<Connection> execute(Connection connection) {
-    final output = _repository.createConnection(connection);
+  Future<Connection> execute(Connection connection, UserM user) async {
+    user.connections.add(connection.userID);
+    await _userDataRepository.updateUserDetails(user);
+    final output = await _repository.createConnection(connection);
     return output;
   }
 }
