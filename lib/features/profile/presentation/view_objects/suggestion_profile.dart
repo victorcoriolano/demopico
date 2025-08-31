@@ -1,6 +1,6 @@
 
 
-import 'package:demopico/features/profile/domain/models/connection.dart';
+import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 
 class SuggestionProfile {

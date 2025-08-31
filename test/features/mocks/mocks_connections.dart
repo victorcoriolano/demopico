@@ -1,12 +1,12 @@
 
-import 'package:demopico/features/profile/domain/models/connection.dart';
+import 'package:demopico/features/profile/domain/models/relationship.dart';
 
 var dummyConnections = [
-  Connection(id: "id",createdAt: DateTime.now(), userID: 'userID1', connectedUserID: 'userID4', status: RequestConnectionStatus.pending, updatedAt: DateTime.now()),
+  Relationship(id: "id",createdAt: DateTime.now(), requesterUserID: 'userID1', addresseeID: 'userID4', status: RequestConnectionStatus.pending, updatedAt: DateTime.now()),
 
-  Connection(id: "id",createdAt: DateTime.now(), userID: 'userID2', connectedUserID: 'userID1', status: RequestConnectionStatus.accepted, updatedAt: DateTime.now()),
+  Relationship(id: "id",createdAt: DateTime.now(), requesterUserID: 'userID2', addresseeID: 'userID1', status: RequestConnectionStatus.accepted, updatedAt: DateTime.now()),
 
-  Connection(id: "id",createdAt: DateTime.now(), userID: 'userID3', connectedUserID: 'userID1', status: RequestConnectionStatus.accepted, updatedAt: DateTime.now())
-  ,Connection(id: "id",createdAt: DateTime.now(), userID: 'userID4', connectedUserID: 'userID3', status: RequestConnectionStatus.rejected, updatedAt: DateTime.now())
+  Relationship(id: "id",createdAt: DateTime.now(), requesterUserID: 'userID3', addresseeID: 'userID1', status: RequestConnectionStatus.accepted, updatedAt: DateTime.now())
+  ,Relationship(id: "id",createdAt: DateTime.now(), requesterUserID: 'userID4', addresseeID: 'userID3', status: RequestConnectionStatus.rejected, updatedAt: DateTime.now())
 
 ];

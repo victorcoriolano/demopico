@@ -1,6 +1,6 @@
 
 import 'package:demopico/features/profile/domain/interfaces/i_network_repository.dart';
-import 'package:demopico/features/profile/domain/models/connection.dart';
+import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/infra/repository/network_repository.dart';
 
 class GetConnectionsRequestsUc {
@@ -18,7 +18,7 @@ class GetConnectionsRequestsUc {
   GetConnectionsRequestsUc({required INetworkRepository networkRepository})
       : _networkRepository = networkRepository;
 
-  Future<List<Connection>> execute(String uid) async {
+  Future<List<Relationship>> execute(String uid) async {
     return await _networkRepository.getConnectionRequests(uid);
   }
 }

@@ -1,5 +1,5 @@
 
-import 'package:demopico/features/profile/domain/models/connection.dart';
+import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/domain/usecases/accept_connection_uc.dart';
 import 'package:demopico/features/profile/infra/repository/network_repository.dart';
 import 'package:mocktail/mocktail.dart';
@@ -32,7 +32,7 @@ void main() {
       final accept = await useCase.execute(connectionAccepted);
 
       expect(accept, isNotNull);
-      expect(accept, isA<Connection>());
+      expect(accept, isA<Relationship>());
       expect(accept.id, equals(connectionAccepted.id));
       expect(accept.status, equals(RequestConnectionStatus.accepted));
 

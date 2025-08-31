@@ -1,5 +1,5 @@
 import 'package:demopico/core/common/errors/failure_server.dart';
-import 'package:demopico/features/profile/domain/models/connection.dart';
+import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/domain/usecases/accept_connection_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/create_connection_users_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_connections_requests_uc.dart';
@@ -37,17 +37,17 @@ class NetworkViewModel extends ChangeNotifier {
         _acceptConnection = acceptConnection;
 
   List<SuggestionProfile> get suggestions => _suggestions;
-  List<Connection> get connections => _connectionsRequests;
+  List<Relationship> get connections => _connectionsRequests;
 
   List<SuggestionProfile> _suggestions = [];
-  List<Connection> _connectionsRequests = [];
+  List<Relationship> _connectionsRequests = [];
 
   Future<void> fetchSugestions() async {
     final user = UserDatabaseProvider.getInstance.user;
     if (user == null) return;
 
     try{
-      _suggestions = await _getSugestionsUser.execute(user);
+      _suggestions = await _getSugestionsUser.execute(user.id);
     } on Failure catch (e) {
       FailureServer.showError(e);
     }
@@ -72,24 +72,24 @@ class NetworkViewModel extends ChangeNotifier {
 
     _suggestions.firstWhere((element) => element == userSuggestion).updateConnection(RequestConnectionStatus.pending);
 
-    final connection = Connection(
+    final connection = Relationship(
       id: '',
-      userID: userLogged.id,
-      connectedUserID: userSuggestion.idUser,
+      requesterUserID: userLogged.id,
+      addresseeID: userSuggestion.idUser,
       status: RequestConnectionStatus.pending,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
     );
 
     try{
-      await _createConnectionUsers.execute(connection);
+      await _createConnectionUsers.execute(connection, userLogged);
     } on Failure catch (e) {
       FailureServer.showError(e);
     }
     notifyListeners();
   }
 
-  Future<void> acceptConnection(Connection connection) async {
+  Future<void> acceptConnection(Relationship connection) async {
     try {
       final userLogged = UserDatabaseProvider.getInstance.user;
     if (userLogged == null) return;
