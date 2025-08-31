@@ -5,4 +5,5 @@ abstract class IUsersRepository {
   Future<List<UserM>> findAll();  
   Future<List<UserM>> getSuggestionsProfileExcept(String uid);
   Future<List<UserM>> getSuggestionsExceptConnections(Set<String> connectionsExcept);
+  Future<List<UserM>> getUsersByIds(List<String> ids);
 }

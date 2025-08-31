@@ -10,6 +10,7 @@ abstract class IUserDataSource<DTO>{
 
   Future<List<DTO>> getSuggestions(Set<String> connectionsUserExcept);
   Future<List<DTO>> getUsersExcept(String uid);
+  Future<List<DTO>> getUsersByIds(List<String> ids);
   //SEARCH
   Stream<List<DTO>> searchUsers(String query);
   //VALIDATE
