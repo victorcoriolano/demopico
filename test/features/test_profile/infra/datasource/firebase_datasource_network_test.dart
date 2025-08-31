@@ -51,7 +51,7 @@ void main() {
       });
 
     test("Deve pegar uma lista de conexões", () async {
-      final connections = await networkDatasource.getConnections('userID1');
+      final connections = await networkDatasource.getConnections('requesterUserID','userID1');
 
       expect(connections, isNotEmpty);
       expect(connections.length, equals(1));
