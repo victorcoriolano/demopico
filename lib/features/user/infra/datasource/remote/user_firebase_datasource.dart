@@ -109,4 +109,9 @@ class UserFirebaseDataSource implements IUserDataSource<FirebaseDTO> {
   Future<List<FirebaseDTO>> getUsersExcept(String uid) {
     return _dataSource.readExcept("id", uid);
   }
+  
+  @override
+  Future<List<FirebaseDTO>> findAll() {
+    return _dataSource.readAll();
+  }
 }
