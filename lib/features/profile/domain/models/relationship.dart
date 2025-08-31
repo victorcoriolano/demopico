@@ -1,34 +1,34 @@
 
 
-class Connection {
+class Relationship {
   String id;
-  String userID;
-  String connectedUserID;
+  String requesterUserID;
+  String addresseeID;
   RequestConnectionStatus status;
   DateTime createdAt;
   DateTime updatedAt;
 
-  Connection({required this.id, required this.userID, required this.connectedUserID, required this.status, required this.createdAt, required this.updatedAt});
+  Relationship({required this.id, required this.requesterUserID, required this.addresseeID, required this.status, required this.createdAt, required this.updatedAt});
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'userID': userID,
-      'connectedUserID': connectedUserID,
+      'requesterUserID': requesterUserID,
+      'addresseeID': addresseeID,
       'status': status.name,
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(), 
     };
   }
 
-  factory Connection.fromJson(Map<String, dynamic> json, String id) {
-    return Connection(
+  factory Relationship.fromJson(Map<String, dynamic> json, String id) {
+    return Relationship(
       updatedAt: DateTime.parse(json['updatedAt']),
       id: id,
       createdAt: DateTime.parse(json['createdAt']),
-      userID: json['userID'],
+      requesterUserID: json['requesterUserID'],
       status: RequestConnectionStatus.fromString(json['status']),
-      connectedUserID: json['connectedUserID'],
+      addresseeID: json['addresseeID'],
     );
   }
 }
