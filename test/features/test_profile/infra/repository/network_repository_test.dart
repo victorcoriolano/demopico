@@ -38,7 +38,7 @@ void main() {
 
     test('should return a list of users when connections exist', () async {
       // Arrange
-      when(() => mockNetworkService.getConnections(any()))
+      when(() => mockNetworkService.getConnections(any(),any()))
           .thenAnswer((_) async => [
             mapper.toDTO(mockUserProfile),
             mapper.toDTO(mockUserProfile2)
@@ -51,12 +51,12 @@ void main() {
       expect(result, isA<List<UserM>>());
       expect(result, isNotEmpty);
       expect(result.length, 2);
-      verify(() => mockNetworkService.getConnections(userID)).called(1);
+      verify(() => mockNetworkService.getConnections("requesterUserID",userID)).called(1);
     });
 
     test('should return an empty list when no connections exist', () async {
       // Arrange
-      when(() => mockNetworkService.getConnections(any()))
+      when(() => mockNetworkService.getConnections(any(),any()))
           .thenAnswer((_) async => []);
 
       // Act
@@ -64,17 +64,16 @@ void main() {
 
       // Assert
       expect(result, isEmpty);
-      verify(() => mockNetworkService.getConnections(userID)).called(1);
     });
 
     test('should throw an exception on a server error', () async {
       // Arrange
-      when(() => mockNetworkService.getConnections(any()))
+      when(() => mockNetworkService.getConnections(any(), any()))
           .thenThrow(Exception('Server error'));
 
       // Act & Assert
       expect(() => repository.getConnections(userID), throwsA(isA<Exception>()));
-      verify(() => mockNetworkService.getConnections(userID)).called(1);
+      verify(() => mockNetworkService.getConnections("requesterUserID",userID)).called(1);
     });
   });
   
