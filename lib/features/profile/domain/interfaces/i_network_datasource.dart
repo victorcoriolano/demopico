@@ -1,5 +1,5 @@
 abstract class INetworkDatasource<DTO> {
-  Future<List<DTO>> getConnections(String userID);
+  Future<List<DTO>> getConnections(String field, String value);
   Future<List<DTO>> fetchRequestConnections(String userID);
   Future<DTO> createConnection(DTO dto);
   Future<void> disconnectUser(DTO dto);
