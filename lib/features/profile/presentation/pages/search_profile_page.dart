@@ -1,6 +1,9 @@
+import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/features/profile/presentation/provider/network_view_model.dart';
 import 'package:demopico/features/profile/presentation/widgets/search_page_widgets/container_suggestion_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/utils.dart';
 import 'package:provider/provider.dart';
 
 class SearchProfilePage extends StatefulWidget {
@@ -26,6 +29,14 @@ class _SearchProfilePageState extends State<SearchProfilePage> {
       appBar: AppBar(
         title: const Text('Buscar Perfil'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.south_america_outlined),
+            onPressed: () {
+              Get.toNamed(Paths.myNetwork);
+            },
+          ),
+        ],
       ),
       body:  Column(
         mainAxisAlignment: MainAxisAlignment.start,
