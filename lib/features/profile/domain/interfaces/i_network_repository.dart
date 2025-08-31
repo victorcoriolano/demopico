@@ -1,11 +1,10 @@
-import 'package:demopico/features/profile/domain/models/connection.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/features/profile/domain/models/relationship.dart';
 
 abstract class INetworkRepository {
-  Future<Connection> checkConnection(String idConnection);
-  Future<Connection> updateConnection(Connection connection);
-  Future<List<UserM>> getConnections(String userID);
-  Future<List<Connection>> getConnectionRequests(String userID);
-  Future<Connection> createConnection(Connection connection);
-  Future<void> disconnectUser(Connection connection);
+  Future<Relationship> checkConnection(String idConnection);
+  Future<Relationship> updateConnection(Relationship connection);
+  Future<List<Relationship>> getConnections(String userID);
+  Future<List<Relationship>> getConnectionRequests(String userID);
+  Future<Relationship> createConnection(Relationship connection);
+  Future<void> disconnectUser(Relationship connection);
 }
