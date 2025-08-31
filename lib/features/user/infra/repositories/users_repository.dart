@@ -41,4 +41,10 @@ class UsersRepository implements IUsersRepository{
      return userFirebaseService.getUsersExcept(uid)
       .then((dtos) => dtos.map((dto) => _mapper.toModel(dto)).toList());
   }
+  
+  @override
+  Future<List<UserM>> findAll() {
+    return userFirebaseService.findAll()
+      .then((dtos) => dtos.map((dto) => _mapper.toModel(dto)).toList());
+  }
 }
