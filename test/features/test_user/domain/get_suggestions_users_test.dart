@@ -1,22 +1,28 @@
+import 'package:demopico/features/profile/domain/interfaces/i_network_repository.dart';
+import 'package:demopico/features/profile/presentation/view_objects/suggestion_profile.dart';
+import 'package:demopico/features/user/domain/interfaces/i_users_repository.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/domain/usecases/get_sugestions_user_uc.dart';
-import 'package:demopico/features/user/infra/repositories/user_data_repository_impl.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 import '../../mocks/mocks_profile.dart';
 
-class UserDataRepositoryMock extends Mock implements UserDataRepositoryImpl {}
+class UsersRepositoryMock extends Mock implements IUsersRepository {}
+class NetworkRepositoryMock extends Mock implements INetworkRepository {}
 
 void main() {
 
   group("Deve testar o caso de uso de pegar as sugestões de usuários", () {
-    late UserDataRepositoryMock repository;
+    late UsersRepositoryMock repository;
     late GetSugestionsUserUc useCase;
+    late NetworkRepositoryMock networkRepository;
 
     setUp(() {
-      repository = UserDataRepositoryMock();
-      useCase = GetSugestionsUserUc(repository: repository);
+      repository = UsersRepositoryMock();
+            networkRepository = NetworkRepositoryMock();
+      useCase = GetSugestionsUserUc(repository: repository, networkRepository: networkRepository);
+
     });
 
     test("Deve retornar uma lista de todos os usuários exeto o user se o user não tiver conexões", () async {
@@ -25,10 +31,10 @@ void main() {
 
       final userTest = listUsers.first;
 
-      final result = await useCase.execute(userTest);
+      final result = await useCase.execute(userTest.id);
 
       expect(result.isEmpty, false);
-      expect(result.contains(userTest), false);
+      expect(result.contains(SuggestionProfile.fromUser(userTest)), false);
       expect(result, isA<List<UserM>>());
     });
 
@@ -38,10 +44,10 @@ void main() {
 
       final userTest = listUsers[1];
 
-      final result = await useCase.execute(userTest);
+      final result = await useCase.execute(userTest.id);
 
       expect(result.isEmpty, false);
-      expect(result.contains(userTest), false);
+      expect(result.contains(SuggestionProfile.fromUser(userTest)), false);
       expect(result, isA<List<UserM>>());
     });
 
