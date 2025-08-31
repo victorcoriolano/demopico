@@ -114,4 +114,9 @@ class UserFirebaseDataSource implements IUserDataSource<FirebaseDTO> {
   Future<List<FirebaseDTO>> findAll() {
     return _dataSource.readAll();
   }
+  
+  @override
+  Future<List<FirebaseDTO>> getUsersByIds(List<String> ids) {
+    return _dataSource.readMultiplesByIds(ids);
+  }
 }
