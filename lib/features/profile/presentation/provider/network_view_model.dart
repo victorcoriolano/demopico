@@ -4,6 +4,7 @@ import 'package:demopico/features/profile/domain/usecases/accept_connection_uc.d
 import 'package:demopico/features/profile/domain/usecases/create_connection_users_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_connections_requests_uc.dart';
 import 'package:demopico/features/profile/presentation/view_objects/suggestion_profile.dart';
+import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/domain/usecases/get_sugestions_user_uc.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:flutter/material.dart';
@@ -37,10 +38,23 @@ class NetworkViewModel extends ChangeNotifier {
         _acceptConnection = acceptConnection;
 
   List<SuggestionProfile> get suggestions => _suggestions;
-  List<Relationship> get connections => _connectionsRequests;
+  List<UserM> get connectionRequests => _connectionsRequests;
+  List<UserM> get connectionSent => _connectionSent;
 
   List<SuggestionProfile> _suggestions = [];
-  List<Relationship> _connectionsRequests = [];
+  List<UserM> _connectionsRequests = [];
+  final List<UserM> _connectionSent = [];
+
+  Future<void> fetchConnectionsRequests() async {
+    final user = UserDatabaseProvider.getInstance.user;
+    if (user == null) return;
+
+    try{
+      _connectionsRequests = await _getConnectionsRequests.execute(user.id);
+    } on Failure catch (e) {
+      FailureServer.showError(e);
+    }
+  }
 
   Future<void> fetchSugestions() async {
     final user = UserDatabaseProvider.getInstance.user;
