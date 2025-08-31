@@ -2,7 +2,7 @@ import 'package:demopico/core/common/files_manager/enums/collections.dart';
 import 'package:demopico/features/external/datasources/firebase/crud_firebase.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_network_datasource.dart';
-import 'package:demopico/features/profile/domain/models/connection.dart';
+import 'package:demopico/features/profile/domain/models/relationship.dart';
 
 class FirebaseNetworkDatasource implements INetworkDatasource<FirebaseDTO> {
   final CrudFirebase _crudFirebaseBoilerplate;
@@ -26,8 +26,8 @@ class FirebaseNetworkDatasource implements INetworkDatasource<FirebaseDTO> {
   }
 
   @override
-  Future<List<FirebaseDTO>> getConnections(String userID) async{
-    return await _crudFirebaseBoilerplate.readAllWithFilter("userID", userID);
+  Future<List<FirebaseDTO>> getConnections(String field, String value) async {
+    return await _crudFirebaseBoilerplate.readAllWithFilter(field, value);
   }
 
   @override
