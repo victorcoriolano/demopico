@@ -1,8 +1,17 @@
 abstract class INetworkDatasource<DTO> {
-  Future<List<DTO>> getConnections(String field, String value);
-  Future<List<DTO>> fetchRequestConnections(String userID);
+  // pegar os relacionamentos independente do status ou do atributo de filtro 
+  // para pegar as requisições vai ser tipo "requesterUserID" |"valor do user id"| status | pending
+  //para pegar as requisições enviadas pelo user vai ser tipo "addresseeID" | "valor do user id"| status | pending
+  // para pegar as conexões feitas vai ser tipo "requesterUserID" | "valor do user id"| status | accepted
+  Future<List<DTO>> getConnections({
+    required String field1, 
+    required String valorDoID, 
+    required String field2, 
+    required String valorDoStatus});
+  // para criar 
   Future<DTO> createConnection(DTO dto);
+  // para disconectar 
   Future<void> disconnectUser(DTO dto);
+  // para atualizar: recusar, aceitar.
   Future<DTO> updateConnection(DTO dto);
-  Future<DTO> checkConnection(String idConnection);
 }
