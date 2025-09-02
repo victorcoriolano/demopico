@@ -3,6 +3,7 @@ import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/domain/usecases/accept_connection_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/create_connection_users_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_connections_requests_uc.dart';
+import 'package:demopico/features/profile/domain/usecases/get_connections_sent.dart';
 import 'package:demopico/features/profile/presentation/view_objects/suggestion_profile.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/domain/usecases/get_sugestions_user_uc.dart';
@@ -13,7 +14,8 @@ class NetworkViewModel extends ChangeNotifier {
   final GetSugestionsUserUc _getSugestionsUser;
   final CreateConnectionUsersUc _createConnectionUsers;
   final GetConnectionsRequestsUc _getConnectionsRequests;
-  final AcceptConnectionUc _acceptConnection;     
+  final AcceptConnectionUc _acceptConnection;  
+  final GetConnectionsSentUc _getConnectionsSent;   
 
 
   static NetworkViewModel? _instance;
@@ -23,27 +25,31 @@ class NetworkViewModel extends ChangeNotifier {
       getSugestionsUser: GetSugestionsUserUc.instance,
       getConnectionsRequests: GetConnectionsRequestsUc.instance,
       acceptConnection: AcceptConnectionUc.instance,
+      getConnectionsSent: GetConnectionsSentUc.instance,
     );
     return _instance!;
   }
 
   NetworkViewModel({
+    required GetConnectionsSentUc getConnectionsSent,
     required GetSugestionsUserUc getSugestionsUser,
     required CreateConnectionUsersUc createConnectionUsers,
     required GetConnectionsRequestsUc getConnectionsRequests,
     required AcceptConnectionUc acceptConnection,
   })  : _getSugestionsUser = getSugestionsUser,
+        _getConnectionsSent = getConnectionsSent,
         _createConnectionUsers = createConnectionUsers,
         _getConnectionsRequests = getConnectionsRequests,
         _acceptConnection = acceptConnection;
 
-  List<SuggestionProfile> get suggestions => _suggestions;
-  List<UserM> get connectionRequests => _connectionsRequests;
-  List<UserM> get connectionSent => _connectionSent;
-
+  
   List<SuggestionProfile> _suggestions = [];
-  List<UserM> _connectionsRequests = [];
-  final List<UserM> _connectionSent = [];
+  List<Relationship> _connectionsRequests = [];
+  List<Relationship> _connectionSent = [];
+
+  List<SuggestionProfile> get suggestions => _suggestions;
+  List<Relationship> get connectionRequests => _connectionsRequests;
+  List<Relationship> get connectionSent => _connectionSent;
 
   Future<void> fetchConnectionsRequests() async {
     final user = UserDatabaseProvider.getInstance.user;
@@ -51,8 +57,20 @@ class NetworkViewModel extends ChangeNotifier {
 
     try{
       _connectionsRequests = await _getConnectionsRequests.execute(user.id);
+      debugPrint("Connections Requests: ${_connectionsRequests.length}");
     } on Failure catch (e) {
-      FailureServer.showError(e);
+      FailureServer.showError(e, "Error fetching connections requests");
+    }
+  }
+
+  Future<void> fetchConnectionSent() async {
+    final user = UserDatabaseProvider.getInstance.user;
+    if (user == null) return;
+
+    try {
+      _connectionSent = await _getConnectionsSent.execute(user.id);
+    } on Failure catch (e) {
+      FailureServer.showError(e, "Error fetching connections sent");
     }
   }
 
@@ -86,10 +104,11 @@ class NetworkViewModel extends ChangeNotifier {
 
     _suggestions.firstWhere((element) => element == userSuggestion).updateConnection(RequestConnectionStatus.pending);
 
+
     final connection = Relationship(
       id: '',
-      requesterUserID: userLogged.id,
-      addresseeID: userSuggestion.idUser,
+      requesterUser: ConnectionRequester(id: userLogged.id, name: userLogged.name, profilePictureUrl: userLogged.pictureUrl),
+      addressed: ConnectionReceiver(id: userSuggestion.idUser, name: userSuggestion.name, profilePictureUrl: userSuggestion.photo),
       status: RequestConnectionStatus.pending,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
