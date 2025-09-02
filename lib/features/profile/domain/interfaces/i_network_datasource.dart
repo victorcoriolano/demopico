@@ -3,11 +3,12 @@ abstract class INetworkDatasource<DTO> {
   // para pegar as requisições vai ser tipo "requesterUserID" |"valor do user id"| status | pending
   //para pegar as requisições enviadas pelo user vai ser tipo "addresseeID" | "valor do user id"| status | pending
   // para pegar as conexões feitas vai ser tipo "requesterUserID" | "valor do user id"| status | accepted
-  Future<List<DTO>> getConnections({
-    required String field1, 
-    required String valorDoID, 
-    required String field2, 
+  Future<List<DTO>> getRelactionships({
+    required String fieldRequest, 
+    required String valueID, 
+    required String fieldOther, 
     required String valorDoStatus});
+
   // para criar 
   Future<DTO> createConnection(DTO dto);
   // para disconectar 
