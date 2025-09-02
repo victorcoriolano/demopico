@@ -1,4 +1,5 @@
 import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/presentation/provider/network_view_model.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +63,7 @@ enum ActionType {
 }
 
 class ProfileList extends StatelessWidget {
-  final List<UserM> userProfiles;
+  final List<Relationship> userProfiles;
   final ActionType actionType;
 
   const ProfileList({super.key, required this.userProfiles, required this.actionType});
