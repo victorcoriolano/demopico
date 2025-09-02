@@ -20,7 +20,7 @@ class CreateConnectionUsersUc {
       : _repository = repository;
 
   Future<Relationship> execute(Relationship connection, UserM user) async {
-    final output = await _repository.createConnection(connection);
+    final output = await _repository.createRelationship(connection);
     return output;
   }
 }
