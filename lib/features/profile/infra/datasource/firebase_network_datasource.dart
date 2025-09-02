@@ -2,7 +2,6 @@ import 'package:demopico/core/common/files_manager/enums/collections.dart';
 import 'package:demopico/features/external/datasources/firebase/crud_firebase.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_network_datasource.dart';
-import 'package:demopico/features/profile/domain/models/relationship.dart';
 
 class FirebaseNetworkDatasource implements INetworkDatasource<FirebaseDTO> {
   final CrudFirebase _crudFirebaseBoilerplate;
@@ -25,10 +24,6 @@ class FirebaseNetworkDatasource implements INetworkDatasource<FirebaseDTO> {
     return await _crudFirebaseBoilerplate.create(dto);
   }
 
-  @override
-  Future<List<FirebaseDTO>> getConnections(String field, String value) async {
-    return await _crudFirebaseBoilerplate.readAllWithFilter(field, value);
-  }
 
   @override
   Future<void> disconnectUser(FirebaseDTO dto) async {
@@ -36,18 +31,14 @@ class FirebaseNetworkDatasource implements INetworkDatasource<FirebaseDTO> {
   }
 
   @override
-  Future<List<FirebaseDTO>> fetchRequestConnections (String userID) {
+  Future<List<FirebaseDTO>> getConnections (String userID, String status, String a, String b) {
     return _crudFirebaseBoilerplate.readWithTwoFilters(
-        field1: 'userID',
+        field1: 'requesterUserID',
         value1: userID,
         field2: 'status',
-        value2: RequestConnectionStatus.pending.name);
+        value2: status);
   }
-  
-  @override
-  Future<FirebaseDTO> checkConnection(String idConnection) {
-    return _crudFirebaseBoilerplate.read(idConnection);
-  }
+
   
   @override
   Future<FirebaseDTO> updateConnection(FirebaseDTO dto) async {
