@@ -18,6 +18,6 @@ class RejectConnectionUc {
       : _networkRepository = networkRepository;
 
   Future<void> execute(Relationship connection) async {
-     _networkRepository.disconnectUser(connection);
+     _networkRepository.disconnectRelationship(connection);
   }
 }
