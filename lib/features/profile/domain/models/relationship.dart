@@ -1,20 +1,69 @@
 
-
-class Relationship {
+sealed class ReciverRequesterBase {
   String id;
-  String requesterUserID;
-  String addresseeID;
-  RequestConnectionStatus status;
-  DateTime createdAt;
-  DateTime updatedAt;
+  String name;
+  String profilePictureUrl;
 
-  Relationship({required this.id, required this.requesterUserID, required this.addresseeID, required this.status, required this.createdAt, required this.updatedAt});
+  ReciverRequesterBase({required this.id, required this.name, required this.profilePictureUrl});
+}
+
+class ConnectionReceiver extends ReciverRequesterBase {
+
+  ConnectionReceiver({required super.id, required super.name, required super.profilePictureUrl});
+
+  factory ConnectionReceiver.fromJson(Map<String, dynamic> json) {
+    return ConnectionReceiver(
+      id: json['id'],
+      name: json['name'],
+      profilePictureUrl: json['profilePictureUrl'],
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'requesterUserID': requesterUserID,
-      'addresseeID': addresseeID,
+      'name': name,
+      'profilePictureUrl': profilePictureUrl,
+    };
+  }
+}
+
+class ConnectionRequester extends ReciverRequesterBase {
+
+  ConnectionRequester({required super.id, required super.name, required super.profilePictureUrl});
+
+  factory ConnectionRequester.fromJson(Map<String, dynamic> json) {
+    return ConnectionRequester(
+      id: json['id'],
+      name: json['name'],
+      profilePictureUrl: json['profilePictureUrl'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'profilePictureUrl': profilePictureUrl,
+    };
+  }
+}
+
+class Relationship {
+  String id;
+  ConnectionRequester requesterUser;
+  ConnectionReceiver addressed;
+  RequestConnectionStatus status;
+  DateTime createdAt;
+  DateTime updatedAt;
+
+  Relationship({required this.id, required this.requesterUser, required this.addressed, required this.status, required this.createdAt, required this.updatedAt});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'requesterUserID': requesterUser.toJson(),
+      'addresseeID': addressed.toJson(),
       'status': status.name,
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(), 
@@ -26,9 +75,9 @@ class Relationship {
       updatedAt: DateTime.parse(json['updatedAt']),
       id: id,
       createdAt: DateTime.parse(json['createdAt']),
-      requesterUserID: json['requesterUserID'],
+      requesterUser: ConnectionRequester.fromJson(json['requesterUserID']),
       status: RequestConnectionStatus.fromString(json['status']),
-      addresseeID: json['addresseeID'],
+      addressed: ConnectionReceiver.fromJson(json['addresseeID']),
     );
   }
 }
