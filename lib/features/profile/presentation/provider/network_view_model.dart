@@ -44,12 +44,12 @@ class NetworkViewModel extends ChangeNotifier {
 
   
   List<SuggestionProfile> _suggestions = [];
-  List<Relationship> _connectionsRequests = [];
-  List<Relationship> _connectionSent = [];
+  List<ConnectionRequester> _connectionsRequests = [];
+  List<ConnectionReceiver> _connectionSent = [];
 
   List<SuggestionProfile> get suggestions => _suggestions;
-  List<Relationship> get connectionRequests => _connectionsRequests;
-  List<Relationship> get connectionSent => _connectionSent;
+  List<ConnectionRequester> get connectionRequests => _connectionsRequests;
+  List<ConnectionReceiver> get connectionSent => _connectionSent;
 
   Future<void> fetchConnectionsRequests() async {
     final user = UserDatabaseProvider.getInstance.user;
@@ -69,6 +69,7 @@ class NetworkViewModel extends ChangeNotifier {
 
     try {
       _connectionSent = await _getConnectionsSent.execute(user.id);
+      debugPrint("Connections Sent: ${_connectionSent.length}");
     } on Failure catch (e) {
       FailureServer.showError(e, "Error fetching connections sent");
     }
@@ -80,18 +81,6 @@ class NetworkViewModel extends ChangeNotifier {
 
     try{
       _suggestions = await _getSugestionsUser.execute(user.id);
-    } on Failure catch (e) {
-      FailureServer.showError(e);
-    }
-    notifyListeners();
-  }
-
-  Future<void> fetchConnections() async {
-    final userLogged = UserDatabaseProvider.getInstance.user;
-    if (userLogged == null) return;
-
-    try {
-      _connectionsRequests = await _getConnectionsRequests.execute(userLogged.id);
     } on Failure catch (e) {
       FailureServer.showError(e);
     }
