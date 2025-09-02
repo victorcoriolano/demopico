@@ -24,8 +24,8 @@ class GetConnectionsRequestsUc {
       : _networkRepository = networkRepository,
         _userDataRepository = userDataRepository;
 
-  Future<List<Relationship>> execute(String uid) async {
-    final relationship = await _networkRepository.getConnectionRequests(uid);
-    return relationship;
+  Future<List<ConnectionRequester>> execute(String uid) async {
+    final relationship = await _networkRepository.getRelationshipRequests(uid);
+    return relationship.map((rel) => rel.requesterUser).toList();
   }
 }
