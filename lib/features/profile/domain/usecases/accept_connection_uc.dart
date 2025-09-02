@@ -18,6 +18,6 @@ class AcceptConnectionUc {
       : _networkRepository = networkRepository;
 
   Future<Relationship> execute(Relationship connection) async {
-    return await _networkRepository.updateConnection(connection);
+    return await _networkRepository.updateRelationship(connection);
   }
 }
