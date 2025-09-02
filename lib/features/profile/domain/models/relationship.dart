@@ -2,7 +2,7 @@
 sealed class ReciverRequesterBase {
   String id;
   String name;
-  String profilePictureUrl;
+  String? profilePictureUrl;
 
   ReciverRequesterBase({required this.id, required this.name, required this.profilePictureUrl});
 }
