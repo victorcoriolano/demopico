@@ -36,7 +36,7 @@ class NetworkRepository implements INetworkRepository {
 
   @override
   Future<List<Relationship>> getConnections(String userID) {
-    return _datasource.getConnections("requesterUserID", userID).then((dtos) {
+    return _datasource.getConnections("requesterUserID", userID, "status", RequestConnectionStatus.accepted.name).then((dtos) {
       return dtos.map((dto) => mapperConnection.toModel(dto)).toList();
     });
   }
@@ -57,10 +57,12 @@ class NetworkRepository implements INetworkRepository {
 
   @override
   Future<List<Relationship>> getConnectionRequests(String userID) {
-    return _datasource.fetchRequestConnections(userID).then((dtos) {
+    return _datasource.getConnections("addresseeID", userID, "status", RequestConnectionStatus.pending.name).then((dtos) {
       return dtos.map((dto) => mapperConnection.toModel(dto)).toList();
     });
   }
+
+  
   
   @override
   Future<Relationship> updateConnection(Relationship connection) async {
@@ -74,7 +76,9 @@ class NetworkRepository implements INetworkRepository {
   }
   
   @override
-  Future<Relationship> checkConnection(String idConnection) async {
-    return _mapperDtoConnection.toModel(await _datasource.checkConnection(idConnection));
+  Future<List<Relationship>> getConnectionsSent(String userID) {
+    return _datasource.getConnections("addresseeID", userID, "status", RequestConnectionStatus.pending.name).then((dtos) {
+      return dtos.map((dto) => mapperConnection.toModel(dto)).toList();
+    });
   }
 }
