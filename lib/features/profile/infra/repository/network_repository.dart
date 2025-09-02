@@ -6,6 +6,7 @@ import 'package:demopico/features/profile/domain/interfaces/i_network_repository
 import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/infra/datasource/firebase_network_datasource.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:flutter/widgets.dart';
 
 class NetworkRepository implements INetworkRepository {
   final INetworkDatasource<FirebaseDTO> _datasource;
@@ -34,51 +35,64 @@ class NetworkRepository implements INetworkRepository {
 
   IMapperDto<Relationship, FirebaseDTO> get mapperConnection => _mapperDtoConnection;
 
-  @override
-  Future<List<Relationship>> getConnections(String userID) {
-    return _datasource.getConnections("requesterUserID", userID, "status", RequestConnectionStatus.accepted.name).then((dtos) {
-      return dtos.map((dto) => mapperConnection.toModel(dto)).toList();
-    });
-  }
 
+  
   @override
-  Future<void> disconnectUser(Relationship connection) {
-    return _datasource.disconnectUser(mapperConnection.toDTO(connection));
-  }
-
-  @override
-  Future<Relationship> createConnection(Relationship connection) {
+  Future<Relationship> createRelationship(Relationship connection) {
     return _datasource.createConnection(mapperConnection.toDTO(connection)).then((dto) {
       return mapperConnection.toModel(dto);
     });
   }
-
   
-
   @override
-  Future<List<Relationship>> getConnectionRequests(String userID) {
-    return _datasource.getConnections("addresseeID", userID, "status", RequestConnectionStatus.pending.name).then((dtos) {
+  Future<void> disconnectRelationship(Relationship connection) {
+    return _datasource.disconnectUser(mapperConnection.toDTO(connection));
+  }
+  
+  @override
+  Future<List<Relationship>> getRelationshipAccepted(String userID) {
+    return _datasource.getRelactionships(
+      fieldRequest: "requesterUserID.id",
+      valueID: userID,
+      fieldOther: "status",
+      valorDoStatus: RequestConnectionStatus.accepted.name,
+    ).then((dtos) {
+      debugPrint("DTOs recebidos: ${dtos.length}");
       return dtos.map((dto) => mapperConnection.toModel(dto)).toList();
     });
   }
-
   
   
   @override
-  Future<Relationship> updateConnection(Relationship connection) async {
-    await _datasource.updateConnection(
-      FirebaseDTO(id: connection.id, data: {
-        'status': connection.status.name,
-        'updatedAt': connection.updatedAt.toIso8601String(),
-      })
-    );
-    return connection;
+  Future<List<Relationship>> getRelationshipRequests(String userID) {
+    return _datasource.getRelactionships(
+      fieldRequest: "addresseeID.id",
+      valueID: userID,
+      fieldOther: "status",
+      valorDoStatus: RequestConnectionStatus.pending.name,
+    ).then((dtos) {
+      debugPrint("DTOs recebidos: ${dtos.length}");
+      return dtos.map((dto) => mapperConnection.toModel(dto)).toList();
+    });
   }
   
   @override
-  Future<List<Relationship>> getConnectionsSent(String userID) {
-    return _datasource.getConnections("addresseeID", userID, "status", RequestConnectionStatus.pending.name).then((dtos) {
+  Future<List<Relationship>> getRelationshipSent(String userID) {
+    return _datasource.getRelactionships(
+      fieldRequest: "requesterUserID.id",
+      valueID: userID,
+      fieldOther: "status",
+      valorDoStatus: RequestConnectionStatus.pending.name,
+    ).then((dtos) {
+      debugPrint("DTOs recebidos: ${dtos.length}");
       return dtos.map((dto) => mapperConnection.toModel(dto)).toList();
+    });
+  }
+  
+  @override
+  Future<Relationship> updateRelationship(Relationship connection) {
+    return _datasource.updateConnection(mapperConnection.toDTO(connection)).then((dto) {
+      return mapperConnection.toModel(dto);
     });
   }
 }
