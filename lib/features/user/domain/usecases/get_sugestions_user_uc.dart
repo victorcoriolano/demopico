@@ -4,6 +4,7 @@ import 'package:demopico/features/profile/infra/repository/network_repository.da
 import 'package:demopico/features/profile/presentation/view_objects/suggestion_profile.dart';
 import 'package:demopico/features/user/domain/interfaces/i_users_repository.dart';
 import 'package:demopico/features/user/infra/repositories/users_repository.dart';
+import 'package:flutter/rendering.dart';
 
 class GetSugestionsUserUc {
   final IUsersRepository _userRepository;
@@ -24,14 +25,22 @@ class GetSugestionsUserUc {
 
   Future<List<SuggestionProfile>> execute(String currentUserId) async {
     final allUsers = await _userRepository.findAll();
-    final myConnections = await _networkRepository.getConnections(currentUserId);
+    final myConnectionsSent = await _networkRepository.getRelationshipSent(currentUserId);
+    final myConnectionsAccepted = await _networkRepository.getRelationshipAccepted(currentUserId);
+    final myConnectionsRequests = await _networkRepository.getRelationshipRequests(currentUserId);
 
-    final connectedIds = myConnections
-        .map((c) => c.requesterUser == currentUserId ? c.addressed : c.requesterUser)
-        .toSet();
+    debugPrint("Relacionamentos enviados encontrados: ${myConnectionsSent.length}");
+    debugPrint("Relacionamentos aceitos encontrados: ${myConnectionsAccepted.length}");
+    debugPrint("Relacionamentos solicitados encontrados: ${myConnectionsRequests.length}");
+
+    final exceptProfiles = [
+      ...myConnectionsSent.map((c) => c.addressed),
+      ...myConnectionsAccepted.map((c) => c.requesterUser),
+      ...myConnectionsRequests.map((c) => c.requesterUser),
+    ];
 
     return allUsers
-        .where((u) => u.id != currentUserId && !connectedIds.contains(u.id))
+        .where((u) => u.id != currentUserId && !exceptProfiles.map((e) => e.id).contains(u.id))
         .map((u) => SuggestionProfile.fromUser(u))
         .toList();
   }
