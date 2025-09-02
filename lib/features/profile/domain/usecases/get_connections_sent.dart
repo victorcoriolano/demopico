@@ -4,6 +4,7 @@ import 'package:demopico/features/profile/infra/repository/network_repository.da
 import 'package:demopico/features/user/domain/interfaces/i_users_repository.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/infra/repositories/users_repository.dart';
+import 'package:flutter/rendering.dart';
 
 class GetConnectionsSentUc {
   static GetConnectionsSentUc? _instance;
@@ -25,8 +26,11 @@ class GetConnectionsSentUc {
   final IUsersRepository _userDataRepository;
 
 
-  Future<List<Relationship>> execute(String userId) async {
-    final relationships = await _networkRepository.getConnectionsSent(userId);
-    return relationships;
+  Future<List<ConnectionReceiver>> execute(String userId) async {
+    final relationships = await _networkRepository.getRelationshipSent(userId);
+    debugPrint(relationships.toString());
+    debugPrint(relationships.map((rel) => rel.addressed).toString());
+    debugPrint("Relacionamentos enviados encontrados: ${relationships.length}");
+    return relationships.map((rel) => rel.addressed).toList();
   }
 }
