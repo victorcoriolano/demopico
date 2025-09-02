@@ -27,7 +27,7 @@ class GetSugestionsUserUc {
     final myConnections = await _networkRepository.getConnections(currentUserId);
 
     final connectedIds = myConnections
-        .map((c) => c.requesterUserID == currentUserId ? c.addresseeID : c.requesterUserID)
+        .map((c) => c.requesterUser == currentUserId ? c.addressed : c.requesterUser)
         .toSet();
 
     return allUsers
