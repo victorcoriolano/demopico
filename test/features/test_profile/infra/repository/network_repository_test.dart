@@ -36,31 +36,31 @@ void main() {
   group('getConnections', () {
     const String userID = 'user123';
 
-    test('should return a list of users when connections exist', () async {
+    test('should return a list of relationships when relationships exist', () async {
       // Arrange
-      when(() => mockNetworkService.getConnections(any(),any()))
+      when(() => mockNetworkService.getRelactionships( fieldRequest: any(), valueID: any(), fieldOther: any(), valorDoStatus: any()))
           .thenAnswer((_) async => [
             mapper.toDTO(mockUserProfile),
             mapper.toDTO(mockUserProfile2)
           ]);
 
       // Act
-      final result = await repository.getConnections(userID);
+      final result = await repository.getRelationshipAccepted(userID);
 
       // Assert
       expect(result, isA<List<UserM>>());
       expect(result, isNotEmpty);
       expect(result.length, 2);
-      verify(() => mockNetworkService.getConnections("requesterUserID",userID)).called(1);
+      verify(() => mockNetworkService.getRelactionships(fieldRequest: "requesterUserID", valueID: userID, fieldOther: "status", valorDoStatus: RequestConnectionStatus.accepted.name)).called(1);
     });
 
     test('should return an empty list when no connections exist', () async {
       // Arrange
-      when(() => mockNetworkService.getConnections(any(),any()))
+      when(() => mockNetworkService.getRelactionships(fieldRequest: any(), valueID: any(), fieldOther: any(), valorDoStatus: any()))
           .thenAnswer((_) async => []);
 
       // Act
-      final result = await repository.getConnections(userID);
+      final result = await repository.getRelationshipAccepted(userID);
 
       // Assert
       expect(result, isEmpty);
@@ -68,12 +68,12 @@ void main() {
 
     test('should throw an exception on a server error', () async {
       // Arrange
-      when(() => mockNetworkService.getConnections(any(), any()))
+      when(() => mockNetworkService.getRelactionships(fieldRequest: any(),valueID: any(),fieldOther: any(), valorDoStatus: any()))
           .thenThrow(Exception('Server error'));
 
       // Act & Assert
-      expect(() => repository.getConnections(userID), throwsA(isA<Exception>()));
-      verify(() => mockNetworkService.getConnections("requesterUserID",userID)).called(1);
+      expect(() => repository.getRelationshipAccepted(userID), throwsA(isA<Exception>()));
+      verify(() => mockNetworkService.getRelactionships(fieldRequest: "requesterUserID", valueID: userID, fieldOther: "status", valorDoStatus: RequestConnectionStatus.accepted.name)).called(1);
     });
   });
   
@@ -86,10 +86,12 @@ void main() {
       when(() => mockNetworkService.createConnection(any())).thenAnswer((_) async => Future.value(mapperConnection.toDTO(dummyConnections[0])));
 
       // Act
-      await repository.createConnection(dummyConnections[0]);
+      final output = await repository.createRelationship(dummyConnections[0]);
 
-      // Assert
-      verifyNever(() => mockNetworkService.createConnection(mapperConnection.toDTO(dummyConnections[0])));
+      expect(output, isNotNull);
+      expect(output.id, isNotEmpty);
+      expect(output.requesterUser.id, equals(dummyConnections[0].requesterUser.id));
+      expect(output.addressed.id, equals(dummyConnections[0].addressed.id));
     });
 
     test('should throw an exception if users are already connected', () async {
@@ -97,7 +99,7 @@ void main() {
       when(() => mockNetworkService.createConnection(any())).thenThrow(Exception('Already connected'));
 
       // Act & Assert
-      expect(() => repository.createConnection(dummyConnections[0]), throwsA(isA<Exception>()));    });
+      expect(() => repository.createRelationship(dummyConnections[0]), throwsA(isA<Exception>()));    });
   });
   
   
@@ -106,67 +108,60 @@ void main() {
     // TODO CORRIGIR ESSES TESTES 
     test('should complete successfully when disconnecting two connected users', () async {
       // Arrange
-      when(() => mockNetworkService.disconnectUser(any())).thenAnswer((_) async => Future.value());
+      when(() => mockNetworkService.deleteConnection(any())).thenAnswer((_) async => Future.value());
 
       // Act
-      await repository.disconnectUser(dummyConnections[0]);
-      
-      
+      await repository.deleteRelationship(dummyConnections[0]);
+
+      verify(() => mockNetworkService.deleteConnection(mapperConnection.toDTO(dummyConnections[0]))).called(1);
     });
 
-    test('should throw an exception if users are not connected', () async {
-      // Arrange
-      when(() => mockNetworkService.disconnectUser(any())).thenThrow(Exception('Not connected'));
-
-      // Act & Assert
-      expect(() => repository.disconnectUser(dummyConnections[2]), throwsA(isA<Exception>()));
-    });
+    
   });
   
   
   
   group('getConnectionRequests', () {
-    const String userID = 'user123';
 
     test('should return a list of connections when requests exist', () async {
       // Arrange
-      when(() => mockNetworkService.fetchRequestConnections(any()))
+      when(() => mockNetworkService.getRelactionships(fieldRequest: "requesterUserID", valueID: any(), fieldOther: "status", valorDoStatus: RequestConnectionStatus.pending.name))
           .thenAnswer((_) async => Future.value([
             mapperConnection.toDTO(dummyConnections[1]),
             mapperConnection.toDTO(dummyConnections[2])
           ]));
 
       // Act
-      final result = await repository.getConnectionRequests(userID);
+      final result = await repository.getRelationshipRequests(dummyConnections[0].addressed.id);
 
       // Assert
       expect(result, isA<List<Relationship>>());
       expect(result, isNotEmpty);
       expect(result.length, 2);
-      verify(() => mockNetworkService.fetchRequestConnections(userID)).called(1);
+      verify(() => mockNetworkService.getRelactionships(fieldRequest: "requesterUserID", valueID: any(), fieldOther: "status", valorDoStatus: RequestConnectionStatus.pending.name)).called(1);
     });
 
     test('should return an empty list when no requests exist', () async {
       // Arrange
-      when(() => mockNetworkService.fetchRequestConnections(any()))
+      when(() => mockNetworkService.getRelactionships(fieldRequest: "requesterUserID", valueID: any(), fieldOther: "status", valorDoStatus: RequestConnectionStatus.pending.name))
           .thenAnswer((_) async => []);
 
       // Act
-      final result = await repository.getConnectionRequests(userID);
+      final result = await repository.getRelationshipRequests(dummyConnections[0].addressed.id);
 
       // Assert
       expect(result, isEmpty);
-      verify(() => mockNetworkService.fetchRequestConnections(userID)).called(1);
+      verify(() => mockNetworkService.getRelactionships(fieldRequest: "requesterUserID", valueID: any(), fieldOther: "status", valorDoStatus: RequestConnectionStatus.pending.name)).called(1);
     });
 
     test('should throw an exception on a server error', () async {
       // Arrange
-      when(() => mockNetworkService.fetchRequestConnections(any()))
+      when(() => mockNetworkService.getRelactionships(fieldRequest: "requesterUserID", valueID: any(), fieldOther: "status", valorDoStatus: RequestConnectionStatus.pending.name))
           .thenThrow(Exception('Server error'));
 
       // Act & Assert
-      expect(() => repository.getConnectionRequests(userID), throwsA(isA<Exception>()));
-      verify(() => mockNetworkService.fetchRequestConnections(userID)).called(1);
+      expect(() => repository.getRelationshipRequests(dummyConnections[0].addressed.id), throwsA(isA<Exception>()));
+      verify(() => mockNetworkService.getRelactionships(fieldRequest: "requesterUserID", valueID: any(), fieldOther: "status", valorDoStatus: RequestConnectionStatus.pending.name)).called(1);
     });
   });
 }

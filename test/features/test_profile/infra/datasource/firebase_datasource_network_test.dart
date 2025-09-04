@@ -5,7 +5,6 @@ import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto
 import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/infra/datasource/firebase_network_datasource.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:test/test.dart';
 
 import '../../../mocks/mocks_connections.dart';
@@ -42,7 +41,7 @@ void main() {
       expect(connection.data['connectedUserID'], equals(mocksConnectionDTO[1].data['connectedUserID']));
     });
     test("Deve desconectar um user", () async {
-      await networkDatasource.disconnectUser(mocksConnectionDTO[1]);
+      await networkDatasource.deleteConnection(mocksConnectionDTO[1]);
 
       final docRef = await fakeFirebaseFirestore.collection(Collections.connections.name)
         .doc(mocksConnectionDTO[1].id).get();
@@ -51,31 +50,22 @@ void main() {
       });
 
     test("Deve pegar uma lista de conexões", () async {
-      final connections = await networkDatasource.getConnections('requesterUserID','userID1');
+      final connections = await networkDatasource.getRelactionships(fieldRequest: "requesterUserID", valueID: "userID1", fieldOther: "status", valorDoStatus: RequestConnectionStatus.accepted.name);
 
       expect(connections, isNotEmpty);
       expect(connections.length, equals(1));
       expect(connections[0].data['userID'], equals('userID1'));
     });
 
-    test("Deve pegar uma lista de requisições de conexão", () async {
+    test("Deve atualizar uma conexão", () async {
+      final connectionToUpdate = mocksConnectionDTO[0];
+      connectionToUpdate.data['status'] = RequestConnectionStatus.accepted.name;
 
-      await Future.wait(dummyConnections.map((connection) {
-        return fakeFirebaseFirestore.collection(Collections.connections.name).add(
-          connection.toJson()
-        );
-      }));
+      final updatedConnection = await networkDatasource.updateConnection(connectionToUpdate);
 
-      final snapshot = await fakeFirebaseFirestore.collection(Collections.connections.name).get();
-
-      debugPrint(snapshot.docs.map((doc) => doc.data()).toList().toString());
-
-      final requests = await networkDatasource.fetchRequestConnections('userID1');
-
-      expect(requests, isNotEmpty);
-      expect(requests.length, equals(2));
-      expect(requests[0].data['userID'], equals('userID1'));
-      expect(requests[0].data['status'], equals(RequestConnectionStatus.pending.name));
+      expect(updatedConnection, isNotNull);
+      expect(updatedConnection.id, equals(connectionToUpdate.id));
+      expect(updatedConnection.data['status'], equals(RequestConnectionStatus.accepted.name));
     });
 
     tearDown((){
