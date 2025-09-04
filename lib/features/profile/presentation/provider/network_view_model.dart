@@ -1,11 +1,11 @@
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/domain/usecases/accept_connection_uc.dart';
+import 'package:demopico/features/profile/domain/usecases/cancel_relationship_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/create_connection_users_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_connections_requests_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_connections_sent.dart';
 import 'package:demopico/features/profile/presentation/view_objects/suggestion_profile.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/domain/usecases/get_sugestions_user_uc.dart';
 import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +16,7 @@ class NetworkViewModel extends ChangeNotifier {
   final GetConnectionsRequestsUc _getConnectionsRequests;
   final AcceptConnectionUc _acceptConnection;  
   final GetConnectionsSentUc _getConnectionsSent;   
+  final CancelRelationshipUc _cancelRelationship;
 
 
   static NetworkViewModel? _instance;
@@ -26,11 +27,13 @@ class NetworkViewModel extends ChangeNotifier {
       getConnectionsRequests: GetConnectionsRequestsUc.instance,
       acceptConnection: AcceptConnectionUc.instance,
       getConnectionsSent: GetConnectionsSentUc.instance,
+      cancelRelationship: CancelRelationshipUc.instance
     );
     return _instance!;
   }
 
   NetworkViewModel({
+    required CancelRelationshipUc cancelRelationship,
     required GetConnectionsSentUc getConnectionsSent,
     required GetSugestionsUserUc getSugestionsUser,
     required CreateConnectionUsersUc createConnectionUsers,
@@ -40,7 +43,8 @@ class NetworkViewModel extends ChangeNotifier {
         _getConnectionsSent = getConnectionsSent,
         _createConnectionUsers = createConnectionUsers,
         _getConnectionsRequests = getConnectionsRequests,
-        _acceptConnection = acceptConnection;
+        _acceptConnection = acceptConnection,
+        _cancelRelationship = cancelRelationship;
 
   
   List<SuggestionProfile> _suggestions = [];
@@ -119,6 +123,18 @@ class NetworkViewModel extends ChangeNotifier {
       
 
       await _acceptConnection.execute(connection);
+    } on Failure catch (e) {
+      FailureServer.showError(e);
+    }
+    notifyListeners();
+  }
+
+  Future<void> cancelRelationship(Relationship connection) async {
+    try {
+      final userLogged = UserDatabaseProvider.getInstance.user;
+      if (userLogged == null) return;
+
+      await _cancelRelationship.execute(connection);
     } on Failure catch (e) {
       FailureServer.showError(e);
     }
