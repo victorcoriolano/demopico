@@ -27,7 +27,7 @@ class FirebaseNetworkDatasource implements INetworkDatasource<FirebaseDTO> {
 
 
   @override
-  Future<void> disconnectUser(FirebaseDTO dto) async {
+  Future<void> deleteConnection(FirebaseDTO dto) async {
     await _crudFirebaseBoilerplate.delete(dto.id);
   }
 
