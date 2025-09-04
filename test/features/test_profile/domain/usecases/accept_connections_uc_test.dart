@@ -5,7 +5,7 @@ import 'package:demopico/features/profile/infra/repository/network_repository.da
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-import '../../mocks/mocks_connections.dart';
+import '../../../mocks/mocks_connections.dart';
 
 class NetworkRepositoryMock extends Mock implements NetworkRepository {}
 
