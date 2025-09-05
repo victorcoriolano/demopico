@@ -21,12 +21,12 @@ void main() {
     });
 
     test("Deve retornar uma lista de todos os usuários exeto o user se o user não tiver conexões", () async {
-      when(() => repository.getRelationshipAccepted(any()))
+      when(() => repository.getRelationshipRequests(any()))
           .thenAnswer((_) async => dummyConnections);
 
-      await useCase.execute("userId");
+      await useCase.execute("userID");
 
-      verify(() => repository.getRelationshipAccepted(any())).called(1);
+      verify(() => repository.getRelationshipRequests(any())).called(1);
     });
 
   });
