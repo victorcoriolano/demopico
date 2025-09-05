@@ -5,14 +5,24 @@ var dummyConnections = [
       id: "id",
       createdAt: DateTime.now(),
       requesterUser: ConnectionRequester(
-          id: "userID1", name: "name", profilePictureUrl: "profilePictureUrl"),
+          id: "userID", name: "name", profilePictureUrl: "profilePictureUrl"),
       addressed: ConnectionReceiver(
           id: "addressedId",
           name: "addressedName",
           profilePictureUrl: "addressedProfilePictureUrl"),
       status: RequestConnectionStatus.pending,
       updatedAt: DateTime.now()),
-
+  Relationship(
+      id: "id",
+      createdAt: DateTime.now(),
+      requesterUser: ConnectionRequester(
+          id: "userID1", name: "name", profilePictureUrl: "profilePictureUrl"),
+      addressed: ConnectionReceiver(
+          id: "addressedId",
+          name: "addressedName",
+          profilePictureUrl: "addressedProfilePictureUrl"),
+      status: RequestConnectionStatus.accepted,
+      updatedAt: DateTime.now()),
   Relationship(
       id: "id",
       createdAt: DateTime.now(),
