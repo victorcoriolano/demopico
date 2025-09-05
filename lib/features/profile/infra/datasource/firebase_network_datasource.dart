@@ -2,7 +2,7 @@ import 'package:demopico/core/common/files_manager/enums/collections.dart';
 import 'package:demopico/features/external/datasources/firebase/crud_firebase.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_network_datasource.dart';
-import 'package:demopico/features/profile/domain/models/connection.dart';
+import 'package:flutter/material.dart';
 
 class FirebaseNetworkDatasource implements INetworkDatasource<FirebaseDTO> {
   final CrudFirebase _crudFirebaseBoilerplate;
@@ -25,32 +25,31 @@ class FirebaseNetworkDatasource implements INetworkDatasource<FirebaseDTO> {
     return await _crudFirebaseBoilerplate.create(dto);
   }
 
-  @override
-  Future<List<FirebaseDTO>> getConnections(String userID) async{
-    return await _crudFirebaseBoilerplate.readAllWithFilter("userID", userID);
-  }
 
   @override
-  Future<void> disconnectUser(FirebaseDTO dto) async {
+  Future<void> deleteConnection(FirebaseDTO dto) async {
     await _crudFirebaseBoilerplate.delete(dto.id);
   }
 
-  @override
-  Future<List<FirebaseDTO>> fetchRequestConnections (String userID) {
-    return _crudFirebaseBoilerplate.readWithTwoFilters(
-        field1: 'userID',
-        value1: userID,
-        field2: 'status',
-        value2: RequestConnectionStatus.pending.name);
-  }
   
   @override
-  Future<FirebaseDTO> checkConnection(String idConnection) {
-    return _crudFirebaseBoilerplate.read(idConnection);
+  Future<FirebaseDTO> updateConnection(FirebaseDTO dto) async {
+    return await _crudFirebaseBoilerplate.update(dto);
   }
-  
+
   @override
-  Future<FirebaseDTO> updateConnection(FirebaseDTO dto) {
-    return _crudFirebaseBoilerplate.update(dto);
+  Future<List<FirebaseDTO>> getRelactionships({
+    required String fieldRequest, 
+    required String valueID, 
+    required String fieldOther, 
+    required String valorDoStatus}) async {
+      debugPrint("Buscando relacionamentos com os filtros: $fieldRequest = $valueID, $fieldOther = $valorDoStatus");
+        final dtos = await _crudFirebaseBoilerplate.readWithTwoFilters(
+        field1: fieldRequest,
+        value1: valueID,
+        field2: fieldOther,
+        value2: valorDoStatus);
+        debugPrint("DTOs recebidos: ${dtos.length}");
+        return dtos;
   }
 }

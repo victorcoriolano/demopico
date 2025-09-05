@@ -84,8 +84,8 @@ void main() {
     });
 
     test('should returns FirebaseDTO list', () async {
-      when(() => mockCrudDataSource.readByMultipleIDs(any())).thenAnswer((_) async => listDtosUser);
-      final result = await dataSource.getSuggestions(['test']);
+      when(() => mockCrudDataSource.readMultiplesExcept(any(), any())).thenAnswer((_) async => listDtosUser);
+      final result = await dataSource.getSuggestions({'test'});
       expect(result, isA<List<FirebaseDTO>>());
     });
 

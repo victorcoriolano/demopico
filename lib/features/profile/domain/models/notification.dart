@@ -1,11 +1,11 @@
-class Notification {
+class NotificationItem {
   final String id;
   final String userId;
   final String message;
   bool isRead;
   final DateTime timestamp;
 
-  Notification({
+  NotificationItem({
     required this.isRead,
     required this.id,
     required this.userId,

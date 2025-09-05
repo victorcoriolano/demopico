@@ -9,6 +9,7 @@ import 'package:demopico/features/profile/presentation/bidings/auth_biding.dart'
 import 'package:demopico/features/profile/presentation/pages/chat_room_page.dart';
 import 'package:demopico/features/profile/presentation/pages/create_post_page.dart';
 import 'package:demopico/features/profile/presentation/pages/edit_profile_page.dart';
+import 'package:demopico/features/profile/presentation/pages/my_network_page.dart';
 import 'package:demopico/features/profile/presentation/pages/search_profile_page.dart';
 import 'package:demopico/features/profile/presentation/pages/screens_profile.dart';
 import 'package:demopico/features/user/presentation/pages/login_page.dart';
@@ -91,6 +92,13 @@ class AppPages {
       name: Paths.home,
       page: () => HomePage(),
       transition: Transition.native,
+    ),
+
+    GetPage(
+      binding: AuthBiding(),
+      name: Paths.myNetwork,
+      page: () => MyNetworkScreen(),
+      transition: Transition.fadeIn,
     ),
   ];
 }

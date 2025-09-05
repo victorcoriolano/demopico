@@ -59,13 +59,9 @@ class _TopLevelHomeRowState extends State<TopLevelHomeRow> {
                         Color.fromARGB(255, 255, 255, 255)),
                     shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: Color.fromARGB(255, 0, 0, 0),
-                        width: 1,
-                      ),
                       borderRadius: BorderRadius.circular(90.0),
                     )),
-                    elevation: WidgetStateProperty.all<double>(1),
+                    elevation: WidgetStateProperty.all<double>(3),
                     shadowColor: WidgetStateProperty.all<Color>(
                         Color.fromARGB(255, 0, 0, 0)),
                   ),

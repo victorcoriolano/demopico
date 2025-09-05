@@ -31,36 +31,6 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
     _instance?.collection = collection;
   }
 
-  
-
-  @override
-  Future<List<FirebaseDTO>> readByMultipleIDs(List<String> ids) async {
-    try {
-      final query = await Future.wait(
-      ids.map((id) => _firestore.collection(collection.name)
-        .doc(id)
-        .get()
-        .then((doc) {
-          if (doc.exists && doc.data() != null) {
-            return FirebaseDTO(id: doc.id, data: doc.data()!);
-          } else {
-            return null;
-          }
-        })
-      )
-    );
-    return query.whereType<FirebaseDTO>().toList();
-    }on FirebaseException catch (firebaseException) {
-      
-      throw FirebaseErrorsMapper.map(firebaseException);
-    } on Exception catch (exception) {
-      throw UnknownFailure(originalException: exception);
-    } catch (unknown) {
-      throw UnknownFailure(unknownError: unknown);
-    }
-    
-  }
-
 
   @override
   Future<FirebaseDTO> create(FirebaseDTO dto) async{
@@ -100,6 +70,23 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
       throw FirebaseErrorsMapper.map(e);
     }
   }
+
+  @override
+  Future<void> updateField(String id, String field, dynamic value) async {
+    try {
+      await _firestore.collection(collection.name).doc(id).update({field: value});
+    } on FirebaseException catch (e) {
+      debugPrint("Data Source Error: $e");
+      throw FirebaseErrorsMapper.map(e);
+    } on Exception catch (e) {
+      debugPrint("Unknown Error: $e");
+      throw UnknownFailure(originalException: e);
+    } on Error catch (e) {
+      debugPrint("Unknown Error: $e");
+      throw UnknownFailure(unknownError: e);
+    }
+  }
+
   @override
   Future<void> delete(String id) async {
     try {
@@ -281,6 +268,46 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
       return query.docs.map((doc) {
         return FirebaseDTO(id: doc.id, data: doc.data());
       }).toList();
+    } on FirebaseException catch (firebaseException) {
+      debugPrint("Data Source Error: $firebaseException");
+      throw FirebaseErrorsMapper.map(firebaseException);
+    } on Exception catch (exception) {
+      throw UnknownFailure(originalException: exception);
+    } catch (unknown) {
+      throw UnknownFailure(unknownError: unknown);
+    }
+  }
+  
+  @override
+  Future<List<FirebaseDTO>> readMultiplesExcept(String field, Set<String> values) async {
+    try {
+      final query = await _firestore.collection(collection.name)
+          .where(field, whereNotIn: values.toList())
+          .get();
+      return query.docs.map((doc) {
+        return FirebaseDTO(id: doc.id, data: doc.data());
+      }).toList();
+    } on FirebaseException catch (firebaseException) {
+      debugPrint("Data Source Error: $firebaseException");
+      throw FirebaseErrorsMapper.map(firebaseException);
+    } on Exception catch (exception) {
+      throw UnknownFailure(originalException: exception);
+    } catch (unknown) {
+      throw UnknownFailure(unknownError: unknown);
+    }
+  }
+  
+  @override
+  Future<List<FirebaseDTO>> readMultiplesByIds(List<String> ids) {
+    try {
+      return _firestore.collection(collection.name)
+          .where(FieldPath.documentId, whereIn: ids)
+          .get()
+          .then((snapshot) {
+        return snapshot.docs.map((doc) {
+          return FirebaseDTO(id: doc.id, data: doc.data());
+        }).toList();
+      });
     } on FirebaseException catch (firebaseException) {
       debugPrint("Data Source Error: $firebaseException");
       throw FirebaseErrorsMapper.map(firebaseException);

@@ -3,9 +3,10 @@ import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto_mapper.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_network_datasource.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_network_repository.dart';
-import 'package:demopico/features/profile/domain/models/connection.dart';
+import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/infra/datasource/firebase_network_datasource.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:flutter/widgets.dart';
 
 class NetworkRepository implements INetworkRepository {
   final INetworkDatasource<FirebaseDTO> _datasource;
@@ -24,52 +25,74 @@ class NetworkRepository implements INetworkRepository {
     getId: (UserM model) => model.id
   );
 
-  final IMapperDto<Connection, FirebaseDTO> _mapperDtoConnection = FirebaseDtoMapper<Connection>(
-    fromJson: (Map<String, dynamic> map, String id) => Connection.fromJson(map, id), 
-    toMap: (Connection model) => model.toJson(), 
-    getId: (Connection model) => model.id
+  final IMapperDto<Relationship, FirebaseDTO> _mapperDtoConnection = FirebaseDtoMapper<Relationship>(
+    fromJson: (Map<String, dynamic> map, String id) => Relationship.fromJson(map, id), 
+    toMap: (Relationship model) => model.toJson(), 
+    getId: (Relationship model) => model.id
   );
 
   IMapperDto<UserM, FirebaseDTO> get mapperUser => _mapperDtoUser;
 
-  IMapperDto<Connection, FirebaseDTO> get mapperConnection => _mapperDtoConnection;
+  IMapperDto<Relationship, FirebaseDTO> get mapperConnection => _mapperDtoConnection;
 
-  @override
-  Future<List<UserM>> getConnections(String userID) {
-    return _datasource.getConnections(userID).then((dtos) {
-      return dtos.map((dto) => mapperUser.toModel(dto)).toList();
-    });
-  }
 
+  
   @override
-  Future<void> disconnectUser(Connection connection) {
-    return _datasource.disconnectUser(mapperConnection.toDTO(connection));
-  }
-
-  @override
-  Future<Connection> createConnection(Connection connection) {
+  Future<Relationship> createRelationship(Relationship connection) {
     return _datasource.createConnection(mapperConnection.toDTO(connection)).then((dto) {
       return mapperConnection.toModel(dto);
     });
   }
-
   
-
   @override
-  Future<List<Connection>> getConnectionRequests(String userID) {
-    return _datasource.fetchRequestConnections(userID).then((dtos) {
+  Future<void> deleteRelationship(Relationship connection) {
+    return _datasource.deleteConnection(mapperConnection.toDTO(connection));
+  }
+  
+  @override
+  Future<List<Relationship>> getRelationshipAccepted(String userID) {
+    return _datasource.getRelactionships(
+      fieldRequest: "requesterUserID.id",
+      valueID: userID,
+      fieldOther: "status",
+      valorDoStatus: RequestConnectionStatus.accepted.name,
+    ).then((dtos) {
+      debugPrint("DTOs recebidos: ${dtos.length}");
+      return dtos.map((dto) => mapperConnection.toModel(dto)).toList();
+    });
+  }
+  
+  
+  @override
+  Future<List<Relationship>> getRelationshipRequests(String userID) {
+    return _datasource.getRelactionships(
+      fieldRequest: "addresseeID.id",
+      valueID: userID,
+      fieldOther: "status",
+      valorDoStatus: RequestConnectionStatus.pending.name,
+    ).then((dtos) {
+      debugPrint("DTOs recebidos: ${dtos.length}");
       return dtos.map((dto) => mapperConnection.toModel(dto)).toList();
     });
   }
   
   @override
-  Future<Connection> updateConnection(Connection connection) async {
-    final output = await _datasource.updateConnection(mapperConnection.toDTO(connection));
-    return mapperConnection.toModel(output);
+  Future<List<Relationship>> getRelationshipSent(String userID) {
+    return _datasource.getRelactionships(
+      fieldRequest: "requesterUserID.id",
+      valueID: userID,
+      fieldOther: "status",
+      valorDoStatus: RequestConnectionStatus.pending.name,
+    ).then((dtos) {
+      debugPrint("DTOs recebidos: ${dtos.length}");
+      return dtos.map((dto) => mapperConnection.toModel(dto)).toList();
+    });
   }
   
   @override
-  Future<Connection> checkConnection(String idConnection) async {
-    return _mapperDtoConnection.toModel(await _datasource.checkConnection(idConnection));
+  Future<Relationship> updateRelationship(Relationship connection) {
+    return _datasource.updateConnection(mapperConnection.toDTO(connection)).then((dto) {
+      return mapperConnection.toModel(dto);
+    });
   }
 }

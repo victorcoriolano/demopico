@@ -1,14 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/features/profile/presentation/provider/network_view_model.dart';
+import 'package:demopico/features/profile/presentation/view_objects/suggestion_profile.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SuggestionProfilesWidget extends StatefulWidget {
-  final String name;
-  final String imageUrl;
+  final SuggestionProfile suggestionProfile;
 
   const SuggestionProfilesWidget({
     super.key,
-    required this.name,
-    required this.imageUrl,
+    required this.suggestionProfile,
   });
 
   @override
@@ -16,13 +18,7 @@ class SuggestionProfilesWidget extends StatefulWidget {
 }
 
 class _SuggestionProfilestState extends State<SuggestionProfilesWidget> {
-  bool isFollowing = false;
-
-  void toggleFollow() {
-    setState(() {
-      isFollowing = !isFollowing;
-    });
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +50,8 @@ class _SuggestionProfilestState extends State<SuggestionProfilesWidget> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CircleAvatar(
-                  backgroundImage: widget.imageUrl.isNotEmpty
-                      ? NetworkImage(widget.imageUrl)
+                  backgroundImage: widget.suggestionProfile.photo != null
+                      ? CachedNetworkImageProvider(widget.suggestionProfile.photo!, errorListener: (error) => const Icon(Icons.error))
                       : null,
                   radius: 20,
                 ),
@@ -63,7 +59,7 @@ class _SuggestionProfilestState extends State<SuggestionProfilesWidget> {
                   height: 8,
                 ),
                 Text(
-                  widget.name,
+                  widget.suggestionProfile.name,
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -75,11 +71,15 @@ class _SuggestionProfilestState extends State<SuggestionProfilesWidget> {
           ),
           const SizedBox(height: 8),
           ElevatedButton(
-            onPressed: toggleFollow,
+            onPressed: () {
+              context.read<NetworkViewModel>().requestConnection(widget.suggestionProfile);
+            },
             style: ElevatedButton.styleFrom(
-              backgroundColor: isFollowing ? kMediumGrey : kRed,
+              backgroundColor: widget.suggestionProfile.status.statusForSuggestions == 'Conectar'
+                  ? kRed
+                  : kMediumGrey,
             ),
-            child: Text(isFollowing ? 'Seguindo' : 'Seguir'),
+            child: Text(widget.suggestionProfile.status.statusForSuggestions),
           ),
         ],
       ),

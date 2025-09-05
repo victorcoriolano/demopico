@@ -60,13 +60,5 @@ void main() {
       expect(exists, true);
       verify(() => mockDataSource.validateExistsData('email', 'test@email.com')).called(1);
     });
-
-    test('getSuggestions throws UnimplementedError', () {
-      expect(() => repository.getSuggestions(['test']), throwsUnimplementedError);
-    });
-
-    test('searchUsers throws UnimplementedError', () {
-      expect(() => repository.searchUsers('test'), throwsUnimplementedError);
-    });
   });
 }

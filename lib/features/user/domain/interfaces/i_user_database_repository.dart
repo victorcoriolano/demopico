@@ -7,8 +7,5 @@ abstract class IUserDataRepository{
   Future<UserM> getUserDetailsByID(String uid);
   Future<String> getEmailByVulgo(String vulgo);
   Future<UserM> updateUserDetails(UserM user);
-  Stream<List<UserM>> searchUsers(String query);
-  Future<List<UserM>> getUsersExcept(String uid);
-  Future<List<UserM>> getSuggestions(List<String> arguments);
   Future<bool> validateExist({required String data,required  String field});
 }

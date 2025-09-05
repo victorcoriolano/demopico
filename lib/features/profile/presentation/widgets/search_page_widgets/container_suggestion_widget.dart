@@ -20,11 +20,10 @@ class ContainerSuggestionWidget extends StatelessWidget {
           color: const Color.fromARGB(255, 231, 231, 231),
           width: MediaQuery.of(context).size.width * 1,
           child:ListView.builder(
-            itemCount: viewModel.sugestions.length, // Número de sugestões
+            itemCount: viewModel.suggestions.length, // Número de sugestões
             itemBuilder: (context, index) {
               return SuggestionProfilesWidget(
-                name: viewModel.sugestions[index].name,
-                imageUrl: viewModel.sugestions[index].pictureUrl ?? '',
+                suggestionProfile: viewModel.suggestions[index],
               );
             },
           ),
