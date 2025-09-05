@@ -25,7 +25,7 @@ void main() {
 
 
     test("Deve retornar uma lista de todos os usuários exeto o user se o user não tiver conexões", () async {
-      when(() => repository.updateConnection(any()))
+      when(() => repository.updateRelationship(any()))
           .thenAnswer((_) async => dummyConnections[2]);
 
       final connectionAccepted = dummyConnections[2];
@@ -36,7 +36,7 @@ void main() {
       expect(accept.id, equals(connectionAccepted.id));
       expect(accept.status, equals(RequestConnectionStatus.accepted));
 
-      verify(() => repository.updateConnection(any())).called(1);
+      verify(() => repository.updateRelationship(any())).called(1);
     });
 
   });

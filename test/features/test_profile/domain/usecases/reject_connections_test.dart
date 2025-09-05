@@ -23,13 +23,13 @@ void main() {
 
 
     test("Deve retornar uma lista de todos os usuários exeto o user se o user não tiver conexões", () async {
-      when(() => repository.disconnectUser(any()))
+      when(() => repository.deleteRelationship(any()))
           .thenAnswer((_) async => {});
 
       final connectionRejected = dummyConnections.last;
       await useCase.execute(connectionRejected);
 
-      verify(() => repository.disconnectUser(any())).called(1);
+      verify(() => repository.deleteRelationship(any())).called(1);
     });
 
   });
