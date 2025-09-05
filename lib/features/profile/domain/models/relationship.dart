@@ -80,6 +80,24 @@ class Relationship {
       addressed: ConnectionReceiver.fromJson(json['addresseeID']),
     );
   }
+
+  Relationship copyWith({
+    String? id,
+    ConnectionRequester? requesterUser,
+    ConnectionReceiver? addressed,
+    RequestConnectionStatus? status,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return Relationship(
+      id: id ?? this.id,
+      requesterUser: requesterUser ?? this.requesterUser,
+      addressed: addressed ?? this.addressed,
+      status: status ?? this.status,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
 }
 
 
