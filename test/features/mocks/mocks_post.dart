@@ -5,7 +5,7 @@ import 'package:demopico/features/user/domain/enums/type_post.dart';
 Post mockPost1 = Post(
    typePost: TypePost.post,
     id: "123",
-      spotID: "spot123",
+    spotID: "spot123",
     nome: 'João Silva',
     userId: 'user123',
     urlUserPhoto: 'https://example.com/user_photo.jpg',
@@ -43,3 +43,5 @@ Post mockPost2 = Post(
 
   final   listDto = listPost.map(
     (post) => mapper.toDTO(post)).toList();
+
+final update = mockPost1.copyWith(description: 'Atualizando descrição do post ${mockPost1.id}');

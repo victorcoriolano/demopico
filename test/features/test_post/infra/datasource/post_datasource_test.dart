@@ -20,6 +20,7 @@ void main(){
           collection: Collections.posts, firestore: firestore
         )
       );
+      firestore.clearPersistence();
     });
 
     tearDown(() {
@@ -45,12 +46,19 @@ void main(){
 
      test("deve atualizar uma postagem ", ()  async{
       
-      await firestore.collection("posts").doc("123").set(listDto[0].data);
+      await firestore.collection("posts").doc("123").set(listDto[0].data).then( (onData) => debugPrint("Post criado no Firestore fake: ${listDto[0].id}"));
       
+      await firestore.collection("posts").get().then((querySnapshot) {
+        for (var doc in querySnapshot.docs) {
+          debugPrint("Documento no Firestore fake: ${doc.id} com dados: ${doc.data()} \n");
+        }
+      });
+
       final dto = await firebasePostDatasource.updatePost(
-        listDto[0].copyWith(data: {"nome": "Tete da Silva"})
+        mapper.toDTO(update)
       );
-      expect(dto.data["nome"], "Tete da Silva");
+
+      expect(dto.data["description"], "Atualizando descrição do post ${mockPost1.id}");
     });
 
     test("deve retornar uma postagem por id ", ()  async{
