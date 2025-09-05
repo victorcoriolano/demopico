@@ -6,6 +6,7 @@ import 'package:demopico/features/user/domain/usecases/get_sugestions_user_uc.da
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
+import '../../mocks/mocks_connections.dart';
 import '../../mocks/mocks_profile.dart';
 
 class UsersRepositoryMock extends Mock implements IUsersRepository {}
@@ -26,21 +27,15 @@ void main() {
     });
 
     test("Deve retornar uma lista de todos os usuários exeto o user se o user não tiver conexões", () async {
-      when(() => repository.getSuggestionsProfileExcept(any()))
-          .thenAnswer((_) async => [mockUserProfile2, testeProfileErrado]);
+       when(() => networkRepository.getRelationshipRequests(any()))
+          .thenAnswer((_) async => []);
+      when(() => networkRepository.getRelationshipAccepted(any()))
+          .thenAnswer((_) async => []);
+      when(() => networkRepository.getRelationshipSent(any()))
+          .thenAnswer((_) async => []);
 
-      final userTest = listUsers.first;
-
-      final result = await useCase.execute(userTest.id);
-
-      expect(result.isEmpty, false);
-      expect(result.contains(SuggestionProfile.fromUser(userTest)), false);
-      expect(result, isA<List<UserM>>());
-    });
-
-    test("deve retornar uma lista conexões que não contenha nem as conexões nem o user", () async {
-      when(() => repository.getSuggestionsExceptConnections(any()))
-          .thenAnswer((_) async => [mockUserProfile, testeProfileErrado]);
+      when(() => repository.findAll())
+          .thenAnswer((_) async => listUsers);
 
       final userTest = listUsers[1];
 
@@ -48,7 +43,27 @@ void main() {
 
       expect(result.isEmpty, false);
       expect(result.contains(SuggestionProfile.fromUser(userTest)), false);
-      expect(result, isA<List<UserM>>());
+      expect(result, isA<List<SuggestionProfile>>());
+    });
+
+    test("deve retornar uma lista conexões que não contenha nem as conexões nem o user", () async {
+      when(() => networkRepository.getRelationshipRequests(any()))
+          .thenAnswer((_) async => []);
+      when(() => networkRepository.getRelationshipAccepted(any()))
+          .thenAnswer((_) async => [dummyConnections[0]]);
+      when(() => networkRepository.getRelationshipSent(any()))
+          .thenAnswer((_) async => []);
+
+      when(() => repository.findAll())
+          .thenAnswer((_) async => listUsers);
+
+      final userTest = listUsers[1];
+
+      final result = await useCase.execute(userTest.id);
+
+      expect(result.isEmpty, false);
+      expect(result.contains(SuggestionProfile.fromUser(userTest)), false);
+      expect(result, isA<List<SuggestionProfile>>());
     });
 
   });
