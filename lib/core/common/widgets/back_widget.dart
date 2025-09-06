@@ -26,9 +26,6 @@ class CustomBackButton extends StatelessWidget {
       color: colorIcon,
       splashRadius: 0.5,
       tooltip: "Voltar",
-      splashColor: null,
-      focusColor: null,
-      hoverColor: null,
       iconSize: iconSize,
     );
   }
