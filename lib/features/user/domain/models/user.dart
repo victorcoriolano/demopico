@@ -17,7 +17,7 @@ class UserM {
   String? pictureUrl;
   String? location;
   List<String> picosSalvos;
-  String backgroundPicture;
+  String? backgroundPicture;
   List<Pico>? favoritePicosEntities;
   List<Post>? myPostsEntities;
   List<String> myIdPosts;
@@ -86,7 +86,7 @@ class UserM {
       dob: todayDate,
       pictureUrl: "https://firebasestorage.googleapis.com/v0/b/pico-skatepico.appspot.com/o/users%2FfotoPadrao%2FuserPhoto.png?alt=media&token=c48f5406-fac1-4b35-b2a7-453e2fb57427",
       isColetivo: authUser.isColetivo,
-      backgroundPicture: "",
+      backgroundPicture: null,
     );
   }
 
@@ -96,13 +96,13 @@ class UserM {
       myIdPosts: List<String>.from(json['myPosts'] ?? []),
       connections: List<String>.from(json["connections"] ?? []),
       favoritesIdPicos: json['favoritesSpots'] ?? [],
-      name: json['name'] ?? "",
+      name: json['name'],
       description: json['description'] ?? "",
       id: id,
       location: json['location'] ?? '',
       picosSalvos: List<String>.from(json['picosSalvos'] ?? []),
       pictureUrl: json['pictureUrl'] ?? '',
-      backgroundPicture: json['backgroundPicture'] ?? '',
+      backgroundPicture: json['backgroundPicture'],
       isColetivo: json['isColetivo'] ?? false,
       signMethod: SignMethods.fromString(json['signMethod'] ?? "email"),
       email: json['email'] ?? "",
