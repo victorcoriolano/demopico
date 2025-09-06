@@ -2,7 +2,6 @@ import 'package:demopico/core/common/files_manager/mappers/i_mapper_dto.dart';
 import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/infra/datasource/firebase_network_datasource.dart';
 import 'package:demopico/features/profile/infra/repository/network_repository.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
