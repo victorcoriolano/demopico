@@ -16,11 +16,13 @@ class _MyNetworkScreenState extends State<MyNetworkScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       final viewModel = context.read<NetworkViewModel>();
-      viewModel.fetchConnectionsRequests();
+      await viewModel.fetchConnectionsRequests();
+      await viewModel.fetchConnectionSent();
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -36,22 +38,31 @@ class _MyNetworkScreenState extends State<MyNetworkScreen> {
           centerTitle: true,
           bottom: const TabBar(
             tabs: [
-              Tab(child: Text('Solicitações', style: TextStyle(color: kWhite),)),
-              Tab(child: Text('Enviados', style: TextStyle(color: kWhite),)),
+              Tab(
+                  child: Text(
+                'Solicitações',
+                style: TextStyle(color: kWhite),
+              )),
+              Tab(
+                  child: Text(
+                'Enviados',
+                style: TextStyle(color: kWhite),
+              )),
             ],
           ),
         ),
-        body: Consumer<NetworkViewModel>(
-          builder: (context, viewModel, child) {  
-            return TabBarView(
-              children: [
-                ProfileList(userProfiles: viewModel.connectionRequests, actionType: ActionType.accept),
-
-                ProfileList(userProfiles: viewModel.connectionSent, actionType: ActionType.cancel),
-              ],
-            );
-          }
-        ),
+        body: Consumer<NetworkViewModel>(builder: (context, viewModel, child) {
+          return TabBarView(
+            children: [
+              ProfileList(
+                  userProfiles: viewModel.connectionRequests,
+                  actionType: ActionType.accept),
+              ProfileList(
+                  userProfiles: viewModel.connectionSent,
+                  actionType: ActionType.cancel),
+            ],
+          );
+        }),
       ),
     );
   }
@@ -66,35 +77,38 @@ class ProfileList extends StatelessWidget {
   final List<ReciverRequesterBase> userProfiles;
   final ActionType actionType;
 
-  const ProfileList({super.key, required this.userProfiles, required this.actionType});
-
+  const ProfileList(
+      {super.key, required this.userProfiles, required this.actionType});
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: userProfiles.length,
-      itemBuilder: (context, index) {
-        return Card(
-          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-          child: ConnectionActionCard(
-            user: userProfiles[index],
-            actionButton: actionType == ActionType.accept 
-              ? ElevatedButton(
-                  onPressed: () {
-                    // TODO IMPLEMENTAR ACEITAR SOLICITAÇÃO DE CONEXÃO
-                  },
-                  child: const Text('Aceitar'),
-                )
-              : ElevatedButton(
-                  onPressed: () {
-                    // TODO IMPLEMENTAR CANCELAR SOLICITAÇÃO DE CONEXÃO
-                  },
-                  child: const Text('Cancelar'),
+    return userProfiles.isEmpty
+        ? const Center(
+            child: Text('Nenhum usuário encontrado'),
+          )
+        : ListView.builder(
+            itemCount: userProfiles.length,
+            itemBuilder: (context, index) {
+              return Card(
+                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                child: ConnectionActionCard(
+                  user: userProfiles[index],
+                  actionButton: actionType == ActionType.accept
+                      ? ElevatedButton(
+                          onPressed: () {
+                            // TODO IMPLEMENTAR ACEITAR SOLICITAÇÃO DE CONEXÃO
+                          },
+                          child: const Text('Aceitar'),
+                        )
+                      : ElevatedButton(
+                          onPressed: () {
+                            // TODO IMPLEMENTAR CANCELAR SOLICITAÇÃO DE CONEXÃO
+                          },
+                          child: const Text('Cancelar'),
+                        ),
                 ),
-              ),
-            );
-      },
-    );
+              );
+            },
+          );
   }
 }
-
