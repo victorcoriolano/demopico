@@ -14,21 +14,19 @@ class NetworkViewModel extends ChangeNotifier {
   final GetSugestionsUserUc _getSugestionsUser;
   final CreateConnectionUsersUc _createConnectionUsers;
   final GetConnectionsRequestsUc _getConnectionsRequests;
-  final AcceptConnectionUc _acceptConnection;  
-  final GetConnectionsSentUc _getConnectionsSent;   
+  final AcceptConnectionUc _acceptConnection;
+  final GetConnectionsSentUc _getConnectionsSent;
   final CancelRelationshipUc _cancelRelationship;
-
 
   static NetworkViewModel? _instance;
   static NetworkViewModel get instance {
     _instance ??= NetworkViewModel(
-      createConnectionUsers: CreateConnectionUsersUc.instance,
-      getSugestionsUser: GetSugestionsUserUc.instance,
-      getConnectionsRequests: GetConnectionsRequestsUc.instance,
-      acceptConnection: AcceptConnectionUc.instance,
-      getConnectionsSent: GetConnectionsSentUc.instance,
-      cancelRelationship: CancelRelationshipUc.instance
-    );
+        createConnectionUsers: CreateConnectionUsersUc.instance,
+        getSugestionsUser: GetSugestionsUserUc.instance,
+        getConnectionsRequests: GetConnectionsRequestsUc.instance,
+        acceptConnection: AcceptConnectionUc.instance,
+        getConnectionsSent: GetConnectionsSentUc.instance,
+        cancelRelationship: CancelRelationshipUc.instance);
     return _instance!;
   }
 
@@ -46,7 +44,6 @@ class NetworkViewModel extends ChangeNotifier {
         _acceptConnection = acceptConnection,
         _cancelRelationship = cancelRelationship;
 
-  
   List<SuggestionProfile> _suggestions = [];
   List<ConnectionRequester> _connectionsRequests = [];
   List<ConnectionReceiver> _connectionSent = [];
@@ -59,9 +56,10 @@ class NetworkViewModel extends ChangeNotifier {
     final user = UserDatabaseProvider.getInstance.user;
     if (user == null) return;
 
-    try{
+    try {
       _connectionsRequests = await _getConnectionsRequests.execute(user.id);
       debugPrint("Connections Requests: ${_connectionsRequests.length}");
+      notifyListeners();
     } on Failure catch (e) {
       FailureServer.showError(e, "Error fetching connections requests");
     }
@@ -74,6 +72,7 @@ class NetworkViewModel extends ChangeNotifier {
     try {
       _connectionSent = await _getConnectionsSent.execute(user.id);
       debugPrint("Connections Sent: ${_connectionSent.length}");
+      notifyListeners();
     } on Failure catch (e) {
       FailureServer.showError(e, "Error fetching connections sent");
     }
@@ -83,8 +82,9 @@ class NetworkViewModel extends ChangeNotifier {
     final user = UserDatabaseProvider.getInstance.user;
     if (user == null) return;
 
-    try{
+    try {
       _suggestions = await _getSugestionsUser.execute(user.id);
+      notifyListeners();
     } on Failure catch (e) {
       FailureServer.showError(e);
     }
@@ -95,19 +95,26 @@ class NetworkViewModel extends ChangeNotifier {
     final userLogged = UserDatabaseProvider.getInstance.user;
     if (userLogged == null) return;
 
-    _suggestions.firstWhere((element) => element == userSuggestion).updateConnection(RequestConnectionStatus.pending);
-
+    _suggestions
+        .firstWhere((element) => element == userSuggestion)
+        .updateConnection(RequestConnectionStatus.pending);
 
     final connection = Relationship(
       id: '',
-      requesterUser: ConnectionRequester(id: userLogged.id, name: userLogged.name, profilePictureUrl: userLogged.pictureUrl),
-      addressed: ConnectionReceiver(id: userSuggestion.idUser, name: userSuggestion.name, profilePictureUrl: userSuggestion.photo),
+      requesterUser: ConnectionRequester(
+          id: userLogged.id,
+          name: userLogged.name,
+          profilePictureUrl: userLogged.pictureUrl),
+      addressed: ConnectionReceiver(
+          id: userSuggestion.idUser,
+          name: userSuggestion.name,
+          profilePictureUrl: userSuggestion.photo),
       status: RequestConnectionStatus.pending,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
     );
 
-    try{
+    try {
       await _createConnectionUsers.execute(connection, userLogged);
     } on Failure catch (e) {
       FailureServer.showError(e);
@@ -118,9 +125,7 @@ class NetworkViewModel extends ChangeNotifier {
   Future<void> acceptConnection(Relationship connection) async {
     try {
       final userLogged = UserDatabaseProvider.getInstance.user;
-    if (userLogged == null) return;
-
-      
+      if (userLogged == null) return;
 
       await _acceptConnection.execute(connection);
     } on Failure catch (e) {
