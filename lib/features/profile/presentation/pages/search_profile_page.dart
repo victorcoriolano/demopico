@@ -3,7 +3,6 @@ import 'package:demopico/features/profile/presentation/provider/network_view_mod
 import 'package:demopico/features/profile/presentation/widgets/search_page_widgets/container_suggestion_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/utils.dart';
 import 'package:provider/provider.dart';
 
 class SearchProfilePage extends StatefulWidget {
@@ -20,8 +19,6 @@ class _SearchProfilePageState extends State<SearchProfilePage> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<NetworkViewModel>().fetchSugestions();
-      context.read<NetworkViewModel>().fetchConnectionsRequests();
-      context.read<NetworkViewModel>().fetchConnectionSent();
     });
   }
   @override
