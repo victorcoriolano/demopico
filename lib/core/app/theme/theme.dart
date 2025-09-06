@@ -5,6 +5,8 @@ const Color kRed = Color(0xFF8B0000);
 const Color kRedAccent = Color(0xFFD32F2F);
 const Color kLightRed = Color(0xFFC62828);
 const Color kError = Color(0xFFB00020);
+const Color kAccentColor = Color(0xFF28A745); 
+
 
 // ==== Neutrals ====
 const Color kBlack = Color(0xFF000000);
