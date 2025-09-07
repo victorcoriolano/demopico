@@ -1,7 +1,7 @@
-import 'package:demopico/core/common/files_manager/data_sources/remote/firebase_file_remote_datasource.dart';
-import 'package:demopico/core/common/files_manager/interfaces/datasource/i_upload_task_datasource.dart';
-import 'package:demopico/core/common/files_manager/interfaces/repository/i_upload_file_repository.dart';
-import 'package:demopico/core/common/files_manager/models/file_model.dart';
+import 'package:demopico/core/common/media_management/data_sources/remote/firebase_file_remote_datasource.dart';
+import 'package:demopico/core/common/media_management/interfaces/datasource/i_upload_task_datasource.dart';
+import 'package:demopico/core/common/media_management/interfaces/repository/i_upload_file_repository.dart';
+import 'package:demopico/core/common/media_management/models/file_model.dart';
 import 'package:flutter/material.dart';
 
 class FilesStorageRepository implements IUploadFileRepository {

@@ -1,4 +1,4 @@
-import 'package:demopico/core/common/files_manager/models/file_model.dart';
+import 'package:demopico/core/common/media_management/models/file_model.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
