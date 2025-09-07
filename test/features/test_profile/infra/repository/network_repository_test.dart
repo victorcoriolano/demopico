@@ -1,4 +1,4 @@
-import 'package:demopico/core/common/files_manager/mappers/i_mapper_dto.dart';
+import 'package:demopico/core/common/mappers/i_mapper_dto.dart';
 import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/infra/datasource/firebase_network_datasource.dart';
 import 'package:demopico/features/profile/infra/repository/network_repository.dart';

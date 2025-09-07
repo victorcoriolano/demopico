@@ -1,6 +1,6 @@
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
-import 'package:demopico/core/common/files_manager/mappers/i_mapper_dto.dart';
+import 'package:demopico/core/common/mappers/i_mapper_dto.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto_mapper.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';

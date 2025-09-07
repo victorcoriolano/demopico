@@ -1,4 +1,4 @@
-import 'package:demopico/core/common/files_manager/mappers/i_mapper_dto.dart';
+import 'package:demopico/core/common/mappers/i_mapper_dto.dart';
 import 'package:demopico/features/external/datasources/redis/dto/redis_dto.dart';
 
 class RedisDtoMapper<Model> implements IMapperDto<Model, RedisDto> {
@@ -14,7 +14,7 @@ class RedisDtoMapper<Model> implements IMapperDto<Model, RedisDto> {
 
   @override
   Model toModel(RedisDto dto) {
-    return this.fromJson(dto.data);
+    return fromJson(dto.data);
   }
 
   @override
