@@ -8,7 +8,7 @@ import 'package:demopico/features/profile/presentation/widgets/profile_data/prof
 import 'package:demopico/features/user/domain/enums/type_post.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
-import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
+import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -141,7 +141,7 @@ class _ProfilePageState extends State<ProfilePage>
     _isLoading = true;
     final providerAuth = Provider.of<AuthUserProvider>(context, listen: false);
     final providerDatabase =
-        Provider.of<UserDatabaseProvider>(context, listen: false);
+        Provider.of<UserDataViewModel>(context, listen: false);
 
     String? uid = providerAuth.currentIdUser;
 
@@ -177,7 +177,7 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final thisUser = context.read<UserDatabaseProvider>().user;
+    final thisUser = context.read<UserDataViewModel>().user;
     if (_isLoading) {
       return Center(
         child: CircularProgressIndicator(),

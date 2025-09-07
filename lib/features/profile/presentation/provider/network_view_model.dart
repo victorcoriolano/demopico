@@ -7,7 +7,7 @@ import 'package:demopico/features/profile/domain/usecases/get_connections_reques
 import 'package:demopico/features/profile/domain/usecases/get_connections_sent.dart';
 import 'package:demopico/features/profile/presentation/view_objects/suggestion_profile.dart';
 import 'package:demopico/features/user/domain/usecases/get_sugestions_user_uc.dart';
-import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
+import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
 import 'package:flutter/material.dart';
 
 class NetworkViewModel extends ChangeNotifier {
@@ -53,7 +53,7 @@ class NetworkViewModel extends ChangeNotifier {
   List<ConnectionReceiver> get connectionSent => _connectionSent;
 
   Future<void> fetchConnectionsRequests() async {
-    final user = UserDatabaseProvider.getInstance.user;
+    final user = UserDataViewModel.getInstance.user;
     if (user == null) return;
 
     try {
@@ -66,7 +66,7 @@ class NetworkViewModel extends ChangeNotifier {
   }
 
   Future<void> fetchConnectionSent() async {
-    final user = UserDatabaseProvider.getInstance.user;
+    final user = UserDataViewModel.getInstance.user;
     if (user == null) return;
 
     try {
@@ -79,7 +79,7 @@ class NetworkViewModel extends ChangeNotifier {
   }
 
   Future<void> fetchSugestions() async {
-    final user = UserDatabaseProvider.getInstance.user;
+    final user = UserDataViewModel.getInstance.user;
     if (user == null) return;
 
     try {
@@ -92,7 +92,7 @@ class NetworkViewModel extends ChangeNotifier {
   }
 
   Future<void> requestConnection(SuggestionProfile userSuggestion) async {
-    final userLogged = UserDatabaseProvider.getInstance.user;
+    final userLogged = UserDataViewModel.getInstance.user;
     if (userLogged == null) return;
 
     _suggestions
@@ -124,7 +124,7 @@ class NetworkViewModel extends ChangeNotifier {
 
   Future<void> acceptConnection(Relationship connection) async {
     try {
-      final userLogged = UserDatabaseProvider.getInstance.user;
+      final userLogged = UserDataViewModel.getInstance.user;
       if (userLogged == null) return;
 
       await _acceptConnection.execute(connection);
@@ -136,7 +136,7 @@ class NetworkViewModel extends ChangeNotifier {
 
   Future<void> cancelRelationship(Relationship connection) async {
     try {
-      final userLogged = UserDatabaseProvider.getInstance.user;
+      final userLogged = UserDataViewModel.getInstance.user;
       if (userLogged == null) return;
 
       await _cancelRelationship.execute(connection);
