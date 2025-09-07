@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
-import 'package:demopico/core/common/util/file_manager/delete_file_uc.dart';
+import 'package:demopico/core/common/files_manager/usecases/delete_file_uc.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/enums/classification_spot.dart';
 import 'package:demopico/features/mapa/domain/usecases/avaliar_spot_uc.dart';
