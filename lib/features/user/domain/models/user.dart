@@ -1,6 +1,6 @@
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';
-import 'package:demopico/features/user/domain/entity/user_credentials.dart';
+import 'package:demopico/core/common/domain/entities/user_credentials.dart';
 import 'package:demopico/features/user/domain/enums/sign_methods.dart';
 
 
@@ -212,10 +212,3 @@ class UserM {
       required this.idMySpots});
 
 }
-
-
-sealed class UnionTypeUser {}
-
-class UserModel extends UnionTypeUser {}
-
-class ColetivoModel extends UnionTypeUser {}

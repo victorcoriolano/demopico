@@ -2,7 +2,7 @@ import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/user/domain/aplication/validate_credentials.dart';
-import 'package:demopico/features/user/domain/entity/user_credentials.dart';
+import 'package:demopico/core/common/domain/entities/user_credentials.dart';
 import 'package:demopico/features/user/domain/enums/identifiers.dart';
 import 'package:demopico/features/user/domain/usecases/criar_conta_uc.dart';
 import 'package:demopico/features/user/domain/usecases/login_uc.dart';

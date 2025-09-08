@@ -3,7 +3,7 @@
 import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/user/domain/aplication/validate_credentials.dart';
-import 'package:demopico/features/user/domain/entity/user_credentials.dart';
+import 'package:demopico/core/common/domain/entities/user_credentials.dart';
 import 'package:demopico/features/user/infra/repositories/user_data_repository_impl.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';

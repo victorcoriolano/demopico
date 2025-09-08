@@ -1,7 +1,8 @@
-import 'package:demopico/core/common/errors/domain_failures.dart';
+/* import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/domain/usecases/update_data_user_uc.dart';
+import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
 import 'package:flutter/foundation.dart';
 
 class InfoProfileProvider extends ChangeNotifier {
@@ -14,34 +15,40 @@ class InfoProfileProvider extends ChangeNotifier {
   }
 
   final UpdateDataUserUc _updateDataUserUc;
-  UserM? _currentUser;
+  final UserDataViewModel _userDataViewModel;
 
   InfoProfileProvider(
-      {required UpdateDataUserUc updateDataUserUc, UserM? currentUser})
+      {required UpdateDataUserUc updateDataUserUc, required UserDataViewModel userDataViewModel})
       : _updateDataUserUc = updateDataUserUc,
-        _currentUser = currentUser;
+        _userDataViewModel = UserDataViewModel.getInstance;
+        
+
+  
 
   Future<void> updateName(String name) async {
+    final UserM? currentUser = _userDataViewModel.user;
     try {
-      if (_currentUser == null) {
+      if (currentUser == null) {
         throw UnauthenticatedFailure();
       }
-      _currentUser = _currentUser!.copyWith(name: name);
-      await _updateDataUserUc.call(_currentUser!);
+      _userDataViewModel.setUser = currentUser.copyWith(name: name);
+      await _updateDataUserUc.call(_userDataViewModel.user!);
     } on Failure catch (e) {
       FailureServer.showError(e);
     }
   }
 
   Future<void> updateBio(String bio) async {
+    final UserM? currentUser = _userDataViewModel.user;
     try {
-      if (_currentUser == null) {
+      if (currentUser == null) {
         throw UnauthenticatedFailure();
       }
-      _currentUser = _currentUser!.copyWith(description: bio);
-      await _updateDataUserUc.call(_currentUser!);
+      await _updateDataUserUc.call(currentUser!);
+      _userDataViewModel.setUser = currentUser.copyWith(description: bio);
     } on Failure catch (e) {
       FailureServer.showError(e);
     }
   }
 }
+ */
