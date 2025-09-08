@@ -3,8 +3,12 @@ import 'package:demopico/core/common/auth/domain/entities/profile_user.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/dob_vo.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/email_vo.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/location_vo.dart';
+import 'package:demopico/core/common/auth/domain/value_objects/user_rule_vo.dart';
 
-sealed class TypeUser {}
+sealed class TypeUser {
+  const TypeUser({required this.rule});
+  final UserRuleVO rule;
+}
 
 class UserEntity extends TypeUser {
   final String id;
@@ -14,8 +18,10 @@ class UserEntity extends TypeUser {
   final LocationVo location;
   final Profile profileUser;
 
+
   UserEntity({
-      required this.displayName,
+    required super.rule,
+    required this.displayName,
     required this.id,
     required this.email,
     required this.dob,
@@ -33,6 +39,7 @@ class UserEntity extends TypeUser {
   }) {
     return UserEntity(
       id: id ?? this.id,
+      rule: rule, // rule is final and should not change
       email: email ?? this.email,
       dob: dob ?? this.dob,
       location: location ?? this.location,
@@ -44,9 +51,13 @@ class UserEntity extends TypeUser {
 }
 
 class ColetivoEntity extends TypeUser {
-  //TODO
+  const ColetivoEntity({required super.rule});
 }
 
-class AnonymousUserEntity extends TypeUser {}
+class AnonymousUserEntity extends TypeUser {
+  const AnonymousUserEntity() : super(rule: UserRuleVO.anonymous);
+}
 
-class AdminUserEntity extends TypeUser {}
+class AdminUserEntity extends TypeUser {
+  const AdminUserEntity() : super(rule: UserRuleVO.admin);
+}
