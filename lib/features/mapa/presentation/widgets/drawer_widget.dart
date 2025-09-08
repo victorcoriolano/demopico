@@ -20,75 +20,77 @@ class _MyDrawerState extends State<MyDrawer> {
   Widget build(BuildContext context) {
     final user = context.read<UserDataViewModel>().user;
 
-    return Drawer(
-      child: Container(
-        padding: const EdgeInsets.all(16.0),
-        color: Colors.white,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            MenuItem(
-              icon: Icons.spoke, 
-              text: " MEUS PICOS", 
-              onPressed: () {
-                if (user == null){
-                  Get.snackbar("Erro", "Usuário não logado faça login para acessar seus picos", colorText: kWhite);
-                  Get.toNamed(Paths.login);
-                  return;
-                }
+    return SafeArea(
+      child: Drawer(
+        child: Container(
+          padding: const EdgeInsets.all(16.0),
+          color: Colors.white,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              MenuItem(
+                icon: Icons.spoke, 
+                text: " MEUS PICOS", 
+                onPressed: () {
+                  if (user == null){
+                    Get.snackbar("Erro", "Usuário não logado faça login para acessar seus picos", colorText: kWhite);
+                    Get.toNamed(Paths.login);
+                    return;
+                  }
+                  
+                  else {
+                    // FIXME: PASSANDO O NOME AO INVÉS DE PASSAR O ID Pq nossa infra n tem o id
+                    Get.toNamed(Paths.mySpots, arguments: user.name);
+                  }
+                },),
+              MenuItem(
+                    icon: Icons.bookmark, 
+                    text: 'PICOS SALVOS', 
+                    onPressed: () {
+                      if(user == null){
+                        Get.snackbar("Usuário não logado", "Faça login para acessar seus picos salvos",
+                        showProgressIndicator: true, 
+                        onTap: (snackbar) {
+                          Get.toNamed(Paths.login);
+                        });
+                        return;
+                      }
+                      final userId = user.id; 
+                      Get.toNamed(Paths.favoriteSpot, arguments: userId);
+                    },
+                  ),
                 
-                else {
-                  // FIXME: PASSANDO O NOME AO INVÉS DE PASSAR O ID Pq nossa infra n tem o id
-                  Get.toNamed(Paths.mySpots, arguments: user.name);
-                }
-              },),
-            MenuItem(
-                  icon: Icons.bookmark, 
-                  text: 'PICOS SALVOS', 
-                  onPressed: () {
-                    if(user == null){
-                      Get.snackbar("Usuário não logado", "Faça login para acessar seus picos salvos",
-                      showProgressIndicator: true, 
-                      onTap: (snackbar) {
-                        Get.toNamed(Paths.login);
-                      });
-                      return;
-                    }
-                    final userId = user.id; 
-                    Get.toNamed(Paths.favoriteSpot, arguments: userId);
-                  },
-                ),
-              
-            Divider(),
-            // Botão Configurar Mapa
-            MenuItem(
-              icon: Icons.map, 
-              text: 'CONFIGURAR MAPA', 
-              onPressed: () {
-                Get.back();
-                ModalHelper.abrirModalConfgMap(context);
-              },
-            ),            
-                
-            // Botão Histórico
-            MenuItem(
-              icon: Icons.history, // Ícone para Histórico
-              text: 'HISTÓRICO', // Texto do botão
-              onPressed: () {
-                Get.toNamed(Paths.historySpot);
-              },
-            ),
-
-            // Botão Home
-            MenuItem(
-              icon: Icons.home, // Ícone para Home
-              text: 'HOME', // Texto do botão
-              onPressed: () {
-                // Navega de volta para a tela inicial
-                Get.offAndToNamed(Paths.home);
-              },
-            ),
-          ],
+              Divider(),
+              // Botão Configurar Mapa
+              MenuItem(
+                icon: Icons.map, 
+                text: 'CONFIGURAR MAPA', 
+                onPressed: () {
+                  Get.back();
+                  ModalHelper.abrirModalConfgMap(context);
+                },
+              ),            
+                  
+              // Botão Histórico
+              MenuItem(
+                icon: Icons.history, // Ícone para Histórico
+                text: 'HISTÓRICO', // Texto do botão
+                onPressed: () {
+                  Get.toNamed(Paths.historySpot);
+                },
+              ),
+      
+              // Botão Home
+              MenuItem(
+                icon: Icons.home, // Ícone para Home
+                text: 'HOME', // Texto do botão
+                onPressed: () {
+                  // Navega de volta para a tela inicial
+                  Get.offAndToNamed(Paths.home);
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
