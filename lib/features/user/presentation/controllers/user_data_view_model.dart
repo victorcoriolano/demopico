@@ -22,7 +22,6 @@ class UserDataViewModel extends ChangeNotifier {
   final PegarDadosUserUc pegarDadosUserUc;
   final UpdateDataUserUc _updateDataUserUc;
 
-  String? errorMessage;
   UserM? _currentUser;
   UserM? get user => _currentUser;
 
@@ -35,9 +34,8 @@ class UserDataViewModel extends ChangeNotifier {
       }
       debugPrint("pegando dados do usuario");
       _currentUser = await pegarDadosUserUc.getDados(uid);
-    } catch (e) {
-      debugPrint("erro ao pegar dados do usuario: $e");
-      errorMessage = e.toString();
+    } on Failure catch (e) {
+      FailureServer.showError(e);
     }
     notifyListeners();
   }
@@ -45,6 +43,4 @@ class UserDataViewModel extends ChangeNotifier {
   set setUser(UserM? authUser) {
     _currentUser = authUser;
   }
-
-  
 }
