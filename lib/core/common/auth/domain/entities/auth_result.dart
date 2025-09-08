@@ -1,5 +1,5 @@
-import 'package:demopico/core/common/domain/entities/auth_tokens.dart';
-import 'package:demopico/core/common/domain/entities/user_entity.dart';
+import 'package:demopico/core/common/auth/domain/entities/auth_tokens.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/errors/domain_failures.dart';
 
 class AuthResult {

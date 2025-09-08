@@ -1,5 +1,5 @@
-import 'package:demopico/core/common/domain/value_objects/email_vo.dart';
-import 'package:demopico/core/common/domain/value_objects/password_vo.dart';
+import 'package:demopico/core/common/auth/domain/value_objects/email_vo.dart';
+import 'package:demopico/core/common/auth/domain/value_objects/password_vo.dart';
 
 abstract class AuthCredentials {}
 

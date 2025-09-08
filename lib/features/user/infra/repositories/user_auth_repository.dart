@@ -1,4 +1,4 @@
-import 'package:demopico/core/common/domain/entities/user_credentials.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_credentials.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_auth_repository.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_auth_service.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_database_repository.dart';

@@ -1,4 +1,4 @@
-import 'package:demopico/core/common/domain/entities/user_credentials.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_credentials.dart';
 import 'package:demopico/features/user/domain/enums/identifiers.dart';
 
 final UserCredentialsSignIn userCredentialsSignInEmail = UserCredentialsSignIn(
