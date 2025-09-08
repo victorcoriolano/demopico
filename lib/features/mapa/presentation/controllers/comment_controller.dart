@@ -24,16 +24,12 @@ class CommentController extends ChangeNotifier {
   CommentController({required this.useCase});
 
 
-  // Função para carregar comentários de um servidor ou banco de dados
   Future<void> loadComments(String picoId) async {
     _isLoading = true;
     _error = null;
     notifyListeners();
-
     try {
-
       _comments = await useCase.execulte(picoId);
-
     } catch (e) {
       _error = 'Erro ao carregar os comentários';
     } finally {
@@ -42,12 +38,11 @@ class CommentController extends ChangeNotifier {
     }
   }
 
-  // Função para adicionar um novo comentário
-  Future<void> addComment(String picoId, String content) async {
+  Future<void> addComment(String picoId, String content, String idUser) async {
     final newComment = CommentModel(
       id: picoId,
       peakId: picoId,
-      userId: 'user123', // Pegar o ID do usuário logado
+      userId: idUser,
       content: content,
       timestamp: DateTime.now(),
     );

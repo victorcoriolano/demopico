@@ -1,5 +1,6 @@
 // Classe base para representar falhas
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 abstract class Failure implements Exception {
   final String message;
@@ -7,7 +8,8 @@ abstract class Failure implements Exception {
   final StackTrace? stackTrace;
   final Exception? originalException;
 
-  Failure(this.message,{
+  Failure({
+    required this.message,
     this.code,
     this.originalException,
     this.stackTrace,
@@ -35,6 +37,16 @@ class SnackBarFailure extends SnackBar {
       duration: const Duration(seconds: 5),
       shape: const RoundedRectangleBorder(),
       elevation: 5,
+    );
+  }
+}
+
+class FailureServer {
+  static void showError(Failure failure, [String title = "Error"]) {
+    Get.snackbar(
+      title,
+      failure.message,
+      snackPosition: SnackPosition.BOTTOM,
     );
   }
 }

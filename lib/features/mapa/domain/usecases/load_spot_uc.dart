@@ -17,6 +17,6 @@ class LoadSpotUc {
   LoadSpotUc({required this.spotRepositoryIMP});
 
   Stream<List<Pico>> loadSpots([Filters? filtros]) {
-    return spotRepositoryIMP.loadSpots(filtros);
+    return spotRepositoryIMP.watchListSpots(filtros);
   }
 }

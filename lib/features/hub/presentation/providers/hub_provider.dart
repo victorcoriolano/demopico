@@ -1,81 +1,66 @@
-import 'package:demopico/core/app/auth_wrapper.dart';
+import 'dart:async';
+
+import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:demopico/features/hub/domain/usecases/listar_comunicados_uc.dart';
 import 'package:demopico/features/hub/domain/usecases/postar_comunicado_uc.dart';
-import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuthException;
+import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' show Colors;
-import 'package:get/get.dart' show ExtensionSnackbar, Get, GetNavigation;
+import 'package:get/get.dart' show ExtensionSnackbar, Get;
 
 class HubProvider extends ChangeNotifier {
-
   static HubProvider? _hubProvider;
 
-  static HubProvider get getInstance{
-    _hubProvider ??= HubProvider(postarComunicado: PostarComunicado.getInstance, listarComunicado: ListarComunicado.getInstance);
+  static HubProvider get getInstance {
+    _hubProvider ??= HubProvider(
+        postarComunicado: PostarComunicado.getInstance,
+        listarComunicado: ListarComunicado.getInstance);
     return _hubProvider!;
   }
 
   PostarComunicado postarComunicado;
   ListarComunicado listarComunicado;
   HubProvider({required this.postarComunicado, required this.listarComunicado});
-  
+
   List<Communique> _allCommuniques = [];
 
   List<Communique> get allCommuniques => _allCommuniques;
 
-  Future<void> postHubCommunique(String text, String type) async {
+  StreamSubscription? _watcher;
+
+  Future<void> postHubCommunique(String text, TypeCommunique type, UserM user) async {
     try {
-      final newCommunique = await postarComunicado.postar(text, type);
-      _allCommuniques.add(newCommunique);
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-      if (e is FormatException) {
-        Get.snackbar(
-          'Erro',
-          e.message,
-          backgroundColor: Colors.red,
-          colorText: Colors.black,
-        );
-      } else if (e is FirebaseAuthException) {
-        Get.snackbar(
-          'Erro',
-          e.message ?? 'Erro desconhecido',
-          backgroundColor: Colors.red,
-          colorText: Colors.black,
-        );
-        Future.delayed(const Duration(seconds: 2), () {
-          Get.to(const AuthWrapper());
-        });
-      }
+      await postarComunicado.postar(Communique.initial(text, type, user));
+    } on Failure catch (e) {
       Get.snackbar(
         'Erro',
-        'Não foi possível postar o comunicado',
+        'Não foi possível postar o comunicado: ${e.message}',
         backgroundColor: Colors.red,
         colorText: Colors.black,
       );
     }
   }
 
-  Future<void> getAllCommuniques() async {
-    //TODO : IMPLEMENTAR STREAMS COM LÓGICA DE CACHE
-    try {
-      if (_allCommuniques.isNotEmpty) return; 
-      final allCommuniquesFromDb = await listarComunicado.listar();
-      _allCommuniques = allCommuniquesFromDb.nonNulls.toList();
-      notifyListeners();
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-      Get.snackbar(
-        'Erro',
-        'Não foi possível listar os comunicados',
-        backgroundColor: Colors.red,
-        colorText: Colors.black,
-      );
-    }
+  void watchCommuniques() async {
+      _watcher = listarComunicado.listar().listen((allCommuniquesFromDb) {
+        _allCommuniques = allCommuniquesFromDb.toList();
+        notifyListeners();
+      }, onError: (error) {
+        debugPrint(error.toString());
+        Get.snackbar(
+          'Erro',
+          'Não foi possível listar os comunicados',
+          backgroundColor: Colors.red,
+          colorText: Colors.black,
+        );
+      });
+      notifyListeners(); 
+  }
+
+  @override
+  void dispose() {
+    _watcher?.cancel();
+    super.dispose();
   }
 }

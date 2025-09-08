@@ -1,11 +1,11 @@
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
-import 'package:demopico/core/common/files_manager/models/file_model.dart';
-import 'package:demopico/core/common/util/file_manager/pick_files_uc.dart';
-import 'package:demopico/core/common/errors/domain_failures.dart';
+import 'package:demopico/core/common/media_management/models/file_model.dart';
+import 'package:demopico/core/common/media_management/usecases/pick_files_uc.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
-import 'package:demopico/core/common/files_manager/services/upload_service.dart';
-import 'package:demopico/core/common/util/file_manager/pick_video_uc.dart';
+import 'package:demopico/core/common/media_management/services/upload_service.dart';
+import 'package:demopico/core/common/media_management/usecases/pick_video_uc.dart';
+import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';
 import 'package:demopico/features/profile/domain/usecases/create_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/delete_post_uc.dart';
@@ -46,7 +46,7 @@ class PostProvider extends ChangeNotifier {
   FileModel? _rec;
 
   String _description = '';
-  String? _selectedSpotId;
+  Pico? _selectedSpotId;
   final List<String> _imgUrls = [];
   final List<String> _videoUrls = [];
   double progress = 0.0;
@@ -57,7 +57,7 @@ class PostProvider extends ChangeNotifier {
   FileModel? get rec => _rec;
   List<FileModel> get filesModels => _pickFileUC.listFiles;
   String get description => _description;
-  String? get selectedSpotId => _selectedSpotId;
+  Pico? get selectedSpotId => _selectedSpotId;
   bool get isLoading => _isLoading;
   List<Post> get post => _posts;
   List<Post> get fullVideos => _fullVideoPosts;
@@ -72,7 +72,7 @@ class PostProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void selectSpot(String? spotId) {
+  void selectSpot(Pico? spotId) {
     _selectedSpotId = spotId;
     notifyListeners();
   }
@@ -185,10 +185,6 @@ class PostProvider extends ChangeNotifier {
     try {
       _isLoading = true;
       notifyListeners();
-      if (user.id == null || user.pictureUrl == null || user.name == null) {
-        getError(InvalidUserFailure());
-        _isLoading = false;        
-      }
 
       mapearFiles(type);
 
@@ -207,9 +203,9 @@ class PostProvider extends ChangeNotifier {
       final newPost = Post(
           id: "",
           typePost: type,
-          nome: user.name!,
-          userId: user.id!,
-          spotID: _selectedSpotId ?? '',
+          nome: user.name,
+          userId: user.id,
+          spotID: _selectedSpotId?.id ?? '',
           urlUserPhoto: user.pictureUrl!,
           urlVideos: _videoUrls.isEmpty ? null : _videoUrls,
           description: description,

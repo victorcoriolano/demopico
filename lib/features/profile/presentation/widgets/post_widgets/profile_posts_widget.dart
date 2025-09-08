@@ -1,11 +1,12 @@
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/container_posts_widget.dart';
+import 'package:demopico/features/profile/presentation/widgets/post_widgets/container_spots.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/container_videos_widget.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePostsWidget extends StatelessWidget {
   final TabController? controller;
-  const ProfilePostsWidget({super.key,required this.controller});
+  const ProfilePostsWidget({super.key,required this.controller, });
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,7 @@ class ProfilePostsWidget extends StatelessWidget {
               children: <Widget>[
                 ContainerPostsWidget(),
                 ContainerVideosWidget(),
-                Center(child: Text("It's sunny here")),
+                ContainerSpots(),
               ],
             ),
           ),

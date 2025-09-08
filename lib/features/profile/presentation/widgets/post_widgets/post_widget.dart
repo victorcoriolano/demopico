@@ -3,7 +3,7 @@ import 'package:demopico/features/profile/domain/models/post.dart';
 import 'package:demopico/features/profile/presentation/provider/post_provider.dart';
 import 'package:demopico/features/profile/presentation/view_objects/media_url_item.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/video_player_from_network.dart';
-import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
+import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -32,7 +32,7 @@ class _PostWidgetState extends State<PostWidget> {
     curtidas = widget.post.curtidas;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       isMypost =
-          context.read<UserDatabaseProvider>().user!.isMy(widget.post.userId);
+          context.read<UserDataViewModel>().user!.isMy(widget.post.userId);
       _provider = Provider.of(context, listen: false);
       urlsItems.addAll(_provider.getMediaItemsFor(widget.post));
       setState(() {});
@@ -145,7 +145,7 @@ class _PostWidgetState extends State<PostWidget> {
                                 shape: BoxShape.circle,
                                 color: isActive
                                     ? Colors.black87
-                                    : Colors.grey.withOpacity(0.5),
+                                    : Colors.grey.withValues(alpha: 0.5),
                               ),
                             );
                           }),
@@ -162,7 +162,7 @@ class _PostWidgetState extends State<PostWidget> {
                       child: Row(                  
                         children: [
                           Icon(Icons.location_pin),
-                          Text(provider.selectedSpotId ?? "Localização não especificada"),
+                          Text(provider.selectedSpotId?.picoName ?? "Localização não especificada"),
                         ],
                       ),
                     ),
@@ -173,7 +173,6 @@ class _PostWidgetState extends State<PostWidget> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                
                         Row(
                           children: [
                             GestureDetector(

@@ -1,13 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/features/profile/presentation/provider/network_view_model.dart';
+import 'package:demopico/features/profile/presentation/view_objects/suggestion_profile.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SuggestionProfilesWidget extends StatefulWidget {
-  final String name;
-  final String imageUrl;
+  final SuggestionProfile suggestionProfile;
 
   const SuggestionProfilesWidget({
     super.key,
-    required this.name,
-    required this.imageUrl,
+    required this.suggestionProfile,
   });
 
   @override
@@ -15,20 +18,14 @@ class SuggestionProfilesWidget extends StatefulWidget {
 }
 
 class _SuggestionProfilestState extends State<SuggestionProfilesWidget> {
-  bool isFollowing = false;
-
-  void toggleFollow() {
-    setState(() {
-      isFollowing = !isFollowing;
-    });
-  }
+  
 
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-      margin: const EdgeInsets.symmetric(vertical:4, horizontal: 4),
+      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
       width: screenWidth * 0.9,
       height: 80,
       decoration: BoxDecoration(
@@ -36,7 +33,7 @@ class _SuggestionProfilestState extends State<SuggestionProfilesWidget> {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
+            color: Colors.grey.withValues(alpha: 0.3),
             spreadRadius: 1,
             blurRadius: 5,
             offset: const Offset(0, 3), // changes position of shadow
@@ -50,32 +47,39 @@ class _SuggestionProfilestState extends State<SuggestionProfilesWidget> {
             alignment: Alignment.center,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,              
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CircleAvatar(
-                  backgroundImage: NetworkImage(widget.imageUrl),
+                  backgroundImage: widget.suggestionProfile.photo != null
+                      ? CachedNetworkImageProvider(widget.suggestionProfile.photo!, errorListener: (error) => const Icon(Icons.error))
+                      : null,
                   radius: 20,
                 ),
-                   SizedBox(
-                    height: 8,
-                   ),
-               Text(widget.name, style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-               ),),
+                SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  widget.suggestionProfile.name,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
               ],
             ),
           ),
           const SizedBox(height: 8),
-          Container(
-            child: ElevatedButton(
-              onPressed: toggleFollow,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: isFollowing ? Colors.grey : Colors.blue,
-              ),
-              child: Text(isFollowing ? 'Seguindo' : 'Seguir'),
+          ElevatedButton(
+            onPressed: () {
+              context.read<NetworkViewModel>().requestConnection(widget.suggestionProfile);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: widget.suggestionProfile.status.statusForSuggestions == 'Conectar'
+                  ? kRed
+                  : kMediumGrey,
             ),
+            child: Text(widget.suggestionProfile.status.statusForSuggestions),
           ),
         ],
       ),

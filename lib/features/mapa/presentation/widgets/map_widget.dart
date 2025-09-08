@@ -1,9 +1,10 @@
 import 'dart:async';
 
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
-import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
+import 'package:demopico/features/mapa/presentation/controllers/spots_controller.dart';
 import 'package:demopico/features/mapa/presentation/view_services/modal_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -17,41 +18,44 @@ class MapWidget extends StatefulWidget {
 }
 
 class MapWidgetState extends State<MapWidget> {
-  late SpotControllerProvider _spotControllerProvider;
+  late SpotsControllerProvider _spotControllerProvider;
   late MapControllerProvider _mapControllerProvider;
 
   @override
   void initState() {
     super.initState();
-    _spotControllerProvider = context.read<SpotControllerProvider>();
+    _spotControllerProvider = context.read<SpotsControllerProvider>();
     _mapControllerProvider = context.read<MapControllerProvider>();
-    _initializeProviders();
+    WidgetsBinding.instance.addPostFrameCallback((_) { 
+      _initializeProviders();  
+    });
   }
 
   Future<void> _initializeProviders() async {
     await _mapControllerProvider.getLocation();
     _spotControllerProvider.setOnTapMarker(
-      (pico) => ModalHelper.openModalInfoPico(context, pico, _spotControllerProvider.deletarPico),
+      (pico) => ModalHelper.openModalInfoPico(context, pico),
     );
     _spotControllerProvider.initialize();
   }
 
   @override
   Widget build(BuildContext context) {
+    final LatLng? location = Get.arguments as LatLng?;
     
     // consome os dados do provider para manter a tela atualizada
     return Scaffold(
-      body: Consumer<SpotControllerProvider>(
-        builder: (context, provider, child) => GoogleMap(
+      body: Consumer2<SpotsControllerProvider, MapControllerProvider>(
+        builder: (context, provider, mapProvider, child) => GoogleMap(
           onMapCreated: (GoogleMapController controller) {
             _mapControllerProvider.setGoogleMapController(controller);
           },
           zoomControlsEnabled: false,
           initialCameraPosition: CameraPosition(
-            target: _mapControllerProvider.center,
-            zoom: _mapControllerProvider.zoomInicial,
+            target: location ?? mapProvider.center,
+            zoom: mapProvider.zoomInicial,
           ),
-          mapType: context.watch<MapControllerProvider>().myMapType,
+          mapType: mapProvider.myMapType,
           scrollGesturesEnabled: true,
           rotateGesturesEnabled: true,
           myLocationEnabled: true,

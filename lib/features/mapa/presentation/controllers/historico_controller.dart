@@ -1,7 +1,7 @@
 import 'package:demopico/features/mapa/domain/usecases/save_history_spot_uc.dart';
 import 'package:flutter/material.dart';
 
-class HistoricoController extends ChangeNotifier {
+class HistoricoController with ChangeNotifier {
   static HistoricoController? _historicoController;
   static HistoricoController get getInstance {
     _historicoController ??= HistoricoController(useCase: SaveHistoryUc.getInstance);
@@ -45,11 +45,9 @@ class HistoricoController extends ChangeNotifier {
 
     await useCase.execultaLimpar();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
       _historico.clear();
       _isLoading = false;
       notifyListeners();
-    });
   }
 
   Future<void> apagarItem(String nomeItem) async {
@@ -58,11 +56,9 @@ class HistoricoController extends ChangeNotifier {
 
     final sucesso = await useCase.execultaApagar(nomeItem);
     if (sucesso) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
         _historico.removeWhere((item) => item['nome'] == nomeItem);
         _isLoading = false;
         notifyListeners();
-      });
     } else {
       _isLoading = false;
       notifyListeners();

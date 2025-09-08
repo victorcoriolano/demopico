@@ -7,12 +7,11 @@ class DenunciarServiceFirebase {
   DenunciarServiceFirebase({FirebaseFirestore? firestore})
       : _firestore = firestore ?? FirebaseFirestore.instance;
 
-  /// Salva uma denúncia no Firestore
   Future<void> salvarDenuncia(DenunciaModel denuncia) async {
     try {
       await _firestore.collection('denuncias').add(denuncia.toMap());
     } catch (e) {
-      rethrow; // Repassa o erro para quem chamou, caso queira tratar
+      rethrow; 
     }
   }
 }

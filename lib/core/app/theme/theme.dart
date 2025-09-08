@@ -5,11 +5,14 @@ const Color kRed = Color(0xFF8B0000);
 const Color kRedAccent = Color(0xFFD32F2F);
 const Color kLightRed = Color(0xFFC62828);
 const Color kError = Color(0xFFB00020);
+const Color kAccentColor = Color(0xFF28A745); 
+
 
 // ==== Neutrals ====
 const Color kBlack = Color(0xFF000000);
 const Color kDarkGrey = Color(0xFF1F1D1D);
 const Color kMediumGrey = Color.fromARGB(255, 169, 168, 168);
+const Color kGrey100 = Color(0xFFF5F5F5);
 const Color kLightGrey = Color.fromARGB(255, 206, 205, 205);
 const Color kAlmostWhite = Color.fromARGB(255, 236, 236, 236);
 const Color kWhite = Colors.white;
@@ -87,14 +90,14 @@ final ThemeData appTheme = ThemeData(
     color: kRed,
   ),
 
-  cardTheme: CardTheme(
+  cardTheme: CardThemeData(
     color: kLightGrey,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(12),
     ),
   ),
 
-  dialogTheme: const DialogTheme(
+  dialogTheme: const DialogThemeData(
     backgroundColor: kDialogBackground,
     titleTextStyle: TextStyle(
       fontSize: 20,

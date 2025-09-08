@@ -1,5 +1,5 @@
 import 'package:demopico/features/user/domain/interfaces/i_user_auth_service.dart';
-import 'package:demopico/features/user/infra/services/user_auth_firebase_service.dart';
+import 'package:demopico/features/user/infra/datasource/remote/firebase_auth_service.dart';
 
 
 class PegarIdUsuario {
@@ -7,7 +7,7 @@ class PegarIdUsuario {
   static PegarIdUsuario? _pegarIdUsuario;
 
   static PegarIdUsuario get getInstance{
-    _pegarIdUsuario ??= PegarIdUsuario(userAuthServiceIMP: UserAuthFirebaseService.getInstance);
+    _pegarIdUsuario ??= PegarIdUsuario(userAuthServiceIMP: FirebaseAuthService.getInstance);
     return _pegarIdUsuario!; 
   }
 
@@ -16,8 +16,6 @@ class PegarIdUsuario {
   final IUserAuthService userAuthServiceIMP;
 
 
-  String pegar(){
-    return userAuthServiceIMP.currentUser();
-  }
+  String? pegar() => userAuthServiceIMP.currentIdUser;
 
 }

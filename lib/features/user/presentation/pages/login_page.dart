@@ -1,6 +1,5 @@
-import 'package:demopico/core/app/auth_wrapper.dart';
-import 'package:demopico/core/app/home_page.dart';
-import 'package:demopico/features/user/presentation/widgets/login_form_pc.dart';
+import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/features/user/presentation/widgets/login_form.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,7 +17,7 @@ class LoginPage extends StatelessWidget {
                 image: const AssetImage('assets/images/containerLogin.jpg'),
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.2), // Ajuste a opacidade aqui
+                  kBlack.withValues(alpha: 0.2), // Ajuste a opacidade aqui
                   BlendMode.darken,
                 ),
               ),
@@ -37,10 +36,7 @@ class LoginPage extends StatelessWidget {
                 size: 50,
               ),
               onPressed: () {
-                Get.off(() => const AuthWrapper());
-                Get.to(() => const HomePage(),
-                    transition: Transition
-                        .leftToRightWithFade); // Navega para a tela anterior
+                Get.back();
               },
             ),
           ),

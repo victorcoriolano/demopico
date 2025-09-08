@@ -1,4 +1,4 @@
-import 'package:demopico/core/common/files_manager/dtos/firebase_dto.dart';
+import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 
 abstract class IPostDatasource {
   Future<FirebaseDTO> createPost(FirebaseDTO firebaseDTO);

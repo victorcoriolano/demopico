@@ -9,6 +9,7 @@ class TerceiraTela extends StatelessWidget {
   Widget build(BuildContext context) {
     // Obtém a altura da tela
     final screenHeight = MediaQuery.of(context).size.height;
+    // TODO: COLOCAR NO DOMÍNIO esta lista
     final List<String> listaObstaculos = [
       "45° graus",
       "Barreira newjersey",

@@ -1,6 +1,6 @@
-import 'package:demopico/core/common/files_manager/dtos/firebase_dto.dart';
-import 'package:demopico/core/common/files_manager/enums/collections.dart';
-import 'package:demopico/features/external/datasources/firebase/remote/crud_firebase.dart';
+import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
+import 'package:demopico/core/common/collections/collections.dart';
+import 'package:demopico/features/external/datasources/firebase/crud_firebase.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_post_datasource.dart';
 
 class FirebasePostDatasource implements IPostDatasource {
@@ -36,7 +36,7 @@ class FirebasePostDatasource implements IPostDatasource {
 
   @override
   Future<List<FirebaseDTO>> getPosts(String id) async {
-    final query = await crudFirebase.firestore
+    final query = await crudFirebase.dataSource
       .collection(crudFirebase.collection.name)
       .where("userId", isEqualTo: id)
       .get();

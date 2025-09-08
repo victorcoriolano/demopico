@@ -1,10 +1,10 @@
-import 'package:demopico/core/app/home_page.dart';
-import 'package:demopico/core/app/providers/providers.dart';
-import 'package:demopico/core/app/theme/theme.dart';
-import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
-import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
-import 'package:demopico/features/profile/presentation/pages/user_controller_page.dart';
 
+import 'package:demopico/core/app/providers/providers.dart';
+import 'package:demopico/core/app/routes/app_pages.dart';
+import 'package:demopico/core/app/routes/app_routes.dart';
+import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/features/profile/presentation/bidings/auth_biding.dart';
+import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';  
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -12,23 +12,20 @@ import 'package:provider/provider.dart';
 class MyAppWidget extends StatelessWidget {
   const MyAppWidget({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    Get.put<AuthBiding>(AuthBiding());
+    Get.put<UserDataViewModel>(UserDataViewModel.getInstance);
+    
     return MultiProvider(
       providers: myProviders,
       child: GetMaterialApp(
+        initialRoute: Paths.home,
         debugShowCheckedModeBanner: false,
         title: 'SKATEPICO',
         theme: appTheme,
         checkerboardRasterCacheImages: true,
-        
-        routes: {
-          '/': (context) => const HomePage(),
-          '/HubPage': (context) => const HubPage(),
-          '/MapPage': (context) => const MapPage(),
-          '/UserPage': (context) => const UserControllerPage(),
-        },
+        getPages: AppPages.routes,
       ),
     );
   }

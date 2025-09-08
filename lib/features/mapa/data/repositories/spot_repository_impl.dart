@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:demopico/core/common/files_manager/dtos/firebase_dto.dart';
-import 'package:demopico/core/common/files_manager/mappers/i_mapper_dto.dart';
+import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
+import 'package:demopico/core/common/mappers/i_mapper_dto.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto_mapper.dart';
 import 'package:demopico/features/mapa/data/data_sources/interfaces/i_spot_datasource.dart';
 import 'package:demopico/features/mapa/data/data_sources/remote/firebase_spot_remote_datasource.dart';
@@ -19,7 +19,7 @@ class SpotRepositoryImpl implements ISpotRepository {
     );
     
 
-  final ISpotRemoteDataSource dataSource;
+  final ISpotDataSource<FirebaseDTO> dataSource;
   SpotRepositoryImpl(this.dataSource);
 
   final IMapperDto<PicoModel, FirebaseDTO> _mapper = FirebaseDtoMapper<PicoModel>(
@@ -52,7 +52,7 @@ class SpotRepositoryImpl implements ISpotRepository {
   }
 
   @override
-  Stream<List<PicoModel>> loadSpots([Filters? filtros]) {    
+  Stream<List<PicoModel>> watchListSpots([Filters? filtros]) {    
 
     final dataStream = dataSource.load(filtros);
 
@@ -72,6 +72,26 @@ class SpotRepositoryImpl implements ISpotRepository {
     final dto = _mapper.toDTO(pico);
     await dataSource.update(dto);
     return  pico;
+  }
+  
+  @override
+  Future<List<PicoModel>> getMySpots(String userID) async {
+    final listDto = await dataSource.getList(userID);
+    return listDto.map((dto) => _mapper.toModel(dto)).toList();
+  }
+
+  @override
+  Future<void> evaluateSpot(PicoModel pico, double newRating) async {
+    // Atribuindo a função para uma variável para poder passar para o datasource 
+    // Pensei em passar aqui por conta que essa camada de repository esta mesmo mais
+    // relacionada as models já que ela cuida de mapear dto para models.
+    var updateFunction = pico.updateNota;
+    return await dataSource.updateRealtime(pico.id, newRating, updateFunction);
+  }
+
+  @override
+  Stream<PicoModel> watchSpot(String id)  {
+    return dataSource.watchData(id).map((dto) => _mapper.toModel(dto));
   }
 }
 

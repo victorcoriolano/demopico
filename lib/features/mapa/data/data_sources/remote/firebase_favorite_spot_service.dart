@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/mapa/data/data_sources/interfaces/i_favorite_spot_remote_datasource.dart';
-import 'package:demopico/core/common/files_manager/dtos/firebase_dto.dart';
+import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
 import 'package:demopico/features/mapa/data/mappers/mapper_pico_favorito_firebase.dart';
 
-class FirebaseFavoriteSpotRemoteDataSource implements IFavoriteSpotRemoteDataSource {
+class FirebaseFavoriteSpotRemoteDataSource implements IFavoriteSpotRemoteDataSource<FirebaseDTO> {
 
   static FirebaseFavoriteSpotRemoteDataSource? _favoriteSpotService;
   static FirebaseFavoriteSpotRemoteDataSource get getInstance {
@@ -35,7 +35,7 @@ class FirebaseFavoriteSpotRemoteDataSource implements IFavoriteSpotRemoteDataSou
     } on Exception catch (e, stackTrace) {
       throw UnknownFailure(originalException: e ,stackTrace: stackTrace);
     }catch (e, st) {
-      throw UnknownError("Erro desconhecido: $e", stackTrace: st);
+      throw UnknownError(message: "Erro desconhecido: $e", stackTrace: st);
     }
   }
 

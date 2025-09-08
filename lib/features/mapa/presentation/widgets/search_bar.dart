@@ -1,12 +1,12 @@
-import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
-import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
-import 'package:demopico/features/mapa/presentation/view_services/modal_helper.dart';
+import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
+import 'package:demopico/features/mapa/presentation/controllers/spots_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 class SearchBarSpots extends StatefulWidget {
-  const SearchBarSpots({super.key});
+  final Function(Pico) onTapSuggestion;
+  const SearchBarSpots({super.key, required this.onTapSuggestion});
 
   @override
   State<SearchBarSpots> createState() => _SearchBarSpotsState();
@@ -15,16 +15,18 @@ class SearchBarSpots extends StatefulWidget {
 class _SearchBarSpotsState extends State<SearchBarSpots> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<SpotControllerProvider>(
-      
-      builder: (context, provider, child) => 
-      SearchAnchor.bar(
+    return Consumer<SpotsControllerProvider>(
+      builder: (context, provider, child) => SearchAnchor.bar(
         viewHeaderHeight: 42,
-        barBackgroundColor: const WidgetStatePropertyAll(Colors.white),
+        barLeading: Icon(
+          Icons.search,
+          size: 32,
+          color: kRed,
+        ),
+        barBackgroundColor: const WidgetStatePropertyAll(kAlmostWhite),
         barHintText: "Pesquisar picos",
         onChanged: (value) => provider.pesquisandoPico(value),
         suggestionsBuilder: (context, controllerSearch) {
-
           if (provider.picosPesquisados.isEmpty) {
             return const [
               ListTile(
@@ -37,16 +39,14 @@ class _SearchBarSpotsState extends State<SearchBarSpots> {
             return ListTile(
               title: Text(pico.picoName),
               onTap: () {
-                controllerSearch.closeView(pico.picoName);
+                controllerSearch.closeView(pico.id);
                 controllerSearch.clear();
-                context.read<MapControllerProvider>().reajustarCameraPosition(
-                  LatLng(pico.lat, pico.long));
-                ModalHelper.openModalInfoPico(context, pico, provider.deletarPico);
-              },
+widget.onTapSuggestion(pico);
+              } 
             );
           }).toList();
         },
-        viewBackgroundColor: Colors.white,
+        viewBackgroundColor: kAlmostWhite,
       ),
     );
   }

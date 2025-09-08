@@ -1,13 +1,14 @@
 
 import 'dart:async';
 
-import 'package:demopico/core/common/files_manager/models/file_model.dart';
+import 'package:demopico/core/common/media_management/models/file_model.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
-import 'package:demopico/core/common/files_manager/services/upload_service.dart';
+import 'package:demopico/core/common/media_management/services/upload_service.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
-import 'package:demopico/core/common/util/file_manager/pick_image_uc.dart';
+import 'package:demopico/core/common/media_management/usecases/pick_image_uc.dart';
+import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -42,10 +43,10 @@ class AddPicoProvider extends ChangeNotifier{
   List<String> obstaculos = [];
   String nomePico = '';
   String descricao = '';
-  String selectedModalidade = 'Skate';
+  ModalitySpot selectedModalidade = ModalitySpot.skate;
   double nota = 0.0;
   int numAval = 0;
-  String tipo = 'Pico de Rua';
+  TypeSpot tipo = TypeSpot.rua;
   List<String> utilidades = [];
   List<String> imgUrls = [];
   LatLng? latlang;
@@ -56,11 +57,9 @@ class AddPicoProvider extends ChangeNotifier{
 
   double progress = 0.0;
 
-  void getLocation(LatLng latlang) {
+  void setLocation(LatLng latlang) {
     this.latlang = latlang;
   }
-
-  
 
   Future<void> pickImages() async{
     try{
@@ -72,33 +71,13 @@ class AddPicoProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  
-
   void removerImagens(int index){
     files.removeAt(index);
     notifyListeners();
   }
-  
 
-  
-  /* - */
-
-  //variaveis de mensagem de erro
   String? errors;
 
-  Map<String, List<String>> utilidadesPorModalidade = {
-    'Skate': [
-      'Água',
-      'Teto',
-      'Banheiro',
-      'Suave Arcadiar',
-      'Público / Gratuito'
-    ],
-    'Parkour': ['Água', 'Banheiro', 'Mecânicas Próximas', 'Ar Livre'],
-    'BMX': ['Água'],
-  };
-
-  List<String> utilidadesAtuais = [];
   Map<String, bool> utilidadesSelecionadas = {};
 
   void initialize() {
@@ -114,13 +93,12 @@ class AddPicoProvider extends ChangeNotifier{
   }
 // notificar o estado de modalidade, tipo e utilidades
   void atualizarModalidade(String modalidade) {
-    selectedModalidade = modalidade;
-    _atualizarUtilidades();
+    selectedModalidade = ModalitySpot.fromString(modalidade);
     notifyListeners();
   }
 
   void atualizarDropdown(String novoValor) {
-    tipo = novoValor;
+    tipo = TypeSpot.fromString(novoValor);
     notifyListeners();
   }
 
@@ -130,9 +108,8 @@ class AddPicoProvider extends ChangeNotifier{
   }
 
   void _atualizarUtilidades() {
-    utilidadesAtuais = utilidadesPorModalidade[selectedModalidade] ?? [];
     utilidadesSelecionadas.clear();
-    for (var utilidade in utilidadesAtuais) {
+    for (var utilidade in selectedModalidade.utilitiesByModality) {
       utilidadesSelecionadas[utilidade] = false;
     }
   }
@@ -208,21 +185,22 @@ class AddPicoProvider extends ChangeNotifier{
   
   
 
-  PicoModel getInfoPico(String? userCriador) {
+  PicoModel getInfoPico(UserM? userCriador) {
     return PicoModel(
       id: "",
+      userID: userCriador?.id ,
       picoName: nomePico,
       description: descricao,
-      nota: nota,
-      numeroAvaliacoes: numAval,
-      tipoPico: tipo,
+      newRating: nota,
+      countReviews: numAval,
+      tipoPico: tipo.name,
       utilidades: utilidades,
       imgUrls: imgUrls,
       lat: latlang!.latitude,
       long: latlang!.longitude,
       atributos: atributos,
-      modalidade: selectedModalidade,
-      userCreator: userCriador ?? "Anônimo",
+      modalidade: selectedModalidade.name,
+      userName: userCriador?.name ?? "Anônimo",
       obstaculos: obstaculos,
     );
   }
@@ -233,11 +211,11 @@ class AddPicoProvider extends ChangeNotifier{
     obstaculos.clear();
     nomePico = '';
     descricao = '';
-    selectedModalidade = 'Skate';
+    selectedModalidade = ModalitySpot.skate;
     nota = 0.0;
     numAval = 0;
     imgUrls.clear();
-    tipo = 'Pico de Rua';
+    tipo = TypeSpot.rua;
     utilidades.clear();
     notifyListeners();
   }
@@ -245,7 +223,7 @@ class AddPicoProvider extends ChangeNotifier{
 
   String? errorCriarPico;
 
-  Future<void> createSpot(String? user) async {
+  Future<void> createSpot(UserM? user) async {
     try {
       late PicoModel newPico;
       // Faz o upload das imagens e espera as urls

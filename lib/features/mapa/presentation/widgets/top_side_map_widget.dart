@@ -1,7 +1,10 @@
 import 'package:demopico/features/mapa/domain/entities/filters.dart';
-import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
+import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
+import 'package:demopico/features/mapa/presentation/controllers/spots_controller.dart';
+import 'package:demopico/features/mapa/presentation/view_services/modal_helper.dart';
 import 'package:demopico/features/mapa/presentation/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 
@@ -23,7 +26,7 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
   @override
   Widget build(BuildContext context) {
 
-    return Consumer<SpotControllerProvider>(
+    return Consumer<SpotsControllerProvider>(
       builder: (context, spotProvider, child) => AppBar(
         automaticallyImplyLeading: false,
         toolbarHeight: 100,
@@ -31,8 +34,16 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Expanded(              
-              child: SearchBarSpots(),
+            Expanded(              
+              child: SearchBarSpots(
+                onTapSuggestion: (pico) {
+                context
+                    .read<MapControllerProvider>()
+                    .reajustarCameraPosition(LatLng(pico.lat, pico.long));
+                ModalHelper.openModalInfoPico(
+                    context, pico);
+              },
+              ),
             ),
             const SizedBox(width: 10),
             PopupMenuButton<String>(
@@ -149,8 +160,8 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Consumer<SpotControllerProvider>(
-          builder: (BuildContext context, SpotControllerProvider provider, Widget? child) => AlertDialog(
+        return Consumer<SpotsControllerProvider>(
+          builder: (BuildContext context, SpotsControllerProvider provider, Widget? child) => AlertDialog(
             title: const Text("Selecione as Utilidades"),
             content: Column(
               children: provider.utilidades.map((utilidade) {

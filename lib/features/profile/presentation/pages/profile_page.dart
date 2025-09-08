@@ -1,7 +1,6 @@
-import 'package:demopico/core/app/home_page.dart';
+import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/widgets/back_widget.dart';
-import 'package:demopico/features/profile/presentation/pages/create_post_page.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_posts_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_bottom_side_data_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_drawer_config.dart';
@@ -9,8 +8,7 @@ import 'package:demopico/features/profile/presentation/widgets/profile_data/prof
 import 'package:demopico/features/user/domain/enums/type_post.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
-import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
-import 'package:demopico/features/user/presentation/pages/login_page.dart';
+import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -24,9 +22,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late UserM? user;
-  String? currentUserId;
   bool _isVisible = true;
   bool _isLoading = true;
   ScrollDirection? _lastDirection;
@@ -39,24 +36,58 @@ class _ProfilePageState extends State<ProfilePage>
   final TextEditingController bioController = TextEditingController();
   late final TabController _tabController;
 
+  void showAlertError(context, String messageError) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Error'),
+        content: Text('Algum erro aconteceu: $messageError'),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              final provider = context.read<AuthUserProvider>();
+              await provider.logout();
+              Get.toNamed(Paths.home);
+            },
+            child: const Text('SAIR E DESLOGAR'),
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadUser();
     });
+
     _tabController = TabController(length: 3, vsync: this);
 
     _tabController.addListener(() {
       if (_tabController.index == 0) {
-        typePost = TypePost.post;
-        setState(() {});
       } else if (_tabController.index == 1) {
         typePost = TypePost.fullVideo;
         setState(() {});
       } else if (_tabController.index == 2) {
         typePost = TypePost.spot;
         setState(() {});
+      }
+
+      switch (_tabController.index) {
+        case 0:
+          typePost = TypePost.post;
+          setState(() {});
+        case 1:
+          typePost = TypePost.fullVideo;
+          setState(() {});
+        case 2:
+          typePost = TypePost.spot;
+          setState(() {});
+        default:
+          typePost = TypePost.post;
+          setState(() {});
       }
     });
 
@@ -107,63 +138,32 @@ class _ProfilePageState extends State<ProfilePage>
 
   Future<void> _loadUser() async {
     debugPrint('Loading user...');
-    _isLoading =true;
+    _isLoading = true;
     final providerAuth = Provider.of<AuthUserProvider>(context, listen: false);
     final providerDatabase =
-        Provider.of<UserDatabaseProvider>(context, listen: false);
+        Provider.of<UserDataViewModel>(context, listen: false);
 
-    String? uid = providerAuth.pegarId();
+    String? uid = providerAuth.currentIdUser;
 
     if (uid == null) {
       debugPrint('User ID is null');
       setState(() {
         _isLoading = false;
       });
-
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Error'),
-          content: const Text('User not found.'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Get.to(() => const HomePage());
-              },
-              child: const Text('OK'),
-            )
-          ],
-        ),
-      );
-      setState(() {
-        _isLoading = false;
-      });
+      showAlertError(context,
+          "Não foi possível encontrar o id do user!\n Tente entrar novamente");
       return;
     }
-    currentUserId = uid;
+
     await providerDatabase.retrieveUserProfileData(uid);
 
     if (providerDatabase.user == null) {
-      debugPrint('User not found');
+      debugPrint('User not found even with id');
       setState(() {
         _isLoading = false;
       });
       if (mounted) {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text('Error'),
-            content: const Text('User not found.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Get.to(() => const LoginPage());
-                },
-                child: const Text('OK'),
-              )
-            ],
-          ),
-        );
+        showAlertError(context, "Dados não encontrados na base");
       }
       return;
     } else {
@@ -177,85 +177,86 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final thisUser = context.read<UserDatabaseProvider>().user;
-    if(_isLoading){
-      return Center(child: CircularProgressIndicator(),);
+    final thisUser = context.read<UserDataViewModel>().user;
+    if (_isLoading) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
     }
-
+    if (thisUser == null) {
+      return SizedBox.shrink();
+    }
     return Scaffold(
-      appBar:  AppBar(
-      backgroundColor: kAlmostWhite,
-      centerTitle: true,
-      title: Text(thisUser?.name ?? "", style: TextStyle(
-        color: kBlack,
-        fontSize: 22,
-        fontWeight: FontWeight.bold),
-      ),
-      leading: CustomBackButton(destination: HomePage()),
-      actions: [
-        Builder(
-          builder: (context) {
-            return IconButton(
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              }, 
-              icon: const Icon(Icons.settings),
-              iconSize: 30,
-              color: const Color.fromARGB(255, 0, 0, 0),
-            );
-          }
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: kRed,
+        centerTitle: true,
+        title: Text(
+          thisUser.name,
+          style: TextStyle(
+              color: kWhite, fontSize: 22, fontWeight: FontWeight.bold),
         ),
-      ],
+        leading: CustomBackButton(
+          destination: Paths.home,
+          colorIcon: kWhite,
+        ),
+        actions: [
+          Builder(builder: (context) {
+            return IconButton(
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+                icon: const Icon(Icons.settings),
+                iconSize: 30,
+                color: kWhite);
+          }),
+        ],
       ),
-      drawer: MyCustomDrawer(user: thisUser!),
+      drawer: MyCustomDrawer(user: thisUser),
       backgroundColor: kAlmostWhite,
-      body: Builder(
-        builder: (context) {
-          return SafeArea(
-            child: ListView(
-                shrinkWrap: true,
+      body: SafeArea(
+        child: ListView(
+            shrinkWrap: true,
+            padding: const EdgeInsets.all(0),
+            children: [
+              ProfileTopSideDataWidget(
+                avatarUrl: user?.pictureUrl,
+                backgroundUrl: user?.backgroundPicture,
+              ),
+              ProfileBottomSideDataWidget(
+                followers: user?.connections.length ?? 0,
+                contributions: user?.idMySpots.length ?? 0,
+                description: user?.description ?? '',
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              Container(
                 padding: const EdgeInsets.all(0),
-                children: [
-                  ProfileTopSideDataWidget(
-                    avatarUrl: user?.pictureUrl,
-                    backgroundUrl: user?.backgroundPicture,
-                  ),
-                  ProfileBottomSideDataWidget(
-                    followers: user?.conexoes ?? 0,
-                    contributions: user?.picosAdicionados ?? 0,
-                    description: user?.description ?? '',
-                  ),
-                  SizedBox(
-                    height: 12,
-                  ),
-                  
-                  Container(
-                    padding: const EdgeInsets.all(0),
-                    margin: const EdgeInsets.all(0),
-                    child: SingleChildScrollView(
-                      controller: _scrollController,
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(0),
-                            height: screenHeight * 0.55,
-                            child: ProfilePostsWidget(
-                              controller: _tabController,
-                            ),
-                          ),
-                        ],
+                margin: const EdgeInsets.all(0),
+                child: SingleChildScrollView(
+                  controller: _scrollController,
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(0),
+                        height: screenHeight * 0.55,
+                        child: ProfilePostsWidget(
+                          controller: _tabController,
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ]),
-          );
-        }
+                ),
+              ),
+            ]),
       ),
+      extendBody: true,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
+        shape: CircleBorder(),
         onPressed: () {
-          Get.to(() => CreatePostPage(
-                typePost: typePost,
-              ));
+          Get.toNamed(Paths.createPostPage, arguments: typePost);
         },
         tooltip: "Criar Postagem",
         child: Icon(

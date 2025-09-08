@@ -1,18 +1,19 @@
-import 'package:demopico/core/app/home_page.dart';
+import 'package:demopico/core/app/routes/app_routes.dart';
+import 'package:demopico/features/mapa/presentation/widgets/search_bar.dart';
 import 'package:demopico/features/profile/presentation/pages/profile_page.dart';
 import 'package:demopico/features/profile/presentation/provider/post_provider.dart';
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/media_preview_list.dart';
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/media_preview_video.dart';
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/midia_input_card.dart';
 import 'package:demopico/features/user/domain/enums/type_post.dart';
-import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
+import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class CreatePostPage extends StatefulWidget {
-  final TypePost typePost;
-  const CreatePostPage({super.key, required this.typePost});
+
+  const CreatePostPage({super.key});
 
   @override
   State<CreatePostPage> createState() => _CreatePostPageState();
@@ -28,47 +29,15 @@ class _CreatePostPageState extends State<CreatePostPage> {
   }
 
   void _showSpotSelectionDialog(BuildContext context, PostProvider provider) {
-    // Simulação de picos disponíveis
-    final Map<String, String> availableSpots = {
-      'spot123': 'Praça da Matriz',
-      'spot456': 'Skatepark do Centro',
-      'spot789': 'Rua do Comércio',
-    };
-
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: const Text('Selecionar Pico'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: availableSpots.entries.map((entry) {
-                return RadioListTile<String>(
-                  title: Text(entry.value),
-                  value: entry.key,
-                  groupValue: provider.selectedSpotId,
-                  onChanged: (String? value) {
-                    provider.selectSpot(value);
-                    Navigator.pop(dialogContext);
-                  },
-                );
-              }).toList(),
-            ),
+        return Center(
+          child:SearchBarSpots(
+            onTapSuggestion: (selectedSpot) {
+              provider.selectSpot(selectedSpot);
+            },
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                provider.selectSpot(null); // Opção para desmarcar o pico
-                Navigator.pop(dialogContext);
-              },
-              child: const Text('Nenhum Pico'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(dialogContext),
-              child: const Text('Cancelar'),
-            ),
-          ],
         );
       },
     );
@@ -76,7 +45,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isPost = widget.typePost == TypePost.post;
+    final TypePost typePost = Get.arguments as TypePost;
+    final isPost = typePost == TypePost.post;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -105,7 +75,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                      : await provider.getVideo();                    
                     
                   },
-                  typePost: widget.typePost,
+                  typePost: typePost,
                 ),
                 const SizedBox(height: 16),
 
@@ -124,7 +94,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                   icon: const Icon(Icons.location_on),
                   label: Text(
                     provider.selectedSpotId != null
-                        ? 'Pico Selecionado: ${provider.selectedSpotId}' 
+                        ? 'Pico Selecionado: ${provider.selectedSpotId!.picoName}' 
                         : 'Linkar a um Pico no Mapa',
                   ),
                   style: ElevatedButton.styleFrom(
@@ -161,18 +131,18 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 // Botão de Publicar
                 ElevatedButton(
                   onPressed: () async {
-                    final user = context.read<UserDatabaseProvider>().user;
+                    final user = context.read<UserDataViewModel>().user;
                     if (user == null) {
                       Get.snackbar(
                         'Erro',
                         'Usuário não encontrado. Por favor, faça login novamente.',
                         snackPosition: SnackPosition.BOTTOM,
                       );
-                      Get.to((_) => const HomePage());
+                      Get.toNamed(Paths.home);
                       return;
                     }
                     try{
-                      await provider.createPost(user, widget.typePost);
+                      await provider.createPost(user, typePost);
                       Get.snackbar(
                         'Sucesso',
                         'Postagem criada com sucesso!',

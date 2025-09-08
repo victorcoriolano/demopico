@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 InputDecoration customTextField(String label) {
     return InputDecoration(
-        
         label: Text(label),
         filled: true,
         fillColor: const Color.fromARGB(255, 139, 0, 0),

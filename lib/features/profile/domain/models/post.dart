@@ -120,5 +120,31 @@ class Post {
     };
   }
 
-  
+  Post copyWith({
+    String? id,
+    String? nome,
+    String? userId,
+    String? spotID,
+    String? urlUserPhoto,
+    String? description,
+    List<String>? urlImages,
+    List<String>? urlVideos,
+    DateTime? dateTime,
+    int? curtidas,
+    TypePost? typePost,
+  }) {
+    return Post(
+      id: id ?? this.id,
+      nome: nome ?? this.nome,
+      userId: userId ?? this.userId,
+      spotID: spotID ?? this.spotID,
+      urlUserPhoto: urlUserPhoto ?? this.urlUserPhoto,
+      description: description ?? this.description,
+      urlImages: urlImages ?? this.urlImages,
+      urlVideos: urlVideos ?? this.urlVideos,
+      dateTime: dateTime ?? this.dateTime,
+      curtidas: curtidas ?? this.curtidas,
+      typePost: typePost ?? this.typePost,
+    );
+  }  
 }

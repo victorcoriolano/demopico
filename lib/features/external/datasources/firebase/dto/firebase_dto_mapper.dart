@@ -1,5 +1,5 @@
-import 'package:demopico/core/common/files_manager/mappers/i_mapper_dto.dart';
-import 'package:demopico/core/common/files_manager/dtos/firebase_dto.dart';
+import 'package:demopico/core/common/mappers/i_mapper_dto.dart';
+import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 
 
 /// classe de mapeamento de dados do firebase
@@ -25,7 +25,7 @@ class FirebaseDtoMapper<Model> implements IMapperDto<Model, FirebaseDTO> {
 
   @override
   Model toModel(FirebaseDTO dto) {
-    return this.fromJson(dto.data, dto.id);
+    return fromJson(dto.data, dto.id);
   }
   
   @override

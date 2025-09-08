@@ -1,6 +1,6 @@
 import 'package:demopico/features/profile/presentation/provider/post_provider.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/card_post_widget.dart';
-import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
+import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,16 +20,13 @@ class _ContainerPostsWidgetState extends State<ContainerPostsWidget> {
     
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _postProvider = context.read<PostProvider>();
-      // This ensures that the provider is initialized before calling _getPost
       _getPost();
     });
   }
 
   Future<void> _getPost() async {
-    final userId = context.read<UserDatabaseProvider>().user?.id;
-
+    final userId = context.read<UserDataViewModel>().user?.id;
     await _postProvider.loadPosts(userId!);
-    
   }
 
   @override

@@ -1,4 +1,5 @@
-import 'package:demopico/core/app/auth_wrapper.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:demopico/core/app/routes/app_routes.dart';
 
 import 'package:demopico/features/home/infra/dialog_page_route.dart';
 import 'package:demopico/features/home/presentation/widgets/weather_dialog.dart';
@@ -58,13 +59,9 @@ class _TopLevelHomeRowState extends State<TopLevelHomeRow> {
                         Color.fromARGB(255, 255, 255, 255)),
                     shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: Color.fromARGB(255, 0, 0, 0),
-                        width: 1,
-                      ),
                       borderRadius: BorderRadius.circular(90.0),
                     )),
-                    elevation: WidgetStateProperty.all<double>(1),
+                    elevation: WidgetStateProperty.all<double>(3),
                     shadowColor: WidgetStateProperty.all<Color>(
                         Color.fromARGB(255, 0, 0, 0)),
                   ),
@@ -81,17 +78,13 @@ class _TopLevelHomeRowState extends State<TopLevelHomeRow> {
           ),
           Spacer(),
           GestureDetector(
-              onTap: () => Get.to(
-                    AuthWrapper(),
-                    transition: Transition.rightToLeftWithFade,
-                    duration: const Duration(milliseconds: 600),
-                    curve: Curves.fastEaseInToSlowEaseOut,
-                  ),
+              onTap: () => Get.toNamed(
+                    Paths.profile,),
               child: widget._userImage == null
                   ? Icon(Icons.supervised_user_circle, size: 64, color: Colors.black,)
                   : CircleAvatar(
                       radius: 32,
-                      backgroundImage: NetworkImage(widget._userImage!),
+                      backgroundImage: CachedNetworkImageProvider(widget._userImage!),
                       backgroundColor: Colors.transparent)),
         ]),
       ),
