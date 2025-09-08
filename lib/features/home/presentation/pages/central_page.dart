@@ -3,7 +3,7 @@ import 'package:demopico/features/home/presentation/widgets/events_bottom_sheet.
 import 'package:demopico/features/home/presentation/widgets/hub_upper_sheet.dart';
 import 'package:demopico/features/home/presentation/widgets/top_level_home_row.dart';
 import 'package:demopico/features/home/presentation/provider/weather_provider.dart';
-import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
+import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -60,7 +60,7 @@ class _CentralPageState extends State<CentralPage> {
             children: [
               Stack(children: [
                 CentralPageBackground(),
-                Consumer2<OpenWeatherProvider, UserDatabaseProvider>(
+                Consumer2<OpenWeatherProvider, UserDataViewModel>(
                   builder: (context, weatherProvider, userDatabaseProvider, child) {
                     //Carrega os dados do clima de acordo com o estado
                     if (weatherProvider.isLoading) {

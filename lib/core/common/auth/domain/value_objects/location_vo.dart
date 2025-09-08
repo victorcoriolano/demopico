@@ -1,0 +1,17 @@
+
+class LocationVo {
+  final double latitude;
+  final double longitude;
+
+  LocationVo._(this.latitude, this.longitude);
+
+  factory LocationVo(double latitude, double longitude) {
+    if (latitude < -90 || latitude > 90) {
+      throw ArgumentError('Invalid latitude value');
+    }
+    if (longitude < -180 || longitude > 180) {
+      throw ArgumentError('Invalid longitude value');
+    }
+    return LocationVo._(latitude, longitude);
+  }
+}

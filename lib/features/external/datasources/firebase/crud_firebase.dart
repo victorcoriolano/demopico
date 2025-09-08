@@ -2,7 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
-import 'package:demopico/core/common/files_manager/enums/collections.dart';
+import 'package:demopico/core/common/collections/collections.dart';
 import 'package:demopico/features/external/datasources/firebase/firestore.dart';
 import 'package:demopico/features/external/interfaces/i_crud_datasource.dart';
 import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';

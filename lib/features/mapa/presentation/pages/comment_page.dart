@@ -1,6 +1,6 @@
 import 'package:demopico/core/common/widgets/snackbar_utils.dart';
 import 'package:demopico/features/mapa/presentation/controllers/comment_controller.dart';
-import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
+import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -76,7 +76,7 @@ class _CommentPageState extends State<CommentPage> {
                       icon: const Icon(Icons.send),
                       onPressed: () {
                         final content = _controller.text;
-                        final user = context.read<UserDatabaseProvider>().user;
+                        final user = context.read<UserDataViewModel>().user;
                         if (user == null){
                           SnackbarUtils.userNotLogged(context);
                         }

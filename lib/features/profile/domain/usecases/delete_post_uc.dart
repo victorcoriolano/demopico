@@ -1,5 +1,5 @@
 import 'package:demopico/core/common/errors/failure_server.dart';
-import 'package:demopico/core/common/files_manager/services/upload_service.dart';
+import 'package:demopico/core/common/media_management/services/upload_service.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_post_repository.dart';
 import 'package:demopico/features/profile/infra/repository/post_repository.dart';
 import 'package:flutter/material.dart';

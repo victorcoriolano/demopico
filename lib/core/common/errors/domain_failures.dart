@@ -59,7 +59,7 @@ class UnauthorizedFailure extends DomainFailure {
 }
 
 class UnauthenticatedFailure extends DomainFailure {
-  UnauthenticatedFailure(): super(message: "Usuário não autenticado",code: 'UNAUTHENTICATED');
+  UnauthenticatedFailure(): super(message: "Usuário não autenticado, faça login novamente!",code: 'UNAUTHENTICATED');
 }
 
 class ConnectionNotFoundFailure extends DomainFailure {

@@ -1,5 +1,5 @@
-import 'package:demopico/core/common/util/file_manager/pick_files_uc.dart';
-import 'package:demopico/core/common/util/file_manager/pick_video_uc.dart';
+import 'package:demopico/core/common/media_management/usecases/pick_files_uc.dart';
+import 'package:demopico/core/common/media_management/usecases/pick_video_uc.dart';
 import 'package:demopico/features/home/infra/http_climate_service.dart';
 import 'package:demopico/features/home/presentation/provider/forecast_provider.dart';
 import 'package:demopico/features/home/presentation/provider/home_provider.dart';
@@ -23,7 +23,7 @@ import 'package:demopico/features/profile/presentation/provider/post_provider.da
 import 'package:demopico/features/profile/presentation/provider/screen_provider.dart';
 import 'package:demopico/features/user/infra/datasource/remote/firebase_auth_service.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
-import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
+import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
@@ -43,7 +43,7 @@ final myProviders = [
   ChangeNotifierProvider(create: (_) => MapControllerProvider()),
   ChangeNotifierProvider(create: (_) => FavoriteSpotController.getInstance),
   ChangeNotifierProvider(create: (_) => SpotsControllerProvider.getInstance),
-  ChangeNotifierProvider(create: (_) => UserDatabaseProvider.getInstance),
+  ChangeNotifierProvider(create: (_) => UserDataViewModel.getInstance),
   ChangeNotifierProvider(create: (_) => HistoricoController.getInstance),
   ChangeNotifierProvider(
     create: (_) => HubProvider(

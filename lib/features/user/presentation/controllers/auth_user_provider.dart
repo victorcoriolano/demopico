@@ -2,13 +2,13 @@ import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/user/domain/aplication/validate_credentials.dart';
-import 'package:demopico/features/user/domain/entity/user_credentials.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_credentials.dart';
 import 'package:demopico/features/user/domain/enums/identifiers.dart';
 import 'package:demopico/features/user/domain/usecases/criar_conta_uc.dart';
 import 'package:demopico/features/user/domain/usecases/login_uc.dart';
 import 'package:demopico/features/user/domain/usecases/logout_uc.dart';
 import 'package:demopico/features/user/domain/usecases/pegar_id_usuario.dart';
-import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
+import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -22,7 +22,7 @@ class AuthUserProvider extends ChangeNotifier {
         validateUserCredentials: ValidateUserCredentials.instance,
         logoutUc: LogoutUc.getInstance,
         pegarIdUsuario: PegarIdUsuario.getInstance, 
-        userDatabaseProvider: UserDatabaseProvider.getInstance);
+        userDatabaseProvider: UserDataViewModel.getInstance);
     return _authUserProvider!;
   }
 
@@ -40,7 +40,7 @@ class AuthUserProvider extends ChangeNotifier {
   final LogoutUc logoutUc;
   final PegarIdUsuario pegarIdUsuario;
   final ValidateUserCredentials _validateUserCredentials;
-  final UserDatabaseProvider userDatabaseProvider;
+  final UserDataViewModel userDatabaseProvider;
 
   bool isColetivo = false;
   bool isEmail = true;
@@ -109,7 +109,7 @@ class AuthUserProvider extends ChangeNotifier {
       final validCredentials =
           await _validateUserCredentials.validateForSignUp(credentials);
       final newUser = await criarContaUc.criar(validCredentials);
-      UserDatabaseProvider.getInstance.setUser = newUser;
+      UserDataViewModel.getInstance.setUser = newUser;
       isLoading = false;
       notifyListeners();
     } on Failure catch (e) {

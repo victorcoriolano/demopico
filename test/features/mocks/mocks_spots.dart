@@ -1,6 +1,6 @@
 
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
-import 'package:demopico/core/common/files_manager/mappers/i_mapper_dto.dart';
+import 'package:demopico/core/common/mappers/i_mapper_dto.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto_mapper.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 

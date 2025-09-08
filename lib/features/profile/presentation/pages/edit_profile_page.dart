@@ -1,147 +1,237 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:demopico/core/app/theme/theme.dart';
-import 'package:demopico/features/profile/presentation/widgets/profile_data/editable_detail_row.dart';
+import 'package:demopico/features/profile/presentation/widgets/profile_data/editable_custom_field.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+
 class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({ super.key});
+  const EditProfilePage({super.key});
 
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  final UserM user = Get.arguments as UserM;
+  final user = Get.arguments as UserM; 
 
-  final String _userPassword = '**********'; // Representing a masked password
-
-  // Controllers for editing
   late TextEditingController _nameController;
-  late TextEditingController _emailController;
-  late TextEditingController _passwordController;
-
-  // States for AnimatedCrossFade
-  bool _isEditingName = false;
-  bool _isEditingEmail = false;
-  bool _isEditingPassword = false;
+  late TextEditingController _bioController;
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: user.name);
-    _emailController = TextEditingController(text: user.email);
-    _passwordController = TextEditingController(text: _userPassword); 
+    _bioController = TextEditingController(text: user.description);
   }
 
   @override
   void dispose() {
     _nameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
+    _bioController.dispose();
     super.dispose();
   }
 
-  void toggleEditState(String field) {
-    setState(() {
-      //TODO : IMPLEMENTAR LÓGICA DE ATUALIZAR NA BASE DE DADOS
-      switch (field) {
-        case 'name':
-          _isEditingName = !_isEditingName;
-          if (!_isEditingName) user.name = _nameController.text;
-          break;
-        case 'email':
-          _isEditingEmail = !_isEditingEmail;
-          if (!_isEditingEmail) user.email = _emailController.text;
-          break;
-        case 'password':
-          _isEditingPassword = !_isEditingPassword;
-          
-          break;
-      }
-    });
+  void _updateProfile() {
+    // TODO: UPDATE PROFILE FLOW
+    // Lógica para salvar as alterações no banco de dados
+    debugPrint('Salvando alterações...');
+    user.name = _nameController.text;
+    user.description = _bioController.text;
+    // ...
+    Get.snackbar('Sucesso!', 'Perfil atualizado com sucesso!',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: kAccentColor,
+        colorText: Colors.white);
+  }
+
+  void _changeEmail() {
+    // TODO: CHANGE EMAIL FLOW
+    // Lógica complexa para alterar o e-mail:
+    // 1. Mostrar um modal ou nova tela para o usuário confirmar a ação.
+    // 2. Enviar um e-mail de validação para o novo endereço.
+    // 3. Exibir uma mensagem de sucesso ou erro.
+    debugPrint('Iniciando fluxo de alteração de e-mail...');
+    Get.snackbar(
+      'Atenção',
+      'Um link de validação foi enviado para seu e-mail. Por favor, verifique sua caixa de entrada.',
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.blueAccent,
+      colorText: Colors.white,
+    );
+  }
+
+  void _handleChangePassword() {
+    // TODO: CHANGE PASSWORD FLOW
+    // Lógica complexa para alterar a senha:
+    // 1. Mostrar um modal ou nova tela para o usuário inserir a senha atual e a nova senha.
+    // 2. Validar a senha atual.
+    // 3. Atualizar a senha no banco de dados.
+    // 4. Exibir uma mensagem de sucesso ou erro.
+    debugPrint('Iniciando fluxo de alteração de senha...');
+    Get.snackbar(
+      'Atenção',
+      'Um link para redefinir sua senha foi enviado para seu e-mail. Por favor, verifique sua caixa de entrada.',
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.blueAccent,
+      colorText: Colors.white,
+    );
+  }
+
+  void _changeProfilePicture() {
+    // TODO: CHANGE PROFILE PICTURE FLOW
+    // Lógica para abrir a galeria de fotos ou câmera
+    debugPrint('Abrindo seletor de imagens...');
+    // Implementar lógica de ImagePicker aqui
+  }
+
+  void _changeBackgroundPicture() {
+    // TODO: CHANGE BACKGROUND PICTURE FLOW
+    // Lógica para abrir a galeria de fotos ou câmera
+    debugPrint('Abrindo seletor de imagens para o fundo...');
+    // Implementar lógica de ImagePicker aqui
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold( 
+    return Scaffold(
+      backgroundColor: kBackground,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back,),
-          onPressed: () {
-            Get.back();
-          },
+          icon: const Icon(Icons.arrow_back, color: kBlack,),
+          onPressed: () => Get.back(),
         ),
-        elevation: 0, // No shadow
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.check, color: kAccentColor),
+            onPressed: _updateProfile,
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    radius: 40,
-                    backgroundImage: user.pictureUrl != null 
-                        ? NetworkImage(user.pictureUrl!)
-                        : AssetImage("assets/images/userPhoto.png") as ImageProvider,
+            Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  margin  : const EdgeInsets.all(16),
+                  height: 200,
+                  decoration: BoxDecoration(
+                    image: user.backgroundPicture == null ? null : 
+                    DecorationImage(
+                      image: CachedNetworkImageProvider(user.backgroundPicture!, errorListener: (erro) => Icons.error,),
+                      fit: BoxFit.cover,
+                    ),
+                    color: kRedAccent,
+                    borderRadius: BorderRadius.all(Radius.circular(16)),
+                    
                   ),
-                  SizedBox(width: 16),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // TODO: Handle "Alterar Imagem" button press
-                        debugPrint('Alterar Imagem button pressed');
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: kRed, // Button background color
-                        foregroundColor: kWhite,     // Text color
-                        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                ),
+                Positioned(
+                  top: 15,
+                  right: 17,
+                  child: IconButton(
+                    icon: const Icon(Icons.photo_camera, color: kWhite, size: 28),
+                    onPressed: _changeBackgroundPicture,
+                  ),
+                ),
+                // Foto de Perfil
+                Positioned(
+                  bottom: -50,
+                  child: Stack(
+                    alignment: Alignment.bottomRight,
+                    children: [
+                      CircleAvatar(
+                        radius: 60,
+                        backgroundColor: kWhite,
+                        backgroundImage: user.pictureUrl == null 
+                          ? AssetImage("assets/images/userPhoto.png") 
+                          : CachedNetworkImageProvider(user.pictureUrl!),
+                      ),
+                      Positioned(
+                        right: 0,
+                        bottom: 0,
+                        child: CircleAvatar(
+                          backgroundColor: kRed,
+                          radius: 20,
+                          child: IconButton(
+                            icon: const Icon(Icons.camera_alt, color: kWhite, size: 20),
+                            onPressed: _changeProfilePicture,
+                          ),
                         ),
                       ),
-                      child: Text('Alterar Imagem'),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 70),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Center(
+                    child: Text('Editar Perfil',
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: kRed)),
+                  ),
+                  const SizedBox(height: 30),
+                  EditableCustomField(
+                    label: 'Nome',
+                    controller: _nameController,
+                    icon: Icons.person_outline,
+                  ),
+                  const SizedBox(height: 20),
+                  EditableCustomField(
+                    label: 'Bio',
+                    controller: _bioController,
+                    icon: Icons.description_outlined,
+                    isMultiline: true,
+                  ),
+                  const SizedBox(height: 20),
+                  const Text('E-mail',
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: kRed)),
+                  const SizedBox(height: 5),
+                  Row(
+                    children: [
+                      const Icon(Icons.email_outlined,
+                          color: kRed, size: 24),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(user.email,
+                            style: const TextStyle(fontSize: 16)),
+                      ),
+                      TextButton(
+                        onPressed: _changeEmail,
+                        child: const Text('Alterar E-mail',
+                            style: TextStyle(color: kRed)),
+                      ),
+                    ],
+                  ),
+                  const Divider(),
+                  const SizedBox(height: 30),
+                  Center(
+                    child: ElevatedButton.icon(
+                      icon: const Icon(Icons.password, color: kWhite),
+                      onPressed: _handleChangePassword,
+                      label: const Text('Alterar Senha',
+                          style: TextStyle(color: kWhite)),
                     ),
                   ),
+                  const SizedBox(height: 30),
                 ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'EDITAR DETALHES',
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            EditableDetailRow(
-              label: 'Nome',
-              value: user.name,
-              controller: _nameController,
-              isEditing: _isEditingName,
-              onToggleEdit: () => toggleEditState('name'),
-            ),
-            EditableDetailRow(
-              label: 'Email',
-              value: user.email,
-              controller: _emailController,
-              isEditing: _isEditingEmail,
-              onToggleEdit: () => toggleEditState('email'),
-              keyboardType: TextInputType.emailAddress,
-            ),
-            EditableDetailRow(
-              label: 'Senha',
-              value: _userPassword, // TODO PEGAR O PASSWORD 
-              controller: _passwordController,
-              isEditing: _isEditingPassword,
-              onToggleEdit: () => toggleEditState('password'),
-              isPassword: true,
             ),
           ],
         ),

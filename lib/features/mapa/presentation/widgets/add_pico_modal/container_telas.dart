@@ -6,7 +6,7 @@ import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/segun
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/terceira_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/custom_buttons.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
-import 'package:demopico/features/user/presentation/controllers/user_database_provider.dart';
+import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -52,7 +52,7 @@ class _ContainerTelasState extends State<ContainerTelas> {
   @override
   void initState() {
     super.initState();
-    user = context.read<UserDatabaseProvider>().user;
+    user = context.read<UserDataViewModel>().user;
     context.read<AddPicoProvider>().setLocation(widget.latlang);
   }
 

@@ -1,7 +1,7 @@
 
 
 import 'package:demopico/core/app/theme/theme.dart';
-import 'package:demopico/features/user/domain/entity/user_credentials.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_credentials.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
 import 'package:demopico/features/user/presentation/widgets/tipo_conta_dropdown.dart';

@@ -1,10 +1,10 @@
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
-import 'package:demopico/core/common/files_manager/models/file_model.dart';
-import 'package:demopico/core/common/util/file_manager/pick_files_uc.dart';
+import 'package:demopico/core/common/media_management/models/file_model.dart';
+import 'package:demopico/core/common/media_management/usecases/pick_files_uc.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
-import 'package:demopico/core/common/files_manager/services/upload_service.dart';
-import 'package:demopico/core/common/util/file_manager/pick_video_uc.dart';
+import 'package:demopico/core/common/media_management/services/upload_service.dart';
+import 'package:demopico/core/common/media_management/usecases/pick_video_uc.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';
 import 'package:demopico/features/profile/domain/usecases/create_post_uc.dart';
