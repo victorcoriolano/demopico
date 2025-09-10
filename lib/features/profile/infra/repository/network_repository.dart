@@ -51,7 +51,7 @@ class NetworkRepository implements INetworkRepository {
   
   @override
   Future<List<Relationship>> getRelationshipAccepted(String userID) {
-    return _datasource.getRelactionships(
+    return _datasource.getRelationships(
       fieldRequest: "requesterUserID.id",
       valueID: userID,
       fieldOther: "status",
@@ -65,7 +65,7 @@ class NetworkRepository implements INetworkRepository {
   
   @override
   Future<List<Relationship>> getRelationshipRequests(String userID) {
-    return _datasource.getRelactionships(
+    return _datasource.getRelationships(
       fieldRequest: "addresseeID.id",
       valueID: userID,
       fieldOther: "status",
@@ -78,7 +78,7 @@ class NetworkRepository implements INetworkRepository {
   
   @override
   Future<List<Relationship>> getRelationshipSent(String userID) {
-    return _datasource.getRelactionships(
+    return _datasource.getRelationships(
       fieldRequest: "requesterUserID.id",
       valueID: userID,
       fieldOther: "status",

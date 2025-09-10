@@ -38,7 +38,7 @@ class FirebaseNetworkDatasource implements INetworkDatasource<FirebaseDTO> {
   }
 
   @override
-  Future<List<FirebaseDTO>> getRelactionships({
+  Future<List<FirebaseDTO>> getRelationships({
     required String fieldRequest, 
     required String valueID, 
     required String fieldOther, 
