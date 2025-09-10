@@ -1,6 +1,11 @@
+import 'package:flutter/material.dart';
+
 class GetRelationshipUc {
+
+  final NetworkingRepository _networkingRepository;
+
   static GetRelationshipUc? _instance;
-  static GetRelationshipUc get instance => _instance ??= GetRelationshipUc();
+  GetRelationshipUc get instance => _instance ??= GetRelationshipUc({required NetworkingRepository networkingRepository}) : _networkingRepository = networkingRepository;
 
 
 }
