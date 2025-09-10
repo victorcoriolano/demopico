@@ -9,10 +9,14 @@ abstract class INetworkDatasource<DTO> {
     required String fieldOther, 
     required String valorDoStatus});
 
+  Future<List<DTO>> getRelationship({required String idReciver, required String idRequester});
+
   // para criar 
   Future<DTO> createConnection(DTO dto);
   // para deletar conexão 
   Future<void> deleteConnection(DTO dto);
   // para atualizar: recusar, aceitar.
   Future<DTO> updateConnection(DTO dto);
+
+
 }
