@@ -35,7 +35,7 @@ void main() {
   group('getConnections', () {
     test('deve retornar uma lista de relacionamentos requisitados', () async {
       // Arrange
-      when(() => mockNetworkService.getRelactionships(fieldRequest: "requesterUserID", valueID: any(), fieldOther: "status", valorDoStatus: RequestConnectionStatus.pending.name))
+      when(() => mockNetworkService.getRelationships(fieldRequest: "requesterUserID", valueID: any(), fieldOther: "status", valorDoStatus: RequestConnectionStatus.pending.name))
           .thenAnswer((_) async => Future.value([
             mapperConnection.toDTO(dummyConnections[1]),
             mapperConnection.toDTO(dummyConnections[2])
@@ -48,12 +48,12 @@ void main() {
       expect(result, isA<List<Relationship>>());
       expect(result, isNotEmpty);
       expect(result.length, 2);
-      verify(() => mockNetworkService.getRelactionships(fieldRequest: "requesterUserID", valueID: any(), fieldOther: "status", valorDoStatus: RequestConnectionStatus.pending.name)).called(1);
+      verify(() => mockNetworkService.getRelationships(fieldRequest: "requesterUserID", valueID: any(), fieldOther: "status", valorDoStatus: RequestConnectionStatus.pending.name)).called(1);
     });
 
     test("dever retornar uma lista de relacionamentos pendentes que o user enviou", () async {
       // Arrange
-      when(() => mockNetworkService.getRelactionships(fieldRequest: "requesterUserID", valueID: "userID", fieldOther: "status", valorDoStatus: RequestConnectionStatus.pending.name))
+      when(() => mockNetworkService.getRelationships(fieldRequest: "requesterUserID", valueID: "userID", fieldOther: "status", valorDoStatus: RequestConnectionStatus.pending.name))
           .thenAnswer((_) async => [
             mapperConnection.toDTO(dummyConnections[0]),
             mapperConnection.toDTO(dummyConnections[1])
@@ -70,7 +70,7 @@ void main() {
 
     test('should return a list of relationships accepted', () async {
       // Arrange
-      when(() => mockNetworkService.getRelactionships(fieldRequest: "requesterUserID", valueID: "userID", fieldOther: "status", valorDoStatus: RequestConnectionStatus.accepted.name))
+      when(() => mockNetworkService.getRelationships(fieldRequest: "requesterUserID", valueID: "userID", fieldOther: "status", valorDoStatus: RequestConnectionStatus.accepted.name))
           .thenAnswer((_) async => [
             mapper.toDTO(mockUserProfile),
             mapper.toDTO(mockUserProfile2)
@@ -83,7 +83,7 @@ void main() {
       expect(result, isA<List<Relationship>>());
       expect(result, isNotEmpty);
       expect(result.length, 1);
-      verify(() => mockNetworkService.getRelactionships(fieldRequest: "requesterUserID", valueID: "userID", fieldOther: "status", valorDoStatus: RequestConnectionStatus.accepted.name)).called(1);
+      verify(() => mockNetworkService.getRelationships(fieldRequest: "requesterUserID", valueID: "userID", fieldOther: "status", valorDoStatus: RequestConnectionStatus.accepted.name)).called(1);
     });
   });
   

@@ -3,7 +3,7 @@ abstract class INetworkDatasource<DTO> {
   // para pegar as requisições vai ser tipo "requesterUserID" |"valor do user id"| status | pending
   //para pegar as requisições enviadas pelo user vai ser tipo "addresseeID" | "valor do user id"| status | pending
   // para pegar as conexões feitas vai ser tipo "requesterUserID" | "valor do user id"| status | accepted
-  Future<List<DTO>> getRelactionships({
+  Future<List<DTO>> getRelationships({
     required String fieldRequest, 
     required String valueID, 
     required String fieldOther, 

@@ -56,7 +56,7 @@ void main() {
         }
       });
 
-      final connections = await networkDatasource.getRelactionships(fieldRequest: "requesterUserID.id", valueID: "userID1", fieldOther: "status", valorDoStatus: RequestConnectionStatus.accepted.name);
+      final connections = await networkDatasource.getRelationships(fieldRequest: "requesterUserID.id", valueID: "userID1", fieldOther: "status", valorDoStatus: RequestConnectionStatus.accepted.name);
 
       expect(connections, isNotEmpty);
       expect(connections.length, equals(1));
