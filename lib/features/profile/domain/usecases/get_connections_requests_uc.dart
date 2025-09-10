@@ -1,7 +1,6 @@
-
 import 'package:demopico/features/profile/domain/interfaces/i_network_repository.dart';
-import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/infra/repository/network_repository.dart';
+import 'package:demopico/features/profile/presentation/view_objects/relationship_vo.dart';
 
 class GetConnectionsRequestsUc {
 
@@ -14,12 +13,26 @@ class GetConnectionsRequestsUc {
   }
 
   final INetworkRepository _networkRepository;
+  RelationshipVo? relationshipVo;
 
   GetConnectionsRequestsUc({required INetworkRepository networkRepository})
       : _networkRepository = networkRepository;
 
-  Future<List<ConnectionRequester>> execute(String uid) async {
+  Future<List<RelationshipVo>> execute(String uid) async {
+
     final relationship = await _networkRepository.getRelationshipRequests(uid);
-    return relationship.map((rel) => rel.requesterUser).toList();
+
+
+
+    
+    final relationshipVo = relationship.map((rel) {
+      return RelationshipVo(
+        requester: rel.requesterUser, 
+        idRelationship: rel.id,
+        addressed: rel.addressed, 
+      );
+    }).toList();
+
+    return relationshipVo;
   }
 }

@@ -1,6 +1,6 @@
 import 'package:demopico/features/profile/domain/interfaces/i_network_repository.dart';
-import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/infra/repository/network_repository.dart';
+import 'package:demopico/features/profile/presentation/view_objects/relationship_vo.dart';
 import 'package:flutter/rendering.dart';
 
 class GetConnectionsSentUc {
@@ -17,13 +17,22 @@ class GetConnectionsSentUc {
       : _networkRepository = networkRepository;
 
   final INetworkRepository _networkRepository;
+  RelationshipVo? relationshipVo;
 
-
-  Future<List<ConnectionReceiver>> execute(String userId) async {
+  Future<List<RelationshipVo>> execute(String userId) async {
     final relationships = await _networkRepository.getRelationshipSent(userId);
+
+    final relationshipVo = relationships.map((rel) {
+      return RelationshipVo(
+        requester: rel.requesterUser, 
+        idRelationship: rel.id,
+        addressed: rel.addressed,
+      );
+    }).toList();
     debugPrint(relationships.toString());
     debugPrint(relationships.map((rel) => rel.addressed).toString());
     debugPrint("Relacionamentos enviados encontrados: ${relationships.length}");
-    return relationships.map((rel) => rel.addressed).toList();
-  }
+    
+    return relationshipVo;  
+    }
 }
