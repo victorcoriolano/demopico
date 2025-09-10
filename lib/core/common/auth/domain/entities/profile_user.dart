@@ -7,7 +7,6 @@ class Profile {
   final String? backgroundPicture;
   final List<String> connections;
   final List<String> spots;
-  final List<String> favoriteSpots;
   final List<String> posts;
   final RuleProfile profileRule;
 
@@ -21,7 +20,6 @@ class Profile {
     this.backgroundPicture,
     this.connections = const [],
     this.spots = const [],
-    this.favoriteSpots = const [],
     this.posts = const [],
   });
 
@@ -47,7 +45,6 @@ class ProfileFactory {
       backgroundPicture: data['backgroundPicture'],
       connections: List<String>.from(data['connections'] ?? []),
       spots: List<String>.from(data['spots'] ?? []),
-      favoriteSpots: List<String>.from(data['favoriteSpots'] ?? []),
       posts: List<String>.from(data['posts'] ?? []),
       profileRule: RuleProfile.fromString(data['profileRule'] ?? 'viewer'),
     );
@@ -59,15 +56,12 @@ class ProfileFactory {
 }
 
 enum RuleProfile { 
-  admin, 
   viewer, 
   owner;
 
   
   String get name {
     switch (this) {
-      case RuleProfile.admin:
-        return 'admin';
       case RuleProfile.viewer:
         return 'viewer';
       case RuleProfile.owner:
