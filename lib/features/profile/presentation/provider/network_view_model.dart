@@ -5,6 +5,7 @@ import 'package:demopico/features/profile/domain/usecases/cancel_relationship_uc
 import 'package:demopico/features/profile/domain/usecases/create_connection_users_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_connections_requests_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_connections_sent.dart';
+import 'package:demopico/features/profile/presentation/view_objects/relationship_vo.dart';
 import 'package:demopico/features/profile/presentation/view_objects/suggestion_profile.dart';
 import 'package:demopico/features/user/domain/usecases/get_sugestions_user_uc.dart';
 import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
@@ -46,12 +47,13 @@ class NetworkViewModel extends ChangeNotifier {
         _cancelRelationship = cancelRelationship;
 
   List<SuggestionProfile> _suggestions = [];
-  List<ConnectionRequester> _connectionsRequests = [];
-  List<ConnectionReceiver> _connectionSent = [];
+
+  List<RelationshipVo> _connectionsRequests = [];
+  List<RelationshipVo> _connectionSent = [];
 
   List<SuggestionProfile> get suggestions => _suggestions;
-  List<ConnectionRequester> get connectionRequests => _connectionsRequests;
-  List<ConnectionReceiver> get connectionSent => _connectionSent;
+  List<RelationshipVo> get connectionRequests => _connectionsRequests;
+  List<RelationshipVo> get connectionSent => _connectionSent;
 
   Future<void> fetchConnectionsRequests() async {
     final user = UserDataViewModel.getInstance.user;
@@ -123,7 +125,7 @@ class NetworkViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> acceptConnection(Relationship connection) async {
+  Future<void> acceptConnection(RelationshipVo connection) async {
     try {
       final userLogged = UserDataViewModel.getInstance.user;
       if (userLogged == null) return;
