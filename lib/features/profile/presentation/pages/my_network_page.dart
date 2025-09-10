@@ -1,9 +1,9 @@
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/features/profile/domain/models/relationship.dart';
-import 'package:demopico/features/profile/infra/repository/network_repository.dart';
+
 import 'package:demopico/features/profile/presentation/provider/network_view_model.dart';
+import 'package:demopico/features/profile/presentation/view_objects/relationship_vo.dart';
 import 'package:demopico/features/profile/presentation/widgets/search_page_widgets/connection_action_card.dart';
-import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +22,6 @@ class _MyNetworkScreenState extends State<MyNetworkScreen> {
       final viewModel = context.read<NetworkViewModel>();
       await viewModel.fetchConnectionsRequests();
       await viewModel.fetchConnectionSent();
-
     });
   }
 
@@ -58,11 +57,21 @@ class _MyNetworkScreenState extends State<MyNetworkScreen> {
           return TabBarView(
             children: [
               ProfileList(
-                  userProfiles: viewModel.connectionRequests,
-                  actionType: ActionType.accept),
+                userProfiles: viewModel.connectionRequests
+                    .map((req) => req.requester)
+                    .cast<ConnectionRequester>() 
+                    .toList(),
+                actionType: ActionType.accept,
+                connection: viewModel.connectionRequests.toList(),
+              ),
               ProfileList(
-                  userProfiles: viewModel.connectionSent,
-                  actionType: ActionType.cancel),
+                userProfiles: viewModel.connectionSent
+                    .map((req) => req.addressed)
+                    .cast<ConnectionReceiver>()
+                    .toList(),
+                actionType: ActionType.accept,
+                connection: viewModel.connectionSent.toList(),
+              ),
             ],
           );
         }),
@@ -79,9 +88,13 @@ enum ActionType {
 class ProfileList extends StatelessWidget {
   final List<ReciverRequesterBase> userProfiles;
   final ActionType actionType;
+  final List<RelationshipVo> connection;
 
   const ProfileList(
-      {super.key, required this.userProfiles, required this.actionType});
+      {super.key,
+      required this.userProfiles,
+      required this.actionType,
+      required this.connection});
 
   @override
   Widget build(BuildContext context) {
@@ -99,15 +112,17 @@ class ProfileList extends StatelessWidget {
                   actionButton: actionType == ActionType.accept
                       ? ElevatedButton(
                           onPressed: () {
-                            
-                           NetworkViewModel.instance.acceptConnection(relationship);
+                            debugPrint(
+                                "Aceitando conexão com id: ${connection[index].addressed}");
+                            NetworkViewModel.instance
+                                .acceptConnection(connection[index]);
                           },
                           child: const Text('Aceitar'),
                         )
                       : ElevatedButton(
                           onPressed: () {
-                            
-                            NetworkViewModel.instance.acceptConnection(connection);
+                            NetworkViewModel.instance.cancelRelationship(
+                                connection[index] as Relationship);
                           },
                           child: const Text('Cancelar'),
                         ),
