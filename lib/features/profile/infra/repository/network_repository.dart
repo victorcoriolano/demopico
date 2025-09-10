@@ -5,19 +5,22 @@ import 'package:demopico/features/profile/domain/interfaces/i_network_datasource
 import 'package:demopico/features/profile/domain/interfaces/i_network_repository.dart';
 import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/infra/datasource/firebase_network_datasource.dart';
+import 'package:demopico/features/profile/infra/datasource/mappers/relationship_mapper.dart';
+import 'package:demopico/features/profile/presentation/view_objects/relationship_vo.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter/widgets.dart';
 
 class NetworkRepository implements INetworkRepository {
   final INetworkDatasource<FirebaseDTO> _datasource;
+  final RelationshipMapper _mapperRelationship;
 
-  NetworkRepository({required INetworkDatasource<FirebaseDTO> datasource})
-      : _datasource = datasource;
+  NetworkRepository({required RelationshipMapper mapperConnection, required INetworkDatasource<FirebaseDTO> datasource})
+      : _datasource = datasource, _mapperRelationship = mapperConnection;
 
   static NetworkRepository? _instance;
 
   static NetworkRepository get instance => _instance ??=
-      NetworkRepository(datasource: FirebaseNetworkDatasource.instance);
+      NetworkRepository(datasource: FirebaseNetworkDatasource.instance, mapperConnection: RelationshipMapper.instance);
 
   final IMapperDto<UserM, FirebaseDTO> _mapperDtoUser = FirebaseDtoMapper<UserM>(
     fromJson: (Map<String, dynamic> map, String id) => UserM.fromJson(map, id), 
@@ -31,22 +34,24 @@ class NetworkRepository implements INetworkRepository {
     getId: (Relationship model) => model.id
   );
 
+  
+
   IMapperDto<UserM, FirebaseDTO> get mapperUser => _mapperDtoUser;
 
-  IMapperDto<Relationship, FirebaseDTO> get mapperConnection => _mapperDtoConnection;
+  IMapperDto<Relationship, FirebaseDTO> get mapperDtoConnection => _mapperDtoConnection;
 
 
   
   @override
   Future<Relationship> createRelationship(Relationship connection) {
-    return _datasource.createConnection(mapperConnection.toDTO(connection)).then((dto) {
-      return mapperConnection.toModel(dto);
+    return _datasource.createConnection(mapperDtoConnection.toDTO(connection)).then((dto) {
+      return mapperDtoConnection.toModel(dto);
     });
   }
   
   @override
   Future<void> deleteRelationship(Relationship connection) {
-    return _datasource.deleteConnection(mapperConnection.toDTO(connection));
+    return _datasource.deleteConnection(mapperDtoConnection.toDTO(connection));
   }
 
   
@@ -60,7 +65,7 @@ class NetworkRepository implements INetworkRepository {
       valorDoStatus: RequestConnectionStatus.accepted.name,
     ).then((dtos) {
       debugPrint("DTOs recebidos: ${dtos.length}");
-      return dtos.map((dto) => mapperConnection.toModel(dto)).toList();
+      return dtos.map((dto) => mapperDtoConnection.toModel(dto)).toList();
     });
   }
   
@@ -74,7 +79,7 @@ class NetworkRepository implements INetworkRepository {
       valorDoStatus: RequestConnectionStatus.pending.name,
     ).then((dtos) {
       debugPrint("DTOs recebidos: ${dtos.length}");
-      return dtos.map((dto) => mapperConnection.toModel(dto)).toList();
+      return dtos.map((dto) => mapperDtoConnection.toModel(dto)).toList();
     });
   }
   
@@ -87,14 +92,16 @@ class NetworkRepository implements INetworkRepository {
       valorDoStatus: RequestConnectionStatus.pending.name,
     ).then((dtos) {
       debugPrint("DTOs recebidos: ${dtos.length}");
-      return dtos.map((dto) => mapperConnection.toModel(dto)).toList();
+      return dtos.map((dto) => mapperDtoConnection.toModel(dto)).toList();
     });
   }
   
   @override
-  Future<Relationship> updateRelationship(Relationship connection) {
-    return _datasource.updateConnection(mapperConnection.toDTO(connection)).then((dto) {
-      return mapperConnection.toModel(dto);
+  Future<Relationship> updateRelationship(RelationshipVo connection) {
+    Relationship dto = _mapperRelationship.toModel(connection);
+
+    return _datasource.updateConnection(mapperDtoConnection.toDTO(dto)).then((dto) {
+      return mapperDtoConnection.toModel(dto);
     });
   }
   
