@@ -1,7 +1,9 @@
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/features/profile/domain/models/relationship.dart';
+import 'package:demopico/features/profile/infra/repository/network_repository.dart';
 import 'package:demopico/features/profile/presentation/provider/network_view_model.dart';
 import 'package:demopico/features/profile/presentation/widgets/search_page_widgets/connection_action_card.dart';
+import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +22,7 @@ class _MyNetworkScreenState extends State<MyNetworkScreen> {
       final viewModel = context.read<NetworkViewModel>();
       await viewModel.fetchConnectionsRequests();
       await viewModel.fetchConnectionSent();
+
     });
   }
 
@@ -96,13 +99,15 @@ class ProfileList extends StatelessWidget {
                   actionButton: actionType == ActionType.accept
                       ? ElevatedButton(
                           onPressed: () {
-                            // TODO IMPLEMENTAR ACEITAR SOLICITAÇÃO DE CONEXÃO
+                            
+                           NetworkViewModel.instance.acceptConnection(relationship);
                           },
                           child: const Text('Aceitar'),
                         )
                       : ElevatedButton(
                           onPressed: () {
-                            // TODO IMPLEMENTAR CANCELAR SOLICITAÇÃO DE CONEXÃO
+                            
+                            NetworkViewModel.instance.acceptConnection(connection);
                           },
                           child: const Text('Cancelar'),
                         ),
