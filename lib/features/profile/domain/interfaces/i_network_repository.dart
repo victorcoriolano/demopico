@@ -7,5 +7,4 @@ abstract class INetworkRepository {
   Future<List<Relationship>> getRelationshipSent(String userID);
   Future<Relationship> createRelationship(Relationship connection);
   Future<void> deleteRelationship(Relationship connection);
-  Future<List<Relationship>> getRelationship(String idReciver, String idRequester);
 }

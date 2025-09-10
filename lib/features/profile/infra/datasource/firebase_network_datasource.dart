@@ -53,8 +53,4 @@ class FirebaseNetworkDatasource implements INetworkDatasource<FirebaseDTO> {
         return dtos;
   }
   
-  @override
-  Future<List<FirebaseDTO>> getRelationship({required String idReciver, required String idRequester}) async {
-    return await _crudFirebaseBoilerplate.readWithTwoFilters(field1: "addresseeID", value1: idReciver, field2:"requesterUserID" , value2: idRequester);
-  }
 }

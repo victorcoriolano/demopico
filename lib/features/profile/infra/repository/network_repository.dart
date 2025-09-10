@@ -98,11 +98,4 @@ class NetworkRepository implements INetworkRepository {
     });
   }
   
-  @override
-  Future<List<Relationship>> getRelationship(String idReciver, String idRequester) {
-   return _datasource.getRelationship(idReciver: idReciver, idRequester: idRequester).then((dtos) {
-      debugPrint("DTOs recebidos: ${dtos.length}");
-      return dtos.map((dto) => mapperConnection.toModel(dto)).toList();
-    });
-  }
 }
