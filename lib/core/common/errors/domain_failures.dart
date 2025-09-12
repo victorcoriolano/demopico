@@ -69,3 +69,12 @@ class ConnectionNotFoundFailure extends DomainFailure {
 class InvalidStatusConnectionFailure extends DomainFailure {
   InvalidStatusConnectionFailure(): super(message: "Status de conexão inválido", code: 'invalid_status_connection');
 }
+
+class InvalidAttributeError extends DomainFailure {
+  InvalidAttributeError({required super.message});
+  
+}
+
+class InvalidObstacleFailure extends DomainFailure {
+  InvalidObstacleFailure({required super.message});
+}
