@@ -13,27 +13,27 @@ class Pico {
   final String description;
   final List<String> imgUrls;
   final UserIdentification? user;
-  final ModalitySpot modalidade;
+  final ModalityVo modalidade;
   final TypeSpotVo tipoPico;
   final LocationVo location;
-  final AttributesVO atributos;
+  final AttributesVO atributosVO;
   final ObstacleVo obstaculos;
   final RatingVo rating;    
-  final List<String> reviewersUsers;
-  final List<String> idPostOnThis;
+  final List<String>? reviewersUsers;
+  final List<String>? idPostOnThis;
 
   Pico(
     {
       this.user,
-      this.reviewersUsers = const [],
-      this.idPostOnThis = const [],
+      required this.reviewersUsers,
+      required this.idPostOnThis,
       required this.rating,
       required this.imgUrls,
       required this.modalidade,
       required this.tipoPico,
       required this.location,
       required this.description,
-      required this.atributos,
+      required this.atributosVO,
       required this.obstaculos,
       required this.id,
       required this.picoName,
