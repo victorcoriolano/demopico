@@ -3,7 +3,7 @@
   import 'package:demopico/core/common/errors/domain_failures.dart';
 
   sealed class  AttributesVO {
-    Map get atributos;
+    Map<String, int> get attributes;
     AttributesVO updateRate(dynamic attributeName, int newRate);
 
     const AttributesVO();
@@ -84,7 +84,9 @@
     }
 
     @override
-    Map<SkateAttributesEnum, int> get atributos => _attributes;
+    Map<String, int> get attributes => _attributes.map((entry, value) {
+      return MapEntry(entry.name, value);
+    } );
 
     static void _validateAttributesMap(Map<SkateAttributesEnum, int> attributes) {
       if (attributes.isEmpty) {
