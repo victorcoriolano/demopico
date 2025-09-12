@@ -69,7 +69,7 @@ class _MyNetworkScreenState extends State<MyNetworkScreen> {
                     .map((req) => req.addressed)
                     .cast<ConnectionReceiver>()
                     .toList(),
-                actionType: ActionType.accept,
+                actionType: ActionType.cancel,
                 connection: viewModel.connectionSent.toList(),
               ),
             ],
@@ -122,7 +122,7 @@ class ProfileList extends StatelessWidget {
                       : ElevatedButton(
                           onPressed: () {
                             NetworkViewModel.instance.cancelRelationship(
-                                connection[index] as Relationship);
+                                connection[index]);
                           },
                           child: const Text('Cancelar'),
                         ),
