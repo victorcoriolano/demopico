@@ -80,9 +80,9 @@ class _FavoriteSpotPageState extends State<FavoriteSpotPage> {
                   contentPadding: const EdgeInsets.all(16),
                   leading: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: pico.picoModel.imgUrls.firstOrNull != null
+                    child: pico.pico.imgUrls.firstOrNull != null
                         ? Image.network(
-                            pico.picoModel.imgUrls.first,
+                            pico.pico.imgUrls.first,
                             width: 70,
                             height: 70,
                             fit: BoxFit.cover,
@@ -95,14 +95,14 @@ class _FavoriteSpotPageState extends State<FavoriteSpotPage> {
                           ),
                   ),
                   title: Text(
-                    pico.picoModel.picoName,
+                    pico.pico.picoName,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   subtitle: Text(
-                    pico.picoModel.userName ?? 'Anônimmo',
+                    pico.pico.user?.name ?? 'Anônimmo',
                     style: const TextStyle(
                       fontSize: 14,
                       color: Colors.grey,
@@ -116,7 +116,7 @@ class _FavoriteSpotPageState extends State<FavoriteSpotPage> {
                         icon: const Icon(Icons.location_on, color: Colors.blue),
                         onPressed: () {
                           mapController.reajustarCameraPosition(
-                              LatLng(pico.picoModel.lat, pico.picoModel.long));
+                              LatLng(pico.pico.location.latitude, pico.pico.location.longitude));
                           if (context.mounted) Navigator.pop(context);
                         },
                       ),
@@ -131,14 +131,14 @@ class _FavoriteSpotPageState extends State<FavoriteSpotPage> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
-                                      "Pico ${pico.picoModel.picoName} removido com sucesso"),
+                                      "Pico ${pico.pico.picoName} removido com sucesso"),
                                 ),
                               );
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
-                                      "Ocorreu um erro ao remover ${pico.picoModel.picoName} dos favoritos"),
+                                      "Ocorreu um erro ao remover ${pico.pico.picoName} dos favoritos"),
                                 ),
                               );
                             }
@@ -148,7 +148,7 @@ class _FavoriteSpotPageState extends State<FavoriteSpotPage> {
                     ],
                   ),
                   onTap: () {
-                    final latlang = LatLng(pico.picoModel.lat, pico.picoModel.long);
+                    final latlang = LatLng(pico.pico.location.latitude, pico.pico.location.longitude);
                     mapController.reajustarCameraPosition(latlang);
                     Get.toNamed(Paths.map, arguments: latlang);
                   },
