@@ -1,17 +1,17 @@
+import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/models/pico_favorito_model.dart';
-import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 
 class SpotCardUIDto {
-  PicoModel picoModel;
+  Pico pico;
   PicoFavoritoModel picoFavoritoModel;
 
   SpotCardUIDto({
-    required this.picoModel,
+    required this.pico,
     required this.picoFavoritoModel,
   });
 
   @override
   String toString() {
-    return "Pico: ${picoModel.picoName} - Favorito: ${picoFavoritoModel.idPico}";
+    return "Pico: ${pico.picoName} - Favorito: ${picoFavoritoModel.idPico}";
   }
 }
