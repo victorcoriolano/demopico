@@ -1,15 +1,10 @@
-import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/location_vo.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
-import 'package:demopico/features/mapa/domain/value_objects/attributes_vo.dart';
 import 'package:demopico/features/mapa/domain/value_objects/modality_vo.dart';
-import 'package:demopico/features/mapa/domain/value_objects/obstacle_vo.dart';
 import 'package:demopico/features/mapa/domain/value_objects/rating_vo.dart';
-import 'package:demopico/features/mapa/domain/value_objects/type_spot_vo.dart';
 import 'package:demopico/features/mapa/domain/factories/spot_factory.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
-import 'package:flutter/foundation.dart';
+
 
 const _padrao = "Não informado";
 
@@ -132,5 +127,45 @@ class PicoModel {
       'avaliacoes': avaliacoes,
       'creatorUser': userIdentification?.toJson(),
     };
+  }
+}
+
+extension PicoModelCopyWith on PicoModel {
+  PicoModel copyWith({
+    String? id,
+    String? picoName,
+    String? description,
+    List<String>? imgUrls,
+    UserIdentification? userIdentification,
+    String? modalidade,
+    String? tipoPico,
+    double? longitude,
+    double? latitude,
+    Map<String, dynamic>? atributos,
+    List<String>? obstaculos,
+    List<String>? utilities,
+    List<String>? reviewersUsers,
+    List<String>? idPostOnThis,
+    double? nota,
+    int? avaliacoes,
+  }) {
+    return PicoModel(
+      id: id ?? this.id,
+      picoName: picoName ?? this.picoName,
+      description: description ?? this.description,
+      imgUrls: imgUrls ?? this.imgUrls,
+      userIdentification: userIdentification ?? this.userIdentification,
+      modalidade: modalidade ?? this.modalidade,
+      tipoPico: tipoPico ?? this.tipoPico,
+      longitude: longitude ?? this.longitude,
+      latitude: latitude ?? this.latitude,
+      atributos: atributos ?? this.atributos,
+      obstaculos: obstaculos ?? this.obstaculos,
+      utilities: utilities ?? this.utilities,
+      reviewersUsers: reviewersUsers ?? this.reviewersUsers,
+      idPostOnThis: idPostOnThis ?? this.idPostOnThis,
+      nota: nota ?? this.nota,
+      avaliacoes: avaliacoes ?? this.avaliacoes,
+    );
   }
 }
