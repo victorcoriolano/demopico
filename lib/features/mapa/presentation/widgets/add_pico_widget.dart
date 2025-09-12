@@ -1,3 +1,4 @@
+import 'package:demopico/core/common/auth/domain/value_objects/location_vo.dart';
 import 'package:demopico/features/mapa/presentation/controllers/add_pico_view_model.dart';
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/container_telas.dart';
@@ -22,7 +23,7 @@ class AddPicoWidgetState extends State<AddPicoWidget> {
   void initState() {
     super.initState();
     latLng = context.read<MapControllerProvider>().center;
-    context.read<AddPicoViewModel>().initialize();
+    context.read<AddPicoViewModel>().initialize(LocationVo(latitude: latLng.latitude, longitude: latLng.longitude));
   }
 
   @override
