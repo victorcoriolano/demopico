@@ -54,6 +54,11 @@ class NetworkViewModel extends ChangeNotifier {
   List<SuggestionProfile> get suggestions => _suggestions;
   List<RelationshipVo> get connectionRequests => _connectionsRequests;
   List<RelationshipVo> get connectionSent => _connectionSent;
+  
+  final _statusesToRemove = {
+  RequestConnectionStatus.accepted,
+  RequestConnectionStatus.pending,
+};
 
   Future<void> fetchConnectionsRequests() async {
     final user = UserDataViewModel.getInstance.user;
@@ -87,7 +92,8 @@ class NetworkViewModel extends ChangeNotifier {
 
     try {
       _suggestions = await _getSugestionsUser.execute(user.id);
-      notifyListeners();
+ _suggestions.removeWhere((element) => _statusesToRemove.contains(element.status));
+         notifyListeners();
     } on Failure catch (e) {
       FailureServer.showError(e);
     }
@@ -137,7 +143,7 @@ class NetworkViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> cancelRelationship(Relationship connection) async {
+  Future<void> cancelRelationship(RelationshipVo connection) async {
     try {
       final userLogged = UserDataViewModel.getInstance.user;
       if (userLogged == null) return;
