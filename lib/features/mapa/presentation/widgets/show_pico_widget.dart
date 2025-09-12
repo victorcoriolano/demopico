@@ -51,9 +51,9 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
   bool isMine(){
     user = context.read<UserDataViewModel>().user;
     final pico = context.read<SpotProvider>().pico;
-
-      return user != null && pico != null 
-        && pico.userName == user?.name;
+      // TODO REFATORAR ESSA LÓGICA
+      return user != null && pico?.user != null 
+        && pico?.user?.name == user?.name;
     }
 
   @override
@@ -89,7 +89,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                           children: [
                             // widget da imagem dos spots
                             TopInfoSpot(
-                              location: LatLng(spotProvider.pico?.lat ?? 0, spotProvider.pico?.long ?? 0),
+                              location: LatLng(spotProvider.pico?.location.latitude ?? 0, spotProvider.pico?.location.latitude ?? 0),
                               images: spotProvider.pico?.imgUrls ?? [], 
                               isMine: isMine(), 
                               onPressedDelete: () async {
@@ -110,8 +110,8 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            ObstacleWidget(obstacles: spotProvider.pico!.obstaculos),
-                                            EvaluateWidget(rate: spotProvider.pico!.rating, numberReviews: spotProvider.pico!.numberOfReviews),
+                                            ObstacleWidget(obstacles: spotProvider.pico!.obstaculos.obstacles),
+                                            EvaluateWidget(rate: spotProvider.pico!.rating.average, numberReviews: spotProvider.pico!.rating.numberOfReviews),
                                             
                                           ],
                                         ),
@@ -122,7 +122,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             PhotoAndNameWidget(
-                                              nameUserCreator: spotProvider.pico!.userName ?? "Anônimo", 
+                                              nameUserCreator: spotProvider.pico!.user?.name ?? "Anônimo", 
                                               //FIXME: PASSANDO A IMAGEM COMO NULL MAIS FUTURAMENTE passar a imagem do user
                                               urlImageUser: null,
                                             ),
@@ -164,7 +164,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                           child: Column(
                                             children: [
                                               for (var entry
-                                                  in spotProvider.pico!.atributos.entries)
+                                                  in spotProvider.pico!.atributosVO.attributes.entries)
                                                 Center(
                                                   child: Row(
                                                     mainAxisAlignment:
