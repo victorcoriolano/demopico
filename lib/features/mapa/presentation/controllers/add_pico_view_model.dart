@@ -1,106 +1,90 @@
 
 import 'dart:async';
 
+import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
+import 'package:demopico/core/common/auth/domain/value_objects/location_vo.dart';
 import 'package:demopico/core/common/media_management/models/file_model.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/media_management/services/upload_service.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
+import 'package:demopico/features/mapa/domain/factories/spot_factory.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
 import 'package:demopico/core/common/media_management/usecases/pick_image_uc.dart';
+import 'package:demopico/features/mapa/domain/value_objects/attributes_vo.dart';
 import 'package:demopico/features/mapa/domain/value_objects/modality_vo.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/features/mapa/domain/value_objects/obstacle_vo.dart';
+import 'package:demopico/features/mapa/domain/value_objects/rating_vo.dart';
+import 'package:demopico/features/mapa/domain/value_objects/type_spot_vo.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class AddPicoViewModel extends ChangeNotifier{
+class AddPicoViewModel extends ChangeNotifier {
   static AddPicoViewModel? _addPicoProvider;
 
   static AddPicoViewModel get getInstance {
     _addPicoProvider ??= AddPicoViewModel(
-        pickImageUC: PickImageUc.getInstance(),
-        serviceImage: UploadService.getInstance,
-        createSpotUc: CreateSpotUc.getInstance);
+      pickImageUC: PickImageUc.getInstance(),
+      serviceImage: UploadService.getInstance,
+      createSpotUc: CreateSpotUc.getInstance,
+    );
     return _addPicoProvider!;
   }
 
-  //instanciando casos de uso
   final PickImageUc _pickImageUC;
   final UploadService _uploadService;
   final CreateSpotUc _createSpotUc;
 
   AddPicoViewModel({
-    required PickImageUc pickImageUC, 
-    required UploadService serviceImage, 
-    required CreateSpotUc createSpotUc})
-    : _uploadService = serviceImage,
-     _createSpotUc = createSpotUc,
-     _pickImageUC = pickImageUC
-    ;
+    required PickImageUc pickImageUC,
+    required UploadService serviceImage,
+    required CreateSpotUc createSpotUc,
+  })  : _uploadService = serviceImage,
+        _createSpotUc = createSpotUc,
+        _pickImageUC = pickImageUC;
 
-  Pico? pico;
+  // --- ENTITIES / VALUE OBJECTS ---
+  late ModalitySpot selectedModalidade;
+  late AttributesVO attributesVO;
+  late ObstacleVo obstaculos;
+  late TypeSpotVo typeSpotVo;
+  late LocationVo locationVO;
 
-  Map<String, int> atributos = {};
-  List<String> obstaculos = [];
   String nomePico = '';
   String descricao = '';
-  ModalitySpot selectedModalidade = ModalitySpot.skate;
-  double nota = 0.0;
-  int numAval = 0;
-  TypeSpot tipo = TypeSpot.rua;
   List<String> utilidades = [];
   List<String> imgUrls = [];
   LatLng? latlang;
 
-  String? errosImages;
-
   List<FileModel> get files => _pickImageUC.listFile;
-
-  double progress = 0.0;
-
-  void setLocation(LatLng latlang) {
-    this.latlang = latlang;
-  }
-
-  Future<void> pickImages() async{
-    try{
-      await _pickImageUC.pick();
-    }on Exception catch(e) {
-      debugPrint("Erro ao selecionar imagens: $e");
-      errosImages = e.toString();
-    }
-    notifyListeners();
-  }
-
-  void removerImagens(int index){
-    files.removeAt(index);
-    notifyListeners();
-  }
-
-  String? errors;
 
   Map<String, bool> utilidadesSelecionadas = {};
 
-  void initialize() {
-    // definindo o estado inicial de cada page
-    _atualizarUtilidades();
-    atributos = {
-      'Chão': 2,
-      'Iluminação': 3,
-      'Policiamento': 5,
-      'Movimento': 1,
-      'Kick-Out': 4,
-    };
+  // --- INICIALIZAÇÃO ---
+  void initialize(LocationVo location) {
+    locationVO = location;
+    selectedModalidade = ModalitySpot.skate;
+    _updateConfig(selectedModalidade);
   }
-// notificar o estado de modalidade, tipo e utilidades
-  void atualizarModalidade(String modalidade) {
-    selectedModalidade = ModalitySpot.fromString(modalidade);
+
+  void _updateConfig(ModalitySpot modalidade) {
+    attributesVO = SpotFactory.createAttributes(modalidade);
+    obstaculos = SpotFactory.createObstacles(modalidade);
+    typeSpotVo = SpotFactory.createType(modalidade);
+
+    // reset utilidades selecionadas
+    utilidadesSelecionadas.clear();
+    for (var util in modalidade.utilitiesByModality) {
+      utilidadesSelecionadas[util] = false;
+    }
+
     notifyListeners();
   }
 
-  void atualizarDropdown(String novoValor) {
-    tipo = TypeSpot.fromString(novoValor);
-    notifyListeners();
+  // --- ATUALIZAÇÕES ---
+  void atualizarModalidade(ModalitySpot modalidade) {
+    selectedModalidade = modalidade;
+    _updateConfig(modalidade);
   }
 
   void selecionarUtilidade(String utilidade, bool isSelected) {
@@ -108,32 +92,6 @@ class AddPicoViewModel extends ChangeNotifier{
     notifyListeners();
   }
 
-  void _atualizarUtilidades() {
-    utilidadesSelecionadas.clear();
-    for (var utilidade in selectedModalidade.utilitiesByModality) {
-      utilidadesSelecionadas[utilidade] = false;
-    }
-  }
-
-  // notificar o estado de atributos
-  void atualizarAtributo(String atributo, int value) {
-    atributos[atributo] = value;
-    notifyListeners();
-  }
-
-  // notificar o estaddo de obstáculos
-  void atualizarObstaculos(String obstaculo) {
-    obstaculos.add(obstaculo);
-    notifyListeners();
-  }
-
-  //método pra remover dos selecionados
-  void removerObstaculo(String obstaculo) {
-    obstaculos.remove(obstaculo);
-    notifyListeners();
-  }
-
-  // notificar o estado de nome e descrição
   void atualizarNome(String novoNome) {
     nomePico = novoNome;
     notifyListeners();
@@ -144,102 +102,69 @@ class AddPicoViewModel extends ChangeNotifier{
     notifyListeners();
   }
 
-  // validação
-  bool validarAtributos() {
-    return atributos.isNotEmpty &&
-        atributos.values.every((value) => value >= 1);
-  }
-
-  bool validarObstaculos() {
-    return obstaculos.isNotEmpty;
-  }
-
-  bool validarPagina1() {
-    return utilidadesSelecionadas.values.contains(true);
-  }
-
-  // Função que valida tudo de uma vez
-  bool validarPaginaAtual(int paginaAtual) {
-    switch (paginaAtual) {
-      case 0: // validação da primeira página
-        return validarPagina1();
-      case 1: // atributos
-        return validarAtributos();
-      case 2: // obstáculos
-        return validarObstaculos();
-      case 3:
-        return validarFormulario();
-      default:
-        return true;
+  // --- IMAGENS ---
+  Future<void> pickImages() async {
+    try {
+      await _pickImageUC.pick();
+    } on Exception catch (e) {
+      debugPrint("Erro ao selecionar imagens: $e");
     }
+    notifyListeners();
   }
 
-  bool validarTexto(){
-    return nomePico.isNotEmpty && descricao.isNotEmpty;
+  void removerImagens(int index) {
+    files.removeAt(index);
+    notifyListeners();
   }
 
-  bool validarFormulario() {
-    final camposValidos = validarTexto();
-    final validarImagens = files.isNotEmpty;
-    return camposValidos && validarImagens;
-  }
-  
-  
+  // --- CRIAÇÃO DO PICO ---
+  Pico getInfoPico(UserIdentification? userCriador) {
+    final utilitiesSelected = utilidadesSelecionadas.entries
+        .where((e) => e.value)
+        .map((e) => e.key)
+        .toList();
 
-  PicoModel getInfoPico(UserM? userCriador) {
-    return PicoModel(
-      id: "",
-      userID: userCriador?.id ,
-      picoName: nomePico,
-      description: descricao,
-      newRating: nota,
-      countReviews: numAval,
-      tipoPico: tipo.name,
-      utilidades: utilidades,
-      imgUrls: imgUrls,
-      lat: latlang!.latitude,
-      long: latlang!.longitude,
-      atributos: atributos,
-      modalidade: selectedModalidade.name,
-      userName: userCriador?.name ?? "Anônimo",
-      obstaculos: obstaculos,
-    );
+    return PicoBuilder()
+        .withId("") // backend vai gerar
+        .withPicoName(nomePico)
+        .withDescription(descricao)
+        .withModalidade(ModalityVo(utilitiesSelected, selectedModalidade))
+        .withLocation(locationVO)
+        .withImgUrls(imgUrls)
+        .withUser(userCriador)
+        .withAttributesData(attributesVO.attributes) // VO mantém auto-validação
+        .withTypeValue(typeSpotVo.selectedValue)
+        .withObstacles(obstaculos.selectedValues)
+        .withRating(RatingVo(0.0, 0))
+        .withReviewers([])
+        .withPosts([])
+        .build();
+  }
+
+  Future<void> createSpot(UserIdentification? user) async {
+    try {
+      final urls = await _uploadService.uploadFiles(files, "spots");
+      imgUrls.addAll(urls);
+
+      final picoEntity = getInfoPico(user);
+      final picoModel = PicoModel.fromEntity(picoEntity);
+
+      await _createSpotUc.createSpot(picoModel);
+
+      limpar();
+    } on Failure catch (e) {
+      debugPrint("Erro ao criar pico: ${e.message}");
+    }
   }
 
   void limpar() {
     _pickImageUC.listFile.clear();
-    atributos.clear();
-    obstaculos.clear();
+    imgUrls.clear();
     nomePico = '';
     descricao = '';
     selectedModalidade = ModalitySpot.skate;
-    nota = 0.0;
-    numAval = 0;
-    imgUrls.clear();
-    tipo = TypeSpot.rua;
-    utilidades.clear();
+    _updateConfig(selectedModalidade);
     notifyListeners();
-  }
-   
-
-  String? errorCriarPico;
-
-  Future<void> createSpot(UserM? user) async {
-    try {
-      late PicoModel newPico;
-      // Faz o upload das imagens e espera as urls
-      final urls = await  _uploadService.uploadFiles(files, "spots");
-      newPico = getInfoPico(user);
-      newPico.imgUrls.addAll(urls);
-      // Salva o pico no backend
-      
-      await _createSpotUc.createSpot(newPico);
-      
-      // Limpa os campos após a criação bem-sucedida
-      limpar();
-    }on Failure catch (e) {
-      errorCriarPico = e.message;
-    }
   }
 
   @override
