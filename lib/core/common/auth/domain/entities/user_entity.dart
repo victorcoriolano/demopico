@@ -12,13 +12,14 @@ sealed class TypeUser {
 class UserEntity extends TypeUser {
   final String id;
   final String displayName;
+  final String? avatar;
   final EmailVO email;
   final DobVo dob;
   final LocationVo location;
   final Profile profileUser;
 
-
   UserEntity({
+    this.avatar,
     required super.rule,
     required this.displayName,
     required this.id,
@@ -29,6 +30,7 @@ class UserEntity extends TypeUser {
   });  
 
   UserEntity copyWith({
+    String? avatar,
     String? displayName,
     String? id,
     EmailVO? email,
@@ -37,6 +39,7 @@ class UserEntity extends TypeUser {
     Profile? profileUser,
   }) {
     return UserEntity(
+      avatar: avatar,
       id: id ?? this.id,
       rule: rule, // rule is final and should not change
       email: email ?? this.email,
@@ -56,4 +59,6 @@ class ColetivoEntity extends TypeUser {
 class AnonymousUserEntity extends TypeUser {
   const AnonymousUserEntity() : super(rule: UserRuleVO.anonymous);
 }
+
+
 
