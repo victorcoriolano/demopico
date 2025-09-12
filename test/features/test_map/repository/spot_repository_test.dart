@@ -30,7 +30,7 @@ void main() {
     late MockDatasource mockDatasource;
     late SpotRepositoryImpl repositoryImpl;
 
-    final testPicoNotaNova = testPico.copyWith(nota: 5, numeroAvaliacoes: 11);
+    final testPicoNotaNova = testPico.copyWith(nota: 5, avaliacoes: 11);
 
     //setando os mocks para utilizar nos testes
     setUpAll(() {
