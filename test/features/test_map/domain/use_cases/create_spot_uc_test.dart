@@ -1,4 +1,5 @@
 
+import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/mapa/data/repositories/spot_repository_impl.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
@@ -13,22 +14,27 @@ final class MockUserRepository extends Mock implements UserDataRepositoryImpl {}
 final class MockPico extends Mock implements PicoModel {}
 
     final testPico = PicoModel(
-      userID: "490320",
-      id: "1",
-      imgUrls: ["url"],
-      tipoPico: "rua",
-      modalidade: "street",
-      newRating: 0,
-      countReviews: 0,
-      long: -46.57421,
-      lat: -23.55052,
-      description: "Teste",
-      atributos: {"teste": 2},
-      obstaculos: ["corrimão"],
-      utilidades: ["banheiro"],
-      userName: "user123",
-      picoName: "Pico Legal",
-    );
+  id: "1",
+  picoName: "Pico Legal",
+  description: "Teste",
+  imgUrls: ["url"],
+  modalidade: "Skate",
+  tipoPico: "rua",
+  longitude: -46.57421,
+  latitude: -23.55052,
+  atributos: {"teste": 2},
+  obstaculos: ["corrimão"],
+  utilities: ["banheiro"],
+  reviewersUsers: ["user123"],
+  idPostOnThis: [],
+  nota: 4.5,
+  avaliacoes: 10,
+  userIdentification: UserIdentification(
+    id: "980302",
+    name: "user123",
+    photoUrl: "url.com.photo"
+  ),
+);
 
 void main() {
     group("deve criar um spot corretamente",() {
