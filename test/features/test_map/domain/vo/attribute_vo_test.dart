@@ -13,8 +13,8 @@ void main() {
       final attributes = SkateAttributes.initial();
 
       expect(attributes, isA<SkateAttributes>());
-      expect(attributes.atributos, isNotEmpty);
-      expect(attributes.atributos.length, equals(SkateAttributesEnum.values.length));
+      expect(attributes.attributes, isNotEmpty);
+      expect(attributes.attributes.length, equals(SkateAttributesEnum.values.length));
     });
 
     test('updateRate deve retornar uma nova instância com a nota alterada', () {
@@ -26,11 +26,11 @@ void main() {
       // Verifica se é uma nova instância
       expect(original, isNot(same(updated)));
       // Verifica se a nota original não foi alterada
-      expect(original.atributos[SkateAttributesEnum.lighting], isNot(equals(newRate)));
+      expect(original.attributes[SkateAttributesEnum.lighting.name], isNot(equals(newRate)));
       // Verifica se a nota na nova instância foi alterada corretamente
-      expect(updated.atributos[SkateAttributesEnum.lighting], equals(newRate));
+      expect(updated.attributes[SkateAttributesEnum.lighting.name], equals(newRate));
       // Verifica se os outros atributos permanecem os mesmos
-      expect(updated.atributos[SkateAttributesEnum.policing], equals(original.atributos[SkateAttributesEnum.policing]));
+      expect(updated.attributes[SkateAttributesEnum.policing.name], equals(original.attributes[SkateAttributesEnum.policing.name]));
     });
 
     //
