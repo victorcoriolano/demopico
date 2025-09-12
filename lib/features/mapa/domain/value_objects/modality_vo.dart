@@ -1,4 +1,20 @@
 
+import 'package:demopico/core/common/errors/domain_failures.dart';
+
+class ModalityVo {
+  final List<String> utilities;
+  final ModalitySpot value;
+
+  ModalityVo._({required this.utilities, required this.value});
+
+  factory ModalityVo(List<String> utilities, ModalitySpot value){
+    if (!value.validUtilities(utilities)){
+      throw InvalidAttributeError(message: "Utilidades não estão mapeadas na aplicação");
+    }
+    return ModalityVo._(utilities: utilities, value: value);
+  }
+
+}
 
 enum ModalitySpot{
   skate,
@@ -40,6 +56,10 @@ enum ModalitySpot{
       case ModalitySpot.bmx:
         return ['Água', 'Banheiro', 'Mecânicas Próximas', 'Ar Livre'];
     }
+  }
+
+  bool validUtilities(List<String> utilities){
+    return utilitiesByModality.toSet().containsAll(utilities);
   }
 }
 
