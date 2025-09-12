@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
+import 'package:demopico/features/mapa/presentation/view_services/modal_helper.dart';
 import 'package:flutter/material.dart';
 
 class PicoCard extends StatelessWidget {
@@ -113,7 +114,7 @@ class PicoCard extends StatelessWidget {
                       const Icon(Icons.star_rate_rounded, color: Colors.amber, size: 20),
                       const SizedBox(width: 4),
                       Text(
-                        pico.rating.toStringAsFixed(1),
+                        pico.rating.average.toString(),
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -121,7 +122,7 @@ class PicoCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        ' (${pico.numberOfReviews} avaliações)',
+                        ' (${pico.rating.numberOfReviews} avaliações)',
                         style: TextStyle(
                           fontSize: 13,
                           color: Colors.grey[600],
@@ -136,8 +137,7 @@ class PicoCard extends StatelessWidget {
                     alignment: Alignment.bottomRight,
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        // TODO : AÇÃO DE DETALHES 
-                        debugPrint("Detalhes");
+                        ModalHelper.openModalInfoPico(context, pico);
                       },
                       icon: const Icon(Icons.info_outline),
                       label: const Text('Ver Detalhes'),
