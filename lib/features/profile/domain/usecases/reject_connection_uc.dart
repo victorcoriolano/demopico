@@ -1,7 +1,7 @@
 
 import 'package:demopico/features/profile/domain/interfaces/i_network_repository.dart';
-import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/infra/repository/network_repository.dart';
+import 'package:demopico/features/profile/presentation/view_objects/relationship_vo.dart';
 
 class RejectConnectionUc {
   static RejectConnectionUc? _instance;
@@ -17,7 +17,7 @@ class RejectConnectionUc {
   RejectConnectionUc({required INetworkRepository networkRepository})
       : _networkRepository = networkRepository;
 
-  Future<void> execute(Relationship connection) async {
+  Future<void> execute(RelationshipVo connection) async {
      _networkRepository.deleteRelationship(connection);
   }
 }
