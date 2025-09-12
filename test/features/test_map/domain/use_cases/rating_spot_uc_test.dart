@@ -1,7 +1,7 @@
 
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../mocks/mocks_spots.dart' as spots_mock; 
+import '../../../mocks/mocks_spots.dart' as spots_mock; 
 
 
 void main() {
