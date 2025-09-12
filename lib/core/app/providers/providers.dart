@@ -7,7 +7,7 @@ import 'package:demopico/features/home/presentation/provider/weather_provider.da
 import 'package:demopico/features/hub/domain/usecases/listar_comunicados_uc.dart';
 import 'package:demopico/features/hub/domain/usecases/postar_comunicado_uc.dart';
 import 'package:demopico/features/hub/presentation/providers/hub_provider.dart';
-import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
+import 'package:demopico/features/mapa/presentation/controllers/add_pico_view_model.dart';
 import 'package:demopico/features/mapa/presentation/controllers/comment_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/favorite_spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/historico_controller.dart';
@@ -39,7 +39,7 @@ final myProviders = [
     create: (_) => FirebaseAuthService.getInstance.getAuthStateChanges(),
     initialData: null,
   ),
-  ChangeNotifierProvider(create: (_) => AddPicoProvider.getInstance),
+  ChangeNotifierProvider(create: (_) => AddPicoViewModel.getInstance),
   ChangeNotifierProvider(create: (_) => MapControllerProvider()),
   ChangeNotifierProvider(create: (_) => FavoriteSpotController.getInstance),
   ChangeNotifierProvider(create: (_) => SpotsControllerProvider.getInstance),
