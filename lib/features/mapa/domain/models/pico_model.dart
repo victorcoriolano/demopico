@@ -18,7 +18,7 @@ class PicoModel {
   final String picoName;
   final String description;
   final List<String> imgUrls;
-  final UserIdentification userIdentification;
+  final UserIdentification? userIdentification;
 
   // primitivos que serão convertidos
   final String modalidade;  
@@ -28,10 +28,14 @@ class PicoModel {
   final Map<String, dynamic> atributos;
   final List<String> obstaculos;
   final List<String> utilities;
+  final List<String>? reviewersUsers;
+  final List<String>? idPostOnThis;
   final double nota;
   final int avaliacoes;
 
   PicoModel({
+    required this.idPostOnThis,
+    required this.reviewersUsers,
     required this.id,
     required this.picoName,
     required this.description,
@@ -64,28 +68,29 @@ class PicoModel {
       obstaculos: List<String>.from(json['obstaculos'] ?? []),
       nota: (json['nota'] as num?)?.toDouble() ?? 0.0,
       avaliacoes: json['avaliacoes'] ?? 0,
-      userIdentification: UserIdentification.fromJson(json["creatorUser"]),
+      userIdentification: json["creatorUser"] != null ? UserIdentification.fromJson(json["creatorUser"]) : null,
+      reviewersUsers: List.from(json["userReviewers"] ?? []),
+      idPostOnThis: List.from(json["idPostOnThis"] ?? [])
     );
   }
 
   /// 🔹 Converte Model → Entidade rica (com VO)
   Pico toEntity() {
     final modalityEnum = ModalitySpot.fromString(modalidade);
-
     return Pico(
       id: id,
       picoName: picoName,
       description: description,
       imgUrls: imgUrls,
       user: userIdentification,
-      modalidade: ModalityVO(modalityEnum, utilities),
+      modalidade: ModalityVo(utilities, modalityEnum),
       tipoPico: SpotFactory.createType(modalityEnum, tipoPico),
       location: LocationVo(latitude: latitude, longitude: longitude),
-      atributos: SpotFactory.createAttributes(modalityEnum, atributos),
+      atributosVO: SpotFactory.createAttributes(modalityEnum, atributos),
       obstaculos: SpotFactory.createObstacles(modalityEnum, obstaculos),
       rating: RatingVo(nota, avaliacoes),
-      reviewersUsers: [], // 🔹 precisa vir do JSON se existir
-      idPostOnThis: [],   // 🔹 idem
+      reviewersUsers: reviewersUsers, // 🔹 precisa vir do JSON se existir
+      idPostOnThis: idPostOnThis,   // 🔹 idem
     );
   }
 
@@ -96,16 +101,18 @@ class PicoModel {
       picoName: pico.picoName,
       description: pico.description,
       imgUrls: pico.imgUrls,
-      modalidade: pico.modalidade.name,
+      modalidade: pico.modalidade.value.name,
+      utilities: pico.modalidade.utilities,
       tipoPico: pico.tipoPico.selectedValue,
       longitude: pico.location.longitude,
       latitude: pico.location.latitude,
-      atributos: pico.atributos.atributos,
+      atributos: pico.atributosVO.attributes,
       obstaculos: pico.obstaculos.obstacles,
       nota: pico.rating.average,
       avaliacoes: pico.rating.numberOfReviews,
-      userID: pico.user.id,
-      userName: pico.user.name,
+      userIdentification: pico.user,
+      idPostOnThis: pico.idPostOnThis,
+      reviewersUsers: pico.reviewersUsers,
     );
   }
 
@@ -123,8 +130,7 @@ class PicoModel {
       'obstaculos': obstaculos,
       'nota': nota,
       'avaliacoes': avaliacoes,
-      'idUser': userID,
-      'criador': userName,
+      'creatorUser': userIdentification?.toJson(),
     };
   }
 }
