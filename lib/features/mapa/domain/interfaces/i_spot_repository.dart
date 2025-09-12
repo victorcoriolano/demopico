@@ -6,7 +6,7 @@ abstract class ISpotRepository {
   
   Future<PicoModel> createSpot(PicoModel pico);
   Future<PicoModel> updateSpot(PicoModel pico);
-  Future<void> evaluateSpot(PicoModel idSpot, double newRating);
+  Future<void> evaluateSpot(String idSpot, double newRating, Function evaluate);
   Stream<List<PicoModel>> watchListSpots([Filters? filtro]);
   Stream<PicoModel> watchSpot(String id);
   Future<PicoModel> getPicoByID(String id);
