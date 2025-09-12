@@ -1,4 +1,4 @@
-import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
+import 'package:demopico/features/mapa/presentation/controllers/add_pico_view_model.dart';
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/container_telas.dart';
 import 'package:flutter/material.dart';
@@ -22,12 +22,12 @@ class AddPicoWidgetState extends State<AddPicoWidget> {
   void initState() {
     super.initState();
     latLng = context.read<MapControllerProvider>().center;
-    context.read<AddPicoProvider>().initialize();
+    context.read<AddPicoViewModel>().initialize();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AddPicoProvider>(
+    return Consumer<AddPicoViewModel>(
       builder: (context, provider, child) => Stack(
         children: [
           if (_isExpanded)
