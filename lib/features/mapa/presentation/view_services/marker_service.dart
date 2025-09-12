@@ -40,7 +40,7 @@ class MarkerService {
       for (var pico in picos){
         yield Marker(
           markerId: MarkerId(pico.id),
-          position: LatLng(pico.lat, pico.long),
+          position: LatLng(pico.location.latitude, pico.location.longitude),
           icon: _markerIcons[pico.picoName]!,
           onTap: () => onTap(pico),
         );
