@@ -3,7 +3,6 @@ import 'package:demopico/core/common/auth/domain/value_objects/location_vo.dart'
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/value_objects/modality_vo.dart';
 import 'package:demopico/features/mapa/domain/value_objects/rating_vo.dart';
-import 'package:demopico/features/mapa/domain/factories/spot_factory.dart';
 
 
 const _padrao = "Não informado";
@@ -51,7 +50,7 @@ class PicoModel {
   factory PicoModel.fromJson(Map<String, dynamic> json, String id) {
     return PicoModel(
       id: id,
-      utilities: json['utilidades'],
+      utilities: json['utilidades'] ?? [],
       picoName: json['name'] ?? _padrao,
       description: json['description'] ?? _padrao,
       imgUrls: List<String>.from(json['imageUrl'] ?? []),
@@ -70,24 +69,26 @@ class PicoModel {
   }
 
   /// 🔹 Converte Model → Entidade rica (com VO)
-  Pico toEntity() {
-    final modalityEnum = ModalitySpot.fromString(modalidade);
-    return Pico(
-      id: id,
-      picoName: picoName,
-      description: description,
-      imgUrls: imgUrls,
-      user: userIdentification,
-      modalidade: ModalityVo(utilities, modalityEnum),
-      tipoPico: SpotFactory.createType(modalityEnum, tipoPico),
-      location: LocationVo(latitude: latitude, longitude: longitude),
-      atributosVO: SpotFactory.createAttributes(modalityEnum, atributos),
-      obstaculos: SpotFactory.createObstacles(modalityEnum, obstaculos),
-      rating: RatingVo(nota, avaliacoes),
-      reviewersUsers: reviewersUsers, // 🔹 precisa vir do JSON se existir
-      idPostOnThis: idPostOnThis,   // 🔹 idem
-    );
-  }
+Pico toEntity() {
+  final modalityEnum = ModalitySpot.fromString(modalidade);
+
+  return PicoBuilder()
+    .withId(id)
+    .withPicoName(picoName)
+    .withDescription(description)
+    .withImgUrls(imgUrls)
+    .withUser(userIdentification)
+    .withModalidade(ModalityVo(utilities, modalityEnum))
+    .withLocation(LocationVo(latitude: latitude, longitude: longitude))
+    .withReviewers(reviewersUsers ?? [])
+    .withPosts(idPostOnThis ?? [])
+    .withAttributesData(atributos) // passa o map que SpotFactory vai resolver
+    .withTypeValue(tipoPico)      // passa a string que SpotFactory vai resolver
+    .withObstacles(obstaculos)    // passa a lista que SpotFactory vai resolver
+    .withRating(RatingVo(nota, avaliacoes))
+    .build();
+}
+
 
   /// 🔹 Converte Entidade → Model (para salvar no banco)
   factory PicoModel.fromEntity(Pico pico) {
