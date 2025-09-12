@@ -1,6 +1,6 @@
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/value_objects/type_spot_vo.dart';
-import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
+import 'package:demopico/features/mapa/presentation/controllers/add_pico_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,7 +15,7 @@ class EspecificidadeScreen extends StatefulWidget {
 class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<AddPicoProvider>(
+    return Consumer<AddPicoViewModel>(
       builder: (context, value, child) => SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

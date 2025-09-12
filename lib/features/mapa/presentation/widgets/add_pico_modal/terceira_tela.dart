@@ -1,4 +1,4 @@
-import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
+import 'package:demopico/features/mapa/presentation/controllers/add_pico_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -54,7 +54,7 @@ class TerceiraTela extends StatelessWidget {
       "assets/images/icons/bowl.png", // Bowl zinho
     ];
 
-    return Consumer<AddPicoProvider>(
+    return Consumer<AddPicoViewModel>(
       builder: (context, provider, child) => Scaffold(
         // Cor de fundo da tela
         backgroundColor: Colors.grey[200],

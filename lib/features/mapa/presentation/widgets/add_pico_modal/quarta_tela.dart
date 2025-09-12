@@ -1,4 +1,4 @@
-import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
+import 'package:demopico/features/mapa/presentation/controllers/add_pico_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +13,7 @@ class QuartaTela extends StatefulWidget {
 class _QuartaTelaState extends State<QuartaTela> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<AddPicoProvider>(
+    return Consumer<AddPicoViewModel>(
       builder: (context, provider, child) => Scaffold(
         backgroundColor: Colors.grey[200],
         body: SingleChildScrollView(

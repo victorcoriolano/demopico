@@ -1,5 +1,5 @@
 
-import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
+import 'package:demopico/features/mapa/presentation/controllers/add_pico_view_model.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/primeira_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/quarta_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/segunda_tela.dart';
@@ -53,14 +53,14 @@ class _ContainerTelasState extends State<ContainerTelas> {
   void initState() {
     super.initState();
     user = context.read<UserDataViewModel>().user;
-    context.read<AddPicoProvider>().setLocation(widget.latlang);
+    context.read<AddPicoViewModel>().setLocation(widget.latlang);
   }
 
   
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AddPicoProvider>(
+    return Consumer<AddPicoViewModel>(
       builder: (context, provider, child) => Scaffold(
         body: Container(
           color: Colors.black54, 
