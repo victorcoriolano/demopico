@@ -1,4 +1,5 @@
 
+
 class RatingVo {
   final double average;
   final int numberOfReviews;
@@ -31,6 +32,9 @@ class RatingVo {
     return copyWith(newAverage: newAverage, numberOfReviews: newNumberOfReviews);
   }
 
+  RatingVo Function(double) evaluateFunction(double newRating) {
+    return calculateNewAverage;
+  } 
   
   RatingVo copyWith({
     double? newAverage,
