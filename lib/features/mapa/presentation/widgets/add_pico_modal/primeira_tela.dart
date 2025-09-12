@@ -1,4 +1,5 @@
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
+import 'package:demopico/features/mapa/domain/value_objects/type_spot_vo.dart';
 import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -80,7 +81,7 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
                   },
                   items: 
                     
-                  TypeSpot.values.map<DropdownMenuItem<String>>((TypeSpot value) {
+                  TypeSpotVo.options.map<DropdownMenuItem<String>>((TypeSpot value) {
                     return DropdownMenuItem<String>(
                       value: value.name,
                       child: Padding(
