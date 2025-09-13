@@ -52,9 +52,9 @@ class AddPicoViewModel extends ChangeNotifier {
 
   String nomePico = '';
   String descricao = '';
-  List<String> utilidades = [];
   List<String> imgUrls = [];
   LatLng? latlang;
+  bool isValid = false;
 
   List<FileModel> get files => _pickImageUC.listFile;
 
@@ -63,11 +63,11 @@ class AddPicoViewModel extends ChangeNotifier {
   // --- INICIALIZAÇÃO ---
   void initialize(LocationVo location) {
     locationVO = location;
-    selectedModalidade = ModalitySpot.skate;
-    _updateConfig(selectedModalidade);
+    _updateConfig(ModalitySpot.skate);
   }
 
   void _updateConfig(ModalitySpot modalidade) {
+    selectedModalidade = modalidade;
     attributesVO = SpotFactory.createAttributes(modalidade);
     obstaculos = SpotFactory.createObstacles(modalidade);
     typeSpotVo = SpotFactory.createType(modalidade);
@@ -81,17 +81,27 @@ class AddPicoViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // --- ATUALIZAÇÕES ---
-  void atualizarModalidade(ModalitySpot modalidade) {
-    selectedModalidade = modalidade;
-    _updateConfig(modalidade);
-  }
+  // --- PÁGINA 1 ---
+  void atualizarModalidade(ModalitySpot modalidade) => _updateConfig(modalidade); 
 
   void selecionarUtilidade(String utilidade, bool isSelected) {
     utilidadesSelecionadas[utilidade] = isSelected;
     notifyListeners();
   }
 
+  // --- PÁGINA 2 ---
+  void atualizarAtributos(String attributeName, int rate) {
+    attributesVO.updateRate(attributeName, rate);
+    notifyListeners();
+  }
+
+  // --- PÁGINA 3 ---
+  void atualizarObstaculos(int index) {
+    obstaculos.selectObstacle(index);
+    notifyListeners();
+  }
+
+  // --- PÁGINA 4 ---
   void atualizarNome(String novoNome) {
     nomePico = novoNome;
     notifyListeners();
@@ -106,8 +116,9 @@ class AddPicoViewModel extends ChangeNotifier {
   Future<void> pickImages() async {
     try {
       await _pickImageUC.pick();
-    } on Exception catch (e) {
+    } on Failure catch (e) {
       debugPrint("Erro ao selecionar imagens: $e");
+      FailureServer.showError(e);
     }
     notifyListeners();
   }
@@ -124,7 +135,8 @@ class AddPicoViewModel extends ChangeNotifier {
         .map((e) => e.key)
         .toList();
 
-    return PicoBuilder()
+    try {
+      return PicoBuilder()
         .withId("") // backend vai gerar
         .withPicoName(nomePico)
         .withDescription(descricao)
@@ -139,6 +151,13 @@ class AddPicoViewModel extends ChangeNotifier {
         .withReviewers([])
         .withPosts([])
         .build();
+    } on ArgumentError catch (e) {
+      debugPrint("Erro ao criar spot: ${e.toString()}");
+      rethrow;
+    } on Failure catch (e) {
+      debugPrint("Erro na contrução do spot: ${e.message}");
+      rethrow;
+    }
   }
 
   Future<void> createSpot(UserIdentification? user) async {
@@ -154,6 +173,10 @@ class AddPicoViewModel extends ChangeNotifier {
       limpar();
     } on Failure catch (e) {
       debugPrint("Erro ao criar pico: ${e.message}");
+      FailureServer.showError(e);
+    } on ArgumentError catch (e) {
+      debugPrint("Erro ao criar spot: ${e.toString()}");
+      rethrow;
     }
   }
 
