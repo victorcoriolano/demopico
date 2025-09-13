@@ -1,4 +1,5 @@
 
+import 'package:demopico/core/common/auth/domain/value_objects/location_vo.dart';
 import 'package:demopico/features/mapa/presentation/controllers/add_pico_view_model.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/primeira_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/quarta_tela.dart';
@@ -53,7 +54,8 @@ class _ContainerTelasState extends State<ContainerTelas> {
   void initState() {
     super.initState();
     user = context.read<UserDataViewModel>().user;
-    context.read<AddPicoViewModel>().setLocation(widget.latlang);
+    final location = LocationVo(latitude: widget.latlang.latitude, longitude: widget.latlang.longitude);
+    context.read<AddPicoViewModel>().initialize(location);
   }
 
   
