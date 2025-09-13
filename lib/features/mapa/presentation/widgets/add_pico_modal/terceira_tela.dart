@@ -9,28 +9,7 @@ class TerceiraTela extends StatelessWidget {
   Widget build(BuildContext context) {
     // Obtém a altura da tela
     final screenHeight = MediaQuery.of(context).size.height;
-    // TODO: COLOCAR NO DOMÍNIO esta lista
-    final List<String> listaObstaculos = [
-      "45° graus",
-      "Barreira newjersey",
-      "Bowl zão",
-      "Banco",
-      "Corrimão",
-      "Escada",
-      "Funbox",
-      "Gap",
-      "Jump",
-      "Megaramp",
-      "Miniramp",
-      "Pirâmide",
-      "Quarter",
-      "Spine",
-      "Stepper",
-      "Transição",
-      "Hidrante",
-      "Parede",
-      "Bowl zinho",
-    ];
+    
 
     final List<String> listaIcon = [
       "assets/images/icons/45graus.png", // 45° graus
@@ -90,15 +69,15 @@ class TerceiraTela extends StatelessWidget {
                 Container(
                   margin: const EdgeInsets.only(bottom: 20),
                   child: Visibility(
-                    visible: provider.obstaculos.isNotEmpty,
+                    visible: provider.obstaculoVo.obstacles.isNotEmpty,
                     child: Wrap(
                       spacing: 6,
                       runSpacing: 3,
-                      children: provider.obstaculos.map((obstaculo) {
+                      children: provider.obstaculoVo.obstacles.map((obstaculo) {
                         return Chip(
                           label: Text(obstaculo),
                           onDeleted: () {
-                            provider.removerObstaculo(obstaculo);
+                            provider.obstaculoVo.removeObstacle(obstaculo);
                           },
                         );
                       }).toList(),
@@ -117,8 +96,11 @@ class TerceiraTela extends StatelessWidget {
                       crossAxisSpacing: 6, // Espaçamento entre colunas
                       childAspectRatio: 1.0, // Faz as caixas serem quadradas
                     ),
-                    itemCount: listaObstaculos.length, // Total de 15 caixas
+                    itemCount: provider.obstaculoVo.options.length, // Total de 15 caixas
                     itemBuilder: (context, index) {
+                      final obstacle = provider.obstaculoVo.obstacles.elementAt(index);
+                      final options = provider.obstaculoVo.options;
+                      final selectedObstacles = provider.obstaculoVo.obstacles;
                       return Padding(
                         padding: const EdgeInsets.all(5),
                         child: Container(
@@ -127,18 +109,18 @@ class TerceiraTela extends StatelessWidget {
                           child: InkWell(
                             onTap: () {
                               // Se estiver na lista, remove; caso contrário, adiciona
-                              if (provider.obstaculos
-                                  .contains(listaObstaculos[index])) {
-                                provider.obstaculos
-                                    .remove(listaObstaculos[index]);
+                              if (selectedObstacles
+                                  .contains(options[index])) {
+                                provider.obstaculoVo
+                                    .removeObstacle(obstacle);
                               } else {
                                 provider.atualizarObstaculos(
-                                    listaObstaculos[index]);
+                                    obstacle);
                               }
                             },
                             child: Image.asset(
-                              listaIcon[index], // Garante que é uma string
-                              fit: BoxFit.contain, // Ajusta a imagem ao botão
+                              listaIcon[index], 
+                              fit: BoxFit.contain,
                             ),
                           ),
                         ),
