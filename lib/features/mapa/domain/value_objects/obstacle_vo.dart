@@ -5,8 +5,8 @@ sealed class  ObstacleVo<T> {
   List<String> get options;
   List<String> get selectedValues;
   List<String> get obstacles;
-  void selectObstacle(int index);
-  void removeObstacle(int value);
+  void selectObstacle(String value);
+  void removeObstacle(String value);
 }
 
 class ObstacleSkate extends ObstacleVo<ModalitySpot> {
@@ -59,19 +59,19 @@ class ObstacleSkate extends ObstacleVo<ModalitySpot> {
 
   
   @override
-  void selectObstacle(int index) {
-    if (_options.elementAtOrNull(index) == null || _options.elementAt(index).isEmpty  ){
-      throw InvalidObstacleFailure(message: "Index inválido");
+  void selectObstacle(String value) {
+    if (value.isEmpty || !_options.contains(value)){
+      throw InvalidObstacleFailure(message: "Value inválido");
     }
-    _selectedObstacles.add(_options.elementAt(index));
+    _selectedObstacles.add(value);
   }
 
    @override
-  void removeObstacle(int index) {
-    if (_options.elementAtOrNull(index) == null || _options.elementAt(index).isEmpty  ){
-      throw InvalidObstacleFailure(message: "Index inválido");
+  void removeObstacle(String value) {
+    if (value.isEmpty || !_options.contains(value)){
+      throw InvalidObstacleFailure(message: "Value inválido");
     }
-    _selectedObstacles.remove(_options.elementAt(index));
+    _selectedObstacles.remove(value);
   }
   
   @override
@@ -117,20 +117,20 @@ class ObstacleParkour extends ObstacleVo<ModalitySpot> {
 
 
   
-  @override
-  void selectObstacle(int index) {
-    if (_options.elementAtOrNull(index) == null || _options.elementAt(index).isEmpty  ){
-      throw InvalidObstacleFailure(message: "Index inválido");
+ @override
+  void selectObstacle(String value) {
+    if (value.isEmpty || !_options.contains(value)){
+      throw InvalidObstacleFailure(message: "Value inválido");
     }
-    _selectedObstacles.add(_options.elementAt(index));
+    _selectedObstacles.add(value);
   }
 
    @override
-  void removeObstacle(int index) {
-    if (_options.elementAtOrNull(index) == null || _options.elementAt(index).isEmpty  ){
-      throw InvalidObstacleFailure(message: "Index inválido");
+  void removeObstacle(String value) {
+    if (value.isEmpty || !_options.contains(value)){
+      throw InvalidObstacleFailure(message: "Value inválido");
     }
-    _selectedObstacles.remove(_options.elementAt(index));
+    _selectedObstacles.remove(value);
   }
   
   @override
@@ -178,19 +178,19 @@ class ObstacleBMX extends ObstacleVo<ModalitySpot> {
 
   
   @override
-  void selectObstacle(int index) {
-    if (_options.elementAtOrNull(index) == null || _options.elementAt(index).isEmpty  ){
-      throw InvalidObstacleFailure(message: "Index inválido");
+  void selectObstacle(String value) {
+    if (value.isEmpty || !_options.contains(value)){
+      throw InvalidObstacleFailure(message: "Value inválido");
     }
-    _selectedObstacles.add(_options.elementAt(index));
+    _selectedObstacles.add(value);
   }
 
    @override
-  void removeObstacle(int index) {
-    if (_options.elementAtOrNull(index) == null || _options.elementAt(index).isEmpty  ){
-      throw InvalidObstacleFailure(message: "Index inválido");
+  void removeObstacle(String value) {
+    if (value.isEmpty || !_options.contains(value)){
+      throw InvalidObstacleFailure(message: "Value inválido");
     }
-    _selectedObstacles.remove(_options.elementAt(index));
+    _selectedObstacles.remove(value);
   }
   
   @override
