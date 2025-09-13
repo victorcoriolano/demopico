@@ -23,8 +23,11 @@ class ButtonAddPicoState extends State<ButtonAddPico> {
   @override
   void initState() {
     super.initState();
-    latLng = context.read<MapControllerProvider>().center;
-    context.read<AddPicoViewModel>().initialize(LocationVo(latitude: latLng.latitude, longitude: latLng.longitude));
+    WidgetsBinding.instance.addPostFrameCallback((_) { 
+      latLng = context.read<MapControllerProvider>().center;
+      context.read<AddPicoViewModel>().initialize(LocationVo(latitude: latLng.latitude, longitude: latLng.longitude));
+    });
+    
   }
 
   @override
