@@ -1,4 +1,4 @@
-import 'package:demopico/features/mapa/presentation/widgets/add_pico_widget.dart';
+import 'package:demopico/features/mapa/presentation/widgets/button_add_pico.dart';
 import 'package:demopico/features/mapa/presentation/widgets/drawer_widget.dart';
 import 'package:demopico/features/mapa/presentation/widgets/map_widget.dart';
 import 'package:demopico/features/mapa/presentation/widgets/top_side_map_widget.dart';
@@ -16,7 +16,7 @@ class MapPage extends StatelessWidget {
         body: Stack(
           children: [
             MapWidget(),
-            AddPicoWidget(),
+            ButtonAddPico(),
           ],
         ),
         endDrawer: MyDrawer(),
