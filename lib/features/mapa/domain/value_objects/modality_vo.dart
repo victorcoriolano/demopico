@@ -9,7 +9,7 @@ class ModalityVo {
 
   factory ModalityVo(List<String> utilities, ModalitySpot value){
     if (!value.validUtilities(utilities)){
-      throw InvalidAttributeError(message: "Utilidades não estão mapeadas na aplicação");
+      throw InvalidAttributeError(message: "Utilidades não estão mapeadas na aplicação: $utilities");
     }
     return ModalityVo._(utilities: utilities, value: value);
   }
@@ -42,20 +42,15 @@ enum ModalitySpot{
   }
 
   List get utilitiesByModality{
-    switch (this){
-      case ModalitySpot.skate:
         return [
           'Água',
           'Teto',
           'Banheiro',
           'Suave Arcadiar',
-          'Público / Gratuito'
+          'Público / Gratuito',
+          'Mecânicas Próximas',
+          'Ar Livre',
         ];
-      case ModalitySpot.parkour:
-        return ['Água', 'Banheiro', 'Ar Livre'];
-      case ModalitySpot.bmx:
-        return ['Água', 'Banheiro', 'Mecânicas Próximas', 'Ar Livre'];
-    }
   }
 
   bool validUtilities(List<String> utilities){
