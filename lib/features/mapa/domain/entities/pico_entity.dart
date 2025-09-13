@@ -53,8 +53,8 @@ class PicoBuilder {
   ModalityVo? modalidade;
   LocationVo? location;
   RatingVo? rating;
-  List<String>? reviewersUsers = [];
-  List<String>? idPostOnThis = [];
+  List<String>? reviewersUsers;
+  List<String>? idPostOnThis;
 
   // dados opcionais para factory
   Map<String, dynamic>? attributesData;
