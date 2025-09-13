@@ -43,6 +43,8 @@ class AddPicoViewModel extends ChangeNotifier {
         _createSpotUc = createSpotUc,
         _pickImageUC = pickImageUC;
 
+  String? errors;
+
   // --- ENTITIES / VALUE OBJECTS ---
   late ModalitySpot selectedModalidade;
   late AttributesVO attributesVO;
@@ -104,11 +106,13 @@ class AddPicoViewModel extends ChangeNotifier {
   // --- PÁGINA 4 ---
   void atualizarNome(String novoNome) {
     nomePico = novoNome;
+    if(novoNome.isEmpty) errors = "Nome não pode ser vazio";
     notifyListeners();
   }
 
   void atualizarDescricao(String novoDesc) {
     descricao = novoDesc;
+    if(novoDesc.isEmpty) errors = "Descrição não pode ser vazia";
     notifyListeners();
   }
 
