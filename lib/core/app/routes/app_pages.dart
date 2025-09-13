@@ -2,6 +2,7 @@ import 'package:demopico/core/app/home_page.dart';
 import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/routes/middleware.dart';
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
+import 'package:demopico/features/mapa/presentation/pages/add_pico_pages.dart/create_spot_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/favorites_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/history_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
@@ -99,6 +100,12 @@ class AppPages {
       name: Paths.myNetwork,
       page: () => MyNetworkScreen(),
       transition: Transition.fadeIn,
+    ),
+
+    GetPage(
+      name: Paths.createSpotPage, 
+      page: () => CreateSpotPage(),
+      transition: Transition.circularReveal,
     ),
   ];
 }
