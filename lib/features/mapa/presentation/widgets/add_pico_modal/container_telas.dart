@@ -23,27 +23,18 @@ class ContainerTelas extends StatefulWidget {
 }
 
 class _ContainerTelasState extends State<ContainerTelas> {
-  int _currentIndex = 0;
   late UserM? user;
-
-  final List<Widget> _screens = [
-    const EspecificidadeScreen(), // Página 1
-    const SegundaTela(), // Página 2
-    const TerceiraTela(), // Página 3
-    const QuartaTela(), // Página 4
-  ];
+  StepsAddPico etapa = StepsAddPico.especificidade;
 
   void _nextScreen() {
     setState(() {
-      _currentIndex =
-          (_currentIndex + 1) % _screens.length; // Muda para o próximo índice
+      etapa = etapa.next();
     });
   }
 
   void _backScreen() {
     setState(() {
-      _currentIndex =
-          (_currentIndex - 1) % _screens.length; // Muda para o próximo índice
+      etapa = etapa.back();
     });
   }
 
@@ -86,68 +77,31 @@ class _ContainerTelasState extends State<ContainerTelas> {
                   child: Column(
                     children: [
                       Expanded(
-                        child: _screens[_currentIndex], // Exibe o widget atual
+                        child: switch (etapa){  
+                          StepsAddPico.especificidade => EspecificidadeScreen(),
+                          StepsAddPico.atributos => SegundaTela(),
+                          StepsAddPico.obstaculos => TerceiraTela(),
+                          StepsAddPico.detalhesAdicionais => QuartaTela(),
+                        }, // Exibe o widget atual
                       ),
                       const SizedBox(height: 10),
-                      if (_currentIndex != 0)
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                const Color(0xFF8B0000), // Cor do botão
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 50, vertical: 15),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          onPressed: () {
-                            _backScreen(); // Chama a função para mudar a tela
-                          },
-                          child: const Text('VOLTAR',
-                              style: TextStyle(fontSize: 15)),
+                      Visibility(
+                        visible: etapa != StepsAddPico.especificidade,
+                        child: CustomElevatedButton(
+                          onPressed: _backScreen, 
+                          textButton: 'Voltar'
                         ),
+                      ),
                       const SizedBox(height: 10),
-                      if (_currentIndex == 3)
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                const Color(0xFF8B0000), // Cor do botão
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 50, vertical: 15),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          onPressed: provider.errors == null
-                              ? () async {
-                                  final identification =
-                                      createIdentification(user);
-                                  await provider.createSpot(identification);
-                                  if (context.mounted) Navigator.pop(context);
-                                }
-                              : null,
-                          child: const Text('POSTAR PICO',
-                              style: TextStyle(fontSize: 15)),
-                        )
-                      else
-                        CustomElevatedButton(
-                          onPressed: () {
-                            // chama a proxima página somente se tiver validada
-                            if (provider.errors == null) {
-                              _nextScreen(); // Chama a função para mudar a tela
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                      "Preenche todos as informações corretamente"),
-                                ),
-                              );
-                            }
-                          },
-                          textButton: "PROSSEGUIR",
-                        ),
+                      CustomElevatedButton(
+                        onPressed: provider.isFormValid(etapa) 
+                          ? () {
+                            etapa == StepsAddPico.detalhesAdicionais
+                              ? provider.createSpot(createIdentification(user))
+                              : _nextScreen();
+                          }
+                          : null, 
+                        textButton: etapa == StepsAddPico.detalhesAdicionais ? "CRIAR PICO" : "PROSSEGUIR"),
                     ],
                   ),
                 ),
