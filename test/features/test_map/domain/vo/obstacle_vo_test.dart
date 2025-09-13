@@ -55,21 +55,21 @@ void main() {
 
     test('selectObstacle adds the correct obstacle to selectedValues', () {
       final obstacleParkour = ObstacleParkour.fromList(['Muro']);
-      obstacleParkour.selectObstacle(0); // 'Muro'
+      obstacleParkour.selectObstacle("Muro"); // 'Muro'
       expect(obstacleParkour.selectedValues, contains('Muro'));
     });
 
     test('removeObstacle removes the correct obstacle from selectedValues', () {
       final obstacleParkour = ObstacleParkour.fromList(['Muro']);
-      obstacleParkour.selectObstacle(0); // 'Muro'
-      obstacleParkour.removeObstacle(0);
+      obstacleParkour.selectObstacle("Muro"); // 'Muro'
+      obstacleParkour.removeObstacle("Muro");
       expect(obstacleParkour.selectedValues, isNot(contains('Muro')));
     });
 
     test('selectObstacle throws InvalidObstacleFailure for invalid index', () {
       final obstacleParkour = ObstacleParkour.fromList(['Muro']);
       expect(
-        () => obstacleParkour.selectObstacle(100),
+        () => obstacleParkour.selectObstacle("100"),
         throwsA(isA<InvalidObstacleFailure>()),
       );
     });
@@ -77,7 +77,7 @@ void main() {
     test('removeObstacle throws InvalidObstacleFailure for invalid index', () {
       final obstacleParkour = ObstacleParkour.fromList(['Muro']);
       expect(
-        () => obstacleParkour.removeObstacle(100),
+        () => obstacleParkour.removeObstacle("100"),
         throwsA(isA<InvalidObstacleFailure>()),
       );
     });
