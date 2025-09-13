@@ -9,13 +9,13 @@ sealed class  TypeSpotVo<T> {
 
 class TypeSkate extends TypeSpotVo<ModalitySpot> {
   final String value;
-  static const List<String> _options = ['Pico de rua', 'Half', 'Bowl', 'Street', 'SkatePark'];
+  static const List<String> _options = ['Pico de Rua', 'Half', 'Bowl', 'Street', 'SkatePark'];
 
   TypeSkate._({required this.value});
 
   factory TypeSkate(String value){
     if (!_options.contains(value)){
-       throw ArgumentError('Invalid value for TypeSkate');
+       throw ArgumentError('Invalid value for TypeSkate: $value');
     }
    return TypeSkate._(value: value);
   }
