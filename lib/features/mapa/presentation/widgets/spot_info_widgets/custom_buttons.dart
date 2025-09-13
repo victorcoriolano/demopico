@@ -2,7 +2,7 @@ import 'package:demopico/core/app/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class CustomElevatedButton extends StatelessWidget {
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final String textButton;
   const CustomElevatedButton(
       {super.key, required this.onPressed, required this.textButton});
@@ -31,7 +31,7 @@ class CustomElevatedButton extends StatelessWidget {
 }
 
 class CustomOutlineButton extends StatelessWidget {
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final String textButton;
   const CustomOutlineButton(
       {super.key, required this.onPressed, required this.textButton});
