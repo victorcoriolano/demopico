@@ -1,8 +1,9 @@
 
+
 class UserIdentification {
   final String id;
   final String name;
-  final String photoUrl;
+  final String? photoUrl;
 
   UserIdentification({
     required this.id,
