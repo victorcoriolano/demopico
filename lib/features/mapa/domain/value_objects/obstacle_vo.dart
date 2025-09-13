@@ -1,5 +1,6 @@
 import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/features/mapa/domain/value_objects/modality_vo.dart';
+import 'package:flutter/widgets.dart';
 
 sealed class  ObstacleVo<T> {
   List<String> get options;
@@ -12,7 +13,7 @@ sealed class  ObstacleVo<T> {
 class ObstacleSkate extends ObstacleVo<ModalitySpot> {
   final List<String> _obstacles;
   final List<String> _selectedObstacles = []; 
-  static const Set<String> _options = {
+  static const Set<String> _obstaclesAll = {
   "45° graus",
   "Barreira newjersey",
   "Bowl zão",
@@ -44,14 +45,14 @@ class ObstacleSkate extends ObstacleVo<ModalitySpot> {
       throw ArgumentError("Lista de obstáculos inválida, alguns elementos estão repetidos");
     }
     
-    if (!_options.toSet().containsAll(value)){
+    if (!_obstaclesAll.toSet().containsAll(value)){
        throw ArgumentError('Lista de obstáculos com elementos fora do padrão');
     }
    return ObstacleSkate._(value);
   }
 
   @override
-  List<String> get options => _options.toList();
+  List<String> get options => _obstaclesAll.toList();
   
   @override
   List<String> get selectedValues => _selectedObstacles;
@@ -60,28 +61,30 @@ class ObstacleSkate extends ObstacleVo<ModalitySpot> {
   
   @override
   void selectObstacle(String value) {
-    if (value.isEmpty || !_options.contains(value)){
+    if (value.isEmpty || !_obstaclesAll.contains(value)){
       throw InvalidObstacleFailure(message: "Value inválido");
     }
     _selectedObstacles.add(value);
+    debugPrint("Selecionou o obstaculo: $value");
   }
 
    @override
   void removeObstacle(String value) {
-    if (value.isEmpty || !_options.contains(value)){
+    if (value.isEmpty || !_obstaclesAll.contains(value)){
       throw InvalidObstacleFailure(message: "Value inválido");
     }
     _selectedObstacles.remove(value);
+    debugPrint("Removeu o obstaculo: $value");
   }
   
   @override
-  List<String> get obstacles => _obstacles.toList();
+  List<String> get obstacles => _obstacles;
 } 
 
 class ObstacleParkour extends ObstacleVo<ModalitySpot> {
   final List<String> _obstacles;
   final List<String> _selectedObstacles = []; 
-  static const Set<String> _options = {
+  static const Set<String> _obstaclesAll = {
   'Muro',
   'Corrimão',
   'Escada',
@@ -103,14 +106,14 @@ class ObstacleParkour extends ObstacleVo<ModalitySpot> {
       throw ArgumentError("Lista de obstáculos inválida, alguns elementos estão repetidos");
     }
     
-    if (!_options.toSet().containsAll(value)){
+    if (!_obstaclesAll.toSet().containsAll(value)){
        throw ArgumentError('Lista de obstáculos com elementos fora do padrão');
     }
    return ObstacleParkour._(value);
   }
 
   @override
-  List<String> get options => _options.toList();
+  List<String> get options => _obstaclesAll.toList();
   
   @override
   List<String> get selectedValues => _selectedObstacles;
@@ -119,18 +122,20 @@ class ObstacleParkour extends ObstacleVo<ModalitySpot> {
   
  @override
   void selectObstacle(String value) {
-    if (value.isEmpty || !_options.contains(value)){
+    if (value.isEmpty || !_obstaclesAll.contains(value)){
       throw InvalidObstacleFailure(message: "Value inválido");
     }
     _selectedObstacles.add(value);
+    debugPrint("Selecionou o obstaculo: $value");
   }
 
    @override
   void removeObstacle(String value) {
-    if (value.isEmpty || !_options.contains(value)){
+    if (value.isEmpty || !_obstaclesAll.contains(value)){
       throw InvalidObstacleFailure(message: "Value inválido");
     }
     _selectedObstacles.remove(value);
+    debugPrint("Removeu o obstaculo: $value");
   }
   
   @override
@@ -140,7 +145,7 @@ class ObstacleParkour extends ObstacleVo<ModalitySpot> {
 class ObstacleBMX extends ObstacleVo<ModalitySpot> {
   final List<String> _obstacles;
   final List<String> _selectedObstacles = []; 
-  static const Set<String> _options = {
+  static const Set<String> _obstaclesAll = {
   'Rampa',
   'Quartar Pipe',
   'Spine',
@@ -163,14 +168,14 @@ class ObstacleBMX extends ObstacleVo<ModalitySpot> {
       throw ArgumentError("Lista de obstáculos inválida, alguns elementos estão repetidos");
     }
     
-    if (!_options.toSet().containsAll(value)){
+    if (!_obstaclesAll.toSet().containsAll(value)){
        throw ArgumentError('Lista de obstáculos com elementos fora do padrão');
     }
    return ObstacleBMX._(value);
   }
 
   @override
-  List<String> get options => _options.toList();
+  List<String> get options => _obstaclesAll.toList();
   
   @override
   List<String> get selectedValues => _selectedObstacles;
@@ -179,18 +184,20 @@ class ObstacleBMX extends ObstacleVo<ModalitySpot> {
   
   @override
   void selectObstacle(String value) {
-    if (value.isEmpty || !_options.contains(value)){
+    if (value.isEmpty || !_obstaclesAll.contains(value)){
       throw InvalidObstacleFailure(message: "Value inválido");
     }
     _selectedObstacles.add(value);
+    debugPrint("Selecionou o obstaculo: $value");
   }
 
    @override
   void removeObstacle(String value) {
-    if (value.isEmpty || !_options.contains(value)){
+    if (value.isEmpty || !_obstaclesAll.contains(value)){
       throw InvalidObstacleFailure(message: "Value inválido");
     }
     _selectedObstacles.remove(value);
+    debugPrint("Removeu o obstaculo: $value");
   }
   
   @override
