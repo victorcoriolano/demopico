@@ -1,10 +1,10 @@
+import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/features/mapa/domain/value_objects/modality_vo.dart';
 import 'package:demopico/features/mapa/presentation/controllers/add_pico_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class EspecificidadeScreen extends StatefulWidget {
-
   const EspecificidadeScreen({super.key});
 
   @override
@@ -43,7 +43,8 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
             // Botões para seleção da modalidade
             ModalidadeButtons(
               onSelected: (ModalitySpot selected) {
-                viewModel.atualizarModalidade(selected); // Atualiza utilidades ao selecionar uma modalidade
+                viewModel.atualizarModalidade(
+                    selected); // Atualiza utilidades ao selecionar uma modalidade
               },
               selectedModalidade: viewModel.selectedModalidade,
             ),
@@ -52,7 +53,7 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'TIPO DE PICO:',
+                'TIPO DO LOCAL:',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -71,14 +72,14 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: DropdownButton<String>(
                   menuWidth: 400,
-                  dropdownColor: Colors.white,
+                  dropdownColor: kAlmostWhite,
                   value: viewModel.typeSpotVo.selectedValue,
                   isExpanded: true,
                   onChanged: (String? newValue) {
-                    if (newValue != null) viewModel.typeSpotVo.selectValue(newValue) ;
+                    if (newValue != null) viewModel.updateTypeSpot(newValue);
                   },
-                  items: 
-                  viewModel.typeSpotVo.options.map<DropdownMenuItem<String>>((String value) {
+                  items: viewModel.typeSpotVo.options
+                      .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Padding(
@@ -113,7 +114,8 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
             const SizedBox(height: 10),
             // Lista de utilidades com checkboxes
             Column(
-              children: viewModel.selectedModalidade.utilitiesByModality.map((utilidade) {
+              children: viewModel.selectedModalidade.utilitiesByModality
+                  .map((utilidade) {
                 return CheckboxListTile(
                   contentPadding: const EdgeInsets.all(0),
                   title: Text(utilidade), // Nome da utilidade
@@ -134,19 +136,29 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
 }
 
 class ModalidadeButtons extends StatelessWidget {
-  final Function(ModalitySpot) onSelected; 
-  final ModalitySpot selectedModalidade; 
+  final Function(ModalitySpot) onSelected;
+  final ModalitySpot selectedModalidade;
 
-  const ModalidadeButtons({super.key, required this.onSelected, required this.selectedModalidade});
+  const ModalidadeButtons(
+      {super.key, required this.onSelected, required this.selectedModalidade});
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly, 
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        ModalidadeItens(isSelectedModalidade: selectedModalidade == ModalitySpot.skate, modalidade: ModalitySpot.skate, onPressed: onSelected),
-        ModalidadeItens(isSelectedModalidade: selectedModalidade == ModalitySpot.bmx, modalidade: ModalitySpot.bmx, onPressed: onSelected),
-        ModalidadeItens(isSelectedModalidade: selectedModalidade == ModalitySpot.parkour, modalidade: ModalitySpot.parkour, onPressed: onSelected),
+        ModalidadeItens(
+            isSelectedModalidade: selectedModalidade == ModalitySpot.skate,
+            modalidade: ModalitySpot.skate,
+            onPressed: onSelected),
+        ModalidadeItens(
+            isSelectedModalidade: selectedModalidade == ModalitySpot.bmx,
+            modalidade: ModalitySpot.bmx,
+            onPressed: onSelected),
+        ModalidadeItens(
+            isSelectedModalidade: selectedModalidade == ModalitySpot.parkour,
+            modalidade: ModalitySpot.parkour,
+            onPressed: onSelected),
       ],
     );
   }
@@ -156,17 +168,24 @@ class ModalidadeItens extends StatelessWidget {
   final bool isSelectedModalidade;
   final ModalitySpot modalidade;
   final Function(ModalitySpot) onPressed;
-  const ModalidadeItens({super.key, required this.isSelectedModalidade, required this.modalidade, required this.onPressed,});
+  const ModalidadeItens({
+    super.key,
+    required this.isSelectedModalidade,
+    required this.modalidade,
+    required this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        backgroundColor: isSelectedModalidade ? const Color(0xFF8B0000) : Colors.grey[300], // Cor do botão
+        backgroundColor: isSelectedModalidade
+            ? const Color(0xFF8B0000)
+            : Colors.grey[300],
         foregroundColor: isSelectedModalidade ? Colors.white : Colors.black,
         padding: const EdgeInsets.symmetric(horizontal: 25),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20), // Bordas arredondadas
+          borderRadius: BorderRadius.circular(20), 
         ),
       ),
       onPressed: () => onPressed(modalidade), // Chama o callback com a modalidade selecionada
