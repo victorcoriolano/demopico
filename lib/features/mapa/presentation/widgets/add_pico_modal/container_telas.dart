@@ -1,4 +1,4 @@
-
+import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/location_vo.dart';
 import 'package:demopico/features/mapa/presentation/controllers/add_pico_view_model.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/primeira_tela.dart';
@@ -9,7 +9,6 @@ import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/cu
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -17,9 +16,7 @@ class ContainerTelas extends StatefulWidget {
   final LatLng latlang;
   final bool expanded;
   const ContainerTelas(
-      {super.key,
-      required this.latlang,
-      required this.expanded});
+      {super.key, required this.latlang, required this.expanded});
 
   @override
   State<ContainerTelas> createState() => _ContainerTelasState();
@@ -53,23 +50,24 @@ class _ContainerTelasState extends State<ContainerTelas> {
   @override
   void initState() {
     super.initState();
-    user = context.read<UserDataViewModel>().user;
-    final location = LocationVo(latitude: widget.latlang.latitude, longitude: widget.latlang.longitude);
-    context.read<AddPicoViewModel>().initialize(location);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      user = context.read<UserDataViewModel>().user;
+      final location = LocationVo(
+          latitude: widget.latlang.latitude,
+          longitude: widget.latlang.longitude);
+      context.read<AddPicoViewModel>().initialize(location);
+    });
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
     return Consumer<AddPicoViewModel>(
       builder: (context, provider, child) => Scaffold(
         body: Container(
-          color: Colors.black54, 
+          color: Colors.black54,
           child: Center(
             child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
               width: MediaQuery.of(context).size.width * 0.95,
               height: MediaQuery.of(context).size.height * 0.95,
               child: Container(
@@ -77,8 +75,8 @@ class _ContainerTelasState extends State<ContainerTelas> {
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(
-                      12), // Arredondamento das bordas
+                  borderRadius:
+                      BorderRadius.circular(12), // Arredondamento das bordas
                   border: Border.all(
                       color: const Color(0xFF8B0000),
                       width: 3), // Borda vermelha
@@ -88,8 +86,7 @@ class _ContainerTelasState extends State<ContainerTelas> {
                   child: Column(
                     children: [
                       Expanded(
-                        child:
-                            _screens[_currentIndex], // Exibe o widget atual
+                        child: _screens[_currentIndex], // Exibe o widget atual
                       ),
                       const SizedBox(height: 10),
                       if (_currentIndex != 0)
@@ -113,10 +110,9 @@ class _ContainerTelasState extends State<ContainerTelas> {
                       const SizedBox(height: 10),
                       if (_currentIndex == 3)
                         ElevatedButton(
-                          
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: 
-                                const Color(0xFF8B0000) , // Cor do botão
+                            backgroundColor:
+                                const Color(0xFF8B0000), // Cor do botão
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 50, vertical: 15),
@@ -124,31 +120,28 @@ class _ContainerTelasState extends State<ContainerTelas> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                          onPressed: provider.validarFormulario() ? () async {
-                            
-                            await provider.createSpot(user);
-                            if( provider.errorCriarPico != null ){
-                              Get.snackbar("Erro ao criar pico", provider.errorCriarPico.toString(),);
-                            }
-                            if(context.mounted) Navigator.pop(context);
-                            
-                          } : null,
+                          onPressed: provider.errors == null
+                              ? () async {
+                                  final identification =
+                                      createIdentification(user);
+                                  await provider.createSpot(identification);
+                                  if (context.mounted) Navigator.pop(context);
+                                }
+                              : null,
                           child: const Text('POSTAR PICO',
                               style: TextStyle(fontSize: 15)),
                         )
                       else
                         CustomElevatedButton(
-                          
                           onPressed: () {
                             // chama a proxima página somente se tiver validada
-                            if (provider
-                                .validarPaginaAtual(_currentIndex)) {
+                            if (provider.errors == null) {
                               _nextScreen(); // Chama a função para mudar a tela
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content:
-                                      Text("Preenche todos as informações"),
+                                  content: Text(
+                                      "Preenche todos as informações corretamente"),
                                 ),
                               );
                             }
@@ -164,5 +157,11 @@ class _ContainerTelasState extends State<ContainerTelas> {
         ),
       ),
     );
+  }
+
+  UserIdentification? createIdentification(UserM? user) {
+    if (user == null) return null;
+    return UserIdentification(
+        id: user.id, name: user.name, photoUrl: user.pictureUrl);
   }
 }
