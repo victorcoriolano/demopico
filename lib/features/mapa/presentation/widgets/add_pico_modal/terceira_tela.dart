@@ -31,6 +31,7 @@ class TerceiraTela extends StatelessWidget {
       "assets/images/icons/hidrante.png", // Hidrante
       "assets/images/icons/wallObstaculo.png", // Parede
       "assets/images/icons/bowl.png", // Bowl zinho
+      "assets/images/icons/lixeira.png", //Lixeira
     ];
 
     return Consumer<AddPicoViewModel>(
@@ -98,7 +99,7 @@ class TerceiraTela extends StatelessWidget {
                     ),
                     itemCount: provider.obstaculoVo.options.length, // Total de 15 caixas
                     itemBuilder: (context, index) {
-                      final obstacle = provider.obstaculoVo.obstacles.elementAt(index);
+                      final obstacle = provider.obstaculoVo.options.elementAt(index);
                       final options = provider.obstaculoVo.options;
                       final selectedObstacles = provider.obstaculoVo.obstacles;
                       return Padding(
