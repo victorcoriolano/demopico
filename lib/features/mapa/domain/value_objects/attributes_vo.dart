@@ -4,8 +4,9 @@
 
   sealed class  AttributesVO {
     Map<String, int> get attributes;
-    AttributesVO updateRate(dynamic attributeName, int newRate);
-
+    AttributesVO updateRate(String attributeName, int newRate);
+    String obterDescricao(String attribute, int nota);
+    List<String> get getAttributesList;
     const AttributesVO();
   }
 
@@ -66,13 +67,10 @@
     }
 
     @override
-    SkateAttributes updateRate(dynamic attribute, int newRate) {
+    SkateAttributes updateRate(String name, int newRate) {
+      final attribute = SkateAttributesEnum.fromString(name);
           if (newRate < 1.0 || newRate > 5.0) {
         throw InvalidAttributeError(message: 'New rate must be between 1.0 and 5.0.');
-      }
-
-      if (attribute is! SkateAttributesEnum) {
-        throw InvalidAttributeError(message: 'Attribute deve ser do tipo SkateAttributesEnum.');
       }
 
       if (!_attributes.containsKey(attribute)) {
@@ -115,6 +113,27 @@
         }
       }
     }
+    
+      @override
+      String obterDescricao(String attribute, int nota) {
+        final att = SkateAttributesEnum.fromString(attribute);
+        switch (att) {
+          
+          case SkateAttributesEnum.conditionGround:
+            return SkateAttributesEnum.obterDescricaoChao(nota);
+          case SkateAttributesEnum.lighting:
+            return SkateAttributesEnum.obterDescricaoIluminacao(nota);
+          case SkateAttributesEnum.policing:
+            return SkateAttributesEnum.obterDescricaoPoliciamento(nota);
+          case SkateAttributesEnum.footTraffic:
+            return SkateAttributesEnum.obterDescricaoMovimento(nota);
+          case SkateAttributesEnum.kickOut:
+            return SkateAttributesEnum.obterDescricaoKickOut(nota);
+        }
+      }
+      
+        @override
+        List<String> get getAttributesList => SkateAttributesEnum.values.map((att) => att.name).toList();
   }
 
 
@@ -162,5 +181,95 @@
           return 'Kick-Out';
       }
     }
+
+    static String obterDescricaoChao(int nota) {
+    switch (nota) {
+      case 5:
+        return 'Patinete';
+      case 4:
+        return 'Lisinho';
+      case 3:
+        return 'Suave';
+      case 2:
+        return 'Pedrinhas';
+      case 1:
+        return 'Esburacado';
+      default:
+        return 'Descrição Indefinida';
+    }
+  }
+
+// Função para mapear os valores de 1 a 5 para a descrição do atributo 'Iluminação'
+  static String obterDescricaoIluminacao(int nota) {
+    switch (nota) {
+      case 5:
+        return 'Muito Claro';
+      case 4:
+        return 'Clarinho';
+      case 3:
+        return 'Razoável';
+      case 2:
+        return 'Pouca Luz';
+      case 1:
+        return 'Escuro';
+      default:
+        return 'Descrição Indefinida';
+    }
+  }
+
+// Função para mapear os valores de 1 a 5 para a descrição do atributo 'Policiamento'
+  static String obterDescricaoPoliciamento(int nota) {
+    switch (nota) {
+      case 5:
+        return 'Opressão';
+      case 4:
+        return 'Boqueta';
+      case 3:
+        return 'Pala';
+      case 2:
+        return 'Toma Cuidado';
+      case 1:
+        return 'Suave';
+      default:
+        return 'Descrição Indefinida';
+    }
+  }
+
+// Função para mapear os valores de 1 a 5 para a descrição do atributo 'Movimento'
+  static String obterDescricaoMovimento(int nota) {
+    switch (nota) {
+      case 5:
+        return 'Muito Cheio';
+      case 4:
+        return 'Cheio';
+      case 3:
+        return 'Médio';
+      case 2:
+        return 'Calmo';
+      case 1:
+        return 'Vazio';
+      default:
+        return 'Descrição Indefinida';
+    }
+  }
+
+// Função para mapear os valores de 1 a 5 para a descrição do atributo 'Kick-Out'
+  static String obterDescricaoKickOut(int nota) {
+    switch (nota) {
+      case 5:
+        return 'Muito Capaz';
+      case 4:
+        return 'Bem Capaz';
+      case 3:
+        return 'Moderado';
+      case 2:
+        return 'Improvável';
+      case 1:
+        return 'Impossível';
+      default:
+        return 'Descrição Indefinida';
+    }
+  }
+    
   }
 
