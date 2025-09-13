@@ -72,7 +72,6 @@ class InvalidStatusConnectionFailure extends DomainFailure {
 
 class InvalidAttributeError extends DomainFailure {
   InvalidAttributeError({required super.message});
-  
 }
 
 class InvalidObstacleFailure extends DomainFailure {
