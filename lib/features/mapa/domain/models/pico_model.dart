@@ -50,7 +50,7 @@ class PicoModel {
   factory PicoModel.fromJson(Map<String, dynamic> json, String id) {
     return PicoModel(
       id: id,
-      utilities: json['utilidades'] ?? [],
+      utilities: List<String>.from(json['utilidades'] ?? []),
       picoName: json['name'] ?? _padrao,
       description: json['description'] ?? _padrao,
       imgUrls: List<String>.from(json['imageUrl'] ?? []),
