@@ -55,8 +55,6 @@ class AddPicoViewModel extends ChangeNotifier {
   String nomePico = '';
   String descricao = '';
   List<String> imgUrls = [];
-  LatLng? latlang;
-  bool isValid = false;
 
   List<FileModel> get files => _pickImageUC.listFile;
 
@@ -84,7 +82,12 @@ class AddPicoViewModel extends ChangeNotifier {
   }
 
   // --- PÁGINA 1 ---
-  void atualizarModalidade(ModalitySpot modalidade) => _updateConfig(modalidade); 
+  void atualizarModalidade(ModalitySpot modalidade) => _updateConfig(modalidade);
+  
+  void updateTypeSpot(String selecteType){
+    typeSpotVo = typeSpotVo.selectValue(selecteType);
+    notifyListeners();
+  }
 
   void selecionarUtilidade(String utilidade, bool isSelected) {
     utilidadesSelecionadas[utilidade] = isSelected;
@@ -102,8 +105,13 @@ class AddPicoViewModel extends ChangeNotifier {
   }
 
   // --- PÁGINA 3 ---
-  void atualizarObstaculos(String index) {
-    obstaculoVo.selectObstacle(index);
+  void selectObstacle(String selected) {
+    obstaculoVo.selectObstacle(selected);
+    notifyListeners();
+  }
+
+  void removeObstacle(String obstacle){
+    obstaculoVo.removeObstacle(obstacle);
     notifyListeners();
   }
 
@@ -135,6 +143,24 @@ class AddPicoViewModel extends ChangeNotifier {
     files.removeAt(index);
     notifyListeners();
   }
+
+  // ---- Validação -----
+  bool isFormValid(StepsAddPico indexPage) {
+    switch (indexPage){
+      case StepsAddPico.especificidade:
+        if (utilidadesSelecionadas.values.every((v) => v == false)) return false;
+        return true;
+      case StepsAddPico.obstaculos:
+        if (obstaculoVo.selectedValues.isEmpty) return false;
+        return true;
+      case StepsAddPico.atributos:
+        return true;
+      case StepsAddPico.detalhesAdicionais:
+        if (nomePico.isEmpty || descricao.isEmpty || imgUrls.isEmpty) return false;
+        return true;
+    }
+}
+
 
   // --- CRIAÇÃO DO PICO ---
   Pico getInfoPico(UserIdentification? userCriador) {
@@ -202,5 +228,54 @@ class AddPicoViewModel extends ChangeNotifier {
   void dispose() {
     limpar();
     super.dispose();
+  }
+}
+
+
+enum StepsAddPico {
+  especificidade,
+  atributos,
+  obstaculos,
+  detalhesAdicionais;
+
+  factory StepsAddPico.fromIndex(int index){
+    switch (index){
+      case 0:
+        return StepsAddPico.especificidade;
+      case 1:
+        return StepsAddPico.atributos;
+      case 2:
+        return StepsAddPico.obstaculos;
+      case 3:
+        return StepsAddPico.detalhesAdicionais;
+      default: 
+        throw ArgumentError("Invalid index");
+    }
+  }
+
+  StepsAddPico next(){
+    switch (this){
+      case StepsAddPico.especificidade:
+        return StepsAddPico.atributos;
+      case StepsAddPico.atributos:
+        return StepsAddPico.obstaculos; 
+      case StepsAddPico.obstaculos:
+        return StepsAddPico.detalhesAdicionais;
+      case StepsAddPico.detalhesAdicionais:
+        return this;
+    }
+  }
+
+  StepsAddPico back(){
+    switch (this){
+      case StepsAddPico.especificidade:
+        return this;
+      case StepsAddPico.atributos:
+        return StepsAddPico.especificidade; 
+      case StepsAddPico.obstaculos:
+        return StepsAddPico.atributos;
+      case StepsAddPico.detalhesAdicionais:
+        return obstaculos;
+    }
   }
 }
