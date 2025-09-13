@@ -21,7 +21,7 @@ void main() {
       final original = SkateAttributes.initial();
       final newRate = 5;
       
-      final updated = original.updateRate(SkateAttributesEnum.lighting, newRate);
+      final updated = original.updateRate("Iluminação", newRate);
 
       // Verifica se é uma nova instância
       expect(original, isNot(same(updated)));
@@ -62,7 +62,7 @@ void main() {
 
     test('updateRate deve lançar InvalidAttributeError se a nova nota for inválida', () {
       final attributes = SkateAttributes.initial();
-      expect(() => attributes.updateRate(SkateAttributesEnum.lighting, 6), throwsA(isA<InvalidAttributeError>()));
+      expect(() => attributes.updateRate("Iluminação", 6), throwsA(isA<InvalidAttributeError>()));
     });
   });
 }
