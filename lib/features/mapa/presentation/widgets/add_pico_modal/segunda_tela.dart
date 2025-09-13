@@ -12,20 +12,29 @@ class SegundaTela extends StatefulWidget {
 
 class _SegundaTelaState extends State<SegundaTela> {
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.grey[200],
         body: Center(
           child: SingleChildScrollView(
-            child: AttributesWidget(),
+            child: Column(
+              children: [
+                Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: Image.asset(
+                        'assets/images/progresso2.png',
+                      ),
+                    ),
+                  ),
+                AttributesWidget(),
+              ],
+            ),
           ),
         ));
   }
-
-  // Widget para construir cada linha de atributo
-  }
+}
 
 class AttributesWidget extends StatelessWidget {
   
@@ -92,8 +101,6 @@ class AttributesWidget extends StatelessWidget {
           ],
               );
             } ),
-            // Nome do atributo
-            
             const SizedBox(height: 7),  
           ],
         );
