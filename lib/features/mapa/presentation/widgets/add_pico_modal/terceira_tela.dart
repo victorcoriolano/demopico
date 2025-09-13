@@ -70,15 +70,15 @@ class TerceiraTela extends StatelessWidget {
                 Container(
                   margin: const EdgeInsets.only(bottom: 20),
                   child: Visibility(
-                    visible: provider.obstaculoVo.obstacles.isNotEmpty,
+                    visible: provider.obstaculoVo.selectedValues.isNotEmpty,
                     child: Wrap(
                       spacing: 6,
                       runSpacing: 3,
-                      children: provider.obstaculoVo.obstacles.map((obstaculo) {
+                      children: provider.obstaculoVo.selectedValues.map((obstaculo) {
                         return Chip(
                           label: Text(obstaculo),
                           onDeleted: () {
-                            provider.obstaculoVo.removeObstacle(obstaculo);
+                            provider.removeObstacle(obstaculo);
                           },
                         );
                       }).toList(),
@@ -112,11 +112,9 @@ class TerceiraTela extends StatelessWidget {
                               // Se estiver na lista, remove; caso contrário, adiciona
                               if (selectedObstacles
                                   .contains(options[index])) {
-                                provider.obstaculoVo
-                                    .removeObstacle(obstacle);
+                                provider.removeObstacle(obstacle);
                               } else {
-                                provider.atualizarObstaculos(
-                                    obstacle);
+                                provider.selectObstacle(obstacle);
                               }
                             },
                             child: Image.asset(
