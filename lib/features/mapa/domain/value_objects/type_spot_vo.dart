@@ -3,6 +3,8 @@ import 'package:demopico/features/mapa/domain/value_objects/modality_vo.dart';
 sealed class  TypeSpotVo<T> {
   List<String> get options;
   String get selectedValue;
+  TypeSpotVo selectValue(String newValue);
+
 }
 
 class TypeSkate extends TypeSpotVo<ModalitySpot> {
@@ -22,11 +24,21 @@ class TypeSkate extends TypeSpotVo<ModalitySpot> {
     return TypeSkate._(value: _options.first);
   }
 
+  TypeSkate copyWith({required String? newValue}){
+    return TypeSkate(newValue ?? value);
+  }
+
   @override
   List<String> get options => _options;
   
   @override
   String get selectedValue => value;
+  
+  @override
+  TypeSpotVo selectValue(String newValue) {
+    return copyWith(newValue: newValue);
+  }
+
 } 
 
 class TypeParkour extends TypeSpotVo {
@@ -47,6 +59,15 @@ class TypeParkour extends TypeSpotVo {
 
   @override
   String get selectedValue => value;
+  
+  @override
+  TypeSpotVo selectValue(String newValue) {
+    return copyWith(newValue: newValue);
+  }
+
+  TypeParkour copyWith({required String? newValue}){
+    return TypeParkour(newValue ?? value);
+  }
 }
 
 class TypeBMX extends TypeSpotVo {
@@ -62,11 +83,20 @@ class TypeBMX extends TypeSpotVo {
     throw ArgumentError('Invalid value for TypeBMX');
   }
 
+  TypeParkour copyWith({required String? newValue}){
+    return TypeParkour(newValue ?? value);
+  }
+
   @override
   List<String> get options => _options;
 
   @override
   String get selectedValue => value;
+  
+  @override
+  TypeSpotVo selectValue(String newValue) {
+    return copyWith(newValue: newValue);
+  }
 }
 
 
