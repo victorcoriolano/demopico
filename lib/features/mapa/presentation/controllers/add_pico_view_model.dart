@@ -48,7 +48,7 @@ class AddPicoViewModel extends ChangeNotifier {
   // --- ENTITIES / VALUE OBJECTS ---
   late ModalitySpot selectedModalidade;
   late AttributesVO attributesVO;
-  late ObstacleVo obstaculos;
+  late ObstacleVo obstaculoVo;
   late TypeSpotVo typeSpotVo;
   late LocationVo locationVO;
 
@@ -71,7 +71,7 @@ class AddPicoViewModel extends ChangeNotifier {
   void _updateConfig(ModalitySpot modalidade) {
     selectedModalidade = modalidade;
     attributesVO = SpotFactory.createAttributes(modalidade);
-    obstaculos = SpotFactory.createObstacles(modalidade);
+    obstaculoVo = SpotFactory.createObstacles(modalidade);
     typeSpotVo = SpotFactory.createType(modalidade);
 
     // reset utilidades selecionadas
@@ -92,14 +92,18 @@ class AddPicoViewModel extends ChangeNotifier {
   }
 
   // --- PÁGINA 2 ---
-  void atualizarAtributos(String attributeName, int rate) {
-    attributesVO.updateRate(attributeName, rate);
+  void updateAttribute(String attributeName, int rate) {
+    debugPrint("Chamou atualizar att - $attributeName - nota: $rate");
+    attributesVO = attributesVO.updateRate(attributeName, rate);
     notifyListeners();
+  }
+  String getDescription(String attribute, int rate){
+    return attributesVO.obterDescricao(attribute, rate);
   }
 
   // --- PÁGINA 3 ---
-  void atualizarObstaculos(int index) {
-    obstaculos.selectObstacle(index);
+  void atualizarObstaculos(String index) {
+    obstaculoVo.selectObstacle(index);
     notifyListeners();
   }
 
@@ -150,7 +154,7 @@ class AddPicoViewModel extends ChangeNotifier {
         .withUser(userCriador)
         .withAttributesData(attributesVO.attributes) // VO mantém auto-validação
         .withTypeValue(typeSpotVo.selectedValue)
-        .withObstacles(obstaculos.selectedValues)
+        .withObstacles(obstaculoVo.selectedValues)
         .withRating(RatingVo(0.0, 0))
         .withReviewers([])
         .withPosts([])
