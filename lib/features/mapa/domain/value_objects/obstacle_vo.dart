@@ -42,11 +42,11 @@ class ObstacleSkate extends ObstacleVo<ModalitySpot> {
   factory ObstacleSkate.fromList(List<String> value){
     final withoutDuplicates = value.toSet();
     if(withoutDuplicates.length < value.length){
-      throw ArgumentError("Lista de obstáculos inválida, alguns elementos estão repetidos");
+      throw ArgumentError("Lista de obstáculos inválida, alguns elementos estão repetidos", value.where((test) => test == test).toString());
     }
     
     if (!_obstaclesAll.toSet().containsAll(value)){
-       throw ArgumentError('Lista de obstáculos com elementos fora do padrão');
+       throw ArgumentError('Lista de obstáculos com elementos fora do padrão', value.where((test) =>_obstaclesAll.contains(test)).toString());
     }
    return ObstacleSkate._(value);
   }
@@ -62,7 +62,7 @@ class ObstacleSkate extends ObstacleVo<ModalitySpot> {
   @override
   void selectObstacle(String value) {
     if (value.isEmpty || !_obstaclesAll.contains(value)){
-      throw InvalidObstacleFailure(message: "Value inválido");
+      throw ArgumentError("Value inválido", value);
     }
     _selectedObstacles.add(value);
     debugPrint("Selecionou o obstaculo: $value");
@@ -71,7 +71,7 @@ class ObstacleSkate extends ObstacleVo<ModalitySpot> {
    @override
   void removeObstacle(String value) {
     if (value.isEmpty || !_obstaclesAll.contains(value)){
-      throw InvalidObstacleFailure(message: "Value inválido");
+      throw ArgumentError("Value inválido", value);
     }
     _selectedObstacles.remove(value);
     debugPrint("Removeu o obstaculo: $value");
@@ -103,11 +103,11 @@ class ObstacleParkour extends ObstacleVo<ModalitySpot> {
   factory ObstacleParkour.fromList(List<String> value){
     final withoutDuplicates = value.toSet();
     if(withoutDuplicates.length < value.length){
-      throw ArgumentError("Lista de obstáculos inválida, alguns elementos estão repetidos");
+      throw ArgumentError("Lista de obstáculos inválida, alguns elementos estão repetidos", value.where((test) => test == test).toString());
     }
     
     if (!_obstaclesAll.toSet().containsAll(value)){
-       throw ArgumentError('Lista de obstáculos com elementos fora do padrão');
+       throw ArgumentError('Lista de obstáculos com elementos fora do padrão', value.where((test) =>_obstaclesAll.contains(test)).toString());
     }
    return ObstacleParkour._(value);
   }
