@@ -51,4 +51,7 @@ class FailureServer {
   }
 }
 
+class OtherError extends Failure {
+  OtherError({required super.message});
+}
 
