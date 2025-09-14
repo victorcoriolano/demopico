@@ -1,3 +1,4 @@
+import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/features/mapa/presentation/controllers/add_pico_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +12,26 @@ class QuartaTela extends StatefulWidget {
 }
 
 class _QuartaTelaState extends State<QuartaTela> {
+  // Use um TextEditingController para gerenciar o valor
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Preenche o campo se já houver um valor no provider
+    final provider = context.read<AddPicoViewModel>();
+    _nameController.text = provider.nomePico;
+    _descriptionController.text = provider.descricao;
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<AddPicoViewModel>(
@@ -45,12 +66,17 @@ class _QuartaTelaState extends State<QuartaTela> {
                 const SizedBox(height: 10),
                 // Campo de texto para o nome do pico
                 TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (value) =>
+                      provider.isFormValid(StepsAddPico.detalhesAdicionais)
+                          ? provider.nameSpotError
+                          : null,
                   decoration: InputDecoration(
                     hintText: 'Escreva aqui...', // Texto de sugestão
                     border: const OutlineInputBorder(), // Borda do campo
-                    errorText: provider.errors,
+                    errorText: provider.nameSpotError,
                   ),
-                  onChanged: (value) => provider.atualizarNome(value),
+                  controller: _nameController,
                 ),
                 const SizedBox(height: 20), // Espaço entre os campos
                 // Texto para o campo de descrição
@@ -65,96 +91,97 @@ class _QuartaTelaState extends State<QuartaTela> {
                 const SizedBox(height: 10),
                 // Campo de texto para a descrição do pico
                 TextFormField(
-                  maxLines: 5, // Permite múltiplas linhas
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (value) =>
+                      provider.isFormValid(StepsAddPico.detalhesAdicionais)
+                          ? provider.descriptionError
+                          : null,
+                  maxLines: 5,
                   decoration: InputDecoration(
-                    hintText: 'Escreva aqui...', // Texto de sugestão
-                    border: const OutlineInputBorder(), // Borda do campo
-                    errorText: provider.errors,
+                    hintText: 'Escreva aqui...',
+                    border: const OutlineInputBorder(),
+                    errorText: provider.descriptionError,
                   ),
-                  onChanged: (value) => provider.atualizarDescricao(value),
+                  controller: _descriptionController,
                 ),
-                const SizedBox(height: 20), // Espaço entre os campos
+                const SizedBox(height: 20),
                 // Botão para anexar imagens
                 Visibility(
                   visible: provider.files.length <= 3,
                   child: GestureDetector(
-                    onTap: () async {
-                      // Função para anexar imagem (placeholder)
-                      if (provider.files.length <= 3) {
-                        await provider.pickImages();
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Só é possível anexar no máximo 3 imagens.'),
-                          ),
-                        );
-                      }
-                    },
-                    child: const  Column(
+                    onTap: provider.files.length <= 3
+                        ? () async => provider.pickImages()
+                        : null,
+                    child: const Column(
                       children: [
-                        Icon(
-                          Icons.cloud_upload,
-                          size: 62, 
-                          color: Colors.black 
-                        ), // Ícone de upload
+                        Icon(Icons.cloud_upload,
+                            size: 62, color: Colors.black), // Ícone de upload
                         Text(
                           'ANEXAR IMAGENS',
-                          style: TextStyle(fontSize: 16), // Texto abaixo do ícone
-                        ),                      ],
+                          style:
+                              TextStyle(fontSize: 16), // Texto abaixo do ícone
+                        ),
+                      ],
                     ),
                   ),
                 ),
                 Visibility(
                   visible: provider.files.isNotEmpty,
-                  child: Container(
-                          margin: const EdgeInsets.only(top: 5),
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: 120,
-                                child: ListView.separated(
-                                    separatorBuilder: (context, index) =>
-                                        const SizedBox(width: 10),
-                                    scrollDirection: Axis.horizontal,
-                                    shrinkWrap: true,
-                                    itemCount: provider.files.length,
-                                    itemBuilder: (context, index) {
-                                      return Stack(
-                                        children: [
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              
-                                            ),
-                                            width: 90,
-                                            child: Image.memory(
-                                              provider.files[index].bytes,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                          Positioned(
-                                            top: 0,
-                                            right: 0,
-                                            child: IconButton(
-                                              onPressed: () {
-                                                provider
-                                                  .removerImagens(index);
-                                              },   
-                                              icon: const Icon(Icons.close),
-                                            ),
-                                          ),
-                                          const Positioned(
-                                            bottom: 0,
-                                            child: Icon(Icons.check_circle, color: Colors.green,),
-                                          ),
-                                        ],
-                                      );
-                                    }),
-                              ),
-                            ],
-                          ),
-                        ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 150,
+                        child: ListView.separated(
+                            padding: EdgeInsets.all(8.0),
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(width: 10),
+                            scrollDirection: Axis.horizontal,
+                            shrinkWrap: true,
+                            itemCount: provider.files.length,
+                            itemBuilder: (context, index) {
+                              return Stack(
+                                clipBehavior: Clip.none,
+                                children: [
+                                  Container(
+                                    width: 120,
+                                    height: 120,
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(20)),
+                                      image: DecorationImage(
+                                        image: MemoryImage(
+                                            provider.files[index].bytes),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: -10,
+                                    right: -10,
+                                    child: CircleAvatar(
+                                      backgroundColor: kRed,
+                                      radius: 16,
+                                      child: IconButton(
+                                        padding: EdgeInsets.zero,
+                                        constraints: const BoxConstraints(),
+                                        onPressed: () =>
+                                            provider.removerImagens(
+                                                provider.files[index]),
+                                        icon: const Icon(
+                                          Icons.close,
+                                          color: kWhite,
+                                          size: 18,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
