@@ -48,7 +48,6 @@ class AttributesWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center, // Centraliza os itens
           children: [
             ...List.generate(viewModel.attributesVO.getAttributesList.length, (index) {
-              //final nameAttribute = attributesVO.getAttributesList[index];
               final attributeEntry = viewModel.attributesVO.attributes.entries.elementAt(index);
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.center, // Centraliza os itens
@@ -63,14 +62,13 @@ class AttributesWidget extends StatelessWidget {
             ),
             const SizedBox(height: 5),
         
-            // Avaliação por imagens customizadas
             Row(
-              mainAxisAlignment: MainAxisAlignment.center, // Centraliza os ícones
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: List.generate(5, (index) {
                 return Padding(
                   padding: const EdgeInsets.all(
-                      0.0), // Ajustado para um espaçamento menor
+                      0.0),
                   child: IconButton(
                       icon: Image.asset(
                         height:
