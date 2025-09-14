@@ -127,15 +127,6 @@ class TerceiraTela extends StatelessWidget {
                     },
                   ),
                 ),
-                // Botão de voltar
-
-                const SizedBox(
-                    height: 10), // Espaço de 10 pixels entre os botões
-                // Botão de prosseguir
-                const Padding(
-                  padding: EdgeInsets.only(
-                      bottom: 20.0), // Adiciona um padding embaixo do botão
-                ),
               ],
             ),
           ),
