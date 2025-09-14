@@ -230,6 +230,8 @@ class AddPicoViewModel extends ChangeNotifier {
   void limpar() {
     _pickImageUC.listFile.clear();
     imgUrls.clear();
+    nomePico = "";
+    descricao = "";
     selectedModalidade = ModalitySpot.skate;
     _updateConfig(selectedModalidade);
     notifyListeners();
