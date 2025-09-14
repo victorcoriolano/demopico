@@ -1,4 +1,3 @@
-
 import 'package:demopico/core/common/auth/domain/entities/profile_user.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/dob_vo.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/email_vo.dart';
@@ -13,13 +12,14 @@ sealed class TypeUser {
 class UserEntity extends TypeUser {
   final String id;
   final String displayName;
+  final String? avatar;
   final EmailVO email;
   final DobVo dob;
   final LocationVo location;
   final Profile profileUser;
 
-
   UserEntity({
+    this.avatar,
     required super.rule,
     required this.displayName,
     required this.id,
@@ -30,6 +30,7 @@ class UserEntity extends TypeUser {
   });  
 
   UserEntity copyWith({
+    String? avatar,
     String? displayName,
     String? id,
     EmailVO? email,
@@ -38,6 +39,7 @@ class UserEntity extends TypeUser {
     Profile? profileUser,
   }) {
     return UserEntity(
+      avatar: avatar,
       id: id ?? this.id,
       rule: rule, // rule is final and should not change
       email: email ?? this.email,
@@ -58,6 +60,5 @@ class AnonymousUserEntity extends TypeUser {
   const AnonymousUserEntity() : super(rule: UserRuleVO.anonymous);
 }
 
-class AdminUserEntity extends TypeUser {
-  const AdminUserEntity() : super(rule: UserRuleVO.admin);
-}
+
+

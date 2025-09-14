@@ -11,6 +11,7 @@ class GetMySpotsUc {
   static GetMySpotsUc get instance => _instance ?? GetMySpotsUc(repository: SpotRepositoryImpl.getInstance);
 
   Future<List<Pico>> execute(String userID) async {
-    return await _spotRepository.getMySpots(userID);  
+    final models = await _spotRepository.getMySpots(userID);
+    return models.map((model) => model.toEntity()).toList();  
   }
 }

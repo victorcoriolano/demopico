@@ -26,8 +26,8 @@ class MapWidgetState extends State<MapWidget> {
     super.initState();
     _spotControllerProvider = context.read<SpotsControllerProvider>();
     _mapControllerProvider = context.read<MapControllerProvider>();
-    WidgetsBinding.instance.addPostFrameCallback((_) { 
-      _initializeProviders();  
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeProviders();
     });
   }
 
@@ -42,7 +42,7 @@ class MapWidgetState extends State<MapWidget> {
   @override
   Widget build(BuildContext context) {
     final LatLng? location = Get.arguments as LatLng?;
-    
+
     // consome os dados do provider para manter a tela atualizada
     return Scaffold(
       body: Consumer2<SpotsControllerProvider, MapControllerProvider>(
@@ -63,7 +63,18 @@ class MapWidgetState extends State<MapWidget> {
           tiltGesturesEnabled: true,
           markers: provider.markers,
           onLongPress: (latlang) => ModalHelper.openAddPicoModal(context, latlang),
-        ),
+
+/*           onLongPress: (latlang) {
+            _mapControllerProvider.reajustarCameraPosition(latlang);
+            _mapControllerProvider.setZoom(15);
+            provider.markers.add(Marker(
+                markerId: MarkerId('Criar Novo Pico Aqui'),
+                infoWindow: InfoWindow(
+                  title: "Deseja criar um novo spot nesse lugar?",
+                  onTap: () => Get.toNamed(""),
+                )));
+          },
+ */        ),
       ),
     );
   }

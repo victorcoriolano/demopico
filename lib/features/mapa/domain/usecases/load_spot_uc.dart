@@ -17,6 +17,7 @@ class LoadSpotUc {
   LoadSpotUc({required this.spotRepositoryIMP});
 
   Stream<List<Pico>> loadSpots([Filters? filtros]) {
-    return spotRepositoryIMP.watchListSpots(filtros);
+    final modelStream = spotRepositoryIMP.watchListSpots(filtros);
+    return modelStream.asyncMap((listEvents) => listEvents.map((model) => model.toEntity()).toList());
   }
 }

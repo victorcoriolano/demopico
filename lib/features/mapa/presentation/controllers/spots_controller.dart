@@ -91,7 +91,7 @@ class SpotsControllerProvider extends ChangeNotifier {
           },
 
           onError: (error) {
-            debugPrint("error: $error");
+            debugPrint("ERROR NA STREAM AO CARREGAR NA VM: $error");
           }
         );
     }
@@ -111,7 +111,7 @@ class SpotsControllerProvider extends ChangeNotifier {
         notifyListeners();
       },
       onError: (error) {
-        debugPrint("error: $error");
+        debugPrint("ERROR AO CARREGAR OS MARKERS NA STREAM NA VM:$error");
       },
     );
     notifyListeners();

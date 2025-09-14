@@ -1,3 +1,4 @@
+import 'package:demopico/core/app/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class AtributeIcons extends StatefulWidget {
@@ -20,7 +21,7 @@ class _AtributeIconsState extends State<AtributeIcons> {
             return Image.asset(
               'assets/images/iconPico.png',
               color: index < widget.value
-                  ? const Color.fromARGB(255, 169, 41, 41)
+                  ? kRed
                   : Colors.grey,
               width: 28,
             );

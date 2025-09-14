@@ -39,7 +39,7 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
                 onTapSuggestion: (pico) {
                 context
                     .read<MapControllerProvider>()
-                    .reajustarCameraPosition(LatLng(pico.lat, pico.long));
+                    .reajustarCameraPosition(LatLng(pico.location.latitude, pico.location.longitude));
                 ModalHelper.openModalInfoPico(
                     context, pico);
               },

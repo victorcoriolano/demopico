@@ -46,7 +46,7 @@ class ModalHelper{
     debugPrint("chamou o modal para o pico ${pico.picoName}");
     // salvando no histórico
     final provider = context.read<HistoricoController>();
-    provider.salvarNoHistorico(pico.picoName, pico.lat, pico.long);
+    provider.salvarNoHistorico(pico.picoName, pico.location.latitude, pico.location.longitude);
 
     try {
       showModalBottomSheet(

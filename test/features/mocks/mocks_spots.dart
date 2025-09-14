@@ -1,70 +1,90 @@
-
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 import 'package:demopico/core/common/mappers/i_mapper_dto.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto_mapper.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 
+// 🔹 Mock 1
 final testPico = PicoModel(
-      userID: "980302",
-      id: "1",
-      imgUrls: ["url"],
-      tipoPico: "rua",
-      modalidade: "Skate",
-      newRating: 4.5,
-      countReviews: 10,
-      long: -46.57421,
-      lat: -23.55052,
-      description: "Teste",
-      atributos: {"teste": 2},
-      obstaculos: ["corrimão"],
-      utilidades: ["banheiro"],
-      userName: "user123",
-      picoName: "Pico Legal",
-    );
+  id: "1",
+  picoName: "Pico Legal",
+  description: "Teste",
+  imgUrls: ["url"],
+  modalidade: "Skate",
+  tipoPico: "rua",
+  longitude: -46.57421,
+  latitude: -23.55052,
+  atributos: {"teste": 2},
+  obstaculos: ["corrimão"],
+  utilities: ["banheiro"],
+  reviewersUsers: ["user123"],
+  idPostOnThis: [],
+  nota: 4.5,
+  avaliacoes: 10,
+  userIdentification: UserIdentification(
+    id: "980302",
+    name: "user123",
+    photoUrl: "url.com.photo"
+  ),
+);
 
-    final testPico2 = PicoModel(
-      userID: "209094",
-      id: "1",
-      imgUrls: ["url"],
-      tipoPico: "rua",
-      modalidade: "BMX",
-      newRating: 4.5,
-      countReviews: 10,
-      long: -46.57421,
-      lat: -23.55052,
-      description: "Teste",
-      atributos: {"teste": 2},
-      obstaculos: ["corrimão"],
-      utilidades: ["banheiro"],
-      userName: "user123",
-      picoName: "Pico Chave",
-    );
+// 🔹 Mock 2
+final testPico2 = PicoModel(
+  id: "2",
+  picoName: "Pico Chave",
+  description: "Teste",
+  imgUrls: ["url"],
+  modalidade: "BMX",
+  tipoPico: "rua",
+  longitude: -46.57421,
+  latitude: -23.55052,
+  atributos: {"teste": 2},
+  obstaculos: ["corrimão"],
+  utilities: ["banheiro"],
+  reviewersUsers: ["user123"],
+  idPostOnThis: [],
+  nota: 4.5,
+  avaliacoes: 10,
+  userIdentification: UserIdentification(
+    id: "209094",
+    name: "user123",
+    photoUrl: "url.com.photo"
+  ),
+);
 
-     final testPico3 = PicoModel(
-      userID: "23413",
-      id: "",
-      imgUrls: ["url"],
-      tipoPico: "rua",
-      modalidade: "Skate",
-      newRating: 4.5,
-      countReviews: 10,
-      long: -46.57421,
-      lat: -23.55052,
-      description: "Teste",
-      atributos: {"teste": 2},
-      obstaculos: ["corrimão"],
-      utilidades: ["banheiro"],
-      userName  : "user123",
-      picoName: "Pico Dhora",
-    );
+// 🔹 Mock 3
+final testPico3 = PicoModel(
+  id: "3",
+  picoName: "Pico Dhora",
+  description: "Teste",
+  imgUrls: ["url"],
+  modalidade: "Skate",
+  tipoPico: "rua",
+  longitude: -46.57421,
+  latitude: -23.55052,
+  atributos: {"teste": 2},
+  obstaculos: ["corrimão"],
+  utilities: ["banheiro"],
+  reviewersUsers: ["user123"],
+  idPostOnThis: [],
+  nota: 4.5,
+  avaliacoes: 10,
+  userIdentification: UserIdentification(
+    id: "23413",
+    name: "user123",
+    photoUrl: "url.com.photo"
+  ),
+);
 
-    
-    final listSpots = [testPico, testPico2, testPico3];
+// 🔹 Lista de spots para testes
+final listSpots = [testPico, testPico2, testPico3];
 
-    final IMapperDto mapper = FirebaseDtoMapper<PicoModel>(
-      fromJson: (data, id) => PicoModel.fromJson(data, id),
-      toMap: (model) => model.toMap(), 
-      getId: (model) => model.id); 
+// 🔹 Mapper com DTO do Firebase
+final IMapperDto mapper = FirebaseDtoMapper<PicoModel>(
+  fromJson: (data, id) => PicoModel.fromJson(data, id),
+  toMap: (model) => model.toMap(),
+  getId: (model) => model.id,
+);
 
-    // mockando o dto para teste de repository
-    final listDto = listSpots.map((pico) => mapper.toDTO(pico) as FirebaseDTO).toList();
+// 🔹 DTOs mockados para testar repository
+final listDto = listSpots.map((pico) => mapper.toDTO(pico) as FirebaseDTO).toList();

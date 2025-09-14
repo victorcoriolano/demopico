@@ -5,7 +5,7 @@ class LocationVo {
 
   LocationVo._(this.latitude, this.longitude);
 
-  factory LocationVo(double latitude, double longitude) {
+  factory LocationVo({required double latitude,required double longitude}) {
     if (latitude < -90 || latitude > 90) {
       throw ArgumentError('Invalid latitude value');
     }

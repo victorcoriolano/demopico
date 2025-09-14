@@ -81,12 +81,12 @@ class SpotRepositoryImpl implements ISpotRepository {
   }
 
   @override
-  Future<void> evaluateSpot(PicoModel pico, double newRating) async {
+  Future<void> evaluateSpot(String id, double newRating, Function updateFunction) async {
     // Atribuindo a função para uma variável para poder passar para o datasource 
     // Pensei em passar aqui por conta que essa camada de repository esta mesmo mais
     // relacionada as models já que ela cuida de mapear dto para models.
-    var updateFunction = pico.updateNota;
-    return await dataSource.updateRealtime(pico.id, newRating, updateFunction);
+    
+    return await dataSource.updateRealtime(id, newRating, updateFunction);
   }
 
   @override

@@ -53,7 +53,7 @@ class FavoriteSpotUC {
       debugPrint("Picos favoritos vindo do firebase: ${favoritos.length}");
       final result = await Future.wait(favoritos.map((fav) async {
         final pico = await spotRepositoryIMP.getPicoByID(fav.idPico); // retorna PicoModel
-        var card = SpotCardUIDto(picoFavoritoModel: fav, picoModel: pico);
+        var card = SpotCardUIDto(picoFavoritoModel: fav, pico: pico.toEntity());
         debugPrint("Pico: ${pico.picoName}");
         debugPrint("Pico card: ${card.toString()}");
         return card;
