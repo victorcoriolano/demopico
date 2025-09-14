@@ -69,14 +69,15 @@ class _QuartaTelaState extends State<QuartaTela> {
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) =>
                       provider.isFormValid(StepsAddPico.detalhesAdicionais)
-                          ? provider.nameSpotError
-                          : null,
+                          ? null
+                          : provider.nameSpotError,
                   decoration: InputDecoration(
                     hintText: 'Escreva aqui...', // Texto de sugestão
                     border: const OutlineInputBorder(), // Borda do campo
                     errorText: provider.nameSpotError,
                   ),
                   controller: _nameController,
+                  onChanged: (value) => provider.nomePico = value,
                 ),
                 const SizedBox(height: 20), // Espaço entre os campos
                 // Texto para o campo de descrição
@@ -94,8 +95,8 @@ class _QuartaTelaState extends State<QuartaTela> {
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) =>
                       provider.isFormValid(StepsAddPico.detalhesAdicionais)
-                          ? provider.descriptionError
-                          : null,
+                          ? null
+                          : provider.descriptionError,
                   maxLines: 5,
                   decoration: InputDecoration(
                     hintText: 'Escreva aqui...',
@@ -103,6 +104,7 @@ class _QuartaTelaState extends State<QuartaTela> {
                     errorText: provider.descriptionError,
                   ),
                   controller: _descriptionController,
+                  onChanged: (value) => provider.descricao = value,
                 ),
                 const SizedBox(height: 20),
                 // Botão para anexar imagens
