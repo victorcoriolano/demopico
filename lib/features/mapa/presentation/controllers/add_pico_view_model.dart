@@ -17,7 +17,6 @@ import 'package:demopico/features/mapa/domain/value_objects/obstacle_vo.dart';
 import 'package:demopico/features/mapa/domain/value_objects/rating_vo.dart';
 import 'package:demopico/features/mapa/domain/value_objects/type_spot_vo.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class AddPicoViewModel extends ChangeNotifier {
   static AddPicoViewModel? _addPicoProvider;
@@ -44,6 +43,8 @@ class AddPicoViewModel extends ChangeNotifier {
         _pickImageUC = pickImageUC;
 
   String? errors;
+  String? nameSpotError;
+  String? descriptionError;
 
   // --- ENTITIES / VALUE OBJECTS ---
   late ModalitySpot selectedModalidade;
@@ -52,8 +53,8 @@ class AddPicoViewModel extends ChangeNotifier {
   late TypeSpotVo typeSpotVo;
   late LocationVo locationVO;
 
-  String nomePico = '';
-  String descricao = '';
+  String nomePico = "";
+  String descricao = "";
   List<String> imgUrls = [];
 
   List<FileModel> get files => _pickImageUC.listFile;
@@ -116,17 +117,6 @@ class AddPicoViewModel extends ChangeNotifier {
   }
 
   // --- PÁGINA 4 ---
-  void atualizarNome(String novoNome) {
-    nomePico = novoNome;
-    if(novoNome.isEmpty) errors = "Nome não pode ser vazio";
-    notifyListeners();
-  }
-
-  void atualizarDescricao(String novoDesc) {
-    descricao = novoDesc;
-    if(novoDesc.isEmpty) errors = "Descrição não pode ser vazia";
-    notifyListeners();
-  }
 
   // --- IMAGENS ---
   Future<void> pickImages() async {
@@ -139,28 +129,51 @@ class AddPicoViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removerImagens(int index) {
-    files.removeAt(index);
+  void removerImagens(FileModel file) {
+    files.remove(file);
     notifyListeners();
   }
 
   // ---- Validação -----
   bool isFormValid(StepsAddPico indexPage) {
+    errors = null;
+    nameSpotError = null;
+    descriptionError = null;
     switch (indexPage){
       case StepsAddPico.especificidade:
-        if (utilidadesSelecionadas.values.every((v) => v == false)) return false;
+        if (utilidadesSelecionadas.values.every((v) => v == false)) {
+          errors = "Selecione ao menos 1 utilidade pra continuar";
+          return false;
+        } 
         return true;
       case StepsAddPico.obstaculos:
-        if (obstaculoVo.selectedValues.isEmpty) return false;
+        if (obstaculoVo.selectedValues.isEmpty){
+          errors = "Selecione ao menos 1 obstáculo pra continuar";
+          return false;
+        } 
         return true;
       case StepsAddPico.atributos:
         return true;
       case StepsAddPico.detalhesAdicionais:
-        if (nomePico.isEmpty || descricao.isEmpty || imgUrls.isEmpty) return false;
+        if (nomePico.isEmpty) {
+          nameSpotError = "Adicione um nome ao pico";
+          return false;
+        } 
+        if ( descricao.isEmpty) {
+          descriptionError = "Adicione um descrição";
+          return false;
+        }
+        if(imgUrls.isEmpty){
+          errors = "Adicione alguma imagem";
+          return false;
+        }
         return true;
     }
-}
+  }
 
+  void showError(){
+    if (errors != null) FailureServer.showError(OtherError(message: errors!));
+  }
 
   // --- CRIAÇÃO DO PICO ---
   Pico getInfoPico(UserIdentification? userCriador) {
@@ -210,15 +223,13 @@ class AddPicoViewModel extends ChangeNotifier {
       FailureServer.showError(e);
     } on ArgumentError catch (e) {
       debugPrint("Erro ao criar spot: ${e.toString()}");
-      rethrow;
+      FailureServer.showError(OtherError(message: "${e.message} - ${e.invalidValue}"));
     }
   }
 
   void limpar() {
     _pickImageUC.listFile.clear();
     imgUrls.clear();
-    nomePico = '';
-    descricao = '';
     selectedModalidade = ModalitySpot.skate;
     _updateConfig(selectedModalidade);
     notifyListeners();
