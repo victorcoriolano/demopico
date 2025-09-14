@@ -100,7 +100,7 @@ class _ContainerTelasState extends State<ContainerTelas> {
                               ? provider.createSpot(createIdentification(user))
                               : _nextScreen();
                           }
-                          : null, 
+                          : provider.showError, 
                         textButton: etapa == StepsAddPico.detalhesAdicionais ? "CRIAR PICO" : "PROSSEGUIR"),
                     ],
                   ),
