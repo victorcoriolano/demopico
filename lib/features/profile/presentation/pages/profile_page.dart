@@ -8,7 +8,7 @@ import 'package:demopico/features/profile/presentation/widgets/profile_data/prof
 import 'package:demopico/features/user/domain/enums/type_post.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
-import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
+import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';

@@ -3,7 +3,7 @@ import 'package:demopico/features/profile/domain/models/post.dart';
 import 'package:demopico/features/profile/presentation/provider/post_provider.dart';
 import 'package:demopico/features/profile/presentation/view_objects/media_url_item.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/video_player_from_network.dart';
-import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
+import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

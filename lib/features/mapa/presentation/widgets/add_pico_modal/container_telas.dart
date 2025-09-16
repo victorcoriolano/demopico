@@ -7,7 +7,7 @@ import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/segun
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/terceira_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/custom_buttons.dart';
 import 'package:demopico/features/user/domain/models/user.dart';
-import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
+import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';

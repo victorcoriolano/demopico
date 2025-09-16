@@ -23,7 +23,7 @@ import 'package:demopico/features/profile/presentation/provider/post_provider.da
 import 'package:demopico/features/profile/presentation/provider/screen_provider.dart';
 import 'package:demopico/features/user/infra/datasource/remote/firebase_auth_service.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
-import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
+import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 

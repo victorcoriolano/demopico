@@ -3,7 +3,6 @@ import 'package:demopico/features/mapa/presentation/controllers/add_pico_view_mo
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-// Classe que representa a quarta tela
 class QuartaTela extends StatefulWidget {
   const QuartaTela({super.key});
 
@@ -12,14 +11,12 @@ class QuartaTela extends StatefulWidget {
 }
 
 class _QuartaTelaState extends State<QuartaTela> {
-  // Use um TextEditingController para gerenciar o valor
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    // Preenche o campo se já houver um valor no provider
     final provider = context.read<AddPicoViewModel>();
     _nameController.text = provider.nomePico;
     _descriptionController.text = provider.descricao;
@@ -38,13 +35,11 @@ class _QuartaTelaState extends State<QuartaTela> {
       builder: (context, provider, child) => Scaffold(
         backgroundColor: Colors.grey[200],
         body: SingleChildScrollView(
-          // Permite rolagem do conteúdo
-          child: Center(
+            child: Center(
             child: Column(
               crossAxisAlignment:
-                  CrossAxisAlignment.center, // Centraliza o conteúdo na coluna
+                  CrossAxisAlignment.center, 
               children: [
-                // Exibir imagem do topo
                 Center(
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
@@ -53,8 +48,7 @@ class _QuartaTelaState extends State<QuartaTela> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20), // Espaço entre a imagem e o texto
-                // Texto para o campo de entrada do nome do pico
+                const SizedBox(height: 20), 
                 const Text(
                   'NOME DO PICO:',
                   style: TextStyle(
@@ -64,7 +58,6 @@ class _QuartaTelaState extends State<QuartaTela> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                // Campo de texto para o nome do pico
                 TextFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) =>

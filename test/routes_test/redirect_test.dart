@@ -1,6 +1,6 @@
 import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/routes/middleware.dart';
-import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
+import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';

@@ -1,5 +1,5 @@
 import 'package:demopico/core/app/routes/app_routes.dart';
-import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
+import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

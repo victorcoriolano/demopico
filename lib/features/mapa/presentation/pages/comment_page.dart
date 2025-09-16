@@ -1,6 +1,6 @@
 import 'package:demopico/core/common/widgets/snackbar_utils.dart';
 import 'package:demopico/features/mapa/presentation/controllers/comment_controller.dart';
-import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
+import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

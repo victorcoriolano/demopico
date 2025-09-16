@@ -1,6 +1,6 @@
 import 'package:demopico/features/profile/presentation/provider/post_provider.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/card_post_widget.dart';
-import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
+import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

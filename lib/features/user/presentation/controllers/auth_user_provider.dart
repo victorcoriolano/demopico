@@ -8,7 +8,7 @@ import 'package:demopico/features/user/domain/usecases/criar_conta_uc.dart';
 import 'package:demopico/features/user/domain/usecases/login_uc.dart';
 import 'package:demopico/features/user/domain/usecases/logout_uc.dart';
 import 'package:demopico/features/user/domain/usecases/pegar_id_usuario.dart';
-import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
+import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

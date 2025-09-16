@@ -7,7 +7,7 @@ import 'package:demopico/features/profile/domain/usecases/get_connections_reques
 import 'package:demopico/features/profile/domain/usecases/get_connections_sent.dart';
 import 'package:demopico/features/profile/presentation/view_objects/suggestion_profile.dart';
 import 'package:demopico/features/user/domain/usecases/get_sugestions_user_uc.dart';
-import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
+import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/material.dart';
 
 class NetworkViewModel extends ChangeNotifier {
