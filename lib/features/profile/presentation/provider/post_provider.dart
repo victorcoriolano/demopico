@@ -13,7 +13,7 @@ import 'package:demopico/features/profile/domain/usecases/get_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/update_post_uc.dart';
 import 'package:demopico/features/profile/presentation/view_objects/media_url_item.dart';
 import 'package:demopico/features/user/domain/enums/type_post.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/features/user/domain/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
