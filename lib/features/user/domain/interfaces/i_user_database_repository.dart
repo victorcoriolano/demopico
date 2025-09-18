@@ -1,5 +1,5 @@
 
-import 'package:demopico/features/user/domain/models/user.dart';
+/* import 'package:demopico/features/user/domain/models/user.dart';
 
 abstract class IUserDataRepository{
   UserM? get localUser;
@@ -8,4 +8,4 @@ abstract class IUserDataRepository{
   Future<String> getEmailByVulgo(String vulgo);
   Future<UserM> updateUserDetails(UserM user);
   Future<bool> validateExist({required String data,required  String field});
-}
+} */

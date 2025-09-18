@@ -1,8 +1,8 @@
-import 'package:demopico/core/common/auth/domain/entities/user_credentials.dart';
+/* import 'package:demopico/core/common/auth/domain/entities/user_credentials.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_auth_repository.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_auth_service.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_database_repository.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/features/user/domain/models/user_model.dart';
 import 'package:demopico/features/user/infra/repositories/user_data_repository_impl.dart';
 import 'package:demopico/features/user/infra/datasource/remote/firebase_auth_service.dart';
 
@@ -37,3 +37,4 @@ class UserAuthRepository implements IUserAuthRepository {
       return await userAuthServiceIMP.loginByEmail(loginCredentials);
   }
 }
+ */

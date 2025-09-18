@@ -1,4 +1,4 @@
-import 'package:demopico/features/user/domain/interfaces/i_user_auth_service.dart';
+/* import 'package:demopico/features/user/domain/interfaces/i_user_auth_service.dart';
 import 'package:demopico/features/user/infra/datasource/remote/firebase_auth_service.dart';
 
 
@@ -18,4 +18,4 @@ class PegarIdUsuario {
 
   String? pegar() => userAuthServiceIMP.currentIdUser;
 
-}
+} */
