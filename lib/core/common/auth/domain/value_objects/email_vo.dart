@@ -1,3 +1,5 @@
+import 'package:demopico/core/common/errors/repository_failures.dart';
+
 class EmailVO {
   final String value;
 
@@ -7,8 +9,12 @@ class EmailVO {
     final normalized = email.trim().toLowerCase();
     final emailRegex = RegExp(r"^[^@\s]+@[^@\s]+\.[^@\s]+$");
     if (!emailRegex.hasMatch(normalized)) {
-      throw ArgumentError('Invalid email format');
+      throw InvalidEmailFailure();
     }
     return EmailVO._(normalized);
+  }
+
+  factory EmailVO.empty(){
+    return EmailVO("");
   }
 }
