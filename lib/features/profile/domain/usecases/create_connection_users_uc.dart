@@ -2,7 +2,7 @@
 import 'package:demopico/features/profile/domain/interfaces/i_network_repository.dart';
 import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/infra/repository/network_repository.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/features/user/domain/models/user_model.dart';
 
 class CreateConnectionUsersUc {
   final INetworkRepository _repository;
