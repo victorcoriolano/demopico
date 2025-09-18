@@ -1,3 +1,4 @@
+import 'package:demopico/core/common/auth/infra/repositories/firebase_auth_repository.dart';
 import 'package:demopico/core/common/media_management/usecases/pick_files_uc.dart';
 import 'package:demopico/core/common/media_management/usecases/pick_video_uc.dart';
 import 'package:demopico/features/home/infra/http_climate_service.dart';
@@ -21,8 +22,10 @@ import 'package:demopico/features/profile/domain/usecases/update_post_uc.dart';
 import 'package:demopico/features/profile/presentation/provider/network_view_model.dart';
 import 'package:demopico/features/profile/presentation/provider/post_provider.dart';
 import 'package:demopico/features/profile/presentation/provider/screen_provider.dart';
+import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:demopico/features/user/infra/datasource/remote/firebase_auth_service.dart';
-import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_sign_in.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_sign_up.dart';
 import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
@@ -33,17 +36,18 @@ final myProviders = [
   ChangeNotifierProvider(
       create: (_) =>
           ForecastProvider(null, climaService: HttpClimateService())),
-  ChangeNotifierProvider(create: (_) => AuthUserProvider.getInstance),
+  ChangeNotifierProvider(create: (_) => AuthViewModelSignIn.getInstance),
+  ChangeNotifierProvider(create: (_) => AuthViewModelSignUp.getInstance),
   ChangeNotifierProvider(create: (_) => ScreenProvider()),
-  StreamProvider<User?>(
-    create: (_) => FirebaseAuthService.getInstance.getAuthStateChanges(),
-    initialData: null,
+  StreamProvider<AuthState>(
+    create: (_) => FirebaseAuthRepository.instance.authState,
+    initialData: AuthUnauthenticated(),
   ),
   ChangeNotifierProvider(create: (_) => AddPicoViewModel.getInstance),
   ChangeNotifierProvider(create: (_) => MapControllerProvider()),
   ChangeNotifierProvider(create: (_) => FavoriteSpotController.getInstance),
   ChangeNotifierProvider(create: (_) => SpotsControllerProvider.getInstance),
-  ChangeNotifierProvider(create: (_) => UserDataViewModel.getInstance),
+  ChangeNotifierProvider(create: (_) => ProfileViewModel.getInstance),
   ChangeNotifierProvider(create: (_) => HistoricoController.getInstance),
   ChangeNotifierProvider(
     create: (_) => HubProvider(
