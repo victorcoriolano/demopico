@@ -1,4 +1,4 @@
-import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/features/user/domain/models/user_model.dart';
 
 class Communique {
   final String id;
