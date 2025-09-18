@@ -4,8 +4,8 @@ import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/features/profile/presentation/pages/edit_profile_page.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/about_page_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/drawer_item.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
-import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
+import 'package:demopico/features/user/domain/models/user_model.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_sing_in.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -41,7 +41,7 @@ class _MyCustomDrawerState extends State<MyCustomDrawer> {
             TextButton(
               child: const Text('Sair'),
               onPressed: () async {
-                await context.read<AuthUserProvider>().logout();
+                await context.read<AuthViewModel>().logout();
                 Get.offAll(
                   () => const HomePage(),
                   transition: Transition.rightToLeftWithFade,
