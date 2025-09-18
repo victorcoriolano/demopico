@@ -60,7 +60,7 @@ class _CentralPageState extends State<CentralPage> {
             children: [
               Stack(children: [
                 CentralPageBackground(),
-                Consumer2<OpenWeatherProvider, UserDataViewModel>(
+                Consumer2<OpenWeatherProvider, ProfileViewModel>(
                   builder: (context, weatherProvider, userDatabaseProvider, child) {
                     //Carrega os dados do clima de acordo com o estado
                     if (weatherProvider.isLoading) {
