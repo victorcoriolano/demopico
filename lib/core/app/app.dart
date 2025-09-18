@@ -15,7 +15,7 @@ class MyAppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put<AuthBiding>(AuthBiding());
-    Get.put<UserDataViewModel>(UserDataViewModel.getInstance);
+    Get.put<ProfileViewModel>(ProfileViewModel.getInstance);
     
     return MultiProvider(
       providers: myProviders,
