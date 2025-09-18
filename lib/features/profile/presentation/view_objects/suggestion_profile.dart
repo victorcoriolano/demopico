@@ -1,7 +1,8 @@
 
 
+import 'package:demopico/core/common/auth/domain/entities/profile_user.dart';
 import 'package:demopico/features/profile/domain/models/relationship.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/features/user/domain/models/user_model.dart';
 
 class SuggestionProfile {
   final String idUser;
@@ -16,11 +17,11 @@ class SuggestionProfile {
     required this.status,
   });
 
-  factory SuggestionProfile.fromUser(UserM user) {
+  factory SuggestionProfile.fromUser(Profile user) {
     return SuggestionProfile(
-      idUser: user.id,
-      name: user.name,
-      photo: user.pictureUrl,
+      idUser: user.userID,
+      name: user.displayName,
+      photo: user.avatar,
       status: RequestConnectionStatus.available,
     );
   }
