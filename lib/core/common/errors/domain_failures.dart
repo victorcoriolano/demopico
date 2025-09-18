@@ -23,6 +23,9 @@ class InvalidPasswordFailure extends DomainFailure {
   InvalidPasswordFailure(): super(message: "Senha inválida", code: 'invalid_password');
 }
 
+class InvalidPasswordLength extends DomainFailure {
+  InvalidPasswordLength(): super(message: "Insira ao menos 8 caracteres", code: 'invalid_password');
+}
 
 class InvalidVulgoFailure extends DomainFailure {
   InvalidVulgoFailure(): super(message: "Vulgo Inválido", code: 'invalid_vulgo');
@@ -77,3 +80,4 @@ class InvalidAttributeError extends DomainFailure {
 class InvalidObstacleFailure extends DomainFailure {
   InvalidObstacleFailure({required super.message});
 }
+
