@@ -3,7 +3,7 @@ import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto_mapper.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_database_service.dart';
 import 'package:demopico/features/user/domain/interfaces/i_users_repository.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/features/user/domain/models/user_model.dart';
 import 'package:demopico/features/user/infra/datasource/remote/user_firebase_datasource.dart';
 
 class UsersRepository implements IUsersRepository{
@@ -21,7 +21,7 @@ class UsersRepository implements IUsersRepository{
 
   final _mapper = FirebaseDtoMapper<UserM>(
     fromJson: (data, id) => UserM.fromJson(data, id),
-    toMap: (user) => user.toJsonMap(),
+    toMap: (user) => user.toJson(),
     getId: (model) => model.id);
 
    @override
