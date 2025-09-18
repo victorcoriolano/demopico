@@ -1,10 +1,10 @@
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
-import 'package:demopico/core/common/errors/domain_failures.dart';
+import 'package:demopico/core/common/errors/failure_server.dart';
 
 class AuthResult {
   final bool success;
-  final TypeUser? user;
-  final DomainFailure? failure;
+  final UserEntity? user;
+  final Failure? failure;
 
   AuthResult._({
     required this.success,
@@ -12,9 +12,9 @@ class AuthResult {
     this.failure,
   });
 
-  factory AuthResult.success({required TypeUser user}) =>
+  factory AuthResult.success({required UserEntity user}) =>
       AuthResult._(success: true, user: user);
 
-  factory AuthResult.failure(DomainFailure failure) =>
+  factory AuthResult.failure(Failure failure) =>
       AuthResult._(success: false, failure: failure);
 }
