@@ -1,4 +1,4 @@
-
+const String defaultDescription = "Skate or die";
 class Profile {
   final String userID;
   final String displayName;
@@ -23,15 +23,56 @@ class Profile {
     this.posts = const [],
   });
 
+  Profile copyWith({
+    String? userID,
+    String? displayName,
+    String? avatar,
+    String? description,
+    String? backgroundPicture,
+    List<String>? connections,
+    List<String>? spots,
+    List<String>? posts,
+    RuleProfile? profileRule,
+  }) {
+    return Profile(
+      userID: userID ?? this.userID,
+      displayName: displayName ?? this.displayName,
+      avatar: avatar ?? this.avatar,
+      description: description ?? this.description,
+      backgroundPicture: backgroundPicture ?? this.backgroundPicture,
+      connections: connections ?? this.connections,
+      spots: spots ?? this.spots,
+      posts: posts ?? this.posts,
+      profileRule: profileRule ?? this.profileRule,
+    );
+  }
 
+    /// Null Object (profile vazio usado como default)
+  static const Profile empty = Profile(
+    userID: '',
+    displayName: '',
+    avatar: null,
+    description: '',
+    backgroundPicture: null,
+    connections: [],
+    spots: [],
+    posts: [],
+    profileRule: RuleProfile.viewer,
+  );
 }
 
 class ProfileFactory {
 
-  static Profile initialFromUser(String userID, String displayName) {
+  static Profile initialFromUser(String userID, String displayName, [String? avatar, ]) {
     return Profile(
       userID: userID,
       displayName: displayName,
+      avatar: avatar,
+      description: defaultDescription,
+      backgroundPicture: null,
+      connections: List.empty(),
+      posts: List.empty(),
+      spots: List.empty(),
       profileRule: RuleProfile.owner,
     );
   }
@@ -50,9 +91,6 @@ class ProfileFactory {
     );
   }
 
-  static bool isMyProfile(Profile profile, String currentUserId) {
-    return profile.userID == currentUserId;
-  }
 }
 
 enum RuleProfile { 
