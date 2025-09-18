@@ -2,36 +2,28 @@ import 'package:demopico/core/common/auth/domain/entities/profile_user.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/dob_vo.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/email_vo.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/location_vo.dart';
-import 'package:demopico/core/common/auth/domain/value_objects/user_rule_vo.dart';
+import 'package:demopico/core/common/auth/domain/value_objects/vulgo_vo.dart';
 
-sealed class TypeUser {
-  const TypeUser({required this.rule});
-  final UserRuleVO rule;
-}
-
-class UserEntity extends TypeUser {
+class UserEntity {
   final String id;
-  final String displayName;
-  final String? avatar;
+  final VulgoVo displayName;
   final EmailVO email;
   final DobVo dob;
-  final LocationVo location;
+  final LocationVo? location;
   final Profile profileUser;
 
   UserEntity({
-    this.avatar,
-    required super.rule,
-    required this.displayName,
     required this.id,
+    required this.displayName,
     required this.email,
     required this.dob,
     required this.location,
     required this.profileUser,
-  });  
+  });
 
   UserEntity copyWith({
     String? avatar,
-    String? displayName,
+    VulgoVo? displayName,
     String? id,
     EmailVO? email,
     DobVo? dob,
@@ -39,9 +31,7 @@ class UserEntity extends TypeUser {
     Profile? profileUser,
   }) {
     return UserEntity(
-      avatar: avatar,
       id: id ?? this.id,
-      rule: rule, // rule is final and should not change
       email: email ?? this.email,
       dob: dob ?? this.dob,
       location: location ?? this.location,
@@ -49,16 +39,38 @@ class UserEntity extends TypeUser {
       displayName: displayName ?? this.displayName,
     );
   }
-  
+
+  factory UserEntity.initial(String id, VulgoVo displayName, EmailVO email, LocationVo? location, String? avatar){
+    return UserEntity(
+      id: id, 
+      displayName: displayName, 
+      email: email, 
+      dob: DobVo(DateTime.now()), 
+      location: location, 
+      profileUser: ProfileFactory.initialFromUser(id, displayName.value, avatar));
+    
+  }
 }
 
-class ColetivoEntity extends TypeUser {
-  const ColetivoEntity({required super.rule});
+class ColetivoEntity {
+  final String id;
+  final String uid;
+  final List<String> members;
+  final String logo;
+  const ColetivoEntity(
+      {required this.id,
+      required this.uid,
+      required this.members,
+      required this.logo});
 }
 
-class AnonymousUserEntity extends TypeUser {
-  const AnonymousUserEntity() : super(rule: UserRuleVO.anonymous);
+class AnonymousUserEntity extends UserEntity {
+  AnonymousUserEntity()
+      : super(
+            id: "",
+            location: LocationVo.empty(),
+            displayName: VulgoVo.empty(),
+            dob: DobVo(DateTime.now()),
+            email: EmailVO.empty(),
+            profileUser: Profile.empty);
 }
-
-
-
