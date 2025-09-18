@@ -6,8 +6,8 @@ import 'package:demopico/features/profile/presentation/widgets/profile_data/prof
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_drawer_config.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_top_side_data_widget.dart';
 import 'package:demopico/features/user/domain/enums/type_post.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
-import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
+import 'package:demopico/features/user/domain/models/user_model.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_sing_in.dart';
 import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -45,7 +45,7 @@ class _ProfilePageState extends State<ProfilePage>
         actions: [
           TextButton(
             onPressed: () async {
-              final provider = context.read<AuthUserProvider>();
+              final provider = context.read<AuthViewModel>();
               await provider.logout();
               Get.toNamed(Paths.home);
             },
@@ -139,21 +139,11 @@ class _ProfilePageState extends State<ProfilePage>
   Future<void> _loadUser() async {
     debugPrint('Loading user...');
     _isLoading = true;
-    final providerAuth = Provider.of<AuthUserProvider>(context, listen: false);
+    final providerAuth = Provider.of<AuthViewModel>(context, listen: false);
     final providerDatabase =
-        Provider.of<UserDataViewModel>(context, listen: false);
+        Provider.of<ProfileViewModel>(context, listen: false);
 
     String? uid = providerAuth.currentIdUser;
-
-    if (uid == null) {
-      debugPrint('User ID is null');
-      setState(() {
-        _isLoading = false;
-      });
-      showAlertError(context,
-          "Não foi possível encontrar o id do user!\n Tente entrar novamente");
-      return;
-    }
 
     await providerDatabase.retrieveUserProfileData(uid);
 
@@ -177,7 +167,7 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final thisUser = context.read<UserDataViewModel>().user;
+    final thisUser = context.read<ProfileViewModel>().user;
     if (_isLoading) {
       return Center(
         child: CircularProgressIndicator(),
