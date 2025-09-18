@@ -1,26 +1,25 @@
 import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/features/user/domain/models/user_model.dart';
 import 'package:demopico/features/user/domain/usecases/update_data_user_uc.dart';
 import 'package:flutter/material.dart';
-import 'package:demopico/features/user/domain/usecases/pegar_dados_user_uc.dart';
+import 'package:demopico/features/user/domain/usecases/get_user_by_id.dart';
 
-class UserDataViewModel extends ChangeNotifier {
-  static UserDataViewModel? _userDatabaseProvider;
-  static UserDataViewModel get getInstance {
-    _userDatabaseProvider ??= UserDataViewModel(
-        pegarDadosUserUc: PegarDadosUserUc.getInstance,
-        updateDataUserUc: UpdateDataUserUc.getInstance);
+class ProfileViewModel extends ChangeNotifier {
+  static ProfileViewModel? _userDatabaseProvider;
+  static ProfileViewModel get getInstance {
+    _userDatabaseProvider ??= ProfileViewModel(
+        pegarDadosUserUc: GetUserByID.getInstance,
+        updateDataUserUc: UpdateUserUc.getInstance);
     return _userDatabaseProvider!;
   }
 
-  UserDataViewModel(
+  ProfileViewModel(
       {required this.pegarDadosUserUc,
-      required UpdateDataUserUc updateDataUserUc})
-      : _updateDataUserUc = updateDataUserUc;
+      required UpdateUserUc updateDataUserUc})
+;
 
-  final PegarDadosUserUc pegarDadosUserUc;
-  final UpdateDataUserUc _updateDataUserUc;
+  final GetUserByID pegarDadosUserUc;
 
   UserM? _currentUser;
   UserM? get user => _currentUser;
@@ -40,7 +39,4 @@ class UserDataViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  set setUser(UserM? authUser) {
-    _currentUser = authUser;
-  }
 }

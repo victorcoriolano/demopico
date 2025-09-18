@@ -32,7 +32,7 @@ class _PostWidgetState extends State<PostWidget> {
     curtidas = widget.post.curtidas;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       isMypost =
-          context.read<UserDataViewModel>().user!.isMy(widget.post.userId);
+          context.read<ProfileViewModel>().user!.isMy(widget.post.userId);
       _provider = Provider.of(context, listen: false);
       urlsItems.addAll(_provider.getMediaItemsFor(widget.post));
       setState(() {});

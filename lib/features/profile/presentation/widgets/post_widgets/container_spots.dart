@@ -18,7 +18,7 @@ class _ContainerSpotsState extends State<ContainerSpots> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async { 
-      final nameUser = context.read<UserDataViewModel>().user!.name;
+      final nameUser = context.read<ProfileViewModel>().user!.name;
       await context.read<SpotsControllerProvider>().getMySpots(nameUser);
     });
   }

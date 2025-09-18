@@ -131,7 +131,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 // Botão de Publicar
                 ElevatedButton(
                   onPressed: () async {
-                    final user = context.read<UserDataViewModel>().user;
+                    final user = context.read<ProfileViewModel>().user;
                     if (user == null) {
                       Get.snackbar(
                         'Erro',

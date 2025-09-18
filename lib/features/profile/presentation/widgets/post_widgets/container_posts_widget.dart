@@ -25,7 +25,7 @@ class _ContainerPostsWidgetState extends State<ContainerPostsWidget> {
   }
 
   Future<void> _getPost() async {
-    final userId = context.read<UserDataViewModel>().user?.id;
+    final userId = context.read<ProfileViewModel>().user?.id;
     await _postProvider.loadPosts(userId!);
   }
 

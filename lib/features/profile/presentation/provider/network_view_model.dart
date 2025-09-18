@@ -53,7 +53,7 @@ class NetworkViewModel extends ChangeNotifier {
   List<ConnectionReceiver> get connectionSent => _connectionSent;
 
   Future<void> fetchConnectionsRequests() async {
-    final user = UserDataViewModel.getInstance.user;
+    final user = ProfileViewModel.getInstance.user;
     if (user == null) return;
 
     try {
@@ -66,7 +66,7 @@ class NetworkViewModel extends ChangeNotifier {
   }
 
   Future<void> fetchConnectionSent() async {
-    final user = UserDataViewModel.getInstance.user;
+    final user = ProfileViewModel.getInstance.user;
     if (user == null) return;
 
     try {
@@ -79,7 +79,7 @@ class NetworkViewModel extends ChangeNotifier {
   }
 
   Future<void> fetchSugestions() async {
-    final user = UserDataViewModel.getInstance.user;
+    final user = ProfileViewModel.getInstance.user;
     if (user == null) return;
 
     try {
@@ -92,7 +92,7 @@ class NetworkViewModel extends ChangeNotifier {
   }
 
   Future<void> requestConnection(SuggestionProfile userSuggestion) async {
-    final userLogged = UserDataViewModel.getInstance.user;
+    final userLogged = ProfileViewModel.getInstance.user;
     if (userLogged == null) return;
 
     _suggestions
@@ -124,7 +124,7 @@ class NetworkViewModel extends ChangeNotifier {
 
   Future<void> acceptConnection(Relationship connection) async {
     try {
-      final userLogged = UserDataViewModel.getInstance.user;
+      final userLogged = ProfileViewModel.getInstance.user;
       if (userLogged == null) return;
 
       await _acceptConnection.execute(connection);
@@ -136,7 +136,7 @@ class NetworkViewModel extends ChangeNotifier {
 
   Future<void> cancelRelationship(Relationship connection) async {
     try {
-      final userLogged = UserDataViewModel.getInstance.user;
+      final userLogged = ProfileViewModel.getInstance.user;
       if (userLogged == null) return;
 
       await _cancelRelationship.execute(connection);

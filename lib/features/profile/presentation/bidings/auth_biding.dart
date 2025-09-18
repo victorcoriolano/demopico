@@ -5,6 +5,6 @@ class AuthBiding implements Bindings {
 
   @override
   void dependencies() {
-    Get.put<UserDataViewModel>(UserDataViewModel.getInstance);
+    Get.put<ProfileViewModel>(ProfileViewModel.getInstance);
   }
 }

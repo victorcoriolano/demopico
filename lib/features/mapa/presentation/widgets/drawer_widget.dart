@@ -18,7 +18,7 @@ class _MyDrawerState extends State<MyDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.read<UserDataViewModel>().user;
+    final user = context.read<ProfileViewModel>().user;
 
     return SafeArea(
       child: Drawer(

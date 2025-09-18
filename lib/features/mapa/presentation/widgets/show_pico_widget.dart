@@ -12,7 +12,7 @@ import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/to
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/name_description.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/obstacle_widget.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/photo_and_name_widget.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/features/user/domain/models/user_model.dart';
 import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -49,7 +49,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
   // FIXME: REMOVER ESSA LÓGICA DA VIEW E MODELAR PARA DENTRO DO DOMÍNIO
   
   bool isMine(){
-    user = context.read<UserDataViewModel>().user;
+    user = context.read<ProfileViewModel>().user;
     final pico = context.read<SpotProvider>().pico;
       // TODO REFATORAR ESSA LÓGICA
       return user != null && pico?.user != null 
