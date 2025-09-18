@@ -1,6 +1,6 @@
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 import 'package:demopico/features/user/domain/enums/sign_methods.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/features/user/domain/models/user_model.dart';
 
 final mockUserProfile = UserM(
   idMySpots: [],

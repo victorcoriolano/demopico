@@ -3,7 +3,7 @@ import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/features/home/presentation/provider/home_provider.dart';
 import 'package:demopico/features/home/presentation/provider/weather_provider.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/features/user/domain/models/user_model.dart';
 import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -43,7 +43,7 @@ class MockWeatherProvider extends Mock implements OpenWeatherProvider {
   Future<void> fetchWeatherData() => Future.value();
 }
 
-class MockUserDatabaseProvider extends Mock implements UserDataViewModel {
+class MockUserDatabaseProvider extends Mock implements ProfileViewModel {
   @override
   UserM? get user => mockUserProfile;
 }
@@ -71,7 +71,7 @@ void main() {
         ChangeNotifierProvider<OpenWeatherProvider>(
           create: (_) => mockWeatherProvider,
         ),
-        ChangeNotifierProvider<UserDataViewModel>(
+        ChangeNotifierProvider<ProfileViewModel>(
           create: (_) => mockUserDatabaseProvider,
         ),
         ChangeNotifierProvider<HomeProvider>(create: (_) => MockHomeProvider())

@@ -8,7 +8,7 @@ import 'package:mocktail/mocktail.dart';
 import '../features/mocks/mocks_profile.dart';
 
 // Mock da classe de serviço para simular o estado de autenticação
-class MockUserDatabaseProvider extends Mock implements UserDataViewModel {}
+class MockUserDatabaseProvider extends Mock implements ProfileViewModel {}
 
 void main() {
 
@@ -19,7 +19,7 @@ void main() {
       
       authService = MockUserDatabaseProvider();
        Get.testMode = true;
-      Get.put<UserDataViewModel>(authService);
+      Get.put<ProfileViewModel>(authService);
       authGard = Middleware();
      
     });
