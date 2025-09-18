@@ -76,7 +76,7 @@ class _CommentPageState extends State<CommentPage> {
                       icon: const Icon(Icons.send),
                       onPressed: () {
                         final content = _controller.text;
-                        final user = context.read<UserDataViewModel>().user;
+                        final user = context.read<ProfileViewModel>().user;
                         if (user == null){
                           SnackbarUtils.userNotLogged(context);
                         }
