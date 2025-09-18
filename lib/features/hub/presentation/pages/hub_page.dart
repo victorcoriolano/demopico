@@ -3,7 +3,7 @@ import 'package:demopico/features/hub/presentation/providers/hub_provider.dart';
 import 'package:demopico/features/hub/presentation/widgets/communique_tile.dart';
 import 'package:demopico/features/hub/presentation/widgets/input_box.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/features/user/domain/models/user_model.dart';
 import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +33,7 @@ class _HubPageState extends State<HubPage> {
   }
 
   Future<void> _handleSendAction(String message) async {
-    user ??= context.read<UserDataViewModel>().user;
+    user ??= context.read<ProfileViewModel>().user;
     await context.read<HubProvider>().postHubCommunique(message, selectedType, user!);
   }
 
