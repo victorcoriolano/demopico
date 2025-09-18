@@ -54,8 +54,6 @@ class UserNotFoundFailure extends RepositoryFailures {
 }
 
 // Arquivos 
-
-
 class UploadFileFailure extends RepositoryFailures {
   UploadFileFailure({super.originalException}): super(message: "Erro ao fazer upload do arquivo", code: 'UPLOAD_FILE_FAILURE');
 }
@@ -98,6 +96,11 @@ class TooManyAttemptsFailure extends RepositoryFailures {
 class DuplicateDataFailure extends RepositoryFailures {
   DuplicateDataFailure({required super.message}): super(code: "DUPLICATE_DATA_FAILURE");
 }
+
+class ProfileNotFoundFailure extends RepositoryFailures {
+  ProfileNotFoundFailure({required super.originalException}) : super(message: "Perfil não encontrado");
+}
+
 
 
 
