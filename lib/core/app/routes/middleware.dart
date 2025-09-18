@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 class Middleware extends GetMiddleware {
 
-  final _authProvider = Get.find<UserDataViewModel>();
+  final _authProvider = Get.find<ProfileViewModel>();
   
   @override
   RouteSettings? redirect(String? route) {
