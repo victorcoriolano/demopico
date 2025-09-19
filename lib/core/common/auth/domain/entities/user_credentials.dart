@@ -18,8 +18,8 @@ class EmailCredentialsSignIn  {
   }) : signMethod = signMethods ?? SignMethods.email;
 }
 
-class VulgoPasswordCredentialsSignIn  {
-  VulgoPasswordCredentialsSignIn({
+class VulgoCredentialsSignIn  {
+  VulgoCredentialsSignIn({
     required this.password,
     required this.vulgo,
   });
