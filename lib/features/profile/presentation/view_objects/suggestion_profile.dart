@@ -1,6 +1,6 @@
 
 
-import 'package:demopico/core/common/auth/domain/entities/profile_user.dart';
+import 'package:demopico/features/profile/domain/models/profile_user.dart';
 import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/user/domain/models/user_model.dart';
 

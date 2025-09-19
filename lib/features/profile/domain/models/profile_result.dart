@@ -1,4 +1,4 @@
-import 'package:demopico/core/common/auth/domain/entities/profile_user.dart';
+import 'package:demopico/features/profile/domain/models/profile_user.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 
 class ProfileResult {

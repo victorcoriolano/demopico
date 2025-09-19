@@ -1,4 +1,4 @@
-import 'package:demopico/core/common/auth/domain/entities/profile_user.dart';
+import 'package:demopico/features/profile/domain/models/profile_user.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/dob_vo.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/location_vo.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/user_rule_vo.dart';
