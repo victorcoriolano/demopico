@@ -1,4 +1,6 @@
 import 'package:demopico/core/app/routes/app_routes.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
+import 'package:demopico/features/profile/presentation/services/verify_auth_and_get_user.dart';
 import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
 import 'package:demopico/features/profile/presentation/widgets/search_page_widgets/container_suggestion_widget.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +20,8 @@ class _SearchProfilePageState extends State<SearchProfilePage> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<NetworkViewModel>().fetchSugestions();
+      final currentUser = VerifyAuthAndGetUser.verify(context);
+      if (currentUser != null) context.read<NetworkViewModel>().fetchSugestions(currentUser);
     });
   }
   @override
