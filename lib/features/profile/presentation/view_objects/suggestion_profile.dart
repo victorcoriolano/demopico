@@ -17,10 +17,10 @@ class SuggestionProfile {
     required this.status,
   });
 
-  factory SuggestionProfile.fromUser(Profile user) {
+  factory SuggestionProfile.fromUser(UserM user) {
     return SuggestionProfile(
-      idUser: user.userID,
-      name: user.displayName,
+      idUser: user.id,
+      name: user.name,
       photo: user.avatar,
       status: RequestConnectionStatus.available,
     );
