@@ -9,4 +9,5 @@ abstract class IAuthRepository {
   Future<void> signOut();
   Future<AuthResult> signUp(NormalUserCredentialsSignUp credentials); 
   Stream<AuthState> get authState; // emits Authenticated(User) or Unauthenticated
+  AuthState get currentAuthState;
 }
