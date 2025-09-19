@@ -1,5 +1,7 @@
 import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/core/common/widgets/snackbar_utils.dart';
 import 'package:demopico/features/profile/domain/models/relationship.dart';
+import 'package:demopico/features/profile/presentation/services/verify_auth_and_get_user.dart';
 import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
 import 'package:demopico/features/profile/presentation/widgets/search_page_widgets/connection_action_card.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +20,8 @@ class _MyNetworkScreenState extends State<MyNetworkScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final viewModel = context.read<NetworkViewModel>();
-      await viewModel.fetchConnectionsRequests();
-      await viewModel.fetchConnectionSent();
+      final currentUser = VerifyAuthAndGetUser.verify(context);
+      if(currentUser != null) await viewModel.fetchRelactionsShips(currentUser);
     });
   }
 
@@ -95,14 +97,19 @@ class ProfileList extends StatelessWidget {
                   user: userProfiles[index],
                   actionButton: actionType == ActionType.accept
                       ? ElevatedButton(
-                          onPressed: () {
-                            // TODO IMPLEMENTAR ACEITAR SOLICITAÇÃO DE CONEXÃO
+                          onPressed: () async {
+                            final currentUser = VerifyAuthAndGetUser.verify(context);
+                            final provider  = context.read<NetworkViewModel>();
+                            if(currentUser == null) return SnackbarUtils.userNotLogged(context);
+                            await provider.acceptConnection(
+                              userProfiles[index], currentUser
+                            );
                           },
                           child: const Text('Aceitar'),
                         )
                       : ElevatedButton(
-                          onPressed: () {
-                            // TODO IMPLEMENTAR CANCELAR SOLICITAÇÃO DE CONEXÃO
+                          onPressed: () async {
+                            await context.read<NetworkViewModel>().cancelRelationship(userProfiles[index]);
                           },
                           child: const Text('Cancelar'),
                         ),
