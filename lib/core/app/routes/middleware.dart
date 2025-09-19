@@ -1,16 +1,21 @@
 import 'package:demopico/core/app/routes/app_routes.dart';
-import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
+import 'package:demopico/core/common/auth/domain/interfaces/i_auth_repository.dart';
+import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Middleware extends GetMiddleware {
+  final IAuthRepository authRepository;
 
-  final _authProvider = Get.find<ProfileViewModel>();
-  
+  Middleware(this.authRepository);
+
   @override
   RouteSettings? redirect(String? route) {
+    final authState = authRepository.currentAuthState;
 
-      if (_authProvider.user == null) return RouteSettings(name: Paths.login);
-      return null; // não redireciona caso o user esteja logado 
+    return switch (authState) {
+      AuthAuthenticated() => null,
+      AuthUnauthenticated() => const RouteSettings(name: Paths.login),
+    };
   }
 }
