@@ -15,6 +15,6 @@ class EmailVO {
   }
 
   factory EmailVO.empty(){
-    return EmailVO("");
+    return EmailVO._("");
   }
 }
