@@ -47,7 +47,7 @@ class UserM {
       id: id,
       name: json['name'],
       email: json['email'],
-      dob: DateTime.parse(json['dob'] ?? DateTime.now().toIso8601String()),
+      dob: DateTime.tryParse(json['dob']) ?? DateTime.now(),
       latitude: (json['latitude'] as num?)?.toDouble(),
       longitude: (json['longitude'] as num?)?.toDouble(),
       avatar: json['avatar'],
