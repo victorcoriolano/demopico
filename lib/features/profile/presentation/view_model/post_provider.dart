@@ -1,4 +1,5 @@
 import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/core/common/media_management/models/file_model.dart';
 import 'package:demopico/core/common/media_management/usecases/pick_files_uc.dart';
@@ -181,7 +182,7 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> createPost(UserM user, TypePost type) async {
+  Future<void> createPost(UserEntity user, TypePost type) async {
     try {
       _isLoading = true;
       notifyListeners();
@@ -203,7 +204,7 @@ class PostProvider extends ChangeNotifier {
       final newPost = Post(
           id: "",
           typePost: type,
-          nome: user.name,
+          nome: user.displayName.value,
           userId: user.id,
           spotID: _selectedSpotId?.id ?? '',
           avatar: user.avatar,
