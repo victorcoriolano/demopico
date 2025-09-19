@@ -13,7 +13,7 @@ class SignInEmailPasswordUc {
 
   final IAuthRepository _authRepository;
 
-  Future<void> execute(EmailCredentialsSignIn credentials) async {
-    await _authRepository.signInWithEmail(credentials);
+  Future<AuthResult> execute(EmailCredentialsSignIn credentials) async {
+    return await _authRepository.signInWithEmail(credentials);
   }
 }
