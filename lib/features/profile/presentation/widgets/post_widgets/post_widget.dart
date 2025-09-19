@@ -1,5 +1,6 @@
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';
+import 'package:demopico/features/profile/presentation/services/verify_is_my.dart';
 import 'package:demopico/features/profile/presentation/view_model/post_provider.dart';
 import 'package:demopico/features/profile/presentation/view_objects/media_url_item.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/video_player_from_network.dart';
@@ -23,7 +24,7 @@ class _PostWidgetState extends State<PostWidget> {
   int curtidas = 0;
   late final PostProvider _provider;
   final urlsItems = [];
-  bool isMypost = true;
+  late bool isMypost;
 
   @override
   void initState() {
@@ -31,8 +32,7 @@ class _PostWidgetState extends State<PostWidget> {
     _pageController = PageController();
     curtidas = widget.post.curtidas;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      isMypost =
-          context.read<ProfileViewModel>().user!.isMy(widget.post.userId);
+      isMypost = VerifyIsMy.isMy(widget.post.userId, context);
       _provider = Provider.of(context, listen: false);
       urlsItems.addAll(_provider.getMediaItemsFor(widget.post));
       setState(() {});
