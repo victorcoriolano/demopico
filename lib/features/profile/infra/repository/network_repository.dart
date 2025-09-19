@@ -45,8 +45,8 @@ class NetworkRepository implements INetworkRepository {
   }
   
   @override
-  Future<void> deleteRelationship(Relationship connection) {
-    return _datasource.deleteConnection(mapperConnection.toDTO(connection));
+  Future<void> deleteRelationship(String id) {
+    return _datasource.deleteConnection(id);
   }
   
   @override
