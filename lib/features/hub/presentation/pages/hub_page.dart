@@ -1,8 +1,12 @@
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
+import 'package:demopico/core/common/errors/domain_failures.dart';
+import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/ui_context_extension.dart';
 import 'package:demopico/features/hub/presentation/providers/hub_provider.dart';
 import 'package:demopico/features/hub/presentation/widgets/communique_tile.dart';
 import 'package:demopico/features/hub/presentation/widgets/input_box.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
+import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:demopico/features/user/domain/models/user_model.dart';
 import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,7 +26,7 @@ class _HubPageState extends State<HubPage> {
   bool _isDonation = false;
   bool _isEvent = false;
   TypeCommunique selectedType = TypeCommunique.normal;
-  UserM? user;
+  UserEntity? user;
 
   @override
   void initState() {
@@ -33,8 +37,14 @@ class _HubPageState extends State<HubPage> {
   }
 
   Future<void> _handleSendAction(String message) async {
-    user ??= context.read<ProfileViewModel>().user;
-    await context.read<HubProvider>().postHubCommunique(message, selectedType, user!);
+    final currentAuthState = context.watch<AuthState>();
+    switch (currentAuthState) {
+      case AuthAuthenticated():
+        user ??= currentAuthState.user;
+        await context.read<HubProvider>().postHubCommunique(message, selectedType, user!);
+      case AuthUnauthenticated():
+        FailureServer.showError(UnauthenticatedFailure());
+    }
   }
 
   @override
