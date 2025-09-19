@@ -1,3 +1,4 @@
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/features/user/domain/models/user_model.dart';
 
 class Communique {
@@ -23,13 +24,13 @@ class Communique {
     required this.type,
   });
 
-  factory Communique.initial(String content, TypeCommunique type, UserM user) {
+  factory Communique.initial(String content, TypeCommunique type, UserEntity user) {
     return Communique(
       id: '',
       uid: user.id,
-      vulgo: user.name,
+      vulgo: user.displayName.value,
       text: content,
-      pictureUrl: user.pictureUrl ?? '',
+      pictureUrl: user.avatar ?? '',
       timestamp: DateTime.now().toIso8601String(),
       likeCount: 0,
       likedBy: [],
