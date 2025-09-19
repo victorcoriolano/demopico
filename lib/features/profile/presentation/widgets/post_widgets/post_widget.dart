@@ -69,7 +69,7 @@ class _PostWidgetState extends State<PostWidget> {
                     Row(
                       children: [
                         CircleAvatar(
-                          backgroundImage: NetworkImage(post.urlUserPhoto),
+                          backgroundImage: NetworkImage(post.avatar),
                           radius: 24,
                         ),
                         const SizedBox(width: 12),
