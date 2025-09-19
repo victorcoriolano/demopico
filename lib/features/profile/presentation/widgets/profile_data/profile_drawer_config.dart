@@ -5,7 +5,6 @@ import 'package:demopico/features/profile/presentation/pages/edit_profile_page.d
 import 'package:demopico/features/profile/presentation/widgets/profile_data/about_page_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/drawer_item.dart';
 import 'package:demopico/features/user/domain/models/user_model.dart';
-import 'package:demopico/features/user/presentation/controllers/auth_view_model_sing_in.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
