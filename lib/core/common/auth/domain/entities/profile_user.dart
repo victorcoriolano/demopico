@@ -47,6 +47,20 @@ class Profile {
     );
   }
 
+  Map<String, dynamic> toJson() {
+  return {
+    'userID': userID,
+    'displayName': displayName,
+    'avatar': avatar,
+    'description': description,
+    'backgroundPicture': backgroundPicture,
+    'connections': connections,
+    'spots': spots,
+    'posts': posts,
+    'profileRule': profileRule.name, // Converte a enum para uma string
+  };
+}
+
     /// Null Object (profile vazio usado como default)
   static const Profile empty = Profile(
     userID: '',
