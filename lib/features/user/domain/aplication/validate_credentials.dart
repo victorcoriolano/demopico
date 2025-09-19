@@ -22,11 +22,11 @@ class ValidateUserCredentials {
     throw InvalidCredentialsFailure();
   }
 
-  Future<EmailCredentialsSignIn> validateVulgoExist(
-      EmailCredentialsSignIn credentials) async {
+  Future<VulgoCredentialsSignIn> validateVulgoExist(
+      VulgoCredentialsSignIn credentials) async {
     final bool exists;
     exists = await repository.validateExist(
-        data: credentials.identifier.value, field: "name");
+        data: credentials.vulgo.value, field: "name");
     if (exists) return credentials;
     throw InvalidCredentialsFailure();
   }
