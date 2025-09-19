@@ -64,6 +64,7 @@ class _LoginFormState extends State<LoginForm> with Validators {
                 //email ou vulgo
                 Consumer<AuthViewModelSignIn>(builder: (context, provider, child) {
                   return TextFormField(
+                    onChanged: (value) => provider.login = value,
                     decoration: customTextField(provider.getHintToFieldLogin()),
                     cursorColor: kWhite,
                     style: const TextStyle(color: kWhite),
@@ -78,20 +79,24 @@ class _LoginFormState extends State<LoginForm> with Validators {
                   height: 20,
                 ),
                 //senha
-                TextFormField(
-                  onFieldSubmitted: (value) async {
-                    final viewModel = context.read<AuthViewModelSignIn>();
-                    await viewModel.signIn(); 
-                  },
-                  decoration: customTextField("Senha"),
-                  cursorColor: kWhite,
-                  style: const TextStyle(color: kWhite),
-                  obscureText: true,
-                  controller: _senhaController,
-                  validator: (value) => combineValidators([
-                    () => isNotEmpty(value),
-                    () => isValidPassword(value),
-                  ]),
+                Consumer<AuthViewModelSignIn>(
+                  builder: (context, provider, child) {
+                    return TextFormField(
+                      onFieldSubmitted: (value) async {
+                        await provider.signIn(); 
+                      },
+                      onChanged: (value) => provider.password = value,
+                      decoration: customTextField("Senha"),
+                      cursorColor: kWhite,
+                      style: const TextStyle(color: kWhite),
+                      obscureText: true,
+                      controller: _senhaController,
+                      validator: (value) => combineValidators([
+                        () => isNotEmpty(value),
+                        () => isValidPassword(value),
+                      ]),
+                    );
+                  }
                 ),
                 // text input(esqueceu senha)
                 TextButton(
