@@ -5,10 +5,10 @@ import 'package:demopico/features/profile/presentation/widgets/post_widgets/prof
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_bottom_side_data_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_drawer_config.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_top_side_data_widget.dart';
+import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:demopico/features/user/domain/enums/type_post.dart';
 import 'package:demopico/features/user/domain/models/user_model.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
-import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -25,7 +25,7 @@ class _ProfilePageState extends State<ProfilePage>
     with TickerProviderStateMixin {
   late UserM? user;
   bool _isVisible = true;
-  bool _isLoading = true;
+  final bool _isLoading = true;
   ScrollDirection? _lastDirection;
   double _accumulatedScroll = 0.0;
   double _lastOffset = 0.0;
@@ -59,9 +59,6 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadUser();
-    });
 
     _tabController = TabController(length: 3, vsync: this);
 
@@ -136,52 +133,27 @@ class _ProfilePageState extends State<ProfilePage>
     super.dispose();
   }
 
-  Future<void> _loadUser() async {
-    debugPrint('Loading user...');
-    _isLoading = true;
-    final providerAuth = Provider.of<AuthViewModel>(context, listen: false);
-    final providerDatabase = context.read<ProfileViewModel>();
-
-    String? uid = providerAuth.currentIdUser;
-
-    await providerDatabase.retrieveUserProfileData(uid);
-
-    if (providerDatabase.user == null) {
-      debugPrint('User not found even with id');
-      setState(() {
-        _isLoading = false;
-      });
-      if (mounted) {
-        showAlertError(context, "Dados não encontrados na base");
-      }
-      return;
-    } else {
-      setState(() {
-        user = providerDatabase.user!;
-        _isLoading = false;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final thisUser = context.read<ProfileViewModel>().user;
+    final authState = context.read<AuthState>();
     if (_isLoading) {
       return Center(
         child: CircularProgressIndicator(),
       );
     }
-    if (thisUser == null) {
-      return SizedBox.shrink();
-    }
-    return Scaffold(
+
+    switch (authState){  
+      case AuthAuthenticated():
+        final user = authState.user;
+        return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: kRed,
         centerTitle: true,
         title: Text(
-          thisUser.name,
+          user.displayName.value,
           style: TextStyle(
               color: kWhite, fontSize: 22, fontWeight: FontWeight.bold),
         ),
@@ -201,7 +173,7 @@ class _ProfilePageState extends State<ProfilePage>
           }),
         ],
       ),
-      drawer: MyCustomDrawer(user: thisUser),
+      drawer: MyCustomDrawer(user: user),
       backgroundColor: kAlmostWhite,
       body: SafeArea(
         child: ListView(
@@ -209,13 +181,13 @@ class _ProfilePageState extends State<ProfilePage>
             padding: const EdgeInsets.all(0),
             children: [
               ProfileTopSideDataWidget(
-                avatarUrl: user?.pictureUrl,
-                backgroundUrl: user?.backgroundPicture,
+                avatarUrl: user.avatar,
+                backgroundUrl: user.profileUser.backgroundPicture,
               ),
               ProfileBottomSideDataWidget(
-                followers: user?.connections.length ?? 0,
-                contributions: user?.idMySpots.length ?? 0,
-                description: user?.description ?? '',
+                followers: user.profileUser.connections.length,
+                contributions: user.profileUser.spots.length,
+                description: user.profileUser.description ?? '',
               ),
               SizedBox(
                 height: 12,
@@ -257,5 +229,15 @@ class _ProfilePageState extends State<ProfilePage>
         ),
       ),
     );
+      case AuthUnauthenticated():
+        return Center(
+          child: Column(
+            children: [
+              Text("Usuário não autenticado")
+            ],
+          ),
+        );
+    }
+    
   }
 }
