@@ -1,21 +1,15 @@
 import 'dart:async';
 
-import 'package:demopico/core/common/auth/domain/usecases/get_auth_state.dart';
+import 'package:demopico/core/common/auth/domain/entities/auth_result.dart';
 import 'package:demopico/core/common/auth/domain/usecases/sign_in_email_password_uc.dart';
-import 'package:demopico/core/common/auth/domain/usecases/sign_up_uc.dart';
+import 'package:demopico/core/common/auth/domain/usecases/sign_in_vulgo_uc.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/email_vo.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/password_vo.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/vulgo_vo.dart';
-import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
-import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/user/domain/aplication/validate_credentials.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_credentials.dart';
-import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:demopico/features/user/domain/enums/identifiers.dart';
-import 'package:demopico/features/user/domain/usecases/logout_uc.dart';
-import 'package:demopico/features/user/domain/usecases/pegar_id_usuario.dart';
-import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -24,7 +18,7 @@ class AuthViewModelSignIn extends ChangeNotifier {
 
   static AuthViewModelSignIn get getInstance {
     _authUserProvider ??= AuthViewModelSignIn(
-        profileViewModel: ProfileViewModel.getInstance,
+        signInVulgo: SignInVulgoUc.instance,
         loginEmailUc: SignInEmailPasswordUc.instance,
         validateUserCredentials: ValidateUserCredentials.instance,);
     return _authUserProvider!;
@@ -33,14 +27,14 @@ class AuthViewModelSignIn extends ChangeNotifier {
   AuthViewModelSignIn(
       {
       required ValidateUserCredentials validateUserCredentials,
-      required ProfileViewModel profileViewModel,
+      required SignInVulgoUc signInVulgo,
       required this.loginEmailUc,})
       : _validateUserCredentials = validateUserCredentials,
-        _profileViewModel = profileViewModel;
+        _loginByVulgo = signInVulgo;
 
   final SignInEmailPasswordUc loginEmailUc;
+  final SignInVulgoUc _loginByVulgo;
   final ValidateUserCredentials _validateUserCredentials;
-  final ProfileViewModel _profileViewModel;
 
   Identifiers identifier = Identifiers.email;
   bool isEmail = true;
@@ -67,6 +61,7 @@ class AuthViewModelSignIn extends ChangeNotifier {
 
   Future<void> signIn() async {
     isLoading = true;
+    final AuthResult authResult;
     
     switch (identifier){
       case Identifiers.email:
@@ -74,32 +69,25 @@ class AuthViewModelSignIn extends ChangeNotifier {
           final credentials = EmailCredentialsSignIn(identifier: EmailVO(login), senha: PasswordVo(password));
           final validatedCredentials =
             await _validateUserCredentials.validateEmailExist(credentials);
-          await loginEmailUc.execute(credentials);
+          authResult = await loginEmailUc.execute(validatedCredentials);
        
       case Identifiers.vulgo:
-        final credentials = VulgoPasswordCredentialsSignIn(vulgo: VulgoVo(login), password: PasswordVo(password));
+        final credentials = VulgoCredentialsSignIn(vulgo: VulgoVo(login), password: PasswordVo(password));
+        final validatedCredentials =
+            await _validateUserCredentials.validateVulgoExist(credentials);
+          authResult = await _loginByVulgo.execute(validatedCredentials);
     }
 
-    /* credentials.login = credentials.login.toLowerCase();
-    try {
-      final validatedCredentials =
-          await _validateUserCredentials.validateForLogin(credentials);
-      final user = await loginEmailUc.logar(validatedCredentials);
-      setIdUser = user.id;
-      userDatabaseProvider.setUser = user;
-    } on Failure catch (e) {
-      getError(e);
-    } catch (e) {
-      getError(UnknownFailure(unknownError: e));
-    } */
+    if(authResult.success){
+      debugPrint("Autenticação bem sucedida");
+
+    }else {
+      FailureServer.showError(authResult.failure!);
+    }   
   }
 
   void getError(Failure e, [String? message]) {
     final messageError = message ?? "ERRO";
     Get.snackbar(messageError, e.message);
-  }
-
-  void clearMessageErrors() {
-    
   }
 }
