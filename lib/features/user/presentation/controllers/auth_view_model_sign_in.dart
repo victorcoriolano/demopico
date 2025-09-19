@@ -48,6 +48,9 @@ class AuthViewModelSignIn extends ChangeNotifier {
     }
   }
 
+  late EmailVO _email;
+  late VulgoVo _vulgo;
+  late PasswordVo _passwordVo;
   String login = "";
   String password = "";
 
@@ -59,20 +62,54 @@ class AuthViewModelSignIn extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool validateCreationEmail(value){
+    try {
+      _email = EmailVO(value);
+      return true;
+    } on Failure catch (failure){
+      FailureServer.showError(failure);
+      return false;
+    }
+  }
+
+  bool validateCreationVulgo(value){
+    try {
+      _vulgo = VulgoVo(value);
+      return true;
+    } on Failure catch (failure){
+      FailureServer.showError(failure);
+      return false;
+    }
+  }
+  
+  bool validateCreationPassword(value){
+    try {
+      _passwordVo = PasswordVo(value);
+      return true;
+    } on Failure catch (failure){
+      FailureServer.showError(failure);
+      return false;
+    }
+  }
+
+
   Future<void> signIn() async {
     isLoading = true;
     final AuthResult authResult;
-    
+    if(!validateCreationPassword(password)) return;
+
     switch (identifier){
       case Identifiers.email:
-
-          final credentials = EmailCredentialsSignIn(identifier: EmailVO(login), senha: PasswordVo(password));
+          debugPrint(login);
+          if(!validateCreationEmail(login)) return;
+          final credentials = EmailCredentialsSignIn(identifier: _email, senha: _passwordVo);
           final validatedCredentials =
             await _validateUserCredentials.validateEmailExist(credentials);
           authResult = await loginEmailUc.execute(validatedCredentials);
        
       case Identifiers.vulgo:
-        final credentials = VulgoCredentialsSignIn(vulgo: VulgoVo(login), password: PasswordVo(password));
+        if(!validateCreationVulgo(login)) return;
+        final credentials = VulgoCredentialsSignIn(vulgo: _vulgo, password: PasswordVo(password));
         final validatedCredentials =
             await _validateUserCredentials.validateVulgoExist(credentials);
           authResult = await _loginByVulgo.execute(validatedCredentials);
