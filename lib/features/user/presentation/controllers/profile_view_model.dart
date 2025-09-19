@@ -32,7 +32,7 @@ class ProfileViewModel extends ChangeNotifier {
         return;
       }
       debugPrint("pegando dados do usuario");
-      _currentUser = await pegarDadosUserUc.getDados(uid);
+      _currentUser = await pegarDadosUserUc.execute(uid);
     } on Failure catch (e) {
       FailureServer.showError(e);
     }
