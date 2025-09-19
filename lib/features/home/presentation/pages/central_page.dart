@@ -3,7 +3,7 @@ import 'package:demopico/features/home/presentation/widgets/events_bottom_sheet.
 import 'package:demopico/features/home/presentation/widgets/hub_upper_sheet.dart';
 import 'package:demopico/features/home/presentation/widgets/top_level_home_row.dart';
 import 'package:demopico/features/home/presentation/provider/weather_provider.dart';
-import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
+import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -53,6 +53,7 @@ class _CentralPageState extends State<CentralPage> {
 
   @override
   Widget build(BuildContext context) {
+    final user = context.watch<AuthState>();
     return Scaffold(
       body: Stack(
         children: [
@@ -60,8 +61,8 @@ class _CentralPageState extends State<CentralPage> {
             children: [
               Stack(children: [
                 CentralPageBackground(),
-                Consumer2<OpenWeatherProvider, ProfileViewModel>(
-                  builder: (context, weatherProvider, userDatabaseProvider, child) {
+                Consumer<OpenWeatherProvider>(
+                  builder: (context, weatherProvider, child) {
                     //Carrega os dados do clima de acordo com o estado
                     if (weatherProvider.isLoading) {
                       return Positioned(
@@ -89,8 +90,12 @@ class _CentralPageState extends State<CentralPage> {
                       'temperature': currentWeatherModel?.tempC ?? 0,
                       'isDay': currentWeatherModel?.isDay ?? true,
                     };
+                    
                     return TopLevelHomeRow(
-                      userImage: userDatabaseProvider.user?.pictureUrl,
+                      userImage: switch (user) {
+                        AuthAuthenticated() => user.user.avatar,
+                        AuthUnauthenticated() => null,
+                      },
                       initialWeatherInfo: weatherData,
                     );
                   },
