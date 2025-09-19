@@ -1,3 +1,4 @@
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/domain/usecases/accept_connection_uc.dart';
@@ -45,45 +46,27 @@ class NetworkViewModel extends ChangeNotifier {
         _cancelRelationship = cancelRelationship;
 
   List<SuggestionProfile> _suggestions = [];
-  List<ConnectionRequester> _connectionsRequests = [];
-  List<ConnectionReceiver> _connectionSent = [];
+  List<Relationship> _connectionsRequests = [];
+  List<Relationship> _connectionSent = [];
 
   List<SuggestionProfile> get suggestions => _suggestions;
-  List<ConnectionRequester> get connectionRequests => _connectionsRequests;
-  List<ConnectionReceiver> get connectionSent => _connectionSent;
+  List<ConnectionRequester> get connectionRequests => _connectionsRequests.map((conn) => conn.requesterUser).toList();
+  List<ConnectionReceiver> get connectionSent => _connectionSent.map((conn) => conn.addressed).toList();
 
-  Future<void> fetchConnectionsRequests() async {
-    final user = ProfileViewModel.getInstance.user;
-    if (user == null) return;
-
+  Future<void> fetchRelactionsShips(UserEntity user) async {
     try {
       _connectionsRequests = await _getConnectionsRequests.execute(user.id);
-      debugPrint("Connections Requests: ${_connectionsRequests.length}");
+      _connectionSent = await _getConnectionsSent.execute(user.id);
+      debugPrint("Relationships founded: ${_connectionsRequests.length}");
       notifyListeners();
     } on Failure catch (e) {
       FailureServer.showError(e, "Error fetching connections requests");
     }
   }
 
-  Future<void> fetchConnectionSent() async {
-    final user = ProfileViewModel.getInstance.user;
-    if (user == null) return;
-
+  Future<void> fetchSugestions(UserEntity currentUser) async {
     try {
-      _connectionSent = await _getConnectionsSent.execute(user.id);
-      debugPrint("Connections Sent: ${_connectionSent.length}");
-      notifyListeners();
-    } on Failure catch (e) {
-      FailureServer.showError(e, "Error fetching connections sent");
-    }
-  }
-
-  Future<void> fetchSugestions() async {
-    final user = ProfileViewModel.getInstance.user;
-    if (user == null) return;
-
-    try {
-      _suggestions = await _getSugestionsUser.execute(user.id);
+      _suggestions = await _getSugestionsUser.execute(currentUser.id);
       notifyListeners();
     } on Failure catch (e) {
       FailureServer.showError(e);
@@ -91,9 +74,7 @@ class NetworkViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> requestConnection(SuggestionProfile userSuggestion) async {
-    final userLogged = ProfileViewModel.getInstance.user;
-    if (userLogged == null) return;
+  Future<void> requestConnection(SuggestionProfile userSuggestion, UserEntity currentUser) async {
 
     _suggestions
         .firstWhere((element) => element == userSuggestion)
@@ -102,9 +83,9 @@ class NetworkViewModel extends ChangeNotifier {
     final connection = Relationship(
       id: '',
       requesterUser: ConnectionRequester(
-          id: userLogged.id,
-          name: userLogged.name,
-          profilePictureUrl: userLogged.avatar),
+          id: currentUser.id,
+          name: currentUser.displayName.value,
+          profilePictureUrl: currentUser.avatar),
       addressed: ConnectionReceiver(
           id: userSuggestion.idUser,
           name: userSuggestion.name,
@@ -115,18 +96,18 @@ class NetworkViewModel extends ChangeNotifier {
     );
 
     try {
-      await _createConnectionUsers.execute(connection, userLogged);
+      await _createConnectionUsers.execute(connection);
     } on Failure catch (e) {
       FailureServer.showError(e);
     }
     notifyListeners();
   }
 
-  Future<void> acceptConnection(Relationship connection) async {
+  Future<void> acceptConnection(ReciverRequesterBase requester, UserEntity currentUser) async {
     try {
-      final userLogged = ProfileViewModel.getInstance.user;
-      if (userLogged == null) return;
-
+      suggestions.removeWhere((suggestion) => suggestion.idUser == requester.id);
+      final relationshiptoUpdate = _connectionsRequests.firstWhere((relactionship) => relactionship.requesterUser == requester);
+      final connection = relationshiptoUpdate.copyWith(status: RequestConnectionStatus.accepted);
       await _acceptConnection.execute(connection);
     } on Failure catch (e) {
       FailureServer.showError(e);
@@ -134,12 +115,10 @@ class NetworkViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> cancelRelationship(Relationship connection) async {
+  Future<void> cancelRelationship(ReciverRequesterBase request) async {
     try {
-      final userLogged = ProfileViewModel.getInstance.user;
-      if (userLogged == null) return;
-
-      await _cancelRelationship.execute(connection);
+      final relationship = _connectionSent.firstWhere((relatioship) => relatioship.addressed == request);
+      await _cancelRelationship.execute(relationship);
     } on Failure catch (e) {
       FailureServer.showError(e);
     }
