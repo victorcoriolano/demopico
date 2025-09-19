@@ -206,7 +206,7 @@ class PostProvider extends ChangeNotifier {
           nome: user.name,
           userId: user.id,
           spotID: _selectedSpotId?.id ?? '',
-          urlUserPhoto: user.pictureUrl!,
+          avatar: user.avatar,
           urlVideos: _videoUrls.isEmpty ? null : _videoUrls,
           description: description,
           urlImages: _imgUrls);
