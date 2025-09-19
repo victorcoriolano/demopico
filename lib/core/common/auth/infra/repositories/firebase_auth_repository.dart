@@ -31,6 +31,7 @@ class FirebaseAuthRepository implements IAuthRepository {
   final IUserRepository _userRepo;
   final IProfileRepository _profileRepository;
   final _stateController = StreamController<AuthState>.broadcast();
+  AuthState _lastState = AuthUnauthenticated();
 
   FirebaseAuthRepository({
     required IProfileRepository profileRepository,
@@ -44,11 +45,16 @@ class FirebaseAuthRepository implements IAuthRepository {
 
   UserEntity? cachedUser;
 
+  void _updateStream(AuthState newState){
+    _stateController.add(newState);
+    _lastState = newState;
+  }
+
   void _onAuthChanges(fb.User? fu) async {
     debugPrint("Estado da autenticação mudou!");
     if (fu == null) {
       debugPrint("User null");
-      _stateController.add(AuthUnauthenticated());
+      _updateStream(AuthUnauthenticated());
       return;
     }
 
@@ -61,7 +67,7 @@ class FirebaseAuthRepository implements IAuthRepository {
     }
 
     cachedUser = UserMapper.toEntity(model, profileResult.profile!);
-    _stateController.add(AuthAuthenticated(user: cachedUser!)); 
+    _updateStream(AuthAuthenticated(user: cachedUser!)); 
   }
 
   Future<UserEntity> _createDefaultProfileFromFirebaseUser(fb.User fu, [LocationVo? location]) async {
@@ -77,7 +83,7 @@ class FirebaseAuthRepository implements IAuthRepository {
   @override
   Future<void> signOut() async {
     await _fa.signOut();
-    _stateController.add(AuthUnauthenticated());
+    _updateStream(AuthUnauthenticated());
   }
 
   @override
@@ -117,4 +123,7 @@ class FirebaseAuthRepository implements IAuthRepository {
       return AuthResult.failure(UnknownFailure(unknownError: unknownError));
     }
   }
+  
+  @override
+  AuthState get currentAuthState  => _lastState;
 }
