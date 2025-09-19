@@ -40,7 +40,7 @@ class FirebaseAuthRepository implements IAuthRepository {
       : _fa = datasource,
         _userRepo = userRepository,
         _profileRepository= profileRepository {
-    _fa.authStateChanges().listen(_onAuthChanges);
+    _fa.userChanges().listen(_onAuthChanges);
   }
 
   UserEntity? cachedUser;
@@ -48,6 +48,7 @@ class FirebaseAuthRepository implements IAuthRepository {
   void _updateStream(AuthState newState){
     _stateController.add(newState);
     _lastState = newState;
+    debugPrint(_lastState.toString());
   }
 
   void _onAuthChanges(fb.User? fu) async {
