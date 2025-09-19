@@ -1,3 +1,4 @@
+import 'package:demopico/features/profile/presentation/services/verify_auth_and_get_user.dart';
 import 'package:demopico/features/profile/presentation/view_model/post_provider.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/card_post_widget.dart';
 import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
@@ -25,8 +26,8 @@ class _ContainerPostsWidgetState extends State<ContainerPostsWidget> {
   }
 
   Future<void> _getPost() async {
-    final userId = context.read<ProfileViewModel>().user?.id;
-    await _postProvider.loadPosts(userId!);
+    final user = VerifyAuthAndGetUser.verify(context);
+    await _postProvider.loadPosts(user!.id);
   }
 
   @override
