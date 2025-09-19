@@ -36,7 +36,8 @@ class GetSugestionsUserUc {
     final exceptProfiles = [
       ...myConnectionsSent.map((c) => c.addressed),
       ...myConnectionsAccepted.map((c) => c.requesterUser),
-      ...myConnectionsRequests.map((c) => c.requesterUser),
+      ...myConnectionsAccepted.map((c) => c.addressed),
+      ...myConnectionsRequests. map((c) => c.requesterUser),
     ];
 
     return allUsers
