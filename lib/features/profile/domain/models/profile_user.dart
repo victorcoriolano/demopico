@@ -91,7 +91,7 @@ class ProfileFactory {
     );
   }
 
-  static Profile fromData(Map<String, dynamic> data) {
+  static Profile fromData(Map<String, dynamic> data, String id) {
     return Profile(
       userID: data['userID'],
       displayName: data['displayName'],
