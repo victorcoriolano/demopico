@@ -11,6 +11,7 @@ class UserMapper {
   /// Converte UserM (model) para UserEntity (entidade de domínio)
   static UserEntity toEntity(UserM model, Profile profileUser) {
     return UserEntity(
+      avatar: model.avatar,
       id: model.id,
       displayName: VulgoVo(model.name),
       email: EmailVO(model.email),
