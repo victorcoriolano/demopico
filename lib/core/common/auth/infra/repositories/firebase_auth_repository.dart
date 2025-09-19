@@ -3,7 +3,7 @@ import 'package:demopico/core/common/auth/domain/entities/auth_result.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_credentials.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/auth/domain/interfaces/i_auth_repository.dart';
-import 'package:demopico/core/common/auth/domain/interfaces/i_profile_repository.dart';
+import 'package:demopico/features/profile/domain/interfaces/i_profile_repository.dart';
 import 'package:demopico/core/common/auth/domain/interfaces/i_user_repository.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/email_vo.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/location_vo.dart';

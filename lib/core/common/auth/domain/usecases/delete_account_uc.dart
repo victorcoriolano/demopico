@@ -1,5 +1,5 @@
 
-import 'package:demopico/core/common/auth/domain/interfaces/i_profile_repository.dart';
+import 'package:demopico/features/profile/domain/interfaces/i_profile_repository.dart';
 import 'package:demopico/core/common/auth/domain/interfaces/i_user_account_repository.dart';
 import 'package:demopico/core/common/auth/domain/interfaces/i_user_repository.dart';
 import 'package:demopico/core/common/auth/infra/repositories/firebase_account_repository.dart';

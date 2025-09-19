@@ -3,7 +3,6 @@ import 'package:demopico/core/common/auth/domain/value_objects/email_vo.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/vulgo_vo.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto_mapper.dart';
-import 'package:demopico/features/user/domain/interfaces/i_user_database_repository.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_database_service.dart';
 import 'package:demopico/features/user/domain/models/user_model.dart';
 import 'package:demopico/features/user/infra/datasource/remote/user_firebase_datasource.dart';

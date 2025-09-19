@@ -1,7 +1,6 @@
 
 import 'package:demopico/core/common/auth/domain/entities/profile_result.dart';
 import 'package:demopico/core/common/auth/domain/entities/profile_user.dart';
-import 'package:demopico/features/profile/domain/interfaces/i_profile_datasource.dart';
 
 class FirebaseProfileDatasource implements IProfileDatasource{
   @override

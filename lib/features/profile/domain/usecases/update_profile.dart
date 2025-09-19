@@ -1,6 +1,6 @@
 import 'package:demopico/core/common/auth/domain/entities/profile_result.dart';
 import 'package:demopico/core/common/auth/domain/entities/profile_user.dart';
-import 'package:demopico/core/common/auth/domain/interfaces/i_profile_repository.dart';
+import 'package:demopico/features/profile/domain/interfaces/i_profile_repository.dart';
 
 class UpdateProfile {
   final IProfileRepository _profileRepository;

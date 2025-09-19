@@ -10,7 +10,6 @@ import 'package:demopico/features/mapa/domain/interfaces/i_favorite_spot_reposit
 import 'package:demopico/features/mapa/domain/interfaces/i_spot_repository.dart';
 import 'package:demopico/features/mapa/presentation/dtos/spot_cart_ui_dto.dart';
 import 'package:demopico/features/user/domain/enums/auth_state.dart';
-import 'package:demopico/features/user/domain/interfaces/i_user_database_repository.dart';
 import 'package:demopico/features/user/infra/repositories/user_data_repository_impl.dart';
 import 'package:flutter/material.dart';
 
