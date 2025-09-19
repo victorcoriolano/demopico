@@ -22,14 +22,14 @@ class FavoriteSpotController extends ChangeNotifier {
   List<SpotCardUIDto> picosFavoritos = [];
   String? error;
 
-  Future<void> favPico() async {
+  Future<void> favPico(String idUser) async {
     final pico = SpotProvider.instance.pico;
     if(pico == null){
       error = "Não foi possível identificar o Pico";
       return;
     } 
     try {
-      await saveSpot.execute(pico);
+      await saveSpot.execute(pico, idUser);
     } on Failure catch (e) {
       debugPrint("Ocorreu um erro ao favoritar pico");
       error = e.message;
