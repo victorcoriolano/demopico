@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:demopico/features/hub/domain/usecases/listar_comunicados_uc.dart';
@@ -29,7 +30,7 @@ class HubProvider extends ChangeNotifier {
 
   StreamSubscription? _watcher;
 
-  Future<void> postHubCommunique(String text, TypeCommunique type, UserM user) async {
+  Future<void> postHubCommunique(String text, TypeCommunique type, UserEntity user) async {
     try {
       await postarComunicado.postar(Communique.initial(text, type, user));
     } on Failure catch (e) {
