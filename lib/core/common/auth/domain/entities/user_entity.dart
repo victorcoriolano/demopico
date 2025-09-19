@@ -11,6 +11,7 @@ class UserEntity {
   final DobVo dob;
   final LocationVo? location;
   final Profile profileUser;
+  final String? avatar;
 
   UserEntity({
     required this.id,
@@ -19,6 +20,7 @@ class UserEntity {
     required this.dob,
     required this.location,
     required this.profileUser,
+    required this.avatar,
   });
 
   UserEntity copyWith({
@@ -31,6 +33,7 @@ class UserEntity {
     Profile? profileUser,
   }) {
     return UserEntity(
+      avatar: avatar ?? this.avatar,
       id: id ?? this.id,
       email: email ?? this.email,
       dob: dob ?? this.dob,
@@ -43,6 +46,7 @@ class UserEntity {
   factory UserEntity.initial(String id, VulgoVo displayName, EmailVO email, LocationVo? location, String? avatar){
     return UserEntity(
       id: id, 
+      avatar: avatar,
       displayName: displayName, 
       email: email, 
       dob: DobVo(DateTime.now()), 
@@ -67,6 +71,7 @@ class ColetivoEntity {
 class AnonymousUserEntity extends UserEntity {
   AnonymousUserEntity()
       : super(
+            avatar: "",
             id: "",
             location: LocationVo.empty(),
             displayName: VulgoVo.empty(),
