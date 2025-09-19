@@ -19,7 +19,7 @@ class CreateConnectionUsersUc {
   CreateConnectionUsersUc({required INetworkRepository repository})
       : _repository = repository;
 
-  Future<Relationship> execute(Relationship connection, UserM user) async {
+  Future<Relationship> execute(Relationship connection) async {
     final output = await _repository.createRelationship(connection);
     return output;
   }
