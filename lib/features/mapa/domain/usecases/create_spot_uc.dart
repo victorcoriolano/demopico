@@ -1,3 +1,6 @@
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
+import 'package:demopico/core/common/auth/domain/interfaces/i_user_repository.dart';
+import 'package:demopico/core/common/auth/infra/mapper/user_mapper.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/mapa/data/repositories/spot_repository_impl.dart';
@@ -17,13 +20,13 @@ class CreateSpotUc {
   }
 
   final ISpotRepository spotRepositoryIMP;
-  final IUserDataRepository _userDataRepository;
-  CreateSpotUc({required this.spotRepositoryIMP, required IUserDataRepository userRepository}): _userDataRepository = userRepository;
+  final IUserRepository _userDataRepository;
+  CreateSpotUc({required this.spotRepositoryIMP, required IUserRepository userRepository}): _userDataRepository = userRepository;
 
-  Future<PicoModel> createSpot(PicoModel pico, [UserM? user]) async {
+  Future<PicoModel> createSpot(PicoModel pico, [UserEntity? user]) async {
     try {
       final picoCriado = await spotRepositoryIMP.createSpot(pico);
-      if (user != null) await _userDataRepository.updateUserDetails(user);
+      if (user != null) await _userDataRepository.update(UserMapper.fromEntity(user));
       return picoCriado;
       
     }on Failure catch (e) {
