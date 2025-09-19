@@ -23,7 +23,7 @@ class FirebaseAuthRepository implements IAuthRepository {
   static FirebaseAuthRepository? _instance;
   static FirebaseAuthRepository get instance {
     return _instance ?? FirebaseAuthRepository(
-      profileRepository: ProfileRepositoryImpl.instance, 
+      profileRepository: ProfileRepositoryImpl.getInstance, 
       userRepository: UserDataRepositoryImpl.getInstance, 
       datasource: fb.FirebaseAuth.instance);
   }

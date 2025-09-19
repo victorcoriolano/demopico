@@ -12,7 +12,7 @@ class DeleteAccountUc {
   _deleteAccountUc ??= DeleteAccountUc(
     accountRepository: FirebaseAccountRepository.instance,
     userRepostory: UserDataRepositoryImpl.getInstance,
-    profileRepository: ProfileRepositoryImpl.instance);
+    profileRepository: ProfileRepositoryImpl.getInstance);
     return _deleteAccountUc!;
   }
   final IUserAccountRepository _accountRepository;
