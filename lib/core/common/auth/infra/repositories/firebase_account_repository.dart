@@ -1,10 +1,18 @@
 import 'package:demopico/core/common/auth/domain/interfaces/i_user_account_repository.dart';
 import 'package:demopico/core/common/auth/domain/interfaces/i_user_repository.dart';
 import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
+import 'package:demopico/features/user/infra/repositories/user_data_repository_impl.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb;
 
 class FirebaseAccountRepository implements IUserAccountRepository {
+
+  static FirebaseAccountRepository? _instance;
+  static FirebaseAccountRepository get instance => 
+    _instance ??= FirebaseAccountRepository(
+      userRepository: UserDataRepositoryImpl.getInstance, 
+      datasource: fb.FirebaseAuth.instance);
+
   FirebaseAccountRepository(
       {required IUserRepository userRepository,
       required fb.FirebaseAuth datasource})
@@ -18,12 +26,14 @@ class FirebaseAccountRepository implements IUserAccountRepository {
   bool get isVerified => _fa.currentUser?.emailVerified ?? false;
 
   @override
-  Future<void> sendEmailVerification() async {
-    if (_fa.currentUser == null) return;
+  Future<bool> sendEmailVerification() async {
+    if (_fa.currentUser == null) return false;
     try {
       _fa.currentUser!.sendEmailVerification();
+      return true;
     } catch (e) {
       debugPrint("Erro ao enviar email de verificação: $e");
+      return false;
     }
   }
 
