@@ -23,6 +23,7 @@ import 'package:demopico/features/profile/presentation/view_model/network_view_m
 import 'package:demopico/features/profile/presentation/view_model/post_provider.dart';
 import 'package:demopico/features/profile/presentation/view_model/screen_provider.dart';
 import 'package:demopico/features/user/domain/enums/auth_state.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_sign_in.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_sign_up.dart';
 import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
@@ -36,6 +37,7 @@ final myProviders = [
           ForecastProvider(null, climaService: HttpClimateService())),
   ChangeNotifierProvider(create: (_) => AuthViewModelSignIn.getInstance),
   ChangeNotifierProvider(create: (_) => AuthViewModelSignUp.getInstance),
+    ChangeNotifierProvider(create: (_) => AuthViewModelAccount.instance),
   ChangeNotifierProvider(create: (_) => ScreenProvider()),
   StreamProvider<AuthState>(
     create: (_) => FirebaseAuthRepository.instance.authState,
