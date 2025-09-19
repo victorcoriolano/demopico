@@ -27,14 +27,14 @@ enum Collections {
         return Collections.comments;
       case 'posts':
         return Collections.posts;
-      case 'profile':
+      case 'profiles':
         return Collections.profile;
       default:
         throw Exception("Invalid Tables name");
     }
   }
 
-  String toJson() {
+  String get name {
     switch (this) {
       case Collections.spots:
         return 'spots';
@@ -53,7 +53,7 @@ enum Collections {
       case Collections.connections:
         return 'connections';
       case Collections.profile:
-        return 'profile';
+        return 'profiles';
     }
   }
 }
