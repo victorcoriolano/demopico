@@ -1,3 +1,4 @@
+import 'package:demopico/core/common/auth/domain/entities/profile_user.dart';
 import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/user/domain/models/user_model.dart';
@@ -21,18 +22,18 @@ class ProfileViewModel extends ChangeNotifier {
 
   final GetUserByID pegarDadosUserUc;
 
-  UserM? _currentUser;
-  UserM? get user => _currentUser;
+  Profile? _currentProfile;
+  Profile? get currentProfile => _currentProfile;
 
   Future<void> retrieveUserProfileData(String uid) async {
     try {
       // Retorna se os dados já foram pegos
-      if (_currentUser != null) {
+      if (_currentProfile != null) {
         debugPrint("Retornando por que os dados do user já foram pegos");
         return;
       }
       debugPrint("pegando dados do usuario");
-      _currentUser = await pegarDadosUserUc.execute(uid);
+      //_currentProfile = await pegarDadosUserUc.execute(uid);
     } on Failure catch (e) {
       FailureServer.showError(e);
     }
