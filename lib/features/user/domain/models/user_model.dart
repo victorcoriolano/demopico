@@ -4,19 +4,20 @@ class UserM {
   String name;
   String email;
   DateTime dob;
+  String? avatar;
   
   // Localização
   double? latitude;
   double? longitude;
 
   UserM({
+    this.avatar,
     required this.id,
     required this.name,
     required this.email,
     required this.dob,
     this.latitude,
     this.longitude,
-    
   });
 
   // CopyWith
@@ -27,8 +28,10 @@ class UserM {
     DateTime? dob,
     double? latitude,
     double? longitude,
+    String? avatar,
   }) {
     return UserM(
+      avatar: avatar ?? this.avatar,
       id: id ?? this.id,
       name: name ?? this.name,
       email: email ?? this.email,
@@ -42,11 +45,12 @@ class UserM {
   factory UserM.fromJson(Map<String, dynamic> json, String id) {
     return UserM(
       id: id,
-      name: json['name'] ?? '',
-      email: json['email'] ?? '',
+      name: json['name'],
+      email: json['email'],
       dob: DateTime.parse(json['dob'] ?? DateTime.now().toIso8601String()),
       latitude: (json['latitude'] as num?)?.toDouble(),
       longitude: (json['longitude'] as num?)?.toDouble(),
+      avatar: json['avatar'],
     );
   }
 
@@ -57,6 +61,7 @@ class UserM {
       'dob': dob.toIso8601String(),
       'latitude': latitude,
       'longitude': longitude,
+      'avatar': avatar,
     };
   }
 }
