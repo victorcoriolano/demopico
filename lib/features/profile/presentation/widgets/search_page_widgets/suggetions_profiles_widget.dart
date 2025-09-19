@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:demopico/core/app/theme/theme.dart';
-import 'package:demopico/features/profile/presentation/provider/network_view_model.dart';
+import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_objects/suggestion_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

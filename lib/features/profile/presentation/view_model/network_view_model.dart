@@ -104,7 +104,7 @@ class NetworkViewModel extends ChangeNotifier {
       requesterUser: ConnectionRequester(
           id: userLogged.id,
           name: userLogged.name,
-          profilePictureUrl: userLogged.pictureUrl),
+          profilePictureUrl: userLogged.avatar),
       addressed: ConnectionReceiver(
           id: userSuggestion.idUser,
           name: userSuggestion.name,

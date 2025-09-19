@@ -1,7 +1,7 @@
 import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/features/mapa/presentation/widgets/search_bar.dart';
 import 'package:demopico/features/profile/presentation/pages/profile_page.dart';
-import 'package:demopico/features/profile/presentation/provider/post_provider.dart';
+import 'package:demopico/features/profile/presentation/view_model/post_provider.dart';
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/media_preview_list.dart';
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/media_preview_video.dart';
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/midia_input_card.dart';

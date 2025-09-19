@@ -1,4 +1,4 @@
-import 'package:demopico/features/profile/presentation/provider/notification_view_model.dart';
+import 'package:demopico/features/profile/presentation/view_model/notification_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

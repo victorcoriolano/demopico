@@ -1,5 +1,5 @@
 import 'package:demopico/core/app/routes/app_routes.dart';
-import 'package:demopico/features/profile/presentation/provider/network_view_model.dart';
+import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
 import 'package:demopico/features/profile/presentation/widgets/search_page_widgets/container_suggestion_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

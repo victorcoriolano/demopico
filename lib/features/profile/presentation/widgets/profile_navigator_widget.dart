@@ -1,4 +1,4 @@
-import 'package:demopico/features/profile/presentation/provider/screen_provider.dart';
+import 'package:demopico/features/profile/presentation/view_model/screen_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

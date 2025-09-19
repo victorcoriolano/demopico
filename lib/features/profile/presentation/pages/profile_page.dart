@@ -7,7 +7,7 @@ import 'package:demopico/features/profile/presentation/widgets/profile_data/prof
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_top_side_data_widget.dart';
 import 'package:demopico/features/user/domain/enums/type_post.dart';
 import 'package:demopico/features/user/domain/models/user_model.dart';
-import 'package:demopico/features/user/presentation/controllers/auth_view_model_sing_in.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -45,7 +45,7 @@ class _ProfilePageState extends State<ProfilePage>
         actions: [
           TextButton(
             onPressed: () async {
-              final provider = context.read<AuthViewModel>();
+              final provider = context.read<AuthViewModelAccount>();
               await provider.logout();
               Get.toNamed(Paths.home);
             },
@@ -140,8 +140,7 @@ class _ProfilePageState extends State<ProfilePage>
     debugPrint('Loading user...');
     _isLoading = true;
     final providerAuth = Provider.of<AuthViewModel>(context, listen: false);
-    final providerDatabase =
-        Provider.of<ProfileViewModel>(context, listen: false);
+    final providerDatabase = context.read<ProfileViewModel>();
 
     String? uid = providerAuth.currentIdUser;
 

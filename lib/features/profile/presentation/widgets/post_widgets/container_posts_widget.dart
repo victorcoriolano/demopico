@@ -1,4 +1,4 @@
-import 'package:demopico/features/profile/presentation/provider/post_provider.dart';
+import 'package:demopico/features/profile/presentation/view_model/post_provider.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/card_post_widget.dart';
 import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/material.dart';
