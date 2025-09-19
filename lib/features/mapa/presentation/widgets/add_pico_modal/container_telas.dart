@@ -1,4 +1,3 @@
-import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/location_vo.dart';
 import 'package:demopico/features/mapa/presentation/controllers/add_pico_view_model.dart';
@@ -8,8 +7,6 @@ import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/segun
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/terceira_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/custom_buttons.dart';
 import 'package:demopico/features/user/domain/enums/auth_state.dart';
-import 'package:demopico/features/user/domain/models/user_model.dart';
-import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
