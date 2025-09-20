@@ -22,7 +22,7 @@ class FirebaseErrorsMapper {
       case 'firebase_storage/quota-exceeded':
         return LimitExceededFailure(originalException: exception);
       case 'firebase_storage/object-not-found':
-        return PicoNotFoundFailure(originalException: exception);
+        return DataNotFoundFailure(originalException: exception);
       
       // Auth
       case 'firebase_auth/email-already-in-use':
