@@ -25,7 +25,6 @@ class _ProfilePageState extends State<ProfilePage>
     with TickerProviderStateMixin {
   late UserM? user;
   bool _isVisible = true;
-  final bool _isLoading = true;
   ScrollDirection? _lastDirection;
   double _accumulatedScroll = 0.0;
   double _lastOffset = 0.0;
@@ -137,12 +136,7 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final authState = context.read<AuthState>();
-    if (_isLoading) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
+    final authState = context.watch<AuthState>();
 
     switch (authState){  
       case AuthAuthenticated():
