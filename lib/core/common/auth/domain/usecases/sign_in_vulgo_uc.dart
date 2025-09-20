@@ -4,6 +4,7 @@ import 'package:demopico/core/common/auth/domain/interfaces/i_auth_repository.da
 import 'package:demopico/core/common/auth/domain/interfaces/i_user_repository.dart';
 import 'package:demopico/core/common/auth/infra/repositories/firebase_auth_repository.dart';
 import 'package:demopico/features/user/infra/repositories/user_data_repository_impl.dart';
+import 'package:flutter/material.dart';
 
 class SignInVulgoUc {
   static SignInVulgoUc? _instance;
@@ -23,6 +24,7 @@ class SignInVulgoUc {
 
   Future<AuthResult> execute(VulgoCredentialsSignIn credentials) async {
     final emailUser = await _userRepository.getEmailByVulgo(credentials.vulgo);
+    debugPrint("Email do user: $emailUser");
     return await _authRepository.signInWithEmail(EmailCredentialsSignIn(identifier: emailUser, senha: credentials.password));
   }
 }
