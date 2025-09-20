@@ -15,6 +15,8 @@ import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/ob
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/photo_and_name_widget.dart';
 import 'package:demopico/features/profile/presentation/services/verify_auth_and_get_user.dart';
 import 'package:demopico/features/profile/presentation/services/verify_is_my.dart';
+import 'package:demopico/features/user/domain/enums/auth_state.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -43,7 +45,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) { 
        context.read<SpotProvider>().initializeWatch(widget.idPico);
-       user = VerifyAuthAndGetUser.verify(context);
+       user = context.read<AuthViewModelAccount>().getCurrentUser();
     });
   }
 
