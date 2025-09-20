@@ -1,13 +1,27 @@
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/auth/domain/usecases/change_password_uc.dart';
 import 'package:demopico/core/common/auth/domain/usecases/delete_account_uc.dart';
 import 'package:demopico/core/common/auth/domain/usecases/get_auth_state_uc.dart';
 import 'package:demopico/core/common/auth/domain/usecases/logout_uc.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
+import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/instance_manager.dart';
 
 class AuthViewModelAccount extends ChangeNotifier {
+
+    static AuthViewModelAccount? _instance;
+    // Avoid self instance
+    
+    static AuthViewModelAccount get instance =>
+      _instance ??= AuthViewModelAccount(
+        changePasswordUc: ChangePasswordUc.getInstance,
+        deleteAccountUc: DeleteAccountUc.getInstance,
+        getAuthState: GetAuthStateUc.instance,
+        logoutUc: LogoutUc.getInstance,
+      );
+
   AuthViewModelAccount({
     required LogoutUc logoutUc,
     required DeleteAccountUc deleteAccountUc,
@@ -41,6 +55,19 @@ class AuthViewModelAccount extends ChangeNotifier {
       Get.snackbar("Email enviado com sucesso", "Verifique sua caixa de entrada");
     } else {
       Get.snackbar("Erro", "Ocorreu um erro ao enviar o email");
+    }
+  }
+
+  UserEntity? getCurrentUser(){
+    final authstate = _getAuthState.execute();
+    switch (authstate){
+      
+      case AuthAuthenticated():
+        debugPrint("USUÁRIO AUTENTICADO");
+        return authstate.user;
+      case AuthUnauthenticated():
+        debugPrint("USUÁRIO NÃO AUTENTICADO");
+        return null;
     }
   }
 }
