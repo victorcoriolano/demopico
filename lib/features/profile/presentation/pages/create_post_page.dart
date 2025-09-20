@@ -7,6 +7,7 @@ import 'package:demopico/features/profile/presentation/widgets/create_post_widge
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/media_preview_video.dart';
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/midia_input_card.dart';
 import 'package:demopico/features/user/domain/enums/type_post.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -132,7 +133,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 // Botão de Publicar
                 ElevatedButton(
                   onPressed: () async {
-                    final user = VerifyAuthAndGetUser.verify(context);
+                    final user = context.read<AuthViewModelAccount>().getCurrentUser();
                     if (user == null) {
                       Get.snackbar(
                         'Erro',
