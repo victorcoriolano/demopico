@@ -4,7 +4,7 @@ import 'package:demopico/features/user/infra/repositories/user_data_repository_i
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_database_service.dart';
 
-import '../../mocks/mocks_profile.dart';
+import '../../mocks/mocks_users.dart';
 
 class MockUserDataSource extends Mock implements IUserDataSource<FirebaseDTO> {}
 

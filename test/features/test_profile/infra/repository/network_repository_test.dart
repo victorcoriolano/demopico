@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../mocks/mocks_connections.dart';
-import '../../../mocks/mocks_profile.dart';
+import '../../../mocks/mocks_users.dart';
 
 
 

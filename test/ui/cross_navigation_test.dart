@@ -11,7 +11,7 @@ import 'package:get/get.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 
-import '../features/mocks/mocks_profile.dart';
+import '../features/mocks/mocks_users.dart';
 
 final mockCommunique = Communique(
   id: '1',

@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../features/mocks/mocks_profile.dart';
+import '../features/mocks/mocks_users.dart';
 
 // Mock da classe de serviço para simular o estado de autenticação
 class MockUserDatabaseProvider extends Mock implements ProfileViewModel {}
