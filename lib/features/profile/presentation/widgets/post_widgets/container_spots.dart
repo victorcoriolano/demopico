@@ -1,6 +1,7 @@
 import 'package:demopico/features/mapa/presentation/controllers/spots_controller.dart';
 import 'package:demopico/features/profile/presentation/services/verify_auth_and_get_user.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/card_spot_for_profile.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +20,7 @@ class _ContainerSpotsState extends State<ContainerSpots> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async { 
-      final nameUser = VerifyAuthAndGetUser.verify(context)!.displayName.value;
+      final nameUser = context.read<AuthViewModelAccount>().getCurrentUser()!.displayName.value;
       await context.read<SpotsControllerProvider>().getMySpots(nameUser);
     });
   }

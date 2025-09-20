@@ -4,6 +4,7 @@ import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/presentation/services/verify_auth_and_get_user.dart';
 import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
 import 'package:demopico/features/profile/presentation/widgets/search_page_widgets/connection_action_card.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +21,7 @@ class _MyNetworkScreenState extends State<MyNetworkScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final viewModel = context.read<NetworkViewModel>();
-      final currentUser = VerifyAuthAndGetUser.verify(context);
+      final currentUser = context.read<AuthViewModelAccount>().getCurrentUser();
       if(currentUser != null) await viewModel.fetchRelactionsShips(currentUser);
     });
   }
@@ -98,7 +99,7 @@ class ProfileList extends StatelessWidget {
                   actionButton: actionType == ActionType.accept
                       ? ElevatedButton(
                           onPressed: () async {
-                            final currentUser = VerifyAuthAndGetUser.verify(context);
+                            final currentUser = context.read<AuthViewModelAccount>().getCurrentUser();
                             final provider  = context.read<NetworkViewModel>();
                             if(currentUser == null) return SnackbarUtils.userNotLogged(context);
                             await provider.acceptConnection(
