@@ -5,6 +5,7 @@ import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto
 import 'package:demopico/features/profile/domain/interfaces/i_profile_data_source.dart';
 import 'package:demopico/features/profile/domain/models/profile_result.dart';
 import 'package:demopico/features/profile/domain/models/profile_user.dart';
+import 'package:flutter/widgets.dart';
 
 class FirebaseProfileDatasource implements IProfileDataSource<FirebaseDTO>{
   static FirebaseProfileDatasource? _instance;
@@ -32,7 +33,9 @@ class FirebaseProfileDatasource implements IProfileDataSource<FirebaseDTO>{
 
   @override
   Future<FirebaseDTO> getProfileByUser(String id) async  {
-    return await _crudFirebase.read(id);
+    final profile = await _crudFirebase.read(id);
+    debugPrint(profile.toString());
+    return profile;
   }
 
   @override
