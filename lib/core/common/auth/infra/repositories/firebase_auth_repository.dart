@@ -48,7 +48,7 @@ class FirebaseAuthRepository implements IAuthRepository {
   void _updateStream(AuthState newState){
     _stateController.add(newState);
     _lastState = newState;
-    debugPrint(_lastState.toString());
+    debugPrint("Estado atual da autenticação: ${_lastState.toString()}");
   }
 
   void _onAuthChanges(fb.User? fu) async {
