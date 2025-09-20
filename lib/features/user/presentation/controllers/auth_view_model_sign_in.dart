@@ -59,6 +59,7 @@ class AuthViewModelSignIn extends ChangeNotifier {
 
   void changeIsCredential(bool value) {
     identifier = Identifiers.fromIsEmail(value);
+    isEmail = !isEmail;
     notifyListeners();
   }
 
@@ -119,6 +120,7 @@ class AuthViewModelSignIn extends ChangeNotifier {
       debugPrint("Autenticação bem sucedida");
 
     }else {
+      debugPrint("VM - Erro ao fazer login : ${authResult.failure.toString()}");
       FailureServer.showError(authResult.failure!);
     }   
   }
