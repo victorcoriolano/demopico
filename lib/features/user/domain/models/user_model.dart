@@ -48,8 +48,8 @@ class UserM {
       name: json['name'],
       email: json['email'],
       dob: DateTime.tryParse(json['dob']) ?? DateTime.now(),
-      latitude: (json['latitude'] as num?)?.toDouble(),
-      longitude: (json['longitude'] as num?)?.toDouble(),
+      latitude: json['latitude'],
+      longitude: json['longitude'],
       avatar: json['avatar'],
     );
   }
