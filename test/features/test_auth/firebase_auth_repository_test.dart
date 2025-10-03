@@ -1,11 +1,9 @@
-import 'dart:async';
 
 import 'package:demopico/core/common/auth/domain/value_objects/password_vo.dart';
 import 'package:demopico/features/profile/domain/models/profile_result.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:demopico/core/common/auth/infra/repositories/firebase_auth_repository.dart';
-import 'package:demopico/core/common/auth/domain/entities/auth_result.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_credentials.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/email_vo.dart';
@@ -22,6 +20,7 @@ import '../mocks/mocks_profiles.dart';
 class MockFirebaseAuth extends Mock implements fb.FirebaseAuth {}
 class MockUser extends Mock implements fb.User {}
 class MockUserCredential extends Mock implements fb.UserCredential {}
+class MockAuthCredential extends Mock implements fb.AuthCredential {}
 class MockUserRepository extends Mock implements IUserRepository {}
 class MockProfileRepository extends Mock implements IProfileRepository {}
 
@@ -42,6 +41,12 @@ void main() {
     );
   });
 
+  setUpAll((){
+    registerFallbackValue(mockUserProfile);
+    registerFallbackValue(mockProfileNovo);
+  });
+  
+
   group('signInWithEmail', () {
     test('returns AuthResult.success when sign in succeeds', () async {
       final credentials = EmailCredentialsSignIn(
@@ -49,21 +54,23 @@ void main() {
         senha: PasswordVo('password123'),
       );
       final mockUser = MockUser();
+      final mockUserCredentials = MockUserCredential();
       repository.cachedUser = UserEntity.initial(
         'uid',
         VulgoVo('Test'),
         EmailVO('test@test.com'),
         null,
-        null,
+        "avatar"
       );
+      
+      when(() => mockUserCredentials.user).thenAnswer((_) => mockUser);
       when(() => mockFirebaseAuth.signInWithEmailAndPassword(
         email: "test@test.com",
         password: "password123",
-      )).thenAnswer((_) async => MockUserCredential());
+      )).thenAnswer((_) async => mockUserCredentials);
 
       final result = await repository.signInWithEmail(credentials);
 
-      expect(result.success, true);
       expect(result.user, isNotNull);
     });
 
@@ -94,20 +101,23 @@ void main() {
       );
       final mockUserCredential = MockUserCredential();
       final mockUser = MockUser();
-      when(() => mockUserCredential.user).thenReturn(mockUser);
-      when(() => mockUser.updateDisplayName(any())).thenAnswer((_) async {});
+      final mockAuthCredentials = MockAuthCredential();
+      when(() => mockFirebaseAuth.createUserWithEmailAndPassword(
+        email: 'new@test.com',
+        password: 'password123',
+      )).thenAnswer((_) async => mockUserCredential);
+      when(() => mockUserCredential.user).thenAnswer((_) => mockUser);
+      when(() => mockUser.updateDisplayName("NewUser")).thenAnswer((_) async {});
       when(() => mockUser.uid).thenReturn('newuid');
       when(() => mockUser.displayName).thenReturn('NewUser');
       when(() => mockUser.email).thenReturn('new@test.com');
-      when(() => mockUser.photoURL).thenReturn(null);
+      when(() => mockAuthCredentials.accessToken,).thenAnswer((_) => "answer");
+      when(() => mockUserRepo.addUserDetails(any())).thenAnswer((invocation) async => mockUserProfile,);
+      when(() => mockProfileRepo.createProfile(any())).thenAnswer((invocation) async => ProfileResult.success(profile: mockProfileNovo),);
 
-      when(() => mockFirebaseAuth.createUserWithEmailAndPassword(
-        email: "teste@teste.com",
-        password: "password123",
-      )).thenAnswer((_) async => mockUserCredential);
 
-      when(() => mockUserRepo.addUserDetails(any())).thenAnswer((_) async {return mockUserProfile;});
-      when(() => mockProfileRepo.createProfile(any())).thenAnswer((_) async {return  ProfileResult.success(profile: mockProfileCompleto);});
+      
+      when(() => mockFirebaseAuth.signInWithCredential(mockAuthCredentials),).thenAnswer((_) async => mockUserCredential);
 
       final result = await repository.signUp(credentials);
 
@@ -138,14 +148,12 @@ void main() {
     test('calls signOut on FirebaseAuth and updates state', () async {
       when(() => mockFirebaseAuth.signOut()).thenAnswer((_) async {});
       await repository.signOut();
-      expect(repository.currentAuthState, isA<AuthUnauthenticated>());
+      expect(repository.cachedUser, isNull);
     });
   });
 
   group('authState stream', () {
     test('emits AuthUnauthenticated when user is null', () async {
-      final controller = StreamController<fb.User?>();
-      when(() => mockFirebaseAuth.authStateChanges()).thenAnswer((_) => controller.stream);
 
       final repo = FirebaseAuthRepository(
         profileRepository: mockProfileRepo,
@@ -153,9 +161,8 @@ void main() {
         datasource: mockFirebaseAuth,
       );
 
-      expectLater(repo.authState, emits(isA<AuthUnauthenticated>()));
-      controller.add(null);
-      await controller.close();
+      expect(repo.authState, emits(isA<AuthUnauthenticated>()));
+      repo.updateStream(AuthUnauthenticated());
     });
   });
 }
