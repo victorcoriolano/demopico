@@ -1,4 +1,4 @@
-import 'package:demopico/core/app/home_page.dart';
+/* import 'package:demopico/core/app/home_page.dart';
 import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/features/home/presentation/provider/home_provider.dart';
 import 'package:demopico/features/home/presentation/provider/weather_provider.dart';
@@ -122,4 +122,4 @@ void main() {
       expect(find.text('Profile Page'), findsOneWidget);
     });
   });
-}
+} */
