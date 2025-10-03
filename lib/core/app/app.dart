@@ -1,4 +1,5 @@
 
+import 'package:demopico/core/app/home_page.dart';
 import 'package:demopico/core/app/providers/providers.dart';
 import 'package:demopico/core/app/routes/app_pages.dart';
 import 'package:demopico/core/app/routes/app_routes.dart';
@@ -13,9 +14,7 @@ class MyAppWidget extends StatelessWidget {
   const MyAppWidget({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    Get.put<AuthBiding>(AuthBiding());
-    Get.put<ProfileViewModel>(ProfileViewModel.getInstance);
+  Widget build(BuildContext context) {    
     
     return MultiProvider(
       providers: myProviders,
@@ -26,6 +25,8 @@ class MyAppWidget extends StatelessWidget {
         theme: appTheme,
         checkerboardRasterCacheImages: true,
         getPages: AppPages.routes,
+        home: const HomePage(),
+        initialBinding: AuthBiding(),
       ),
     );
   }
