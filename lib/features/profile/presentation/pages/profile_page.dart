@@ -1,14 +1,16 @@
+
 import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/widgets/back_widget.dart';
+import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_posts_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_bottom_side_data_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_drawer_config.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_top_side_data_widget.dart';
-import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:demopico/features/user/domain/enums/type_post.dart';
-import 'package:demopico/features/user/domain/models/user_model.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -23,7 +25,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage>
     with TickerProviderStateMixin {
-  late UserM? user;
+  late UserEntity? user;
   bool _isVisible = true;
   ScrollDirection? _lastDirection;
   double _accumulatedScroll = 0.0;
@@ -56,9 +58,22 @@ class _ProfilePageState extends State<ProfilePage>
   }
 
   @override
+  void didChangeDependencies() {
+    final currentUser = AuthViewModelAccount.instance.user;
+    switch (currentUser) {
+      case UserEntity():
+        context.read<NetworkViewModel>().fetchSugestions(currentUser);
+        user = currentUser;
+      case AnonymousUserEntity():
+        // do nothing
+    }
+    debugPrint("User no profile page: $user");
+    super.didChangeDependencies();
+  }
+
+  @override
   void initState() {
     super.initState();
-
     _tabController = TabController(length: 3, vsync: this);
 
     _tabController.addListener(() {
@@ -136,18 +151,19 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final authState = context.watch<AuthState>();
+    if (user == null){
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
 
-    switch (authState){  
-      case AuthAuthenticated():
-        final user = authState.user;
         return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: kRed,
         centerTitle: true,
         title: Text(
-          user.displayName.value,
+          user!.displayName.value,
           style: TextStyle(
               color: kWhite, fontSize: 22, fontWeight: FontWeight.bold),
         ),
@@ -167,7 +183,7 @@ class _ProfilePageState extends State<ProfilePage>
           }),
         ],
       ),
-      drawer: MyCustomDrawer(user: user),
+      drawer: MyCustomDrawer(user: user!),
       backgroundColor: kAlmostWhite,
       body: SafeArea(
         child: ListView(
@@ -175,13 +191,13 @@ class _ProfilePageState extends State<ProfilePage>
             padding: const EdgeInsets.all(0),
             children: [
               ProfileTopSideDataWidget(
-                avatarUrl: user.avatar,
-                backgroundUrl: user.profileUser.backgroundPicture,
+                avatarUrl: user!.avatar,
+                backgroundUrl: user!.profileUser.backgroundPicture,
               ),
               ProfileBottomSideDataWidget(
-                followers: user.profileUser.connections.length,
-                contributions: user.profileUser.spots.length,
-                description: user.profileUser.description ?? '',
+                followers: user!.profileUser.connections.length,
+                contributions: user!.profileUser.spots.length,
+                description: user!.profileUser.description ?? '',
               ),
               SizedBox(
                 height: 12,
@@ -223,15 +239,5 @@ class _ProfilePageState extends State<ProfilePage>
         ),
       ),
     );
-      case AuthUnauthenticated():
-        return Center(
-          child: Column(
-            children: [
-              Text("Usuário não autenticado")
-            ],
-          ),
-        );
-    }
-    
   }
 }
