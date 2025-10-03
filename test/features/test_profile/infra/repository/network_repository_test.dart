@@ -121,7 +121,7 @@ void main() {
       when(() => mockNetworkService.deleteConnection(mapperConnection.toDTO(dummyConnections[0]))).thenAnswer((_) async => {});
 
       // Act
-      await repository.deleteRelationship(dummyConnections[0]);
+      await repository.deleteRelationship(dummyConnections[0].id);
 
       verify(() => mockNetworkService.deleteConnection(mapperConnection.toDTO(dummyConnections[0]))).called(1);
     });
