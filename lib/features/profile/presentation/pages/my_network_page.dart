@@ -1,4 +1,5 @@
 import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/widgets/snackbar_utils.dart';
 import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/presentation/services/verify_auth_and_get_user.dart';
@@ -21,8 +22,15 @@ class _MyNetworkScreenState extends State<MyNetworkScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final viewModel = context.read<NetworkViewModel>();
-      final currentUser = context.read<AuthViewModelAccount>().getCurrentUser();
-      if(currentUser != null) await viewModel.fetchRelactionsShips(currentUser);
+      final currentUser = context.read<AuthViewModelAccount>().user;
+      switch (currentUser){
+        case UserEntity():
+          await viewModel.fetchRelactionsShips(currentUser);
+        case AnonymousUserEntity():
+          //do nothing
+          
+      }
+      
     });
   }
 
@@ -99,12 +107,19 @@ class ProfileList extends StatelessWidget {
                   actionButton: actionType == ActionType.accept
                       ? ElevatedButton(
                           onPressed: () async {
-                            final currentUser = context.read<AuthViewModelAccount>().getCurrentUser();
+                            final currentUser = context.read<AuthViewModelAccount>().user;
                             final provider  = context.read<NetworkViewModel>();
-                            if(currentUser == null) return SnackbarUtils.userNotLogged(context);
-                            await provider.acceptConnection(
-                              userProfiles[index], currentUser
-                            );
+                            switch (currentUser){
+                              
+                              case UserEntity():
+                                await provider.acceptConnection(
+                                  userProfiles[index], currentUser
+                                );
+                              case AnonymousUserEntity():
+                                // some error occourred - user not logged
+                                SnackbarUtils.userNotLogged(context);
+                            }
+                           
                           },
                           child: const Text('Aceitar'),
                         )
