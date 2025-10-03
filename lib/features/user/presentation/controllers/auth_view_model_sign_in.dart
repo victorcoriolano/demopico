@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:demopico/core/common/auth/domain/entities/auth_result.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/auth/domain/usecases/sign_in_email_password_uc.dart';
 import 'package:demopico/core/common/auth/domain/usecases/sign_in_vulgo_uc.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/email_vo.dart';
@@ -10,6 +11,7 @@ import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/user/domain/aplication/validate_credentials.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_credentials.dart';
 import 'package:demopico/features/user/domain/enums/identifiers.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -55,7 +57,6 @@ class AuthViewModelSignIn extends ChangeNotifier {
   String password = "";
 
   bool isLoading = false;
-
 
   void changeIsCredential(bool value) {
     identifier = Identifiers.fromIsEmail(value);
@@ -118,7 +119,7 @@ class AuthViewModelSignIn extends ChangeNotifier {
 
     if(authResult.success){
       debugPrint("Autenticação bem sucedida");
-
+      AuthViewModelAccount.instance.currentUser = authResult.user!;
     }else {
       debugPrint("VM - Erro ao fazer login : ${authResult.failure.toString()}");
       FailureServer.showError(authResult.failure!);
