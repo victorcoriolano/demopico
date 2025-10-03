@@ -118,6 +118,7 @@ class _LoginFormState extends State<LoginForm> with Validators {
                   onPressed: () async {
                     final viewModel = context.read<AuthViewModelSignIn>();
                     await viewModel.signIn(); 
+                    Get.toNamed(Paths.profile);
                   },
                   style: buttonStyle(),
                   child: const Text(
