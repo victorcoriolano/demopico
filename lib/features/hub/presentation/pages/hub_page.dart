@@ -40,11 +40,15 @@ class _HubPageState extends State<HubPage> {
     return [
       PopupMenuItem<String>(
         value: 'option1',
-        child: Text('Opção 1'),
+        child: Text('Global'),
       ), 
       PopupMenuItem<String>(
         value: 'option2',
-        child: Text('Opção 2'),
+        child: Text('Estado de São Paulo'),
+      ),
+      PopupMenuItem<String>(
+        value: 'option2',
+        child: Text('Zona Oeste'),
       ),
     ];
   }
@@ -54,7 +58,7 @@ class _HubPageState extends State<HubPage> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 238, 238, 238),
+      backgroundColor:     const Color.fromARGB(220, 238, 238, 238),
       body: SafeArea(
         child: Column(
           children: [
@@ -107,7 +111,7 @@ class _HubPageState extends State<HubPage> {
               child: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(8),
-                color: const Color.fromARGB(255, 238, 238, 238),
+                color: const Color.fromARGB(5, 238, 238, 238),
                 child: Consumer<HubProvider>(
                   builder: (context, provider, _) {
                     if (provider.allCommuniques.isEmpty) {
@@ -129,9 +133,7 @@ class _HubPageState extends State<HubPage> {
                             borderRadius: BorderRadius.circular(12),
                             side: BorderSide(
                               width: 0.5,
-                              color: communique.type == TypeCommunique.event
-                                  ? const Color.fromARGB(255, 128, 25, 18)
-                                  : Colors.black,
+                              color: const Color.fromARGB(255, 116, 9, 1)
                             ),
                           ),
                           child: CommuniqueTile(post: communique),

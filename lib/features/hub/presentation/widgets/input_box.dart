@@ -93,9 +93,9 @@ class _InputBoxState extends State<InputBox> {
               isSelected: isTapped,
               selectedIcon: const Icon(Icons.blur_on_outlined),
               icon: const Icon(Icons.keyboard_arrow_up),
-              color: isTapped
-                  ? const Color.fromARGB(255, 74, 178, 230)
-                  : const Color.fromARGB(255, 0, 0, 0),
+                focusColor: isTapped
+                    ? const Color.fromARGB(255, 74, 178, 230)
+                    : const Color.fromARGB(255, 0, 0, 0),
               iconSize: 45,
               onPressed: chooseAction,
             ),
@@ -104,7 +104,7 @@ class _InputBoxState extends State<InputBox> {
             top: 23,
             right: 8,
             child: IconButton(
-                icon: const Icon(Icons.send_rounded, color: Colors.black),
+                icon: const Icon(Icons.send_rounded, color:  Color.fromARGB(255, 128, 25, 18),),
                 iconSize: 30,
                 onPressed: () async => sendAction(postController.text),
                 disabledColor: const Color.fromARGB(255, 255, 72, 0)),
