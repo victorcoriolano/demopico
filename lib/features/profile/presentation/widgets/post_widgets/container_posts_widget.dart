@@ -1,3 +1,4 @@
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/features/profile/presentation/services/verify_auth_and_get_user.dart';
 import 'package:demopico/features/profile/presentation/view_model/post_provider.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/card_post_widget.dart';
@@ -27,9 +28,16 @@ class _ContainerPostsWidgetState extends State<ContainerPostsWidget> {
   }
 
   Future<void> _getPost() async {
-    final user = context.read<AuthViewModelAccount>().getCurrentUser();
+    final user = context.read<AuthViewModelAccount>().user;
     debugPrint(user.toString());
-    await _postProvider.loadPosts(user!.id);
+    switch (user){
+      
+      case UserEntity():
+        await _postProvider.loadPosts(user.id);
+
+      case AnonymousUserEntity():
+        // do nothing
+    }
   }
 
   @override
