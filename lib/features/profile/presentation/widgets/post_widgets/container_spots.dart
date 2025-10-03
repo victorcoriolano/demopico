@@ -1,3 +1,4 @@
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spots_controller.dart';
 import 'package:demopico/features/profile/presentation/services/verify_auth_and_get_user.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/card_spot_for_profile.dart';
@@ -20,8 +21,15 @@ class _ContainerSpotsState extends State<ContainerSpots> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async { 
-      final nameUser = context.read<AuthViewModelAccount>().getCurrentUser()!.displayName.value;
-      await context.read<SpotsControllerProvider>().getMySpots(nameUser);
+      final user = context.read<AuthViewModelAccount>().user;
+      switch (user){
+        
+        case UserEntity():
+          await context.read<SpotsControllerProvider>().getMySpots(user.displayName.value);
+
+        case AnonymousUserEntity():
+          // do nothing
+      }
     });
   }
 
