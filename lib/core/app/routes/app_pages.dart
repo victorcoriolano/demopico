@@ -1,7 +1,6 @@
 import 'package:demopico/core/app/home_page.dart';
 import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/routes/middleware.dart';
-import 'package:demopico/core/common/auth/infra/repositories/firebase_auth_repository.dart';
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/add_pico_pages.dart/create_spot_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/favorites_page.dart';
@@ -14,6 +13,7 @@ import 'package:demopico/features/profile/presentation/pages/edit_profile_page.d
 import 'package:demopico/features/profile/presentation/pages/my_network_page.dart';
 import 'package:demopico/features/profile/presentation/pages/search_profile_page.dart';
 import 'package:demopico/features/profile/presentation/pages/screens_profile.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:demopico/features/user/presentation/pages/login_page.dart';
 import 'package:demopico/features/user/presentation/pages/register_page.dart';
 import 'package:get/get.dart';
@@ -27,7 +27,7 @@ class AppPages {
       binding: AuthBiding(),
       name: Paths.favoriteSpot,
       page: () => FavoriteSpotPage(),
-      middlewares: [Middleware(FirebaseAuthRepository.instance)],
+      middlewares: [Middleware(AuthViewModelAccount.instance)],
     ),
     GetPage(
       name: Paths.historySpot,
@@ -43,19 +43,19 @@ class AppPages {
       binding: AuthBiding(),
       name: Paths.searchProfile,
       page: () => SearchProfilePage(),
-      middlewares: [Middleware(FirebaseAuthRepository.instance)],
+      middlewares: [Middleware(AuthViewModelAccount.instance)],
     ),
     GetPage(
         binding: AuthBiding(),
         name: Paths.profile,
         page: () => ScreensProfile(),
-        middlewares: [Middleware(FirebaseAuthRepository.instance)],
+        middlewares: [Middleware(AuthViewModelAccount.instance)],
         transition: Transition.rightToLeft),
     GetPage(
         binding: AuthBiding(),
         name: Paths.chat,
         page: () => ChatRoomPage(),
-        middlewares: [Middleware(FirebaseAuthRepository.instance)],
+        middlewares: [Middleware(AuthViewModelAccount.instance)],
         transition: Transition.rightToLeft),
     GetPage(
         binding: AuthBiding(),
@@ -67,7 +67,7 @@ class AppPages {
         name: Paths.editProfile,
         page: () => EditProfilePage(),
         transition: Transition.circularReveal,
-        middlewares: [Middleware(FirebaseAuthRepository.instance)]),
+        middlewares: [Middleware(AuthViewModelAccount.instance)]),
     
     //hub
     GetPage(
