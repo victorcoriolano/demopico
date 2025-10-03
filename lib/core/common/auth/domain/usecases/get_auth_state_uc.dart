@@ -1,24 +1,22 @@
 
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/auth/domain/interfaces/i_auth_repository.dart';
 import 'package:demopico/core/common/auth/infra/repositories/firebase_auth_repository.dart';
-import 'package:demopico/features/user/domain/enums/auth_state.dart';
 
-class GetAuthStateUc   {
+class GetCurrentUserUc   {
   final IAuthRepository _authRepository;
-
-  
-    static GetAuthStateUc? _instance;
+    static GetCurrentUserUc? _instance;
     
-    static GetAuthStateUc get instance =>
-      _instance ??= GetAuthStateUc(
+    static GetCurrentUserUc get instance =>
+      _instance ??= GetCurrentUserUc(
         authRepository: FirebaseAuthRepository.instance
       );
   
 
-  GetAuthStateUc({required IAuthRepository authRepository})
+  GetCurrentUserUc({required IAuthRepository authRepository})
     : _authRepository = authRepository;
 
-  AuthState execute() {
-    return _authRepository.currentAuthState;
+  UserEntity? execute() {
+    return _authRepository.currentUser;
   }
 }
