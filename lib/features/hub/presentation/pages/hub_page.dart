@@ -74,8 +74,8 @@ class _HubPageState extends State<HubPage> {
                       onPressed: () => Get.back(),
                       icon: const Image(
                         image: AssetImage("assets/images/icons/fist-icon.png"),
-                        width: 36,
-                        height: 36,
+                        width: 32,
+                        height: 32,
                         color: Colors.white,
                       ),
                     ),
@@ -85,7 +85,7 @@ class _HubPageState extends State<HubPage> {
                     style: TextStyle(
                       fontFamily: 'Misfit',
                       letterSpacing: 2,
-                      fontSize: 20,
+                      fontSize: 26,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
@@ -95,6 +95,7 @@ class _HubPageState extends State<HubPage> {
                     child: PopupMenuButton(itemBuilder: itemBuilder, 
                     icon: const Icon(Icons.arrow_drop_down_circle_sharp, color: Colors.white), 
                     color: Colors.white, 
+                    iconSize: 30,
                     ),
                   ),
                 ],
@@ -144,7 +145,7 @@ class _HubPageState extends State<HubPage> {
 
             // =================== INPUT ===================
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+              padding: const EdgeInsets.all(16),
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 200),
                 child: !isChoosingType
@@ -158,7 +159,7 @@ class _HubPageState extends State<HubPage> {
                       )
                     : Container(
                         width: double.infinity,
-                        padding: const EdgeInsets.all(12),
+                        padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: const Color.fromARGB(255, 177, 177, 177),
                           borderRadius: BorderRadius.circular(12),
