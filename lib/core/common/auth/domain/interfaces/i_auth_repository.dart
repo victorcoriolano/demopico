@@ -1,5 +1,6 @@
 import 'package:demopico/core/common/auth/domain/entities/auth_result.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_credentials.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 
 import 'package:demopico/features/user/domain/enums/auth_state.dart';
 
@@ -9,5 +10,5 @@ abstract class IAuthRepository {
   Future<void> signOut();
   Future<AuthResult> signUp(NormalUserCredentialsSignUp credentials); 
   Stream<AuthState> get authState; // emits Authenticated(User) or Unauthenticated
-  AuthState get currentAuthState;
+  UserEntity? get currentUser;
 }
