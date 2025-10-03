@@ -3,6 +3,7 @@ import 'package:demopico/core/common/auth/domain/usecases/change_password_uc.dar
 import 'package:demopico/core/common/auth/domain/usecases/delete_account_uc.dart';
 import 'package:demopico/core/common/auth/domain/usecases/get_auth_state_uc.dart';
 import 'package:demopico/core/common/auth/domain/usecases/logout_uc.dart';
+import 'package:demopico/core/common/auth/infra/repositories/firebase_auth_repository.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class AuthViewModelAccount extends ChangeNotifier {
       _instance ??= AuthViewModelAccount(
         changePasswordUc: ChangePasswordUc.getInstance,
         deleteAccountUc: DeleteAccountUc.getInstance,
-        getAuthState: GetAuthStateUc.instance,
+        getAuthState: GetCurrentUserUc.instance,
         logoutUc: LogoutUc.getInstance,
       );
 
@@ -26,7 +27,7 @@ class AuthViewModelAccount extends ChangeNotifier {
     required LogoutUc logoutUc,
     required DeleteAccountUc deleteAccountUc,
     required ChangePasswordUc changePasswordUc,
-    required GetAuthStateUc getAuthState,
+    required GetCurrentUserUc getAuthState,
   }): _changePasswordUc = changePasswordUc,
       _deleteAccountUc = deleteAccountUc,
       _getAuthState = getAuthState,
@@ -35,7 +36,7 @@ class AuthViewModelAccount extends ChangeNotifier {
   final LogoutUc _logoutUc;
   final DeleteAccountUc _deleteAccountUc;
   final ChangePasswordUc _changePasswordUc;
-  final GetAuthStateUc _getAuthState;
+  final GetCurrentUserUc _getAuthState;
   
   Future _handleAction(Function execute) async {
     try{
@@ -58,16 +59,21 @@ class AuthViewModelAccount extends ChangeNotifier {
     }
   }
 
-  UserEntity? getCurrentUser(){
-    final authstate = _getAuthState.execute();
-    switch (authstate){
-      
-      case AuthAuthenticated():
-        debugPrint("USUÁRIO AUTENTICADO");
-        return authstate.user;
-      case AuthUnauthenticated():
-        debugPrint("USUÁRIO NÃO AUTENTICADO");
-        return null;
+  User _currentUser = AnonymousUserEntity();
+
+  set currentUser(User user){
+    _currentUser = user;
+    notifyListeners();
+  }
+
+  User get user => _currentUser;
+
+  AuthState get authState {
+    switch (_currentUser) {
+      case UserEntity _:
+        return AuthAuthenticated(user: _currentUser as UserEntity); 
+      case AnonymousUserEntity _:
+        return AuthUnauthenticated();
     }
   }
 }
