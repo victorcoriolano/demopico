@@ -1,5 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
+import 'package:demopico/core/common/errors/domain_failures.dart';
+import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/profile/presentation/services/verify_auth_and_get_user.dart';
 import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_objects/suggestion_profile.dart';
@@ -74,8 +77,15 @@ class _SuggestionProfilestState extends State<SuggestionProfilesWidget> {
           const SizedBox(height: 8),
           ElevatedButton(
             onPressed: () {
-              final currentUser = context.read<AuthViewModelAccount>().getCurrentUser();
-              context.read<NetworkViewModel>().requestConnection(widget.suggestionProfile, currentUser!);
+              final currentUser = context.read<AuthViewModelAccount>().user;
+              switch (currentUser) {
+                
+                case UserEntity():
+                  context.read<NetworkViewModel>().requestConnection(widget.suggestionProfile, currentUser);
+
+                case AnonymousUserEntity():
+                  FailureServer.showError(UnauthenticatedFailure());
+              }
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: widget.suggestionProfile.status.statusForSuggestions == 'Conectar'
