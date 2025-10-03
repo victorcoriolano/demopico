@@ -39,39 +39,42 @@ class FirebaseAuthRepository implements IAuthRepository {
     required fb.FirebaseAuth datasource})
       : _fa = datasource,
         _userRepo = userRepository,
-        _profileRepository= profileRepository {
-    _fa.userChanges().listen(_onAuthChanges);
-  }
+        _profileRepository= profileRepository ;
 
   UserEntity? cachedUser;
 
-  void _updateStream(AuthState newState){
-    _stateController.add(newState);
+  void updateStream(AuthState newState){
     _lastState = newState;
+    _stateController.add(newState);
     debugPrint("Estado atual da autenticação: ${_lastState.toString()}");
   }
 
-  void _onAuthChanges(fb.User? fu) async {
-    debugPrint("Estado da autenticação mudou!");
-    if (fu == null) {
+  Future<void> _onAuthChanges(fb.User? fu) async {
+/*     if(cachedUser != null) return;
+ */    if (fu == null) {
       debugPrint("User null");
-      _updateStream(AuthUnauthenticated());
+      updateStream(AuthUnauthenticated());
       return;
     }
 
-    debugPrint("User logado");
+    debugPrint("User logado no firebase: ${fu.uid} - ${fu.email} - ${fu.displayName}");
     final model = await _userRepo.getById(fu.uid);
+    debugPrint("UserModel do banco: $model");
     final profileResult = await _profileRepository.getProfileByUser(fu.uid);
+    debugPrint("profile result = $profileResult - Success${profileResult.success}");
 
     if(profileResult.failure != null) {
+      debugPrint("Não foi possível encontrar o perfil do user, lançando falha e deslogando do firebase auth");
+      signOut();
       throw ProfileNotFoundFailure(originalException: profileResult.failure);
     }
 
     cachedUser = UserMapper.toEntity(model, profileResult.profile!);
-    _updateStream(AuthAuthenticated(user: cachedUser!)); 
+    debugPrint("Usuário autenticado: $cachedUser");
+    updateStream(AuthAuthenticated(user: cachedUser!)); 
   }
 
-  Future<UserEntity> _createDefaultProfileFromFirebaseUser(fb.User fu, [LocationVo? location]) async {
+  Future<UserEntity>  _createDefaultProfileFromFirebaseUser(fb.User fu, [LocationVo? location]) async {
     final userInitial = UserEntity.initial(fu.uid, VulgoVo(fu.displayName ?? "Não especificado",), EmailVO(fu.email!), location, fu.photoURL);
     await _userRepo.addUserDetails(UserMapper.fromEntity(userInitial));
     await _profileRepository.createProfile(userInitial.profileUser);
@@ -84,14 +87,20 @@ class FirebaseAuthRepository implements IAuthRepository {
   @override
   Future<void> signOut() async {
     await _fa.signOut();
-    _updateStream(AuthUnauthenticated());
+    _onAuthChanges(null);
+    updateStream(AuthUnauthenticated());
+    cachedUser = null;
   }
 
   @override
   Future<AuthResult> signInWithEmail(EmailCredentialsSignIn credentials) async {
     try {
-      await _fa.signInWithEmailAndPassword(
+      final credential = await _fa.signInWithEmailAndPassword(
           email: credentials.identifier.value, password: credentials.senha.value);
+      if(credential.user == null) throw fb.FirebaseAuthException(code: "UNAUTENTICATED_FAILURE"); 
+      final fu = credential.user;  
+      final espera  = await _onAuthChanges(fu);
+      debugPrint("Usuário logado: $cachedUser");
       return AuthResult.success(user: cachedUser!);
     } on fb.FirebaseAuthException catch (fbException) {
       return AuthResult.failure(FirebaseErrorsMapper.map(fbException));
@@ -117,14 +126,18 @@ class FirebaseAuthRepository implements IAuthRepository {
       final fu = cred.user!;
       await fu.updateDisplayName(credentials.vulgo.value);
       final domainUser = await _createDefaultProfileFromFirebaseUser(fu, credentials.location);
+      _onAuthChanges(fu);
       return AuthResult.success(user: domainUser);
     } on fb.FirebaseAuthException catch (fbException){
       return AuthResult.failure(FirebaseErrorsMapper.map(fbException));
-    } catch (unknownError){
-      return AuthResult.failure(UnknownFailure(unknownError: unknownError));
+    } catch (unknownError, st){
+      return AuthResult.failure(UnknownFailure(unknownError: unknownError, stackTrace: st));
     }
   }
   
   @override
-  AuthState get currentAuthState  => _lastState;
+  UserEntity? get currentUser {
+    debugPrint('Getting current user: $cachedUser');
+    return cachedUser;
+  }
 }
