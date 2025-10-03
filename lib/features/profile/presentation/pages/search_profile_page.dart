@@ -21,8 +21,13 @@ class _SearchProfilePageState extends State<SearchProfilePage> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final currentUser = context.read<AuthViewModelAccount>().getCurrentUser();
-      if (currentUser != null) context.read<NetworkViewModel>().fetchSugestions(currentUser);
+      final currentUser = context.read<AuthViewModelAccount>().user;
+      switch (currentUser) {
+        case UserEntity(): 
+          context.read<NetworkViewModel>().fetchSugestions(currentUser);
+        case AnonymousUserEntity():
+          // do nothing
+      }
     });
   }
   @override
@@ -57,7 +62,6 @@ class _SearchProfilePageState extends State<SearchProfilePage> {
           Expanded(child: ContainerSuggestionWidget()),
         ],
       ),
-          
     );
   }
 }
