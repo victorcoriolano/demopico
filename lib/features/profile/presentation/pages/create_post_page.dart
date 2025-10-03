@@ -1,4 +1,5 @@
 import 'package:demopico/core/app/routes/app_routes.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/features/mapa/presentation/widgets/search_bar.dart';
 import 'package:demopico/features/profile/presentation/pages/profile_page.dart';
 import 'package:demopico/features/profile/presentation/services/verify_auth_and_get_user.dart';
@@ -133,24 +134,25 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 // Botão de Publicar
                 ElevatedButton(
                   onPressed: () async {
-                    final user = context.read<AuthViewModelAccount>().getCurrentUser();
-                    if (user == null) {
-                      Get.snackbar(
-                        'Erro',
-                        'Usuário não encontrado. Por favor, faça login novamente.',
-                        snackPosition: SnackPosition.BOTTOM,
-                      );
-                      Get.toNamed(Paths.home);
-                      return;
+                    final user = context.read<AuthViewModelAccount>().user;
+                    switch (user) {
+                      
+                      case UserEntity _:
+                        await provider.createPost(user, typePost);
+                       
+                      case AnonymousUserEntity():
+                        Get.snackbar(
+                          'Erro',
+                          'Usuário não encontrado. Por favor, faça login novamente.',
+                          snackPosition: SnackPosition.BOTTOM,
+                        );
+                        Get.toNamed(Paths.home);
+                        return;
                     }
+                    
                     try{
-                      await provider.createPost(user, typePost);
-                      Get.snackbar(
-                        'Sucesso',
-                        'Postagem criada com sucesso!',
-                        snackPosition: SnackPosition.TOP,
-                      );
-                      Get.offAll(() => const ProfilePage());
+                      
+                      
                     }catch (e){
                       Get.snackbar(
                         'Erro',
