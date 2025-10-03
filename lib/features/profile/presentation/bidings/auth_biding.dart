@@ -5,6 +5,7 @@ class AuthBiding implements Bindings {
 
   @override
   void dependencies() {
+    Get.lazyPut<AuthBiding>(() => AuthBiding());
     Get.put<ProfileViewModel>(ProfileViewModel.getInstance);
   }
 }
