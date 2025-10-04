@@ -21,9 +21,8 @@ class _ContainerPostsWidgetState extends State<ContainerPostsWidget> {
   @override
   void initState() {
     super.initState();
-    
+    _postProvider = context.read<PostProvider>();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _postProvider = context.read<PostProvider>();
       _getPost();
     });
   }

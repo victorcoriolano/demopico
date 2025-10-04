@@ -2,6 +2,7 @@ import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto
 import 'package:demopico/core/common/collections/collections.dart';
 import 'package:demopico/features/external/datasources/firebase/crud_firebase.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_post_datasource.dart';
+import 'package:flutter/foundation.dart';
 
 class FirebasePostDatasource implements IPostDatasource {
 
@@ -31,11 +32,12 @@ class FirebasePostDatasource implements IPostDatasource {
 
   @override
   Future<FirebaseDTO> getPostbyID(String postId) async {
+    debugPrint('FirebasePostDatasource: Fetching post with id $postId');
     return await crudFirebase.read(postId);
   }
 
   @override
-  Future<List<FirebaseDTO>> getPosts(String id) async {
+  Future<List<FirebaseDTO>> getPostsByUserId(String id) async {
     final query = await crudFirebase.dataSource
       .collection(crudFirebase.collection.name)
       .where("userId", isEqualTo: id)
