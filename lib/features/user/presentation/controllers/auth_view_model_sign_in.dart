@@ -10,6 +10,7 @@ import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/user/domain/aplication/validate_credentials.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_credentials.dart';
 import 'package:demopico/features/user/domain/enums/identifiers.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -118,10 +119,14 @@ class AuthViewModelSignIn extends ChangeNotifier {
 
     if(authResult.success){
       debugPrint("Autenticação bem sucedida");
-
+      AuthViewModelAccount.instance.currentUser = authResult.user!;
+      isLoading = false;
+      notifyListeners();
     }else {
       debugPrint("VM - Erro ao fazer login : ${authResult.failure.toString()}");
       FailureServer.showError(authResult.failure!);
+      isLoading = false;
+      notifyListeners();
     }   
   }
 
