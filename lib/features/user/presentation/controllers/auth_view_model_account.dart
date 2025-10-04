@@ -70,4 +70,24 @@ class AuthViewModelAccount extends ChangeNotifier {
         return null;
     }
   }
+
+  User _currentUser = AnonymousUserEntity();
+
+  set currentUser(User user){
+    _currentUser = user;
+    notifyListeners();
+  }
+
+  User get user => _currentUser;
+
+  AuthState get authState {
+    switch (_currentUser) {
+      case UserEntity _:
+        return AuthAuthenticated(user: _currentUser as UserEntity); 
+      case AnonymousUserEntity _:
+        return AuthUnauthenticated();
+    }
+  }
+
+  
 }
