@@ -7,7 +7,7 @@ enum Collections {
   communique,
   comments,
   posts,
-  profile;
+  profiles;
 
   factory Collections.fromString(String value) {
     switch (value) {
@@ -28,7 +28,7 @@ enum Collections {
       case 'posts':
         return Collections.posts;
       case 'profiles':
-        return Collections.profile;
+        return Collections.profiles;
       default:
         throw Exception("Invalid Tables name");
     }
@@ -52,7 +52,7 @@ enum Collections {
         return 'posts';
       case Collections.connections:
         return 'connections';
-      case Collections.profile:
+      case Collections.profiles:
         return 'profiles';
     }
   }

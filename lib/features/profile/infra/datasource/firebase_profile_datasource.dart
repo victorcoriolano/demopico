@@ -11,7 +11,7 @@ class FirebaseProfileDatasource implements IProfileDataSource<FirebaseDTO>{
   static FirebaseProfileDatasource? _instance;
   static FirebaseProfileDatasource get getInstance {
     return _instance ??= FirebaseProfileDatasource(
-      crud: CrudFirebase.getInstance..setcollection(Collections.profile)
+      crud: CrudFirebase.getInstance..setcollection(Collections.profiles)
     );
   }
 
