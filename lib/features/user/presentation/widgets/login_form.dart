@@ -118,6 +118,7 @@ class _LoginFormState extends State<LoginForm> with Validators {
                   onPressed: () async {
                     final viewModel = context.read<AuthViewModelSignIn>();
                     await viewModel.signIn(); 
+                    Get.offAndToNamed(Paths.profile);
                   },
                   style: buttonStyle(),
                   child: const Text(
@@ -133,7 +134,7 @@ class _LoginFormState extends State<LoginForm> with Validators {
                 //button (fazer parte)
                 ElevatedButton(
                   onPressed: () {
-                    Get.toNamed(
+                    Get.offAndToNamed(
                       Paths.signUp,
                     );
                   },
