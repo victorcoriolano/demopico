@@ -40,7 +40,7 @@ class FirebaseAuthRepository implements IAuthRepository {
       : _fa = datasource,
         _userRepo = userRepository,
         _profileRepository= profileRepository {
-    _fa.userChanges().listen(_onAuthChanges);
+    //_fa.userChanges().listen(_onAuthChanges);
   }
 
   UserEntity? cachedUser;
@@ -49,6 +49,7 @@ class FirebaseAuthRepository implements IAuthRepository {
     _stateController.add(newState);
     _lastState = newState;
     debugPrint("Estado atual da autenticação: ${_lastState.toString()}");
+
   }
 
   void _onAuthChanges(fb.User? fu) async {
@@ -64,6 +65,7 @@ class FirebaseAuthRepository implements IAuthRepository {
     final profileResult = await _profileRepository.getProfileByUser(fu.uid);
 
     if(profileResult.failure != null) {
+      debugPrint("Erro ao buscar perfil do usuário");
       throw ProfileNotFoundFailure(originalException: profileResult.failure);
     }
 
@@ -90,8 +92,9 @@ class FirebaseAuthRepository implements IAuthRepository {
   @override
   Future<AuthResult> signInWithEmail(EmailCredentialsSignIn credentials) async {
     try {
-      await _fa.signInWithEmailAndPassword(
+      final fuCredentials =await _fa.signInWithEmailAndPassword(
           email: credentials.identifier.value, password: credentials.senha.value);
+      _onAuthChanges(fuCredentials.user);
       return AuthResult.success(user: cachedUser!);
     } on fb.FirebaseAuthException catch (fbException) {
       return AuthResult.failure(FirebaseErrorsMapper.map(fbException));
