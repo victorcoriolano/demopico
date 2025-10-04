@@ -8,6 +8,7 @@ import 'package:demopico/features/hub/presentation/widgets/input_box.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:demopico/features/user/domain/models/user_model.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,7 @@ class _HubPageState extends State<HubPage> {
   }
 
   Future<void> _handleSendAction(String message) async {
-    final currentAuthState = context.watch<AuthState>();
+    final currentAuthState = context.read<AuthViewModelAccount>().authState;
     switch (currentAuthState) {
       case AuthAuthenticated():
         user ??= currentAuthState.user;
