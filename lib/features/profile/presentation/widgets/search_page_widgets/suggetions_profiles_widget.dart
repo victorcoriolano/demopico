@@ -3,6 +3,7 @@ import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/features/profile/presentation/services/verify_auth_and_get_user.dart';
 import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_objects/suggestion_profile.dart';
+import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -74,8 +75,16 @@ class _SuggestionProfilestState extends State<SuggestionProfilesWidget> {
           const SizedBox(height: 8),
           ElevatedButton(
             onPressed: () {
-              final currentUser = context.read<AuthViewModelAccount>().getCurrentUser();
-              context.read<NetworkViewModel>().requestConnection(widget.suggestionProfile, currentUser!);
+              final authstate = context.read<AuthViewModelAccount>().authState;
+              switch (authstate) {
+                
+                case AuthAuthenticated():
+                  context.read<NetworkViewModel>().requestConnection(widget.suggestionProfile, authstate.user);
+                case AuthUnauthenticated():
+                  //do nothing
+                  break;
+              }
+              
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: widget.suggestionProfile.status.statusForSuggestions == 'Conectar'
