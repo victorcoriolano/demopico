@@ -45,7 +45,7 @@ class _HubPageState extends State<HubPage> {
       case AuthUnauthenticated():
         FailureServer.showError(UnauthenticatedFailure());
     }
-  }
+  } 
 
   @override
   Widget build(BuildContext context) {
