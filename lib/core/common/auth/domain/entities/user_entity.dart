@@ -4,7 +4,9 @@ import 'package:demopico/core/common/auth/domain/value_objects/email_vo.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/location_vo.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/vulgo_vo.dart';
 
-class UserEntity {
+sealed class User {}
+
+class UserEntity extends User{
   final String id;
   final VulgoVo displayName;
   final EmailVO email;
@@ -68,14 +70,21 @@ class ColetivoEntity {
       required this.logo});
 }
 
-class AnonymousUserEntity extends UserEntity {
-  AnonymousUserEntity()
-      : super(
-            avatar: "",
-            id: "",
-            location: LocationVo.empty(),
-            displayName: VulgoVo.empty(),
-            dob: DobVo(DateTime.now()),
-            email: EmailVO.empty(),
-            profileUser: Profile.empty);
+class AnonymousUserEntity extends User {
+  final String id;
+  final VulgoVo displayName;
+  final EmailVO email;
+  final DobVo dob;
+  final LocationVo? location;
+  final Profile profileUser;
+  final String? avatar;
+  AnonymousUserEntity() 
+  : avatar = "",
+            id= "",
+            location= LocationVo(latitude: 0, longitude: 0),
+            displayName = VulgoVo("Anônimo"),
+            dob = DobVo(DateTime.now()),
+            email = EmailVO("anônimo@anônimo.com"),
+            profileUser = Profile.empty;
+            
 }
