@@ -98,8 +98,8 @@ class FirebaseAuthRepository implements IAuthRepository {
       return AuthResult.success(user: cachedUser!);
     } on fb.FirebaseAuthException catch (fbException) {
       return AuthResult.failure(FirebaseErrorsMapper.map(fbException));
-    } catch (unknownError){
-      return AuthResult.failure(UnknownFailure(unknownError: unknownError));
+    } catch (unknownError, st){
+      return AuthResult.failure(UnknownFailure(unknownError: unknownError, stackTrace: st));
     }
   }
 
