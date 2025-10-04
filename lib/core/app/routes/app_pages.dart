@@ -24,7 +24,7 @@ class AppPages {
   static final routes = <GetPage>[
     //mapa
     GetPage(
-      binding: AuthBiding(),
+      binding: AuthBinding(),
       name: Paths.favoriteSpot,
       page: () => FavoriteSpotPage(),
       middlewares: [Middleware(FirebaseAuthRepository.instance)],
@@ -40,30 +40,30 @@ class AppPages {
     
     //profile
     GetPage(
-      binding: AuthBiding(),
+      binding: AuthBinding(),
       name: Paths.searchProfile,
       page: () => SearchProfilePage(),
       middlewares: [Middleware(FirebaseAuthRepository.instance)],
     ),
     GetPage(
-        binding: AuthBiding(),
+        binding: AuthBinding(),
         name: Paths.profile,
         page: () => ScreensProfile(),
         middlewares: [Middleware(FirebaseAuthRepository.instance)],
         transition: Transition.rightToLeft),
     GetPage(
-        binding: AuthBiding(),
+        binding: AuthBinding(),
         name: Paths.chat,
         page: () => ChatRoomPage(),
         middlewares: [Middleware(FirebaseAuthRepository.instance)],
         transition: Transition.rightToLeft),
     GetPage(
-        binding: AuthBiding(),
+        binding: AuthBinding(),
         name: Paths.createPostPage,
         page: () => CreatePostPage(),
         transition: Transition.downToUp),
     GetPage(
-        binding: AuthBiding(),
+        binding: AuthBinding(),
         name: Paths.editProfile,
         page: () => EditProfilePage(),
         transition: Transition.circularReveal,
@@ -90,14 +90,14 @@ class AppPages {
 
     //home
     GetPage(
-      binding: AuthBiding(),
+      binding: AuthBinding(),
       name: Paths.home,
       page: () => HomePage(),
       transition: Transition.native,
     ),
 
     GetPage(
-      binding: AuthBiding(),
+      binding: AuthBinding(),
       name: Paths.myNetwork,
       page: () => MyNetworkScreen(),
       transition: Transition.fadeIn,
