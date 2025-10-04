@@ -26,7 +26,7 @@ enum ModalitySpot{
       case 'Skate': return ModalitySpot.skate;
       case 'Parkour': return ModalitySpot.parkour;
       case 'BMX': return ModalitySpot.bmx;
-      default: throw ArgumentError('Invalid modality spot');
+      default: throw ArgumentError('Invalid modality spot - $value');
     }
   }
 

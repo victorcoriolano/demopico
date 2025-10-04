@@ -58,7 +58,7 @@ class AuthViewModelAccount extends ChangeNotifier {
     }
   }
 
-  UserEntity? getCurrentUser(){
+ /*  UserEntity? getCurrentUser(){
     final authstate = _getAuthState.execute();
     switch (authstate){
       
@@ -70,7 +70,7 @@ class AuthViewModelAccount extends ChangeNotifier {
         return null;
     }
   }
-
+ */
   User _currentUser = AnonymousUserEntity();
 
   set currentUser(User user){
