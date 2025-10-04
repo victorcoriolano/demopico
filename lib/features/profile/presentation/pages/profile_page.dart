@@ -211,6 +211,7 @@ class _ProfilePageState extends State<ProfilePage>
                         padding: const EdgeInsets.all(0),
                         height: screenHeight * 0.55,
                         child: ProfilePostsWidget(
+                          user: user!,
                           controller: _tabController,
                         ),
                       ),

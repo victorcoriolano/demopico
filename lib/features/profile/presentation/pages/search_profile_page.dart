@@ -3,6 +3,7 @@ import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/features/profile/presentation/services/verify_auth_and_get_user.dart';
 import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
 import 'package:demopico/features/profile/presentation/widgets/search_page_widgets/container_suggestion_widget.dart';
+import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,8 +22,15 @@ class _SearchProfilePageState extends State<SearchProfilePage> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final currentUser = context.read<AuthViewModelAccount>().getCurrentUser();
-      if (currentUser != null) context.read<NetworkViewModel>().fetchSugestions(currentUser);
+      final currentAuthState = context.read<AuthViewModelAccount>().authState;
+      switch (currentAuthState) {
+        case AuthAuthenticated _:
+          context.read<NetworkViewModel>().fetchSugestions(currentAuthState.user);
+          break;
+        case AuthUnauthenticated():
+          // Handle unauthenticated state
+          break;
+      }
     });
   }
   @override
