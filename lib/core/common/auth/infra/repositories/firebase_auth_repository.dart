@@ -47,11 +47,12 @@ class FirebaseAuthRepository implements IAuthRepository {
     _lastState = newState;
     _stateController.add(newState);
     debugPrint("Estado atual da autenticação: ${_lastState.toString()}");
+
   }
 
   Future<void> _onAuthChanges(fb.User? fu) async {
-/*     if(cachedUser != null) return;
- */    if (fu == null) {
+    debugPrint("Estado da autenticação mudou!");
+    if (fu == null) {
       debugPrint("User null");
       updateStream(AuthUnauthenticated());
       return;
@@ -95,17 +96,14 @@ class FirebaseAuthRepository implements IAuthRepository {
   @override
   Future<AuthResult> signInWithEmail(EmailCredentialsSignIn credentials) async {
     try {
-      final credential = await _fa.signInWithEmailAndPassword(
+      final fuCredentials =await _fa.signInWithEmailAndPassword(
           email: credentials.identifier.value, password: credentials.senha.value);
-      if(credential.user == null) throw fb.FirebaseAuthException(code: "UNAUTENTICATED_FAILURE"); 
-      final fu = credential.user;  
-      final espera  = await _onAuthChanges(fu);
-      debugPrint("Usuário logado: $cachedUser");
+      await _onAuthChanges(fuCredentials.user);
       return AuthResult.success(user: cachedUser!);
     } on fb.FirebaseAuthException catch (fbException) {
       return AuthResult.failure(FirebaseErrorsMapper.map(fbException));
-    } catch (unknownError){
-      return AuthResult.failure(UnknownFailure(unknownError: unknownError));
+    } catch (unknownError, st){
+      return AuthResult.failure(UnknownFailure(unknownError: unknownError, stackTrace: st));
     }
   }
 

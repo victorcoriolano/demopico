@@ -14,7 +14,7 @@ class MyAppWidget extends StatelessWidget {
   const MyAppWidget({super.key});
 
   @override
-  Widget build(BuildContext context) {    
+  Widget build(BuildContext context) {
     
     return MultiProvider(
       providers: myProviders,
@@ -26,7 +26,7 @@ class MyAppWidget extends StatelessWidget {
         checkerboardRasterCacheImages: true,
         getPages: AppPages.routes,
         home: const HomePage(),
-        initialBinding: AuthBiding(),
+        initialBinding: AuthBinding(),
       ),
     );
   }

@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ContainerSpots extends StatefulWidget {
-
-  const ContainerSpots({ super.key,  });
+  final UserEntity user;
+  const ContainerSpots({ super.key, required this.user  });
 
   @override
   State<ContainerSpots> createState() => _ContainerSpotsState();

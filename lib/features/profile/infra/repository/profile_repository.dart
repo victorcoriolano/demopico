@@ -1,11 +1,13 @@
 
 import 'package:demopico/core/common/errors/failure_server.dart';
+import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto_mapper.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_profile_data_source.dart';
 import 'package:demopico/features/profile/domain/models/profile_result.dart';
 import 'package:demopico/features/profile/domain/models/profile_user.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_profile_repository.dart';
 import 'package:demopico/features/profile/infra/datasource/firebase_profile_datasource.dart';
+import 'package:flutter/foundation.dart';
 
 
 class ProfileRepositoryImpl implements IProfileRepository {
@@ -47,9 +49,14 @@ class ProfileRepositoryImpl implements IProfileRepository {
   Future<ProfileResult> getProfileByUser(String id) async {
     try {
       final dto = await profileDatasource.getProfileByUser(id);
+      debugPrint("Profile encontrado: $dto");
       return ProfileResult.success(profile: _mapper.toModel(dto));
     } on Failure catch (failure) {
+      debugPrint("Erro ao buscar perfil do usuário: $failure");
       return ProfileResult.failure(failure);
+    } catch (e){
+      debugPrint("Erro desconhecido ao buscar o perfil do user: $e");
+      return ProfileResult.failure(UnknownFailure(unknownError: e));
     }
   }
 

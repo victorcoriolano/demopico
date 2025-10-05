@@ -1,5 +1,5 @@
 import 'package:demopico/features/mapa/presentation/widgets/button_add_pico.dart';
-import 'package:demopico/features/mapa/presentation/widgets/drawer_widget.dart';
+import 'package:demopico/features/mapa/presentation/widgets/map_drawer_widget.dart';
 import 'package:demopico/features/mapa/presentation/widgets/map_widget.dart';
 import 'package:demopico/features/mapa/presentation/widgets/top_side_map_widget.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +19,7 @@ class MapPage extends StatelessWidget {
             ButtonAddPico(),
           ],
         ),
-        endDrawer: MyDrawer(),
+        endDrawer: MapDrawer(),
       );
   }
 }

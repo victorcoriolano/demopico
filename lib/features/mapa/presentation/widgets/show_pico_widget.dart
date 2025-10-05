@@ -45,12 +45,14 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) { 
        context.read<SpotProvider>().initializeWatch(widget.idPico);
-       final currentUser = context.read<AuthViewModelAccount>().user;
-       switch (currentUser){
-         case UserEntity():
-           user = currentUser;
-         case AnonymousUserEntity():
-           // do nothing 
+       final authState = context.read<AuthViewModelAccount>().authState;
+       switch (authState) {
+         case AuthAuthenticated():
+           user = authState.user;
+           break;
+         case AuthUnauthenticated():
+           // do nothing
+           break;
        }
     });
   }

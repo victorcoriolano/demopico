@@ -9,14 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-class MyDrawer extends StatefulWidget {
-  const MyDrawer({super.key});
+class MapDrawer extends StatefulWidget {
+  const MapDrawer({super.key});
 
   @override
-  State<MyDrawer> createState() => _MyDrawerState();
+  State<MapDrawer> createState() => _MapDrawerState();
 }
 
-class _MyDrawerState extends State<MyDrawer> {
+class _MapDrawerState extends State<MapDrawer> {
   @override
   Widget build(BuildContext context) {
     final authState = context.read<AuthViewModelAccount>().authState;

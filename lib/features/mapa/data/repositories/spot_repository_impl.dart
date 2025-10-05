@@ -76,6 +76,7 @@ class SpotRepositoryImpl implements ISpotRepository {
   
   @override
   Future<List<PicoModel>> getMySpots(String userID) async {
+    debugPrint('REPSITORY - pegando spots do userid: $userID ${userID.length}');
     final listDto = await dataSource.getList(userID);
     return listDto.map((dto) => _mapper.toModel(dto)).toList();
   }

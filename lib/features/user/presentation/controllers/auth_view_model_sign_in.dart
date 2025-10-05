@@ -120,9 +120,13 @@ class AuthViewModelSignIn extends ChangeNotifier {
     if(authResult.success){
       debugPrint("Autenticação bem sucedida");
       AuthViewModelAccount.instance.currentUser = authResult.user!;
+      isLoading = false;
+      notifyListeners();
     }else {
       debugPrint("VM - Erro ao fazer login : ${authResult.failure.toString()}");
       FailureServer.showError(authResult.failure!);
+      isLoading = false;
+      notifyListeners();
     }   
   }
 

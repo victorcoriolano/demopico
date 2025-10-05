@@ -4,10 +4,9 @@ import 'package:demopico/core/common/auth/domain/value_objects/email_vo.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/location_vo.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/vulgo_vo.dart';
 
+sealed class User {}
 
-sealed class User {
-}
-class UserEntity extends User {
+class UserEntity extends User{
   final String id;
   final VulgoVo displayName;
   final EmailVO email;

@@ -59,6 +59,19 @@ class AuthViewModelAccount extends ChangeNotifier {
     }
   }
 
+ /*  UserEntity? getCurrentUser(){
+    final authstate = _getAuthState.execute();
+    switch (authstate){
+      
+      case AuthAuthenticated():
+        debugPrint("USUÁRIO AUTENTICADO");
+        return authstate.user;
+      case AuthUnauthenticated():
+        debugPrint("USUÁRIO NÃO AUTENTICADO");
+        return null;
+    }
+  }
+ */
   User _currentUser = AnonymousUserEntity();
 
   set currentUser(User user){

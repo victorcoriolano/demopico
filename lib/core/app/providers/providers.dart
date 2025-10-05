@@ -28,6 +28,7 @@ import 'package:demopico/features/user/presentation/controllers/auth_view_model_
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_sign_up.dart';
 import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 
 final myProviders = [
@@ -59,12 +60,22 @@ final myProviders = [
   ChangeNotifierProvider(create: (_) => HomeProvider.getInstance),
   
   // Providers de mapa
+  
+  // Providers de UI/estado
+  ChangeNotifierProvider(create: (_) => NetworkViewModel.instance),
+  ChangeNotifierProvider(create: (_) => ScreenProvider()),
+  ChangeNotifierProvider(create: (_) => HomeProvider.getInstance),
+  
+  // Providers de mapa
   ChangeNotifierProvider(create: (_) => AddPicoViewModel.getInstance),
   ChangeNotifierProvider(create: (_) => MapControllerProvider()),
   ChangeNotifierProvider(create: (_) => FavoriteSpotController.getInstance),
   ChangeNotifierProvider(create: (_) => SpotsControllerProvider.getInstance),
   ChangeNotifierProvider(create: (_) => SpotProvider.instance),
   ChangeNotifierProvider(create: (_) => HistoricoController.getInstance),
+  ChangeNotifierProvider(create: (_) => CommentController.getInstance),
+  
+  // Providers de hub
   ChangeNotifierProvider(create: (_) => CommentController.getInstance),
   
   // Providers de hub

@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ContainerPostsWidget extends StatefulWidget {
-  const ContainerPostsWidget({super.key});
+  final UserEntity user;
+  const ContainerPostsWidget({super.key, required this.user});
 
   @override
   State<ContainerPostsWidget> createState() => _ContainerPostsWidgetState();
@@ -20,9 +21,8 @@ class _ContainerPostsWidgetState extends State<ContainerPostsWidget> {
   @override
   void initState() {
     super.initState();
-    
+    _postProvider = context.read<PostProvider>();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _postProvider = context.read<PostProvider>();
       _getPost();
     });
   }

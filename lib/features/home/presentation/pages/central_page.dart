@@ -1,3 +1,4 @@
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/features/home/presentation/widgets/central_page_background.dart';
 import 'package:demopico/features/home/presentation/widgets/events_bottom_sheet.dart';
 import 'package:demopico/features/home/presentation/widgets/hub_upper_sheet.dart';

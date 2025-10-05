@@ -7,6 +7,7 @@ import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/segun
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/terceira_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/custom_buttons.dart';
 import 'package:demopico/features/user/domain/enums/auth_state.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -41,7 +42,7 @@ class _ContainerTelasState extends State<ContainerTelas> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      authstate = context.read<AuthState>();
+      authstate = context.read<AuthViewModelAccount>().authState;
       final location = LocationVo(
           latitude: widget.latlang.latitude,
           longitude: widget.latlang.longitude);
@@ -114,14 +115,11 @@ class _ContainerTelasState extends State<ContainerTelas> {
 
   UserIdentification? createIdentification(AuthState? authstate) {
     switch (authstate){
-
-      case null:
+      case null || AuthUnauthenticated():
         return null;
       case AuthAuthenticated():
          return UserIdentification(
         id: authstate.user.id, name: authstate.user.displayName.value, photoUrl: authstate.user.profileUser.avatar);
-      case AuthUnauthenticated():
-        return null;
     }
 
    
