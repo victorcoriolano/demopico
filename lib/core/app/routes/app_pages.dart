@@ -6,6 +6,7 @@ import 'package:demopico/features/mapa/presentation/pages/add_pico_pages.dart/cr
 import 'package:demopico/features/mapa/presentation/pages/favorites_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/history_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
+import 'package:demopico/features/mapa/presentation/pages/my_spots_page.dart';
 import 'package:demopico/features/profile/presentation/bidings/auth_biding.dart';
 import 'package:demopico/features/profile/presentation/pages/chat_room_page.dart';
 import 'package:demopico/features/profile/presentation/pages/create_post_page.dart';
@@ -37,7 +38,18 @@ class AppPages {
       name: Paths.map,
       page: () => MapPage(),
     ),
-    
+    GetPage(
+      binding: AuthBinding(),
+      name: Paths.mySpots,
+      page: () => MySpotsPage(),
+      middlewares: [Middleware(AuthViewModelAccount.instance)],
+    ),
+    GetPage(
+      name: Paths.favoriteSpot, 
+      page: () => FavoriteSpotPage(),
+      middlewares: [Middleware(AuthViewModelAccount.instance)],
+    ),
+
     //profile
     GetPage(
       binding: AuthBinding(),
