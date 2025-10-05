@@ -10,7 +10,7 @@ class OpenWeatherProvider extends ValueNotifier<CurrentWeatherModel?> {
   bool imOld() {
     if (value == null) return true;
     final now = DateTime.now();
-    final dob = value!.dateOfBirth;
+    final dob = value!.dateOfBirth; 
     Duration difference = dob!.difference(now);
     return difference.inMinutes.abs() > 20;
   }
@@ -40,6 +40,7 @@ class OpenWeatherProvider extends ValueNotifier<CurrentWeatherModel?> {
       //Valor atualizado
       value = CurrentWeatherModel(weatherData);
       debugPrint('PROVIDERMETHOD: Value updated: ${value!.text}');
+      debugPrint(value?.tempC.toString());
     } on Exception catch (e) {
       debugPrint('PROVIDERMETHOD: Error fetching weather data: $e');
       errorMessage = "ERRO!";

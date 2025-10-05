@@ -32,8 +32,9 @@ class _TopLevelHomeRowState extends State<TopLevelHomeRow> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     debugPrint('didChangeDependencies called in TopLevelHomeRow');
-    if (!_isWeatherLoaded) {
-        if (OpenWeatherProvider()
+   
+      if (!_isWeatherLoaded) {
+        if (context.read<OpenWeatherProvider>()
             .isUpdated()) {
           debugPrint('Weather data already updated, skipping load.');
           return;
@@ -45,7 +46,7 @@ class _TopLevelHomeRowState extends State<TopLevelHomeRow> {
 
   Future<void> _loadWeather() async {
     try{
-      await OpenWeatherProvider()
+      await context.read<OpenWeatherProvider>()
         .fetchWeatherData();
         debugPrint('Weather data fetch called sucessfuly in HomePage');
         _isWeatherLoaded = false;
