@@ -32,10 +32,12 @@ class ProfileRepositoryImpl implements IProfileRepository {
   @override
   Future<ProfileResult> createProfile(Profile profile) async {
     try{
+      debugPrint("Criando perfil: $profile");
       final dto = _mapper.toDTO(profile);
       final createdDto = await profileDatasource.createProfile(dto);
       return ProfileResult.success(profile: _mapper.toModel(createdDto));
     } on Failure catch (failure){
+      debugPrint("Erro ao criar perfil: $failure");
       return ProfileResult.failure(failure);
     }
   }

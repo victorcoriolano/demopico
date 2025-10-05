@@ -6,6 +6,8 @@ import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
 import 'package:demopico/features/user/presentation/widgets/textfield_decoration.dart';
 import 'package:demopico/features/user/presentation/widgets/form_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/utils.dart';
 import 'package:provider/provider.dart';
 
 class RegisterForm extends StatefulWidget {
@@ -64,7 +66,9 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                         () => isNotEmpty(value),
                         () => isValidVulgo(value),
                       ]),
-                      onChanged: (value) => provider.clearMessageErrors(),
+                      onChanged: (value) { 
+                        provider.updateFieldVulgo(value);
+                        provider.clearMessageErrors();}
                     );
                   }
                 ),
@@ -86,7 +90,10 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                         ]);
                         
                       },
-                      onChanged: (value) =>  provider.clearMessageErrors(),
+                      onChanged: (value) { 
+                        provider.updateFieldEmail(value);
+                        provider.clearMessageErrors();
+                      }
                     );
                   }
                 ),
@@ -111,16 +118,24 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                 ),
     
                 // confirmar senha
-                TextFormField(
-                  decoration: customTextField("Confirmar senha "),
-                  cursorColor: Colors.white,
-                  style: const TextStyle(color: Colors.white),
-                  obscureText: true,
-                  controller: _senhaController2,
-                  validator: (value) => combineValidators([
-                    () => isNotEmpty(value),
-                    () => checkPassword(_senhaController.text, value),
-                  ]),
+                Consumer<AuthViewModelSignUp>(
+                  builder: (context, provider, child) {
+                    return TextFormField(
+                      decoration: customTextField("Confirmar senha "),
+                      cursorColor: Colors.white,
+                      style: const TextStyle(color: Colors.white),
+                      obscureText: true,
+                      controller: _senhaController2,
+                      validator: (value) => combineValidators([
+                        () => isNotEmpty(value),
+                        () => checkPassword(_senhaController.text, value),
+                      ]),
+                      onChanged: (value) { 
+                            provider.updateFieldPassword(value);
+                            provider.clearMessageErrors();}
+                    
+                    );
+                  }
                 ),
                 const SizedBox(
                   height: 12,
@@ -132,7 +147,10 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                     return ElevatedButton(
                       onPressed:  provider.isLoading ? null : () async {
                         if(_formkey.currentState?.validate() ?? false){
-                        
+                          await provider.signUp();
+                          if(mounted){
+                            Get.back();
+                          }
                         }
                       },
                       style: buttonStyle(),
