@@ -76,11 +76,20 @@ class FirebaseAuthRepository implements IAuthRepository {
     updateStream(AuthAuthenticated(user: cachedUser!)); 
   }
 
-  Future<UserEntity>  _createDefaultProfileFromFirebaseUser(fb.User fu, [LocationVo? location]) async {
-    final userInitial = UserEntity.initial(fu.uid, VulgoVo(fu.displayName ?? "Não especificado",), EmailVO(fu.email!), location, fu.photoURL);
-    await _userRepo.addUserDetails(UserMapper.fromEntity(userInitial));
-    await _profileRepository.createProfile(userInitial.profileUser);
-    return userInitial;
+  Future<UserEntity>  _createDefaultProfileFromFirebaseUser(fb.User fu, NormalUserCredentialsSignUp credentials) async {
+    final userInitial = UserEntity.initial(fu.uid, VulgoVo(credentials.vulgo.value), EmailVO(fu.email!), credentials.location, fu.photoURL);
+    final userM = await _userRepo.addUserDetails(UserMapper.fromEntity(userInitial));
+    debugPrint("UserModel criado: $userM");
+    final profileresult = await _profileRepository.createProfile(userInitial.profileUser);
+    if (profileresult.success){
+      return userInitial;
+    } else {
+      debugPrint("Erro ao criar perfil padrão do usuário: ${profileresult.failure}");
+      // Se não conseguir criar o perfil, deve apagar o usuário criado no Firebase Auth e no Firestore
+      await fu.delete();
+      await _userRepo.deleteData(fu.uid);
+      throw profileresult.failure!;
+    }
   }
 
   @override
@@ -122,20 +131,25 @@ class FirebaseAuthRepository implements IAuthRepository {
   @override
   Future<AuthResult> signUp(NormalUserCredentialsSignUp credentials) async {
     try {
+      debugPrint("Criando usuário no Firebase com email: ${credentials.email.value} e vulgo: ${credentials.vulgo.value}");
       final cred = await _fa.createUserWithEmailAndPassword(
         email: credentials.email.value, 
         password: credentials.password.value);
+      debugPrint("Usuário criado no Firebase: ${cred.user}");
       final fu = cred.user!;
       await fu.updateDisplayName(credentials.vulgo.value);
-      final domainUser = await _createDefaultProfileFromFirebaseUser(fu, credentials.location);
-      _onAuthChanges(fu);
+
+      final domainUser = await _createDefaultProfileFromFirebaseUser(fu, credentials);
+      
       return AuthResult.success(user: domainUser);
     } on fb.FirebaseAuthException catch (fbException){
+      debugPrint("Repository - erro no firebase: $fbException");
       return AuthResult.failure(FirebaseErrorsMapper.map(fbException));
     } on DomainFailure catch (domainFailure){
       debugPrint("ERRO DE DOMÍNIO: $domainFailure");
       return AuthResult.failure(domainFailure);
     } catch (unknownError, st){
+      debugPrint("Erro desconhecido: $unknownError");
       return AuthResult.failure(UnknownFailure(unknownError: unknownError, stackTrace: st));
     }
   }
