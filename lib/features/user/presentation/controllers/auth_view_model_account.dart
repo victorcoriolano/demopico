@@ -88,6 +88,4 @@ class AuthViewModelAccount extends ChangeNotifier {
         return AuthUnauthenticated();
     }
   }
-
-  
 }
