@@ -3,6 +3,7 @@ import 'package:demopico/core/common/auth/domain/entities/auth_result.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_credentials.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/auth/domain/interfaces/i_auth_repository.dart';
+import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_profile_repository.dart';
 import 'package:demopico/core/common/auth/domain/interfaces/i_user_repository.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/email_vo.dart';
@@ -102,6 +103,9 @@ class FirebaseAuthRepository implements IAuthRepository {
       return AuthResult.success(user: cachedUser!);
     } on fb.FirebaseAuthException catch (fbException) {
       return AuthResult.failure(FirebaseErrorsMapper.map(fbException));
+    }on DomainFailure catch (domainFailure){
+      debugPrint("ERRO DE DOMÍNIO: $domainFailure");
+      return AuthResult.failure(domainFailure);
     } catch (unknownError, st){
       return AuthResult.failure(UnknownFailure(unknownError: unknownError, stackTrace: st));
     }
@@ -128,6 +132,9 @@ class FirebaseAuthRepository implements IAuthRepository {
       return AuthResult.success(user: domainUser);
     } on fb.FirebaseAuthException catch (fbException){
       return AuthResult.failure(FirebaseErrorsMapper.map(fbException));
+    } on DomainFailure catch (domainFailure){
+      debugPrint("ERRO DE DOMÍNIO: $domainFailure");
+      return AuthResult.failure(domainFailure);
     } catch (unknownError, st){
       return AuthResult.failure(UnknownFailure(unknownError: unknownError, stackTrace: st));
     }
