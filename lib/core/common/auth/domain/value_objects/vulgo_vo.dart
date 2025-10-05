@@ -14,6 +14,6 @@ class VulgoVo {
   }
 
   factory VulgoVo.empty(){
-    return VulgoVo("");
+    return VulgoVo._(value: "");
   }
 }
