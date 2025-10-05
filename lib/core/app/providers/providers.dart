@@ -1,3 +1,4 @@
+import 'package:demopico/core/common/auth/infra/repositories/firebase_auth_repository.dart';
 import 'package:demopico/core/common/media_management/usecases/pick_files_uc.dart';
 import 'package:demopico/core/common/media_management/usecases/pick_video_uc.dart';
 import 'package:demopico/features/home/infra/http_climate_service.dart';
@@ -21,16 +22,16 @@ import 'package:demopico/features/profile/domain/usecases/update_post_uc.dart';
 import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/post_provider.dart';
 import 'package:demopico/features/profile/presentation/view_model/screen_provider.dart';
+import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_sign_in.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_sign_up.dart';
 import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 
-
 final myProviders = [
-  // Providers de autenticação primeiro
+// Providers de autenticação primeiro
   ChangeNotifierProvider(create: (_) => AuthViewModelAccount.instance),
   ChangeNotifierProvider(create: (_) => AuthViewModelSignIn.getInstance),
   ChangeNotifierProvider(create: (_) => AuthViewModelSignUp.getInstance),
@@ -46,6 +47,11 @@ final myProviders = [
   
   ChangeNotifierProvider(
       create: (_) => ForecastProvider(null, climaService: HttpClimateService())),
+
+  StreamProvider<AuthState>(
+    create: (_) => FirebaseAuthRepository.instance.authState,
+    initialData: AuthUnauthenticated(),
+  ),
   
   // Providers de UI/estado
   ChangeNotifierProvider(create: (_) => NetworkViewModel.instance),
