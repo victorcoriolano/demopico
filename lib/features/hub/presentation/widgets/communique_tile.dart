@@ -146,13 +146,13 @@ class _CommuniqueTileState extends State<CommuniqueTile> {
                 color: Colors.black,
               ),
               const SizedBox(height: 55),
-              if (post.type == 'normal') const SizedBox(),
-              if (post.type == 'doacoesEtrocas')
+              if (post.type == TypeCommunique.normal) const SizedBox(),
+              if (post.type == TypeCommunique.donation)
                 const Icon(
                   Icons.swap_horiz_rounded,
                   color: Color.fromARGB(255, 143, 0, 0),
                 ),
-              if (post.type == 'evento')
+              if (post.type == TypeCommunique.event)
                 const Icon(
                   Icons.event,
                   color: Color.fromARGB(255, 143, 0, 0),
