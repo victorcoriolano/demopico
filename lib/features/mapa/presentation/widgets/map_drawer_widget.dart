@@ -39,7 +39,7 @@ class _MapDrawerState extends State<MapDrawer> {
                   debugPrint("authState: $authState");
                   switch (authState) {
                     case AuthAuthenticated():
-                      debugPrint("Authenticated user: ${authState.user.displayName}");
+                      debugPrint("Authenticated user: ${authState.user.displayName.value}");
                       // FIXME: PASSANDO O NOME AO INVÉS DE PASSAR O ID Pq nossa infra n tem o id
                       Get.toNamed(Paths.mySpots,
                           arguments: authState.user.displayName.value);
