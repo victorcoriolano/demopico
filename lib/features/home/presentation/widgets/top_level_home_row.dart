@@ -32,9 +32,9 @@ class _TopLevelHomeRowState extends State<TopLevelHomeRow> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     debugPrint('didChangeDependencies called in TopLevelHomeRow');
-   
+  WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_isWeatherLoaded) {
-        if (context.read<OpenWeatherProvider>()
+      if (context.read<OpenWeatherProvider>()
             .isUpdated()) {
           debugPrint('Weather data already updated, skipping load.');
           return;
@@ -42,6 +42,7 @@ class _TopLevelHomeRowState extends State<TopLevelHomeRow> {
         _loadWeather();
         _isWeatherLoaded = true;
       }
+    });
   }
 
   Future<void> _loadWeather() async {
@@ -80,23 +81,31 @@ class _TopLevelHomeRowState extends State<TopLevelHomeRow> {
                 Consumer<OpenWeatherProvider>(
                   builder: (context, provider, child) {
                     return provider.isLoading 
-                      ? Positioned(
-                          top: 110,
-                          left: 5,
-                          child: Center(
-                              child: CircularProgressIndicator(
-                            color: Theme.of(context).colorScheme.primary,
-                          )))
+                      ? Stack(
+                        children: [
+                          Positioned(
+                              top: 110,
+                              left: 5,
+                              child: Center(
+                                  child: CircularProgressIndicator(
+                                color: Theme.of(context).colorScheme.primary,
+                              ))),
+                        ],
+                      )
                     : provider.errorMessage != null
-                      ? Positioned(
-                        top: 110,
-                        left: 5,
-                        child: Center(
-                          child: Text(
-                            provider.errorMessage!,
-                            style: TextStyle(color: Colors.red),
+                      ? Stack(
+                        children: [
+                          Positioned(
+                            top: 110,
+                            left: 5,
+                            child: Center(
+                              child: Text(
+                                provider.errorMessage!,
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       )
                     
                       : ElevatedButton(
@@ -122,7 +131,7 @@ class _TopLevelHomeRowState extends State<TopLevelHomeRow> {
                           Icon(provider.value?.isDay == true ? Icons.wb_sunny : Icons.nightlight_round,
                               size: 38, color: Colors.black87),
                           SizedBox(width: 10),
-                          Text('${provider.value?.tempC}°C',
+                          Text('${provider.value?.tempC ?? "Carregando"}°C',
                               style: TextStyle(fontSize: 20, color: Colors.black87))
                           ],
                         ),
