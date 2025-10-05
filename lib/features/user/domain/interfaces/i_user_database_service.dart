@@ -17,4 +17,6 @@ abstract class IUserDataSource<DTO>{
   Future<bool> validateExistsData(String field, String value);
   //UPDATE
   Future<void> update(DTO user);
+  //DELETE
+  Future<void> delete(String id);
 }

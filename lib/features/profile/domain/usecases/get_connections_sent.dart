@@ -19,11 +19,9 @@ class GetConnectionsSentUc {
   final INetworkRepository _networkRepository;
 
 
-  Future<List<ConnectionReceiver>> execute(String userId) async {
+  Future<List<Relationship>> execute(String userId) async {
     final relationships = await _networkRepository.getRelationshipSent(userId);
-    debugPrint(relationships.toString());
-    debugPrint(relationships.map((rel) => rel.addressed).toString());
-    debugPrint("Relacionamentos enviados encontrados: ${relationships.length}");
-    return relationships.map((rel) => rel.addressed).toList();
+    debugPrint("GETCONNECTIONSSENT - Relacionamentos enviados: ${relationships.toString()} - ${relationships.length}");
+    return relationships;
   }
 }

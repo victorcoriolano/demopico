@@ -17,7 +17,7 @@ abstract class Failure implements Exception {
 
   @override
   String toString() {
-    return "Failure Error: $message, code: $code, stackTrace: $stackTrace, originalException: $originalException";
+    return "Erro: $message Código do erro: $code";
   }
 }
 

@@ -1,8 +1,15 @@
+import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
+import 'package:demopico/core/common/widgets/snackbar_utils.dart';
 import 'package:demopico/features/profile/domain/models/relationship.dart';
-import 'package:demopico/features/profile/presentation/provider/network_view_model.dart';
+import 'package:demopico/features/profile/presentation/services/verify_auth_and_get_user.dart';
+import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
 import 'package:demopico/features/profile/presentation/widgets/search_page_widgets/connection_action_card.dart';
+import 'package:demopico/features/user/domain/enums/auth_state.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class MyNetworkScreen extends StatefulWidget {
@@ -18,8 +25,15 @@ class _MyNetworkScreenState extends State<MyNetworkScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final viewModel = context.read<NetworkViewModel>();
-      await viewModel.fetchConnectionsRequests();
-      await viewModel.fetchConnectionSent();
+      final currentUser = context.read<AuthViewModelAccount>().user;
+      switch (currentUser){
+        case UserEntity():
+          await viewModel.fetchRelactionsShips(currentUser);
+        case AnonymousUserEntity():
+          //do nothing
+          
+      }
+      
     });
   }
 
@@ -95,14 +109,26 @@ class ProfileList extends StatelessWidget {
                   user: userProfiles[index],
                   actionButton: actionType == ActionType.accept
                       ? ElevatedButton(
-                          onPressed: () {
-                            // TODO IMPLEMENTAR ACEITAR SOLICITAÇÃO DE CONEXÃO
+                          onPressed: () async {
+                            final currentUser = context.read<AuthViewModelAccount>().user;
+                            final provider  = context.read<NetworkViewModel>();
+                            switch (currentUser){
+                              
+                              case UserEntity():
+                                await provider.acceptConnection(
+                                  userProfiles[index], currentUser
+                                );
+                              case AnonymousUserEntity():
+                                // some error occourred - user not logged
+                                SnackbarUtils.userNotLogged(context);
+                            }
+                           
                           },
                           child: const Text('Aceitar'),
                         )
                       : ElevatedButton(
-                          onPressed: () {
-                            // TODO IMPLEMENTAR CANCELAR SOLICITAÇÃO DE CONEXÃO
+                          onPressed: () async {
+                            await context.read<NetworkViewModel>().cancelRelationship(userProfiles[index]);
                           },
                           child: const Text('Cancelar'),
                         ),

@@ -39,7 +39,7 @@ void main(){
         firestore.collection("posts").doc("456").set(listDto[1].data),
       ]).then((value) => debugPrint("Criou os documentos"));
 
-      final list = await firebasePostDatasource.getPosts(mockPost1.userId);
+      final list = await firebasePostDatasource.getPostsByUserId(mockPost1.userId);
       expect(list.length, equals(2));
       expect(list[0].data["nome"], "João Silva");
     });

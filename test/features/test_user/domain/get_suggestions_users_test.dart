@@ -6,7 +6,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 import '../../mocks/mocks_connections.dart';
-import '../../mocks/mocks_profile.dart';
+import '../../mocks/mocks_users.dart';
 
 class UsersRepositoryMock extends Mock implements IUsersRepository {}
 class NetworkRepositoryMock extends Mock implements INetworkRepository {}

@@ -1,24 +1,14 @@
-import 'package:demopico/core/common/errors/failure_server.dart';
-import 'package:demopico/core/common/errors/repository_failures.dart';
-import 'package:demopico/features/user/domain/interfaces/i_user_database_repository.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
-import 'package:flutter/foundation.dart';
+import 'package:demopico/features/profile/domain/models/profile_result.dart';
+import 'package:demopico/features/profile/domain/models/profile_user.dart';
+import 'package:demopico/features/profile/domain/interfaces/i_profile_repository.dart';
 
 class UpdateProfile {
-  final IUserDataRepository _userDataRepository;
+  final IProfileRepository _profileRepository;
 
-  UpdateProfile({required IUserDataRepository userDataRepository})
-      : _userDataRepository = userDataRepository;
+  UpdateProfile({required IProfileRepository userDataRepository})
+      : _profileRepository = userDataRepository;
 
-  Future<void> updateProfile(UserM user) async {
-    try {
-      await _userDataRepository.updateUserDetails(user);
-    } on Failure catch (e) {
-      debugPrint('UC - ERROR KNOWN: $e');
-      rethrow;
-    } catch (e) {
-      debugPrint('UC - ERROR UNKNOWN: $e');
-      throw UnknownFailure(unknownError: e);
-    }
+  Future<ProfileResult> updateProfile(Profile profileUpdated) async {
+    return  await _profileRepository.updateProfile(profileUpdated);
   }
 }

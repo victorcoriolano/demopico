@@ -12,6 +12,6 @@ class GetPostUc {
 
   Future<List<Post>> execute(String userId) async {
     debugPrint('GetPostUc: Execute called');
-    return await _postRepository.getPosts(userId);
+    return await _postRepository.getPostsByUser(userId);
   }
 }

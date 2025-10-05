@@ -1,11 +1,15 @@
-import 'package:demopico/features/profile/presentation/provider/post_provider.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
+import 'package:demopico/features/profile/presentation/services/verify_auth_and_get_user.dart';
+import 'package:demopico/features/profile/presentation/view_model/post_provider.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/card_post_widget.dart';
-import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
+import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ContainerPostsWidget extends StatefulWidget {
-  const ContainerPostsWidget({super.key});
+  final UserEntity user;
+  const ContainerPostsWidget({super.key, required this.user});
 
   @override
   State<ContainerPostsWidget> createState() => _ContainerPostsWidgetState();
@@ -17,16 +21,23 @@ class _ContainerPostsWidgetState extends State<ContainerPostsWidget> {
   @override
   void initState() {
     super.initState();
-    
+    _postProvider = context.read<PostProvider>();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _postProvider = context.read<PostProvider>();
       _getPost();
     });
   }
 
   Future<void> _getPost() async {
-    final userId = context.read<UserDataViewModel>().user?.id;
-    await _postProvider.loadPosts(userId!);
+    final user = context.read<AuthViewModelAccount>().user;
+    debugPrint(user.toString());
+    switch (user){
+      
+      case UserEntity():
+        await _postProvider.loadPosts(user.id);
+
+      case AnonymousUserEntity():
+        // do nothing
+    }
   }
 
   @override

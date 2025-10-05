@@ -1,5 +1,5 @@
 import 'package:demopico/core/app/theme/theme.dart';
-import 'package:demopico/features/profile/presentation/provider/post_provider.dart';
+import 'package:demopico/features/profile/presentation/view_model/post_provider.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/video_player_from_network.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

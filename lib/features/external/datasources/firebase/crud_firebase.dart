@@ -47,16 +47,23 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
   @override
   Future<FirebaseDTO> read(String id)async{
     try {
+      debugPrint(collection.name);
       final docRf = await _firestore.collection(collection.name).doc(id).get(
         GetOptions(source: Source.serverAndCache)
       );
-      if (!docRf.exists || docRf.data() == null) throw DataNotFoundFailure(dataID: id); 
+      if (!docRf.exists || docRf.data() == null) {
+        debugPrint("Dados não encontrados: ${docRf.exists} - ${docRf.data()}");
+        throw DataNotFoundFailure(dataID: id);
+      } 
       return FirebaseDTO(
         id: id, 
         data: docRf.data()!);
     } on FirebaseException catch (e) {
       debugPrint("Data Source Error: $e");
       throw FirebaseErrorsMapper.map(e);
+    } catch (unknownError, st){
+      debugPrint("Erro não reconhecido");
+      throw UnknownFailure(unknownError: unknownError,stackTrace: st);
     }
   }
   
@@ -141,6 +148,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
   @override
   Future<List<FirebaseDTO>> readAllWithFilter(String field, String value) async {
     try {
+      debugPrint("Lendo com filtro $field = $value");
       final query = await _firestore.collection(collection.name).where(field, isEqualTo: value).get();
       return query.docs.map((doc) {
         return FirebaseDTO(id: doc.id, data: doc.data());

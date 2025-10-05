@@ -12,7 +12,7 @@ abstract class INetworkDatasource<DTO> {
   // para criar 
   Future<DTO> createConnection(DTO dto);
   // para deletar conexão 
-  Future<void> deleteConnection(DTO dto);
+  Future<void> deleteConnection(String id);
   // para atualizar: recusar, aceitar.
   Future<DTO> updateConnection(DTO dto);
 }

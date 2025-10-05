@@ -1,6 +1,6 @@
 import 'package:demopico/core/common/widgets/snackbar_utils.dart';
 import 'package:demopico/features/mapa/presentation/controllers/comment_controller.dart';
-import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
+import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -74,17 +74,17 @@ class _CommentPageState extends State<CommentPage> {
                     labelText: 'Adicionar comentário',
                     suffixIcon: IconButton(
                       icon: const Icon(Icons.send),
-                      onPressed: () {
+                      onPressed: _controller.text.isNotEmpty ? () {
                         final content = _controller.text;
-                        final user = context.read<UserDataViewModel>().user;
-                        if (user == null){
-                          SnackbarUtils.userNotLogged(context);
+                        final auth = context.watch<AuthState>();
+                        switch (auth){
+                          case AuthAuthenticated():
+                            provider.addComment(widget.picoId, content, auth.user.id);
+                            _controller.clear();
+                          case AuthUnauthenticated():
+                            return SnackbarUtils.userNotLogged(context);
                         }
-                        if (content.isNotEmpty) {
-                          provider.addComment(widget.picoId, content, user!.id);
-                          _controller.clear();
-                        }
-                      },
+                      } : null,
                     ),
                   ),
                 ),

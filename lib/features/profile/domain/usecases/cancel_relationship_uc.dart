@@ -18,7 +18,7 @@ class CancelRelationshipUc {
       : _networkRepository = networkRepository;
 
   Future<void> execute(Relationship relationship) async {
-    await _networkRepository.deleteRelationship(relationship);
+    await _networkRepository.deleteRelationship(relationship.id);
   }
 
 }

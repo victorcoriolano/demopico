@@ -1,7 +1,7 @@
 import 'package:demopico/features/profile/presentation/pages/chat_room_page.dart';
 import 'package:demopico/features/profile/presentation/pages/profile_page.dart';
 import 'package:demopico/features/profile/presentation/pages/search_profile_page.dart';
-import 'package:demopico/features/profile/presentation/provider/screen_provider.dart';
+import 'package:demopico/features/profile/presentation/view_model/screen_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_navigator_widget.dart';

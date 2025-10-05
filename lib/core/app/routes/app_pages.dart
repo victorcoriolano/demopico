@@ -6,6 +6,7 @@ import 'package:demopico/features/mapa/presentation/pages/add_pico_pages.dart/cr
 import 'package:demopico/features/mapa/presentation/pages/favorites_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/history_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/map_page.dart';
+import 'package:demopico/features/mapa/presentation/pages/my_spots_page.dart';
 import 'package:demopico/features/profile/presentation/bidings/auth_biding.dart';
 import 'package:demopico/features/profile/presentation/pages/chat_room_page.dart';
 import 'package:demopico/features/profile/presentation/pages/create_post_page.dart';
@@ -13,6 +14,7 @@ import 'package:demopico/features/profile/presentation/pages/edit_profile_page.d
 import 'package:demopico/features/profile/presentation/pages/my_network_page.dart';
 import 'package:demopico/features/profile/presentation/pages/search_profile_page.dart';
 import 'package:demopico/features/profile/presentation/pages/screens_profile.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:demopico/features/user/presentation/pages/login_page.dart';
 import 'package:demopico/features/user/presentation/pages/register_page.dart';
 import 'package:get/get.dart';
@@ -23,10 +25,10 @@ class AppPages {
   static final routes = <GetPage>[
     //mapa
     GetPage(
-      binding: AuthBiding(),
+      binding: AuthBinding(),
       name: Paths.favoriteSpot,
       page: () => FavoriteSpotPage(),
-      middlewares: [Middleware()],
+      middlewares: [Middleware(AuthViewModelAccount.instance)],
     ),
     GetPage(
       name: Paths.historySpot,
@@ -36,37 +38,48 @@ class AppPages {
       name: Paths.map,
       page: () => MapPage(),
     ),
-    
-    //profile
     GetPage(
-      binding: AuthBiding(),
-      name: Paths.searchProfile,
-      page: () => SearchProfilePage(),
-      middlewares: [Middleware()],
+      binding: AuthBinding(),
+      name: Paths.mySpots,
+      page: () => MySpotsPage(),
+      middlewares: [Middleware(AuthViewModelAccount.instance)],
     ),
     GetPage(
-        binding: AuthBiding(),
+      name: Paths.favoriteSpot, 
+      page: () => FavoriteSpotPage(),
+      middlewares: [Middleware(AuthViewModelAccount.instance)],
+    ),
+
+    //profile
+    GetPage(
+      binding: AuthBinding(),
+      name: Paths.searchProfile,
+      page: () => SearchProfilePage(),
+      middlewares: [Middleware(AuthViewModelAccount.instance)],
+    ),
+    GetPage(
+        binding: AuthBinding(),
         name: Paths.profile,
         page: () => ScreensProfile(),
-        middlewares: [Middleware()],
+        middlewares: [Middleware(AuthViewModelAccount.instance)],
         transition: Transition.rightToLeft),
     GetPage(
-        binding: AuthBiding(),
+        binding: AuthBinding(),
         name: Paths.chat,
         page: () => ChatRoomPage(),
-        middlewares: [Middleware()],
+        middlewares: [Middleware(AuthViewModelAccount.instance)],
         transition: Transition.rightToLeft),
     GetPage(
-        binding: AuthBiding(),
+        binding: AuthBinding(),
         name: Paths.createPostPage,
         page: () => CreatePostPage(),
         transition: Transition.downToUp),
     GetPage(
-        binding: AuthBiding(),
+        binding: AuthBinding(),
         name: Paths.editProfile,
         page: () => EditProfilePage(),
         transition: Transition.circularReveal,
-        middlewares: [Middleware()]),
+        middlewares: [Middleware(AuthViewModelAccount.instance)]),
     
     //hub
     GetPage(
@@ -89,14 +102,14 @@ class AppPages {
 
     //home
     GetPage(
-      binding: AuthBiding(),
+      binding: AuthBinding(),
       name: Paths.home,
       page: () => HomePage(),
       transition: Transition.native,
     ),
 
     GetPage(
-      binding: AuthBiding(),
+      binding: AuthBinding(),
       name: Paths.myNetwork,
       page: () => MyNetworkScreen(),
       transition: Transition.fadeIn,

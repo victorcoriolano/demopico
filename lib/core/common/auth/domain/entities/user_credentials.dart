@@ -1,47 +1,55 @@
-import 'package:demopico/features/user/domain/enums/identifiers.dart';
+import 'package:demopico/core/common/auth/domain/value_objects/email_vo.dart';
+import 'package:demopico/core/common/auth/domain/value_objects/location_vo.dart';
+import 'package:demopico/core/common/auth/domain/value_objects/password_vo.dart';
+import 'package:demopico/core/common/auth/domain/value_objects/vulgo_vo.dart';
 import 'package:demopico/features/user/domain/enums/sign_methods.dart';
 
 
-class UserCredentialsSignIn {
-  final Identifiers identifier;
-  String login; // não é final por que pode mudar no caso de logar com o vulgo no qual irá alterar o login em tempo de execução
-  final String senha;
+
+class EmailCredentialsSignIn  {
+  final EmailVO identifier;
+  final PasswordVo senha;
   final SignMethods signMethod;
 
-  UserCredentialsSignIn({
-    SignMethods? signMethods, 
+  EmailCredentialsSignIn({
+    SignMethods? signMethods,
     required this.identifier,
-    required this.login,
     required this.senha,
   }) : signMethod = signMethods ?? SignMethods.email;
+}
 
-  // método para alterar login no caso de ir logar 
-  void setLogin(String login){
-    this.login = login;
-  }
+class VulgoCredentialsSignIn  {
+  VulgoCredentialsSignIn({
+    required this.password,
+    required this.vulgo,
+  });
+
+  final PasswordVo password;
+  final VulgoVo vulgo;
+}
+
+class GoogleCredentialsSignIn  {
+  GoogleCredentialsSignIn({
+    required this.token,
+  });
+
+  final String token;
 }
 
 
-class UserCredentialsSignUp {
-  String uid;
-  //não é final em caso de validação no use case.
-  String nome;
-  String email;
-  final bool isColetivo;
-  final SignMethods signMethod;
-  final String password;
-  
-
-  UserCredentialsSignUp({
-    required this.password,
-    SignMethods? signMethods, 
-    required this.uid,
-    required this.nome,
-    required this.isColetivo,
+class NormalUserCredentialsSignUp {
+  NormalUserCredentialsSignUp({
+    required this.vulgo,
     required this.email,
-  }): signMethod = signMethods ?? SignMethods.email;
+    required this.password,
+    this.avatar,
+    this.location,
+  });
 
-  set id(String value){
-    uid = value;
-  }
+  final VulgoVo vulgo;
+  final EmailVO email;
+  final PasswordVo password;
+  final String? avatar;
+  final LocationVo? location;
+
 }

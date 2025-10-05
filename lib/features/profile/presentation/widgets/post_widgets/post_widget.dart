@@ -1,14 +1,19 @@
 import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';
-import 'package:demopico/features/profile/presentation/provider/post_provider.dart';
+import 'package:demopico/features/profile/presentation/services/verify_is_my.dart';
+import 'package:demopico/features/profile/presentation/view_model/post_provider.dart';
 import 'package:demopico/features/profile/presentation/view_objects/media_url_item.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/video_player_from_network.dart';
-import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_sign_in.dart';
+import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class PostWidget extends StatefulWidget {
   final Post post;
+  
 
   const PostWidget({super.key, required this.post});
 
@@ -23,20 +28,33 @@ class _PostWidgetState extends State<PostWidget> {
   int curtidas = 0;
   late final PostProvider _provider;
   final urlsItems = [];
-  bool isMypost = true;
+  late bool isMypost;
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
     curtidas = widget.post.curtidas;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      isMypost =
-          context.read<UserDataViewModel>().user!.isMy(widget.post.userId);
-      _provider = Provider.of(context, listen: false);
-      urlsItems.addAll(_provider.getMediaItemsFor(widget.post));
-      setState(() {});
-    });
+    
+  }
+
+  @override
+  void didChangeDependencies() async{
+    super.didChangeDependencies();
+    final currentUser = context.read<AuthViewModelAccount>().user;
+    switch (currentUser) {
+      case UserEntity():
+        final userId = currentUser.id;
+         await context.read<PostProvider>().loadPosts(userId);
+         if (mounted){
+          isMypost = VerifyIsMy.isMy(widget.post.userId, context);
+          _provider = context.read<PostProvider>();
+          urlsItems.addAll(_provider.getMediaItemsFor(widget.post));
+         }
+      case AnonymousUserEntity():
+        // do nothing
+        break; 
+    }
   }
 
   @override
@@ -69,7 +87,9 @@ class _PostWidgetState extends State<PostWidget> {
                     Row(
                       children: [
                         CircleAvatar(
-                          backgroundImage: NetworkImage(post.urlUserPhoto),
+                          backgroundImage: post.avatar != null 
+                            ? NetworkImage(post.avatar!)
+                            : AssetImage("assets/images/userPhoto"),
                           radius: 24,
                         ),
                         const SizedBox(width: 12),
