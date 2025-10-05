@@ -53,8 +53,7 @@ class _MapDrawerState extends State<MapDrawer> {
                   onPressed: () {
                     switch (authState) {
                       case AuthAuthenticated():
-                        // FIXME: PASSANDO O NOME AO INVÉS DE PASSAR O ID Pq nossa infra n tem o id
-                        Get.toNamed(Paths.mySpots,
+                        Get.toNamed(Paths.favoriteSpot,
                             arguments: authState.user.id);
                       case AuthUnauthenticated():
                         SnackbarUtils.userNotLogged(context);
