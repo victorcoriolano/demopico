@@ -2,7 +2,6 @@ import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spots_controller.dart';
 import 'package:demopico/features/mapa/presentation/widgets/pico_card.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:get/route_manager.dart';
 import 'package:provider/provider.dart';
 

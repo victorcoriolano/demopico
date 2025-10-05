@@ -38,6 +38,7 @@ class FavoriteSpotController extends ChangeNotifier {
 
   Future<void> getPicosSalvos(String idUser) async {
     isLoading = true;
+    error = null;
     picosFavoritos.clear();
     try {
       debugPrint("Busca de picos salvos");
