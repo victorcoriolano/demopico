@@ -33,7 +33,8 @@ class _CentralPageState extends State<CentralPage> {
         children: [
           Column(
             children: [
-              Stack(children: [
+              Stack(
+                children: [
                 CentralPageBackground(),
                 /* Consumer<OpenWeatherProvider>(
                   builder: (context, weatherProvider, child) {

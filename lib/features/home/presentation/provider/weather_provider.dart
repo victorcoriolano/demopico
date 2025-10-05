@@ -30,7 +30,6 @@ class OpenWeatherProvider extends ValueNotifier<CurrentWeatherModel?> {
     final Map<String, dynamic> weatherData;
     //Notifica que está carregando
     isLoading = true;
-    notifyListeners();
     debugPrint('PROVIDERMETHOD: Fetching weather data...');
     try {
       //Requisição GET para a API de clima (weatherapi)

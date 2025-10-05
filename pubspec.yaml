@@ -68,9 +68,11 @@ flutter:
       - family: Misfit
         fonts:
           - asset: assets/fonts/Misfit.ttf
+         
     uses-material-design: true
     assets:
       - .env
       - assets/images/
       - assets/images/icons/
+      
 
