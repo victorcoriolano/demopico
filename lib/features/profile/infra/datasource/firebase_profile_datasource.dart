@@ -23,7 +23,8 @@ class FirebaseProfileDatasource implements IProfileDataSource<FirebaseDTO>{
 
   @override
   Future<FirebaseDTO> createProfile(FirebaseDTO profile) async  {
-    return await _crudFirebase.create(profile);
+    debugPrint("Data source - criando profile: $profile");
+    return await _crudFirebase.setData(profile.id, profile);
   }
 
   @override
