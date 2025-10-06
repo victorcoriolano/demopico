@@ -62,7 +62,6 @@ class _ProfilePageState extends State<ProfilePage>
     final currentUser = AuthViewModelAccount.instance.user;
     switch (currentUser) {
       case UserEntity():
-        context.read<NetworkViewModel>().fetchSugestions(currentUser);
         user = currentUser;
       case AnonymousUserEntity():
         // do nothing
