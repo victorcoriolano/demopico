@@ -36,7 +36,7 @@ final ThemeData appTheme = ThemeData(
 
   colorScheme:  ColorScheme.fromSeed(
     seedColor: kRed,
-    
+    shadow: kAlmostWhite,
     brightness: Brightness.light,
 
     primary: kRed,
