@@ -51,13 +51,9 @@ class NetworkRepository implements INetworkRepository {
   
   @override
   Future<List<Relationship>> getRelationshipAccepted(String userID) {
-    return _datasource.getRelactionships(
-      fieldRequest: "requesterUserID.id",
-      valueID: userID,
-      fieldOther: "status",
-      valorDoStatus: RequestConnectionStatus.accepted.name,
+    return _datasource.getAcceptedRelationships(idUser: userID
     ).then((dtos) {
-      debugPrint("DTOs recebidos: ${dtos.length}");
+      debugPrint("DTOs recebidos - relacionamentos aceitos: ${dtos.length}");
       return dtos.map((dto) => mapperConnection.toModel(dto)).toList();
     });
   }
@@ -71,7 +67,7 @@ class NetworkRepository implements INetworkRepository {
       fieldOther: "status",
       valorDoStatus: RequestConnectionStatus.pending.name,
     ).then((dtos) {
-      debugPrint("DTOs recebidos: ${dtos.length}");
+      debugPrint("DTOs recebidos - que o user requisitou: ${dtos.length}");
       return dtos.map((dto) => mapperConnection.toModel(dto)).toList();
     });
   }
@@ -84,7 +80,7 @@ class NetworkRepository implements INetworkRepository {
       fieldOther: "status",
       valorDoStatus: RequestConnectionStatus.pending.name,
     ).then((dtos) {
-      debugPrint("DTOs recebidos: ${dtos.length}");
+      debugPrint("DTOs recebidos relacionamentos que o user enviou: ${dtos.length}");
       return dtos.map((dto) => mapperConnection.toModel(dto)).toList();
     });
   }
