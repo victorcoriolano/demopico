@@ -44,6 +44,7 @@ class HubProvider extends ChangeNotifier {
   }
 
   void watchCommuniques(String server, String collectionPath) async {
+      _allCommuniques = [];
       _watcher = listarComunicado.listar(server,collectionPath).listen((allCommuniquesFromDb) {
         _allCommuniques = allCommuniquesFromDb.toList();
         notifyListeners();
