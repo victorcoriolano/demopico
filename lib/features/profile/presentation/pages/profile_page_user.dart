@@ -47,6 +47,7 @@ class _ProfilePageUserState extends State<ProfilePageUser>
     switch (userVM) {
       case UserEntity():
         _isMyFriend = userVM.profileUser.connections.contains(profile.userID);
+        debugPrint("Este perfil é meu amigo ? $_isMyFriend");
       case AnonymousUserEntity():
         _isMyFriend = false;
     }
