@@ -101,6 +101,7 @@ class ProfileList extends StatelessWidget {
             child: Text('Nenhum usuário encontrado'),
           )
         : ListView.builder(
+            shrinkWrap: true, 
             itemCount: userProfiles.length,
             itemBuilder: (context, index) {
               return Card(
@@ -113,7 +114,6 @@ class ProfileList extends StatelessWidget {
                             final currentUser = context.read<AuthViewModelAccount>().user;
                             final provider  = context.read<NetworkViewModel>();
                             switch (currentUser){
-                              
                               case UserEntity():
                                 await provider.acceptConnection(
                                   userProfiles[index], currentUser
