@@ -58,7 +58,7 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    if (server == 'serverGlobal') {
+    if (server != 'serverOutros') {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         context.read<HubProvider>().watchCommuniques(server, 'mensagens');
       });
@@ -68,7 +68,7 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
 
     _tabController.addListener(() {
       if (!_tabController.indexIsChanging) {
-        if (_tabController.index == 0 && server != 'serverGlobal') {
+        if (_tabController.index == 0 ) {
           setState(() {
             server = 'serverGlobal';
           });
