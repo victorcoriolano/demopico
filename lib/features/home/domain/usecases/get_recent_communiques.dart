@@ -16,6 +16,8 @@ class GetRecentCommuniques {
   }) : _repository = repository;
 
   Future<List<Communique>> call() async {
-    return await _repository.recentCommunique;
+    String docRef = 'serverGlobal';
+    String collectionPath = 'mensagens';
+    return await _repository.watchCommuniques(docRef, collectionPath).first;
   }
 }
