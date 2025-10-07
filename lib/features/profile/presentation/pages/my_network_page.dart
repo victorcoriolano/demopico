@@ -28,7 +28,7 @@ class _MyNetworkScreenState extends State<MyNetworkScreen> {
       final currentUser = context.read<AuthViewModelAccount>().user;
       switch (currentUser){
         case UserEntity():
-          await viewModel.fetchRelactionsShips(currentUser);
+          await viewModel.fetchRelactionships(currentUser);
         case AnonymousUserEntity():
           //do nothing
           
@@ -88,7 +88,7 @@ enum ActionType {
 }
 
 class ProfileList extends StatelessWidget {
-  final List<ReciverRequesterBase> userProfiles;
+  final List<BasicInfoUser> userProfiles;
   final ActionType actionType;
 
   const ProfileList(
@@ -122,7 +122,6 @@ class ProfileList extends StatelessWidget {
                                 // some error occourred - user not logged
                                 SnackbarUtils.userNotLogged(context);
                             }
-                           
                           },
                           child: const Text('Aceitar'),
                         )

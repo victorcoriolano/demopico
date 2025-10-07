@@ -4,9 +4,9 @@ var dummyConnections = [
   Relationship(
       id: "id",
       createdAt: DateTime.now(),
-      requesterUser: ConnectionRequester(
+      requesterUser: BasicInfoUser(
           id: "userID", name: "name", profilePictureUrl: "profilePictureUrl"),
-      addressed: ConnectionReceiver(
+      addressed: BasicInfoUser(
           id: "addressedId",
           name: "addressedName",
           profilePictureUrl: "addressedProfilePictureUrl"),
@@ -15,9 +15,9 @@ var dummyConnections = [
   Relationship(
       id: "id",
       createdAt: DateTime.now(),
-      requesterUser: ConnectionRequester(
+      requesterUser: BasicInfoUser(
           id: "userID1", name: "name", profilePictureUrl: "profilePictureUrl"),
-      addressed: ConnectionReceiver(
+      addressed: BasicInfoUser(
           id: "addressedId",
           name: "addressedName",
           profilePictureUrl: "addressedProfilePictureUrl"),
@@ -26,9 +26,9 @@ var dummyConnections = [
   Relationship(
       id: "id",
       createdAt: DateTime.now(),
-      requesterUser: ConnectionRequester(
+      requesterUser: BasicInfoUser(
           id: "userID2", name: "name", profilePictureUrl: "profilePictureUrl"),
-      addressed: ConnectionReceiver(
+      addressed: BasicInfoUser(
           id: "addressedId2",
           name: "addressedName2",
           profilePictureUrl: "addressedProfilePictureUrl2"),
@@ -38,9 +38,9 @@ var dummyConnections = [
   Relationship(
       id: "id",
       createdAt: DateTime.now(),
-      requesterUser: ConnectionRequester(
+      requesterUser: BasicInfoUser(
           id: "userID3", name: "name", profilePictureUrl: "profilePictureUrl"),
-      addressed: ConnectionReceiver(
+      addressed: BasicInfoUser(
           id: "addressedId3",
           name: "addressedName3",
           profilePictureUrl: "addressedProfilePictureUrl3"),
@@ -50,9 +50,9 @@ var dummyConnections = [
   Relationship(
       id: "id",
       createdAt: DateTime.now(),
-      requesterUser: ConnectionRequester(
+      requesterUser: BasicInfoUser(
           id: "userID4", name: "name", profilePictureUrl: "profilePictureUrl"),
-      addressed: ConnectionReceiver(
+      addressed: BasicInfoUser(
           id: "addressedId4",
           name: "addressedName4",
           profilePictureUrl: "addressedProfilePictureUrl4"),
