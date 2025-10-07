@@ -29,9 +29,9 @@ class HubProvider extends ChangeNotifier {
 
   StreamSubscription? _watcher;
 
-  Future<void> postHubCommunique(String text, TypeCommunique type, UserM user) async {
+  Future<void> postHubCommunique(String text, TypeCommunique type, UserM user, String server) async {
     try {
-      await postarComunicado.postar(Communique.initial(text, type, user));
+      await postarComunicado.postar(Communique.initial(text, type, user, server));
     } on Failure catch (e) {
       Get.snackbar(
         'Erro',
