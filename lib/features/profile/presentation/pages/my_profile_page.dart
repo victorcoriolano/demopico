@@ -16,14 +16,14 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+class MyProfilePage  extends StatefulWidget {
+  const MyProfilePage({super.key});
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<MyProfilePage> createState() => _MyProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage>
+class _MyProfilePageState extends State<MyProfilePage>
     with TickerProviderStateMixin {
   late UserEntity? user;
   bool _isVisible = true;
@@ -212,7 +212,7 @@ class _ProfilePageState extends State<ProfilePage>
                         padding: const EdgeInsets.all(0),
                         height: screenHeight * 0.55,
                         child: ProfilePostsWidget(
-                          user: user!,
+                          profile: user!.profileUser,
                           controller: _tabController,
                         ),
                       ),

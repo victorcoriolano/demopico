@@ -11,7 +11,7 @@ class ScreensProfile extends StatelessWidget {
   const ScreensProfile({super.key});
 
   final List<Widget> _pages = const [
-    ProfilePage(),
+    MyProfilePage(),
     SearchProfilePage(),
     ChatRoomPage(),
   ];

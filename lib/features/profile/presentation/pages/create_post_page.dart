@@ -146,7 +146,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                         'Postagem criada com sucesso!',
                         snackPosition: SnackPosition.TOP,
                       );
-                      Get.offAll(() => const ProfilePage());
+                      Get.offAll(() => const MyProfilePage());
                     }catch (e){
                       Get.snackbar(
                         'Erro',
