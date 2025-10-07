@@ -1,6 +1,7 @@
 import 'package:demopico/features/user/domain/models/user.dart';
 
 class Communique {
+  final String server;
   final String id;
   final String uid;
   final String? pictureUrl;
@@ -12,6 +13,7 @@ class Communique {
   final TypeCommunique type;
 
   Communique({
+    required this.server,
     required this.id,
     required this.uid,
     required this.vulgo,
@@ -23,9 +25,10 @@ class Communique {
     required this.type,
   });
 
-  factory Communique.initial(String content, TypeCommunique type, UserM user) {
+  factory Communique.initial(String content, TypeCommunique type, UserM user, String server) {
     return Communique(
       id: '',
+      server:  server ?? 'serverGlobal',
       uid: user.id,
       vulgo: user.name,
       text: content,
@@ -44,6 +47,7 @@ class Communique {
       uid: json['uid'],
       vulgo: json['vulgo'],
       text: json['text'],
+      server: json['server'] ?? 'serverGlobal',
       timestamp: json['timestamp'],
       pictureUrl: json['pictureUrl'],
       likeCount: json['likeCount'],
@@ -59,6 +63,7 @@ class Communique {
       'uid': uid,
       'vulgo': vulgo,
       'text': text,
+      'server': server,
       'pictureUrl': pictureUrl,
       'timestamp': timestamp,
       'likeCount': likeCount,
