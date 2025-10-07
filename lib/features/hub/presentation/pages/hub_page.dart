@@ -1,10 +1,10 @@
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:demopico/features/hub/presentation/providers/hub_provider.dart';
 import 'package:demopico/features/hub/presentation/widgets/communique_tile.dart';
 import 'package:demopico/features/hub/presentation/widgets/input_box.dart';
 import 'package:demopico/features/hub/presentation/widgets/servidores_card.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
-import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,11 +18,11 @@ class HubPage extends StatefulWidget {
 }
 
 class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
+  UserEntity? user;
   bool isChoosingType = false;
   bool _isDonation = false;
   bool _isEvent = false;
   TypeCommunique selectedType = TypeCommunique.normal;
-  UserM? user;
   String server = 'serverGlobal';
   final servidores = [
     {
@@ -89,7 +89,7 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
   }
 
   Future<void> _handleSendAction(String message) async {
-    user ??= context.read<UserDataViewModel>().user;
+    user ??= context.read<AuthViewModelAccount>().user as UserEntity;
     await context
         .read<HubProvider>()
         .postHubCommunique(message, selectedType, user!, server);
@@ -140,6 +140,7 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
             ),
 
             TabBar(
+              dividerColor: Colors.transparent,
               labelColor: const Color.fromARGB(255, 107, 7, 7),
               unselectedLabelColor: Colors.black54,
               indicatorColor: const Color.fromARGB(255, 107, 7, 7),
@@ -148,6 +149,13 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
                 Tab(text: "Geral"),
                 Tab(text: "Servidores"),
               ],
+              onTap: (value) => setState(() {
+                if (value == 0) {
+                  server = 'serverGlobal';
+                } else if (value == 1) {
+                  server = 'serverOutros';
+                }
+              }),
             ),
 
             Expanded(
@@ -183,31 +191,32 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
                           );
                         },
                       ),
-
-                      // Aba Servidores
                       Container(
-                        color: const Color.fromARGB(255, 207, 212, 216),
+                    
                         child: server == 'serverOutros'
-                            ? Center(
-                                child: ListView(
-                                children: servidores
-                                    .map((servidor) => ServidoresCard(
-                                          serverName: servidor["name"]!,
-                                          serverImage: servidor["image"]!,
-                                          servidorPath: servidor["path"]!,
-                                          onTap: () {
-                                            setState(() {
-                                              server = servidor["path"]!;
-                                            });
-
-                                            context
-                                                .read<HubProvider>()
-                                                .watchCommuniques(
-                                                    server, 'mensagens');
-                                          },
-                                        ))
-                                    .toList(),
-                              ))
+                            ? Container(
+                              margin: EdgeInsets.only(top: 10),
+                              child: Center(
+                                  child: ListView(
+                                  children: servidores
+                                      .map((servidor) => ServidoresCard(
+                                            serverName: servidor["name"]!,
+                                            serverImage: servidor["image"]!,
+                                            servidorPath: servidor["path"]!,
+                                            onTap: () {
+                                              setState(() {
+                                                server = servidor["path"]!;
+                                               context
+                                                  .read<HubProvider>()
+                                                  .watchCommuniques(
+                                                      server, 'mensagens');
+                                              });
+                                              
+                                            },
+                                          ))
+                                      .toList(),
+                                )),
+                            )
                             : ListView.builder(
                                 itemCount: provider.allCommuniques.length,
                                 itemBuilder: (context, index) {
@@ -233,6 +242,8 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
                 },
               ),
             ),
+
+            //INPUT
           server == 'serverOutros'
               ? const SizedBox.shrink()
               :  Padding(
