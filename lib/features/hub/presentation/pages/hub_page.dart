@@ -22,35 +22,21 @@ class _HubPageState extends State<HubPage> {
   bool _isEvent = false;
   TypeCommunique selectedType = TypeCommunique.normal;
   UserM? user;
+  String server = 'serverGlobal';
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<HubProvider>().watchCommuniques();
+      context.read<HubProvider>().watchCommuniques(server, 'mensagens');
     });
   }
 
   Future<void> _handleSendAction(String message) async {
     user ??= context.read<UserDataViewModel>().user;
-    await context.read<HubProvider>().postHubCommunique(message, selectedType, user!, 'serverGlobal');
-  }
-
-  List<PopupMenuEntry<String>> itemBuilder(BuildContext context) {
-    return [
-      PopupMenuItem<String>(
-        value: 'option1',
-        child: Text('Global'),
-      ), 
-      PopupMenuItem<String>(
-        value: 'option2',
-        child: Text('Estado de São Paulo'),
-      ),
-      PopupMenuItem<String>(
-        value: 'option2',
-        child: Text('Zona Oeste'),
-      ),
-    ];
+    await context
+        .read<HubProvider>()
+        .postHubCommunique(message, selectedType, user!, server);
   }
 
   @override
@@ -61,7 +47,7 @@ class _HubPageState extends State<HubPage> {
       initialIndex: 0,
       length: 2,
       child: Scaffold(
-        backgroundColor:     const Color.fromARGB(220, 238, 238, 238),
+        backgroundColor: const Color.fromARGB(220, 238, 238, 238),
         body: SafeArea(
           child: Column(
             children: [
@@ -82,7 +68,8 @@ class _HubPageState extends State<HubPage> {
                           child: IconButton(
                             onPressed: () => Get.back(),
                             icon: const Image(
-                              image: AssetImage("assets/images/icons/fist-icon.png"),
+                              image: AssetImage(
+                                  "assets/images/icons/fist-icon.png"),
                               width: 32,
                               height: 32,
                               color: Colors.white,
@@ -99,14 +86,6 @@ class _HubPageState extends State<HubPage> {
                             color: Colors.white,
                           ),
                         ),
-                            Positioned(
-                          right: 10,
-                          child: PopupMenuButton(itemBuilder: itemBuilder, 
-                          icon: const Icon(Icons.arrow_drop_down_circle_sharp, color: Colors.white), 
-                          color: Colors.white, 
-                          iconSize: 30,
-                          ),
-                        ),
                       ],
                     ),
                   ),
@@ -121,18 +100,20 @@ class _HubPageState extends State<HubPage> {
                     onTap: (index) {
                       setState(() {
                         if (index == 0) {
-                          selectedType = TypeCommunique.normal;
+                          server = 'serverGlobal';
+                          print(server);
                         } else if (index == 1) {
-                          selectedType = TypeCommunique.event;
-                        } else if (index == 2) {
-                          selectedType = TypeCommunique.donation;
+                          server = 'serverOutros';
+                          print(server);
+                
                         }
+                      context.read<HubProvider>().watchCommuniques(server, 'mensagens');
                       });
                     },
                   ),
                 ],
               ),
-      
+
               // =================== POSTS ===================
               Expanded(
                 child: Container(
@@ -140,6 +121,7 @@ class _HubPageState extends State<HubPage> {
                   padding: const EdgeInsets.all(8),
                   color: const Color.fromARGB(5, 238, 238, 238),
                   child: Consumer<HubProvider>(
+                    
                     builder: (context, provider, _) {
                       if (provider.allCommuniques.isEmpty) {
                         return const Center(
@@ -149,18 +131,19 @@ class _HubPageState extends State<HubPage> {
                           ),
                         );
                       }
-      
+         
                       return ListView.builder(
                         itemCount: provider.allCommuniques.length,
                         itemBuilder: (context, index) {
                           final communique = provider.allCommuniques[index];
                           return Card(
-                            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 8),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                               side: BorderSide(
                                 width: 0.5,
-                                color: const Color.fromARGB(255, 116, 9, 1)
+                                color: const Color.fromARGB(255, 116, 9, 1),
                               ),
                             ),
                             child: CommuniqueTile(post: communique),
@@ -171,7 +154,7 @@ class _HubPageState extends State<HubPage> {
                   ),
                 ),
               ),
-      
+
               // =================== INPUT ===================
               Padding(
                 padding: const EdgeInsets.all(16),
@@ -197,11 +180,13 @@ class _HubPageState extends State<HubPage> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   const Text(
                                     'Escolha o tipo de publicação',
-                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                   IconButton(
                                     icon: const Icon(Icons.close),
@@ -215,15 +200,18 @@ class _HubPageState extends State<HubPage> {
                               ),
                               const SizedBox(height: 8),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Column(
                                     children: [
                                       const Icon(Icons.star),
                                       CupertinoSwitch(
                                         value: _isDonation,
-                                        activeTrackColor: const Color(0xFF970202),
-                                        inactiveTrackColor: const Color(0xFFE0E0E0),
+                                        activeTrackColor:
+                                            const Color(0xFF970202),
+                                        inactiveTrackColor:
+                                            const Color(0xFFE0E0E0),
                                         thumbColor: Colors.black,
                                         onChanged: (bool value) {
                                           setState(() {
@@ -239,8 +227,10 @@ class _HubPageState extends State<HubPage> {
                                       const Icon(Icons.recycling),
                                       CupertinoSwitch(
                                         value: _isEvent,
-                                        activeTrackColor: const Color(0xFF970202),
-                                        inactiveTrackColor: const Color(0xFFE0E0E0),
+                                        activeTrackColor:
+                                            const Color(0xFF970202),
+                                        inactiveTrackColor:
+                                            const Color(0xFFE0E0E0),
                                         thumbColor: Colors.black,
                                         onChanged: (bool value) {
                                           setState(() {
