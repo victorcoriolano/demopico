@@ -1,32 +1,57 @@
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
+import 'package:demopico/features/profile/domain/models/relationship.dart';
+import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class FriendsHorizontalList extends StatefulWidget {
-  const FriendsHorizontalList({super.key});
+class HistoricHorizontalList extends StatefulWidget {
+  const HistoricHorizontalList({super.key});
 
   @override
-  State<FriendsHorizontalList> createState() => _FriendsHorizontalListState();
+  State<HistoricHorizontalList> createState() => _HistoricHorizontalListState();
 }
 
-class _FriendsHorizontalListState extends State<FriendsHorizontalList> {
+class _HistoricHorizontalListState extends State<HistoricHorizontalList> {
+    final List<BasicInfoUser> connectionsAccepted = [];
 
-  
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) { 
+      final user = context.read<AuthViewModelAccount>().user;
+      switch (user) {
+      case UserEntity():
+        final viewModel = context.read<NetworkViewModel>();
+        connectionsAccepted.addAll( viewModel.connAccepted(user.id));
+      case AnonymousUserEntity():
+        // do nothing
+    }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+      final List<BasicInfoUser> connectionsAccepted = [];
 
-    // Exemplo temporário de dados mockados
-    final friends = [];
+    final theme = Theme.of(context);
+    final user = context.read<AuthViewModelAccount>().user;
+      switch (user) {
+      case UserEntity():
+        final viewModel = context.read<NetworkViewModel>();
+        connectionsAccepted.addAll( viewModel.connAccepted(user.id));
+      
+        // do nothing
 
     return SizedBox(
       height: 95,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemCount: friends.length,
+        itemCount: connectionsAccepted.length,
         separatorBuilder: (_, __) => const SizedBox(width: 12),
         padding: const EdgeInsets.symmetric(horizontal: 4),
         itemBuilder: (context, index) {
-          final friend = friends[index];
+          final friend = connectionsAccepted[index];
           return GestureDetector(
             onTap: () {
               // 👉 futura navegação para perfil do amigo
@@ -49,7 +74,7 @@ class _FriendsHorizontalListState extends State<FriendsHorizontalList> {
                   ),
                   child: ClipOval(
                     child: Image.network(
-                      friend['avatar']!,
+                      friend.profilePictureUrl!,
                       fit: BoxFit.cover,
                       errorBuilder: (_, __, ___) => Container(
                         color: theme.colorScheme.surfaceContainer,
@@ -60,7 +85,7 @@ class _FriendsHorizontalListState extends State<FriendsHorizontalList> {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  friend['name']!,
+                  friend.name,
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                     fontWeight: FontWeight.w500,
@@ -73,5 +98,8 @@ class _FriendsHorizontalListState extends State<FriendsHorizontalList> {
         },
       ),
     );
+    case AnonymousUserEntity():
+      return Icon(Icons.tag_faces_rounded);}
   }
+  
 }
