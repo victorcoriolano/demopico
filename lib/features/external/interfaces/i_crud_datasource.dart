@@ -27,7 +27,7 @@ abstract class ICrudDataSource<DTO, DataSource> {
   Stream<List<DTO>> watch();
   Stream<DTO> watchDoc(String id);
   Stream<List<DTO>> watchWithFilter(String field, String value);
-  Stream<DTO> watchDocWithCollection(String docRef, String collectionPath, String docData);
+  Stream<List<DTO>> watchDocWithCollection(String docRef, String collectionPath);
 
   //delete
   Future<void> delete(String id);
