@@ -113,12 +113,14 @@ class AppPages {
       name: Paths.myNetwork,
       page: () => MyNetworkScreen(),
       transition: Transition.fadeIn,
+      middlewares: [Middleware(AuthViewModelAccount.instance)]
     ),
 
     GetPage(
       name: Paths.createSpotPage, 
       page: () => CreateSpotPage(),
       transition: Transition.circularReveal,
+      middlewares: [Middleware(AuthViewModelAccount.instance)]
     ),
   ];
 }
