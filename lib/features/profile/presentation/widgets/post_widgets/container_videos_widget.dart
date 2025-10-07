@@ -21,7 +21,8 @@ class _ContainerVideosWidgetState extends State<ContainerVideosWidget> {
         );
       }
       final listRec = provider.fullVideos;
-      return Stack(
+      return listRec.isNotEmpty 
+      ? Stack(
         children: [
           ListWheelScrollView.useDelegate(
             itemExtent: 350,
@@ -53,7 +54,10 @@ class _ContainerVideosWidgetState extends State<ContainerVideosWidget> {
             ),
           ),
         ],
-      );
+      )
+      :  const Center(
+          child: Text('Nenhuma rec encontrada'),
+        );
     });
   }
 }
