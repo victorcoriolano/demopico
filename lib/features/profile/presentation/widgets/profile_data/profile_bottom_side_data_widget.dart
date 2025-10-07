@@ -28,7 +28,7 @@ class ProfileBottomSideDataWidget extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              TextStatsProfileWidget(info: followers.toString(), legend: 'SEGUIDORES'),
+              TextStatsProfileWidget(info: followers.toString(), legend: 'CONEXÕES'),
               TextStatsProfileWidget(info: contributions.toString(), legend: 'CONTRIBUIÇÕES'),
             ],
           ),

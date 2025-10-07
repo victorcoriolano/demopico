@@ -78,11 +78,10 @@ class PostProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getVideo() async {
-    
+  Future<void> getVideo() async {    
     try{
       _rec = await _pickVideoUC.execute();
-      
+
       notifyListeners();
     }on Failure catch (e){
       getError(e);
@@ -98,11 +97,7 @@ class PostProvider extends ChangeNotifier {
   Future<void> getFiles() async {
     try {
       await _pickFileUC.execute();
-      debugPrint(
-          "Adicionou: ${_pickFileUC.listFiles.length} na lista e arquivos selecionados");
-
-      
-
+      debugPrint("Adicionou: ${_pickFileUC.listFiles.length} na lista e arquivos selecionados");
       notifyListeners();
       debugPrint("arquivos selecionados com sucesso");
     } on Failure catch (e) {
@@ -159,7 +154,7 @@ class PostProvider extends ChangeNotifier {
   Future<void> loadPosts(String userId) async {
     debugPrint("Carregando postagens do usuário: $userId");
     // 
-    if (_posts.isNotEmpty) return;
+    //if (_posts.isNotEmpty) return;
     getPosts(userId);
   }
 
@@ -180,8 +175,7 @@ class PostProvider extends ChangeNotifier {
       notifyListeners();
     }finally {
       _isLoading = false;
-      notifyListeners();
-    }
+      notifyListeners();}
   }
 
   Future<void> createPost(UserEntity user, TypePost type) async {
@@ -225,15 +219,14 @@ class PostProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
   
 
   Future<void> getPosts(String userId) async {
     try {
       _isLoading = true;
+      clear();
       notifyListeners();
       final myPosts = await _getPostUc.execute(userId);
-      _posts.clear();
       if (myPosts.isEmpty) {
         debugPrint("Nenhum post encontrado no banco de dados");        
         _isLoading = false;
@@ -256,7 +249,6 @@ class PostProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
   
   Future<void> updatePost(Post updatedPost, int index) async {
     try{
@@ -272,12 +264,13 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
-
   void clear() {
+    _posts.clear();
     _pickFileUC.listFiles.clear();
     _description = '';
     _selectedSpotId = null;
     _videos.clear();
+    _fullVideoPosts.clear();
     _images.clear();
     progress = 0.0;
     notifyListeners();
