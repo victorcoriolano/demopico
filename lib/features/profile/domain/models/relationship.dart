@@ -7,12 +7,14 @@ sealed class ReciverRequesterBase {
   ReciverRequesterBase({required this.id, required this.name, required this.profilePictureUrl});
 }
 
-class ConnectionReceiver extends ReciverRequesterBase {
+class BasicInfoUser  {
+    final String id;
+  final String name;
+  final String? profilePictureUrl;
+  BasicInfoUser({required this.id, required this.name, required this.profilePictureUrl});
 
-  ConnectionReceiver({required super.id, required super.name, required super.profilePictureUrl});
-
-  factory ConnectionReceiver.fromJson(Map<String, dynamic> json) {
-    return ConnectionReceiver(
+  factory BasicInfoUser.fromJson(Map<String, dynamic> json) {
+    return BasicInfoUser(
       id: json['id'],
       name: json['name'],
       profilePictureUrl: json['profilePictureUrl'],
@@ -27,32 +29,10 @@ class ConnectionReceiver extends ReciverRequesterBase {
     };
   }
 }
-
-class ConnectionRequester extends ReciverRequesterBase {
-
-  ConnectionRequester({required super.id, required super.name, required super.profilePictureUrl});
-
-  factory ConnectionRequester.fromJson(Map<String, dynamic> json) {
-    return ConnectionRequester(
-      id: json['id'],
-      name: json['name'],
-      profilePictureUrl: json['profilePictureUrl'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'profilePictureUrl': profilePictureUrl,
-    };
-  }
-}
-
 class Relationship {
   String id;
-  ConnectionRequester requesterUser;
-  ConnectionReceiver addressed;
+  BasicInfoUser requesterUser;
+  BasicInfoUser addressed;
   RequestConnectionStatus status;
   DateTime createdAt;
   DateTime updatedAt;
@@ -77,16 +57,16 @@ class Relationship {
       updatedAt: DateTime.parse(json['updatedAt']),
       id: id,
       createdAt: DateTime.parse(json['createdAt']),
-      requesterUser: ConnectionRequester.fromJson(json['requesterData']),
+      requesterUser: BasicInfoUser.fromJson(json['requesterData']),
       status: RequestConnectionStatus.fromString(json['status']),
-      addressed: ConnectionReceiver.fromJson(json['addressedData']),
+      addressed: BasicInfoUser.fromJson(json['addressedData']),
     );
   }
 
   Relationship copyWith({
     String? id,
-    ConnectionRequester? requesterUser,
-    ConnectionReceiver? addressed,
+    BasicInfoUser? requesterUser,
+    BasicInfoUser? addressed,
     RequestConnectionStatus? status,
     DateTime? createdAt,
     DateTime? updatedAt,
