@@ -1,10 +1,11 @@
 
+import 'package:demopico/core/app/home_page.dart';
 import 'package:demopico/core/app/providers/providers.dart';
 import 'package:demopico/core/app/routes/app_pages.dart';
 import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/features/profile/presentation/bidings/auth_biding.dart';
-import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';  
+import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';  
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -14,8 +15,6 @@ class MyAppWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put<AuthBiding>(AuthBiding());
-    Get.put<UserDataViewModel>(UserDataViewModel.getInstance);
     
     return MultiProvider(
       providers: myProviders,
@@ -26,6 +25,8 @@ class MyAppWidget extends StatelessWidget {
         theme: appTheme,
         checkerboardRasterCacheImages: true,
         getPages: AppPages.routes,
+        home: const HomePage(),
+        initialBinding: AuthBinding(),
       ),
     );
   }

@@ -20,7 +20,6 @@ class _FavoriteSpotPageState extends State<FavoriteSpotPage> {
 
   void getSpots() async {
     final provider = context.read<FavoriteSpotController>();
-    provider.error = null;
     await provider.getPicosSalvos(userID);
   }
 

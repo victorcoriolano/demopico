@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../mocks/mocks_connections.dart';
-import '../../../mocks/mocks_profile.dart';
+import '../../../mocks/mocks_users.dart';
 
 
 
@@ -121,7 +121,7 @@ void main() {
       when(() => mockNetworkService.deleteConnection(mapperConnection.toDTO(dummyConnections[0]))).thenAnswer((_) async => {});
 
       // Act
-      await repository.deleteRelationship(dummyConnections[0]);
+      await repository.deleteRelationship(dummyConnections[0].id);
 
       verify(() => mockNetworkService.deleteConnection(mapperConnection.toDTO(dummyConnections[0]))).called(1);
     });

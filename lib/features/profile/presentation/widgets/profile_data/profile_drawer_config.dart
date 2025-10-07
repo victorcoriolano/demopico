@@ -1,17 +1,17 @@
 import 'package:demopico/core/app/home_page.dart';
 import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/features/profile/presentation/pages/edit_profile_page.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/about_page_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/drawer_item.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
-import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class MyCustomDrawer extends StatefulWidget {
-  final UserM user;
+  final UserEntity user;
   const MyCustomDrawer({super.key, required this.user});
 
   @override
@@ -41,7 +41,7 @@ class _MyCustomDrawerState extends State<MyCustomDrawer> {
             TextButton(
               child: const Text('Sair'),
               onPressed: () async {
-                await context.read<AuthUserProvider>().logout();
+                await context.read<AuthViewModelAccount>().logout();
                 Get.offAll(
                   () => const HomePage(),
                   transition: Transition.rightToLeftWithFade,
@@ -63,7 +63,7 @@ class _MyCustomDrawerState extends State<MyCustomDrawer> {
         children: <Widget>[
           UserAccountsDrawerHeader(
             accountName: Text(
-                widget.user.name,
+                widget.user.displayName.value,
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -72,7 +72,7 @@ class _MyCustomDrawerState extends State<MyCustomDrawer> {
               ),
               
             accountEmail: Text(
-              widget.user.email,
+              widget.user.email.value,
               style: TextStyle(
                 color: Colors.white70,
                 fontSize: 14,
@@ -82,8 +82,8 @@ class _MyCustomDrawerState extends State<MyCustomDrawer> {
               children: [
                 CircleAvatar(
                   
-                  backgroundImage: widget.user.pictureUrl != null
-                      ? NetworkImage(widget.user.pictureUrl!)
+                  backgroundImage: widget.user.avatar != null
+                      ? NetworkImage(widget.user.avatar!)
                       : AssetImage("assets/images/userPhoto.png") as ImageProvider,
                 ),
               ],

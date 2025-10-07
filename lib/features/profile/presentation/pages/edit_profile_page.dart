@@ -1,7 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/editable_custom_field.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/features/user/domain/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,7 +15,7 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  final user = Get.arguments as UserM; 
+  final user = Get.arguments as UserEntity; 
 
   late TextEditingController _nameController;
   late TextEditingController _bioController;
@@ -22,8 +23,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: user.name);
-    _bioController = TextEditingController(text: user.description);
+    _nameController = TextEditingController(text: user.profileUser.displayName);
+    _bioController = TextEditingController(text: user.profileUser.description);
   }
 
   @override
@@ -37,8 +38,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     // TODO: UPDATE PROFILE FLOW
     // Lógica para salvar as alterações no banco de dados
     debugPrint('Salvando alterações...');
-    user.name = _nameController.text;
-    user.description = _bioController.text;
+    
     // ...
     Get.snackbar('Sucesso!', 'Perfil atualizado com sucesso!',
         snackPosition: SnackPosition.BOTTOM,
@@ -122,9 +122,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   margin  : const EdgeInsets.all(16),
                   height: 200,
                   decoration: BoxDecoration(
-                    image: user.backgroundPicture == null ? null : 
+                    image: user.profileUser.backgroundPicture == null ? null : 
                     DecorationImage(
-                      image: CachedNetworkImageProvider(user.backgroundPicture!, errorListener: (erro) => Icons.error,),
+                      image: CachedNetworkImageProvider(user.profileUser.backgroundPicture!, errorListener: (erro) => Icons.error,),
                       fit: BoxFit.cover,
                     ),
                     color: kRedAccent,
@@ -149,9 +149,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       CircleAvatar(
                         radius: 60,
                         backgroundColor: kWhite,
-                        backgroundImage: user.pictureUrl == null 
+                        backgroundImage: user.profileUser.avatar == null 
                           ? AssetImage("assets/images/userPhoto.png") 
-                          : CachedNetworkImageProvider(user.pictureUrl!),
+                          : CachedNetworkImageProvider(user.profileUser.avatar!),
                       ),
                       Positioned(
                         right: 0,
@@ -209,7 +209,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           color: kRed, size: 24),
                       const SizedBox(width: 10),
                       Expanded(
-                        child: Text(user.email,
+                        child: Text(user.email.value,
                             style: const TextStyle(fontSize: 16)),
                       ),
                       TextButton(

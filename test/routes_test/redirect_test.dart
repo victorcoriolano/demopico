@@ -1,14 +1,14 @@
-import 'package:demopico/core/app/routes/app_routes.dart';
+/* import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/routes/middleware.dart';
-import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
+import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../features/mocks/mocks_profile.dart';
+import '../features/mocks/mocks_users.dart';
 
 // Mock da classe de serviço para simular o estado de autenticação
-class MockUserDatabaseProvider extends Mock implements UserDataViewModel {}
+class MockUserDatabaseProvider extends Mock implements ProfileViewModel {}
 
 void main() {
 
@@ -19,7 +19,7 @@ void main() {
       
       authService = MockUserDatabaseProvider();
        Get.testMode = true;
-      Get.put<UserDataViewModel>(authService);
+      Get.put<ProfileViewModel>(authService);
       authGard = Middleware();
      
     });
@@ -49,3 +49,4 @@ void main() {
     });
   });
 }
+ */

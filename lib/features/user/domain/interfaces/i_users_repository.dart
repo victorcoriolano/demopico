@@ -1,4 +1,5 @@
-import 'package:demopico/features/user/domain/models/user.dart';
+
+import 'package:demopico/features/user/domain/models/user_model.dart';
 
 abstract class IUsersRepository {
   Stream<List<UserM>> searchUsers(String query);

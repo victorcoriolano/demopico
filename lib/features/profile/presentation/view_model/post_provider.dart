@@ -1,4 +1,5 @@
 import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/core/common/media_management/models/file_model.dart';
 import 'package:demopico/core/common/media_management/usecases/pick_files_uc.dart';
@@ -13,7 +14,7 @@ import 'package:demopico/features/profile/domain/usecases/get_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/update_post_uc.dart';
 import 'package:demopico/features/profile/presentation/view_objects/media_url_item.dart';
 import 'package:demopico/features/user/domain/enums/type_post.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/features/user/domain/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -156,6 +157,8 @@ class PostProvider extends ChangeNotifier {
   // Gateway carregar postagem para ui
   // retorna caso a requisição já tenha sido feita postagens ja tenha sido feitas
   Future<void> loadPosts(String userId) async {
+    debugPrint("Carregando postagens do usuário: $userId");
+    // 
     if (_posts.isNotEmpty) return;
     getPosts(userId);
   }
@@ -181,7 +184,7 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> createPost(UserM user, TypePost type) async {
+  Future<void> createPost(UserEntity user, TypePost type) async {
     try {
       _isLoading = true;
       notifyListeners();
@@ -203,10 +206,10 @@ class PostProvider extends ChangeNotifier {
       final newPost = Post(
           id: "",
           typePost: type,
-          nome: user.name,
+          nome: user.displayName.value,
           userId: user.id,
           spotID: _selectedSpotId?.id ?? '',
-          urlUserPhoto: user.pictureUrl!,
+          avatar: user.avatar,
           urlVideos: _videoUrls.isEmpty ? null : _videoUrls,
           description: description,
           urlImages: _imgUrls);

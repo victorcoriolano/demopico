@@ -1,3 +1,6 @@
+import 'package:demopico/core/common/auth/domain/interfaces/i_auth_repository.dart';
+import 'package:demopico/core/common/auth/domain/interfaces/i_user_repository.dart';
+import 'package:demopico/core/common/auth/infra/repositories/firebase_auth_repository.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/core/common/mappers/i_mapper_dto.dart';
@@ -8,7 +11,6 @@ import 'package:demopico/features/hub/domain/interfaces/i_communique_repository.
 import 'package:demopico/features/hub/domain/interfaces/i_hub_service.dart';
 import 'package:demopico/features/hub/infra/services/hub_service.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_auth_service.dart';
-import 'package:demopico/features/user/domain/interfaces/i_user_database_repository.dart';
 import 'package:demopico/features/user/infra/repositories/user_data_repository_impl.dart';
 import 'package:demopico/features/user/infra/datasource/remote/firebase_auth_service.dart';
 import 'package:flutter/foundation.dart';
@@ -18,14 +20,14 @@ class CommuniqueRepository implements ICommuniqueRepository {
 
   static CommuniqueRepository get getInstance {
     _instance ??= CommuniqueRepository(
-        userAuthServiceIMP: FirebaseAuthService.getInstance,
+        userAuthServiceIMP: FirebaseAuthRepository.instance,
         hubServiceIMP: HubService.getInstance,
         userDatabaseRepositoryIMP: UserDataRepositoryImpl.getInstance);
     return _instance!;
   }
 
-  final IUserDataRepository userDatabaseRepositoryIMP;
-  final IUserAuthService userAuthServiceIMP;
+  final IUserRepository userDatabaseRepositoryIMP;
+  final IAuthRepository userAuthServiceIMP;
   final IHubService hubServiceIMP;
 
   CommuniqueRepository({

@@ -1,3 +1,4 @@
+import 'package:demopico/core/common/auth/domain/interfaces/i_user_repository.dart';
 import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
@@ -8,9 +9,7 @@ import 'package:demopico/features/mapa/domain/entities/pico_favorito.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_favorite_spot_repository.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_spot_repository.dart';
 import 'package:demopico/features/mapa/presentation/dtos/spot_cart_ui_dto.dart';
-import 'package:demopico/features/user/domain/aplication/get_state_user.dart';
 import 'package:demopico/features/user/domain/enums/auth_state.dart';
-import 'package:demopico/features/user/domain/interfaces/i_user_database_repository.dart';
 import 'package:demopico/features/user/infra/repositories/user_data_repository_impl.dart';
 import 'package:flutter/material.dart';
 
@@ -19,24 +18,19 @@ class FavoriteSpotUC {
   static get getInstance {
     _saveSpotUc ??= FavoriteSpotUC(
         spotFavRepositoryIMP: FavoriteSpotRepository.getInstance,
-        spotRepositoryIMP: SpotRepositoryImpl.getInstance,
-        userdataRepo: UserDataRepositoryImpl.getInstance);
+        spotRepositoryIMP: SpotRepositoryImpl.getInstance);
     return _saveSpotUc!;
   }
 
   final IFavoriteSpotRepository spotFavRepositoryIMP;
   final ISpotRepository spotRepositoryIMP;
-  final IUserDataRepository _userDataRepository;
 
   FavoriteSpotUC(
-      {required this.spotFavRepositoryIMP, required this.spotRepositoryIMP,
-      required IUserDataRepository userdataRepo}): _userDataRepository = userdataRepo;
+      {required this.spotFavRepositoryIMP, required this.spotRepositoryIMP});
 
-  Future<void> execute(Pico newPicoFav) async {
-    if(GetStateUser.authState == AuthState.notLoggedIn) throw UnauthenticatedFailure();
+  Future<void> execute(Pico newPicoFav, String idUser) async {
     try {
-      final idUser = _userDataRepository.localUser?.id;
-      final picoFav = PicoFavorito(idPico: newPicoFav.id, idUsuario: idUser!);
+      final picoFav = PicoFavorito(idPico: newPicoFav.id, idUsuario: idUser);
       await spotFavRepositoryIMP.saveSpot(picoFav);
 
     } on Failure catch (e) {

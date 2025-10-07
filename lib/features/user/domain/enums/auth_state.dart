@@ -1,14 +1,13 @@
-import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 
-enum AuthState { 
-  notLoggedIn,
-  loggedInWithGoogle,
-  loggedInWithPhone,
-  loggedIn;
+sealed class AuthState {}
 
-  factory AuthState.fromUserState(UserM? user){
-    return user != null 
-      ?  AuthState.loggedIn
-      : AuthState.notLoggedIn;
-  }
+class AuthAuthenticated extends AuthState {
+  AuthAuthenticated({
+    required this.user,
+  });
+
+  final UserEntity user;
 }
+
+class AuthUnauthenticated extends AuthState {}

@@ -1,4 +1,5 @@
 import 'package:demopico/core/app/routes/app_routes.dart';
+import 'package:demopico/core/app/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,6 +18,15 @@ class SnackbarUtils extends SnackBar {
           label: "Fazer login",
           onPressed: () => Get.toNamed(Paths.login),
         ),
+      ),
+    );
+  }
+
+  static void showSnackbarError(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message, style: TextStyle(color: kWhite)),
+        backgroundColor: kRed,
       ),
     );
   }

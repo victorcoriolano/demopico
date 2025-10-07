@@ -5,7 +5,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:demopico/features/user/infra/datasource/remote/user_firebase_datasource.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
-import '../../mocks/mocks_profile.dart';
+import '../../mocks/mocks_users.dart';
 
 class MockCrudDataSource extends Mock implements CrudFirebase {}
 

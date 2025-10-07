@@ -1,7 +1,6 @@
 import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/theme/theme.dart';
-import 'package:demopico/core/common/auth/domain/entities/user_credentials.dart';
-import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_sign_in.dart';
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
 import 'package:demopico/features/user/presentation/widgets/swith_type_login.dart';
 import 'package:demopico/features/user/presentation/widgets/textfield_decoration.dart';
@@ -21,20 +20,6 @@ class _LoginFormState extends State<LoginForm> with Validators {
   final TextEditingController _loginController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
   final formKey = GlobalKey<FormState>();
-
-  Future<void> submit () async {
-    if (formKey.currentState!.validate()) {
-      final authProvider = context.read<AuthUserProvider>();
-
-                      final credential = UserCredentialsSignIn(
-                          identifier: authProvider.identifier,
-                          login: _loginController.text.trim(),
-                          senha: _senhaController.text.trim());
-
-                      await authProvider.login(credential);
-                      Get.offAndToNamed(Paths.profile);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,11 +62,10 @@ class _LoginFormState extends State<LoginForm> with Validators {
                 ),
 
                 //email ou vulgo
-                Consumer<AuthUserProvider>(builder: (context, provider, child) {
+                Consumer<AuthViewModelSignIn>(builder: (context, provider, child) {
                   return TextFormField(
-                    decoration: customTextField(provider.isEmail
-                        ? "Digite seu Email"
-                        : "Digite seu vulgo"),
+                    onChanged: (value) => provider.login = value,
+                    decoration: customTextField(provider.getHintToFieldLogin()),
                     cursorColor: kWhite,
                     style: const TextStyle(color: kWhite),
                     controller: _loginController,
@@ -95,19 +79,24 @@ class _LoginFormState extends State<LoginForm> with Validators {
                   height: 20,
                 ),
                 //senha
-                TextFormField(
-                  onFieldSubmitted: (value) async {
-                    await submit();
-                  },
-                  decoration: customTextField("Senha"),
-                  cursorColor: kWhite,
-                  style: const TextStyle(color: kWhite),
-                  obscureText: true,
-                  controller: _senhaController,
-                  validator: (value) => combineValidators([
-                    () => isNotEmpty(value),
-                    () => isValidPassword(value),
-                  ]),
+                Consumer<AuthViewModelSignIn>(
+                  builder: (context, provider, child) {
+                    return TextFormField(
+                      onFieldSubmitted: (value) async {
+                        await provider.signIn(); 
+                      },
+                      onChanged: (value) => provider.password = value,
+                      decoration: customTextField("Senha"),
+                      cursorColor: kWhite,
+                      style: const TextStyle(color: kWhite),
+                      obscureText: true,
+                      controller: _senhaController,
+                      validator: (value) => combineValidators([
+                        () => isNotEmpty(value),
+                        () => isValidPassword(value),
+                      ]),
+                    );
+                  }
                 ),
                 // text input(esqueceu senha)
                 TextButton(
@@ -127,7 +116,9 @@ class _LoginFormState extends State<LoginForm> with Validators {
                 // button (entrar)
                 ElevatedButton(
                   onPressed: () async {
-                    await submit();
+                    final viewModel = context.read<AuthViewModelSignIn>();
+                    await viewModel.signIn(); 
+                    Get.offAndToNamed(Paths.profile);
                   },
                   style: buttonStyle(),
                   child: const Text(
@@ -143,7 +134,7 @@ class _LoginFormState extends State<LoginForm> with Validators {
                 //button (fazer parte)
                 ElevatedButton(
                   onPressed: () {
-                    Get.toNamed(
+                    Get.offAndToNamed(
                       Paths.signUp,
                     );
                   },

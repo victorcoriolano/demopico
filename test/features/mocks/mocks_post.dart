@@ -8,7 +8,7 @@ Post mockPost1 = Post(
     spotID: "spot123",
     nome: 'João Silva',
     userId: 'user123',
-    urlUserPhoto: 'https://example.com/user_photo.jpg',
+    avatar: 'https://example.com/user_photo.jpg',
     description: 'Curtindo um dia de sol no parque!',
     urlImages: [
       'https://firebasestorage.googleapis.com/v0/b/pico-skatepico.appspot.com/o/spots_images%2Fimages%2FDegrau%20no%20Centro%20.jpg?alt=media&token=2dda3751-c51e-4981-875d-5ab7c92cbded',
@@ -24,7 +24,7 @@ Post mockPost2 = Post(
         spotID: "spot123",
     nome: 'Tete da Silva',
     userId: 'user123',
-    urlUserPhoto: 'https://example.com/user_photo.jpg',
+    avatar: 'https://example.com/user_photo.jpg',
     description: 'Curtindo um dia de sol no parque!',
     urlImages: [
       'https://firebasestorage.googleapis.com/v0/b/pico-skatepico.appspot.com/o/spots_images%2Fimages%2FPico%20top.jpg?alt=media&token=1a489ff1-0c61-4e31-b793-117c46ced16',

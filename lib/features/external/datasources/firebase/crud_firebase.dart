@@ -52,6 +52,9 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
     } on FirebaseException catch (e) {
       debugPrint("Data Source Error: $e");
       throw FirebaseErrorsMapper.map(e);
+    } catch (unknownError, st){
+      debugPrint("Erro não reconhecido");
+      throw UnknownFailure(unknownError: unknownError,stackTrace: st);
     }
   }
 
@@ -157,10 +160,8 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
   Future<List<FirebaseDTO>> readAllWithFilter(
       String field, String value) async {
     try {
-      final query = await _firestore
-          .collection(collection.name)
-          .where(field, isEqualTo: value)
-          .get();
+      debugPrint("Lendo com filtro $field = $value");
+      final query = await _firestore.collection(collection.name).where(field, isEqualTo: value).get();
       return query.docs.map((doc) {
         return FirebaseDTO(id: doc.id, data: doc.data());
       }).toList();

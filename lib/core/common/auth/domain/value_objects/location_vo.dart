@@ -14,4 +14,8 @@ class LocationVo {
     }
     return LocationVo._(latitude, longitude);
   }
+
+  factory LocationVo.empty(){
+    return LocationVo(latitude: 0, longitude: 0);
+  }
 }

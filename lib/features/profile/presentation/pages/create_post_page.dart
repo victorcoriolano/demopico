@@ -1,12 +1,16 @@
 import 'package:demopico/core/app/routes/app_routes.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/features/mapa/presentation/widgets/search_bar.dart';
 import 'package:demopico/features/profile/presentation/pages/profile_page.dart';
-import 'package:demopico/features/profile/presentation/provider/post_provider.dart';
+import 'package:demopico/features/profile/presentation/services/verify_auth_and_get_user.dart';
+import 'package:demopico/features/profile/presentation/view_model/post_provider.dart';
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/media_preview_list.dart';
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/media_preview_video.dart';
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/midia_input_card.dart';
+import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:demopico/features/user/domain/enums/type_post.dart';
-import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
+import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -131,18 +135,12 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 // Botão de Publicar
                 ElevatedButton(
                   onPressed: () async {
-                    final user = context.read<UserDataViewModel>().user;
-                    if (user == null) {
-                      Get.snackbar(
-                        'Erro',
-                        'Usuário não encontrado. Por favor, faça login novamente.',
-                        snackPosition: SnackPosition.BOTTOM,
-                      );
-                      Get.toNamed(Paths.home);
-                      return;
-                    }
-                    try{
-                      await provider.createPost(user, typePost);
+                    final auth = context.read<AuthViewModelAccount>().authState;
+                    switch (auth){
+
+                      case AuthAuthenticated():
+                        try{
+                      await provider.createPost(auth.user, typePost);
                       Get.snackbar(
                         'Sucesso',
                         'Postagem criada com sucesso!',
@@ -156,7 +154,15 @@ class _CreatePostPageState extends State<CreatePostPage> {
                         snackPosition: SnackPosition.BOTTOM,
                       );
                     }
-
+                      case AuthUnauthenticated():
+                         Get.snackbar(
+                        'Erro',
+                        'Usuário não encontrado. Por favor, faça login novamente.',
+                        snackPosition: SnackPosition.BOTTOM,
+                      );
+                      Get.toNamed(Paths.home);
+                      return;
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 15),

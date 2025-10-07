@@ -38,7 +38,7 @@ void main() {
       expect(connection.data['connectedUserID'], equals(mocksConnectionDTO[1].data['connectedUserID']));
     });
     test("Deve desconectar um user", () async {
-      await networkDatasource.deleteConnection(mocksConnectionDTO[1]);
+      await networkDatasource.deleteConnection(mocksConnectionDTO[1].id);
 
       final docRef = await fakeFirebaseFirestore.collection(Collections.connections.name)
         .doc(mocksConnectionDTO[1].id).get();

@@ -39,13 +39,21 @@ class ScrollingTextState extends State<ScrollingText>
   void initState() {
     super.initState();
     scrollController = ScrollController();
-    WidgetsBinding.instance.addPostFrameCallback((callback) {
+    WidgetsBinding.instance.endOfFrame.then((callback) {
       startTimer();
     });
   }
 
   void startTimer() {
-    if (_key.currentContext != null) {
+    final renderBox = _key.currentContext?.findRenderObject();
+    // Se ainda não tem tamanho, tenta novamente no próximo frame
+    if (renderBox is! RenderBox || !renderBox.hasSize) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) startTimer();
+      });
+      return;
+    }
+    if (_key.currentContext != null ) {
       double widgetWidth =
           _key.currentContext!.findRenderObject()!.paintBounds.size.width;
       double widgetHeight =
@@ -127,9 +135,9 @@ class ScrollingTextState extends State<ScrollingText>
 
   @override
   void dispose() {
-    scrollController!.dispose();
+    timer?.cancel();
+    scrollController?.dispose();
     super.dispose();
-    timer!.cancel();
   }
 
   @override

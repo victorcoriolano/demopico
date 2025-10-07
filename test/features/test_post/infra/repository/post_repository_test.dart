@@ -43,7 +43,7 @@ void main(){
           firestore.collection("posts").doc("456").set(listDto[1].data),
         ]);
 
-      final listPost = await postRepository.getPosts(mockPost1.userId);
+      final listPost = await postRepository.getPostsByUser(mockPost1.userId);
       expect(listPost, isA<List<Post>>());
       expect(listPost.length, equals(2));
     });
