@@ -73,4 +73,5 @@ flutter:
       - .env
       - assets/images/
       - assets/images/icons/
+      - assets/images/servidores/
 
