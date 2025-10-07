@@ -185,8 +185,12 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
   Future<List<FirebaseDTO>> readWithTwoFilters({required String field1, required String value1, required String field2, required String value2}) async {
     try {
       final query = await _firestore.collection(collection.name)
-          .where(field1, isEqualTo: value1)
-          .where(field2, isEqualTo: value2)
+          .where(
+            Filter.and(
+              Filter(field1, isEqualTo: value1),
+              Filter(field2, isEqualTo: value2) 
+            )
+          )
           .get();
       debugPrint("QUERY length: ${query.docs.length}");
       return query.docs.map((doc) {
