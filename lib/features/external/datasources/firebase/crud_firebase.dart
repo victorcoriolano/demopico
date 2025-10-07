@@ -44,6 +44,18 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
     }
   }
 
+    @override
+  Future<FirebaseDTO> createWithTwoCollections(FirebaseDTO dto) async{
+    try {
+      final docRef = await _firestore.collection(collection.name).doc(dto.data['server']).collection('mensagens').add(dto.data);
+      dto.setId=docRef.id;
+      return dto;
+    } on FirebaseException catch (e) {
+      debugPrint("Data Source Error: $e");
+      throw FirebaseErrorsMapper.map(e);
+    }
+  }
+
   @override
   Future<FirebaseDTO> read(String id)async{
     try {
@@ -199,6 +211,29 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
     try {
       return _firestore.collection(collection.name)
       .doc(id)
+      .snapshots().map((doc) {
+        if (!doc.exists || doc.data() == null){
+          throw DataNotFoundFailure();
+        }
+        return FirebaseDTO(id: doc.id, data: doc.data()!);
+      });
+    } on FirebaseException catch (firebaseException) {
+    debugPrint("Data Source Error: $firebaseException");
+      throw FirebaseErrorsMapper.map(firebaseException);
+    } on Exception catch (exception) {
+      throw UnknownFailure(originalException: exception);
+    } catch (unknown) {
+      throw UnknownFailure(unknownError: unknown);
+    }
+  }
+
+  @override
+  Stream<FirebaseDTO> watchDocWithCollection(String docRef, String collectionPath, String docData) {
+    try {
+      return _firestore.collection(collection.name)
+      .doc(docRef)
+      .collection(collectionPath)
+      .doc(docData)
       .snapshots().map((doc) {
         if (!doc.exists || doc.data() == null){
           throw DataNotFoundFailure();

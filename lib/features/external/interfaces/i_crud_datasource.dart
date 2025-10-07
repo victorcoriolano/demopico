@@ -4,6 +4,8 @@ abstract class ICrudDataSource<DTO, DataSource> {
   //create
   Future<DTO> create(DTO dto);
   Future<DTO> setData(String id, DTO data);
+  Future<DTO> createWithTwoCollections(DTO dto);
+  
 
   //read
   Future<DTO> read(String id);
@@ -25,6 +27,7 @@ abstract class ICrudDataSource<DTO, DataSource> {
   Stream<List<DTO>> watch();
   Stream<DTO> watchDoc(String id);
   Stream<List<DTO>> watchWithFilter(String field, String value);
+  Stream<DTO> watchDocWithCollection(String docRef, String collectionPath, String docData);
 
   //delete
   Future<void> delete(String id);
