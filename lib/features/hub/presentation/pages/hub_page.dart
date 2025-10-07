@@ -33,7 +33,7 @@ class _HubPageState extends State<HubPage> {
 
   Future<void> _handleSendAction(String message) async {
     user ??= context.read<UserDataViewModel>().user;
-    await context.read<HubProvider>().postHubCommunique(message, selectedType, user!);
+    await context.read<HubProvider>().postHubCommunique(message, selectedType, user!, 'serverGlobal');
   }
 
   List<PopupMenuEntry<String>> itemBuilder(BuildContext context) {
