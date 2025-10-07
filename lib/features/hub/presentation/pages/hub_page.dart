@@ -27,19 +27,29 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
   final servidores = [
     {
       "name": "São Paulo",
-      "image": "url_da_imagem_sp",
-      "path": "sp",
+      "image": "assets/images/servidores/serverSP.jpg",
+      "path": "serverSp",
     },
     {
       "name": "Zona Oeste",
-      "image": "url_da_imagem_zo",
-      "path": "zonaOeste",
+      "image": "assets/images/servidores/serverZOSP.jpg",
+      "path": "serverSpZonaOeste",
     },
     {
-      "name": "Zona Central",
-      "image": "url_da_imagem_zc",
-      "path": "zonaCentral",
+      "name": "Zona Leste",
+      "image": "assets/images/servidores/serverZL.jpeg",
+      "path": "serverSpZonaLeste",
+    }, 
+    {
+      "name": "Zona Norte",
+      "image": "assets/images/servidores/serverSPZN.jpg",
+      "path": "serverSpZonaNorte",
     },
+    {
+      "name": "Zona Sul",
+      "image": "assets/images/servidores/serverSPZS.jpeg",
+      "path": "serverSpZonaSul",
+    }
   ];
 
   late TabController _tabController;
@@ -48,15 +58,14 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
-   if (server == 'serverGlobal') {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<HubProvider>().watchCommuniques(server, 'mensagens');
-    });
-  }
+    if (server == 'serverGlobal') {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.read<HubProvider>().watchCommuniques(server, 'mensagens');
+      });
+    }
 
     _tabController = TabController(length: 2, vsync: this);
 
-    // Atualiza o server quando a aba muda (tap ou swipe concluído)
     _tabController.addListener(() {
       if (!_tabController.indexIsChanging) {
         if (_tabController.index == 0 && server != 'serverGlobal') {
@@ -65,7 +74,6 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
           });
           context.read<HubProvider>().watchCommuniques(server, 'mensagens');
         } else if (_tabController.index == 1) {
-          // Aba Servidores: apenas muda o estado, sem request
           setState(() {
             server = 'serverOutros';
           });
@@ -96,7 +104,6 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
       body: SafeArea(
         child: Column(
           children: [
-            // =================== HEADER ===================
             Container(
               width: double.infinity,
               height: size.height * 0.10,
@@ -132,7 +139,6 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
               ),
             ),
 
-            // =================== TABBAR ===================
             TabBar(
               labelColor: const Color.fromARGB(255, 107, 7, 7),
               unselectedLabelColor: Colors.black54,
@@ -144,7 +150,6 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
               ],
             ),
 
-            // =================== POSTS ===================
             Expanded(
               child: Consumer<HubProvider>(
                 builder: (context, provider, _) {
@@ -178,7 +183,7 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
                           );
                         },
                       ),
-                  
+
                       // Aba Servidores
                       Container(
                         color: const Color.fromARGB(255, 207, 212, 216),
@@ -194,13 +199,11 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
                                             setState(() {
                                               server = servidor["path"]!;
                                             });
-                                            // Aqui você só chama watchCommuniques se o server tiver dados no Firebase
-                                            if (server == "sp" ||
-                                                server == "zo" ||
-                                                server == "zc") {
-                                              // Só se tiver conteúdo, se não, não faz nada
-                                              // context.read<HubProvider>().watchCommuniques(server, 'mensagens');
-                                            }
+
+                                            context
+                                                .read<HubProvider>()
+                                                .watchCommuniques(
+                                                    server, 'mensagens');
                                           },
                                         ))
                                     .toList(),
@@ -230,9 +233,9 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
                 },
               ),
             ),
-
-            // =================== INPUT ===================
-            Padding(
+          server == 'serverOutros'
+              ? const SizedBox.shrink()
+              :  Padding(
               padding: const EdgeInsets.all(16),
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 200),
@@ -319,6 +322,7 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
                       ),
               ),
             ),
+           
           ],
         ),
       ),
