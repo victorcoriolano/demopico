@@ -91,7 +91,7 @@ class _SearchProfilePageState extends State<SearchProfilePage> {
             Padding(
               padding: const EdgeInsets.only(left: 4),
               child: Text(
-                'Amigos',
+                'Histórico',
                 style: textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: theme.colorScheme.primary,
@@ -101,7 +101,7 @@ class _SearchProfilePageState extends State<SearchProfilePage> {
 
             const SizedBox(height: 18,),
 
-            const FriendsHorizontalList(),
+            const HistoricHorizontalList(),
 
             const SizedBox(height: 10,),
             
