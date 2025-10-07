@@ -28,7 +28,7 @@ class Communique {
   factory Communique.initial(String content, TypeCommunique type, UserM user, String server) {
     return Communique(
       id: '',
-      server:  server ?? 'serverGlobal',
+      server:  server,
       uid: user.id,
       vulgo: user.name,
       text: content,
