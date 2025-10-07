@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 import 'package:demopico/core/common/collections/collections.dart';
 import 'package:demopico/features/external/datasources/firebase/crud_firebase.dart';
@@ -10,7 +11,7 @@ class FirebasePostDatasource implements IPostDatasource {
   static FirebasePostDatasource? _firebasePostDatasource;
   static FirebasePostDatasource get getInstance {
     _firebasePostDatasource ??= FirebasePostDatasource(
-      crudFirebase: CrudFirebase.getInstance..setcollection(Collections.posts)
+      crudFirebase: CrudFirebase(collection: Collections.posts, firestore: FirebaseFirestore.instance)
     );
     return _firebasePostDatasource!;
   }

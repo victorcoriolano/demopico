@@ -52,6 +52,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
         GetOptions(source: Source.serverAndCache)
       );
       if (!docRf.exists || docRf.data() == null) {
+        
         debugPrint("Dados não encontrados: ${docRf.exists} - ${docRf.data()}");
         throw DataNotFoundFailure(dataID: id);
       } 

@@ -16,8 +16,7 @@ class FirebaseNetworkDatasource implements INetworkDatasource<FirebaseDTO> {
 
   static FirebaseNetworkDatasource get instance {
     _instance ??= FirebaseNetworkDatasource(
-      crudFirebase: CrudFirebase.getInstance
-        ..collection = Collections.connections,
+      crudFirebase: CrudFirebase(collection: Collections.connections, firestore: FirebaseFirestore.instance)
     );
     return _instance!;
   }
