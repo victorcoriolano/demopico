@@ -1,4 +1,5 @@
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
+import 'package:demopico/features/profile/domain/models/profile_user.dart';
 import 'package:demopico/features/profile/presentation/services/verify_auth_and_get_user.dart';
 import 'package:demopico/features/profile/presentation/view_model/post_provider.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/card_post_widget.dart';
@@ -8,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ContainerPostsWidget extends StatefulWidget {
-  final UserEntity user;
-  const ContainerPostsWidget({super.key, required this.user});
+  final Profile profile;
+  const ContainerPostsWidget({super.key, required this.profile});
 
   @override
   State<ContainerPostsWidget> createState() => _ContainerPostsWidgetState();
@@ -33,7 +34,7 @@ class _ContainerPostsWidgetState extends State<ContainerPostsWidget> {
     switch (user){
       
       case UserEntity():
-        await _postProvider.loadPosts(user.id);
+        await _postProvider.loadPosts(widget.profile.userID);
 
       case AnonymousUserEntity():
         // do nothing
