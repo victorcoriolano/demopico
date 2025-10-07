@@ -5,7 +5,17 @@ class CustomElevatedButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final String textButton;
   const CustomElevatedButton(
-      {super.key, required this.onPressed, required this.textButton});
+      {super.key, required this.onPressed, required this.textButton,  });
+
+  static ButtonStyle get formatation {
+    return ElevatedButton.styleFrom(
+        backgroundColor: kRed,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 50,
+          vertical: 10,
+        ),
+      );
+  } 
 
   @override
   Widget build(BuildContext context) {
