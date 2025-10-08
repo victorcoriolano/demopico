@@ -29,7 +29,7 @@ class _MySpotsPageState extends State<MySpotsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('MEUS PICOS'),
+        title: Text('PICOS - $idUser'),
         centerTitle: true,
       ),
       body: Consumer<SpotsControllerProvider>(
