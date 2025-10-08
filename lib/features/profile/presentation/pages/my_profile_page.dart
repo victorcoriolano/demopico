@@ -192,6 +192,8 @@ class _MyProfilePageState extends State<MyProfilePage>
                 backgroundUrl: user!.profileUser.backgroundPicture,
               ),
               ProfileBottomSideDataWidget(
+                nameUser: user!.displayName.value,
+                idUser: user!.id,
                 followers: user!.profileUser.connections.length,
                 contributions: user!.profileUser.spots.length,
                 description: user!.profileUser.description ?? '',
