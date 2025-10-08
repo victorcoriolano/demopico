@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:demopico/core/common/auth/domain/entities/auth_result.dart';
-import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/auth/domain/usecases/sign_in_email_password_uc.dart';
 import 'package:demopico/core/common/auth/domain/usecases/sign_in_vulgo_uc.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/email_vo.dart';

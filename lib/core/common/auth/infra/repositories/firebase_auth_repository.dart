@@ -7,7 +7,6 @@ import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_profile_repository.dart';
 import 'package:demopico/core/common/auth/domain/interfaces/i_user_repository.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/email_vo.dart';
-import 'package:demopico/core/common/auth/domain/value_objects/location_vo.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/vulgo_vo.dart';
 import 'package:demopico/core/common/auth/infra/mapper/user_mapper.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';

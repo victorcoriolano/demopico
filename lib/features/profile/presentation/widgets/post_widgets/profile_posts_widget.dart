@@ -1,5 +1,4 @@
 import 'package:demopico/core/app/theme/theme.dart';
-import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/features/profile/domain/models/profile_user.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/container_posts_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/container_spots.dart';

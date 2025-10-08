@@ -3,7 +3,6 @@ import 'package:demopico/core/common/auth/domain/usecases/change_password_uc.dar
 import 'package:demopico/core/common/auth/domain/usecases/delete_account_uc.dart';
 import 'package:demopico/core/common/auth/domain/usecases/get_auth_state_uc.dart';
 import 'package:demopico/core/common/auth/domain/usecases/logout_uc.dart';
-import 'package:demopico/core/common/auth/infra/repositories/firebase_auth_repository.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:flutter/material.dart';
