@@ -58,12 +58,14 @@ class NetworkViewModel extends ChangeNotifier {
   List<SuggestionProfile> get suggestions => _suggestions;
   List<BasicInfoUser> get connectionRequests => _connectionsRequests.map((conn) => conn.requesterUser).toList();
   List<BasicInfoUser> get connectionSent => _connectionSent.map((conn) => conn.addressed).toList();
-  List<BasicInfoUser> connAccepted(String idUser) => 
-    _connectionsAccepted.map((e) {
+  List<BasicInfoUser> connAccepted(String idUser) { 
+    debugPrint("Pegando conexões aceitaas para o user: $idUser");
+    debugPrint("conexões aceitas: ${_connectionsAccepted.length}");
+    return _connectionsAccepted.map((e) {
       return e.addressed.id == idUser 
         ?  e.requesterUser
         :  e.addressed;
-    }).toList();
+    }).toList(); }
 
   Future<void> fetchRelactionships(UserEntity user) async {
     try {
@@ -73,6 +75,15 @@ class NetworkViewModel extends ChangeNotifier {
       notifyListeners();
     } on Failure catch (e) {
       FailureServer.showError(e, "Error fetching connections requests");
+    }
+  }
+
+  Future<void> fetchAcceptedConnections(String idUser) async {
+    try {
+      _connectionsAccepted = await _getConnAcceptedUc.execute(idUser);
+      notifyListeners();
+    } on Failure catch (e) {
+      FailureServer.showError(e, "Error fetching accepted connections");
     }
   }
 
