@@ -60,12 +60,12 @@ class UserEntity extends User{
 
 class ColetivoEntity {
   final String id;
-  final String uid;
-  final List<String> members;
+  final UserEntity modarator;
+  final List<User> members;
   final String logo;
-  const ColetivoEntity(
+  ColetivoEntity(
       {required this.id,
-      required this.uid,
+      required this.modarator,
       required this.members,
       required this.logo});
 }
