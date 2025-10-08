@@ -23,7 +23,7 @@ class HubService implements IHubService<FirebaseDTO> {
   @override
   Future<FirebaseDTO> create(FirebaseDTO communique) async {
     try {
-      return await crudBoilerplate.create(communique);
+      return await crudBoilerplate.createWithTwoCollections(communique);
     } on FirebaseException catch (e) {
       throw FirebaseErrorsMapper.map(e);
     } on Exception catch (e, stacktrace) {
@@ -47,9 +47,9 @@ class HubService implements IHubService<FirebaseDTO> {
   }
   
   @override
-  Stream<List<FirebaseDTO>> list() {
+  Stream<List<FirebaseDTO>> list(String docRef, String collectionPath) {
     try {
-      return crudBoilerplate.watch();
+      return crudBoilerplate.watchDocWithCollection(docRef, collectionPath);
     } on FirebaseException catch (e) {
       throw FirebaseErrorsMapper.map(e);
     } on Exception catch (e, stacktrace) {

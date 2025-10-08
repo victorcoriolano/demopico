@@ -74,17 +74,10 @@ class CommuniqueRepository implements ICommuniqueRepository {
   }
   
   @override
-  Stream<List<Communique>> watchCommuniques() {
-    return hubServiceIMP.list().map((dtos) {
+  Stream<List<Communique>> watchCommuniques(String docRef, String collectionPath) {
+    return hubServiceIMP.list(docRef, collectionPath).map((dtos) {
       return dtos.map((dto) => _mapper.toModel(dto)).toList();
     });
   }
   
-  @override
-  
-  Future<List<Communique>> get recentCommunique {
-    return hubServiceIMP.list().map((dtos) {
-      return dtos.map((dto) => _mapper.toModel(dto)).toList();
-    }).first;
-  }
 }

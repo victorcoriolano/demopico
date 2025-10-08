@@ -29,9 +29,9 @@ class HubProvider extends ChangeNotifier {
 
   StreamSubscription? _watcher;
 
-  Future<void> postHubCommunique(String text, TypeCommunique type, UserEntity user) async {
+  Future<void> postHubCommunique(String text, TypeCommunique type, UserEntity user, String server) async {
     try {
-      await postarComunicado.postar(Communique.initial(text, type, user));
+      await postarComunicado.postar(Communique.initial(text, type, user, server));
     } on Failure catch (e) {
       Get.snackbar(
         'Erro',
@@ -42,8 +42,9 @@ class HubProvider extends ChangeNotifier {
     }
   }
 
-  void watchCommuniques() async {
-      _watcher = listarComunicado.listar().listen((allCommuniquesFromDb) {
+  void watchCommuniques(String server, String collectionPath) async {
+      _allCommuniques = [];
+      _watcher = listarComunicado.listar(server,collectionPath).listen((allCommuniquesFromDb) {
         _allCommuniques = allCommuniquesFromDb.toList();
         notifyListeners();
       }, onError: (error) {

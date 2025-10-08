@@ -14,8 +14,9 @@ class ListarComunicado{
     }
 
 
-  Stream<List<Communique>> listar() {
-    var dados = hubRepositoryIMP.watchCommuniques();
+  Stream<List<Communique>> listar(String server, String collectionPath){ {
+    var dados = hubRepositoryIMP.watchCommuniques(server, collectionPath);
     return dados;
   }
+}
 }
