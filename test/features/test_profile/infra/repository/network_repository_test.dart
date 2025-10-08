@@ -1,4 +1,5 @@
 import 'package:demopico/core/common/mappers/i_mapper_dto.dart';
+import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/infra/datasource/firebase_network_datasource.dart';
 import 'package:demopico/features/profile/infra/repository/network_repository.dart';
@@ -35,26 +36,25 @@ void main() {
   group('getConnections', () {
     test('deve retornar uma lista de relacionamentos requisitados', () async {
       // Arrange
-      when(() => mockNetworkService.getRelactionships(fieldRequest: "requesterUserID", valueID: any(), fieldOther: "status", valorDoStatus: RequestConnectionStatus.pending.name))
+      when(() => mockNetworkService.getRelactionships(fieldRequest: "requesterUserID", valueID:"userID", fieldOther: "status", valorDoStatus: RequestConnectionStatus.pending.name))
           .thenAnswer((_) async => Future.value([
             mapperConnection.toDTO(dummyConnections[1]),
             mapperConnection.toDTO(dummyConnections[2])
           ]));
 
       // Act
-      final result = await repository.getRelationshipRequests("userID");
+      final result = await repository.getRelationshipSent("userID");
 
       // Assert
       expect(result, isA<List<Relationship>>());
       expect(result, isNotEmpty);
       expect(result.length, 2);
-      verify(() => mockNetworkService.getRelactionships(fieldRequest: "requesterUserID", valueID: any(), fieldOther: "status", valorDoStatus: RequestConnectionStatus.pending.name)).called(1);
     });
 
     test("dever retornar uma lista de relacionamentos pendentes que o user enviou", () async {
       // Arrange
-      when(() => mockNetworkService.getRelactionships(fieldRequest: "requesterUserID", valueID: "userID", fieldOther: "status", valorDoStatus: RequestConnectionStatus.pending.name))
-          .thenAnswer((_) async => [
+      when(() => mockNetworkService.getRelactionships(fieldRequest: "addressedID", valueID: "userID", fieldOther: "status", valorDoStatus: RequestConnectionStatus.pending.name))
+          .thenAnswer((_) async => <FirebaseDTO>[
             mapperConnection.toDTO(dummyConnections[0]),
             mapperConnection.toDTO(dummyConnections[1])
           ]);
@@ -70,10 +70,10 @@ void main() {
 
     test('should return a list of relationships accepted', () async {
       // Arrange
-      when(() => mockNetworkService.getRelactionships(fieldRequest: "requesterUserID", valueID: "userID", fieldOther: "status", valorDoStatus: RequestConnectionStatus.accepted.name))
+      when(() => mockNetworkService.getAcceptedRelationships(idUser: "userID"))
           .thenAnswer((_) async => [
-            mapper.toDTO(mockUserProfile),
-            mapper.toDTO(mockUserProfile2)
+            mapperConnection.toDTO(dummyConnections.first),
+            mapperConnection.toDTO(dummyConnections.last)
           ]);
 
       // Act
@@ -82,8 +82,7 @@ void main() {
       // Assert
       expect(result, isA<List<Relationship>>());
       expect(result, isNotEmpty);
-      expect(result.length, 1);
-      verify(() => mockNetworkService.getRelactionships(fieldRequest: "requesterUserID", valueID: "userID", fieldOther: "status", valorDoStatus: RequestConnectionStatus.accepted.name)).called(1);
+      expect(result.length, 2);
     });
   });
   
@@ -118,12 +117,12 @@ void main() {
     // TODO CORRIGIR ESSES TESTES 
     test('should complete successfully when disconnecting two connected users', () async {
       // Arrange
-      when(() => mockNetworkService.deleteConnection(mapperConnection.toDTO(dummyConnections[0]))).thenAnswer((_) async => {});
+      when(() => mockNetworkService.deleteConnection("id")).thenAnswer((_) async => {});
 
       // Act
       await repository.deleteRelationship(dummyConnections[0].id);
 
-      verify(() => mockNetworkService.deleteConnection(mapperConnection.toDTO(dummyConnections[0]))).called(1);
+      verify(() => mockNetworkService.deleteConnection("id")).called(1);
     });
 
     

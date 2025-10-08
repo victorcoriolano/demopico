@@ -56,11 +56,15 @@ void main() {
         }
       });
 
-      final connections = await networkDatasource.getRelactionships(fieldRequest: "requesterUserID.id", valueID: "userID1", fieldOther: "status", valorDoStatus: RequestConnectionStatus.accepted.name);
+      final connections = await networkDatasource.getRelactionships(
+        fieldRequest: "requesterUserID", 
+        valueID: "userID1", 
+        fieldOther: "status", 
+        valorDoStatus: RequestConnectionStatus.accepted.name);
 
       expect(connections, isNotEmpty);
       expect(connections.length, equals(1));
-      expect(connections[0].data['requesterUserID'], equals(dummyConnections[1].requesterUser.toJson()));
+      expect(connections[0].data['requesterData'], equals(dummyConnections[1].requesterUser.toJson()));
     });
 
     test("Deve atualizar uma conexão", () async {
