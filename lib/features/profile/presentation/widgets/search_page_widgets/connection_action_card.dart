@@ -1,5 +1,8 @@
 import 'package:demopico/features/profile/domain/models/relationship.dart';
+import 'package:demopico/features/profile/presentation/pages/my_profile_page.dart';
+import 'package:demopico/features/profile/presentation/pages/profile_page_user.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ConnectionActionCard extends StatefulWidget {
   final BasicInfoUser user;
@@ -25,7 +28,8 @@ class _ConnectionActionCardState extends State<ConnectionActionCard> {
             ),
             trailing: widget.actionButton,
             onTap: () {
-              // TODO IMPLEMENTAR NAVEGAÇÃO PARA PÁGINA DO PERFIL DO USUÁRIO
+              
+              Get.to(() => ProfilePageUser(), arguments: widget.user.id);
             },
           );
   }
