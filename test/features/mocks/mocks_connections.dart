@@ -5,7 +5,7 @@ var dummyConnections = [
       id: "id",
       createdAt: DateTime.now(),
       requesterUser: BasicInfoUser(
-          id: "userID", name: "name", profilePictureUrl: "profilePictureUrl"),
+          id: "userIDnelson", name: "name", profilePictureUrl: "profilePictureUrl"),
       addressed: BasicInfoUser(
           id: "addressedId",
           name: "addressedName",
@@ -13,7 +13,7 @@ var dummyConnections = [
       status: RequestConnectionStatus.pending,
       updatedAt: DateTime.now()),
   Relationship(
-      id: "id",
+      id: "id2",
       createdAt: DateTime.now(),
       requesterUser: BasicInfoUser(
           id: "userID1", name: "name", profilePictureUrl: "profilePictureUrl"),
@@ -24,7 +24,7 @@ var dummyConnections = [
       status: RequestConnectionStatus.accepted,
       updatedAt: DateTime.now()),
   Relationship(
-      id: "id",
+      id: "id3",
       createdAt: DateTime.now(),
       requesterUser: BasicInfoUser(
           id: "userID2", name: "name", profilePictureUrl: "profilePictureUrl"),
@@ -36,7 +36,7 @@ var dummyConnections = [
       updatedAt: DateTime.now()),
 
   Relationship(
-      id: "id",
+      id: "id4",
       createdAt: DateTime.now(),
       requesterUser: BasicInfoUser(
           id: "userID3", name: "name", profilePictureUrl: "profilePictureUrl"),
@@ -48,7 +48,7 @@ var dummyConnections = [
       updatedAt: DateTime.now()),
 
   Relationship(
-      id: "id",
+      id: "id5",
       createdAt: DateTime.now(),
       requesterUser: BasicInfoUser(
           id: "userID4", name: "name", profilePictureUrl: "profilePictureUrl"),
