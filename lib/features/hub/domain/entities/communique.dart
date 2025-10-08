@@ -2,6 +2,7 @@ import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/features/user/domain/models/user_model.dart';
 
 class Communique {
+  final String server;
   final String id;
   final String uid;
   final String? pictureUrl;
@@ -13,6 +14,7 @@ class Communique {
   final TypeCommunique type;
 
   Communique({
+    required this.server,
     required this.id,
     required this.uid,
     required this.vulgo,
@@ -24,9 +26,11 @@ class Communique {
     required this.type,
   });
 
-  factory Communique.initial(String content, TypeCommunique type, UserEntity user) {
+
+  factory Communique.initial(String content, TypeCommunique type, UserEntity user, String server) {
     return Communique(
       id: '',
+      server:  server,
       uid: user.id,
       vulgo: user.displayName.value,
       text: content,
@@ -45,6 +49,7 @@ class Communique {
       uid: json['uid'],
       vulgo: json['vulgo'],
       text: json['text'],
+      server: json['server'] ?? 'serverGlobal',
       timestamp: json['timestamp'],
       pictureUrl: json['pictureUrl'],
       likeCount: json['likeCount'],
@@ -60,6 +65,7 @@ class Communique {
       'uid': uid,
       'vulgo': vulgo,
       'text': text,
+      'server': server,
       'pictureUrl': pictureUrl,
       'timestamp': timestamp,
       'likeCount': likeCount,

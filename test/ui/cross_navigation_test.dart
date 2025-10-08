@@ -17,6 +17,7 @@ final mockCommunique = Communique(
   id: '1',
   text: 'Test Communique',
   timestamp: 'This is a test communique.',
+  server: 'serverGlobal',
   likeCount: 0,
   likedBy: [],
   pictureUrl: "",
