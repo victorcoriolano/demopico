@@ -28,7 +28,6 @@ import 'package:demopico/features/user/presentation/controllers/auth_view_model_
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_sign_up.dart';
 import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 
 final myProviders = [

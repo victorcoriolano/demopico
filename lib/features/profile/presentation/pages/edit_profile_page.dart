@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/editable_custom_field.dart';
-import 'package:demopico/features/user/domain/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

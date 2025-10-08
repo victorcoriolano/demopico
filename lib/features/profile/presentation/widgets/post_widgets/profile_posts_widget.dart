@@ -1,14 +1,14 @@
 import 'package:demopico/core/app/theme/theme.dart';
-import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
+import 'package:demopico/features/profile/domain/models/profile_user.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/container_posts_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/container_spots.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/container_videos_widget.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePostsWidget extends StatelessWidget {
-  final UserEntity user;
+  final Profile profile;
   final TabController? controller;
-  const ProfilePostsWidget({super.key,required this.controller, required this.user });
+  const ProfilePostsWidget({super.key,required this.controller, required this.profile });
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +36,9 @@ class ProfilePostsWidget extends StatelessWidget {
               
               controller: controller,
               children: <Widget>[
-                ContainerPostsWidget(user: user,),
+                ContainerPostsWidget(profile: profile,),
                 ContainerVideosWidget(),
-                ContainerSpots(user: user,),
+                ContainerSpots(profile: profile,),
               ],
             ),
           ),

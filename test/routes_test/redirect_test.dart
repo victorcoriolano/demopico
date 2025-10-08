@@ -1,5 +1,7 @@
-/* import 'package:demopico/core/app/routes/app_routes.dart';
+import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/routes/middleware.dart';
+import 'package:demopico/features/user/domain/enums/auth_state.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
@@ -10,22 +12,23 @@ import '../features/mocks/mocks_users.dart';
 // Mock da classe de serviço para simular o estado de autenticação
 class MockUserDatabaseProvider extends Mock implements ProfileViewModel {}
 
+class MockAuthViewModel extends Mock implements AuthViewModelAccount {}
+
+
 void main() {
 
   group("deve testar o redirecionamento das telas", () {
-    late MockUserDatabaseProvider authService;
     late Middleware authGard;
+    late MockAuthViewModel mockAuthViewModel;
     setUpAll(() {
-      
-      authService = MockUserDatabaseProvider();
+      mockAuthViewModel = MockAuthViewModel();
        Get.testMode = true;
-      Get.put<ProfileViewModel>(authService);
-      authGard = Middleware();
+      authGard = Middleware(mockAuthViewModel);
      
     });
     test('redirect should return login route if user is null', () {
-      // Configura o mock para retornar null no user
-      when(() => authService.user).thenReturn(null);
+      // Configura o mock para retornar anomymous no user
+      when(() => mockAuthViewModel.authState).thenReturn(AuthUnauthenticated());
 
       
 
@@ -39,7 +42,7 @@ void main() {
     // Teste para o caso de usuário logado
     test('redirect should return null if user is not null', () {
       // Configura o mock para retornar um valor não nulo (usuário logado)
-      when(() => authService.user).thenReturn(mockUserProfile);
+      when(() => mockAuthViewModel.authState).thenReturn(AuthAuthenticated(user: userMock1));
 
       // Chama o método redirect com uma rota protegida
       final result = authGard.redirect(Paths.editProfile);
@@ -49,4 +52,3 @@ void main() {
     });
   });
 }
- */

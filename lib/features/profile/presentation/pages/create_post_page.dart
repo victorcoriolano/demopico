@@ -1,8 +1,6 @@
 import 'package:demopico/core/app/routes/app_routes.dart';
-import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/features/mapa/presentation/widgets/search_bar.dart';
-import 'package:demopico/features/profile/presentation/pages/profile_page.dart';
-import 'package:demopico/features/profile/presentation/services/verify_auth_and_get_user.dart';
+import 'package:demopico/features/profile/presentation/pages/my_profile_page.dart';
 import 'package:demopico/features/profile/presentation/view_model/post_provider.dart';
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/media_preview_list.dart';
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/media_preview_video.dart';
@@ -10,7 +8,6 @@ import 'package:demopico/features/profile/presentation/widgets/create_post_widge
 import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:demopico/features/user/domain/enums/type_post.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
-import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -146,7 +143,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                         'Postagem criada com sucesso!',
                         snackPosition: SnackPosition.TOP,
                       );
-                      Get.offAll(() => const ProfilePage());
+                      Get.offAll(() => const MyProfilePage());
                     }catch (e){
                       Get.snackbar(
                         'Erro',

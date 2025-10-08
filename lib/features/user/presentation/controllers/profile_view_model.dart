@@ -1,16 +1,14 @@
 import 'package:demopico/features/profile/domain/models/profile_user.dart';
-import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
-import 'package:demopico/features/user/domain/models/user_model.dart';
 import 'package:demopico/features/user/domain/usecases/update_data_user_uc.dart';
 import 'package:flutter/material.dart';
-import 'package:demopico/features/user/domain/usecases/get_user_by_id.dart';
+import 'package:demopico/features/user/domain/usecases/get_profile_user_by_id.dart';
 
 class ProfileViewModel extends ChangeNotifier {
   static ProfileViewModel? _userDatabaseProvider;
   static ProfileViewModel get getInstance {
     _userDatabaseProvider ??= ProfileViewModel(
-        pegarDadosUserUc: GetUserByID.getInstance,
+        pegarDadosUserUc: GetProfileUserByID.getInstance,
         updateDataUserUc: UpdateUserUc.getInstance);
     return _userDatabaseProvider!;
   }
@@ -20,22 +18,19 @@ class ProfileViewModel extends ChangeNotifier {
       required UpdateUserUc updateDataUserUc})
 ;
 
-  final GetUserByID pegarDadosUserUc;
+  final GetProfileUserByID pegarDadosUserUc;
 
-  Profile? _currentProfile;
-  Profile? get currentProfile => _currentProfile;
+  Profile _currentProfile = Profile.empty;
+  Profile get currentProfile => _currentProfile;
 
-  Future<void> retrieveUserProfileData(String uid) async {
-    try {
-      // Retorna se os dados já foram pegos
-      if (_currentProfile != null) {
-        debugPrint("Retornando por que os dados do user já foram pegos");
-        return;
-      }
-      debugPrint("pegando dados do usuario");
-      //_currentProfile = await pegarDadosUserUc.execute(uid);
-    } on Failure catch (e) {
-      FailureServer.showError(e);
+  Future<void> fetchProfileDataByID(String uid) async {
+    // Retorna se os dados já foram pegos  
+    debugPrint("pegando dados do usuario");
+    final result = await pegarDadosUserUc.execute(uid);
+    if (result.success){
+      _currentProfile = result.profile!;
+    }else  {
+      FailureServer.showError(result.failure!);
     }
     notifyListeners();
   }

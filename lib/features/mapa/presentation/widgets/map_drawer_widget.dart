@@ -4,7 +4,6 @@ import 'package:demopico/core/common/widgets/snackbar_utils.dart';
 import 'package:demopico/features/mapa/presentation/view_services/modal_helper.dart';
 import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
-import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';

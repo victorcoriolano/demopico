@@ -10,9 +10,7 @@ import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:demopico/features/hub/domain/interfaces/i_communique_repository.dart';
 import 'package:demopico/features/hub/domain/interfaces/i_hub_service.dart';
 import 'package:demopico/features/hub/infra/services/hub_service.dart';
-import 'package:demopico/features/user/domain/interfaces/i_user_auth_service.dart';
 import 'package:demopico/features/user/infra/repositories/user_data_repository_impl.dart';
-import 'package:demopico/features/user/infra/datasource/remote/firebase_auth_service.dart';
 import 'package:flutter/foundation.dart';
 
 class CommuniqueRepository implements ICommuniqueRepository {

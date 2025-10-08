@@ -1,5 +1,3 @@
-import 'package:demopico/core/common/auth/domain/interfaces/i_user_repository.dart';
-import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/mapa/data/repositories/favorite_spot_repository.dart';
@@ -9,8 +7,6 @@ import 'package:demopico/features/mapa/domain/entities/pico_favorito.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_favorite_spot_repository.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_spot_repository.dart';
 import 'package:demopico/features/mapa/presentation/dtos/spot_cart_ui_dto.dart';
-import 'package:demopico/features/user/domain/enums/auth_state.dart';
-import 'package:demopico/features/user/infra/repositories/user_data_repository_impl.dart';
 import 'package:flutter/material.dart';
 
 class FavoriteSpotUC {

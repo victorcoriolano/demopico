@@ -1,5 +1,4 @@
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
-import 'package:demopico/features/user/domain/models/user_model.dart';
 
 class Communique {
   final String server;

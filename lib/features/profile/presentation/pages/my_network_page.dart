@@ -1,15 +1,11 @@
-import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/widgets/snackbar_utils.dart';
 import 'package:demopico/features/profile/domain/models/relationship.dart';
-import 'package:demopico/features/profile/presentation/services/verify_auth_and_get_user.dart';
 import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
 import 'package:demopico/features/profile/presentation/widgets/search_page_widgets/connection_action_card.dart';
-import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class MyNetworkScreen extends StatefulWidget {
@@ -28,7 +24,7 @@ class _MyNetworkScreenState extends State<MyNetworkScreen> {
       final currentUser = context.read<AuthViewModelAccount>().user;
       switch (currentUser){
         case UserEntity():
-          await viewModel.fetchRelactionsShips(currentUser);
+          await viewModel.fetchRelactionships(currentUser);
         case AnonymousUserEntity():
           //do nothing
           
@@ -88,7 +84,7 @@ enum ActionType {
 }
 
 class ProfileList extends StatelessWidget {
-  final List<ReciverRequesterBase> userProfiles;
+  final List<BasicInfoUser> userProfiles;
   final ActionType actionType;
 
   const ProfileList(
@@ -101,6 +97,7 @@ class ProfileList extends StatelessWidget {
             child: Text('Nenhum usuário encontrado'),
           )
         : ListView.builder(
+            shrinkWrap: true, 
             itemCount: userProfiles.length,
             itemBuilder: (context, index) {
               return Card(
@@ -113,7 +110,6 @@ class ProfileList extends StatelessWidget {
                             final currentUser = context.read<AuthViewModelAccount>().user;
                             final provider  = context.read<NetworkViewModel>();
                             switch (currentUser){
-                              
                               case UserEntity():
                                 await provider.acceptConnection(
                                   userProfiles[index], currentUser
@@ -122,7 +118,6 @@ class ProfileList extends StatelessWidget {
                                 // some error occourred - user not logged
                                 SnackbarUtils.userNotLogged(context);
                             }
-                           
                           },
                           child: const Text('Aceitar'),
                         )

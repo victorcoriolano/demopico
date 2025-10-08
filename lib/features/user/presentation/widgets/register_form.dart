@@ -7,7 +7,6 @@ import 'package:demopico/features/user/presentation/widgets/textfield_decoration
 import 'package:demopico/features/user/presentation/widgets/form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/utils.dart';
 import 'package:provider/provider.dart';
 
 class RegisterForm extends StatefulWidget {

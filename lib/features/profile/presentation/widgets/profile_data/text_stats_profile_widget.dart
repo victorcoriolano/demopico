@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 class TextStatsProfileWidget extends StatefulWidget {
   final String info;
   final String legend; 
-  const TextStatsProfileWidget({super.key, required this.info, required this.legend});
+  final VoidCallback onTap;
+  const TextStatsProfileWidget({super.key, required this.info, required this.legend, required this.onTap});
 
   @override
   State<TextStatsProfileWidget> createState() => _TextStatsProfileWidgetState();
@@ -19,25 +20,28 @@ class _TextStatsProfileWidgetState extends State<TextStatsProfileWidget> {
         color: kAlmostWhite,
         borderRadius: BorderRadius.circular(8.0)
       ),
-      child: Column(
-              children: [
-                Text(
-                  widget.info,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+      child: InkWell(
+        onTap: widget.onTap,
+        child: Column(
+                children: [
+                  Text(
+                    widget.info,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                Text(
-                  widget.legend,
-                  style: TextStyle(
-                    fontSize: 10,
-                    letterSpacing: 1,
-                    color: Colors.grey,
+                  Text(
+                    widget.legend,
+                    style: TextStyle(
+                      fontSize: 10,
+                      letterSpacing: 1,
+                      color: Colors.grey,
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+      ),
     );
   }
 }

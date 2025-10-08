@@ -13,7 +13,7 @@ class FirebaseSpotRemoteDataSource implements ISpotDataSource<FirebaseDTO> {
 
   static FirebaseSpotRemoteDataSource get getInstance =>
       _firebaseSpotRemoteDataSource ??= FirebaseSpotRemoteDataSource(
-          CrudFirebase.getInstance..setcollection(Collections.spots));
+          CrudFirebase(collection: Collections.spots, firestore: FirebaseFirestore.instance));
 
   final CrudFirebase _firebaseFirestore;
   final String _collectionName = 'spots';

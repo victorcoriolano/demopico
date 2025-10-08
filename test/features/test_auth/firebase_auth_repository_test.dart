@@ -63,11 +63,16 @@ void main() {
         "avatar"
       );
       
+      when(() => mockUser.email).thenAnswer((_) => "test@test.com");
+      when(() => mockUser.uid,).thenAnswer((invocation) => "uid");
+      when(() => mockUser.displayName).thenAnswer((_) => "name");
       when(() => mockUserCredentials.user).thenAnswer((_) => mockUser);
       when(() => mockFirebaseAuth.signInWithEmailAndPassword(
         email: "test@test.com",
         password: "password123",
       )).thenAnswer((_) async => mockUserCredentials);
+      when(() => mockUserRepo.getById("uid")).thenAnswer((_) async => mockUserProfile);
+      when(() => mockProfileRepo.getProfileByUser("uid"),).thenAnswer((_) async => ProfileResult.success(profile: mockProfileCompleto));
 
       final result = await repository.signInWithEmail(credentials);
 

@@ -4,31 +4,31 @@ var dummyConnections = [
   Relationship(
       id: "id",
       createdAt: DateTime.now(),
-      requesterUser: ConnectionRequester(
-          id: "userID", name: "name", profilePictureUrl: "profilePictureUrl"),
-      addressed: ConnectionReceiver(
+      requesterUser: BasicInfoUser(
+          id: "userIDnelson", name: "name", profilePictureUrl: "profilePictureUrl"),
+      addressed: BasicInfoUser(
           id: "addressedId",
           name: "addressedName",
           profilePictureUrl: "addressedProfilePictureUrl"),
       status: RequestConnectionStatus.pending,
       updatedAt: DateTime.now()),
   Relationship(
-      id: "id",
+      id: "id2",
       createdAt: DateTime.now(),
-      requesterUser: ConnectionRequester(
+      requesterUser: BasicInfoUser(
           id: "userID1", name: "name", profilePictureUrl: "profilePictureUrl"),
-      addressed: ConnectionReceiver(
+      addressed: BasicInfoUser(
           id: "addressedId",
           name: "addressedName",
           profilePictureUrl: "addressedProfilePictureUrl"),
       status: RequestConnectionStatus.accepted,
       updatedAt: DateTime.now()),
   Relationship(
-      id: "id",
+      id: "id3",
       createdAt: DateTime.now(),
-      requesterUser: ConnectionRequester(
+      requesterUser: BasicInfoUser(
           id: "userID2", name: "name", profilePictureUrl: "profilePictureUrl"),
-      addressed: ConnectionReceiver(
+      addressed: BasicInfoUser(
           id: "addressedId2",
           name: "addressedName2",
           profilePictureUrl: "addressedProfilePictureUrl2"),
@@ -36,11 +36,11 @@ var dummyConnections = [
       updatedAt: DateTime.now()),
 
   Relationship(
-      id: "id",
+      id: "id4",
       createdAt: DateTime.now(),
-      requesterUser: ConnectionRequester(
+      requesterUser: BasicInfoUser(
           id: "userID3", name: "name", profilePictureUrl: "profilePictureUrl"),
-      addressed: ConnectionReceiver(
+      addressed: BasicInfoUser(
           id: "addressedId3",
           name: "addressedName3",
           profilePictureUrl: "addressedProfilePictureUrl3"),
@@ -48,11 +48,11 @@ var dummyConnections = [
       updatedAt: DateTime.now()),
 
   Relationship(
-      id: "id",
+      id: "id5",
       createdAt: DateTime.now(),
-      requesterUser: ConnectionRequester(
+      requesterUser: BasicInfoUser(
           id: "userID4", name: "name", profilePictureUrl: "profilePictureUrl"),
-      addressed: ConnectionReceiver(
+      addressed: BasicInfoUser(
           id: "addressedId4",
           name: "addressedName4",
           profilePictureUrl: "addressedProfilePictureUrl4"),

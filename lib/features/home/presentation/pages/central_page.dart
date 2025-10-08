@@ -1,14 +1,8 @@
-import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/features/home/presentation/widgets/central_page_background.dart';
 import 'package:demopico/features/home/presentation/widgets/events_bottom_sheet.dart';
 import 'package:demopico/features/home/presentation/widgets/hub_upper_sheet.dart';
 import 'package:demopico/features/home/presentation/widgets/top_level_home_row.dart';
-import 'package:demopico/features/home/presentation/provider/weather_provider.dart';
-import 'package:demopico/features/user/domain/enums/auth_state.dart';
-import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class CentralPage extends StatefulWidget {
   const CentralPage({super.key});

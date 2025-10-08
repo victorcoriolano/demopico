@@ -15,4 +15,6 @@ abstract class INetworkDatasource<DTO> {
   Future<void> deleteConnection(String id);
   // para atualizar: recusar, aceitar.
   Future<DTO> updateConnection(DTO dto);
+
+  Future<List<DTO>> getAcceptedRelationships({required String idUser});
 }
