@@ -34,6 +34,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
 
   @override
   Future<FirebaseDTO> create(FirebaseDTO dto) async{
+    debugPrint("CRUD create - COLLECTION -> ${collection.name}");
     try {
       final docRef = await _firestore.collection(collection.name).add(dto.data);
       dto.setId=docRef.id;
@@ -46,6 +47,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
 
   @override
   Future<FirebaseDTO> read(String id)async{
+    debugPrint("CRUD READ - COLLECTION -> ${collection.name}");
     try {
       debugPrint(collection.name);
       final docRf = await _firestore.collection(collection.name).doc(id).get(
@@ -70,6 +72,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
   
   @override
   Future<FirebaseDTO> update(FirebaseDTO firebaseDto) async {
+    debugPrint("CRUD update - COLLECTION -> ${collection.name}");
     try {
       await _firestore.collection(collection.name).doc(firebaseDto.id).update(firebaseDto.data);
       return firebaseDto;
@@ -81,6 +84,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
 
   @override
   Future<void> updateField(String id, String field, dynamic value) async {
+    debugPrint("CRUD updateField - COLLECTION -> ${collection.name}");
     try {
       await _firestore.collection(collection.name).doc(id).update({field: value});
     } on FirebaseException catch (e) {
@@ -97,6 +101,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
 
   @override
   Future<void> delete(String id) async {
+    debugPrint("CRUD delete - COLLECTION -> ${collection.name}");
     try {
       debugPrint("Called Delete");
       await _firestore.collection(collection.name).doc(id).delete(). then((_) => debugPrint('SUCCESSFULLY DELETED DOC'));
@@ -108,6 +113,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
   
   @override
   Future<List<FirebaseDTO>>   readAll() async {
+    debugPrint("CRUD READall - COLLECTION -> ${collection.name}");
     try{
       final data = await _firestore.collection(collection.name).get(
         GetOptions(source: Source.serverAndCache)
@@ -130,6 +136,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
   
   @override
   Stream<List<FirebaseDTO>> watch() {
+    debugPrint("CRUD watch - COLLECTION -> ${collection.name}");
     try {
       return _firestore.collection(collection.name).snapshots().map((snapshot) =>
         snapshot.docs.map((doc) => FirebaseDTO(
@@ -148,6 +155,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
   
   @override
   Future<List<FirebaseDTO>> readAllWithFilter(String field, String value) async {
+    debugPrint("CRUD READwithfilter - COLLECTION -> ${collection.name}");
     try {
       debugPrint("Lendo com filtro $field = $value");
       final query = await _firestore.collection(collection.name).where(field, isEqualTo: value).get();
@@ -166,6 +174,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
   
   @override
   Future<FirebaseDTO> setData(String id, FirebaseDTO data) async {
+    debugPrint("CRUD setData - COLLECTION -> ${collection.name}");
     try {
       await _firestore.collection(collection.name).doc(id).set(data.data);
       return data.copyWith(id: id);
@@ -184,6 +193,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
   
   @override
   Future<List<FirebaseDTO>> readWithTwoFilters({required String field1, required String value1, required String field2, required String value2}) async {
+    debugPrint("CRUD READ2filter - COLLECTION -> ${collection.name}");
     try {
       final query = await _firestore.collection(collection.name)
           .where(
@@ -209,6 +219,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
   
   @override
   Stream<FirebaseDTO> watchDoc(String id) {
+    debugPrint("CRUD watchdoc - COLLECTION -> ${collection.name}");
     try {
       return _firestore.collection(collection.name)
       .doc(id)
@@ -230,6 +241,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
   
   @override
   Future<bool> existsDataById(String id) async {
+    debugPrint("CRUD existsData - COLLECTION -> ${collection.name}");
     try {
       final doc = await _firestore.collection(collection.name).doc(id).get();
       return doc.exists;
@@ -245,6 +257,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
   
   @override
   Future<bool> existsDataWithField(String field, String value) async {
+    debugPrint("CRUD existsdatawithfield - COLLECTION -> ${collection.name}");
     try {
       final query = await _firestore.collection(collection.name)
           .where(field, isEqualTo: value)
@@ -262,6 +275,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
   
   @override
   Stream<List<FirebaseDTO>> watchWithFilter(String field, String value) {
+    debugPrint("CRUD watch with filter - COLLECTION -> ${collection.name}");
     return _firestore.collection(collection.name)
         .where(field, isEqualTo: value)
         .snapshots()
@@ -274,6 +288,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
   
   @override
   Future<List<FirebaseDTO>> readExcept(String field, String value) async  {
+    debugPrint("CRUD read except - COLLECTION -> ${collection.name}");
     try {
       final query = await _firestore.collection(collection.name)
           .where(field, isNotEqualTo: value)
@@ -293,6 +308,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
   
   @override
   Future<List<FirebaseDTO>> readMultiplesExcept(String field, Set<String> values) async {
+    debugPrint("CRUD READmultipleexcept - COLLECTION -> ${collection.name}");
     try {
       final query = await _firestore.collection(collection.name)
           .where(field, whereNotIn: values.toList())
@@ -312,6 +328,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
   
   @override
   Future<List<FirebaseDTO>> readMultiplesByIds(List<String> ids) {
+    debugPrint("CRUD READMultiplesbyid - COLLECTION -> ${collection.name}");
     try {
       return _firestore.collection(collection.name)
           .where(FieldPath.documentId, whereIn: ids)
