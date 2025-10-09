@@ -80,6 +80,16 @@ class Relationship {
       updatedAt: updatedAt ?? this.updatedAt,
     );
   }
+
+
+  bool hasId(String id){
+    return addressed.id == id || requesterUser.id == id;
+  }
+
+  bool hasBothID(String id1, String id2){
+    return hasId(id1) && hasId(id2); 
+  }
+
 }
 
 
