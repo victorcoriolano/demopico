@@ -41,7 +41,8 @@ class _ProfilePageUserState extends State<ProfilePageUser>
     final userVM = context.read<AuthViewModelAccount>().user;
     switch (userVM) {
       case UserEntity():
-        _isMyFriend = userVM.profileUser.connections.contains(profile.userID);
+        debugPrint("Amigos: ${userVM.profileUser.connections}");
+        _isMyFriend = userVM.profileUser.connections.contains(idProfile);
         debugPrint("Este perfil é meu amigo ? $_isMyFriend");
       case AnonymousUserEntity():
         _isMyFriend = false;
