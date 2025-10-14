@@ -1,5 +1,5 @@
-import 'package:demopico/features/profile/presentation/widgets/chat_room_widgets.dart/in_message.dart';
-import 'package:demopico/features/profile/presentation/widgets/chat_room_widgets.dart/out_message.dart';
+import 'package:demopico/features/profile/presentation/widgets/chat_widgets.dart/in_message.dart';
+import 'package:demopico/features/profile/presentation/widgets/chat_widgets.dart/out_message.dart';
 import 'package:flutter/material.dart';
 
 class ChatRoomPage extends StatefulWidget {
