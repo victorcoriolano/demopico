@@ -19,6 +19,8 @@ import 'package:demopico/features/profile/domain/usecases/create_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/delete_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/update_post_uc.dart';
+import 'package:demopico/features/profile/infra/repository/message_repository.dart';
+import 'package:demopico/features/profile/presentation/view_model/chat_list_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/post_provider.dart';
 import 'package:demopico/features/profile/presentation/view_model/screen_provider.dart';
@@ -38,6 +40,8 @@ final myProviders = [
   
   // Provider de perfil
   ChangeNotifierProvider(create: (_) => ProfileViewModel.getInstance),
+  ChangeNotifierProvider(create: (_) => ChatListViewModel(repository: MessageRepository.instance)),
+  
   
   // Providers de clima
   ChangeNotifierProvider(create: (_) {
@@ -52,13 +56,6 @@ final myProviders = [
     create: (_) => FirebaseAuthRepository.instance.authState,
     initialData: AuthUnauthenticated(),
   ),
-  
-  // Providers de UI/estado
-  ChangeNotifierProvider(create: (_) => NetworkViewModel.instance),
-  ChangeNotifierProvider(create: (_) => ScreenProvider()),
-  ChangeNotifierProvider(create: (_) => HomeProvider.getInstance),
-  
-  // Providers de mapa
   
   // Providers de UI/estado
   ChangeNotifierProvider(create: (_) => NetworkViewModel.instance),
