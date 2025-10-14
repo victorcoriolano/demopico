@@ -1,6 +1,7 @@
 import 'package:demopico/features/profile/domain/models/relationship.dart';
 
 class Message {
+  final String id;
   final String content;
   final BasicInfoUser infoUser;
   final DateTime dateTime;
@@ -10,6 +11,7 @@ class Message {
   final String? postId;  
 
   const Message({
+    required this.id,
     required this.isSent,
     required this.content,
     required this.dateTime,
@@ -20,8 +22,9 @@ class Message {
   });
 
 
-  factory Message.fromMap(Map<String, dynamic> map) {
+  factory Message.fromMap(Map<String, dynamic> map, String id) {
     return Message(
+      id: id,
       content: map['content'] as String,
       infoUser: BasicInfoUser.fromJson(map['infoUser'] as Map<String,dynamic>),
       dateTime: DateTime.parse(map['dateTime'] as String),
