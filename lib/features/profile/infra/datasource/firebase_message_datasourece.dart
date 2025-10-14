@@ -10,7 +10,6 @@ class MessageFirestoreDatasource implements IMessageDatasource<FirebaseDTO> {
 
   @override
   Stream<List<FirebaseDTO>> getMessagesForChat(String idChat) {
-    // Escuta em tempo real a subcoleção 'messages' dentro de um chat específico
     final snapshots = _firestore
         .collection('chats')
         .doc(idChat)
@@ -18,7 +17,6 @@ class MessageFirestoreDatasource implements IMessageDatasource<FirebaseDTO> {
         .orderBy('dateTime', descending: true)
         .snapshots();
 
-    // Transforma o Stream<QuerySnapshot> em um Stream<List<FirebaseDTO>>
     return snapshots.map((snapshot) {
       return snapshot.docs.map((doc) {
         return FirebaseDTO(id: doc.id, data: doc.data());
@@ -28,13 +26,11 @@ class MessageFirestoreDatasource implements IMessageDatasource<FirebaseDTO> {
 
   @override
   Future<List<FirebaseDTO>> getChatForUser(String idUser) async {
-    // Busca por todos os chats onde o id do usuário está no array 'participants'
     final querySnapshot = await _firestore
         .collection('chats')
         .where('participants', arrayContains: idUser)
         .get();
 
-    // Transforma o resultado da query em uma lista de FirebaseDTO
     return querySnapshot.docs.map((doc) {
       return FirebaseDTO(id: doc.id, data: doc.data());
     }).toList();
@@ -52,12 +48,11 @@ class MessageFirestoreDatasource implements IMessageDatasource<FirebaseDTO> {
       await _firestore
         .collection('chats')
         .doc(idChat)
-        .update({'lastMessage': message.data});
+        .update({'lastReadMessage': message.data});
   }
 
   @override
   Future<void> readMessage(String idChat, FirebaseDTO message) async {
-    // Atualiza um documento de mensagem existente para marcar como lido
     await _firestore
         .collection('chats')
         .doc(idChat)
