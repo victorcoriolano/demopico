@@ -1,5 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
+import 'package:demopico/core/common/collections/collections.dart';
+import 'package:demopico/features/external/datasources/firebase/crud_firebase.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
+import 'package:demopico/features/profile/domain/models/chat.dart';
 import 'package:demopico/features/profile/infra/datasource/firebase_message_datasourece.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,7 +14,12 @@ void main() {
 
   setUp(() {
     fakeFirestore = FakeFirebaseFirestore();
-    datasource = MessageFirestoreDatasource(firestore: fakeFirestore);
+    datasource = MessageFirestoreDatasource(
+      datasource: CrudFirebase(
+        collection: Collections.chats, 
+        firestore: fakeFirestore,
+      ),
+    );
   });
 
   group('MessageFirestoreDatasource', () {
@@ -152,6 +161,31 @@ void main() {
         expect(updatedMessage.data()?['isRead'], isTrue);
       });
     });
-    
+    group('createChat', () {
+      test('should create a FirebaseDTO', () async {
+        // Arrange
+        final chat = Conversation(
+          lastUpdate: null,
+          lastMessage: null, 
+          participants: [
+            UserIdentification(id: "userID1", name: "name", profilePictureUrl: "photoUrl"),
+            UserIdentification(id: "userID2", name: "name2", profilePictureUrl: "photoUrl3")
+          ], 
+          id: "", 
+          lastReadMessage: null, 
+          participantsIds: ["userID1", "userID2"]
+        );
+        
+        final chatDTO = FirebaseDTO(id: "", data: chat.toJson());
+
+        // Act
+        final created = await datasource.createChatForUser(chatDTO);
+
+        // Assert
+        expect(created, isA<FirebaseDTO>());
+      });
+    });
   });
+
+
 }

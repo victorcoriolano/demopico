@@ -2,6 +2,7 @@
 import 'package:demopico/features/profile/domain/models/profile_result.dart';
 import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/domain/usecases/accept_connection_uc.dart';
+import 'package:demopico/features/profile/infra/repository/chat_repository.dart';
 import 'package:demopico/features/profile/infra/repository/network_repository.dart';
 import 'package:demopico/features/profile/infra/repository/profile_repository.dart';
 import 'package:mocktail/mocktail.dart';
@@ -12,6 +13,7 @@ import '../../../mocks/mocks_profiles.dart';
 
 class NetworkRepositoryMock extends Mock implements NetworkRepository {}
 class ProfileRepositoryMock extends Mock implements ProfileRepositoryImpl {}
+class ChatRepositoryMock extends Mock implements ChatRepository {}
 
 
 void main() {
@@ -20,11 +22,13 @@ void main() {
     late NetworkRepositoryMock repository;
     late AcceptConnectionUc useCase;
     late ProfileRepositoryMock profileRepoMock;
+    late ChatRepositoryMock chatRepository;
 
     setUp(() {
       repository = NetworkRepositoryMock();
       profileRepoMock = ProfileRepositoryMock();
-      useCase = AcceptConnectionUc(networkRepository: repository, profileRepository: profileRepoMock);
+      chatRepository = ChatRepositoryMock();
+      useCase = AcceptConnectionUc(networkRepository: repository, profileRepository: profileRepoMock, messageRepository: chatRepository);
 
       registerFallbackValue(dummyConnections[2]);
     });
