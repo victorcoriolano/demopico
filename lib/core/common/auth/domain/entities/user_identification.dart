@@ -3,23 +3,26 @@
 class UserIdentification {
   final String id;
   final String name;
-  final String? photoUrl;
+  final String? profilePictureUrl;
 
   UserIdentification({
     required this.id,
     required this.name,
-    required this.photoUrl,
+    required this.profilePictureUrl,
   });
 
   factory UserIdentification.fromJson(Map<String, dynamic> json) {
-    return UserIdentification(id: json["idUser"], name: json["name"], photoUrl: json["photoUrl"]);
+    return UserIdentification(
+      id: json["id"], 
+      name: json["name"], 
+      profilePictureUrl: json["profilePictureUrl"]);
   }
   
   Map<String,dynamic> toJson() {
     return {
-      "idUser": id,
+      "id": id,
       "name": name,
-      "photoUrl": photoUrl,
+      "profilePictureUrl": profilePictureUrl,
     };
   }
 }
