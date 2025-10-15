@@ -4,6 +4,7 @@ import 'package:demopico/features/external/datasources/firebase/crud_firebase.da
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_network_datasource.dart';
+import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:flutter/material.dart';
 
 class FirebaseNetworkDatasource implements INetworkDatasource<FirebaseDTO> {
@@ -64,9 +65,12 @@ class FirebaseNetworkDatasource implements INetworkDatasource<FirebaseDTO> {
 
       try{
         final data = await collections.where(
-          Filter.or(
-            Filter("requesterID", isEqualTo: idUser),
-            Filter("adressedID", isEqualTo: idUser),
+          Filter.and(
+            Filter.or(
+              Filter("requesterUserID", isEqualTo: idUser),
+              Filter("addressedID", isEqualTo: idUser),
+            ),
+            Filter("status", isEqualTo: RequestConnectionStatus.accepted.name)
           )
         ).get();
         return data.docs.map((doc) {
