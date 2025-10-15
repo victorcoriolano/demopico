@@ -17,7 +17,6 @@ class MockNetworkService extends Mock implements FirebaseNetworkDatasource {}
 void main() {
   late NetworkRepository repository;
   late MockNetworkService mockNetworkService;
-  late IMapperDto mapper;
   late IMapperDto mapperConnection;
 
 
@@ -25,7 +24,7 @@ void main() {
         mockNetworkService = MockNetworkService();
     // Initialize the repository with the mock service
     repository = NetworkRepository(datasource: mockNetworkService);
-    mapper = repository.mapperUser;
+    
     mapperConnection = repository.mapperConnection;
     // Register the mapper for UserM and Connection
     registerFallbackValue(mockUserProfile);
@@ -114,7 +113,6 @@ void main() {
   
   
   group('disconnectUser', () {
-    // TODO CORRIGIR ESSES TESTES 
     test('should complete successfully when disconnecting two connected users', () async {
       // Arrange
       when(() => mockNetworkService.deleteConnection("id")).thenAnswer((_) async => {});

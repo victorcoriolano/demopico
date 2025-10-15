@@ -1,9 +1,12 @@
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
+import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/domain/usecases/accept_connection_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/cancel_relationship_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/create_connection_users_uc.dart';
+import 'package:demopico/features/profile/domain/usecases/disconnect_users.dart';
 import 'package:demopico/features/profile/domain/usecases/get_conections_accepted_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_connections_requests_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_connections_sent.dart';
@@ -20,6 +23,8 @@ class NetworkViewModel extends ChangeNotifier {
   final GetConnectionsSentUc _getConnectionsSent;
   final CancelRelationshipUc _cancelRelationship;
   final GetConectionsAcceptedUc _getConnAcceptedUc;
+  final DisconnectUsers _disconnectUsers;
+  
 
   static NetworkViewModel? _instance;
   static NetworkViewModel get instance {
@@ -30,11 +35,13 @@ class NetworkViewModel extends ChangeNotifier {
         getConnectionsRequests: GetConnectionsRequestsUc.instance,
         acceptConnection: AcceptConnectionUc.instance,
         getConnectionsSent: GetConnectionsSentUc.instance,
-        cancelRelationship: CancelRelationshipUc.instance);
+        cancelRelationship: CancelRelationshipUc.instance,
+        disconnectUsers: DisconnectUsers.instance);
     return _instance!;
   }
 
   NetworkViewModel({
+    required DisconnectUsers disconnectUsers,
     required CancelRelationshipUc cancelRelationship,
     required GetConnectionsSentUc getConnectionsSent,
     required GetSugestionsUserUc getSugestionsUser,
@@ -45,6 +52,7 @@ class NetworkViewModel extends ChangeNotifier {
   })  : _getSugestionsUser = getSugestionsUser,
         _getConnAcceptedUc = getConnAccUC,
         _getConnectionsSent = getConnectionsSent,
+        _disconnectUsers = disconnectUsers,
         _createConnectionUsers = createConnectionUsers,
         _getConnectionsRequests = getConnectionsRequests,
         _acceptConnection = acceptConnection,
@@ -56,9 +64,9 @@ class NetworkViewModel extends ChangeNotifier {
   List<Relationship> _connectionsAccepted = [];
 
   List<SuggestionProfile> get suggestions => _suggestions;
-  List<BasicInfoUser> get connectionRequests => _connectionsRequests.map((conn) => conn.requesterUser).toList();
-  List<BasicInfoUser> get connectionSent => _connectionSent.map((conn) => conn.addressed).toList();
-  List<BasicInfoUser> connAccepted(String idUser) { 
+  List<UserIdentification> get connectionRequests => _connectionsRequests.map((conn) => conn.requesterUser).toList();
+  List<UserIdentification> get connectionSent => _connectionSent.map((conn) => conn.addressed).toList();
+  List<UserIdentification> connAccepted(String idUser) { 
     debugPrint("Pegando conexões aceitaas para o user: $idUser");
     debugPrint("conexões aceitas: ${_connectionsAccepted.length}");
     return _connectionsAccepted.map((e) {
@@ -81,6 +89,7 @@ class NetworkViewModel extends ChangeNotifier {
   Future<void> fetchAcceptedConnections(String idUser) async {
     try {
       _connectionsAccepted = await _getConnAcceptedUc.execute(idUser);
+      debugPrint(_connectionsAccepted.toString());
       notifyListeners();
     } on Failure catch (e) {
       FailureServer.showError(e, "Error fetching accepted connections");
@@ -104,11 +113,11 @@ class NetworkViewModel extends ChangeNotifier {
 
     final connection = Relationship(
       id: '',
-      requesterUser: BasicInfoUser(
+      requesterUser: UserIdentification(
           id: currentUser.id,
           name: currentUser.displayName.value,
           profilePictureUrl: currentUser.avatar),
-      addressed: BasicInfoUser(
+      addressed: UserIdentification(
           id: userSuggestion.idUser,
           name: userSuggestion.name,
           profilePictureUrl: userSuggestion.photo),
@@ -125,7 +134,7 @@ class NetworkViewModel extends ChangeNotifier {
   }
 
 
-  Future<void> acceptConnection(BasicInfoUser requester, UserEntity currentUser) async {
+  Future<void> acceptConnection(UserIdentification requester, UserEntity currentUser) async {
     try {
       suggestions.removeWhere((suggestion) => suggestion.idUser == requester.id);
       final relationshiptoUpdate = _connectionsRequests.firstWhere((relactionship) => relactionship.requesterUser == requester);
@@ -137,7 +146,7 @@ class NetworkViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> cancelRelationship(BasicInfoUser request) async {
+  Future<void> cancelRelationship(UserIdentification request) async {
     try {
       final relationship = _connectionSent.firstWhere((relatioship) => relatioship.addressed == request);
       await _cancelRelationship.execute(relationship);
@@ -145,5 +154,17 @@ class NetworkViewModel extends ChangeNotifier {
       FailureServer.showError(e);
     }
     notifyListeners();
+  }
+
+  Future<void> disconnectUsers(String currentIdUser, String otherUser) async {
+    try {
+      final relationshipToDisconnect = _connectionsAccepted.firstWhere((element) => element.hasBothID(currentIdUser, otherUser)); 
+      _disconnectUsers.execute(relationshipToDisconnect);
+    } on StateError catch (e) {
+      debugPrint("ERRO - NÃO ENCONTROU O RELACIONAMENTO - $e");
+      FailureServer.showError(UnknownError(message: "Não foi possivel realizar esta ação"));
+    } on Failure catch (e){
+      FailureServer.showError(e);
+    }
   }
 }

@@ -119,7 +119,7 @@ class _ContainerTelasState extends State<ContainerTelas> {
         return null;
       case AuthAuthenticated():
          return UserIdentification(
-        id: authstate.user.id, name: authstate.user.displayName.value, photoUrl: authstate.user.profileUser.avatar);
+        id: authstate.user.id, name: authstate.user.displayName.value, profilePictureUrl: authstate.user.profileUser.avatar);
     }
 
    

@@ -2,6 +2,9 @@ import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/custom_buttons.dart';
 import 'package:demopico/features/profile/domain/models/profile_user.dart';
+import 'package:demopico/features/profile/domain/models/relationship.dart';
+import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
+import 'package:demopico/features/profile/presentation/view_objects/suggestion_profile.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_posts_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_bottom_side_data_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_top_side_data_widget.dart';
@@ -41,7 +44,8 @@ class _ProfilePageUserState extends State<ProfilePageUser>
     final userVM = context.read<AuthViewModelAccount>().user;
     switch (userVM) {
       case UserEntity():
-        _isMyFriend = userVM.profileUser.connections.contains(profile.userID);
+        debugPrint("Amigos: ${userVM.profileUser.connections}");
+        _isMyFriend = userVM.profileUser.connections.contains(idProfile);
         debugPrint("Este perfil é meu amigo ? $_isMyFriend");
       case AnonymousUserEntity():
         _isMyFriend = false;
@@ -175,9 +179,22 @@ class _ProfilePageUserState extends State<ProfilePageUser>
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomElevatedButton(
-                        onPressed: () {}, textButton: _isMyFriend ? "Desconectar" : "Conectar"),
+                        onPressed: () async {
+                          final userVM = context.read<AuthViewModelAccount>().user as UserEntity;
+                          if (_isMyFriend){
+                            userVM.profileUser.connections.remove(profile.userID);
+                            profile.connections.remove(userVM.id);
+                            await context.read<NetworkViewModel>().disconnectUsers(userVM.id, profile.userID);
+                          } else {
+                            final userToConnect = SuggestionProfile(idUser: profile.userID, name: profile.displayName, photo: profile.avatar, status: RequestConnectionStatus.pending);
+                            await context.read<NetworkViewModel>().requestConnection(userToConnect, userVM);
+                          }
+                        }, 
+                        textButton: _isMyFriend ? "Desconectar" : "Conectar"),
                     ElevatedButton.icon(
-                      onPressed: () {},
+                      onPressed: () {
+                        // TODO: implementar criação de chat
+                      },
                       icon: Icon(Icons.chat_outlined),
                       style: CustomElevatedButton.formatation,
                       label: Text("Acessar chat"),

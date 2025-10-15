@@ -39,9 +39,12 @@ class FirebaseErrorsMapper {
         return ExpiredTokenFailure(originalException: exception);
       case 'user-not-found':
         return UserNotFoundFailure(originalException: exception);
+      case 'invalid-credential':
+        return InvalidCredentialsFailure("Credenciais inválidas, verifique se inseriu corretamente");
       
       // Genéricos
       default:
+        debugPrint("Erro não mapeado, lançando erro generico: $exception ${exception.code}");
         return UnknownFailure(originalException: exception);
     }
   }

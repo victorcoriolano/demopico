@@ -1,38 +1,10 @@
+import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 
-sealed class ReciverRequesterBase {
-  String id;
-  String name;
-  String? profilePictureUrl;
 
-  ReciverRequesterBase({required this.id, required this.name, required this.profilePictureUrl});
-}
-
-class BasicInfoUser  {
-    final String id;
-  final String name;
-  final String? profilePictureUrl;
-  BasicInfoUser({required this.id, required this.name, required this.profilePictureUrl});
-
-  factory BasicInfoUser.fromJson(Map<String, dynamic> json) {
-    return BasicInfoUser(
-      id: json['id'],
-      name: json['name'],
-      profilePictureUrl: json['profilePictureUrl'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'profilePictureUrl': profilePictureUrl,
-    };
-  }
-}
 class Relationship {
   String id;
-  BasicInfoUser requesterUser;
-  BasicInfoUser addressed;
+  UserIdentification requesterUser;
+  UserIdentification addressed;
   RequestConnectionStatus status;
   DateTime createdAt;
   DateTime updatedAt;
@@ -57,16 +29,16 @@ class Relationship {
       updatedAt: DateTime.parse(json['updatedAt']),
       id: id,
       createdAt: DateTime.parse(json['createdAt']),
-      requesterUser: BasicInfoUser.fromJson(json['requesterData']),
+      requesterUser: UserIdentification.fromJson(json['requesterData']),
       status: RequestConnectionStatus.fromString(json['status']),
-      addressed: BasicInfoUser.fromJson(json['addressedData']),
+      addressed: UserIdentification.fromJson(json['addressedData']),
     );
   }
 
   Relationship copyWith({
     String? id,
-    BasicInfoUser? requesterUser,
-    BasicInfoUser? addressed,
+    UserIdentification? requesterUser,
+    UserIdentification? addressed,
     RequestConnectionStatus? status,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -80,6 +52,16 @@ class Relationship {
       updatedAt: updatedAt ?? this.updatedAt,
     );
   }
+
+
+  bool hasId(String id){
+    return addressed.id == id || requesterUser.id == id;
+  }
+
+  bool hasBothID(String id1, String id2){
+    return hasId(id1) && hasId(id2); 
+  }
+
 }
 
 

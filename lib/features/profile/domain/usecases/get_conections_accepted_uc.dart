@@ -15,9 +15,9 @@ class GetConectionsAcceptedUc {
   GetConectionsAcceptedUc({required INetworkRepository repository})
       : _repository = repository;
 
-  Future<List<Relationship>> execute(String idUser) {
+  Future<List<Relationship>> execute(String idUser) async {
     try {
-      final relationships = _repository.getRelationshipAccepted(idUser);
+      final relationships = await _repository.getRelationshipAccepted(idUser);
       debugPrint("Relationships for $idUser: $relationships");
       return relationships;
     } on Failure catch (e) {

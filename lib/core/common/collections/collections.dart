@@ -7,10 +7,13 @@ enum Collections {
   communique,
   comments,
   posts,
-  profiles;
+  profiles,
+  chats;
 
   factory Collections.fromString(String value) {
     switch (value) {
+      case 'chats':
+        return Collections.chats;
       case 'connections':
         return Collections.connections;
       case 'spots':
@@ -36,6 +39,8 @@ enum Collections {
 
   String get name {
     switch (this) {
+      case Collections.chats:
+        return 'chats';
       case Collections.spots:
         return 'spots';
       case Collections.users:

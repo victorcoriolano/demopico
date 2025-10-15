@@ -1,5 +1,6 @@
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/core/common/widgets/snackbar_utils.dart';
 import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
@@ -84,7 +85,7 @@ enum ActionType {
 }
 
 class ProfileList extends StatelessWidget {
-  final List<BasicInfoUser> userProfiles;
+  final List<UserIdentification> userProfiles;
   final ActionType actionType;
 
   const ProfileList(

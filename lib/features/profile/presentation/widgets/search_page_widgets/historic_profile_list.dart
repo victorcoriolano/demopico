@@ -1,4 +1,5 @@
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/presentation/pages/profile_page_user.dart';
 import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
@@ -15,7 +16,7 @@ class HistoricHorizontalList extends StatefulWidget {
 }
 
 class _HistoricHorizontalListState extends State<HistoricHorizontalList> {
-  final List<BasicInfoUser> connectionsAccepted = [];
+  final List<UserIdentification> connectionsAccepted = [];
 
   @override
   void initState() {
@@ -34,7 +35,7 @@ class _HistoricHorizontalListState extends State<HistoricHorizontalList> {
 
   @override
   Widget build(BuildContext context) {
-    final List<BasicInfoUser> connectionsAccepted = [];
+    final List<UserIdentification> connectionsAccepted = [];
 
     final theme = Theme.of(context);
     final user = context.read<AuthViewModelAccount>().user;
@@ -73,14 +74,14 @@ class _HistoricHorizontalListState extends State<HistoricHorizontalList> {
                         ],
                       ),
                       child: ClipOval(
-                        child: Image.network(
+                        child: friend.profilePictureUrl!= null ? Image.network(
                           friend.profilePictureUrl!,
                           fit: BoxFit.cover,
                           errorBuilder: (_, __, ___) => Container(
                             color: theme.colorScheme.surfaceContainer,
                             child: const Icon(Icons.person, size: 32),
                           ),
-                        ),
+                        ): Icon(Icons.person),
                       ),
                     ),
                     const SizedBox(height: 6),

@@ -1,6 +1,7 @@
 import 'package:demopico/core/app/home_page.dart';
 import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/routes/middleware.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/add_pico_pages.dart/create_spot_page.dart';
 import 'package:demopico/features/mapa/presentation/pages/favorites_page.dart';
@@ -66,7 +67,7 @@ class AppPages {
     GetPage(
         binding: AuthBinding(),
         name: Paths.chat,
-        page: () => ChatRoomPage(),
+        page: () => ChatRoomPage(idCurrentUser: (AuthViewModelAccount.instance.user as UserEntity).id),
         middlewares: [Middleware(AuthViewModelAccount.instance)],
         transition: Transition.rightToLeft),
     GetPage(

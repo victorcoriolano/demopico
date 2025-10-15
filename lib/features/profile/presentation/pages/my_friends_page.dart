@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/presentation/pages/profile_page_user.dart';
 import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
@@ -16,7 +17,7 @@ class MyFriendsPage extends StatefulWidget {
 
 class _MyFriendsPageState extends State<MyFriendsPage> {
   final String idUser  = Get.arguments as String;
-  final List<BasicInfoUser> friends = [];
+  final List<UserIdentification> friends = [];
   @override
   void initState() {
     super.initState();
@@ -40,10 +41,11 @@ class _MyFriendsPageState extends State<MyFriendsPage> {
               return ListTile(
                 title: Text(friend.name),
                 leading: CircleAvatar(
-                  backgroundImage: CachedNetworkImageProvider(friend.profilePictureUrl!),
-                  onBackgroundImageError: (exception, stackTrace) => const Icon(Icons.person),),
+                  backgroundImage: friend.profilePictureUrl != null ? CachedNetworkImageProvider(friend.profilePictureUrl!) : null,
+),
                 trailing: IconButton(
                   onPressed: () {
+                    
                   }, 
                   icon: Icon(Icons.chat)),
                 onTap: () {

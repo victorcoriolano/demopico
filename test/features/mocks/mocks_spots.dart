@@ -24,7 +24,7 @@ final testPico = PicoModel(
   userIdentification: UserIdentification(
     id: "980302",
     name: "user123",
-    photoUrl: "url.com.photo"
+    profilePictureUrl: "url.com.photo"
   ),
 );
 
@@ -48,7 +48,7 @@ final testPico2 = PicoModel(
   userIdentification: UserIdentification(
     id: "209094",
     name: "user123",
-    photoUrl: "url.com.photo"
+    profilePictureUrl: "url.com.photo"
   ),
 );
 
@@ -72,7 +72,7 @@ final testPico3 = PicoModel(
   userIdentification: UserIdentification(
     id: "23413",
     name: "user123",
-    photoUrl: "url.com.photo"
+    profilePictureUrl: "url.com.photo"
   ),
 );
 

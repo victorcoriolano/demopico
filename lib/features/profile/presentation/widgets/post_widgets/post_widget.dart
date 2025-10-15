@@ -26,14 +26,13 @@ class _PostWidgetState extends State<PostWidget> {
   int curtidas = 0;
   late final PostProvider _provider;
   final urlsItems = [];
-  late bool isMypost;
+  bool isMypost = false;
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
     curtidas = widget.post.curtidas;
-    
   }
 
   @override
@@ -48,6 +47,7 @@ class _PostWidgetState extends State<PostWidget> {
           isMypost = VerifyIsMy.isMy(widget.post.userId, context);
           _provider = context.read<PostProvider>();
           urlsItems.addAll(_provider.getMediaItemsFor(widget.post));
+          
          }
       case AnonymousUserEntity():
         // do nothing
@@ -63,6 +63,7 @@ class _PostWidgetState extends State<PostWidget> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint(isMypost.toString());
     final post = widget.post;
     final screenHeight = MediaQuery.of(context).size.height;
 
