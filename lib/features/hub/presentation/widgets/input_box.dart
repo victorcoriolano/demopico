@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 class InputBox extends StatefulWidget {
+  final String hintText;
   final Future<void> Function(String) sendAction;
   final void Function() chooseAction;
   const InputBox(
-      {super.key, required this.sendAction, required this.chooseAction});
+      {super.key, required this.sendAction, required this.chooseAction, required this.hintText});
 
   @override
   State<InputBox> createState() => _InputBoxState();
@@ -67,11 +68,11 @@ class _InputBoxState extends State<InputBox> {
               child: TextField(
                 style: const TextStyle(
                     decoration: TextDecoration.none, overflow: TextOverflow.clip),
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   helperStyle: TextStyle(),
                   counterText: '',
                   enabledBorder: null,
-                  hintText: 'Fazer anúncio...',
+                  hintText: widget.hintText,
                   hintStyle: TextStyle(
                       color: Color.fromARGB(139, 12, 12, 12),
                       fontWeight: FontWeight.bold),
