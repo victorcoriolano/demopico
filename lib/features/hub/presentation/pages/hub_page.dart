@@ -252,6 +252,7 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
                 duration: const Duration(milliseconds: 200),
                 child: !isChoosingType
                     ? InputBox(
+                        hintText: 'Fazer anúncio...',
                         sendAction: _handleSendAction,
                         chooseAction: () {
                           setState(() {
