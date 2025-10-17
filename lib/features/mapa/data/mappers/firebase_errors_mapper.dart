@@ -41,7 +41,8 @@ class FirebaseErrorsMapper {
         return UserNotFoundFailure(originalException: exception);
       case 'invalid-credential':
         return InvalidCredentialsFailure("Credenciais inválidas, verifique se inseriu corretamente");
-      
+      case 'requires-recent-login':
+        return RequiresRecentLoginFailure();
       // Genéricos
       default:
         debugPrint("Erro não mapeado, lançando erro generico: $exception ${exception.code}");
