@@ -36,6 +36,11 @@ class InvalidCredentialsFailure extends DomainFailure {
   InvalidCredentialsFailure([this.personalizedMessage]): super(message: personalizedMessage ?? "Credenciais inválidas", code: "invalid_credentials");
 }
 
+class RequiresRecentLoginFailure extends DomainFailure {
+  final String? personalizedMessage;
+  RequiresRecentLoginFailure([this.personalizedMessage]): super(message: personalizedMessage ?? "Essa operação é sensível e requer autenticação recente por favor faça login novamente para realizar esta operação", code: "REQUIRES-RECENT-LOGIN-FAILURE");
+}
+
 class InvalidFormatFileFailure extends DomainFailure {
   InvalidFormatFileFailure(): super(message: "Formato de arquivo inválido", code: 'invalid_file');
 }
