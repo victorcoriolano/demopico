@@ -24,7 +24,7 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
   bool _isDonation = false;
   bool _isEvent = false;
   TypeCommunique selectedType = TypeCommunique.normal;
-
+  String mensagem = '';
   String server = 'serverGlobal';
   final servidores = [
     {
@@ -92,7 +92,6 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
 
   Future<void> _handleSendAction(String message) async {
     final currentUser = context.read<AuthViewModelAccount>().user;
-
     if (currentUser is AnonymousUserEntity) {
       SnackbarUtils.userNotLogged(context);
       return;
@@ -103,6 +102,7 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
     await context
         .read<HubProvider>()
         .postHubCommunique(message, selectedType, user!, server);
+    setState(() => mensagem = '');
   }
 
   @override
@@ -261,12 +261,12 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
                       child: !isChoosingType
                           ? InputBox(
                               hintText: 'Fazer anúncio...',
+                              value: mensagem,
+                              onChanged: (val) =>
+                                  setState(() => mensagem = val),
                               sendAction: _handleSendAction,
-                              chooseAction: () {
-                                setState(() {
-                                  isChoosingType = true;
-                                });
-                              },
+                              chooseAction: () =>
+                                  setState(() => isChoosingType = true),
                             )
                           : Container(
                               width: double.infinity,
