@@ -1,4 +1,5 @@
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
+import 'package:demopico/core/common/widgets/snackbar_utils.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:demopico/features/hub/presentation/providers/hub_provider.dart';
 import 'package:demopico/features/hub/presentation/widgets/communique_tile.dart';
@@ -23,6 +24,7 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
   bool _isDonation = false;
   bool _isEvent = false;
   TypeCommunique selectedType = TypeCommunique.normal;
+
   String server = 'serverGlobal';
   final servidores = [
     {
@@ -39,7 +41,7 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
       "name": "Zona Leste",
       "image": "assets/images/servidores/serverZL.jpeg",
       "path": "serverSpZonaLeste",
-    }, 
+    },
     {
       "name": "Zona Norte",
       "image": "assets/images/servidores/serverSPZN.jpg",
@@ -68,7 +70,7 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
 
     _tabController.addListener(() {
       if (!_tabController.indexIsChanging) {
-        if (_tabController.index == 0 ) {
+        if (_tabController.index == 0) {
           setState(() {
             server = 'serverGlobal';
           });
@@ -89,7 +91,15 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
   }
 
   Future<void> _handleSendAction(String message) async {
-    user ??= context.read<AuthViewModelAccount>().user as UserEntity;
+    final currentUser = context.read<AuthViewModelAccount>().user;
+
+    if (currentUser is AnonymousUserEntity) {
+      SnackbarUtils.userNotLogged(context);
+      return;
+    }
+
+    user = currentUser as UserEntity;
+
     await context
         .read<HubProvider>()
         .postHubCommunique(message, selectedType, user!, server);
@@ -192,12 +202,11 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
                         },
                       ),
                       Container(
-                    
                         child: server == 'serverOutros'
                             ? Container(
-                              margin: EdgeInsets.only(top: 10),
-                              child: Center(
-                                  child: ListView(
+                                margin: EdgeInsets.only(top: 10),
+                                child: Center(
+                                    child: ListView(
                                   children: servidores
                                       .map((servidor) => ServidoresCard(
                                             serverName: servidor["name"]!,
@@ -206,17 +215,16 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
                                             onTap: () {
                                               setState(() {
                                                 server = servidor["path"]!;
-                                               context
-                                                  .read<HubProvider>()
-                                                  .watchCommuniques(
-                                                      server, 'mensagens');
+                                                context
+                                                    .read<HubProvider>()
+                                                    .watchCommuniques(
+                                                        server, 'mensagens');
                                               });
-                                              
                                             },
                                           ))
                                       .toList(),
                                 )),
-                            )
+                              )
                             : ListView.builder(
                                 itemCount: provider.allCommuniques.length,
                                 itemBuilder: (context, index) {
@@ -244,97 +252,129 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
             ),
 
             //INPUT
-          server == 'serverOutros'
-              ? const SizedBox.shrink()
-              :  Padding(
-              padding: const EdgeInsets.all(16),
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 200),
-                child: !isChoosingType
-                    ? InputBox(
-                        hintText: 'Fazer anúncio...',
-                        sendAction: _handleSendAction,
-                        chooseAction: () {
-                          setState(() {
-                            isChoosingType = true;
-                          });
-                        },
-                      )
-                    : Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 177, 177, 177),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Text(
-                                  'Escolha o tipo de publicação',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.close),
-                                  onPressed: () {
-                                    setState(() {
-                                      isChoosingType = false;
-                                    });
-                                  },
-                                )
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Column(
-                                  children: [
-                                    const Icon(Icons.star),
-                                    CupertinoSwitch(
-                                      value: _isDonation,
-                                      activeTrackColor: const Color(0xFF970202),
-                                      inactiveTrackColor:
-                                          const Color(0xFFE0E0E0),
-                                      thumbColor: Colors.black,
-                                      onChanged: (bool value) {
-                                        setState(() {
-                                          _isDonation = value;
-                                          if (value) _isEvent = false;
-                                        });
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  children: [
-                                    const Icon(Icons.recycling),
-                                    CupertinoSwitch(
-                                      value: _isEvent,
-                                      activeTrackColor: const Color(0xFF970202),
-                                      inactiveTrackColor:
-                                          const Color(0xFFE0E0E0),
-                                      thumbColor: Colors.black,
-                                      onChanged: (bool value) {
-                                        setState(() {
-                                          _isEvent = value;
-                                          if (value) _isDonation = false;
-                                        });
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ],
+            server == 'serverOutros'
+                ? const SizedBox.shrink()
+                : Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 200),
+                      child: !isChoosingType
+                          ? InputBox(
+                              hintText: 'Fazer anúncio...',
+                              sendAction: _handleSendAction,
+                              chooseAction: () {
+                                setState(() {
+                                  isChoosingType = true;
+                                });
+                              },
                             )
-                          ],
-                        ),
-                      ),
-              ),
-            ),
-           
+                          : Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: const Color.fromARGB(255, 221, 221, 221),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.only(left: 10),
+                                        child: const Text(
+                                          'TIPO DE PUBLICAÇÃO',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18),
+                                        ),
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.close),
+                                        iconSize: 30,
+                                        onPressed: () {
+                                          setState(() {
+                                            isChoosingType = false;
+                                          });
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Column(
+                                        children: [
+                                          const Icon(
+                                            Icons.star,
+                                            size: 30,
+                                          ),
+                                          Text(
+                                            'EVENTO',
+                                            style: TextStyle(fontSize: 10),
+                                          ),
+                                          CupertinoSwitch(
+                                            value: _isDonation,
+                                            trackOutlineColor:
+                                                WidgetStateProperty.all(
+                                                    const Color.fromARGB(
+                                                        255, 207, 207, 207)),
+                                            trackOutlineWidth:
+                                                WidgetStatePropertyAll(0.4),
+                                            activeTrackColor:
+                                                const Color(0xFF970202),
+                                            inactiveTrackColor:
+                                                const Color(0xFFE0E0E0),
+                                            thumbColor: Colors.black,
+                                            onChanged: (bool value) {
+                                              setState(() {
+                                                _isDonation = value;
+                                                if (value) _isEvent = false;
+                                              });
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        children: [
+                                          const Icon(Icons.handshake, size: 30),
+                                          Text(
+                                            'DOAÇÃO',
+                                            style: TextStyle(fontSize: 10),
+                                          ),
+                                          CupertinoSwitch(
+                                            value: _isEvent,
+                                            trackOutlineColor:
+                                                WidgetStateProperty.all(
+                                                    const Color.fromARGB(
+                                                        255, 207, 207, 207)),
+                                            trackOutlineWidth:
+                                                WidgetStatePropertyAll(0.5),
+                                            activeTrackColor:
+                                                const Color(0xFF970202),
+                                            inactiveTrackColor:
+                                                const Color(0xFFE0E0E0),
+                                            thumbColor: Colors.black,
+                                            onChanged: (bool value) {
+                                              setState(() {
+                                                _isEvent = value;
+                                                if (value) _isDonation = false;
+                                              });
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                    ),
+                  ),
           ],
         ),
       ),
