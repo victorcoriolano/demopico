@@ -54,6 +54,19 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
     }
   ];
 
+  Color _getBorderColor(TypeCommunique type) {
+    switch (type) {
+      case TypeCommunique.donation:
+        return const Color.fromARGB(255, 0, 0, 0);
+      case TypeCommunique.event:
+        return Colors.blue;
+      case TypeCommunique.announcement:
+        return Colors.orange;
+      default:
+        return const Color.fromARGB(255, 116, 9, 1); // cor padrão
+    }
+  }
+
   late TabController _tabController;
 
   @override
@@ -235,10 +248,10 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
                                         vertical: 8, horizontal: 8),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
-                                      side: const BorderSide(
-                                          width: 0.5,
-                                          color:
-                                              Color.fromARGB(255, 116, 9, 1)),
+                                      side: BorderSide(
+                                        width: 0.5,
+                                        color: _getBorderColor(communique.type),
+                                      ),
                                     ),
                                     child: CommuniqueTile(post: communique),
                                   );
@@ -258,25 +271,26 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
                     padding: const EdgeInsets.all(16),
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 200),
-                      child: !isChoosingType
-                          ? InputBox(
-                              hintText: 'Fazer anúncio...',
-                              value: mensagem,
-                              onChanged: (val) =>
-                                  setState(() => mensagem = val),
-                              sendAction: _handleSendAction,
-                              chooseAction: () =>
-                                  setState(() => isChoosingType = true),
-                            )
-                          : Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(10),
+                      child: Stack(children: [
+                        InputBox(
+                          hintText: 'Fazer anúncio...',
+                          value: mensagem,
+                          onChanged: (val) => setState(() => mensagem = val),
+                          sendAction: _handleSendAction,
+                          chooseAction: () =>
+                              setState(() => isChoosingType = true),
+                        ),
+                        if (isChoosingType)
+                          Positioned(
+                            child: Container(
+                              height: 180,
                               decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 221, 221, 221),
-                                borderRadius: BorderRadius.circular(12),
+                                color: const Color.fromARGB(255, 223, 222, 222),
+                                borderRadius: BorderRadius.circular(10),
                               ),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Row(
                                     mainAxisAlignment:
@@ -332,6 +346,8 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
                                             thumbColor: Colors.black,
                                             onChanged: (bool value) {
                                               setState(() {
+                                                selectedType =
+                                                    TypeCommunique.event;
                                                 _isDonation = value;
                                                 if (value) _isEvent = false;
                                               });
@@ -362,6 +378,8 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
                                             onChanged: (bool value) {
                                               setState(() {
                                                 _isEvent = value;
+                                                selectedType =
+                                                    TypeCommunique.donation;
                                                 if (value) _isDonation = false;
                                               });
                                             },
@@ -373,6 +391,8 @@ class _HubPageState extends State<HubPage> with TickerProviderStateMixin {
                                 ],
                               ),
                             ),
+                          ),
+                      ]),
                     ),
                   ),
           ],
