@@ -15,7 +15,7 @@ class ChangePasswordUc {
   ChangePasswordUc({required IUserAccountRepository accountRepository}) 
     : _accountRepository = accountRepository;
 
-  Future<void> sendEmail(PasswordVo newPassword) async {
+  Future<void> execute(PasswordVo newPassword) async {
     return await _accountRepository.updatePassword(newPassword);
   } 
 }
