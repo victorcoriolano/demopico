@@ -1,9 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
+import 'package:demopico/core/common/auth/domain/value_objects/password_vo.dart';
+import 'package:demopico/core/common/errors/failure_server.dart';
+import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/custom_buttons.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/editable_custom_field.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
+import 'package:demopico/features/user/presentation/widgets/form_validator.dart';
+import 'package:demopico/features/user/presentation/widgets/textfield_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 
 class EditProfilePage extends StatefulWidget {
@@ -13,23 +20,30 @@ class EditProfilePage extends StatefulWidget {
   State<EditProfilePage> createState() => _EditProfilePageState();
 }
 
-class _EditProfilePageState extends State<EditProfilePage> {
+class _EditProfilePageState extends State<EditProfilePage> with Validators{
   final user = Get.arguments as UserEntity; 
 
   late TextEditingController _nameController;
   late TextEditingController _bioController;
+  final TextEditingController _passwordController1 = TextEditingController();
+  final TextEditingController _passwordController2 = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: user.profileUser.displayName);
     _bioController = TextEditingController(text: user.profileUser.description);
+
   }
 
   @override
   void dispose() {
     _nameController.dispose();
     _bioController.dispose();
+    _passwordController1.dispose();
+    _passwordController2.dispose();
+    _formKey.currentState?.dispose();
     super.dispose();
   }
 
@@ -62,21 +76,77 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   void _handleChangePassword() {
-    // TODO: CHANGE PASSWORD FLOW
-    // Lógica complexa para alterar a senha:
-    // 1. Mostrar um modal ou nova tela para o usuário inserir a senha atual e a nova senha.
-    // 2. Validar a senha atual.
-    // 3. Atualizar a senha no banco de dados.
-    // 4. Exibir uma mensagem de sucesso ou erro.
-    debugPrint('Iniciando fluxo de alteração de senha...');
-    Get.snackbar(
-      'Atenção',
-      'Um link para redefinir sua senha foi enviado para seu e-mail. Por favor, verifique sua caixa de entrada.',
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.blueAccent,
-      colorText: Colors.white,
+    showDialog(
+      context: context, 
+      builder: (context) {
+        return AlertDialog( 
+          title: Column(
+            children: [
+              Text("Insira sua nova senha"),
+              Divider()
+            ],
+          ),
+
+          content: Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Form(
+              key: _formKey,
+              child: SizedBox(
+                height: 150,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    TextFormField(
+                      decoration: customTextField("Adicione sua nova senha", kLightGrey),
+                      controller: _passwordController1,
+                      validator: (value) => combineValidators([
+                          () => isNotEmpty(value),
+                          () => isValidPassword(value),
+                      ]),
+                    ),
+                    SizedBox(height: 12,),
+                    TextFormField(
+                      decoration: customTextField("Confirme a sua senha", kLightGrey),
+                      controller: _passwordController2,
+                      validator: (value) => combineValidators([
+                          () => isNotEmpty(value),
+                          () => isValidPassword(value),
+                          () => checkPassword(value, _passwordController1.text),
+                      ]),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          actionsAlignment: MainAxisAlignment.spaceBetween,
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.back();
+              }, 
+              child: Text("Cancelar")),
+            CustomElevatedButton(
+              onPressed: () async {
+                if(_formKey.currentState!.validate()){
+                  try{
+
+                final newPassword= PasswordVo(_passwordController1.text);
+                await context.read<AuthViewModelAccount>().changePasswordFlow(newPassword);
+
+                  } on Failure catch (e){
+                    FailureServer.showError(e);
+                  }
+                }              
+              }, 
+              textButton: "OK")
+            
+          ],
+        );
+      }
     );
   }
+  
 
   void _changeProfilePicture() {
     // TODO: CHANGE PROFILE PICTURE FLOW
@@ -91,6 +161,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     debugPrint('Abrindo seletor de imagens para o fundo...');
     // Implementar lógica de ImagePicker aqui
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
