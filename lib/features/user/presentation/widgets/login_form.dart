@@ -1,5 +1,7 @@
 import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/custom_buttons.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_sign_in.dart';
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
 import 'package:demopico/features/user/presentation/widgets/swith_type_login.dart';
@@ -20,6 +22,38 @@ class _LoginFormState extends State<LoginForm> with Validators {
   final TextEditingController _loginController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+
+  void inputEmailToUpdatePassword(BuildContext context){
+    showDialog(
+      context: context, 
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Insira seu email pra redefinir a senha"),
+          content: Padding(
+            padding: EdgeInsets.all(8.0),
+            child: TextFormField(
+              controller: _loginController,
+            ),
+          ),
+          actionsAlignment: MainAxisAlignment.spaceBetween,
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.back();
+              }, 
+              child: Text("Cancelar")),
+            CustomElevatedButton(
+              onPressed: () async {
+                final email = _loginController.text;
+                await context.read<AuthViewModelAccount>().resetPasswordFlow(email);
+              }, 
+              textButton: "OK")
+            
+          ],
+        );
+      }
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,8 +134,8 @@ class _LoginFormState extends State<LoginForm> with Validators {
                 ),
                 // text input(esqueceu senha)
                 TextButton(
-                    onPressed: () {
-                      //TODO: IMPLEMENTAR LÓGICA DE ESQUECEU A SENHA
+                    onPressed: () async {
+                      inputEmailToUpdatePassword(context);
                     },
                     child: const Text(
                       "Esqueceu senha",
