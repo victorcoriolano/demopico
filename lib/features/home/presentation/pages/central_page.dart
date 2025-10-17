@@ -2,10 +2,7 @@ import 'package:demopico/features/home/presentation/widgets/central_page_backgro
 import 'package:demopico/features/home/presentation/widgets/events_bottom_sheet.dart';
 import 'package:demopico/features/home/presentation/widgets/hub_upper_sheet.dart';
 import 'package:demopico/features/home/presentation/widgets/top_level_home_row.dart';
-import 'package:demopico/features/home/presentation/provider/weather_provider.dart';
-import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class CentralPage extends StatefulWidget {
   const CentralPage({super.key});
@@ -17,51 +14,24 @@ class CentralPage extends StatefulWidget {
 class _CentralPageState extends State<CentralPage> {
   final ScrollController scrollController = ScrollController();
 
-
-  bool _isWeatherLoaded = false;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!_isWeatherLoaded) {
-        if (context.read<OpenWeatherProvider>()
-            .isUpdated()) {
-          debugPrint('Weather data already updated, skipping load.');
-          return;
-        }
-        _loadWeather();
-        _isWeatherLoaded = true;
-      }
-    });
-  }
-
-  Future<void> _loadWeather() async {
-    try{
-      await context.read<OpenWeatherProvider>()
-        .fetchWeatherData();
-        debugPrint('Weather data fetch called sucessfuly in HomePage');
-        _isWeatherLoaded = false;
-    } catch (e) {
-      debugPrint('Error fetching weather data: $e');
-      _isWeatherLoaded = false;
-    }
-    
-  }
+  
 
 
 
   @override
   Widget build(BuildContext context) {
+    
+    //final user = context.read<AuthViewModelAccount>().authState;
     return Scaffold(
       body: Stack(
         children: [
           Column(
             children: [
-              Stack(children: [
+              Stack(
+                children: [
                 CentralPageBackground(),
-                Consumer2<OpenWeatherProvider, UserDataViewModel>(
-                  builder: (context, weatherProvider, userDatabaseProvider, child) {
+                /* Consumer<OpenWeatherProvider>(
+                  builder: (context, weatherProvider, child) {
                     //Carrega os dados do clima de acordo com o estado
                     if (weatherProvider.isLoading) {
                       return Positioned(
@@ -89,12 +59,16 @@ class _CentralPageState extends State<CentralPage> {
                       'temperature': currentWeatherModel?.tempC ?? 0,
                       'isDay': currentWeatherModel?.isDay ?? true,
                     };
-                    return TopLevelHomeRow(
-                      userImage: userDatabaseProvider.user?.pictureUrl,
-                      initialWeatherInfo: weatherData,
-                    );
-                  },
-                ),
+                     */
+                     TopLevelHomeRow(
+                      /* userImage: switch (user) {
+                        AuthAuthenticated() => user.user.avatar,
+                        AuthUnauthenticated() => null,
+                      },
+                      initialWeatherInfo: weatherData, */
+                                         ),
+                  //},
+                //)
               ]),
             ],
           ),
@@ -102,7 +76,9 @@ class _CentralPageState extends State<CentralPage> {
           EventsBottomSheet(),
         ],
       ),
-    );
+        
+      );
+    
   }
 
   @override

@@ -1,8 +1,11 @@
+import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/features/profile/domain/models/relationship.dart';
+import 'package:demopico/features/profile/presentation/pages/profile_page_user.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ConnectionActionCard extends StatefulWidget {
-  final ReciverRequesterBase user;
+  final UserIdentification user;
   final Widget actionButton;
 
   const ConnectionActionCard({ super.key, required this.actionButton, required this.user  });
@@ -25,7 +28,8 @@ class _ConnectionActionCardState extends State<ConnectionActionCard> {
             ),
             trailing: widget.actionButton,
             onTap: () {
-              // TODO IMPLEMENTAR NAVEGAÇÃO PARA PÁGINA DO PERFIL DO USUÁRIO
+              
+              Get.to(() => ProfilePageUser(), arguments: widget.user.id);
             },
           );
   }

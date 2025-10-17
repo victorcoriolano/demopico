@@ -6,7 +6,7 @@ class Post {
   String nome;     
   String userId;
   String spotID;             
-  String urlUserPhoto;
+  String? avatar;
   String description;
   List<String> urlImages;
   List<String>? urlVideos;
@@ -19,7 +19,7 @@ class Post {
     required this.nome,
     required this.userId,
     required this.spotID,
-    required this.urlUserPhoto,
+    required this.avatar,
     required this.description,
     required this.urlImages,
     required this.typePost,
@@ -34,8 +34,8 @@ class Post {
     return nome;
   }
 
-  String getUrlUserPhoto() {
-    return urlUserPhoto;
+  String? getUrlUserPhoto() {
+    return avatar;
   }
 
   String getUserID() {
@@ -72,7 +72,7 @@ class Post {
   }
 
   void setUrlUserPhoto(String value) {
-    urlUserPhoto = value;
+    avatar = value;
   }
 
   void setDescription(String value) {
@@ -83,7 +83,7 @@ class Post {
     urlImages = value;
   }
 
-  void setCurtidas(int value) {
+  set setCurtidas(int value) {
     curtidas = value;
   }
 
@@ -93,7 +93,7 @@ class Post {
       nome: json['nome'],
       spotID: json['spotID'] ?? '', 
       userId: json['userId'],
-      urlUserPhoto: json['urlUserPhoto'],
+      avatar: json['urlUserPhoto'],
       description: json['description'],
       urlImages: List<String>.from(json['urlMidia']),
       urlVideos: json['urlVideos'] != null
@@ -110,7 +110,7 @@ class Post {
       'nome': nome,
       'userId': userId,
       'spotId': spotID,
-      'urlUserPhoto': urlUserPhoto,
+      'urlUserPhoto': avatar,
       'description': description,
       'urlMidia': urlImages,
       'urlVideos': urlVideos ?? [],
@@ -138,7 +138,7 @@ class Post {
       nome: nome ?? this.nome,
       userId: userId ?? this.userId,
       spotID: spotID ?? this.spotID,
-      urlUserPhoto: urlUserPhoto ?? this.urlUserPhoto,
+      avatar: urlUserPhoto ?? avatar,
       description: description ?? this.description,
       urlImages: urlImages ?? this.urlImages,
       urlVideos: urlVideos ?? this.urlVideos,

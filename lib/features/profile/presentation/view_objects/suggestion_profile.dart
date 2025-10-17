@@ -1,7 +1,7 @@
 
 
 import 'package:demopico/features/profile/domain/models/relationship.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/features/user/domain/models/user_model.dart';
 
 class SuggestionProfile {
   final String idUser;
@@ -20,7 +20,7 @@ class SuggestionProfile {
     return SuggestionProfile(
       idUser: user.id,
       name: user.name,
-      photo: user.pictureUrl,
+      photo: user.avatar,
       status: RequestConnectionStatus.available,
     );
   }

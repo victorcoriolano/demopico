@@ -31,7 +31,7 @@ class _TipoContaDropdownButtonState extends State<TipoContaDropdownButton> {
     return DropdownButtonFormField(
       decoration: customTextField("Tipo de conta"),
       dropdownColor: const Color.fromARGB(255, 139, 0, 0),
-      value: _selectedValue,
+      initialValue: _selectedValue,
       items: _items,
       validator: widget.validator,
       onChanged: (String? newValue) {

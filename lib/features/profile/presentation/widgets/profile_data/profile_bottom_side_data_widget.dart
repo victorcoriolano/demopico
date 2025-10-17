@@ -1,8 +1,13 @@
+import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/features/profile/presentation/pages/my_friends_page.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/text_stats_profile_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ProfileBottomSideDataWidget extends StatelessWidget {
+  final String idUser;
+  final String nameUser;
   final int followers;
   final int contributions;
   final String description;
@@ -10,7 +15,10 @@ class ProfileBottomSideDataWidget extends StatelessWidget {
 
 
   const ProfileBottomSideDataWidget(
+
       {super.key,
+      required this.idUser,
+      required this.nameUser,
       required this.followers,
       required this.contributions,
       required this.description,
@@ -28,8 +36,12 @@ class ProfileBottomSideDataWidget extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              TextStatsProfileWidget(info: followers.toString(), legend: 'SEGUIDORES'),
-              TextStatsProfileWidget(info: contributions.toString(), legend: 'CONTRIBUIÇÕES'),
+              TextStatsProfileWidget(
+                info: followers.toString(), 
+                legend: 'CONEXÕES',
+                onTap: () => Get.to(() => MyFriendsPage(), arguments: idUser),),
+              TextStatsProfileWidget(info: contributions.toString(), legend: 'CONTRIBUIÇÕES',
+              onTap: () => Get.toNamed(Paths.mySpots, arguments: nameUser),),
             ],
           ),
         ),

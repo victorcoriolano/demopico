@@ -6,8 +6,8 @@ import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/quart
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/segunda_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/terceira_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/custom_buttons.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
-import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
+import 'package:demopico/features/user/domain/enums/auth_state.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +23,7 @@ class ContainerTelas extends StatefulWidget {
 }
 
 class _ContainerTelasState extends State<ContainerTelas> {
-  late UserM? user;
+  late AuthState? authstate;
   StepsAddPico etapa = StepsAddPico.especificidade;
 
   void _nextScreen() {
@@ -42,7 +42,7 @@ class _ContainerTelasState extends State<ContainerTelas> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      user = context.read<UserDataViewModel>().user;
+      authstate = context.read<AuthViewModelAccount>().authState;
       final location = LocationVo(
           latitude: widget.latlang.latitude,
           longitude: widget.latlang.longitude);
@@ -97,7 +97,7 @@ class _ContainerTelasState extends State<ContainerTelas> {
                         onPressed: provider.isFormValid(etapa) 
                           ? () {
                             etapa == StepsAddPico.detalhesAdicionais
-                              ? provider.createSpot(createIdentification(user))
+                              ? provider.createSpot(createIdentification(authstate))
                               : _nextScreen();
                           }
                           : provider.showError, 
@@ -113,9 +113,15 @@ class _ContainerTelasState extends State<ContainerTelas> {
     );
   }
 
-  UserIdentification? createIdentification(UserM? user) {
-    if (user == null) return null;
-    return UserIdentification(
-        id: user.id, name: user.name, photoUrl: user.pictureUrl);
+  UserIdentification? createIdentification(AuthState? authstate) {
+    switch (authstate){
+      case null || AuthUnauthenticated():
+        return null;
+      case AuthAuthenticated():
+         return UserIdentification(
+        id: authstate.user.id, name: authstate.user.displayName.value, profilePictureUrl: authstate.user.profileUser.avatar);
+    }
+
+   
   }
 }

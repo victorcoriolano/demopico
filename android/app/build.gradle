@@ -8,6 +8,7 @@ plugins {
 android {
     namespace = "com.example.demopico"
     compileSdk = 36
+    compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     compileOptions {

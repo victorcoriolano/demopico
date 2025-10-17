@@ -1,7 +1,11 @@
 import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
+import 'package:demopico/core/common/widgets/snackbar_utils.dart';
 import 'package:demopico/features/profile/domain/models/relationship.dart';
-import 'package:demopico/features/profile/presentation/provider/network_view_model.dart';
+import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
 import 'package:demopico/features/profile/presentation/widgets/search_page_widgets/connection_action_card.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,8 +22,15 @@ class _MyNetworkScreenState extends State<MyNetworkScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final viewModel = context.read<NetworkViewModel>();
-      await viewModel.fetchConnectionsRequests();
-      await viewModel.fetchConnectionSent();
+      final currentUser = context.read<AuthViewModelAccount>().user;
+      switch (currentUser){
+        case UserEntity():
+          await viewModel.fetchRelactionships(currentUser);
+        case AnonymousUserEntity():
+          //do nothing
+          
+      }
+      
     });
   }
 
@@ -74,7 +85,7 @@ enum ActionType {
 }
 
 class ProfileList extends StatelessWidget {
-  final List<ReciverRequesterBase> userProfiles;
+  final List<UserIdentification> userProfiles;
   final ActionType actionType;
 
   const ProfileList(
@@ -87,6 +98,7 @@ class ProfileList extends StatelessWidget {
             child: Text('Nenhum usuário encontrado'),
           )
         : ListView.builder(
+            shrinkWrap: true, 
             itemCount: userProfiles.length,
             itemBuilder: (context, index) {
               return Card(
@@ -95,14 +107,24 @@ class ProfileList extends StatelessWidget {
                   user: userProfiles[index],
                   actionButton: actionType == ActionType.accept
                       ? ElevatedButton(
-                          onPressed: () {
-                            // TODO IMPLEMENTAR ACEITAR SOLICITAÇÃO DE CONEXÃO
+                          onPressed: () async {
+                            final currentUser = context.read<AuthViewModelAccount>().user;
+                            final provider  = context.read<NetworkViewModel>();
+                            switch (currentUser){
+                              case UserEntity():
+                                await provider.acceptConnection(
+                                  userProfiles[index], currentUser
+                                );
+                              case AnonymousUserEntity():
+                                // some error occourred - user not logged
+                                SnackbarUtils.userNotLogged(context);
+                            }
                           },
                           child: const Text('Aceitar'),
                         )
                       : ElevatedButton(
-                          onPressed: () {
-                            // TODO IMPLEMENTAR CANCELAR SOLICITAÇÃO DE CONEXÃO
+                          onPressed: () async {
+                            await context.read<NetworkViewModel>().cancelRelationship(userProfiles[index]);
                           },
                           child: const Text('Cancelar'),
                         ),

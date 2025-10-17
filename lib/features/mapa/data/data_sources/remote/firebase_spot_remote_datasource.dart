@@ -13,7 +13,7 @@ class FirebaseSpotRemoteDataSource implements ISpotDataSource<FirebaseDTO> {
 
   static FirebaseSpotRemoteDataSource get getInstance =>
       _firebaseSpotRemoteDataSource ??= FirebaseSpotRemoteDataSource(
-          CrudFirebase.getInstance..setcollection(Collections.spots));
+          CrudFirebase(collection: Collections.spots, firestore: FirebaseFirestore.instance));
 
   final CrudFirebase _firebaseFirestore;
   final String _collectionName = 'spots';
@@ -116,9 +116,12 @@ class FirebaseSpotRemoteDataSource implements ISpotDataSource<FirebaseDTO> {
   }
 
   @override
-  Future<List<FirebaseDTO>> getList(String id) async =>
-      await _firebaseFirestore.readAllWithFilter("criador", id);
-
+  Future<List<FirebaseDTO>> getList(String id) async {
+    final posts = await _firebaseFirestore.readAllWithFilter("criador", id);
+    debugPrint('DATASOURCE - getList - posts: $posts');
+    return posts;
+  }
+    
   @override
   Future<void> updateRealtime(String idPico, double newRating, Function updateFunction ) async {
     // Acessando o datasource pela interface do datasource

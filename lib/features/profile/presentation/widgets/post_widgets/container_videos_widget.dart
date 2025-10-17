@@ -1,5 +1,5 @@
 import 'package:demopico/core/app/theme/theme.dart';
-import 'package:demopico/features/profile/presentation/provider/post_provider.dart';
+import 'package:demopico/features/profile/presentation/view_model/post_provider.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/video_player_from_network.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +21,8 @@ class _ContainerVideosWidgetState extends State<ContainerVideosWidget> {
         );
       }
       final listRec = provider.fullVideos;
-      return Stack(
+      return listRec.isNotEmpty 
+      ? Stack(
         children: [
           ListWheelScrollView.useDelegate(
             itemExtent: 350,
@@ -53,7 +54,10 @@ class _ContainerVideosWidgetState extends State<ContainerVideosWidget> {
             ),
           ),
         ],
-      );
+      )
+      :  const Center(
+          child: Text('Nenhuma rec encontrada'),
+        );
     });
   }
 }

@@ -1,10 +1,10 @@
 import 'dart:async';
 
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
 import 'package:demopico/features/hub/domain/usecases/listar_comunicados_uc.dart';
 import 'package:demopico/features/hub/domain/usecases/postar_comunicado_uc.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' show Colors;
 import 'package:get/get.dart' show ExtensionSnackbar, Get;
@@ -29,9 +29,9 @@ class HubProvider extends ChangeNotifier {
 
   StreamSubscription? _watcher;
 
-  Future<void> postHubCommunique(String text, TypeCommunique type, UserM user) async {
+  Future<void> postHubCommunique(String text, TypeCommunique type, UserEntity user, String server) async {
     try {
-      await postarComunicado.postar(Communique.initial(text, type, user));
+      await postarComunicado.postar(Communique.initial(text, type, user, server));
     } on Failure catch (e) {
       Get.snackbar(
         'Erro',
@@ -42,8 +42,9 @@ class HubProvider extends ChangeNotifier {
     }
   }
 
-  void watchCommuniques() async {
-      _watcher = listarComunicado.listar().listen((allCommuniquesFromDb) {
+  void watchCommuniques(String server, String collectionPath) async {
+      _allCommuniques = [];
+      _watcher = listarComunicado.listar(server,collectionPath).listen((allCommuniquesFromDb) {
         _allCommuniques = allCommuniquesFromDb.toList();
         notifyListeners();
       }, onError: (error) {

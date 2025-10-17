@@ -1,4 +1,5 @@
 
+import 'package:demopico/core/app/home_page.dart';
 import 'package:demopico/core/app/providers/providers.dart';
 import 'package:demopico/core/app/routes/app_pages.dart';
 import 'package:demopico/core/app/routes/app_routes.dart';
@@ -9,7 +10,6 @@ import 'package:demopico/features/mapa/presentation/controllers/map_controller.d
 import 'package:demopico/features/mapa/presentation/view_services/modal_helper.dart' show ModalHelper;
 import 'package:demopico/features/mapa/presentation/widgets/search_bar.dart';
 import 'package:demopico/features/profile/presentation/bidings/auth_biding.dart';
-import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';  
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' show LatLng;
@@ -20,8 +20,6 @@ class MyAppWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put<AuthBiding>(AuthBiding());
-    Get.put<UserDataViewModel>(UserDataViewModel.getInstance);
     
     return MultiProvider(
       providers: myProviders,
@@ -32,6 +30,8 @@ class MyAppWidget extends StatelessWidget {
         theme: appTheme,
         checkerboardRasterCacheImages: true,
         getPages: AppPages.routes,
+        home: const HomePage(),
+        initialBinding: AuthBinding(),
       ),
     );
   }

@@ -17,7 +17,7 @@ abstract class Failure implements Exception {
 
   @override
   String toString() {
-    return "Failure Error: $message, code: $code, stackTrace: $stackTrace, originalException: $originalException";
+    return "Erro: $message Código do erro: $code";
   }
 }
 
@@ -43,10 +43,11 @@ class SnackBarFailure extends SnackBar {
 
 class FailureServer {
   static void showError(Failure failure, [String title = "Error"]) {
+    debugPrint("Mostrando erro: ${failure.message}");
     Get.snackbar(
       title,
       failure.message,
-      snackPosition: SnackPosition.BOTTOM,
+      snackPosition: SnackPosition.TOP,
     );
   }
 }

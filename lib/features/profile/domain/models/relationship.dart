@@ -1,58 +1,10 @@
+import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 
-sealed class ReciverRequesterBase {
-  String id;
-  String name;
-  String? profilePictureUrl;
-
-  ReciverRequesterBase({required this.id, required this.name, required this.profilePictureUrl});
-}
-
-class ConnectionReceiver extends ReciverRequesterBase {
-
-  ConnectionReceiver({required super.id, required super.name, required super.profilePictureUrl});
-
-  factory ConnectionReceiver.fromJson(Map<String, dynamic> json) {
-    return ConnectionReceiver(
-      id: json['id'],
-      name: json['name'],
-      profilePictureUrl: json['profilePictureUrl'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'profilePictureUrl': profilePictureUrl,
-    };
-  }
-}
-
-class ConnectionRequester extends ReciverRequesterBase {
-
-  ConnectionRequester({required super.id, required super.name, required super.profilePictureUrl});
-
-  factory ConnectionRequester.fromJson(Map<String, dynamic> json) {
-    return ConnectionRequester(
-      id: json['id'],
-      name: json['name'],
-      profilePictureUrl: json['profilePictureUrl'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'profilePictureUrl': profilePictureUrl,
-    };
-  }
-}
 
 class Relationship {
   String id;
-  ConnectionRequester requesterUser;
-  ConnectionReceiver addressed;
+  UserIdentification requesterUser;
+  UserIdentification addressed;
   RequestConnectionStatus status;
   DateTime createdAt;
   DateTime updatedAt;
@@ -62,8 +14,10 @@ class Relationship {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'requesterUserID': requesterUser.toJson(),
-      'addresseeID': addressed.toJson(),
+      'requesterData': requesterUser.toJson(),
+      'addressedData': addressed.toJson(),
+      'requesterUserID': requesterUser.id,
+      'addressedID': addressed.id,
       'status': status.name,
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(), 
@@ -75,16 +29,16 @@ class Relationship {
       updatedAt: DateTime.parse(json['updatedAt']),
       id: id,
       createdAt: DateTime.parse(json['createdAt']),
-      requesterUser: ConnectionRequester.fromJson(json['requesterUserID']),
+      requesterUser: UserIdentification.fromJson(json['requesterData']),
       status: RequestConnectionStatus.fromString(json['status']),
-      addressed: ConnectionReceiver.fromJson(json['addresseeID']),
+      addressed: UserIdentification.fromJson(json['addressedData']),
     );
   }
 
   Relationship copyWith({
     String? id,
-    ConnectionRequester? requesterUser,
-    ConnectionReceiver? addressed,
+    UserIdentification? requesterUser,
+    UserIdentification? addressed,
     RequestConnectionStatus? status,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -98,6 +52,16 @@ class Relationship {
       updatedAt: updatedAt ?? this.updatedAt,
     );
   }
+
+
+  bool hasId(String id){
+    return addressed.id == id || requesterUser.id == id;
+  }
+
+  bool hasBothID(String id1, String id2){
+    return hasId(id1) && hasId(id2); 
+  }
+
 }
 
 

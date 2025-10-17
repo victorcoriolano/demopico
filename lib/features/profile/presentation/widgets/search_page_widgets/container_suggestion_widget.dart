@@ -1,4 +1,4 @@
-import 'package:demopico/features/profile/presentation/provider/network_view_model.dart';
+import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
 import 'package:demopico/features/profile/presentation/widgets/search_page_widgets/suggetions_profiles_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

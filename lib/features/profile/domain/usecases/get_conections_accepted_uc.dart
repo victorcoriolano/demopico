@@ -1,0 +1,28 @@
+import 'package:demopico/core/common/errors/failure_server.dart';
+import 'package:demopico/features/profile/domain/interfaces/i_network_repository.dart';
+import 'package:demopico/features/profile/domain/models/relationship.dart';
+import 'package:demopico/features/profile/infra/repository/network_repository.dart';
+import 'package:flutter/material.dart';
+
+class GetConectionsAcceptedUc {
+  final INetworkRepository _repository;
+
+  static GetConectionsAcceptedUc? _instance;
+
+  static GetConectionsAcceptedUc get instance => _instance ??=
+      GetConectionsAcceptedUc(repository: NetworkRepository.instance);
+
+  GetConectionsAcceptedUc({required INetworkRepository repository})
+      : _repository = repository;
+
+  Future<List<Relationship>> execute(String idUser) async {
+    try {
+      final relationships = await _repository.getRelationshipAccepted(idUser);
+      debugPrint("Relationships for $idUser: $relationships");
+      return relationships;
+    } on Failure catch (e) {
+      debugPrint("UC - ERRO AO PEGAR RELATIONSHIP: $e");
+      rethrow;
+    }
+  }
+}

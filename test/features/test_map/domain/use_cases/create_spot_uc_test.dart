@@ -32,7 +32,7 @@ final class MockPico extends Mock implements PicoModel {}
   userIdentification: UserIdentification(
     id: "980302",
     name: "user123",
-    photoUrl: "url.com.photo"
+    profilePictureUrl: "url.com.photo"
   ),
 );
 

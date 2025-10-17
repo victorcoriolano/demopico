@@ -5,7 +5,7 @@ import 'package:demopico/features/profile/domain/interfaces/i_network_datasource
 import 'package:demopico/features/profile/domain/interfaces/i_network_repository.dart';
 import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/infra/datasource/firebase_network_datasource.dart';
-import 'package:demopico/features/user/domain/models/user.dart';
+import 'package:demopico/features/user/domain/models/user_model.dart';
 import 'package:flutter/widgets.dart';
 
 class NetworkRepository implements INetworkRepository {
@@ -21,7 +21,7 @@ class NetworkRepository implements INetworkRepository {
 
   final IMapperDto<UserM, FirebaseDTO> _mapperDtoUser = FirebaseDtoMapper<UserM>(
     fromJson: (Map<String, dynamic> map, String id) => UserM.fromJson(map, id), 
-    toMap: (UserM model) => model.toJsonMap(), 
+    toMap: (UserM model) => model.toJson(), 
     getId: (UserM model) => model.id
   );
 
@@ -45,19 +45,15 @@ class NetworkRepository implements INetworkRepository {
   }
   
   @override
-  Future<void> deleteRelationship(Relationship connection) {
-    return _datasource.deleteConnection(mapperConnection.toDTO(connection));
+  Future<void> deleteRelationship(String id) {
+    return _datasource.deleteConnection(id);
   }
   
   @override
   Future<List<Relationship>> getRelationshipAccepted(String userID) {
-    return _datasource.getRelactionships(
-      fieldRequest: "requesterUserID.id",
-      valueID: userID,
-      fieldOther: "status",
-      valorDoStatus: RequestConnectionStatus.accepted.name,
+    return _datasource.getAcceptedRelationships(idUser: userID
     ).then((dtos) {
-      debugPrint("DTOs recebidos: ${dtos.length}");
+      debugPrint("DTOs recebidos - relacionamentos aceitos: ${dtos.length}");
       return dtos.map((dto) => mapperConnection.toModel(dto)).toList();
     });
   }
@@ -66,12 +62,12 @@ class NetworkRepository implements INetworkRepository {
   @override
   Future<List<Relationship>> getRelationshipRequests(String userID) {
     return _datasource.getRelactionships(
-      fieldRequest: "addresseeID.id",
+      fieldRequest: "addressedID",
       valueID: userID,
       fieldOther: "status",
       valorDoStatus: RequestConnectionStatus.pending.name,
     ).then((dtos) {
-      debugPrint("DTOs recebidos: ${dtos.length}");
+      debugPrint("DTOs recebidos - que o user requisitou: ${dtos.length}");
       return dtos.map((dto) => mapperConnection.toModel(dto)).toList();
     });
   }
@@ -79,12 +75,12 @@ class NetworkRepository implements INetworkRepository {
   @override
   Future<List<Relationship>> getRelationshipSent(String userID) {
     return _datasource.getRelactionships(
-      fieldRequest: "requesterUserID.id",
+      fieldRequest: "requesterUserID",
       valueID: userID,
       fieldOther: "status",
       valorDoStatus: RequestConnectionStatus.pending.name,
     ).then((dtos) {
-      debugPrint("DTOs recebidos: ${dtos.length}");
+      debugPrint("DTOs recebidos relacionamentos que o user enviou: ${dtos.length}");
       return dtos.map((dto) => mapperConnection.toModel(dto)).toList();
     });
   }

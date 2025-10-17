@@ -26,9 +26,12 @@ class MapWidgetState extends State<MapWidget> {
     super.initState();
     _spotControllerProvider = context.read<SpotsControllerProvider>();
     _mapControllerProvider = context.read<MapControllerProvider>();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _initializeProviders();
-    });
+  }
+
+  @override
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+    _initializeProviders();
   }
 
   Future<void> _initializeProviders() async {

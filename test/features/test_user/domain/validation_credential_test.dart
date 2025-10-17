@@ -27,37 +27,37 @@ void main(){
 
     test("Deve validar as credenciais do user para cadastro em caso de sucesso", () async {
       
-      when(() => mockRepositoryDataUser.validateExist(data: userCredentialsSignUp.email, field: "email")).thenAnswer((_) => Future.value(false));
-      when(() => mockRepositoryDataUser.validateExist(data: userCredentialsSignUp.nome, field: "name")).thenAnswer((_) => Future.value(false));
-      final validCredentials = await classToTest.validateForSignUp(userCredentialsSignUp);
-      expect(validCredentials, isA<UserCredentialsSignUp>());
-      verify(() => mockRepositoryDataUser.validateExist(data: userCredentialsSignUp.email, field: "email"),).called(1);
-      verify(() => mockRepositoryDataUser.validateExist(data: userCredentialsSignUp.nome, field: "name"),).called(1);
+      when(() => mockRepositoryDataUser.validateExist(data: normalUserCredentialsSignUp.email.value, field: "email")).thenAnswer((_) => Future.value(false));
+      when(() => mockRepositoryDataUser.validateExist(data: normalUserCredentialsSignUp.vulgo.value, field: "name")).thenAnswer((_) => Future.value(false));
+      final validCredentials = await classToTest.validateForSignUp(normalUserCredentialsSignUp);
+      expect(validCredentials, isA<NormalUserCredentialsSignUp>());
+      verify(() => mockRepositoryDataUser.validateExist(data: normalUserCredentialsSignUp.email.value, field: "email"),).called(1);
+      verify(() => mockRepositoryDataUser.validateExist(data: normalUserCredentialsSignUp.vulgo.value, field: "name"),).called(1);
     });
 
     test("Deve lançar EmailAlreadyInUseFailure quando o email já existe no cadastro", () async {
-      when(() => mockRepositoryDataUser.validateExist(data: userCredentialsSignUp.email, field: "email"))
+      when(() => mockRepositoryDataUser.validateExist(data: normalUserCredentialsSignUp.email.value, field: "email"))
           .thenAnswer((_) async => Future.value(true)); 
-      when(() => mockRepositoryDataUser.validateExist(data: userCredentialsSignUp.nome, field: "name"))
+      when(() => mockRepositoryDataUser.validateExist(data: normalUserCredentialsSignUp.vulgo.value, field: "name"))
           .thenAnswer((_) async => Future.value(false)); 
 
       // Espera que uma exceção EmailAlreadyInUseFailure seja lançada
       expect(
-        () => classToTest.validateForSignUp(userCredentialsSignUp),
+        () => classToTest.validateForSignUp(normalUserCredentialsSignUp),
         throwsA(isA<EmailAlreadyInUseFailure>()),
       );
     });
 
   test("Deve lançar VulgoAlreadyExistsFailure quando o vulgo já existe no cadastro", () async {
       // Configura o stub: email não existe (true), nome já existe (false)
-      when(() => mockRepositoryDataUser.validateExist(data: userCredentialsSignUp.email, field: "email"))
+      when(() => mockRepositoryDataUser.validateExist(data: normalUserCredentialsSignUp.email.value, field: "email"))
           .thenAnswer((_) async => Future.value(false)); // Email NÃO existe
-      when(() => mockRepositoryDataUser.validateExist(data: userCredentialsSignUp.nome, field: "name"))
+      when(() => mockRepositoryDataUser.validateExist(data: normalUserCredentialsSignUp.vulgo.value, field: "name"))
           .thenAnswer((_) async => Future.value(true)); // Nome (vulgo) JÁ EXISTE
 
       // Espera que uma exceção VulgoAlreadyExistsFailure seja lançada
       expect( 
-        () => classToTest.validateForSignUp(userCredentialsSignUp),
+        () => classToTest.validateForSignUp(normalUserCredentialsSignUp),
         throwsA(isA<VulgoAlreadyExistsFailure>()),
       );
 
@@ -70,7 +70,7 @@ void main(){
 
       // Espera que uma UnknownFailure seja lançada encapsulando o erro original
       expect(
-        () => classToTest.validateForSignUp(userCredentialsSignUp),
+        () => classToTest.validateForSignUp(normalUserCredentialsSignUp),
         throwsA(isA<UnknownFailure>()),
       );
 
@@ -82,41 +82,41 @@ void main(){
 
     test("Deve lançar InvalidCredentialsFailure para login com email quando a validação falha", () async {
 
-      when(() => mockRepositoryDataUser.validateExist(data: userCredentialsSignInEmail.login, field: "email"))
+      when(() => mockRepositoryDataUser.validateExist(data: userCredentialsSignInEmail.identifier.value, field: "email"))
           .thenAnswer((_) => Future.value(false));
 
       expect(
-        () => classToTest.validateForLogin(userCredentialsSignInEmail),
+        () => classToTest.validateEmailExist(userCredentialsSignInEmail),
         throwsA(isA<InvalidCredentialsFailure>()),
       );
 
-      verify(() => mockRepositoryDataUser.validateExist(data: userCredentialsSignInEmail.login, field: "email")).called(1);
+      verify(() => mockRepositoryDataUser.validateExist(data: userCredentialsSignInEmail.identifier.value, field: "email")).called(1);
     });
 
     test("Deve validar as credenciais do user COM SUCESSO quando passado email", () async {
-      when(() => mockRepositoryDataUser.validateExist(data: userCredentialsSignInEmail.login, field: "email")).thenAnswer((_) => Future.value(true));
-      final validCredentials = await classToTest.validateForLogin(userCredentialsSignInEmail);
-      expect(validCredentials, isA<UserCredentialsSignIn>());
-      verify(() => mockRepositoryDataUser.validateExist(data: userCredentialsSignInEmail.login, field: "email"),).called(1);
+      when(() => mockRepositoryDataUser.validateExist(data: userCredentialsSignInEmail.identifier.value, field: "email")).thenAnswer((_) => Future.value(true));
+      final validCredentials = await classToTest.validateEmailExist(userCredentialsSignInEmail);
+      expect(validCredentials, isA<EmailCredentialsSignIn>());
+      verify(() => mockRepositoryDataUser.validateExist(data: userCredentialsSignInEmail.identifier.value, field: "email"),).called(1);
     });
 
     test("Deve validar as credenciais do user COM SUCESSO quando passado vulgo", () async {
-      when(() => mockRepositoryDataUser.validateExist(data: userCredentialsSignInVulgo.login, field: "name")).thenAnswer((_) => Future.value(true));
-      final validCredentials = await classToTest.validateForLogin(userCredentialsSignInVulgo);
-      expect(validCredentials, isA<UserCredentialsSignIn>());
-      verify(() => mockRepositoryDataUser.validateExist(data: userCredentialsSignInVulgo.login, field: "name"),).called(1);
+      when(() => mockRepositoryDataUser.validateExist(data: vulgoCredentialsSignIn.vulgo.value, field: "name")).thenAnswer((_) => Future.value(true));
+      final validCredentials = await classToTest.validateVulgoExist(vulgoCredentialsSignIn);
+      expect(validCredentials, isA<VulgoCredentialsSignIn>());
+      verify(() => mockRepositoryDataUser.validateExist(data: vulgoCredentialsSignIn.vulgo.value, field: "name"),).called(1);
     });
 
      test("Deve lançar InvalidCredentialsFailure para login com vulgo quando a validação falha", () async {
-      when(() => mockRepositoryDataUser.validateExist(data: userCredentialsSignInVulgo.login, field: "name"))
+      when(() => mockRepositoryDataUser.validateExist(data: vulgoCredentialsSignIn.vulgo.value, field: "name"))
           .thenAnswer((_) => Future.value(false));
 
       expect(
-        () => classToTest.validateForLogin(userCredentialsSignInVulgo),
+        () => classToTest.validateVulgoExist(vulgoCredentialsSignIn),
         throwsA(isA<InvalidCredentialsFailure>()),
       );
 
-      verify(() => mockRepositoryDataUser.validateExist(data: userCredentialsSignInVulgo.login, field: "name")).called(1);
+      verify(() => mockRepositoryDataUser.validateExist(data: vulgoCredentialsSignIn.vulgo.value, field: "name")).called(1);
     });
   });
 }

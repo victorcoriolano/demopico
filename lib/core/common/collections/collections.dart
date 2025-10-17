@@ -6,10 +6,14 @@ enum Collections {
   denuncias,
   communique,
   comments,
-  posts;
+  posts,
+  profiles,
+  chats;
 
   factory Collections.fromString(String value) {
     switch (value) {
+      case 'chats':
+        return Collections.chats;
       case 'connections':
         return Collections.connections;
       case 'spots':
@@ -26,13 +30,17 @@ enum Collections {
         return Collections.comments;
       case 'posts':
         return Collections.posts;
+      case 'profiles':
+        return Collections.profiles;
       default:
         throw Exception("Invalid Tables name");
     }
   }
 
-  String toJson() {
+  String get name {
     switch (this) {
+      case Collections.chats:
+        return 'chats';
       case Collections.spots:
         return 'spots';
       case Collections.users:
@@ -49,6 +57,8 @@ enum Collections {
         return 'posts';
       case Collections.connections:
         return 'connections';
+      case Collections.profiles:
+        return 'profiles';
     }
   }
 }

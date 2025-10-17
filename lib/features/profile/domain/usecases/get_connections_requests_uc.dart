@@ -2,6 +2,7 @@
 import 'package:demopico/features/profile/domain/interfaces/i_network_repository.dart';
 import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/infra/repository/network_repository.dart';
+import 'package:flutter/rendering.dart';
 
 class GetConnectionsRequestsUc {
 
@@ -18,8 +19,9 @@ class GetConnectionsRequestsUc {
   GetConnectionsRequestsUc({required INetworkRepository networkRepository})
       : _networkRepository = networkRepository;
 
-  Future<List<ConnectionRequester>> execute(String uid) async {
+  Future<List<Relationship>> execute(String uid) async {
     final relationship = await _networkRepository.getRelationshipRequests(uid);
-    return relationship.map((rel) => rel.requesterUser).toList();
+    debugPrint("GET CONNECTONS REQUEST - Relacionamentos requisitado: ${relationship.toString()} - ${relationship.length}");
+    return relationship;
   }
 }

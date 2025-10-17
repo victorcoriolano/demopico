@@ -82,7 +82,7 @@ class PicoBuilder {
   Pico build() {
     // TODO CORRIGIR AS VALIDAÇÕES 
     if (id == null || picoName == null || description == null || modalidade == null || location == null || rating == null) {
-      throw StateError("Campos obrigatórios: id, picoName, description, modalidade, location");
+      throw StateError("Campos obrigatórios: id, picoName, description, modalidade, location, nota");
     }
 
     // 🔑 usa a SpotFactory conforme a modalidade

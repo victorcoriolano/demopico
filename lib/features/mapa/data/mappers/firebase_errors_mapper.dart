@@ -2,44 +2,49 @@ import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 
 class FirebaseErrorsMapper {
   static Failure map(FirebaseException exception) {
     switch (exception.code) {
      // Firestore
-      case 'firestore/permission-denied':
+      case 'permission-denied':
         return UnauthorizedFailure();
-      case 'firestore/deadline-exceeded':
+      case 'deadline-exceeded':
         return TimeoutFailure(originalException: exception);
-      case 'cloud-firestore/unavailable':
+      case 'unavailable':
         return DatabaseFailure("Serviço indisponível", originalException: exception,);
       
      // Storage
-      case 'firebase_storage/unauthorized':
+      case 'unauthorized':
         return UnauthorizedFailure();
-      case 'firebase_storage/canceled':
+      case 'canceled':
         return OperationCanceledFailure(originalException: exception);
-      case 'firebase_storage/quota-exceeded':
+      case 'quota-exceeded':
         return LimitExceededFailure(originalException: exception);
-      case 'firebase_storage/object-not-found':
-        return PicoNotFoundFailure(originalException: exception);
+      case 'object-not-found':
+        return DataNotFoundFailure(originalException: exception);
       
       // Auth
-      case 'firebase_auth/email-already-in-use':
+      case 'email-already-in-use':
         return EmailAlreadyInUseFailure(originalException: exception);
-      case 'firebase_auth/invalid-email':
+      case 'invalid-email':
+        debugPrint("Email inválido detectado no mapeador dos erros do firebase");
         return InvalidEmailFailure(originalException: exception);
-      case 'firebase_auth/too-many-requests':
+      case 'too-many-requests':
         return TooManyAttemptsFailure(originalException: exception);
-      case 'firebase_auth/uid-already-exists':
+      case 'uid-already-exists':
         return AccountExistsFailure(originalException: exception);  
-      case 'firebase_auth/user-token-expired':
+      case 'user-token-expired':
         return ExpiredTokenFailure(originalException: exception);
-      case 'firebase_auth/user-not-found':
+      case 'user-not-found':
         return UserNotFoundFailure(originalException: exception);
+      case 'invalid-credential':
+        return InvalidCredentialsFailure("Credenciais inválidas, verifique se inseriu corretamente");
       
       // Genéricos
       default:
+        debugPrint("Erro não mapeado, lançando erro generico: $exception ${exception.code}");
         return UnknownFailure(originalException: exception);
     }
   }

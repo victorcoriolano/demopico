@@ -1,13 +1,12 @@
 
 
 import 'package:demopico/core/app/theme/theme.dart';
-import 'package:demopico/core/common/auth/domain/entities/user_credentials.dart';
-import 'package:demopico/features/user/presentation/controllers/auth_user_provider.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_sign_up.dart';
 import 'package:demopico/features/user/presentation/widgets/button_custom.dart';
-import 'package:demopico/features/user/presentation/widgets/tipo_conta_dropdown.dart';
 import 'package:demopico/features/user/presentation/widgets/textfield_decoration.dart';
 import 'package:demopico/features/user/presentation/widgets/form_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class RegisterForm extends StatefulWidget {
@@ -24,24 +23,6 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
   final TextEditingController _senhaController2 = TextEditingController();
   
   final _formkey = GlobalKey<FormState>();
-  String _tipoConta = '';
-  bool isColetivo = false;
-
-  bool _onTipoContaChanged(String newValue) {
-    setState(() {
-      _tipoConta = newValue;
-    });
-    if (_tipoConta.contains('Coletivo')) {
-      setState(() {
-        isColetivo = true;
-      });
-    } else {
-      setState(() {
-        isColetivo = false;
-      });
-    }
-    return isColetivo;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,18 +54,20 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                 ),
     
                 // vulgo
-                Consumer<AuthUserProvider>(
+                Consumer<AuthViewModelSignUp>(
                   builder: (context, provider, child) {
                     return TextFormField(
                       decoration: customTextField("Vulgo"),
                       cursorColor: Colors.white,
                       style: const TextStyle(color: Colors.white),
                       controller: _vulgoCadastro,
-                      validator: (value) => provider.errorMessageVulgo ?? combineValidators([
+                      validator: (value) => provider.errorVulgo ?? combineValidators([
                         () => isNotEmpty(value),
                         () => isValidVulgo(value),
                       ]),
-                      onChanged: (value) => provider.clearMessageErrors(),
+                      onChanged: (value) { 
+                        provider.updateFieldVulgo(value);
+                        provider.clearMessageErrors();}
                     );
                   }
                 ),
@@ -92,7 +75,7 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                   height: 20,
                 ),
                 //email
-                Consumer<AuthUserProvider>(
+                Consumer<AuthViewModelSignUp>(
                   builder: (context, provider, child) {
                     return TextFormField(
                       decoration: customTextField("Email"),
@@ -100,13 +83,16 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                       style: const TextStyle(color: Colors.white),
                       controller: _emailController,
                       validator: (value) {
-                        return provider.errorMessageEmail ?? combineValidators([
+                        return provider.errorEmail ?? combineValidators([
                           () => isNotEmpty(value),
                           () => isValidEmail(value),
                         ]);
                         
                       },
-                      onChanged: (value) =>  provider.clearMessageErrors(),
+                      onChanged: (value) { 
+                        provider.updateFieldEmail(value);
+                        provider.clearMessageErrors();
+                      }
                     );
                   }
                 ),
@@ -131,45 +117,39 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                 ),
     
                 // confirmar senha
-                TextFormField(
-                  decoration: customTextField("Confirmar senha "),
-                  cursorColor: Colors.white,
-                  style: const TextStyle(color: Colors.white),
-                  obscureText: true,
-                  controller: _senhaController2,
-                  validator: (value) => combineValidators([
-                    () => isNotEmpty(value),
-                    () => checkPassword(_senhaController.text, value),
-                  ]),
+                Consumer<AuthViewModelSignUp>(
+                  builder: (context, provider, child) {
+                    return TextFormField(
+                      decoration: customTextField("Confirmar senha "),
+                      cursorColor: Colors.white,
+                      style: const TextStyle(color: Colors.white),
+                      obscureText: true,
+                      controller: _senhaController2,
+                      validator: (value) => combineValidators([
+                        () => isNotEmpty(value),
+                        () => checkPassword(_senhaController.text, value),
+                      ]),
+                      onChanged: (value) { 
+                            provider.updateFieldPassword(value);
+                            provider.clearMessageErrors();}
+                    
+                    );
+                  }
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                //tipo de onta
-                TipoContaDropdownButton(
-                    onChanged: (String newValue) =>
-                        _onTipoContaChanged(newValue),
-                    validator: (value) => isNotEmpty(value)),
-    
                 const SizedBox(
                   height: 12,
                 ),
     
                 // button (cadastrar)
-                Consumer<AuthUserProvider>(
+                Consumer<AuthViewModelSignUp>(
                   builder: (context, provider, child) {
                     return ElevatedButton(
                       onPressed:  provider.isLoading ? null : () async {
                         if(_formkey.currentState?.validate() ?? false){
-                          final credentialsSignUp = UserCredentialsSignUp(
-                            password: _senhaController.text.trim(), 
-                            uid: "", 
-                            nome: _vulgoCadastro.text.trim(), 
-                            isColetivo: isColetivo,
-                            email: _emailController.text.trim());
-                          await provider.signUp(credentialsSignUp);
-                          _formkey.currentState?.validate();  /// validando formulário para mostrar a 
-                                                              ///mensagem de erro no campo específico do erro
+                          await provider.signUp();
+                          if(mounted){
+                            Get.back();
+                          }
                         }
                       },
                       style: buttonStyle(),

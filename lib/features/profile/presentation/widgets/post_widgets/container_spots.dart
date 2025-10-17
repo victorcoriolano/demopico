@@ -1,12 +1,14 @@
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spots_controller.dart';
+import 'package:demopico/features/profile/domain/models/profile_user.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/card_spot_for_profile.dart';
-import 'package:demopico/features/user/presentation/controllers/user_data_view_model.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ContainerSpots extends StatefulWidget {
-
-  const ContainerSpots({ super.key,  });
+  final Profile profile;
+  const ContainerSpots({ super.key, required this.profile  });
 
   @override
   State<ContainerSpots> createState() => _ContainerSpotsState();
@@ -18,8 +20,15 @@ class _ContainerSpotsState extends State<ContainerSpots> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async { 
-      final nameUser = context.read<UserDataViewModel>().user!.name;
-      await context.read<SpotsControllerProvider>().getMySpots(nameUser);
+      final user = context.read<AuthViewModelAccount>().user;
+      switch (user){
+        
+        case UserEntity():
+          await context.read<SpotsControllerProvider>().getMySpots(widget.profile.displayName);
+
+        case AnonymousUserEntity():
+          // do nothing
+      }
     });
   }
 
