@@ -1,8 +1,11 @@
+import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/auth/domain/usecases/change_password_uc.dart';
+import 'package:demopico/core/common/auth/domain/usecases/reset_password_uc.dart';
 import 'package:demopico/core/common/auth/domain/usecases/delete_account_uc.dart';
 import 'package:demopico/core/common/auth/domain/usecases/get_auth_state_uc.dart';
 import 'package:demopico/core/common/auth/domain/usecases/logout_uc.dart';
+import 'package:demopico/core/common/auth/domain/value_objects/password_vo.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:flutter/material.dart';
@@ -16,26 +19,30 @@ class AuthViewModelAccount extends ChangeNotifier {
     
     static AuthViewModelAccount get instance =>
       _instance ??= AuthViewModelAccount(
-        changePasswordUc: ChangePasswordUc.getInstance,
+        changePasswordUc: ResetPasswordUc.getInstance,
         deleteAccountUc: DeleteAccountUc.getInstance,
         getAuthState: GetCurrentUserUc.instance,
         logoutUc: LogoutUc.getInstance,
+        changePass: ChangePasswordUc.getInstance,
       );
 
   AuthViewModelAccount({
     required LogoutUc logoutUc,
     required DeleteAccountUc deleteAccountUc,
-    required ChangePasswordUc changePasswordUc,
+    required ResetPasswordUc changePasswordUc,
     required GetCurrentUserUc getAuthState,
-  }): _changePasswordUc = changePasswordUc,
+    required ChangePasswordUc changePass,
+  }): _resetPasswordUc = changePasswordUc,
       _deleteAccountUc = deleteAccountUc,
       _getAuthState = getAuthState,
+      _changePasswordUc = changePass,
       _logoutUc = logoutUc;
 
   final LogoutUc _logoutUc;
   final DeleteAccountUc _deleteAccountUc;
-  final ChangePasswordUc _changePasswordUc;
+  final ResetPasswordUc _resetPasswordUc;
   final GetCurrentUserUc _getAuthState;
+  final ChangePasswordUc _changePasswordUc;
   
   Future _handleAction(Function execute) async {
     try{
@@ -49,13 +56,38 @@ class AuthViewModelAccount extends ChangeNotifier {
     await _handleAction(_logoutUc.deslogar);
   }
   
-  Future<void> changePassword() async {
-    final isSent = await _handleAction(_changePasswordUc.sendEmail);
+  Future<void> resetPasswordFlow(String email) async {
+    final isSent = await _resetPasswordUc.sendEmail(email);
     if(isSent){
-      Get.snackbar("Email enviado com sucesso", "Verifique sua caixa de entrada");
+      Get.snackbar(
+      'Atenção',
+      'Um link para redefinir sua senha foi enviado para seu e-mail. Por favor, verifique sua caixa de entrada e também a caixa de spam.',
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.blueAccent,
+      colorText: Colors.white,
+      dismissDirection: DismissDirection.down
+      );
     } else {
-      Get.snackbar("Erro", "Ocorreu um erro ao enviar o email");
+      Get.snackbar("Erro", "Ocorreu um erro ao enviar o email, por favor verifique os campos e tente novamente",dismissDirection: DismissDirection.down);
     }
+  }
+
+  Future<void> changePasswordFlow(PasswordVo newPassword) async {
+    try {
+      await _changePasswordUc.execute(newPassword);
+    
+      Get.snackbar(
+      'Atenção',
+      'Um link para redefinir sua senha foi enviado para seu e-mail. Por favor, verifique sua caixa de entrada.',
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.blueAccent,
+      colorText: Colors.white,
+      dismissDirection: DismissDirection.down
+      );  
+    } on Failure catch (e) {
+      FailureServer.showError(e);
+    }
+    
   }
 
  /*  UserEntity? getCurrentUser(){
