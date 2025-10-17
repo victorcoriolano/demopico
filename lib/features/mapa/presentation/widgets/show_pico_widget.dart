@@ -1,4 +1,5 @@
 import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/core/common/widgets/snackbar_utils.dart' show SnackbarUtils;
 import 'package:demopico/features/denunciar/denuncia_model.dart';
 import 'package:demopico/features/mapa/presentation/controllers/favorite_spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_provider.dart';
@@ -59,7 +60,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
   @override
   Widget build(BuildContext context) {
     debugPrint("show pico widget");
-
+    user = context.read<UserDataViewModel>().user;
     return DraggableScrollableSheet(
         initialChildSize: 0.8,
         minChildSize: 0.2,
@@ -89,6 +90,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                           children: [
                             // widget da imagem dos spots
                             TopInfoSpot(
+                              mapControllerProvider: context.read(),
                               location: LatLng(spotProvider.pico?.location.latitude ?? 0, spotProvider.pico?.location.latitude ?? 0),
                               images: spotProvider.pico?.imgUrls ?? [], 
                               isMine: isMine(), 
@@ -123,8 +125,9 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                           children: [
                                             PhotoAndNameWidget(
                                               nameUserCreator: spotProvider.pico!.user?.name ?? "Anônimo", 
+                                              //FIXED ? 1.0
                                               //FIXME: PASSANDO A IMAGEM COMO NULL MAIS FUTURAMENTE passar a imagem do user
-                                              urlImageUser: null,
+                                              urlImageUser: spotProvider.pico!.user?.photoUrl,
                                             ),
                                             const SizedBox(width: 15),
             
@@ -196,6 +199,12 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                                 onPressed: () async {
                                                   //TODO: REFATORAR LÓGICA DE SALVAR SPOT PARA PASSAR 
                                                   //TER UMA LÓGICA PARA SALVAR E UMA PARA FAVORITAR
+                                                        // Por que ter uma lógica para salvar e outra para favoritar?
+                                                        // Pois o usuário pode querer salvar um pico para ver depois, mas não necessariamente quer favorita-lo
+                                                  if(user == null){
+                                                    SnackbarUtils.userNotLogged(context);
+                                                    return;
+                                                  }
                                                   
                                                   context.read<FavoriteSpotController>().favPico();
                                                 },
@@ -207,7 +216,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                                   tooltip: "Denunciar Pico",
                                                   onPressed: () {
                                                     if(user == null){
-                                                      Get.snackbar("Erro", "Você precisa estar logado para reportar um spot");
+                                                      SnackbarUtils.userNotLogged(context);
                                                       return;
                                                     }
                                                     ModalHelper.openReportSpotModal(context, user?.id, widget.idPico, TypePublication.pico);

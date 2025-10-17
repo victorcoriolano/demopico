@@ -87,21 +87,21 @@ class _TopSideMapWidgetState extends State<TopSideMapWidget> {
                   const PopupMenuItem<String>(
                     value: 'Pico de Rua',
                     child: ListTile(
-                      leading: Icon(Icons.terrain),
+                      leading: Icon(Icons.fire_hydrant_alt_rounded),
                       title: Text("Filtrar por Pico de rua"),
                     ),
                   ),
                   const PopupMenuItem<String>(
                     value: 'Half',
                     child: ListTile(
-                      leading: Icon(Icons.auto_graph),
+                      leading: Icon(Icons.panorama_horizontal_select_outlined),
                       title: Text("Filtrar por Half"),
                     ),
                   ),
                   const PopupMenuItem<String>(
                     value: 'Bowl',
                     child: ListTile(
-                      leading: Icon(Icons.bubble_chart_rounded),
+                      leading: Icon(Icons.panorama_fish_eye_outlined),
                       title: Text("Filtrar por Bowl"),
                     ),
                   ),

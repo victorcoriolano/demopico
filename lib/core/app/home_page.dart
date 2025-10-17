@@ -24,10 +24,10 @@ class _HomePageState extends State<HomePage> {
           child: GestureDetector(
             key: const Key('home_page_gesture_detector_navigate'),
         onHorizontalDragEnd: (details) {
-          if (details.primaryVelocity! > 0) {
+          if (details.primaryVelocity! > 0.5) {
             Get.toNamed(Paths.map);
 
-          } else if (details.primaryVelocity! < 0) {
+          } else if (details.primaryVelocity! < 0.5) {
             Get.toNamed(Paths.profile);
           }
         },

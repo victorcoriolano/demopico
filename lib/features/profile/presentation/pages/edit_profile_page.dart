@@ -149,9 +149,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       CircleAvatar(
                         radius: 60,
                         backgroundColor: kWhite,
-                        backgroundImage: user.pictureUrl == null 
-                          ? AssetImage("assets/images/userPhoto.png") 
-                          : CachedNetworkImageProvider(user.pictureUrl!),
+                        backgroundImage: getPfp(),
                       ),
                       Positioned(
                         right: 0,
@@ -238,4 +236,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
       ),
     );
   }
+
+  ImageProvider<Object>? getPfp() {
+    if(user.pictureUrl == null){
+      return AssetImage("assets/images/userPhoto.png");
+    }
+    return CachedNetworkImageProvider(user.pictureUrl!);
+  }
+
 }
