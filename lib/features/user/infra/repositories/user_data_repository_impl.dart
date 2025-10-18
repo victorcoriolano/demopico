@@ -51,7 +51,7 @@ class UserDataRepositoryImpl implements IUserRepository {
   }
   
   @override
-  Future<bool> validateExist({required  String data, required  String field}) async =>
+  Future<bool> validateExistData({required  String data, required  String field}) async =>
     await userFirebaseService.validateExistsData(field, data);
     
   @override

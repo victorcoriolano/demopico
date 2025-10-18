@@ -8,5 +8,5 @@ abstract class IUserRepository {
   Future<void> deleteData(String uid);
   Future<UserM> addUserDetails(UserM newUser);
   Future<EmailVO> getEmailByVulgo(VulgoVo vulgo);
-  Future<bool> validateExist({required String data,required  String field});
+  Future<bool> validateExistData({required String data,required  String field});
 }
