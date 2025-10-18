@@ -159,8 +159,8 @@ class AddPicoViewModel extends ChangeNotifier {
           nameSpotError = "Adicione um nome ao pico";
           return false;
         } 
-        if ( descricao.isEmpty) {
-          descriptionError = "Adicione um descrição";
+        if (descricao.isEmpty) {
+          descriptionError = "Adicione uma descrição";
           return false;
         }
         if(imgUrls.isEmpty){
@@ -184,7 +184,7 @@ class AddPicoViewModel extends ChangeNotifier {
 
     try {
       return PicoBuilder()
-        .withId("") // backend vai gerar
+        .withId("") // firebase vai gerar
         .withPicoName(nomePico)
         .withDescription(descricao)
         .withModalidade(ModalityVo(utilitiesSelected, selectedModalidade))
@@ -197,6 +197,7 @@ class AddPicoViewModel extends ChangeNotifier {
         .withRating(RatingVo(0.0, 0))
         .withReviewers([])
         .withPosts([])
+        .withWhoFavorited([])
         .build();
     } on ArgumentError catch (e) {
       debugPrint("Erro ao criar spot: ${e.toString()}");
@@ -207,7 +208,7 @@ class AddPicoViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> createSpot(UserIdentification? user) async {
+  Future<void> createSpot([UserIdentification? user]) async {
     try {
       final urls = await _uploadService.uploadFiles(files, "spots");
       imgUrls.addAll(urls);
@@ -223,7 +224,7 @@ class AddPicoViewModel extends ChangeNotifier {
       FailureServer.showError(e);
     } on ArgumentError catch (e) {
       debugPrint("Erro ao criar spot: ${e.toString()}");
-      FailureServer.showError(OtherError(message: "${e.message} - ${e.invalidValue}"));
+      FailureServer.showError(OtherError(message: "${e.message} - ${e.invalidValue}")); 
     }
   }
 
