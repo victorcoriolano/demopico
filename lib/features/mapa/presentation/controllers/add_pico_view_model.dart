@@ -10,7 +10,7 @@ import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/factories/spot_factory.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
-import 'package:demopico/core/common/media_management/usecases/pick_image_uc.dart';
+import 'package:demopico/core/common/media_management/usecases/pick_mult_images_uc.dart';
 import 'package:demopico/features/mapa/domain/value_objects/attributes_vo.dart';
 import 'package:demopico/features/mapa/domain/value_objects/modality_vo.dart';
 import 'package:demopico/features/mapa/domain/value_objects/obstacle_vo.dart';
@@ -23,19 +23,19 @@ class AddPicoViewModel extends ChangeNotifier {
 
   static AddPicoViewModel get getInstance {
     _addPicoProvider ??= AddPicoViewModel(
-      pickImageUC: PickImageUc.getInstance(),
+      pickImageUC: PickMultiImagesUc.getInstance(),
       serviceImage: UploadService.getInstance,
       createSpotUc: CreateSpotUc.getInstance,
     );
     return _addPicoProvider!;
   }
 
-  final PickImageUc _pickImageUC;
+  final PickMultiImagesUc _pickImageUC;
   final UploadService _uploadService;
   final CreateSpotUc _createSpotUc;
 
   AddPicoViewModel({
-    required PickImageUc pickImageUC,
+    required PickMultiImagesUc pickImageUC,
     required UploadService serviceImage,
     required CreateSpotUc createSpotUc,
   })  : _uploadService = serviceImage,

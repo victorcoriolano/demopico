@@ -6,18 +6,18 @@ import 'package:demopico/core/common/media_management/usecases/delete_file_uc.da
 import 'package:flutter/material.dart';
 
 class UploadService {
-  final UploadFileUC _uploadFileUC;
+  final UploadFilesUC _uploadFileUC;
   final DeleteFileUc _deleteFileUc;
 
   UploadService({
-    required UploadFileUC uploadUc, 
+    required UploadFilesUC uploadUc, 
     required DeleteFileUc deleteUc})
     : _deleteFileUc = deleteUc, _uploadFileUC = uploadUc;
 
   static UploadService? _instance;
   static UploadService get getInstance {
     _instance ??= UploadService(
-      uploadUc: UploadFileUC.getInstance,
+      uploadUc: UploadFilesUC.getInstance,
       deleteUc: DeleteFileUc.instance,
     );
     return _instance!;

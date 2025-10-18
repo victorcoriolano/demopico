@@ -2,7 +2,7 @@ import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/core/common/media_management/models/file_model.dart';
-import 'package:demopico/core/common/media_management/usecases/pick_files_uc.dart';
+import 'package:demopico/core/common/media_management/usecases/pick_mult_files_uc.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/media_management/services/upload_service.dart';
 import 'package:demopico/core/common/media_management/usecases/pick_video_uc.dart';

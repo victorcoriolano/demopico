@@ -90,19 +90,17 @@ class AuthViewModelAccount extends ChangeNotifier {
     
   }
 
- /*  UserEntity? getCurrentUser(){
-    final authstate = _getAuthState.execute();
-    switch (authstate){
-      
-      case AuthAuthenticated():
-        debugPrint("USUÁRIO AUTENTICADO");
-        return authstate.user;
-      case AuthUnauthenticated():
-        debugPrint("USUÁRIO NÃO AUTENTICADO");
-        return null;
+  /// Update Profile Flow =>
+  /// Select new profile photo
+  /* Future<void> selectNewImage() async {
+    try {
+      await 
     }
-  }
- */
+  } */
+  /// confirmar atualização 
+  /// selecionar subir para o firestore storage
+  /// atualizar user entity
+
   User _currentUser = AnonymousUserEntity();
 
   set currentUser(User user){

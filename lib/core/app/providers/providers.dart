@@ -1,5 +1,5 @@
 import 'package:demopico/core/common/auth/infra/repositories/firebase_auth_repository.dart';
-import 'package:demopico/core/common/media_management/usecases/pick_files_uc.dart';
+import 'package:demopico/core/common/media_management/usecases/pick_mult_files_uc.dart';
 import 'package:demopico/core/common/media_management/usecases/pick_video_uc.dart';
 import 'package:demopico/features/home/infra/http_climate_service.dart';
 import 'package:demopico/features/home/presentation/provider/forecast_provider.dart';
