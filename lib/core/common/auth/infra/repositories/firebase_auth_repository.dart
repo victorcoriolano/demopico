@@ -10,7 +10,7 @@ import 'package:demopico/core/common/auth/domain/value_objects/email_vo.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/vulgo_vo.dart';
 import 'package:demopico/core/common/auth/infra/mapper/user_mapper.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
-import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
+import 'package:demopico/core/common/mappers/firebase_errors_mapper.dart';
 import 'package:demopico/features/profile/infra/repository/profile_repository.dart';
 import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:demopico/features/user/infra/repositories/user_data_repository_impl.dart';

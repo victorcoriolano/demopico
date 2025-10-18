@@ -4,7 +4,7 @@ import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto
 import 'package:demopico/core/common/collections/collections.dart';
 import 'package:demopico/features/external/datasources/firebase/firestore.dart';
 import 'package:demopico/features/external/interfaces/i_crud_datasource.dart';
-import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
+import 'package:demopico/core/common/mappers/firebase_errors_mapper.dart';
 import 'package:flutter/foundation.dart';
 
 class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {

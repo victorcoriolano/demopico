@@ -1,6 +1,6 @@
 import 'package:demopico/core/common/auth/domain/interfaces/i_user_account_repository.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/password_vo.dart';
-import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
+import 'package:demopico/core/common/mappers/firebase_errors_mapper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb;
 

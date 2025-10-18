@@ -8,7 +8,7 @@ import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto
 import 'package:demopico/features/external/datasources/firebase/crud_firebase.dart';
 import 'package:demopico/features/external/datasources/firebase/firestore.dart';
 import 'package:demopico/features/external/interfaces/i_crud_datasource.dart';
-import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
+import 'package:demopico/core/common/mappers/firebase_errors_mapper.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_database_service.dart';
 import 'package:flutter/foundation.dart';
 

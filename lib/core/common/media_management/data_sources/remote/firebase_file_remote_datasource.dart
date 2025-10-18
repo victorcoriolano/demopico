@@ -5,7 +5,7 @@ import 'package:demopico/core/common/media_management/models/upload_result_file_
 import 'package:demopico/core/common/errors/repository_failures.dart';
 
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
+import 'package:demopico/core/common/mappers/firebase_errors_mapper.dart';
 import 'package:flutter/material.dart';
 
 class FirebaseFileRemoteDatasource implements IFileRemoteDataSource {
