@@ -29,7 +29,7 @@ class FirebaseFavoriteSpotRemoteDataSource implements IFavoriteSpotRemoteDataSou
       final snapshot =
           await firebaseFirestore.collection("picosFavoritados").add(data);
       final docPicoFav = await snapshot.get();
-      return MapperFavoriteSpotFirebase.fromFirebase(docPicoFav);
+      return FirebaseDTO.fromDocumentSnapshot(docPicoFav)..resolveReference("idPico");
     } on FirebaseException catch (e) {
       throw FirebaseErrorsMapper.map(e);
     } on Exception catch (e, stackTrace) {
@@ -47,10 +47,10 @@ class FirebaseFavoriteSpotRemoteDataSource implements IFavoriteSpotRemoteDataSou
           .where("idUser", isEqualTo: idUser)
           .get();
       return snapshot.docs.map((doc) {
-        return MapperFavoriteSpotFirebase.fromFirebase(doc);
+        return FirebaseDTO.fromDocumentSnapshot(doc)..resolveReference("idPico");
       }).toList();
-    } catch (e) {
-      throw Exception("Erro ao listar os picos favoritos: $e");
+    } on FirebaseException catch (e, st) {
+      throw FirebaseErrorsMapper.map(e, st);
     }
   }
   
