@@ -5,7 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class FirebaseErrorsMapper {
-  static Failure map(FirebaseException exception) {
+  static Failure map(FirebaseException exception, [StackTrace? st]) {
     switch (exception.code) {
      // Firestore
       case 'permission-denied':
@@ -46,7 +46,7 @@ class FirebaseErrorsMapper {
       // Genéricos
       default:
         debugPrint("Erro não mapeado, lançando erro generico: $exception ${exception.code}");
-        return UnknownFailure(originalException: exception);
+        return UnknownFailure(originalException: exception, stackTrace: st);
     }
   }
 }
