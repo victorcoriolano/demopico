@@ -3,6 +3,7 @@ import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/password_vo.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
+import 'package:demopico/core/common/media_management/models/file_model.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/custom_buttons.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/editable_custom_field.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
@@ -21,7 +22,7 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> with Validators{
-  final user = Get.arguments as UserEntity; 
+  UserEntity user = Get.arguments as UserEntity; 
 
   late TextEditingController _nameController;
   late TextEditingController _bioController;
@@ -48,8 +49,7 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators{
   }
 
   void _updateProfile() {
-    // TODO: UPDATE PROFILE FLOW
-    // Lógica para salvar as alterações no banco de dados
+    
     debugPrint('Salvando alterações...');
     
     // ...
@@ -140,7 +140,6 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators{
                 }              
               }, 
               textButton: "OK")
-            
           ],
         );
       }
@@ -148,19 +147,56 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators{
   }
   
 
-  void _changeProfilePicture() {
+  void _changeProfilePicture(bool isBackGround) async {
     // TODO: CHANGE PROFILE PICTURE FLOW
-    // Lógica para abrir a galeria de fotos ou câmera
-    debugPrint('Abrindo seletor de imagens...');
-    // Implementar lógica de ImagePicker aqui
+    debugPrint("Alterar foto do avatar");
+    final vm = context.read<AuthViewModelAccount>();
+    final selectedFile = await vm.selectNewImage(isBackGround);
+    if (mounted && selectedFile is! NullFileModel){
+      return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Consumer<AuthViewModelAccount>(
+            builder: (context, mapProvider, child) {
+          return AlertDialog(
+            title: const Text('Confirme a Imagem'),
+            content: Image.memory(selectedFile.bytes),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('CANCELAR'),
+                onPressed: () {
+                  Get.back();
+                },
+              ),
+              TextButton(
+                child: const Text('Confirmar'),
+                onPressed: () async {
+                  if(isBackGround){
+                     final userUpdated = await vm.uploadBackGroundImage(selectedFile);
+                     debugPrint("UserUpdated: $userUpdated - profile: ${userUpdated.profileUser.backgroundPicture}");
+                     
+                     setState(() {
+                        user = userUpdated;  
+                     });
+                  } else {
+                    final userUpdated = await vm.uploadFileProfile(selectedFile);
+                    setState(() {
+                      user = userUpdated;  
+                    });
+                    
+                  }
+                  Get.back();
+                },
+              ),
+            ],
+          );
+        });
+      },
+    );
+    }
+    
   }
 
-  void _changeBackgroundPicture() {
-    // TODO: CHANGE BACKGROUND PICTURE FLOW
-    // Lógica para abrir a galeria de fotos ou câmera
-    debugPrint('Abrindo seletor de imagens para o fundo...');
-    // Implementar lógica de ImagePicker aqui
-  }
 
   
 
@@ -185,63 +221,70 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators{
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Stack(
-              clipBehavior: Clip.none,
-              alignment: Alignment.center,
-              children: [
-                Container(
-                  margin  : const EdgeInsets.all(16),
-                  height: 200,
-                  decoration: BoxDecoration(
-                    image: user.profileUser.backgroundPicture == null ? null : 
-                    DecorationImage(
-                      image: CachedNetworkImageProvider(user.profileUser.backgroundPicture!, errorListener: (erro) => Icons.error,),
-                      fit: BoxFit.cover,
-                    ),
-                    color: kRedAccent,
-                    borderRadius: BorderRadius.all(Radius.circular(16)),
-                    
-                  ),
-                ),
-                Positioned(
-                  top: 15,
-                  right: 17,
-                  child: IconButton(
-                    icon: const Icon(Icons.photo_camera, color: kWhite, size: 28),
-                    onPressed: _changeBackgroundPicture,
-                  ),
-                ),
-                // Foto de Perfil
-                Positioned(
-                  bottom: -50,
-                  child: Stack(
-                    alignment: Alignment.bottomRight,
-                    children: [
-                      CircleAvatar(
-                        radius: 60,
-                        backgroundColor: kWhite,
-                        backgroundImage: user.profileUser.avatar == null 
-                          ? AssetImage("assets/images/userPhoto.png") 
-                          : CachedNetworkImageProvider(user.profileUser.avatar!),
+            SizedBox(
+              height: 270.0,
+              child: Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.center,
+                children: [
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    left: 0,
+                    child: Container(
+                      margin  : const EdgeInsets.all(16),
+                      height: 200,
+                      decoration: BoxDecoration(
+                        image: user.profileUser.backgroundPicture == null 
+                          ? null
+                          : DecorationImage(
+                            image: CachedNetworkImageProvider(user.profileUser.backgroundPicture!, errorListener: (erro) => Icons.error,),
+                            fit: BoxFit.cover,
+                          ),
+                        color: kRedAccent,
+                        borderRadius: BorderRadius.all(Radius.circular(16)),
                       ),
-                      Positioned(
-                        right: 0,
-                        bottom: 0,
-                        child: CircleAvatar(
-                          backgroundColor: kRed,
-                          radius: 20,
-                          child: IconButton(
-                            icon: const Icon(Icons.camera_alt, color: kWhite, size: 20),
-                            onPressed: _changeProfilePicture,
+                    ),
+                  ),
+                  Positioned(
+                    top: 15,
+                    right: 17,
+                    child: IconButton(
+                      icon: const Icon(Icons.photo_camera, color: kWhite, size: 28),
+                      onPressed: () => _changeProfilePicture(true),
+                    ),
+                  ),
+                  // Foto de Perfil
+                  Positioned(
+                    bottom: 20,
+                    child: Stack(
+                      alignment: Alignment.bottomRight,
+                      children: [
+                        CircleAvatar(
+                          radius: 60,
+                          backgroundColor: kWhite,
+                          backgroundImage: user.profileUser.avatar == null 
+                            ? AssetImage("assets/images/userPhoto.png") 
+                            : CachedNetworkImageProvider(user.profileUser.avatar!),
+                        ),
+                        Positioned(
+                          right: 0,
+                          bottom: 0,
+                          child: CircleAvatar(
+                            backgroundColor: kRed,
+                            radius: 20,
+                            child: IconButton(
+                              icon: const Icon(Icons.camera_alt, color: kWhite, size: 20),
+                              onPressed: () => _changeProfilePicture(false),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-            const SizedBox(height: 70),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Column(
