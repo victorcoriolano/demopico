@@ -1,7 +1,7 @@
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/core/common/media_management/models/file_model.dart';
 import 'package:demopico/core/common/media_management/models/upload_result_file_model.dart';
-import 'package:demopico/core/common/media_management/usecases/upload_file_uc.dart';
+import 'package:demopico/core/common/media_management/usecases/upload_files_uc.dart';
 import 'package:demopico/core/common/media_management/usecases/delete_file_uc.dart';
 import 'package:flutter/material.dart';
 
