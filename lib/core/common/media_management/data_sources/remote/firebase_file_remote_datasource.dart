@@ -21,7 +21,7 @@ class FirebaseFileRemoteDatasource implements IFileRemoteDataSource {
   FirebaseFileRemoteDatasource({required this.firebaseStorage});
 
   @override
-  List<UploadTaskInterface> uploadFile(List<FileModel> files, String path) {
+  List<UploadTaskInterface> uploadFiles(List<FileModel> files, String path) {
     try{
       final String data = DateTime.now().toIso8601String();
       final tasks = files.map((file) {
@@ -35,7 +35,6 @@ class FirebaseFileRemoteDatasource implements IFileRemoteDataSource {
               );
         return FirebaseUploadTask(uploadTask: task);
       }).toList();
-
     return tasks;
     }
     on FirebaseException catch(e) {
@@ -53,6 +52,28 @@ class FirebaseFileRemoteDatasource implements IFileRemoteDataSource {
       await firebaseStorage.refFromURL(url).delete();
     } on FirebaseException catch (e){
       throw FirebaseErrorsMapper.map(e);
+    }
+  }
+  
+  @override
+  UploadTaskInterface uploadFile(FileModel file, String path) {
+    try{
+      String dateTime = DateTime.now().toIso8601String();
+      final task = firebaseStorage
+            .ref()
+            .child("$path/${file.fileName.split(".")[0]}_$dateTime.${file.contentType.name}")
+            .putData(
+              file.bytes, 
+              SettableMetadata(
+                contentType: file.contentType.name),
+              );
+        return FirebaseUploadTask(uploadTask: task);
+  }on FirebaseException catch(e) {
+      debugPrint("Erro capturado no data source: ${e.message}");
+      throw FirebaseErrorsMapper.map(e);
+  }on Exception catch (e) {
+      debugPrint("Erro desconhecido: $e");
+      throw UnknownFailure(originalException: e);
     }
   }
 }
