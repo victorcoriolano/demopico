@@ -5,8 +5,10 @@ import 'package:demopico/core/common/auth/domain/value_objects/password_vo.dart'
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/media_management/models/file_model.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/custom_buttons.dart';
+import 'package:demopico/features/profile/presentation/utils/modal_helper_profile.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/editable_custom_field.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
+import 'package:demopico/features/user/presentation/controllers/edit_account_view_model.dart';
 import 'package:demopico/features/user/presentation/widgets/form_validator.dart';
 import 'package:demopico/features/user/presentation/widgets/textfield_decoration.dart';
 import 'package:flutter/material.dart';
@@ -93,7 +95,7 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators {
                     children: [
                       TextFormField(
                         decoration: customTextField(
-                            "Adicione sua nova senha", kLightGrey),
+                            "Adicione sua nova senha", kLightGrey, kBlack),
                         controller: _passwordController1,
                         validator: (value) => combineValidators([
                           () => isNotEmpty(value),
@@ -132,7 +134,7 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators {
                         final newPassword =
                             PasswordVo(_passwordController1.text);
                         await context
-                            .read<AuthViewModelAccount>()
+                            .read<EditProfileViewModel>()
                             .changePasswordFlow(newPassword);
                       } on Failure catch (e) {
                         FailureServer.showError(e);
@@ -147,15 +149,17 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators {
 
   void _changeProfilePicture(bool isBackGround) async {
     // TODO: CHANGE PROFILE PICTURE FLOW
-    debugPrint("Alterar foto do avatar");
-    final vm = context.read<AuthViewModelAccount>();
+
+    final vm = context.read<EditProfileViewModel>();
+    // selecionando imagem
     final selectedFile = await vm.selectNewImage(isBackGround);
+
     if (mounted && selectedFile is! NullFileModel) {
       return showDialog(
         context: context,
         builder: (BuildContext context) {
-          return Consumer<AuthViewModelAccount>(
-              builder: (context, vmAccount, child) {
+          return Consumer<EditProfileViewModel>(
+              builder: (context, editProfileViewModel, child) {
             return AlertDialog(
               title: const Text('Confirme a Imagem'),
               content: Image.memory(selectedFile.bytes),
@@ -173,12 +177,12 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators {
                       //final userUpdated = await vm.uploadBackGroundImage(selectedFile);
                       //debugPrint("UserUpdated: $userUpdated - profile: ${userUpdated.profileUser.backgroundPicture}");
                       setState(() {
-                        newBackGround = vmAccount.backgroundImage;
+                        newBackGround = editProfileViewModel.backgroundImage;
                       });
                     } else {
                       //final userUpdated = await vm.uploadFileProfile(selectedFile);
                       setState(() {
-                        newAvatar = vmAccount.avatar;
+                        newAvatar = editProfileViewModel.avatar;
                       });
                     }
                     Get.back();
@@ -192,31 +196,7 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators {
     }
   }
 
-  void confirmDiscardingChanges(){
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text("Deseja descartar as alterações?"),
-          actions: [
-            TextButton(
-                  child: const Text('CANCELAR'),
-                  onPressed: () {
-                    Get.back();
-                  },
-                ),
-                TextButton(
-                  child: const Text('Confirmar'),
-                  onPressed: () async {
-                    Get.back();
-                    Get.back();
-                  },
-                ),
-          ],
-        );
-      },
-    );
-  }
+  
 
   bool get wasChanged {
     return newAvatar is! NullFileModel 
@@ -237,7 +217,7 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators {
             Icons.arrow_back,
             color: kBlack,
           ),
-          onPressed: () => wasChanged ? confirmDiscardingChanges() : Get.back(),
+          onPressed: () => wasChanged ? ModalHelperProfile.confirmDiscardingChanges(context) : Get.back(),
         ),
         actions: [
           IconButton(
