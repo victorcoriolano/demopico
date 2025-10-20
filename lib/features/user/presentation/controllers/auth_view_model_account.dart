@@ -12,6 +12,7 @@ import 'package:demopico/core/common/media_management/models/upload_result_file_
 import 'package:demopico/core/common/media_management/usecases/pick_one_image_uc.dart';
 import 'package:demopico/core/common/media_management/usecases/upload_file_uc.dart';
 import 'package:demopico/core/common/media_management/usecases/upload_files_uc.dart';
+import 'package:demopico/features/profile/domain/usecases/update_profile.dart';
 import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
@@ -88,14 +89,15 @@ class AuthViewModelAccount extends ChangeNotifier {
       dismissDirection: DismissDirection.down
       );
     } else {
-      Get.snackbar("Erro", "Ocorreu um erro ao enviar o email, por favor verifique os campos e tente novamente",dismissDirection: DismissDirection.down);
+      Get.snackbar(
+        "Erro", "Ocorreu um erro ao enviar o email, por favor verifique os campos e tente novamente",
+        dismissDirection: DismissDirection.down);
     }
   }
 
   Future<void> changePasswordFlow(PasswordVo newPassword) async {
     try {
       await _changePasswordUc.execute(newPassword);
-    
       Get.snackbar(
       'Atenção',
       'Um link para redefinir sua senha foi enviado para seu e-mail. Por favor, verifique sua caixa de entrada.',
@@ -113,7 +115,6 @@ class AuthViewModelAccount extends ChangeNotifier {
   /// Select new profile photo
   Future<FileModel> selectNewImage(bool isBackGround) async {
     try {
-          
       final selectedFile = await _pickOneImageUc.execute();
       isBackGround ? backgroundImage = selectedFile : avatar = selectedFile;
       return selectedFile;
@@ -176,7 +177,7 @@ class AuthViewModelAccount extends ChangeNotifier {
 
   User _currentUser = AnonymousUserEntity();
 
-  set currentUser(User user){
+  set setCurrentUser(User user){
     _currentUser = user;
     notifyListeners();
   }
