@@ -10,6 +10,7 @@ import 'package:demopico/core/common/media_management/usecases/pick_one_image_uc
 import 'package:demopico/core/common/media_management/usecases/upload_file_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/update_profile.dart';
 import 'package:demopico/features/profile/infra/repository/profile_repository.dart';
+import 'package:demopico/features/user/domain/usecases/update_data_user_uc.dart';
 import 'package:demopico/features/user/infra/repositories/user_data_repository_impl.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,8 @@ class EditAccountViewModel extends ChangeNotifier {
         deleteAccountUc: DeleteAccountUc.getInstance,
         changePass: ChangePasswordUc.getInstance,
         pickAImage: PickOneImageUc.instance,
-        uploadFile: UploadFileUC.getInstance,
+        uploadFile: UploadFileUC.getInstance, 
+        updateDataUser: UpdateUserUc.getInstance,
       );
 
   EditAccountViewModel({
@@ -38,6 +40,7 @@ class EditAccountViewModel extends ChangeNotifier {
     required PickOneImageUc pickAImage,
     required UpdateProfile updateProfile,
     required UploadFileUC uploadFile,
+    required UpdateUserUc updateDataUser,
     required AuthViewModelAccount account,
   }): _resetPasswordUc = changePasswordUc,
       _deleteAccountUc = deleteAccountUc,
@@ -45,7 +48,8 @@ class EditAccountViewModel extends ChangeNotifier {
       _pickOneImageUc = pickAImage,
       _uploadFile = uploadFile,
       _updateProfile = updateProfile,
-      _account = account;
+      _account = account,
+      _updateUser = updateDataUser;
 
 
   final DeleteAccountUc _deleteAccountUc;
@@ -55,6 +59,7 @@ class EditAccountViewModel extends ChangeNotifier {
   final UploadFileUC _uploadFile;
   final AuthViewModelAccount _account;
   final UpdateProfile _updateProfile;
+  final UpdateUserUc _updateUser;
 
   /// inicializando como null object pra não ter ficar fazendo verificações de null toda hora  
   FileModel avatar = NullFileModel();
