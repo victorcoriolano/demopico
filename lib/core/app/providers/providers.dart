@@ -29,6 +29,7 @@ import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_sign_in.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_sign_up.dart';
+import 'package:demopico/features/user/presentation/controllers/edit_account_view_model.dart';
 import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
@@ -43,6 +44,8 @@ final myProviders = [
   ChangeNotifierProvider(create: (_) => ProfileViewModel.getInstance),
   ChangeNotifierProvider(create: (_) => ChatListViewModel(repository: ChatRepository.instance)),
   ChangeNotifierProvider(create: (_) => ChatRoomViewModel(repository: ChatRepository.instance)),
+  ChangeNotifierProvider(create: (_) => EditProfileViewModel.instance),
+  
   
   
   // Providers de clima
@@ -50,9 +53,9 @@ final myProviders = [
     debugPrint('criou o OpenWeatherProvider');
     return OpenWeatherProvider();
   }),
-  
   ChangeNotifierProvider(
       create: (_) => ForecastProvider(null, climaService: HttpClimateService())),
+
 
   StreamProvider<AuthState>(
     create: (_) => FirebaseAuthRepository.instance.authState,
@@ -71,10 +74,7 @@ final myProviders = [
   ChangeNotifierProvider(create: (_) => SpotsControllerProvider.getInstance),
   ChangeNotifierProvider(create: (_) => SpotProvider.instance),
   ChangeNotifierProvider(create: (_) => HistoricoController.getInstance),
-  ChangeNotifierProvider(create: (_) => CommentController.getInstance),
-  
-  // Providers de hub
-  ChangeNotifierProvider(create: (_) => CommentController.getInstance),
+  ChangeNotifierProvider(create: (_) => CommentController.getInstance), 
   
   // Providers de hub
   ChangeNotifierProvider(
