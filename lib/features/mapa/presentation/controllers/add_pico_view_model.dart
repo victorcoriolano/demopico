@@ -163,7 +163,7 @@ class AddPicoViewModel extends ChangeNotifier {
           descriptionError = "Adicione um descrição";
           return false;
         }
-        if(imgUrls.isEmpty){
+        if(files.isEmpty){
           errors = "Adicione alguma imagem";
           return false;
         }
