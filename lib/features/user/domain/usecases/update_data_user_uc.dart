@@ -15,7 +15,7 @@ class UpdateUserUc {
   UpdateUserUc({required IUserRepository repository})
       : _repository = repository;
 
-  Future<void> call(UserM user) async {
+  Future<void> execute(UserM user) async {
     await _repository.update(user);
   }
 }
