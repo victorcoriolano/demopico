@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key});
 
@@ -21,8 +20,10 @@ class EditProfilePage extends StatefulWidget {
   State<EditProfilePage> createState() => _EditProfilePageState();
 }
 
-class _EditProfilePageState extends State<EditProfilePage> with Validators{
-  UserEntity user = Get.arguments as UserEntity; 
+class _EditProfilePageState extends State<EditProfilePage> with Validators {
+  UserEntity user = Get.arguments as UserEntity;
+  FileModel newBackGround = NullFileModel();
+  FileModel newAvatar = NullFileModel();
 
   late TextEditingController _nameController;
   late TextEditingController _bioController;
@@ -35,7 +36,6 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators{
     super.initState();
     _nameController = TextEditingController(text: user.profileUser.displayName);
     _bioController = TextEditingController(text: user.profileUser.description);
-
   }
 
   @override
@@ -49,9 +49,8 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators{
   }
 
   void _updateProfile() {
-    
     debugPrint('Salvando alterações...');
-    
+
     // ...
     Get.snackbar('Sucesso!', 'Perfil atualizado com sucesso!',
         snackPosition: SnackPosition.BOTTOM,
@@ -77,128 +76,154 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators{
 
   void _handleChangePassword() {
     showDialog(
-      context: context, 
-      builder: (context) {
-        return AlertDialog( 
-          title: Column(
-            children: [
-              Text("Insira sua nova senha"),
-              Divider()
-            ],
-          ),
-
-          content: Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Form(
-              key: _formKey,
-              child: SizedBox(
-                height: 150,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    TextFormField(
-                      decoration: customTextField("Adicione sua nova senha", kLightGrey),
-                      controller: _passwordController1,
-                      validator: (value) => combineValidators([
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Column(
+              children: [Text("Insira sua nova senha"), Divider()],
+            ),
+            content: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Form(
+                key: _formKey,
+                child: SizedBox(
+                  height: 150,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      TextFormField(
+                        decoration: customTextField(
+                            "Adicione sua nova senha", kLightGrey),
+                        controller: _passwordController1,
+                        validator: (value) => combineValidators([
                           () => isNotEmpty(value),
                           () => isValidPassword(value),
-                      ]),
-                    ),
-                    SizedBox(height: 12,),
-                    TextFormField(
-                      decoration: customTextField("Confirme a sua senha", kLightGrey),
-                      controller: _passwordController2,
-                      validator: (value) => combineValidators([
+                        ]),
+                      ),
+                      SizedBox(
+                        height: 12,
+                      ),
+                      TextFormField(
+                        decoration:
+                            customTextField("Confirme a sua senha", kLightGrey),
+                        controller: _passwordController2,
+                        validator: (value) => combineValidators([
                           () => isNotEmpty(value),
                           () => isValidPassword(value),
                           () => checkPassword(value, _passwordController1.text),
-                      ]),
-                    ),
-                  ],
+                        ]),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          actionsAlignment: MainAxisAlignment.spaceBetween,
-          actions: [
-            TextButton(
-              onPressed: () {
-                Get.back();
-              }, 
-              child: Text("Cancelar")),
-            CustomElevatedButton(
-              onPressed: () async {
-                if(_formKey.currentState!.validate()){
-                  try{
-
-                final newPassword= PasswordVo(_passwordController1.text);
-                await context.read<AuthViewModelAccount>().changePasswordFlow(newPassword);
-
-                  } on Failure catch (e){
-                    FailureServer.showError(e);
-                  }
-                }              
-              }, 
-              textButton: "OK")
-          ],
-        );
-      }
-    );
+            actionsAlignment: MainAxisAlignment.spaceBetween,
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: Text("Cancelar")),
+              CustomElevatedButton(
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      try {
+                        final newPassword =
+                            PasswordVo(_passwordController1.text);
+                        await context
+                            .read<AuthViewModelAccount>()
+                            .changePasswordFlow(newPassword);
+                      } on Failure catch (e) {
+                        FailureServer.showError(e);
+                      }
+                    }
+                  },
+                  textButton: "OK")
+            ],
+          );
+        });
   }
-  
 
   void _changeProfilePicture(bool isBackGround) async {
     // TODO: CHANGE PROFILE PICTURE FLOW
     debugPrint("Alterar foto do avatar");
     final vm = context.read<AuthViewModelAccount>();
     final selectedFile = await vm.selectNewImage(isBackGround);
-    if (mounted && selectedFile is! NullFileModel){
+    if (mounted && selectedFile is! NullFileModel) {
       return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Consumer<AuthViewModelAccount>(
-            builder: (context, mapProvider, child) {
-          return AlertDialog(
-            title: const Text('Confirme a Imagem'),
-            content: Image.memory(selectedFile.bytes),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('CANCELAR'),
-                onPressed: () {
-                  Get.back();
-                },
-              ),
-              TextButton(
-                child: const Text('Confirmar'),
-                onPressed: () async {
-                  if(isBackGround){
-                     final userUpdated = await vm.uploadBackGroundImage(selectedFile);
-                     debugPrint("UserUpdated: $userUpdated - profile: ${userUpdated.profileUser.backgroundPicture}");
-                     
-                     setState(() {
-                        user = userUpdated;  
-                     });
-                  } else {
-                    final userUpdated = await vm.uploadFileProfile(selectedFile);
-                    setState(() {
-                      user = userUpdated;  
-                    });
-                    
-                  }
-                  Get.back();
-                },
-              ),
-            ],
-          );
-        });
-      },
-    );
+        context: context,
+        builder: (BuildContext context) {
+          return Consumer<AuthViewModelAccount>(
+              builder: (context, vmAccount, child) {
+            return AlertDialog(
+              title: const Text('Confirme a Imagem'),
+              content: Image.memory(selectedFile.bytes),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('CANCELAR'),
+                  onPressed: () {
+                    Get.back();
+                  },
+                ),
+                TextButton(
+                  child: const Text('Confirmar'),
+                  onPressed: () async {
+                    if (isBackGround) {
+                      //final userUpdated = await vm.uploadBackGroundImage(selectedFile);
+                      //debugPrint("UserUpdated: $userUpdated - profile: ${userUpdated.profileUser.backgroundPicture}");
+                      setState(() {
+                        newBackGround = vmAccount.backgroundImage;
+                      });
+                    } else {
+                      //final userUpdated = await vm.uploadFileProfile(selectedFile);
+                      setState(() {
+                        newAvatar = vmAccount.avatar;
+                      });
+                    }
+                    Get.back();
+                  },
+                ),
+              ],
+            );
+          });
+        },
+      );
     }
-    
   }
 
+  void confirmDiscardingChanges(){
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Deseja descartar as alterações?"),
+          actions: [
+            TextButton(
+                  child: const Text('CANCELAR'),
+                  onPressed: () {
+                    Get.back();
+                  },
+                ),
+                TextButton(
+                  child: const Text('Confirmar'),
+                  onPressed: () async {
+                    Get.back();
+                    Get.back();
+                  },
+                ),
+          ],
+        );
+      },
+    );
+  }
 
-  
+  bool get wasChanged {
+    return newAvatar is! NullFileModel 
+      || newBackGround is! NullFileModel 
+      || _nameController.text != user.displayName.value 
+      || _bioController.text != user.profileUser.description;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -208,8 +233,11 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators{
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: kBlack,),
-          onPressed: () => Get.back(),
+          icon: const Icon(
+            Icons.arrow_back,
+            color: kBlack,
+          ),
+          onPressed: () => wasChanged ? confirmDiscardingChanges() : Get.back(),
         ),
         actions: [
           IconButton(
@@ -232,15 +260,21 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators{
                     right: 0,
                     left: 0,
                     child: Container(
-                      margin  : const EdgeInsets.all(16),
+                      margin: const EdgeInsets.all(16),
                       height: 200,
                       decoration: BoxDecoration(
-                        image: user.profileUser.backgroundPicture == null 
-                          ? null
-                          : DecorationImage(
-                            image: CachedNetworkImageProvider(user.profileUser.backgroundPicture!, errorListener: (erro) => Icons.error,),
-                            fit: BoxFit.cover,
-                          ),
+                        image: newBackGround is NullFileModel
+                            ? user.profileUser.backgroundPicture == null
+                                ? null
+                                : DecorationImage(
+                                    image: CachedNetworkImageProvider(
+                                      user.profileUser.backgroundPicture!,
+                                      errorListener: (erro) => Icons.error,
+                                    ),
+                                    fit: BoxFit.cover,
+                                  )
+                            : DecorationImage(
+                                image: MemoryImage(newBackGround.bytes)),
                         color: kRedAccent,
                         borderRadius: BorderRadius.all(Radius.circular(16)),
                       ),
@@ -250,7 +284,8 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators{
                     top: 15,
                     right: 17,
                     child: IconButton(
-                      icon: const Icon(Icons.photo_camera, color: kWhite, size: 28),
+                      icon: const Icon(Icons.photo_camera,
+                          color: kRed, size: 28, ),
                       onPressed: () => _changeProfilePicture(true),
                     ),
                   ),
@@ -263,9 +298,12 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators{
                         CircleAvatar(
                           radius: 60,
                           backgroundColor: kWhite,
-                          backgroundImage: user.profileUser.avatar == null 
-                            ? AssetImage("assets/images/userPhoto.png") 
-                            : CachedNetworkImageProvider(user.profileUser.avatar!),
+                          backgroundImage: newAvatar is NullFileModel
+                              ? user.profileUser.avatar == null
+                                  ? AssetImage("assets/images/userPhoto.png")
+                                  : CachedNetworkImageProvider(
+                                      user.profileUser.avatar!)
+                              : MemoryImage(newAvatar.bytes),
                         ),
                         Positioned(
                           right: 0,
@@ -274,7 +312,8 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators{
                             backgroundColor: kRed,
                             radius: 20,
                             child: IconButton(
-                              icon: const Icon(Icons.camera_alt, color: kWhite, size: 20),
+                              icon: const Icon(Icons.camera_alt,
+                                  color: kWhite, size: 20),
                               onPressed: () => _changeProfilePicture(false),
                             ),
                           ),
@@ -319,8 +358,7 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators{
                   const SizedBox(height: 5),
                   Row(
                     children: [
-                      const Icon(Icons.email_outlined,
-                          color: kRed, size: 24),
+                      const Icon(Icons.email_outlined, color: kRed, size: 24),
                       const SizedBox(width: 10),
                       Expanded(
                         child: Text(user.email.value,
