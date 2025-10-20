@@ -118,7 +118,7 @@ class AuthViewModelSignIn extends ChangeNotifier {
 
     if(authResult.success){
       debugPrint("Autenticação bem sucedida");
-      AuthViewModelAccount.instance.currentUser = authResult.user!;
+      AuthViewModelAccount.instance.setCurrentUser = authResult.user!;
       isLoading = false;
       notifyListeners();
     }else {
