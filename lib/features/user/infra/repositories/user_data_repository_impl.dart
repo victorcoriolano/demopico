@@ -3,7 +3,7 @@ import 'package:demopico/core/common/auth/domain/value_objects/email_vo.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/vulgo_vo.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto_mapper.dart';
-import 'package:demopico/features/user/domain/interfaces/i_user_database_service.dart';
+import 'package:demopico/features/user/domain/interfaces/i_user_datasource_service.dart';
 import 'package:demopico/features/user/domain/models/user_model.dart';
 import 'package:demopico/features/user/infra/datasource/remote/user_firebase_datasource.dart';
 
@@ -64,5 +64,10 @@ class UserDataRepositoryImpl implements IUserRepository {
     _userLocalDetails = user;
     final dto = _mapper.toDTO(user);
     return userFirebaseService.update(dto).then((_) => user);
+  }
+  
+  @override
+  Future<void> updateOnlyField(String id, String fieldName, value) {
+    return userFirebaseService.updateOnlyField(id, fieldName, value);
   }
 }

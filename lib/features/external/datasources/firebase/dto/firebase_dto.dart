@@ -43,7 +43,4 @@ class FirebaseDTO {
     }
     return this;
   }
-
-
-
 }
