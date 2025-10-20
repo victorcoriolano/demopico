@@ -16,13 +16,13 @@ import 'package:demopico/features/user/presentation/controllers/auth_view_model_
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class EditAccountViewModel extends ChangeNotifier {
+class EditProfileViewModel extends ChangeNotifier {
   
-    static EditAccountViewModel? _instance;
+    static EditProfileViewModel? _instance;
     // Avoid self instance
     
-    static EditAccountViewModel get instance =>
-      _instance ??= EditAccountViewModel(
+    static EditProfileViewModel get instance =>
+      _instance ??= EditProfileViewModel(
         updateProfile: UpdateProfile(profileDataRepo: ProfileRepositoryImpl.getInstance),
         account: AuthViewModelAccount.instance,
         changePasswordUc: ResetPasswordUc.getInstance,
@@ -33,7 +33,7 @@ class EditAccountViewModel extends ChangeNotifier {
         updateDataUser: UpdateUserUc.getInstance,
       );
 
-  EditAccountViewModel({
+  EditProfileViewModel({
     required DeleteAccountUc deleteAccountUc,
     required ResetPasswordUc changePasswordUc,
     required ChangePasswordUc changePass,
@@ -82,28 +82,13 @@ class EditAccountViewModel extends ChangeNotifier {
   }
 
 
-  Future<UserEntity> uploadFileProfile(FileModel file) async {
-    try {
+  Stream<UploadStateFileModel> uploadAvatar(FileModel file) {
       final streamUpload = _uploadFile.execute(file, "users/avatar/${(_account.user as UserEntity).id}");
-      streamUpload.listen(
-        (onData) {
-          if (onData.state == UploadState.success){
-            debugPrint("Sucesso no upload: ${onData.url}");
-            avatarUrl = onData.url;
-            final profileUpdated = (_account.user as UserEntity).profileUser.copyWith(avatar: avatarUrl);
-            _account.setCurrentUser = (_account.user as UserEntity).copyWith(profileUser: profileUpdated);
-          }
-        }, 
-        onDone: () => debugPrint("Done"),
-        onError: (error) {
-          debugPrint("Ocorreu um erro ao subir arquivo: ${error.toString()}");
-        }
-      );
-      return _account.user as UserEntity;
-    }on Failure catch (e) {
-      FailureServer.showError(e);
-      return _account.user as UserEntity;
-    }
+      return streamUpload;
+  }
+
+  Stream<UploadStateFileModel> uploadBackGroundImage(FileModel file) {
+      return _uploadFile.execute(file, "users/backGround/${(_account.user as UserEntity).id}");
   }
 
   
