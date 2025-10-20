@@ -46,7 +46,7 @@ class Conversation extends Chat {
       }).toList(),
     );
     } on TypeError catch (e){
-      throw ArgumentError("Ocorreu um erro ao mapear os dados: $e ${e.stackTrace}");
+    throw ArgumentError("Ocorreu um erro ao mapear os dados da conversation: $e ${e.stackTrace}");
     }
     
   }
