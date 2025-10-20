@@ -10,7 +10,7 @@ import 'package:demopico/features/profile/domain/usecases/disconnect_users.dart'
 import 'package:demopico/features/profile/domain/usecases/get_conections_accepted_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_connections_requests_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_connections_sent.dart';
-import 'package:demopico/features/profile/presentation/view_objects/suggestion_profile.dart';
+import 'package:demopico/features/profile/presentation/object_for_only_view/suggestion_profile.dart';
 import 'package:demopico/features/user/domain/usecases/get_sugestions_user_uc.dart';
 import 'package:flutter/material.dart';
 

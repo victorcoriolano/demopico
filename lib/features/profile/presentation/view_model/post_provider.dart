@@ -12,7 +12,7 @@ import 'package:demopico/features/profile/domain/usecases/create_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/delete_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/update_post_uc.dart';
-import 'package:demopico/features/profile/presentation/view_objects/media_url_item.dart';
+import 'package:demopico/features/profile/presentation/object_for_only_view/media_url_item.dart';
 import 'package:demopico/features/user/domain/enums/type_post.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
