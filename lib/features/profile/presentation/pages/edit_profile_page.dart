@@ -398,4 +398,5 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators {
       ),
     );
   }
+
 }

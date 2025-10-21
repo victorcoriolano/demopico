@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/widgets/glass_widget.dart';
+import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -11,7 +12,8 @@ class TopInfoSpot extends StatefulWidget {
   final List<String> images;
   final bool isMine;
   final VoidCallback onPressedDelete;
-  const TopInfoSpot({super.key, required this.images, required this.isMine, required this.onPressedDelete, required this.location});
+  final MapControllerProvider mapControllerProvider;
+  const TopInfoSpot({super.key, required this.images,required this.mapControllerProvider, required this.isMine, required this.onPressedDelete, required this.location});
 
   @override
   State<TopInfoSpot> createState() => _TopInfoSpotState();
@@ -77,7 +79,7 @@ class _TopInfoSpotState extends State<TopInfoSpot> {
             alignment: Alignment.topRight,
             child: Container(
               margin: EdgeInsets.all(12),
-              height: 200,
+              height: widget.isMine ? 200 : 120,
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
               child: GlassWidget(
                 child: Column(
@@ -97,6 +99,8 @@ class _TopInfoSpotState extends State<TopInfoSpot> {
                       iconSize: 30,
                       onPressed: () {
                         Get.toNamed(Paths.map, arguments: widget.location); // Retorna para a tela anterior
+                        widget.mapControllerProvider.reajustarCameraPosition(widget.location); // Reajusta a posição da câmera para o local do pico
+                        widget.mapControllerProvider.setZoom(15); // Define um zoom mais próximo
                       },
                     ),
                     Visibility(
