@@ -1,8 +1,8 @@
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
-import 'package:demopico/core/common/auth/domain/usecases/change_password_uc.dart';
-import 'package:demopico/core/common/auth/domain/usecases/delete_account_uc.dart';
-import 'package:demopico/core/common/auth/domain/usecases/reset_password_uc.dart';
+import 'package:demopico/core/common/auth/domain/usecases/update_password_uc.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/password_vo.dart';
+import 'package:demopico/core/common/auth/domain/value_objects/vulgo_vo.dart';
+import 'package:demopico/core/common/auth/infra/mapper/user_mapper.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/media_management/models/file_model.dart';
 import 'package:demopico/core/common/media_management/models/upload_result_file_model.dart';
@@ -11,7 +11,6 @@ import 'package:demopico/core/common/media_management/usecases/upload_file_uc.da
 import 'package:demopico/features/profile/domain/usecases/update_profile.dart';
 import 'package:demopico/features/profile/infra/repository/profile_repository.dart';
 import 'package:demopico/features/user/domain/usecases/update_data_user_uc.dart';
-import 'package:demopico/features/user/infra/repositories/user_data_repository_impl.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,26 +24,20 @@ class EditProfileViewModel extends ChangeNotifier {
       _instance ??= EditProfileViewModel(
         updateProfile: UpdateProfile(profileDataRepo: ProfileRepositoryImpl.getInstance),
         account: AuthViewModelAccount.instance,
-        changePasswordUc: ResetPasswordUc.getInstance,
-        deleteAccountUc: DeleteAccountUc.getInstance,
-        changePass: ChangePasswordUc.getInstance,
+        updatePassword: UpdatePasswordUc.getInstance,
         pickAImage: PickOneImageUc.instance,
         uploadFile: UploadFileUC.getInstance, 
         updateDataUser: UpdateUserUc.getInstance,
       );
 
   EditProfileViewModel({
-    required DeleteAccountUc deleteAccountUc,
-    required ResetPasswordUc changePasswordUc,
-    required ChangePasswordUc changePass,
+    required UpdatePasswordUc updatePassword,
     required PickOneImageUc pickAImage,
     required UpdateProfile updateProfile,
     required UploadFileUC uploadFile,
     required UpdateUserUc updateDataUser,
     required AuthViewModelAccount account,
-  }): _resetPasswordUc = changePasswordUc,
-      _deleteAccountUc = deleteAccountUc,
-      _changePasswordUc = changePass,
+  }): _updatePasswordUc = updatePassword,
       _pickOneImageUc = pickAImage,
       _uploadFile = uploadFile,
       _updateProfile = updateProfile,
@@ -52,9 +45,7 @@ class EditProfileViewModel extends ChangeNotifier {
       _updateUser = updateDataUser;
 
 
-  final DeleteAccountUc _deleteAccountUc;
-  final ResetPasswordUc _resetPasswordUc;
-  final ChangePasswordUc _changePasswordUc;
+  final UpdatePasswordUc _updatePasswordUc;
   final PickOneImageUc _pickOneImageUc;
   final UploadFileUC _uploadFile;
   final AuthViewModelAccount _account;
@@ -64,11 +55,11 @@ class EditProfileViewModel extends ChangeNotifier {
   /// inicializando como null object pra não ter ficar fazendo verificações de null toda hora  
   FileModel avatar = NullFileModel();
   FileModel backgroundImage = NullFileModel();
+
+  VulgoVo? newVulgo;
+  String? newBio;
+
   bool isLoading = false;
-  String? avatarUrl;
-  String? imageBackGroundUrl;
-
-
 
   Future<FileModel> selectNewImage(bool isBackGround) async {
     try {
@@ -79,22 +70,47 @@ class EditProfileViewModel extends ChangeNotifier {
       FailureServer.showError(e);
       return NullFileModel();
     }
-  }
+  }  
 
+  bool isCompletedUploadAvatar = false;
+  bool isCompletedUploadBackGroundImage = false;
 
-  Stream<UploadStateFileModel> uploadAvatar(FileModel file) {
-      final streamUpload = _uploadFile.execute(file, "users/avatar/${(_account.user as UserEntity).id}");
-      return streamUpload;
-  }
-
-  Stream<UploadStateFileModel> uploadBackGroundImage(FileModel file) {
-      return _uploadFile.execute(file, "users/backGround/${(_account.user as UserEntity).id}");
-  }
-
-  
-  Future<void> changePasswordFlow(PasswordVo newPassword) async {
+  Future<String?> uploadAvatar() async {
     try {
-      await _changePasswordUc.execute(newPassword);
+      if (avatar is! NullFileModel) return null;
+      final streamUpload = _uploadFile.execute(avatar, "users/photos/avatar/${(_account.user as UserEntity).id}");
+      final task = await streamUpload.firstWhere(
+        (task) => task.state == UploadState.success || 
+                   task.state == UploadState.failure,
+      );
+
+      if (task.state == UploadState.success) return task.url;
+      return null;
+    } catch (e){
+      debugPrint("Erro ao fazer o upload do avatar: $e");
+      return null;
+    }
+  }
+
+  Future<String?> uploadBackgroundImage() async {
+    try {
+      if (avatar is! NullFileModel) return null;
+       final streamUpload = _uploadFile.execute(backgroundImage, "users/photos/backgroundProfiles/${(_account.user as UserEntity).id}");
+       final task = await streamUpload.firstWhere(
+        (task) => task.state == UploadState.success || 
+                   task.state == UploadState.failure,
+      );
+      if (task.state == UploadState.success) return task.url;
+      return null;
+    } catch (e){
+      debugPrint("Erro ao fazer o upload do avatar: $e");
+      return null;
+    }
+  }
+
+  Future<void> updatePassword(PasswordVo newPassword) async {
+    try {
+      await _updatePasswordUc.execute(newPassword);
       Get.snackbar(
       'Atenção',
       'Senha Redefinida',
@@ -108,7 +124,52 @@ class EditProfileViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> update() async {
-
+  bool get hasNewImages {
+    return avatar is! NullFileModel 
+      || backgroundImage is! NullFileModel;
   }
+
+  Future<void> updateAll() async {
+    isLoading = true;
+    notifyListeners();
+    UserEntity originalUser = _account.user as UserEntity;
+    UserEntity userModificado = originalUser.copyWith();
+    try {
+      // verifica se alguma foto foi alterada
+      final (urlAvatar, backgroundImageUrl) = await ( 
+        uploadAvatar(),
+        uploadBackgroundImage(),
+      ).wait;
+
+      if (urlAvatar != null){
+        final profileUpdated = userModificado.profileUser.copyWith(avatar: urlAvatar);
+        userModificado = userModificado.copyWith(profileUser: profileUpdated, avatar: urlAvatar);
+      }
+        
+      if (backgroundImageUrl != null){
+          final profileUpdated = userModificado.profileUser.copyWith(backgroundPicture: backgroundImageUrl);
+          userModificado = userModificado.copyWith(profileUser: profileUpdated,);
+      }
+
+      // verify text changes as update entity
+      if (newVulgo != null) userModificado = userModificado.copyWith(displayName: newVulgo);
+      if (newBio != null) {
+        final profileUpdated = userModificado.profileUser.copyWith(description: newBio);
+        userModificado = userModificado.copyWith(profileUser: profileUpdated);
+      } 
+
+      // finally uploads to the database if the data is really different
+      if (userModificado != _account.user) {
+        final result = await _updateProfile.execute(userModificado.profileUser);
+        if (result.success) await _updateUser.fullUpdate(UserMapper.fromEntity(userModificado));
+      }
+    } on Failure catch (e) {
+      FailureServer.showError(e);
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  
 }

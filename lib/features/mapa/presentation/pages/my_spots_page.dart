@@ -34,8 +34,8 @@ class _MySpotsPageState extends State<MySpotsPage> {
       ),
       body: Consumer<SpotsControllerProvider>(
         builder: (context, provider, child) {
-          if(provider.isLoading) Center(child: CircularProgressIndicator(),);
-          if(provider.mySpots.isEmpty) Center(child: Text("Nenhum pico encontrado", style: TextStyle(color: kRed),),); 
+          if(provider.isLoading) return Center(child: CircularProgressIndicator(),);
+          if(provider.mySpots.isEmpty) return Center(child: Text("Nenhum pico encontrado", style: TextStyle(color: kRed),),); 
           return ListView.builder(
             itemBuilder: (context, item) =>
                 PicoCard(pico: provider.mySpots[item]),

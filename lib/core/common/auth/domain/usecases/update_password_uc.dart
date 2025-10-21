@@ -3,16 +3,16 @@ import 'package:demopico/core/common/auth/domain/interfaces/i_user_account_repos
 import 'package:demopico/core/common/auth/domain/value_objects/password_vo.dart';
 import 'package:demopico/core/common/auth/infra/repositories/firebase_account_repository.dart';
 
-class ChangePasswordUc {
-  static ChangePasswordUc? _changePasswordUc;
-  static ChangePasswordUc get getInstance {
-  _changePasswordUc ??= ChangePasswordUc(accountRepository: FirebaseAccountRepository.instance);
+class UpdatePasswordUc {
+  static UpdatePasswordUc? _changePasswordUc;
+  static UpdatePasswordUc get getInstance {
+  _changePasswordUc ??= UpdatePasswordUc(accountRepository: FirebaseAccountRepository.instance);
     return _changePasswordUc!;
   }
 
   final IUserAccountRepository _accountRepository;
 
-  ChangePasswordUc({required IUserAccountRepository accountRepository}) 
+  UpdatePasswordUc({required IUserAccountRepository accountRepository}) 
     : _accountRepository = accountRepository;
 
   Future<void> execute(PasswordVo newPassword) async {

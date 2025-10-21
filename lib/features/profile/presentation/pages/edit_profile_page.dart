@@ -2,12 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/password_vo.dart';
+import 'package:demopico/core/common/auth/domain/value_objects/vulgo_vo.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/media_management/models/file_model.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/custom_buttons.dart';
 import 'package:demopico/features/profile/presentation/utils/modal_helper_profile.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/editable_custom_field.dart';
-import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:demopico/features/user/presentation/controllers/edit_account_view_model.dart';
 import 'package:demopico/features/user/presentation/widgets/form_validator.dart';
 import 'package:demopico/features/user/presentation/widgets/textfield_decoration.dart';
@@ -135,7 +135,7 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators {
                             PasswordVo(_passwordController1.text);
                         await context
                             .read<EditProfileViewModel>()
-                            .changePasswordFlow(newPassword);
+                            .updatePassword(newPassword);
                       } on Failure catch (e) {
                         FailureServer.showError(e);
                       }
@@ -148,8 +148,6 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators {
   }
 
   void _changeProfilePicture(bool isBackGround) async {
-    // TODO: CHANGE PROFILE PICTURE FLOW
-
     final vm = context.read<EditProfileViewModel>();
     // selecionando imagem
     final selectedFile = await vm.selectNewImage(isBackGround);
@@ -196,13 +194,17 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators {
     }
   }
 
-  
+  bool get hasNewImages {
+    return newAvatar is! NullFileModel || newBackGround is! NullFileModel;
+  }
+
+  bool get hasNewText {
+    return _nameController.text != user.displayName.value ||
+        _bioController.text != user.profileUser.description;
+  }
 
   bool get wasChanged {
-    return newAvatar is! NullFileModel 
-      || newBackGround is! NullFileModel 
-      || _nameController.text != user.displayName.value 
-      || _bioController.text != user.profileUser.description;
+    return hasNewText || hasNewImages;
   }
 
   @override
@@ -217,7 +219,9 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators {
             Icons.arrow_back,
             color: kBlack,
           ),
-          onPressed: () => wasChanged ? ModalHelperProfile.confirmDiscardingChanges(context) : Get.back(),
+          onPressed: () => wasChanged
+              ? ModalHelperProfile.confirmDiscardingChanges(context)
+              : Get.back(),
         ),
         actions: [
           IconButton(
@@ -264,8 +268,11 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators {
                     top: 15,
                     right: 17,
                     child: IconButton(
-                      icon: const Icon(Icons.photo_camera,
-                          color: kRed, size: 28, ),
+                      icon: const Icon(
+                        Icons.photo_camera,
+                        color: kRed,
+                        size: 28,
+                      ),
                       onPressed: () => _changeProfilePicture(true),
                     ),
                   ),
@@ -321,6 +328,19 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators {
                     label: 'Nome',
                     controller: _nameController,
                     icon: Icons.person_outline,
+                    onChanged: (value) {
+                      final viewModel = context.read<EditProfileViewModel>();
+                      if (value != user.displayName.value) {
+                        try {
+                          viewModel.newVulgo = VulgoVo(value);
+                        } on Failure catch (e){
+                          FailureServer.showError(e);
+                        }
+                        
+                      } else {
+                        viewModel.newVulgo = null;
+                      }
+                    },
                   ),
                   const SizedBox(height: 20),
                   EditableCustomField(
@@ -328,6 +348,14 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators {
                     controller: _bioController,
                     icon: Icons.description_outlined,
                     isMultiline: true,
+                    onChanged: (value) {
+                      final viewModel = context.read<EditProfileViewModel>();
+                      if (value != user.profileUser.description) {
+                        viewModel.newBio = value;
+                      } else {
+                        viewModel.newBio = null;
+                      }
+                    },
                   ),
                   const SizedBox(height: 20),
                   const Text('E-mail',

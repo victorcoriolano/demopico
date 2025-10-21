@@ -9,6 +9,7 @@ class ChatRoomViewModel extends ChangeNotifier {
 
   ChatRoomViewModel({required ImessageRepository repository})
       : _repository = repository;
+      
   Stream<List<Message>> listenMessagesForChat(Chat chat) {
     return _repository.getMessagesForChat(chat.id);
   }
