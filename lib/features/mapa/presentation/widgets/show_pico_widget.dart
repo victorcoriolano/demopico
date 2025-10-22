@@ -3,6 +3,7 @@ import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/features/denunciar/denuncia_model.dart';
 import 'package:demopico/features/mapa/domain/value_objects/attributes_vo.dart';
 import 'package:demopico/features/mapa/presentation/controllers/favorite_spot_controller.dart';
+import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_provider.dart';
 
 import 'package:demopico/features/mapa/presentation/pages/comment_page.dart';
@@ -95,6 +96,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                     children: [
                       // widget da imagem dos spots
                       TopInfoSpot(
+                        mapControllerProvider: context.read<MapControllerProvider>(),
                         location: LatLng(
                             spotProvider.pico?.location.latitude ?? 0,
                             spotProvider.pico?.location.latitude ?? 0),
