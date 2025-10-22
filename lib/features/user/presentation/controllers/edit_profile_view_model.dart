@@ -3,7 +3,9 @@ import 'package:demopico/core/common/auth/domain/usecases/update_password_uc.dar
 import 'package:demopico/core/common/auth/domain/value_objects/password_vo.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/vulgo_vo.dart';
 import 'package:demopico/core/common/auth/infra/mapper/user_mapper.dart';
+import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
+import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/core/common/media_management/models/file_model.dart';
 import 'package:demopico/core/common/media_management/models/upload_result_file_model.dart';
 import 'package:demopico/core/common/media_management/usecases/pick_one_image_uc.dart';
@@ -64,6 +66,7 @@ class EditProfileViewModel extends ChangeNotifier {
   Future<FileModel> selectNewImage(bool isBackGround) async {
     try {
       final selectedFile = await _pickOneImageUc.execute();
+      if (selectedFile.contentType == ContentType.unavailable) throw InvalidFormatFileFailure();
       isBackGround ? backgroundImage = selectedFile : avatar = selectedFile;
       return selectedFile;
     } on Failure catch (e){
@@ -85,6 +88,7 @@ class EditProfileViewModel extends ChangeNotifier {
       );
 
       if (task.state == UploadState.success) return task.url;
+      debugPrint("Upload falhou retornando null");
       return null;
     } catch (e){
       debugPrint("Erro ao fazer o upload do avatar: $e");
@@ -161,7 +165,13 @@ class EditProfileViewModel extends ChangeNotifier {
       // finally uploads to the database if the data is really different
       if (userModificado != _account.user) {
         final result = await _updateProfile.execute(userModificado.profileUser);
-        if (result.success) await _updateUser.fullUpdate(UserMapper.fromEntity(userModificado));
+        if (result.success) {
+          await _updateUser.fullUpdate(UserMapper.fromEntity(userModificado));
+          debugPrint("Perfil atualizado com sucesso");
+          _account.setCurrentUser = userModificado;
+        } else {
+          throw result.failure!;
+        }
       }
     } on Failure catch (e) {
       FailureServer.showError(e);
