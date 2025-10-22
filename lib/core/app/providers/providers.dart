@@ -29,7 +29,7 @@ import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_sign_in.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_sign_up.dart';
-import 'package:demopico/features/user/presentation/controllers/edit_account_view_model.dart';
+import 'package:demopico/features/user/presentation/controllers/edit_profile_view_model.dart';
 import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
