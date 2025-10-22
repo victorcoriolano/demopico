@@ -58,7 +58,7 @@ class FirebaseFileRemoteDatasource implements IFileRemoteDataSource {
   @override
   UploadTaskInterface uploadFile(FileModel file, String path) {
     try{
-      String dateTime = DateTime.now().toIso8601String();
+      String dateTime = DateTime.now().toString().replaceAll('.', "").replaceAll(":", "");
       final task = firebaseStorage
             .ref()
             .child("$path/${file.fileName.split(".")[0]}_$dateTime.${file.contentType.name}")
