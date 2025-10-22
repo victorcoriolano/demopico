@@ -41,17 +41,15 @@ class AuthViewModelAccount extends ChangeNotifier {
   bool isLoading = false;
   String? avatarUrl;
   String? imageBackGroundUrl;
-  
-  Future _handleAction(Function execute) async {
-    try{
-      return await execute();
+
+  Future<void> logout() async {
+     try{
+      await _logoutUc.deslogar();
+      setCurrentUser = AnonymousUserEntity();
     } on Failure catch (failure){
       FailureServer.showError(failure);
     }
-  }
 
-  Future<void> logout() async {
-    await _handleAction(_logoutUc.deslogar);
   }
   
   Future<void> resetPasswordFlow(String email) async {

@@ -8,7 +8,7 @@ import 'package:demopico/core/common/media_management/models/file_model.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/custom_buttons.dart';
 import 'package:demopico/features/profile/presentation/utils/modal_helper_profile.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/editable_custom_field.dart';
-import 'package:demopico/features/user/presentation/controllers/edit_account_view_model.dart';
+import 'package:demopico/features/user/presentation/controllers/edit_profile_view_model.dart';
 import 'package:demopico/features/user/presentation/widgets/form_validator.dart';
 import 'package:demopico/features/user/presentation/widgets/textfield_decoration.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +50,8 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators {
     super.dispose();
   }
 
-  void _updateProfile() {
+  Future<void> _updateProfile() async {
+    await context.read<EditProfileViewModel>().updateAll();
     debugPrint('Salvando alterações...');
 
     // ...
