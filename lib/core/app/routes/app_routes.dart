@@ -16,5 +16,6 @@ abstract class Paths {
   static const createSpotPage = '/create-spot-page';
   static const signUp = '/sign-up';
   static const myNetwork = '/my-network';
+  static const aboutPage = '/about-page';
 
 }
