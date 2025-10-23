@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/media_management/interfaces/datasource/i_upload_task_datasource.dart';
 import 'package:demopico/core/common/media_management/models/file_model.dart';
 import 'package:demopico/core/common/media_management/models/upload_result_file_model.dart';
@@ -58,10 +59,12 @@ class FirebaseFileRemoteDatasource implements IFileRemoteDataSource {
   @override
   UploadTaskInterface uploadFile(FileModel file, String path) {
     try{
-      String dateTime = DateTime.now().toString().replaceAll('.', "").replaceAll(":", "");
+      if (file.contentType == ContentType.unavailable){
+        throw UnavailableFailure();
+      }
       final task = firebaseStorage
             .ref()
-            .child("$path/${file.fileName.split(".")[0]}_$dateTime.${file.contentType.name}")
+            .child("$path/${file.fileName.split(".")[0]}.${file.contentType.name}")
             .putData(
               file.bytes, 
               SettableMetadata(
@@ -71,7 +74,10 @@ class FirebaseFileRemoteDatasource implements IFileRemoteDataSource {
   }on FirebaseException catch(e) {
       debugPrint("Erro capturado no data source: ${e.message}");
       throw FirebaseErrorsMapper.map(e);
-  }on Exception catch (e) {
+  }on Failure catch (e) {
+      debugPrint("Tipo de arquivo desconhecido ou fora do escopo da aplicação: $e");
+      rethrow;
+    }on Exception catch (e) {
       debugPrint("Erro desconhecido: $e");
       throw UnknownFailure(originalException: e);
     }
