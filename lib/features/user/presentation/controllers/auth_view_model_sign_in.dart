@@ -98,16 +98,16 @@ class AuthViewModelSignIn extends ChangeNotifier {
     isLoading = true;
     final AuthResult authResult;
     if(!validateCreationPassword(password)) return;
-
-    switch (identifier){
+    try {
+      switch (identifier){
       case Identifiers.email:
           debugPrint(login);
           if(!validateCreationEmail(login)) return;
           final credentials = EmailCredentialsSignIn(identifier: _email, senha: _passwordVo);
-          final validatedCredentials =
-            await _validateUserCredentials.validateEmailExist(credentials);
+          
+          final validatedCredentials = await _validateUserCredentials.validateEmailExist(credentials);
           authResult = await loginEmailUc.execute(validatedCredentials);
-       
+          
       case Identifiers.vulgo:
         if(!validateCreationVulgo(login)) return;
         final credentials = VulgoCredentialsSignIn(vulgo: _vulgo, password: PasswordVo(password));
@@ -126,7 +126,11 @@ class AuthViewModelSignIn extends ChangeNotifier {
       FailureServer.showError(authResult.failure!);
       isLoading = false;
       notifyListeners();
-    }   
+    }
+    } on Failure catch (e){
+      getError(e);
+    }
+       
   }
 
   void getError(Failure e, [String? message]) {
