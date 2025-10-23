@@ -17,5 +17,4 @@ abstract class Paths {
   static const signUp = '/sign-up';
   static const myNetwork = '/my-network';
   static const aboutPage = '/about-page';
-
 }

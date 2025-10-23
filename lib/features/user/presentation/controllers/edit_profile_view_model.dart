@@ -179,7 +179,7 @@ class EditProfileViewModel extends ChangeNotifier {
       if (userModificado != _account.user) {
         final result = await _updateProfile.execute(userModificado.profileUser);
         if (result.success) {
-          await _updateUser.fullUpdate(UserMapper.fromEntity(userModificado));
+          await _updateUser.updateOnlyField(id: userModificado.id, nameField: "avatar", data: userModificado.avatar);
           debugPrint("Perfil atualizado com sucesso");
           _account.setCurrentUser = userModificado;
         } else {

@@ -64,4 +64,9 @@ class UserM {
       'avatar': avatar,
     };
   }
+
+  @override
+  String toString() {
+    return 'UserM(id: $id, name: $name, email: $email, dob: ${dob.toIso8601String()}, latitude: ${latitude ?? 'null'}, longitude: ${longitude ?? 'null'}, avatar: ${avatar ?? 'null'})';
+  }
 }
