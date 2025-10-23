@@ -60,10 +60,11 @@ class UserDataRepositoryImpl implements IUserRepository {
   }
     
   @override
-  Future<UserM> update(UserM user) {
+  Future<UserM> update(UserM user) async {
     _userLocalDetails = user;
     final dto = _mapper.toDTO(user);
-    return userFirebaseService.update(dto).then((_) => user);
+    await userFirebaseService.update(dto);
+    return user;
   }
   
   @override

@@ -92,6 +92,7 @@ class UserFirebaseDataSource implements IUserDataSource<FirebaseDTO> {
   
   @override
   Future<void> update(FirebaseDTO user) async {
+    debugPrint("Executando update do user");
     await _dataSource.update(user); 
   }
   
