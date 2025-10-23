@@ -63,11 +63,25 @@ class EditProfileViewModel extends ChangeNotifier {
 
   bool isLoading = false;
 
-  Future<FileModel> selectNewImage(bool isBackGround) async {
+  Future<FileModel> selectAvatar() async {
     try {
       final selectedFile = await _pickOneImageUc.execute();
       if (selectedFile.contentType == ContentType.unavailable) throw InvalidFormatFileFailure();
-      isBackGround ? backgroundImage = selectedFile : avatar = selectedFile;
+      avatar = selectedFile;
+      debugPrint(avatar.runtimeType.toString());
+      return selectedFile;
+    } on Failure catch (e){
+      FailureServer.showError(e);
+      return NullFileModel();
+    }
+  }
+
+  Future<FileModel> selectBackgroundPicture() async {
+    try {
+      final selectedFile = await _pickOneImageUc.execute();
+      if (selectedFile.contentType == ContentType.unavailable) throw InvalidFormatFileFailure();
+      debugPrint(backgroundImage.runtimeType.toString());
+      backgroundImage = selectedFile;
       return selectedFile;
     } on Failure catch (e){
       FailureServer.showError(e);
@@ -75,12 +89,11 @@ class EditProfileViewModel extends ChangeNotifier {
     }
   }  
 
-  bool isCompletedUploadAvatar = false;
-  bool isCompletedUploadBackGroundImage = false;
-
   Future<String?> uploadAvatar() async {
     try {
-      if (avatar is! NullFileModel) return null;
+      debugPrint("Chamou o upload do avatar, avatar é null ?${avatar is NullFileModel}");
+      if (avatar is NullFileModel) return null;
+      debugPrint("Fazendo upload de avatar");
       final streamUpload = _uploadFile.execute(avatar, "users/photos/avatar/${(_account.user as UserEntity).id}");
       final task = await streamUpload.firstWhere(
         (task) => task.state == UploadState.success || 
@@ -98,7 +111,7 @@ class EditProfileViewModel extends ChangeNotifier {
 
   Future<String?> uploadBackgroundImage() async {
     try {
-      if (avatar is! NullFileModel) return null;
+      if (backgroundImage is NullFileModel) return null;
        final streamUpload = _uploadFile.execute(backgroundImage, "users/photos/backgroundProfiles/${(_account.user as UserEntity).id}");
        final task = await streamUpload.firstWhere(
         (task) => task.state == UploadState.success || 
