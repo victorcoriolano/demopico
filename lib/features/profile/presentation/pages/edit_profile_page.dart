@@ -150,18 +150,24 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators {
 
   void _changeProfilePicture(bool isBackGround) async {
     final vm = context.read<EditProfileViewModel>();
+    FileModel selectedImage = NullFileModel();
     // selecionando imagem
-    final selectedFile = await vm.selectNewImage(isBackGround);
+    if (isBackGround){
+      selectedImage = await vm.selectBackgroundPicture(); 
+    }
+    else{
+       selectedImage = await vm.selectAvatar();
+    }
 
-    if (mounted && selectedFile is! NullFileModel) {
-      return showDialog(
+    if (mounted && selectedImage is! NullFileModel) {
+      return showDialog(  
         context: context,
         builder: (BuildContext context) {
           return Consumer<EditProfileViewModel>(
               builder: (context, editProfileViewModel, child) {
             return AlertDialog(
               title: const Text('Confirme a Imagem'),
-              content: Image.memory(selectedFile.bytes),
+              content: Image.memory(selectedImage.bytes),
               actions: <Widget>[
                 TextButton(
                   child: const Text('CANCELAR'),
@@ -337,7 +343,6 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators {
                         } on Failure catch (e){
                           FailureServer.showError(e);
                         }
-                        
                       } else {
                         viewModel.newVulgo = null;
                       }
