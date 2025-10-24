@@ -1,7 +1,6 @@
-import 'dart:typed_data';
-
+import 'package:demopico/core/common/media_management/models/file_model.dart';
 import 'package:demopico/features/external/enuns/type_content.dart';
 
 abstract class IDangerContentApi{
-  TypeContent scanMidia(Uint8List midia);
+  Future<TypeContent> scanMidia(FileModel midia);
 }
