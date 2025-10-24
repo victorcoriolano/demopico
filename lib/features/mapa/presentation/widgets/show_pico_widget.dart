@@ -90,6 +90,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                           children: [
                             // widget da imagem dos spots
                             TopInfoSpot(
+                              mapControllerProvider: context.read(),
                               location: LatLng(spotProvider.pico?.location.latitude ?? 0, spotProvider.pico?.location.latitude ?? 0),
                               images: spotProvider.pico?.imgUrls ?? [], 
                               isMine: VerifyIsMy.isMy(spotProvider.pico!.id, context), 
@@ -124,8 +125,9 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                           children: [
                                             PhotoAndNameWidget(
                                               nameUserCreator: spotProvider.pico!.user?.name ?? "Anônimo", 
+                                              //FIXED ? 1.0
                                               //FIXME: PASSANDO A IMAGEM COMO NULL MAIS FUTURAMENTE passar a imagem do user
-                                              urlImageUser: null,
+                                              urlImageUser: spotProvider.pico!.user?.photoUrl,
                                             ),
                                             const SizedBox(width: 15),
             
@@ -211,7 +213,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                                   tooltip: "Denunciar Pico",
                                                   onPressed: () {
                                                     if(user == null){
-                                                      Get.snackbar("Erro", "Você precisa estar logado para reportar um spot");
+                                                      SnackbarUtils.userNotLogged(context);
                                                       return;
                                                     }
                                                     ModalHelper.openReportSpotModal(context, user?.id, widget.idPico, TypePublication.pico);

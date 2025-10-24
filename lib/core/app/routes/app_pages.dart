@@ -1,3 +1,4 @@
+import 'package:demopico/core/app/app.dart';
 import 'package:demopico/core/app/home_page.dart';
 import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/routes/middleware.dart';
@@ -105,7 +106,7 @@ class AppPages {
     GetPage(
       binding: AuthBinding(),
       name: Paths.home,
-      page: () => HomePage(),
+      page: () => HomePageTest(),
       transition: Transition.native,
     ),
 
