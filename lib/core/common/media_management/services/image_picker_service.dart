@@ -13,13 +13,13 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImagePickerService implements IPickFileRepository {
-  
   static ImagePickerService? _imagePickerService;
 
   static ImagePickerService get getInstance {
     _imagePickerService ??= ImagePickerService();
     return _imagePickerService!;
   }
+
   final IDangerContentApi dangerContentApi = GeminiApi();
   final _imagePicker = ImagePicker();
 
@@ -28,9 +28,10 @@ class ImagePickerService implements IPickFileRepository {
     return Future.wait(
       files.map((xFile) async {
         final bytes = await xFile.readAsBytes();
-        final mimeTypeStr = xFile.mimeType ?? mimeTypeToString(mimeTypeFromExtension(xFile.name));
-          
-          FileModel file = FileModel(
+        final mimeTypeStr = xFile.mimeType ??
+            mimeTypeToString(mimeTypeFromExtension(xFile.name));
+
+        FileModel file = FileModel(
           fileName: xFile.name,
           filePath: xFile.path,
           bytes: bytes,
@@ -39,12 +40,17 @@ class ImagePickerService implements IPickFileRepository {
               : ContentType.unavailable,
         );
 
-        TypeContent tipoConteudo =  dangerContentApi.scanMidia(file.bytes);
-        if(tipoConteudo == TypeContent.danger) throw DangerContent();
-        if(tipoConteudo == TypeContent.warning) WarningContent();
-        
+        final tipoConteudo = await dangerContentApi.scanMidia(file);
 
-        return  file;
+        if (tipoConteudo == TypeContent.danger) {
+          throw DangerContent();
+        }
+
+        if (tipoConteudo == TypeContent.warning) {
+          WarningContent();
+        }
+
+        return file;
       }),
     );
   }
@@ -79,7 +85,8 @@ class ImagePickerService implements IPickFileRepository {
   @override
   Future<FileModel> pickVideo() async {
     try {
-      final pickedFile = await _imagePicker.pickVideo(source: ImageSource.gallery);
+      final pickedFile =
+          await _imagePicker.pickVideo(source: ImageSource.gallery);
       if (pickedFile == null) throw NoFileSelectedFailure();
 
       final models = await _toFileModels([pickedFile]);
@@ -98,10 +105,10 @@ class ImagePickerService implements IPickFileRepository {
       return _toFileModels(xFiles);
     } catch (e, st) {
       debugPrint("Erro ao selecionar múltiplos arquivos : $e stackTrace: $st");
-      throw UnknownError(message: "Erro ao selecionar múltiplos arquivos: $e", stackTrace: st);
+      throw UnknownError(
+          message: "Erro ao selecionar múltiplos arquivos: $e", stackTrace: st);
     }
   }
-
 
   MimeType mimeTypeFromExtension(String fileName) {
     final ext = fileName.split('.').last.toLowerCase();
@@ -133,7 +140,6 @@ class ImagePickerService implements IPickFileRepository {
         return MimeType.unknown;
     }
   }
-
 
   String mimeTypeToString(MimeType type) {
     switch (type) {
