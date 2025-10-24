@@ -1,19 +1,26 @@
+import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/core/common/media_management/interfaces/repository/i_pick_image_repository.dart';
 import 'package:demopico/core/common/media_management/models/file_model.dart';
+import 'package:demopico/core/common/widgets/snackbar_utils.dart';
+import 'package:demopico/features/external/api/gemini_api.dart';
+import 'package:demopico/features/external/enuns/type_content.dart';
+import 'package:demopico/features/external/interfaces/i_danger_content_api.dart';
 import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/features/mapa/domain/enums/mime_type.dart';
+import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/quarta_tela.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImagePickerService implements IPickFileRepository {
+  
   static ImagePickerService? _imagePickerService;
 
   static ImagePickerService get getInstance {
     _imagePickerService ??= ImagePickerService();
     return _imagePickerService!;
   }
-
+  final IDangerContentApi dangerContentApi = GeminiApi();
   final _imagePicker = ImagePicker();
 
   /// [XFile] → [FileModel]
@@ -22,8 +29,8 @@ class ImagePickerService implements IPickFileRepository {
       files.map((xFile) async {
         final bytes = await xFile.readAsBytes();
         final mimeTypeStr = xFile.mimeType ?? mimeTypeToString(mimeTypeFromExtension(xFile.name));
-
-        return FileModel(
+          
+          FileModel file = FileModel(
           fileName: xFile.name,
           filePath: xFile.path,
           bytes: bytes,
@@ -31,6 +38,13 @@ class ImagePickerService implements IPickFileRepository {
               ? ContentTypeExtension.fromMime(mimeTypeStr)
               : ContentType.unavailable,
         );
+
+        TypeContent tipoConteudo =  dangerContentApi.scanMidia(file.bytes);
+        if(tipoConteudo == TypeContent.danger) throw DangerContent();
+        if(tipoConteudo == TypeContent.warning) WarningContent();
+        
+
+        return  file;
       }),
     );
   }
