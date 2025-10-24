@@ -1,5 +1,4 @@
  enum TypeContent {
   legal,
   warning,
-  danger 
-}
+  danger}

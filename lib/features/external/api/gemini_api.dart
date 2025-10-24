@@ -6,7 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class GeminiApi implements IDangerContentApi {
-  TypeContent typeContent = TypeContent.undefined;
+  TypeContent typeContent = TypeContent.danger;
 
   @override
   Future<TypeContent> scanMidia(FileModel midia) async {
