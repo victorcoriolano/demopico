@@ -1,6 +1,5 @@
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
-import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/presentation/pages/profile_page_user.dart';
 import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';

@@ -1,13 +1,9 @@
-import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/custom_buttons.dart';
 import 'package:demopico/features/profile/presentation/object_for_only_view/suggestion_profile.dart';
 import 'package:demopico/features/profile/presentation/view_model/create_collective_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
-import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/midia_input_card.dart';
-import 'package:demopico/features/user/domain/enums/type_post.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
-import 'package:demopico/features/user/presentation/widgets/textfield_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

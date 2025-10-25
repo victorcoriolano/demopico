@@ -1,5 +1,4 @@
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
-import 'package:demopico/features/profile/domain/models/message.dart';
 
 sealed class Chat {
   String get id;

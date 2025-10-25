@@ -1,14 +1,4 @@
-import 'package:demopico/core/app/theme/theme.dart';
-import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
-import 'package:demopico/features/profile/presentation/object_for_only_view/suggestion_profile.dart';
-import 'package:demopico/features/profile/presentation/pages/create_colective_page.dart';
-import 'package:demopico/features/profile/presentation/pages/create_post_page.dart';
-import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
-import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
-import 'package:demopico/features/user/presentation/widgets/textfield_decoration.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 class ProfileTopSideDataWidget extends StatelessWidget {
   final String? avatarUrl;

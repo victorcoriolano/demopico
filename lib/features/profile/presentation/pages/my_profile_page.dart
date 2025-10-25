@@ -4,7 +4,6 @@ import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/core/common/widgets/back_widget.dart';
-import 'package:demopico/features/profile/domain/models/post.dart';
 import 'package:demopico/features/profile/presentation/pages/coletivo_profile_page.dart';
 import 'package:demopico/features/profile/presentation/pages/create_colective_page.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_posts_widget.dart';

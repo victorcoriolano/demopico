@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:demopico/core/common/media_management/models/file_model.dart';
 import 'package:demopico/features/external/enuns/type_content.dart';
 import 'package:demopico/features/external/interfaces/i_danger_content_api.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
@@ -121,9 +122,9 @@ class GeminiApi implements IDangerContentApi {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      print(jsonEncode(data));
+      debugPrint(jsonEncode(data));
       final text = data['candidates']?[0]?['content']?['parts']?[0]?['text'];
-      print(text);
+      debugPrint(text);
       switch (text) {
         case "legal":
           typeContent = TypeContent.legal;
@@ -135,7 +136,7 @@ class GeminiApi implements IDangerContentApi {
           typeContent = TypeContent.danger;
       }
     } else {
-      print('Erro ${response.statusCode}: ${response.body}');
+      debugPrint('Erro ${response.statusCode}: ${response.body}');
     }
   }
 }

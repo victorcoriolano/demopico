@@ -1,10 +1,8 @@
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
-import 'package:demopico/core/common/widgets/glass_widget.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 // Importe suas entidades e a paleta de cores aqui
 // import 'entities/coletivo_entity.dart';
 // import 'entities/user_identification.dart';
@@ -32,15 +30,15 @@ class ColetivoProfilePage extends StatelessWidget {
           _buildSliverAppBar(context, coletivo),
 
           // --- Seção de Membros ---
-          _SectionHeader(title: 'MEMBROS', cta: 'Ver todos (${coletivo.members.length})'),
+          _SectionHeader(title: 'MEMBROS', cta: 'Ver todos (${coletivo.members.length})', onTap: () {},),
           _MembersListView(members: coletivo.members),
 
           // --- Seção de Recs (Vídeo Parts) ---
-          _SectionHeader(title: 'RECS', cta: 'Ver todas (${recs.length})'),
+          _SectionHeader(title: 'RECS', cta: 'Ver todas (${recs.length})',onTap: () {}),
           _RecsListView(recs: recs),
 
           // --- Seção de Atividade (Todos os Posts) ---
-          _SectionHeader(title: 'ATIVIDADE DO COLETIVO'),
+          _SectionHeader(title: 'ATIVIDADE DO COLETIVO',onTap: () {}),
           _AllPostsListView(posts: coletivo.publications),
         ],
       ),
@@ -204,12 +202,13 @@ class _SectionHeader extends StatelessWidget {
 
   const _SectionHeader({
     required this.title,
+    required this.onTap,
     this.cta,
-    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
+    debugPrint(onTap.toString());
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
