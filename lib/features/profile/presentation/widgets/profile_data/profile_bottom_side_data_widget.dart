@@ -1,9 +1,6 @@
 import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/theme/theme.dart';
-import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
-import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/features/profile/presentation/pages/my_friends_page.dart';
-import 'package:demopico/features/profile/presentation/widgets/profile_data/colective_card_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/text_stats_profile_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

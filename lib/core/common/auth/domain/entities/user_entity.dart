@@ -1,5 +1,3 @@
-import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
-import 'package:demopico/features/profile/domain/models/post.dart';
 import 'package:demopico/features/profile/domain/models/profile_user.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/dob_vo.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/email_vo.dart';
