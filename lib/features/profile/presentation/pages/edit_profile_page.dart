@@ -95,7 +95,7 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       TextFormField(
-                        decoration: customTextField(
+                        decoration: customTextFieldDecoration(
                             "Adicione sua nova senha", kLightGrey, kBlack),
                         controller: _passwordController1,
                         validator: (value) => combineValidators([
@@ -108,7 +108,7 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators {
                       ),
                       TextFormField(
                         decoration:
-                            customTextField("Confirme a sua senha", kLightGrey),
+                            customTextFieldDecoration("Confirme a sua senha", kLightGrey),
                         controller: _passwordController2,
                         validator: (value) => combineValidators([
                           () => isNotEmpty(value),

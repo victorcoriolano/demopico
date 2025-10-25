@@ -99,7 +99,7 @@ class _LoginFormState extends State<LoginForm> with Validators {
                 Consumer<AuthViewModelSignIn>(builder: (context, provider, child) {
                   return TextFormField(
                     onChanged: (value) => provider.login = value,
-                    decoration: customTextField(provider.getHintToFieldLogin()),
+                    decoration: customTextFieldDecoration(provider.getHintToFieldLogin()),
                     cursorColor: kWhite,
                     style: const TextStyle(color: kWhite),
                     controller: _loginController,
@@ -120,7 +120,7 @@ class _LoginFormState extends State<LoginForm> with Validators {
                         await provider.signIn(); 
                       },
                       onChanged: (value) => provider.password = value,
-                      decoration: customTextField("Senha"),
+                      decoration: customTextFieldDecoration("Senha"),
                       cursorColor: kWhite,
                       style: const TextStyle(color: kWhite),
                       obscureText: true,
