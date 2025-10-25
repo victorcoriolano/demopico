@@ -4,6 +4,8 @@ import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
 import 'package:demopico/features/profile/presentation/widgets/search_page_widgets/container_suggestion_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/search_page_widgets/historic_profile_list.dart';
+import 'package:demopico/features/profile/presentation/widgets/search_page_widgets/not_searching_view.dart';
+import 'package:demopico/features/profile/presentation/widgets/search_page_widgets/suggetions_profiles_widget.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,6 +20,7 @@ class SearchProfilePage extends StatefulWidget {
 
 class _SearchProfilePageState extends State<SearchProfilePage> {
   final TextEditingController _searchController = TextEditingController();
+  
 
   @override
   void initState() {
@@ -36,9 +39,9 @@ class _SearchProfilePageState extends State<SearchProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
-
+      final theme = Theme.of(context);
+      final textTheme = theme.textTheme;
+    
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       appBar: AppBar(
@@ -81,53 +84,27 @@ class _SearchProfilePageState extends State<SearchProfilePage> {
                 ),
                 onChanged: (query) {
                   // opcional: acionar busca dinâmica
+                  context.read<NetworkViewModel>().setIsSearching = true;
                 },
+                onSubmitted: (value) => context.read<NetworkViewModel>().setIsSearching = true,
               ),
             ),
 
-            const SizedBox(height: 18),
-            Padding(
-              padding: const EdgeInsets.only(left: 4),
-              child: Text(
-                'Histórico',
-                style: textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: theme.colorScheme.primary,
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 18,),
-
-            const HistoricHorizontalList(),
-
-            const SizedBox(height: 10,),
-            
-            Padding(
-              padding: const EdgeInsets.only(left: 4),
-              child: Text(
-                'Sugestões para você',
-                style: textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: theme.colorScheme.primary,
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 6),
-
-            Divider(
-              thickness: 0.6,
-              color: kDarkGrey,
-            ),
-
-            const SizedBox(height: 8),
-
-            Expanded(
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 400),
-                child: ContainerSuggestionWidget(key: ValueKey(DateTime.now())),
-              ),
+            Consumer<NetworkViewModel>(
+              builder: (context, vm, child) {
+                final user = context.read<AuthViewModelAccount>().user as UserEntity;
+                return vm.isSearching && _searchController.text.isNotEmpty
+                ? Expanded(
+                  child: ListView.builder(
+                    itemCount: vm.searchUser(_searchController.text, user).length,
+                    itemBuilder: (context, index) {
+                      final listUser = vm.searchUser(_searchController.text, user);
+                      return SuggestionProfilesWidget(suggestionProfile: listUser[index]);
+                    },
+                  ),
+                )
+                : NotSearchingView();
+              }
             ),
           ],
         ),
