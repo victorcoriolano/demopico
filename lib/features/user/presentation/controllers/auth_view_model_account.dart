@@ -70,6 +70,16 @@ class AuthViewModelAccount extends ChangeNotifier {
     }
   }
 
+  Future<void> deletarConta() async {
+     try{
+      if (user is UserEntity) await _deleteAccountUc.execute((user as UserEntity).id);
+      setCurrentUser = AnonymousUserEntity();
+    } on Failure catch (failure){
+      FailureServer.showError(failure);
+    }
+
+  }
+
 
   User _currentUser = AnonymousUserEntity();
 
