@@ -22,6 +22,7 @@ import 'package:demopico/features/profile/domain/usecases/update_post_uc.dart';
 import 'package:demopico/features/profile/infra/repository/chat_repository.dart';
 import 'package:demopico/features/profile/presentation/view_model/chat_list_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/chat_room_view_model.dart';
+import 'package:demopico/features/profile/presentation/view_model/create_collective_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/post_provider.dart';
 import 'package:demopico/features/profile/presentation/view_model/screen_provider.dart';
@@ -74,7 +75,9 @@ final myProviders = [
   ChangeNotifierProvider(create: (_) => SpotsControllerProvider.getInstance),
   ChangeNotifierProvider(create: (_) => SpotProvider.instance),
   ChangeNotifierProvider(create: (_) => HistoricoController.getInstance),
-  ChangeNotifierProvider(create: (_) => CommentController.getInstance), 
+  ChangeNotifierProvider(create: (_) => CommentController.getInstance),
+  ChangeNotifierProvider(create: (_) => CreateCollectiveViewModel()),
+   
   
   // Providers de hub
   ChangeNotifierProvider(
