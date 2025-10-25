@@ -75,6 +75,16 @@ class NetworkViewModel extends ChangeNotifier {
         :  e.addressed;
     }).toList(); }
 
+   bool _isSearching = false;
+
+  bool get isSearching  {
+    return _isSearching;
+  }
+  set setIsSearching(bool isSearching) { 
+    _isSearching = isSearching;
+    notifyListeners();
+    } 
+
   Future<void> fetchRelactionships(UserEntity user) async {
     try {
       _connectionsRequests = await _getConnectionsRequests.execute(user.id);
@@ -166,5 +176,21 @@ class NetworkViewModel extends ChangeNotifier {
     } on Failure catch (e){
       FailureServer.showError(e);
     }
+  }
+
+  List<SuggestionProfile> searchUser(String word, UserEntity user) {
+    if(_suggestions.isEmpty){
+      fetchSugestions(user);
+    }
+    word = word.toLowerCase().trim();
+    final listConn = [..._connectionSent, ..._connectionsRequests, ..._connectionsAccepted];
+    
+    final listUsers = <SuggestionProfile>[..._suggestions, ...(
+      listConn.map((element) =>  SuggestionProfile.fromRelationship(element, user.id))) ];
+    
+    return listUsers
+        .where((argument) =>
+            argument.name.toLowerCase().contains(word.toLowerCase()))
+        .toList();
   }
 }
