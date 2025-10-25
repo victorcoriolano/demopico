@@ -1,8 +1,14 @@
+import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/core/common/media_management/interfaces/repository/i_pick_image_repository.dart';
 import 'package:demopico/core/common/media_management/models/file_model.dart';
+import 'package:demopico/core/common/widgets/snackbar_utils.dart';
+import 'package:demopico/features/external/api/gemini_api.dart';
+import 'package:demopico/features/external/enuns/type_content.dart';
+import 'package:demopico/features/external/interfaces/i_danger_content_api.dart';
 import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/features/mapa/domain/enums/mime_type.dart';
+import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/quarta_tela.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -14,6 +20,7 @@ class ImagePickerService implements IPickFileRepository {
     return _imagePickerService!;
   }
 
+  final IDangerContentApi dangerContentApi = GeminiApi();
   final _imagePicker = ImagePicker();
 
   /// [XFile] → [FileModel]
@@ -21,9 +28,10 @@ class ImagePickerService implements IPickFileRepository {
     return Future.wait(
       files.map((xFile) async {
         final bytes = await xFile.readAsBytes();
-        final mimeTypeStr = xFile.mimeType ?? mimeTypeToString(mimeTypeFromExtension(xFile.name));
+        final mimeTypeStr = xFile.mimeType ??
+            mimeTypeToString(mimeTypeFromExtension(xFile.name));
 
-        return FileModel(
+        FileModel file = FileModel(
           fileName: xFile.name,
           filePath: xFile.path,
           bytes: bytes,
@@ -31,6 +39,18 @@ class ImagePickerService implements IPickFileRepository {
               ? ContentTypeExtension.fromMime(mimeTypeStr)
               : ContentType.unavailable,
         );
+
+        final tipoConteudo = await dangerContentApi.scanMidia(file);
+
+        if (tipoConteudo == TypeContent.danger) {
+          throw DangerContent();
+        }
+
+        if (tipoConteudo == TypeContent.warning) {
+          WarningContent();
+        }
+
+        return file;
       }),
     );
   }
@@ -65,7 +85,8 @@ class ImagePickerService implements IPickFileRepository {
   @override
   Future<FileModel> pickVideo() async {
     try {
-      final pickedFile = await _imagePicker.pickVideo(source: ImageSource.gallery);
+      final pickedFile =
+          await _imagePicker.pickVideo(source: ImageSource.gallery);
       if (pickedFile == null) throw NoFileSelectedFailure();
 
       final models = await _toFileModels([pickedFile]);
@@ -84,10 +105,10 @@ class ImagePickerService implements IPickFileRepository {
       return _toFileModels(xFiles);
     } catch (e, st) {
       debugPrint("Erro ao selecionar múltiplos arquivos : $e stackTrace: $st");
-      throw UnknownError(message: "Erro ao selecionar múltiplos arquivos: $e", stackTrace: st);
+      throw UnknownError(
+          message: "Erro ao selecionar múltiplos arquivos: $e", stackTrace: st);
     }
   }
-
 
   MimeType mimeTypeFromExtension(String fileName) {
     final ext = fileName.split('.').last.toLowerCase();
@@ -119,7 +140,6 @@ class ImagePickerService implements IPickFileRepository {
         return MimeType.unknown;
     }
   }
-
 
   String mimeTypeToString(MimeType type) {
     switch (type) {

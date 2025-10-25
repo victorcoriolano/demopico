@@ -57,6 +57,14 @@ class NoFileSelectedFailure extends DomainFailure {
   NoFileSelectedFailure(): super(message: "Nenhum arquivo selecionado", code: 'no_file_selected');
 }
 
+class DangerContent extends DomainFailure {
+  DangerContent(): super(message: "Alguma mídia anexada não cumpre os termos da plataforma", code: 'no_legal_content');
+}
+
+class WarningContent extends DomainFailure {
+  WarningContent(): super(message: "Alguma mídia anexada não cumpre os termos da plataforma", code: 'no_legal_content');
+}
+
 class FileLimitExceededFailure extends DomainFailure {
   final String? messagemAdicional;
   FileLimitExceededFailure({this.messagemAdicional}): super(message: "Limite de arquivos excedido - ${messagemAdicional ?? ""}", code: 'file_limit_exceeded');
