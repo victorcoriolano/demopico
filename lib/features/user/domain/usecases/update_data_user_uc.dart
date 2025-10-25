@@ -15,7 +15,11 @@ class UpdateUserUc {
   UpdateUserUc({required IUserRepository repository})
       : _repository = repository;
 
-  Future<void> call(UserM user) async {
-    await _repository.update(user);
+  Future<UserM> fullUpdate(UserM user) async {
+    return await _repository.update(user);
+  }
+
+  Future<void> updateOnlyField({required String id, required String nameField, required dynamic data}) async {
+    await _repository.updateOnlyField(id, nameField, data);
   }
 }

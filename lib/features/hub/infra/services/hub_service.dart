@@ -6,7 +6,7 @@ import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto
 import 'package:demopico/features/external/datasources/firebase/firestore.dart';
 import 'package:demopico/features/external/interfaces/i_crud_datasource.dart';
 import 'package:demopico/features/hub/domain/interfaces/i_hub_service.dart';
-import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
+import 'package:demopico/core/common/mappers/firebase_errors_mapper.dart';
 
 class HubService implements IHubService<FirebaseDTO> {
   static HubService? _hubService;

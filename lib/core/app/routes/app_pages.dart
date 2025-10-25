@@ -16,6 +16,7 @@ import 'package:demopico/features/profile/presentation/pages/edit_profile_page.d
 import 'package:demopico/features/profile/presentation/pages/my_network_page.dart';
 import 'package:demopico/features/profile/presentation/pages/search_profile_page.dart';
 import 'package:demopico/features/profile/presentation/pages/screens_profile.dart';
+import 'package:demopico/features/profile/presentation/widgets/profile_data/about_page_widget.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:demopico/features/user/presentation/pages/login_page.dart';
 import 'package:demopico/features/user/presentation/pages/register_page.dart';
@@ -123,6 +124,11 @@ class AppPages {
       page: () => CreateSpotPage(),
       transition: Transition.circularReveal,
       middlewares: [Middleware(AuthViewModelAccount.instance)]
+    ),
+    GetPage(
+      name: Paths.aboutPage, 
+      page: () => AboutPage(),
+      transition: Transition.cupertinoDialog,
     ),
   ];
 }

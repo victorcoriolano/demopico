@@ -1,6 +1,7 @@
+import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 import 'package:demopico/features/mapa/data/data_sources/interfaces/i_favorite_spot_remote_datasource.dart';
 import 'package:demopico/features/mapa/data/data_sources/remote/firebase_favorite_spot_service.dart';
-import 'package:demopico/features/mapa/data/mappers/mapper_pico_favorito_firebase.dart';
+import 'package:demopico/core/common/mappers/mapper_pico_favorito_firebase.dart';
 import 'package:demopico/features/mapa/domain/entities/pico_favorito.dart';
 import 'package:demopico/features/mapa/domain/interfaces/i_favorite_spot_repository.dart';
 import 'package:demopico/features/mapa/domain/models/pico_favorito_model.dart';
@@ -15,7 +16,7 @@ class FavoriteSpotRepository implements IFavoriteSpotRepository {
     return _favoriteSpotRepository!;
   }
   
-  final IFavoriteSpotRemoteDataSource dataSource;
+  final IFavoriteSpotRemoteDataSource<FirebaseDTO> dataSource;
 
   FavoriteSpotRepository(this.dataSource);
 

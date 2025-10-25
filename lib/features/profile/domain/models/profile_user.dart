@@ -9,12 +9,14 @@ class Profile {
   final List<String> spots;
   final List<String> posts;
   final RuleProfile profileRule;
+  final List<String> idColetivos;
 
 
   const Profile({
     required this.userID,
     required this.displayName,
     required this.profileRule,
+    this.idColetivos = const [],
     this.avatar,
     this.description,
     this.backgroundPicture,

@@ -6,18 +6,18 @@ import 'package:demopico/core/common/media_management/interfaces/repository/i_up
 
 
 
-class UploadFileUC{
+class UploadFilesUC{
 
-  static UploadFileUC? _saveImageUC;
+  static UploadFilesUC? _saveImageUC;
 
- static UploadFileUC  get getInstance{
-    _saveImageUC ??= UploadFileUC(saveImageRepositoryIMP: FilesStorageRepository.getInstance);
+ static UploadFilesUC  get getInstance{
+    _saveImageUC ??= UploadFilesUC(saveImageRepositoryIMP: FilesStorageRepository.getInstance);
     return _saveImageUC!;
   } 
 
   final IUploadFileRepository saveImageRepositoryIMP;
 
-  UploadFileUC({required this.saveImageRepositoryIMP});
+  UploadFilesUC({required this.saveImageRepositoryIMP});
 
   ListUploadTask saveFiles(List<FileModel> files, String path) {
     final uploadTask = saveImageRepositoryIMP.saveFiles(files, path);

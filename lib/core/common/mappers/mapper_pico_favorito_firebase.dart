@@ -14,28 +14,18 @@ class MapperFavoriteSpotFirebase {
     );
   }
   static PicoFavoritoModel fromDto(FirebaseDTO dto) {
+    dto = dto.resolveReference("idPico");
     return PicoFavoritoModel(
       idPico: dto.data['idPico'],
       idUsuario: dto.data['idUser'],
       id: dto.id,
     );
   }
-  static FirebaseDTO fromFirebase(DocumentSnapshot doc){
-    final data = doc.data() as Map<String, dynamic>;
-
-    return FirebaseDTO(
-      id: doc.id,
-      data: {
-        'idUser': data['idUser'] as String,
-        'idPico': (data['spotRef'] as DocumentReference).id,
-      }
-    );
-  }
 
   static Map<String, dynamic> toFirebase(FirebaseDTO picoFavorito, FirebaseFirestore firebaseInstance) {
     return {
       'idUser': picoFavorito.data['idUser'] as String,
-      'spotRef': firebaseInstance
+      'idPico': firebaseInstance
         .collection('spots')  
         .doc(picoFavorito.data["idPico"]),
     };

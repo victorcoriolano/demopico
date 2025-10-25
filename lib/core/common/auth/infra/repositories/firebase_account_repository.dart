@@ -1,7 +1,6 @@
 import 'package:demopico/core/common/auth/domain/interfaces/i_user_account_repository.dart';
-import 'package:demopico/core/common/auth/domain/interfaces/i_user_repository.dart';
-import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
-import 'package:demopico/features/user/infra/repositories/user_data_repository_impl.dart';
+import 'package:demopico/core/common/auth/domain/value_objects/password_vo.dart';
+import 'package:demopico/core/common/mappers/firebase_errors_mapper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb;
 
@@ -9,18 +8,14 @@ class FirebaseAccountRepository implements IUserAccountRepository {
 
   static FirebaseAccountRepository? _instance;
   static FirebaseAccountRepository get instance => 
-    _instance ??= FirebaseAccountRepository(
-      userRepository: UserDataRepositoryImpl.getInstance, 
+    _instance ??= FirebaseAccountRepository( 
       datasource: fb.FirebaseAuth.instance);
 
   FirebaseAccountRepository(
-      {required IUserRepository userRepository,
-      required fb.FirebaseAuth datasource})
-      : _fa = datasource,
-        _userRepo = userRepository;
+      {required fb.FirebaseAuth datasource})
+      : _fa = datasource; 
 
   final fb.FirebaseAuth _fa;
-  final IUserRepository _userRepo;
 
   @override
   bool get isVerified => _fa.currentUser?.emailVerified ?? false;
@@ -38,15 +33,13 @@ class FirebaseAccountRepository implements IUserAccountRepository {
   }
 
   @override
-  Future<bool> changePassWord() async {
-    if (_fa.currentUser == null || _fa.currentUser?.email == null) return false;
-    try {
-      final fu = _fa.currentUser;
-      await _fa.sendPasswordResetEmail(email: fu!.email!);
+  Future<bool> resetPassword(String email) async {
+    try { 
+      await _fa.sendPasswordResetEmail(email: email);
       return true;
     } on fb.FirebaseAuthException catch (fbException) {
-      debugPrint("FAA - Erro ao autualizar alterar senha - $fbException");
-      rethrow;
+      debugPrint("FA Repo - Erro ao autualizar alterar senha - $fbException");
+      return false;
     } catch (unknownError) {
       debugPrint(
           "FAA - Erro ao não identificado ao alterar senha - $unknownError");
@@ -59,9 +52,20 @@ class FirebaseAccountRepository implements IUserAccountRepository {
     if (_fa.currentUser == null) return;
     try {
       await _fa.currentUser!.delete();
-      await _userRepo.deleteData(_fa.currentUser!.uid);
+    } on fb.FirebaseAuthException catch (exception) {
+      throw FirebaseErrorsMapper.map(exception);
+    }
+  }
+
+  @override
+  Future<void> updatePassword(PasswordVo password) async {
+    if (_fa.currentUser == null) return;
+    try {
+      await _fa.currentUser!.updatePassword(password.value);
     } on fb.FirebaseAuthException catch (exception) {
       throw FirebaseErrorsMapper.map(exception);
     }
   }
 }
+
+

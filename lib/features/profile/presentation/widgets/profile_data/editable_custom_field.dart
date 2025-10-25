@@ -6,12 +6,14 @@ class EditableCustomField extends StatelessWidget {
   final TextEditingController controller;
   final IconData icon;
   final bool isMultiline;
+  final Function(String) onChanged;
 
   const EditableCustomField({
     super.key,
     required this.label,
     required this.controller,
     required this.icon,
+    required this.onChanged,
     this.isMultiline = false,
   });
 
@@ -27,6 +29,7 @@ class EditableCustomField extends StatelessWidget {
                 color: kMediumGrey)),
         const SizedBox(height: 5),
         TextField(
+          onChanged: onChanged,
           controller: controller,
           maxLines: isMultiline ? null : 1,
           keyboardType: isMultiline ? TextInputType.multiline : TextInputType.text,

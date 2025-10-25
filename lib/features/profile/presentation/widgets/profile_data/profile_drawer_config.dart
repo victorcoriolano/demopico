@@ -108,7 +108,7 @@ class _MyCustomDrawerState extends State<MyCustomDrawer> {
             icon: Icons.home,
             text: 'Home',
             onTap: () {
-              Get.to((_) => HomePage());
+              Get.toNamed(Paths.home);
             },
           ),
           DrawerItem(
@@ -152,7 +152,7 @@ class _MyCustomDrawerState extends State<MyCustomDrawer> {
             text: 'Sobre o App',
             onTap: () {
               // TODO: RESOLVER ERRO DE NAVEGAR PARA ABOUT PAGE
-              Get.to((_) => AboutPage());
+              Get.toNamed(Paths.aboutPage);
             },
           ),
         ],

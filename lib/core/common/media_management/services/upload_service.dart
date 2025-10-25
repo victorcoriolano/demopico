@@ -1,23 +1,23 @@
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/core/common/media_management/models/file_model.dart';
 import 'package:demopico/core/common/media_management/models/upload_result_file_model.dart';
-import 'package:demopico/core/common/media_management/usecases/upload_file_uc.dart';
+import 'package:demopico/core/common/media_management/usecases/upload_files_uc.dart';
 import 'package:demopico/core/common/media_management/usecases/delete_file_uc.dart';
 import 'package:flutter/material.dart';
 
 class UploadService {
-  final UploadFileUC _uploadFileUC;
+  final UploadFilesUC _uploadFileUC;
   final DeleteFileUc _deleteFileUc;
 
   UploadService({
-    required UploadFileUC uploadUc, 
+    required UploadFilesUC uploadUc, 
     required DeleteFileUc deleteUc})
     : _deleteFileUc = deleteUc, _uploadFileUC = uploadUc;
 
   static UploadService? _instance;
   static UploadService get getInstance {
     _instance ??= UploadService(
-      uploadUc: UploadFileUC.getInstance,
+      uploadUc: UploadFilesUC.getInstance,
       deleteUc: DeleteFileUc.instance,
     );
     return _instance!;

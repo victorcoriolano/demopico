@@ -8,16 +8,16 @@ import 'package:demopico/core/common/media_management/services/image_picker_serv
 import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:flutter/material.dart';
 
-class PickImageUc {
+class PickMultiImagesUc {
 
-  factory PickImageUc.getInstance(){
-    return PickImageUc(repositoryIMP: ImagePickerService.getInstance);
+  factory PickMultiImagesUc.getInstance(){
+    return PickMultiImagesUc(repositoryIMP: ImagePickerService.getInstance);
   } 
   final IPickFileRepository repositoryIMP;
   final List<FileModel> listFile = [];
   final int _limit = 3;
 
-  PickImageUc({required this.repositoryIMP});
+  PickMultiImagesUc({required this.repositoryIMP});
 
   Future<void> pick() async {
     if (!_validateListFile(listFile)){

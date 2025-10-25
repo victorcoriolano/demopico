@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/mapa/data/data_sources/interfaces/i_comment_spot_datasource.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
-import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
+import 'package:demopico/core/common/mappers/firebase_errors_mapper.dart';
 
 class FirebaseCommentRemoteDataSource implements ICommentSpotDataSource<FirebaseDTO> {
   static FirebaseCommentRemoteDataSource? _firebaseCommentRemoteDataSource;

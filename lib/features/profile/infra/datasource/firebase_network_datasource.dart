@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/core/common/collections/collections.dart';
 import 'package:demopico/features/external/datasources/firebase/crud_firebase.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
-import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
+import 'package:demopico/core/common/mappers/firebase_errors_mapper.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_network_datasource.dart';
 import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:flutter/material.dart';

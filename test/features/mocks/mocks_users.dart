@@ -1,8 +1,10 @@
+import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/dob_vo.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/email_vo.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/location_vo.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/vulgo_vo.dart';
+import 'package:demopico/core/common/auth/infra/mapper/user_mapper.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 import 'package:demopico/features/profile/domain/models/profile_user.dart';
 import 'package:demopico/features/user/domain/models/user_model.dart';
@@ -81,13 +83,15 @@ final userMock3 = UserEntity.initial(
   'https://i.pravatar.cc/150?u=juliana',
 );
 
-
+final userI = UserMapper.mapUserModelToUserIdentification(UserMapper.fromEntity(userMock1));
 // Mock para a entidade ColetivoEntity.
 final coletivoMock = ColetivoEntity(
   id: 'coletivo-tech-sp',
-  modarator: userMock1, // Ana é a moderadora
-  members: [userMock2, userMock3], // Carlos e Juliana são membros
+  modarator: userI, // Ana é a moderadora
+  members: [userI, userI], // Carlos e Juliana são membros
   logo: 'https://i.pravatar.cc/150?u=coletivo',
+  nameColetivo: "legal",
+  publications: [],  
 );
 
 // Mock para o usuário anônimo.

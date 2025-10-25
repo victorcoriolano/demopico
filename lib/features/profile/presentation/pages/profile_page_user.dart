@@ -4,7 +4,7 @@ import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/cu
 import 'package:demopico/features/profile/domain/models/profile_user.dart';
 import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
-import 'package:demopico/features/profile/presentation/view_objects/suggestion_profile.dart';
+import 'package:demopico/features/profile/presentation/object_for_only_view/suggestion_profile.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_posts_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_bottom_side_data_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_top_side_data_widget.dart';

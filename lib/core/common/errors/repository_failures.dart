@@ -81,6 +81,10 @@ class InternalServerErrorFailure extends RepositoryFailures {
   InternalServerErrorFailure({super.originalException}): super(message: "Erro interno do servidor", code: 'INTERNAL_SERVER_ERROR');
 }
 
+class UploadFailure extends RepositoryFailures {
+  UploadFailure({super.originalException}): super(message: "Ocorreu um erro ao fazer o upload", code: 'INTERNAL_SERVER_ERROR');
+}
+
 class EmailAlreadyInUseFailure extends RepositoryFailures {
   EmailAlreadyInUseFailure({super.originalException}): super(message: "Email já está em uso", code: 'EMAIL_ALREADY_IN_USE');  
 }

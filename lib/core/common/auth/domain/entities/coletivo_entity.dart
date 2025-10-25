@@ -1,0 +1,21 @@
+
+import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
+import 'package:demopico/features/profile/domain/models/post.dart';
+
+class ColetivoEntity {
+  final String id;
+  final String nameColetivo;
+  final UserIdentification modarator;
+  final List<UserIdentification> members;
+  final String logo;
+  final List<Post> publications;
+  
+  ColetivoEntity(
+      {required this.id,
+      required this.publications,
+      required this.nameColetivo,
+      required this.modarator,
+      required this.members,
+      required this.logo});
+
+}

@@ -24,7 +24,7 @@ class MyAppWidget extends StatelessWidget {
     return MultiProvider(
       providers: myProviders,
       child: GetMaterialApp(
-        home: HomePageTest(),
+        //home: HomePageTest(),
         debugShowCheckedModeBanner: false,
         title: 'SKATEPICO',
         theme: appTheme,

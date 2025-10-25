@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-InputDecoration customTextField(String label) {
+InputDecoration customTextFieldDecoration(String label,[Color? colorBackGround, Color? colorsText]) {
     return InputDecoration(
         label: Text(label),
         filled: true,
-        fillColor: const Color.fromARGB(255, 139, 0, 0),
+        fillColor: colorBackGround ?? Color.fromARGB(255, 139, 0, 0),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
           borderSide: BorderSide.none,

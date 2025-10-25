@@ -10,7 +10,7 @@ import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/mapa/domain/factories/spot_factory.dart';
 import 'package:demopico/features/mapa/domain/models/pico_model.dart';
 import 'package:demopico/features/mapa/domain/usecases/create_spot_uc.dart';
-import 'package:demopico/core/common/media_management/usecases/pick_image_uc.dart';
+import 'package:demopico/core/common/media_management/usecases/pick_mult_images_uc.dart';
 import 'package:demopico/features/mapa/domain/value_objects/attributes_vo.dart';
 import 'package:demopico/features/mapa/domain/value_objects/modality_vo.dart';
 import 'package:demopico/features/mapa/domain/value_objects/obstacle_vo.dart';
@@ -23,19 +23,19 @@ class AddPicoViewModel extends ChangeNotifier {
 
   static AddPicoViewModel get getInstance {
     _addPicoProvider ??= AddPicoViewModel(
-      pickImageUC: PickImageUc.getInstance(),
+      pickImageUC: PickMultiImagesUc.getInstance(),
       serviceImage: UploadService.getInstance,
       createSpotUc: CreateSpotUc.getInstance,
     );
     return _addPicoProvider!;
   }
 
-  final PickImageUc _pickImageUC;
+  final PickMultiImagesUc _pickImageUC;
   final UploadService _uploadService;
   final CreateSpotUc _createSpotUc;
 
   AddPicoViewModel({
-    required PickImageUc pickImageUC,
+    required PickMultiImagesUc pickImageUC,
     required UploadService serviceImage,
     required CreateSpotUc createSpotUc,
   })  : _uploadService = serviceImage,
@@ -159,8 +159,8 @@ class AddPicoViewModel extends ChangeNotifier {
           nameSpotError = "Adicione um nome ao pico";
           return false;
         } 
-        if ( descricao.isEmpty) {
-          descriptionError = "Adicione um descrição";
+        if (descricao.isEmpty) {
+          descriptionError = "Adicione uma descrição";
           return false;
         }
         if(files.isEmpty){
@@ -184,7 +184,7 @@ class AddPicoViewModel extends ChangeNotifier {
 
     try {
       return PicoBuilder()
-        .withId("") // backend vai gerar
+        .withId("") // firebase vai gerar
         .withPicoName(nomePico)
         .withDescription(descricao)
         .withModalidade(ModalityVo(utilitiesSelected, selectedModalidade))
@@ -197,6 +197,7 @@ class AddPicoViewModel extends ChangeNotifier {
         .withRating(RatingVo(0.0, 0))
         .withReviewers([])
         .withPosts([])
+        .withWhoFavorited([])
         .build();
     } on ArgumentError catch (e) {
       debugPrint("Erro ao criar spot: ${e.toString()}");
@@ -207,7 +208,7 @@ class AddPicoViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> createSpot(UserIdentification? user) async {
+  Future<void> createSpot([UserIdentification? user]) async {
     try {
       final urls = await _uploadService.uploadFiles(files, "spots");
       imgUrls.addAll(urls);
@@ -223,7 +224,7 @@ class AddPicoViewModel extends ChangeNotifier {
       FailureServer.showError(e);
     } on ArgumentError catch (e) {
       debugPrint("Erro ao criar spot: ${e.toString()}");
-      FailureServer.showError(OtherError(message: "${e.message} - ${e.invalidValue}"));
+      FailureServer.showError(OtherError(message: "${e.message} - ${e.invalidValue}")); 
     }
   }
 

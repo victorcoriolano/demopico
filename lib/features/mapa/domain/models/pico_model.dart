@@ -24,10 +24,12 @@ class PicoModel {
   final List<String> utilities;
   final List<String>? reviewersUsers;
   final List<String>? idPostOnThis;
+  final List<String> usersWhoFavorited;
   final double nota;
   final int avaliacoes;
 
   PicoModel({
+    required this.usersWhoFavorited,
     required this.idPostOnThis,
     required this.reviewersUsers,
     required this.id,
@@ -64,7 +66,8 @@ class PicoModel {
       avaliacoes: json['avaliacoes'] ?? 0,
       userIdentification: json["creatorUser"] != null ? UserIdentification.fromJson(json["creatorUser"]) : null,
       reviewersUsers: List.from(json["userReviewers"] ?? []),
-      idPostOnThis: List.from(json["idPostOnThis"] ?? [])
+      idPostOnThis: List.from(json["idPostOnThis"] ?? []),
+      usersWhoFavorited: List.from(json["favoritedBy"] ?? [])
     );
   }
 
@@ -86,6 +89,7 @@ Pico toEntity() {
     .withTypeValue(tipoPico)      // passa a string que SpotFactory vai resolver
     .withObstacles(obstaculos)    // passa a lista que SpotFactory vai resolver
     .withRating(RatingVo(nota, avaliacoes))
+    .withWhoFavorited(usersWhoFavorited)
     .build();
 }
 
@@ -109,6 +113,7 @@ Pico toEntity() {
       userIdentification: pico.user,
       idPostOnThis: pico.idPostOnThis,
       reviewersUsers: pico.reviewersUsers,
+      usersWhoFavorited: pico.favoritedBy,
     );
   }
 
@@ -127,6 +132,7 @@ Pico toEntity() {
       'nota': nota,
       'avaliacoes': avaliacoes,
       'creatorUser': userIdentification?.toJson(),
+      'favoritedBy': usersWhoFavorited,
     };
   }
 }
@@ -147,6 +153,7 @@ extension PicoModelCopyWith on PicoModel {
     List<String>? utilities,
     List<String>? reviewersUsers,
     List<String>? idPostOnThis,
+    List<String>? whoFavorited,
     double? nota,
     int? avaliacoes,
   }) {
@@ -167,6 +174,7 @@ extension PicoModelCopyWith on PicoModel {
       idPostOnThis: idPostOnThis ?? this.idPostOnThis,
       nota: nota ?? this.nota,
       avaliacoes: avaliacoes ?? this.avaliacoes,
+      usersWhoFavorited: whoFavorited ?? usersWhoFavorited
     );
   }
 }
