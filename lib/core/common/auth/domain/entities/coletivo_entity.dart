@@ -18,4 +18,14 @@ class ColetivoEntity {
       required this.members,
       required this.logo});
 
+  factory ColetivoEntity.initial(String nameColetivo, UserIdentification mod, String logo){
+    return ColetivoEntity(
+      id: "", 
+      publications: [], 
+      nameColetivo: nameColetivo, 
+      modarator: mod, 
+      members: [], 
+      logo: logo);
+  }
+
 }
