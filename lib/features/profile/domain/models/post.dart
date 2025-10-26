@@ -50,7 +50,7 @@ class Post {
       dateTime: DateTime.parse(json['dateTime']),
       curtidas: json['curtidas'],
       typePost: TypePost.fromString(json["typePost"]),
-      profileRelated: json["profileRelated"]
+      profileRelated: json["profileRelated"] ?? "",
     );
   }
 
