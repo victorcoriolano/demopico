@@ -2,7 +2,7 @@ class NotificationItem {
   final String id;
   final String userId;
   final String message;
-  bool isRead;
+  final bool isRead;
   final DateTime timestamp;
 
   NotificationItem({
@@ -11,7 +11,5 @@ class NotificationItem {
     required this.userId,
     required this.message,
     required this.timestamp,
-  });
-
-  
+  }); 
 }
