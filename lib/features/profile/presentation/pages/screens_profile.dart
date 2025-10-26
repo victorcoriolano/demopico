@@ -6,25 +6,23 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_navigator_widget.dart';
 
-
 class ScreensProfile extends StatefulWidget {
-  const ScreensProfile({super.key,});
+  const ScreensProfile({
+    super.key,
+  });
 
   @override
   State<ScreensProfile> createState() => _ScreensProfileState();
 }
 
 class _ScreensProfileState extends State<ScreensProfile> {
-
-
   @override
   Widget build(BuildContext context) {
-
-      final List<Widget> pages = [
-    MyProfilePage(),
-    SearchProfilePage(),
-    ChatListPage(),
-  ];
+    final List<Widget> pages = [
+      MyProfilePage(),
+      SearchProfilePage(),
+      ChatListPage(),
+    ];
     final currentIndex = context.watch<ScreenProvider>().currentIndex;
 
     return Scaffold(

@@ -205,7 +205,9 @@ class PostProvider extends ChangeNotifier {
           avatar: user.avatar,
           urlVideos: _videoUrls.isEmpty ? null : _videoUrls,
           description: description,
-          urlImages: _imgUrls);
+          urlImages: _imgUrls,
+          profileRelated: user.id, // perfil do usuário tem o id por isso não passei o id do perfil 
+      );
 
       final post = await _createPostUc.execute(newPost);
       type == TypePost.post ? _posts.add(post) : _fullVideoPosts.add(post);

@@ -43,4 +43,24 @@ class FirebaseDTO {
     }
     return this;
   }
+
+  FirebaseDTO resolveReferencesList(String nameField) {
+    final currentData = data;
+    if (currentData.containsKey(nameField) &&
+        currentData[nameField] is List) {
+      final list = currentData[nameField] as List;
+      if (list.isEmpty || list.first is! DocumentReference) {
+        return this;
+      }
+
+      final copyData = Map<String, dynamic>.from(currentData);
+      copyData[nameField] = list
+          .map((ref) => (ref as DocumentReference).id)
+          .toList()
+          .cast<String>(); // Garante a tipagem
+
+      return copyWith(data: copyData);
+    }
+    return this;
+  }
 }

@@ -148,19 +148,26 @@ class _LoginFormState extends State<LoginForm> with Validators {
                 ),
 
                 // button (entrar)
-                ElevatedButton(
-                  onPressed: () async {
-                    final viewModel = context.read<AuthViewModelSignIn>();
-                    await viewModel.signIn().then((_) => Get.offNamed(Paths.profile)); 
-                    
-                  },
-                  style: buttonStyle(),
-                  child: const Text(
-                    "Entrar",
-                    style: TextStyle(
-                      color: kWhite,
-                    ),
-                  ),
+                Consumer<AuthViewModelSignIn>(
+                  builder: (context, provider, child) {
+                    if (provider.isLoading){
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    return ElevatedButton(
+                      onPressed: () async {
+                        final viewModel = context.read<AuthViewModelSignIn>();
+                        await viewModel.signIn(); 
+                        
+                      },
+                      style: buttonStyle(),
+                      child: const Text(
+                        "Entrar",
+                        style: TextStyle(
+                          color: kWhite,
+                        ),
+                      ),
+                    );
+                  }
                 ),
                 const SizedBox(
                   height: 12,

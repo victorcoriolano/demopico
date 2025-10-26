@@ -18,4 +18,32 @@ class ColetivoEntity {
       required this.members,
       required this.logo});
 
+  factory ColetivoEntity.initial(String nameColetivo, UserIdentification mod, String logo){
+    return ColetivoEntity(
+      id: "", 
+      publications: [], 
+      nameColetivo: nameColetivo, 
+      modarator: mod, 
+      members: [], 
+      logo: logo);
+  }
+
+ ColetivoEntity copyWith({
+    String? id,
+    String? nameColetivo,
+    UserIdentification? modarator,
+    List<UserIdentification>? members,
+    String? logo,
+    List<Post>? publications,
+  }) {
+    return ColetivoEntity(
+      id: id ?? this.id,
+      nameColetivo: nameColetivo ?? this.nameColetivo,
+      modarator: modarator ?? this.modarator,
+      members: members ?? List<UserIdentification>.from(this.members),
+      logo: logo ?? this.logo,
+      publications: publications ?? List<Post>.from(this.publications),
+    );
+  }
+   
 }
