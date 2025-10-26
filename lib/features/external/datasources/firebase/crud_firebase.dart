@@ -365,6 +365,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
       final query = await _firestore
           .collection(collection.name)
           .where(field, whereNotIn: values.toList())
+          .limit(7)
           .get();
       return query.docs.map((doc) {
         return FirebaseDTO(id: doc.id, data: doc.data());
