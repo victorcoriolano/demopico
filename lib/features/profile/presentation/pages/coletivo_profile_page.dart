@@ -3,11 +3,7 @@ import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';
 import 'package:flutter/material.dart';
-// Importe suas entidades e a paleta de cores aqui
-// import 'entities/coletivo_entity.dart';
-// import 'entities/user_identification.dart';
-// import 'entities/post.dart';
-// import 'theme/colors.dart';
+
 
 class ColetivoProfilePage extends StatelessWidget {
   final ColetivoEntity coletivo;
