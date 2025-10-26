@@ -1,20 +1,24 @@
 
 import 'package:demopico/features/user/domain/enums/type_post.dart';
 
+
+// TODO: COLOCAR USERIDENTIFICATION 
 class Post {
-  String id;
-  String nome;     
-  String userId;
-  String spotID;             
-  String? avatar;
-  String description;
-  List<String> urlImages;
-  List<String>? urlVideos;
-  DateTime dateTime;
-  int curtidas;
-  TypePost typePost;
+  final String id;
+  final String nome;     
+  final String userId;
+  final String spotID;             
+  final String? avatar;
+  final String description;
+  final String profileRelated;
+  final List<String> urlImages;
+  final List<String>? urlVideos;
+  final DateTime dateTime;
+  final int curtidas;
+  final TypePost typePost;
 
   Post({
+    required this.profileRelated,
     required this.id,
     required this.nome,
     required this.userId,
@@ -29,63 +33,7 @@ class Post {
   })  : dateTime = dateTime ?? DateTime.now(),
         curtidas = curtidas ?? 0;
 
-  // Métodos GET
-  String getNome() {
-    return nome;
-  }
 
-  String? getUrlUserPhoto() {
-    return avatar;
-  }
-
-  String getUserID() {
-    return nome;
-  }
-
-    String getPostID() {
-    return nome;
-  }
-
-  String getDescription() {
-    return description;
-  }
-
-  List<String> geturlMidia() {
-    return urlImages;
-  }
-
-  DateTime getDateTime() {
-    return dateTime;
-  }
-
-  // Métodos SET
-  void setNome(String value) {
-    nome = value;
-  }
-
-  void setUserId(String value) {
-    userId = value;
-  }
-
-  void setSpotId(String value) {
-    spotID = value;
-  }
-
-  void setUrlUserPhoto(String value) {
-    avatar = value;
-  }
-
-  void setDescription(String value) {
-    description = value;
-  }
-
-  void seturlMidia(List<String> value) {
-    urlImages = value;
-  }
-
-  set setCurtidas(int value) {
-    curtidas = value;
-  }
 
   factory Post.fromJson(Map<String, dynamic> json, String id) {
     return Post(
@@ -102,6 +50,7 @@ class Post {
       dateTime: DateTime.parse(json['dateTime']),
       curtidas: json['curtidas'],
       typePost: TypePost.fromString(json["typePost"]),
+      profileRelated: json["profileRelated"]
     );
   }
 
@@ -116,7 +65,8 @@ class Post {
       'urlVideos': urlVideos ?? [],
       'dateTime': dateTime.toIso8601String(),
       'curtidas': curtidas,
-      'typePost': typePost.name
+      'typePost': typePost.name,
+      'profileRelated': profileRelated,
     };
   }
 
@@ -132,8 +82,10 @@ class Post {
     DateTime? dateTime,
     int? curtidas,
     TypePost? typePost,
+    String? profileRelated,
   }) {
     return Post(
+      profileRelated: profileRelated ?? this.profileRelated,
       id: id ?? this.id,
       nome: nome ?? this.nome,
       userId: userId ?? this.userId,
