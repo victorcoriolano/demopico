@@ -1,5 +1,6 @@
 import 'package:demopico/core/common/auth/infra/repositories/firebase_auth_repository.dart';
 import 'package:demopico/core/common/media_management/usecases/pick_mult_files_uc.dart';
+import 'package:demopico/core/common/media_management/usecases/pick_one_image_uc.dart';
 import 'package:demopico/core/common/media_management/usecases/pick_video_uc.dart';
 import 'package:demopico/features/home/infra/http_climate_service.dart';
 import 'package:demopico/features/home/presentation/provider/forecast_provider.dart';
@@ -76,7 +77,7 @@ final myProviders = [
   ChangeNotifierProvider(create: (_) => SpotProvider.instance),
   ChangeNotifierProvider(create: (_) => HistoricoController.getInstance),
   ChangeNotifierProvider(create: (_) => CommentController.getInstance),
-  ChangeNotifierProvider(create: (_) => CreateCollectiveViewModel()),
+  ChangeNotifierProvider(create: (_) => CreateCollectiveViewModel(pickFile: PickOneImageUc.instance)),
    
   
   // Providers de hub
