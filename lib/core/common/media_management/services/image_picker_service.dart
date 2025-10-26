@@ -37,16 +37,16 @@ class ImagePickerService implements IPickFileRepository {
               : ContentType.unavailable,
         );
 
-        final tipoConteudo = await dangerContentApi.scanMidia(file);
+       /*  final tipoConteudo = await dangerContentApi.scanMidia(file);
 
         if (tipoConteudo == TypeContent.danger) {
           throw DangerContent();
         }
 
         if (tipoConteudo == TypeContent.warning) {
-          WarningContent();
+          throw WarningContent();
         }
-
+ */
         return file;
       }),
     );
