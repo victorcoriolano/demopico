@@ -31,9 +31,9 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
         key: _formkey,
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(70.0),
+            padding: const EdgeInsets.symmetric(horizontal:70.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 const SizedBox(
                     height: 200,
@@ -137,7 +137,7 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                   }
                 ),
                 const SizedBox(
-                  height: 12,
+                  height: 35,
                 ),
     
                 // button (cadastrar)
