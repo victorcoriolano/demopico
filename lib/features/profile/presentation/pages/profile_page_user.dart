@@ -172,35 +172,31 @@ class _ProfilePageUserState extends State<ProfilePageUser>
               SizedBox(
                 height: 12,
               ),
-              Container(
-                margin: EdgeInsets.symmetric(
-                    horizontal: (screenWidth * 0.10) / 2, vertical: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomElevatedButton(
-                        onPressed: () async {
-                          final userVM = context.read<AuthViewModelAccount>().user as UserEntity;
-                          if (_isMyFriend){
-                            userVM.profileUser.connections.remove(profile.userID);
-                            profile.connections.remove(userVM.id);
-                            await context.read<NetworkViewModel>().disconnectUsers(userVM.id, profile.userID);
-                          } else {
-                            final userToConnect = SuggestionProfile(idUser: profile.userID, name: profile.displayName, photo: profile.avatar, status: RequestConnectionStatus.pending);
-                            await context.read<NetworkViewModel>().requestConnection(userToConnect, userVM);
-                          }
-                        }, 
-                        textButton: _isMyFriend ? "Desconectar" : "Conectar"),
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        // TODO: implementar criação de chat
-                      },
-                      icon: Icon(Icons.chat_outlined),
-                      style: CustomElevatedButton.formatation,
-                      label: Text("Acessar chat"),
-                    ),
-                  ],
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  CustomElevatedButton(
+                      onPressed: () async {
+                        final userVM = context.read<AuthViewModelAccount>().user as UserEntity;
+                        if (_isMyFriend){
+                          userVM.profileUser.connections.remove(profile.userID);
+                          profile.connections.remove(userVM.id);
+                          await context.read<NetworkViewModel>().disconnectUsers(userVM.id, profile.userID);
+                        } else {
+                          final userToConnect = SuggestionProfile(idUser: profile.userID, name: profile.displayName, photo: profile.avatar, status: RequestConnectionStatus.pending);
+                          await context.read<NetworkViewModel>().requestConnection(userToConnect, userVM);
+                        }
+                      }, 
+                      textButton: _isMyFriend ? "Desconectar" : "Conectar"),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      // TODO: implementar criação de chat
+                    },
+                    icon: Icon(Icons.chat_outlined),
+                    style: CustomElevatedButton.formatation,
+                    label: Text("Acessar chat"),
+                  ),
+                ],
               ),
               SizedBox(
                 height: 12,
