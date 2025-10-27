@@ -76,12 +76,7 @@
     transition: Transition.circularReveal,
     middlewares: [Middleware(AuthViewModelAccount.instance)],
   ),
-  GetPage(
-    name: Paths.createCollectivePage,
-    page: () => CreateCollectivePage(),
-    transition: Transition.circularReveal,
-    middlewares: [Middleware(AuthViewModelAccount.instance)],
-  ),
+  
   GetPage(
     name: Paths.createPostPage,
     page: () => CreatePostPage(),

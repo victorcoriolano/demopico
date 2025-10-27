@@ -6,6 +6,7 @@ import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/media_management/models/file_model.dart';
 import 'package:demopico/core/common/media_management/models/upload_result_file_model.dart';
+import 'package:demopico/core/common/media_management/services/upload_service.dart';
 import 'package:demopico/core/common/media_management/usecases/pick_one_image_uc.dart';
 import 'package:demopico/core/common/media_management/usecases/upload_file_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/update_profile.dart';
@@ -26,7 +27,7 @@ class EditProfileViewModel extends ChangeNotifier {
         account: AuthViewModelAccount.instance,
         updatePassword: UpdatePasswordUc.getInstance,
         pickAImage: PickOneImageUc.instance,
-        uploadFile: UploadFileUC.getInstance, 
+        uploadFile: UploadService.getInstance, 
         updateDataUser: UpdateUserUc.getInstance,
       );
 
@@ -34,7 +35,7 @@ class EditProfileViewModel extends ChangeNotifier {
     required UpdatePasswordUc updatePassword,
     required PickOneImageUc pickAImage,
     required UpdateProfile updateProfile,
-    required UploadFileUC uploadFile,
+    required UploadService uploadFile,
     required UpdateUserUc updateDataUser,
     required AuthViewModelAccount account,
   }): _updatePasswordUc = updatePassword,
@@ -47,7 +48,7 @@ class EditProfileViewModel extends ChangeNotifier {
 
   final UpdatePasswordUc _updatePasswordUc;
   final PickOneImageUc _pickOneImageUc;
-  final UploadFileUC _uploadFile;
+  final UploadService _uploadFile;
   final AuthViewModelAccount _account;
   final UpdateProfile _updateProfile;
   final UpdateUserUc _updateUser;
@@ -92,15 +93,7 @@ class EditProfileViewModel extends ChangeNotifier {
       debugPrint("Chamou o upload do avatar, avatar é null ?${avatar is NullFileModel}");
       if (avatar is NullFileModel) return null;
       debugPrint("Fazendo upload de avatar");
-      final streamUpload = _uploadFile.execute(avatar, "users/photos/avatar/${(_account.user as UserEntity).id}");
-      final task = await streamUpload.firstWhere(
-        (task) => task.state == UploadState.success || 
-                   task.state == UploadState.failure,
-      );
-
-      if (task.state == UploadState.success) return task.url;
-      debugPrint("Upload falhou retornando null");
-      return null;
+      return _uploadFile.uploadAFileWithoutStream(avatar, "users/photos/avatar/${(_account.user as UserEntity).id}");
     } catch (e){
       debugPrint("Erro ao fazer o upload do avatar: $e");
       return null;
@@ -110,13 +103,9 @@ class EditProfileViewModel extends ChangeNotifier {
   Future<String?> uploadBackgroundImage() async {
     try {
       if (backgroundImage is NullFileModel) return null;
-       final streamUpload = _uploadFile.execute(backgroundImage, "users/photos/backgroundProfiles/${(_account.user as UserEntity).id}");
-       final task = await streamUpload.firstWhere(
-        (task) => task.state == UploadState.success || 
-                   task.state == UploadState.failure,
-      );
-      if (task.state == UploadState.success) return task.url;
-      return null;
+       return _uploadFile.uploadAFileWithoutStream(
+        backgroundImage, 
+        "users/photos/backgroundProfiles/${(_account.user as UserEntity).id}");
     } catch (e){
       debugPrint("Erro ao fazer o upload do avatar: $e");
       return null;

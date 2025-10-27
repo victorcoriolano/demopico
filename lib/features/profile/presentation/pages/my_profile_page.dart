@@ -4,10 +4,12 @@ import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/core/common/widgets/back_widget.dart';
+import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto_mapper.dart';
 import 'package:demopico/features/profile/presentation/pages/coletivo_profile_page.dart';
 import 'package:demopico/features/profile/presentation/pages/create_colective_page.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_posts_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/colective_card_widget.dart';
+import 'package:demopico/features/profile/presentation/widgets/profile_data/collective_section_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_bottom_side_data_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_drawer_config.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_top_side_data_widget.dart';
@@ -33,8 +35,10 @@ class _MyProfilePageState extends State<MyProfilePage>
   double _accumulatedScroll = 0.0;
   double _lastOffset = 0.0;
   ////mock do coletivo pra teste
-  final List<ColetivoEntity> coletivos = [
+  /* final List<ColetivoEntity> coletivos = [
     ColetivoEntity(
+      entryRequests: List.empty(),
+      guests: List.empty(),
       id: "mockid", 
       publications: [], 
       nameColetivo: "skateZO", 
@@ -53,10 +57,10 @@ class _MyProfilePageState extends State<MyProfilePage>
         profilePictureUrl: "https://cdn.pixabay.com/photo/2018/02/16/14/38/portrait-3157821_1280.jpg"), 
       ], 
       logo: "https://firebasestorage.googleapis.com/v0/b/pico-skatepico.appspot.com/o/users%2FbackGround%2F7GS5UiKxvPW9CQmIS5iM1Lk9H5n2%2Fbarnab%C3%A9_2025-10-18T22%3A02%3A02.834.png?alt=media&token=f0be1b70-de35-4433-9ef7-d612178a9816")
-  ];
+  ]; */
 
   TypePost typePost = TypePost.post; // definindo o tipo de post
-
+  final List<ColetivoEntity> coletivos = [];
   final ScrollController _scrollController = ScrollController();
   final TextEditingController bioController = TextEditingController();
   late final TabController _tabController;
@@ -224,62 +228,35 @@ class _MyProfilePageState extends State<MyProfilePage>
                 contributions: user!.profileUser.spots.length,
                 description: user!.profileUser.description ?? '',
               ),
-              (coletivos.isNotEmpty)
-                  ? SizedBox(
-                      height: 120,
-                      child: Stack(
-                        children: [
-                          ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: coletivos.length,
-                            padding: EdgeInsets.symmetric(
-                                horizontal: (screenWidth * 0.10) / 2),
-                            itemBuilder: (context, index) {
-                              final group = coletivos[index];
-                              return ColectiveCardWidget(
-                                coletivo: group,
-                                onTap: () {
-                                  Get.to(() => ColetivoProfilePage(coletivo: group));
-                                },
-                              );
-                            },
-                          ),
-                          Positioned(
-                            top: 0,
-                            right: 30,
-                            child: IconButton(
-                              tooltip: "Criar grupo",
-                              onPressed: () {
-                                Get.to(() => CreateCollectivePage());
-                              },
-                              icon: Icon(Icons.group_add),),),
-                          
-                        ],
+              if (user!.profileUser.idColetivos.isNotEmpty)
+                CollectiveSectionWidget(profile: user!.profileUser)
+              else
+                Container(
+                  height: 80,
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.symmetric(
+                      horizontal: (screenWidth * 0.10) / 2),
+                  decoration: BoxDecoration(
+                    color: kWhite.withValues(alpha: .5),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Você não participa de nenhum coletivo",
+                        style: TextStyle(color: kMediumGrey, fontSize: 13),
                       ),
-                    )
-                  : Container(
-                      height: 80,
-                      width: double.infinity,
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.symmetric(
-                          horizontal: (screenWidth * 0.10) / 2),
-                      decoration: BoxDecoration(
-                        color: kWhite.withValues(alpha: .5), 
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "Você não participa de nenhum coletivo",
-                            style: TextStyle(color: kMediumGrey, fontSize: 13),
-                          ),
-                          IconButton(onPressed: () {
-                            Get.to(() => CreateCollectivePage());
-                          }, icon: Icon(Icons.add))
-                        ],
-                      ),
-                    ),
+                      IconButton(
+                          onPressed: () {
+                            Get.to(() => CreateCollectivePage(user: user!.profileUser,),
+                                );
+                          },
+                          icon: Icon(Icons.add))
+                    ],
+                  ),
+                ),
               SizedBox(
                 height: 12,
               ),
@@ -320,7 +297,6 @@ class _MyProfilePageState extends State<MyProfilePage>
                   : Icons.map_outlined,
         ),
       ),
-      
     );
   }
 }

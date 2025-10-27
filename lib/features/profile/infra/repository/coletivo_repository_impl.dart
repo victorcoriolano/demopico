@@ -9,19 +9,18 @@ import 'package:demopico/features/profile/domain/models/post.dart';
 import 'package:demopico/features/profile/infra/datasource/firebase_collective_datasource.dart';
 import 'package:demopico/features/profile/infra/datasource/firebase_post_datasource.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_datasource_service.dart';
-import 'package:demopico/features/user/domain/models/user_model.dart';
 import 'package:demopico/features/user/infra/datasource/remote/user_firebase_datasource.dart';
 
 
-class ColetivoRepository implements IColetivoRepository{
+class ColetivoRepositoryImpl implements IColetivoRepository{
   final IColetivoDatasource _datasource;
   final IPostDatasource _postDatasource;
   final IUserDataSource<FirebaseDTO> _userDataSource;
 
-  ColetivoRepository({required IColetivoDatasource datasource, required IPostDatasource postDatasource, required IUserDataSource<FirebaseDTO> userDatasource}): _datasource = datasource, _postDatasource = postDatasource, _userDataSource = userDatasource;
+  ColetivoRepositoryImpl({required IColetivoDatasource datasource, required IPostDatasource postDatasource, required IUserDataSource<FirebaseDTO> userDatasource}): _datasource = datasource, _postDatasource = postDatasource, _userDataSource = userDatasource;
 
-  static ColetivoRepository? _instance;
-  static ColetivoRepository get instance => _instance ?? ColetivoRepository(
+  static ColetivoRepositoryImpl? _instance;
+  static ColetivoRepositoryImpl get instance => _instance ?? ColetivoRepositoryImpl(
     datasource: FirebaseCollectiveDatasource.instance,
     postDatasource: FirebasePostDatasource.getInstance,
     userDatasource: UserFirebaseDataSource.getInstance, );  
@@ -46,7 +45,7 @@ class ColetivoRepository implements IColetivoRepository{
   }
 
   @override
-  Future<void> sendInviteUsers(List<UserIdentification> user) {
+  Future<void> sendInviteUsers(List<String> users) {
     // TODO: implement sendInviteUsers
     throw UnimplementedError();
   }
@@ -98,6 +97,12 @@ class ColetivoRepository implements IColetivoRepository{
 
   Future<List<Post>> _fetchPublications(String id) async{
     return (await _postDatasource.getPostsByUserId(id)).map((dto) => postMapper.fromJson(dto.data, dto.id)).toList();
+  }
+  
+  @override
+  Future<List<ColetivoEntity>> getCollectiveForProfile(String idProfile) async {
+    final collectives = await _datasource.getCollectiveForProfile(idProfile);
+    return collectives.map((coll) => coletivoDtoMapper.toModel(coll)).toList();
   } 
   
 }
