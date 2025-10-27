@@ -73,20 +73,20 @@ class _LoginFormState extends State<LoginForm> with Validators {
                     )),
 
                 const SizedBox(
-                  height: 30,
+                  height: 15,
                 ),
 
                 const Text(
-                  "Bem vindo de volta",
+                  "BEM VINDO DE VOLTA!",
                   style: TextStyle(
                     fontWeight: FontWeight.normal,
                     color: kWhite,
-                    fontSize: 25,
+                    fontSize: 22,
                   ),
                 ),
 
                 const SizedBox(
-                  height: 15,
+                  height: 30,
                 ),
 
                 SwithTypeLogin(),
