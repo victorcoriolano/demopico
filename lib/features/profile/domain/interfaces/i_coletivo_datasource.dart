@@ -2,6 +2,7 @@ import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto
 
 abstract interface class IColetivoDatasource {
   Future<FirebaseDTO> getCollectivoDoc(String id);
+  Future<List<FirebaseDTO>> getCollectiveForProfile(String idProfile);
     Future<FirebaseDTO> createColetivo(FirebaseDTO coletivo);
     Future<void> updateColetivo(FirebaseDTO coletivo);
     Future<void> addUserOnCollective(FirebaseDTO user);

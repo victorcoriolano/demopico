@@ -2,16 +2,39 @@ import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';
+import 'package:demopico/features/profile/presentation/view_model/collective_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 
-class ColetivoProfilePage extends StatelessWidget {
-  final ColetivoEntity coletivo;
+class ColetivoProfilePage extends StatefulWidget {
+  final ColetivoEntity initialColetivoInformation;
 
   const ColetivoProfilePage({
+    required this.initialColetivoInformation,
     super.key,
-    required this.coletivo,
   });
+
+  @override
+  State<ColetivoProfilePage> createState() => _ColetivoProfilePageState();
+}
+
+class _ColetivoProfilePageState extends State<ColetivoProfilePage> {
+  late ColetivoEntity coletivo;
+
+  @override
+  void initState() {
+    coletivo = widget.initialColetivoInformation;
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async { 
+      await context.read<CollectiveViewModel>().getTotalInformationCollective(coletivo.id);
+      if (mounted) {
+        setState(() {
+          coletivo = context.read<CollectiveViewModel>().coletivo;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -269,8 +292,10 @@ class _MembersListView extends StatelessWidget {
                     backgroundImage: member.profilePictureUrl != null
                         ? NetworkImage(member.profilePictureUrl!)
                         : null,
-                    onBackgroundImageError: (e, s) =>
-                        const Icon(Icons.person, color: kLightGrey),
+                    onBackgroundImageError: member.profilePictureUrl != null 
+                        ?  (e, s) =>
+                          const Icon(Icons.person, color: kLightGrey)
+                        : null,
                     child: member.profilePictureUrl == null
                         ? const Icon(Icons.person, color: kLightGrey)
                         : null,

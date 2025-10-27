@@ -16,6 +16,7 @@ import 'package:demopico/features/mapa/presentation/controllers/historico_contro
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_provider.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spots_controller.dart';
+import 'package:demopico/features/profile/domain/usecases/create_collective_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/create_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/delete_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_post_uc.dart';
@@ -23,6 +24,7 @@ import 'package:demopico/features/profile/domain/usecases/update_post_uc.dart';
 import 'package:demopico/features/profile/infra/repository/chat_repository.dart';
 import 'package:demopico/features/profile/presentation/view_model/chat_list_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/chat_room_view_model.dart';
+import 'package:demopico/features/profile/presentation/view_model/collective_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/create_collective_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/post_provider.dart';
@@ -77,7 +79,12 @@ final myProviders = [
   ChangeNotifierProvider(create: (_) => SpotProvider.instance),
   ChangeNotifierProvider(create: (_) => HistoricoController.getInstance),
   ChangeNotifierProvider(create: (_) => CommentController.getInstance),
-  ChangeNotifierProvider(create: (_) => CreateCollectiveViewModel(pickFile: PickOneImageUc.instance)),
+  ChangeNotifierProvider(create: (_) => CreateCollectiveViewModel(
+    pickFile: PickOneImageUc.instance,
+    createUC: CreateCollectiveUc.instance
+  )),
+  ChangeNotifierProvider(create: (_) => CollectiveViewModel.instance),
+  
    
   
   // Providers de hub
