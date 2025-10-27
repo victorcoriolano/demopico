@@ -66,7 +66,8 @@ final coletivoDtoMapper = FirebaseDtoMapper<ColetivoEntity>(
       id: id,
       nameColetivo: resolvedData['nameColetivo'] ?? '',
       logo: resolvedData['logo'] ?? '',
-      
+      guests: List<String>.from(resolvedData['guests'] ?? []) ,
+      entryRequests: List<String>.from(resolvedData['entryRequests'] ?? []),
       // Mapeia a ID do moderador para um UserIdentification "parcial"
       modarator: UserIdentification(
         id: resolvedData['modarator'] ?? '',
@@ -75,7 +76,7 @@ final coletivoDtoMapper = FirebaseDtoMapper<ColetivoEntity>(
       ),
       
       // Mapeia as IDs dos membros para UserIdentification "parciais"
-      members: (resolvedData['members'] as List<String>? ?? [])
+      members: (List<String>.from(resolvedData['members'] ?? []))
           .map((memberId) => UserIdentification(
                 id: memberId,
                 name: '', // Será preenchido pelo Repository
@@ -92,20 +93,23 @@ final coletivoDtoMapper = FirebaseDtoMapper<ColetivoEntity>(
   // Converte os objetos UserIdentification de volta para DocumentReferences.
   toMap: (model) {
     return {
+      'entryRequests': model.entryRequests,
+      'guests': model.guests,
       'nameColetivo': model.nameColetivo,
       'logo': model.logo,
-      // Assume que você tem uma referência global ao Firestore
+      // Inserindo referencia ao invés dos dados exatos
       'modarator':
           FirebaseFirestore.instance.collection('users').doc(model.modarator.id),
       'members': model.members
           .map((user) =>
-              FirebaseFirestore.instance.collection('users').doc(user.id))
+              user.id)
           .toList(),
       // 'publications' não é armazenado no documento principal.
     };
   },
   getId: (model) => model.id,
 );
+
 
 final mapperUserModel = FirebaseDtoMapper<UserM>(
     fromJson: (data, id) => UserM.fromJson(data, id),
