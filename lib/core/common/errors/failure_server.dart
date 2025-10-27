@@ -1,4 +1,5 @@
 // Classe base para representar falhas
+import 'package:demopico/core/app/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -42,9 +43,11 @@ class SnackBarFailure extends SnackBar {
 }
 
 class FailureServer {
-  static void showError(Failure failure, [String title = "Error"]) {
+  static void showError(Failure failure, [String title = "ERRO"]) {
     debugPrint("Mostrando erro: ${failure.message}");
     Get.snackbar(
+      backgroundColor: kRed,
+      colorText: kWhite,
       title,
       failure.message,
       snackPosition: SnackPosition.TOP,
