@@ -1,15 +1,19 @@
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/core/common/media_management/models/file_model.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/custom_buttons.dart';
+import 'package:demopico/features/profile/domain/models/profile_user.dart';
 import 'package:demopico/features/profile/presentation/object_for_only_view/suggestion_profile.dart';
 import 'package:demopico/features/profile/presentation/view_model/create_collective_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class CreateCollectivePage extends StatefulWidget {
-  const CreateCollectivePage({super.key});
+  final Profile user;
+  const CreateCollectivePage({super.key, required this.user});
 
   @override
   State<CreateCollectivePage> createState() => _CreateCollectivePageState();
@@ -56,6 +60,7 @@ class _CreateCollectivePageState extends State<CreateCollectivePage> {
                 hintText: 'Ex: OS+SEMROLAMENTO',
                 border: OutlineInputBorder(),
               ),
+              onChanged: (value) => context.read<CreateCollectiveViewModel>().nameCollective = value,
             ),
             const SizedBox(height: 24.0), 
 
@@ -209,7 +214,20 @@ class _CreateCollectivePageState extends State<CreateCollectivePage> {
               }
             }),
             const SizedBox(height: 16.0),
-            Center(child: CustomElevatedButton(onPressed: () {}, textButton: "Criar Coletivo"))
+            Center(
+              child: Consumer<CreateCollectiveViewModel>(
+                builder: (context, vm, child) {
+                  return CustomElevatedButton(
+                    onPressed: vm.validateForCreate() 
+                    ? () {
+                        context.read<CreateCollectiveViewModel>().createCollective(widget.user);
+                      }
+                    : null,
+                    textButton: "Criar Coletivo",
+                  );
+                }
+              ),
+            ),
           ],
         ),
       ),
