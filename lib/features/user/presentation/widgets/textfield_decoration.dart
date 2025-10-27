@@ -16,6 +16,14 @@ InputDecoration customTextFieldDecoration(String label,[Color? colorBackGround, 
         labelStyle:const TextStyle(
           color: Colors.white,
         ),
+        errorBorder:  OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide.none,
+        ),
+        focusedErrorBorder:  OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide.none,
+        ),
         contentPadding: const EdgeInsets.all(20.0),
         errorText: label.isEmpty ? 'Insira os campos' : null,
       );
