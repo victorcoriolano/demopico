@@ -11,19 +11,26 @@ class SwithTypeLogin extends StatefulWidget {
 }
 
 class _SwithTypeLoginState extends State<SwithTypeLogin> {
-
   @override
   Widget build(BuildContext context) {
     return Consumer<AuthViewModelSignIn>(
       builder: (context, provider, child) => Column(
         children: [
           Switch(
-            thumbIcon: WidgetStatePropertyAll(Icon(Icons.skateboarding)),
-            
-            value: provider.isEmail, 
-            onChanged: (value) => provider.changeIsCredential(value)
+              thumbIcon: WidgetStateProperty.resolveWith<Icon?>(
+                (Set<WidgetState> states) {
+                  if (states.contains(WidgetState.selected)) {
+                    return const Icon(Icons.email);
+                  }
+                  return const Icon(Icons.person);
+                },
+              ),
+              value: provider.isEmail,
+              onChanged: (value) => provider.changeIsCredential(value)),
+          Text(
+            "Entrando com ${provider.identifier.name}",
+            style: TextStyle(color: kWhite),
           ),
-          Text("Entrar com ${provider.identifier.name}", style: TextStyle(color: kWhite),),
         ],
       ),
     );
