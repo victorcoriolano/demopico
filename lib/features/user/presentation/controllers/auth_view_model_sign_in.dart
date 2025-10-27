@@ -70,7 +70,7 @@ class AuthViewModelSignIn extends ChangeNotifier {
       return true;
     } on Failure catch (failure){
       FailureServer.showError(failure);
-      return false;
+      return isLoading = false;
     }
   }
 
@@ -80,7 +80,7 @@ class AuthViewModelSignIn extends ChangeNotifier {
       return true;
     } on Failure catch (failure){
       FailureServer.showError(failure);
-      return false;
+      return  isLoading = false;
     }
   }
   
@@ -90,7 +90,7 @@ class AuthViewModelSignIn extends ChangeNotifier {
       return true;
     } on Failure catch (failure){
       FailureServer.showError(failure);
-      return false;
+      return isLoading = false;
     }
   }
 
@@ -98,7 +98,7 @@ class AuthViewModelSignIn extends ChangeNotifier {
   Future<void> signIn() async {
     isLoading = true;
     final AuthResult authResult;
-    if(!validateCreationPassword(password)) return;
+    if(!validateCreationPassword(password))return;
     try {
       switch (identifier){
       case Identifiers.email:
