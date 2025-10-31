@@ -363,11 +363,11 @@ class _RecsListView extends StatelessWidget {
                       Image.network(
                         thumbnailUrl,
                         fit: BoxFit.cover,
-                        color: kBlack.withOpacity(0.3), // Escurece a imagem
+                        color: kBlack.withValues(alpha: 0.3), // Escurece a imagem
                         colorBlendMode: BlendMode.darken,
                       )
                     else
-                      Container(color: kMediumGrey.withOpacity(0.3)),
+                      Container(color: kMediumGrey.withValues(alpha: 0.3)),
                     
                     // Ícone de "Play"
                     const Center(
