@@ -27,6 +27,7 @@ abstract class ICrudDataSource<DTO, DataSource> {
   //watch
   Stream<List<DTO>> watch();
   Stream<DTO> watchDoc(String id);
+  Stream<List<DTO>> watchCollectionOnDoc(String docRef, String collectionsPath);
   Stream<List<DTO>> watchWithFilter(String field, String value);
   Stream<List<DTO>> watchDocWithCollection(String docRef, String collectionPath);
 
