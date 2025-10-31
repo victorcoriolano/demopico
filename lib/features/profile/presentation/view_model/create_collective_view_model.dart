@@ -66,9 +66,10 @@ class CreateCollectiveViewModel extends ChangeNotifier {
         id: profile.userID, name: profile.displayName, profilePictureUrl: profile.avatar);
       final newCollective = ColetivoEntity.initial(nameCollective, userIdentification, url, guests);
       final collective = await _createCollectiveUc.execute(newCollective, profile.idColetivos);
+      debugPrint("Coletivo criado com sucesso: $collective");
       Get.snackbar(
       'Sucesso',
-      'Coletivo criado com sucesso',
+      'Coletivo ${collective.nameColetivo} criado com sucesso ',
         snackPosition: SnackPosition.TOP  ,
         backgroundColor: Colors.blueAccent,
         colorText: Colors.white,
@@ -77,7 +78,6 @@ class CreateCollectiveViewModel extends ChangeNotifier {
       Get.back();
 
 
-      //// TODO: IMPLEMENTAR LOGICA DE CONVITE DE USUARIOS 
       /// TODO: IMPLEMENTAR ADIÇÃO DE USUÁRIOS NO COLETIVO
       /// TODO: IMPLEMENTAR SOLICITAÇÃO DE ENTRADA DE USUÁRIOS NO COLETIVO
       /// TODO: IMPLEMENTAR INFRAESTRUTURA DE NOTIFICAÇÕES
