@@ -44,11 +44,6 @@ class ColetivoRepositoryImpl implements IColetivoRepository{
     throw UnimplementedError();
   }
 
-  @override
-  Future<void> sendInviteUsers(List<String> users) {
-    // TODO: implement sendInviteUsers
-    throw UnimplementedError();
-  }
 
   @override
   Future<void> updateColetivo(ColetivoEntity coletivo) {
