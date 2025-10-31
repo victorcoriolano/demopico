@@ -3,6 +3,7 @@ import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/core/common/mappers/i_mapper_dto.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
+import 'package:demopico/features/profile/domain/models/notification.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';
 import 'package:demopico/features/user/domain/models/user_model.dart';
 
@@ -115,3 +116,12 @@ final mapperUserModel = FirebaseDtoMapper<UserM>(
     fromJson: (data, id) => UserM.fromJson(data, id),
     toMap: (user) => user.toJson(),
     getId: (model) => model.id);
+
+
+
+// mapper notification 
+final mapperNotificationModel = FirebaseDtoMapper<NotificationItem>(
+  fromJson: (map, id) => NotificationItem.fromMap(map..["id"] = id),
+  toMap: (model) => model.toJson(),
+  getId: (model) => model.id,
+  );
