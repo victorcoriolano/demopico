@@ -31,6 +31,20 @@ class _ObstacleWidgetState extends State<ObstacleWidget> {
     "Parede": "assets/images/icons/wallObstaculo.png",
     "Bowl zinho": "assets/images/icons/bowl.png",
     "Lixeira": "assets/images/icons/lixeira.png",
+    "Icone21": "assets/images/icons/icone21.png",
+    "Icone22": "assets/images/icons/icone22.png",
+    "Icone23": "assets/images/icons/icone23.png",
+    "Icone24": "assets/images/icons/icone24.png",
+    "Icone25": "assets/images/icons/icone25.png",
+    "Icone26": "assets/images/icons/icone26.png",
+    "Icone27": "assets/images/icons/icone27.png",
+    "Icone28": "assets/images/icons/icone28.png",
+    "Icone29": "assets/images/icons/icone29.png",
+    "Icone30": "assets/images/icons/icone30.png",
+    "Icone31": "assets/images/icons/icone31.png",
+    "Icone32": "assets/images/icons/icone32.png",
+    "Icone33": "assets/images/icons/icone33.png",
+    "Icone34": "assets/images/icons/icone34.png",
   };
 
   @override
