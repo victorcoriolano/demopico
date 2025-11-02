@@ -1,7 +1,9 @@
 import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/features/profile/presentation/view_model/collective_view_model.dart';
+import 'package:demopico/features/profile/presentation/widgets/profile_data/collective_list_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/search_page_widgets/container_suggestion_widget.dart';
-import 'package:demopico/features/profile/presentation/widgets/search_page_widgets/historic_profile_list.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class NotSearchingView extends StatelessWidget {
 
@@ -19,7 +21,7 @@ class NotSearchingView extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(left: 4),
                         child: Text(
-                          'Histórico',
+                          'Coletivos',
                           style: textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.w600,
                             color: theme.colorScheme.primary,
@@ -29,7 +31,26 @@ class NotSearchingView extends StatelessWidget {
                       
                       const SizedBox(height: 18,),
                       
-                      const HistoricHorizontalList(),
+                      SizedBox(
+                        height: 150,
+                        child: Consumer<CollectiveViewModel>(
+                          builder: (context, vm, child) {
+                            return FutureBuilder(
+                              future: vm.getAllCollectives(),
+                              builder: (context, asyncSnapshot) {
+                                if (asyncSnapshot.connectionState == ConnectionState.waiting){
+                                  return Center(child: CircularProgressIndicator(),);
+                                }
+                                if (asyncSnapshot.hasError){
+                                  debugPrint(asyncSnapshot.error.toString());
+                                  return Center(child: Text("Não foi possível carregar os coletivos tente novamente mais tarde"),);
+                                }
+                                return  Expanded(child: CollectiveListWidget(coletivos: vm.allCollectives,));
+                              }
+                            );
+                          }
+                        ),
+                      ),
                       
                       const SizedBox(height: 10,),
                       
