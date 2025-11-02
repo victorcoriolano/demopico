@@ -167,7 +167,7 @@ void main() {
         final chat = Conversation(
           lastUpdate: null,
           lastMessage: null, 
-          participants: [
+          participantsIds: [
             UserIdentification(id: "userID1", name: "name", profilePictureUrl: "photoUrl"),
             UserIdentification(id: "userID2", name: "name2", profilePictureUrl: "photoUrl3")
           ], 
