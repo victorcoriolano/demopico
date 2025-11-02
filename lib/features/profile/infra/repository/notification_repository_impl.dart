@@ -26,8 +26,8 @@ class NotificationRepositoryImpl implements INotificationRepository {
 
   @override
   Stream<List<NotificationItem>> watchNotifications(String idUser) {
-    // TODO: implement listRecentNotifications
-    throw UnimplementedError();
+    return _datasource.watchNotifications(idUser)
+      .map((dtoList) => dtoList.map((dto) => mapperNotificationModel.toModel(dto)).toList());
   }
 
   @override
