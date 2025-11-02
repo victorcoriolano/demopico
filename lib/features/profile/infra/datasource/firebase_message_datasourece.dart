@@ -22,7 +22,7 @@ class MessageFirestoreDatasource implements IMessageDatasource<FirebaseDTO> {
   MessageFirestoreDatasource({required CrudFirebase datasource}) : _boilerplate = datasource;
 
   @override
-  Stream<List<FirebaseDTO>> getMessagesForChat(String idChat) {
+  Stream<List<FirebaseDTO>> watchMessagesForChat(String idChat) {
     final snapshots = _boilerplate.dataSource
         .collection('chats')
         .doc(idChat)
@@ -38,15 +38,10 @@ class MessageFirestoreDatasource implements IMessageDatasource<FirebaseDTO> {
   }
 
   @override
-  Future<List<FirebaseDTO>> getChatForUser(String idUser) async {
-    final querySnapshot = await _boilerplate.dataSource
-        .collection('chats')
-        .where('participantsIds', arrayContains: idUser)
-        .get();
-    debugPrint("Chats founded: ${querySnapshot.docs.length}");
-    return querySnapshot.docs.map((doc) {
-      return FirebaseDTO(id: doc.id, data: doc.data());
-    }).toList();
+  Future<List<FirebaseDTO>>  getChatForUser(String idUser) async {
+    final querySnapshot = await _boilerplate.readArrayContains(field: "participantsIds", value: idUser);
+    debugPrint("Chats founded: ${querySnapshot.length}");
+    return querySnapshot;
   }
 
   @override
@@ -80,8 +75,15 @@ class MessageFirestoreDatasource implements IMessageDatasource<FirebaseDTO> {
   }
 
   @override
-  Future<FirebaseDTO> createChatForUser(FirebaseDTO chatDTO) async {
+  Future<FirebaseDTO> createChat(FirebaseDTO chatDTO) async {
     final createdChat = await _boilerplate.create(chatDTO);
     return createdChat;
+  }
+  
+  
+  @override
+  Future<FirebaseDTO> createGroupChat(FirebaseDTO initialChat) {
+    // TODO: implement createGroupChat
+    throw UnimplementedError();
   }
 }
