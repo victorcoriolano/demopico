@@ -1,7 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
+import 'package:demopico/features/profile/domain/models/chat.dart';
+import 'package:demopico/features/profile/presentation/pages/chat_room_page.dart';
 import 'package:demopico/features/profile/presentation/pages/profile_page_user.dart';
+import 'package:demopico/features/profile/presentation/view_model/chat_list_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -43,8 +47,11 @@ class _MyFriendsPageState extends State<MyFriendsPage> {
                   backgroundImage: friend.profilePictureUrl != null ? CachedNetworkImageProvider(friend.profilePictureUrl!) : null,
 ),
                 trailing: IconButton(
-                  onPressed: () {
-                    
+                  onPressed: () async {
+                    late Chat? chat;
+                    final currentUserIdentification = context.read<AuthViewModelAccount>().userIdentification;
+                    if (currentUserIdentification != null) chat = await context.read<ChatListViewModel>().createChat(currentUserIdentification, friend);
+                    if (chat != null) Get.to(() => ChatRoomPage(idCurrentUser: currentUserIdentification!.id), arguments: chat);
                   }, 
                   icon: Icon(Icons.chat)),
                 onTap: () {
