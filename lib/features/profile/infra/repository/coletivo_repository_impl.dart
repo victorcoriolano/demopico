@@ -98,6 +98,12 @@ class ColetivoRepositoryImpl implements IColetivoRepository{
   Future<List<ColetivoEntity>> getCollectiveForProfile(String idProfile) async {
     final collectives = await _datasource.getCollectiveForProfile(idProfile);
     return collectives.map((coll) => coletivoDtoMapper.toModel(coll)).toList();
+  }
+  
+  @override
+  Future<List<ColetivoEntity>> getAllCollectives() async {
+    final collectivesDatasource = await _datasource.getAllCollectives();
+    return collectivesDatasource.map((coll) => coletivoDtoMapper.toModel(coll)).toList();
   } 
   
 }

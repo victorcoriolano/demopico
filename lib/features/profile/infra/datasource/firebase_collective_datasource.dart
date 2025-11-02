@@ -51,5 +51,10 @@ class FirebaseCollectiveDatasource implements IColetivoDatasource {
   Future<List<FirebaseDTO>> getCollectiveForProfile(String idProfile) async {
      return await _crudBoilerplate.readArrayContains(field: "members", value: idProfile);
   }
+  
+  @override
+  Future<List<FirebaseDTO>> getAllCollectives() async {
+    return await _crudBoilerplate.readAll();
+  }
 
 }
