@@ -42,4 +42,5 @@ enum TypeNotification {
   newPostCollective,
   newLikeOnPub,
   newCommentOnPub,  
+  newMessage,
 }
