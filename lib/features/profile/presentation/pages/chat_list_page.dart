@@ -1,3 +1,4 @@
+import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/features/profile/presentation/view_model/chat_list_view_model.dart';
 import 'package:demopico/features/profile/presentation/widgets/chat_widgets.dart/chat_list.dart';
 import 'package:demopico/features/user/domain/enums/auth_state.dart';
@@ -22,9 +23,12 @@ class _ChatListPageState extends State<ChatListPage> {
    switch (authState){
     
      case AuthAuthenticated():
-       final thisId = authState.user.id;
-       context.read<ChatListViewModel>().fetchChats(thisId);
-       idUser = thisId;
+       final user = UserIdentification(
+        id: authState.user.id, 
+        name: authState.user.displayName.value, 
+        profilePictureUrl: authState.user.avatar);
+       context.read<ChatListViewModel>().fetchChats(user);
+       idUser = authState.user.id;
      case AuthUnauthenticated():
        context.read<ChatListViewModel>().statement = "Usuário não autenticado";
        context.read<ChatListViewModel>().stateVM = StateViewModel.error;

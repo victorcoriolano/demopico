@@ -7,6 +7,7 @@ import 'package:demopico/core/common/widgets/back_widget.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto_mapper.dart';
 import 'package:demopico/features/profile/presentation/pages/coletivo_profile_page.dart';
 import 'package:demopico/features/profile/presentation/pages/create_colective_page.dart';
+import 'package:demopico/features/profile/presentation/view_model/notification_view_model.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_posts_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/colective_card_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/collective_section_widget.dart';
@@ -34,31 +35,6 @@ class _MyProfilePageState extends State<MyProfilePage>
   ScrollDirection? _lastDirection;
   double _accumulatedScroll = 0.0;
   double _lastOffset = 0.0;
-  ////mock do coletivo pra teste
-  /* final List<ColetivoEntity> coletivos = [
-    ColetivoEntity(
-      entryRequests: List.empty(),
-      guests: List.empty(),
-      id: "mockid", 
-      publications: [], 
-      nameColetivo: "skateZO", 
-      modarator: UserIdentification(
-        id: "dsjkds", 
-        name: "moderador", 
-        profilePictureUrl: "https://cdn.pixabay.com/photo/2018/02/16/14/38/portrait-3157821_1280.jpg"), 
-      members: [
-        UserIdentification(
-        id: "dsjkds", 
-        name: "negocia", 
-        profilePictureUrl: "https://cdn.pixabay.com/photo/2018/02/16/14/38/portrait-3157821_1280.jpg"), 
-        UserIdentification(
-        id: "dsjkds", 
-        name: "biew", 
-        profilePictureUrl: "https://cdn.pixabay.com/photo/2018/02/16/14/38/portrait-3157821_1280.jpg"), 
-      ], 
-      logo: "https://firebasestorage.googleapis.com/v0/b/pico-skatepico.appspot.com/o/users%2FbackGround%2F7GS5UiKxvPW9CQmIS5iM1Lk9H5n2%2Fbarnab%C3%A9_2025-10-18T22%3A02%3A02.834.png?alt=media&token=f0be1b70-de35-4433-9ef7-d612178a9816")
-  ]; */
-
   TypePost typePost = TypePost.post; // definindo o tipo de post
   final List<ColetivoEntity> coletivos = [];
   final ScrollController _scrollController = ScrollController();
@@ -91,6 +67,7 @@ class _MyProfilePageState extends State<MyProfilePage>
     switch (currentUser) {
       case UserEntity():
         user = currentUser;
+        context.read<NotificationViewModel>().initWatch(currentUser.id);    
       case AnonymousUserEntity():
       // do nothing
     }
@@ -101,6 +78,7 @@ class _MyProfilePageState extends State<MyProfilePage>
   @override
   void initState() {
     super.initState();
+
     _tabController = TabController(length: 3, vsync: this);
 
     _tabController.addListener(() {
@@ -199,14 +177,48 @@ class _MyProfilePageState extends State<MyProfilePage>
           colorIcon: kWhite,
         ),
         actions: [
+          // Notifications
+          Consumer<NotificationViewModel>(
+            builder: (context, vm, child) {
+              return SizedBox(
+                width: 30,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Get.toNamed(Paths.notifications);
+                      },
+                      icon: const Icon(Icons.notifications),
+                      iconSize: 30,
+                      color: kAlmostWhite,
+                    ),
+                    Visibility(
+                      visible: vm.notifications.where((notif) => notif.isRead == false).isNotEmpty,
+                      child: Positioned(
+                          top: 12,
+                          left: 12,
+                          child: CircleAvatar(
+                            radius: 5,
+                            backgroundColor: kRedAccent,
+                          )),
+                    )
+                  ],
+                ),
+              );
+            }
+          ),
+          SizedBox(
+            width: 12,
+          ),
           Builder(builder: (context) {
             return IconButton(
                 onPressed: () {
                   Scaffold.of(context).openDrawer();
                 },
-                icon: const Icon(Icons.settings),
+                icon: const Icon(Icons.more_vert),
                 iconSize: 30,
-                color: kWhite);
+                color: kAlmostWhite);
           }),
         ],
       ),
@@ -250,8 +262,11 @@ class _MyProfilePageState extends State<MyProfilePage>
                       ),
                       IconButton(
                           onPressed: () {
-                            Get.to(() => CreateCollectivePage(user: user!.profileUser,),
-                                );
+                            Get.to(
+                              () => CreateCollectivePage(
+                                user: user!.profileUser,
+                              ),
+                            );
                           },
                           icon: Icon(Icons.add))
                     ],

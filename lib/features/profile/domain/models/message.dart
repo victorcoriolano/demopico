@@ -53,4 +53,14 @@ class Message {
       isRead: false,
     );
   }
+
+  factory Message.initialChat(){
+    return Message(
+      id: "", 
+      content: "Envie uma mensagem pra iniciar o chat", 
+      dateTime: DateTime.now(), 
+      infoUser: UserIdentification(id: "", name: "",profilePictureUrl: "")  , 
+      isRead: false,
+    );
+  }
 }

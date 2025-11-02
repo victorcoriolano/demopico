@@ -1,4 +1,5 @@
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/core/common/auth/domain/usecases/reset_password_uc.dart';
 import 'package:demopico/core/common/auth/domain/usecases/delete_account_uc.dart';
 import 'package:demopico/core/common/auth/domain/usecases/logout_uc.dart';
@@ -98,4 +99,16 @@ class AuthViewModelAccount extends ChangeNotifier {
         return AuthUnauthenticated();
     }
   }
+
+  UserIdentification? get userIdentification {
+    switch (_currentUser) {
+      case UserEntity _:
+        final thisUser = _currentUser as UserEntity;
+        return UserIdentification(
+          id: thisUser.id, 
+          name: thisUser.displayName.value, 
+          profilePictureUrl: thisUser.avatar,); 
+      case AnonymousUserEntity _:
+        return null;
+    }}
 }

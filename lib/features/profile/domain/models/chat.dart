@@ -1,119 +1,167 @@
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
+import 'package:demopico/features/profile/domain/models/message.dart';
 
 sealed class Chat {
   String get id;
+  String? get photoUrl;
+  String get nameChat;
   DateTime? get lastUpdate;
-  List<UserIdentification> get participants;
+  Message get lastReadMessage;
+  String get lastMessage;
   List<String> get participantsIds;
-
 }
 
 class Conversation extends Chat {
   @override
-  final List<String> participantsIds;
-  @override
   final String id;
   @override
   final DateTime? lastUpdate;
-  final UserIdentification user1;
-  final UserIdentification user2;
-  final String? lastReadMessage;
-  final String? lastMessage;
   @override
-  final List<UserIdentification> participants;
+  final Message lastReadMessage;
+  @override
+  final String lastMessage;
+  @override
+  final List<String> participantsIds;
   
+  final List<UserIdentification> _participantsData;
+  final String _currentUserId;
+
   Conversation({
     required this.lastUpdate,
     required this.id,
     required this.lastMessage,
-    required this.participants,
-    required this.lastReadMessage,
     required this.participantsIds,
-  }): user1 = participants[0], user2 = participants[1];
-
-   factory Conversation.fromMap(Map<String, dynamic> map, String id) {
-    try {
-      return Conversation(
-        lastUpdate: map["lastUpdate"] != null ? DateTime.tryParse(map["lastUpdate"]) : null,
-      lastMessage: map["lastMessage"],
-      id: id,
-      lastReadMessage:map["lastReadMessage"],
-      participantsIds: List<String>.from(map['participantsIds'] as List),
-      participants: (map['participants'] as List).map((user) { 
-        user = user as Map<String, dynamic>;
-        return UserIdentification.fromJson(user);
-      }).toList(),
-    );
-    } on TypeError catch (e){
-    throw ArgumentError("Ocorreu um erro ao mapear os dados da conversation: $e ${e.stackTrace}");
-    }
-    
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'lastUpdate': lastUpdate?.toIso8601String(),
-      'lastMessage': lastMessage,
-      'lastReadMessage': lastReadMessage,
-      'participantsIds': participantsIds,
-      'participants': participants.map((user) => user.toJson()).toList(),
-    };
-  }
+    required this.lastReadMessage,
+    required List<UserIdentification> participantsData,
+    required String currentUserId,
+  }) : _participantsData = participantsData,
+        _currentUserId = currentUserId;
 
   factory Conversation.initFromUsers(UserIdentification currentUser, UserIdentification otherUser){
     return Conversation(
+      currentUserId: currentUser.id,
+      participantsData: [currentUser, otherUser],
       lastUpdate: null,
-      lastMessage: null, 
-      participants: List.from([currentUser, otherUser]), 
+      lastMessage: "Inicie uma conversa com ${otherUser.name}", 
+      participantsIds: List<String>.from([currentUser.id, otherUser.id]), 
       id: "", // sera inserido no bd
-      lastReadMessage: null, 
-      participantsIds: List.from([currentUser.id, otherUser.id]));
+      lastReadMessage: Message.initial(currentUser, "content"),
+    );    
+  }
+
+  UserIdentification get _otherUser {
+    return _participantsData.firstWhere(
+      (user) => user.id != _currentUserId,
+      orElse: () => _participantsData.first, // Fallback
+    );
+  }
+
+  @override
+  String? get photoUrl => _otherUser.profilePictureUrl;
+
+  @override
+  String get nameChat => _otherUser.name;
+
+  Map<String, dynamic> toMap() {
+    return {
+      'chatType': 'conversation', // ATRIBUTO DISCRIMINADOR PARA AJUDAR NO MAPEAMENTO DO DATASOURCE
+      'lastUpdate': lastUpdate?.toIso8601String(),
+      'lastMessage': lastMessage,
+      'participantsIds': participantsIds,
+      'participantsData': _participantsData.map((user) => user.toJson()).toList(), 
+      // 'nameChat' e 'photo' não é armazenado, pois é derivado (SÃO DADOS DO OUTRO USUÁRIO)
+      'lastReadMessage': lastReadMessage.toJson(),
+    };
+  }
+
+  factory Conversation.fromMap(Map<String, dynamic> map, String id, UserIdentification currentUser) {
+    try {
+      final participantsList = (map['participantsData'] as List)
+          .map((user) => UserIdentification.fromJson(user as Map<String, dynamic>))
+          .toList();
+      
+      
+
+      return Conversation(
+        participantsData: participantsList,
+        currentUserId: currentUser.id,
+        id: id,
+        lastUpdate: map["lastUpdate"] != null ? DateTime.tryParse(map["lastUpdate"]) : null,
+        lastMessage: map["lastMessage"] ?? '',
+        participantsIds: List.from(map['participantsIds'] ?? ''),
+        lastReadMessage: Message.fromMap(map['lastReadMessage']), // Assumindo que Message tem fromMap()
+      );
+    } catch (e) {
+      throw Exception("Erro ao mapear Conversation: $e");
+    }
   }
 }
 
 class GroupChat extends Chat{
   @override
   final String id;
-  final String nameGroup;
-  @override
-  final List<UserIdentification> participants;
-  @override
-  final List<String> participantsIds;
-  final String? lastMessage;
   @override
   final DateTime? lastUpdate;
+  @override
+  final Message lastReadMessage;
+  @override
+  final String lastMessage;
+  @override
+  final String nameChat;
+  @override
+  final List<String> participantsIds;
+  @override
+  final String? photoUrl;
+
 
   GroupChat({
+    required this.lastReadMessage,
     required this.lastUpdate,
     required this.id,
     required this.lastMessage,
-    required this.nameGroup,
-    required this.participants,
+    required this.nameChat,
     required this.participantsIds,
+    required this.photoUrl,
   });
 
-  factory GroupChat.fromJson(Map<String,dynamic> data, String id){
-    try{
-      return GroupChat(
-        lastUpdate: DateTime.tryParse(data["lastUpdate"]),
-      id: id,
-      lastMessage: data["lastMessage"], 
-      nameGroup: data["nameGroup"] as String, 
-      participants: List.from(data["participants"]), 
-      participantsIds: List.from(data["participantsIds"]));
-    } catch (e) {
-      throw ArgumentError("Não foi possivel serializar os dados: ${e.toString()}");
-    }
+  factory GroupChat.initial(List<UserIdentification> members, String nameChat, String photoUrl,){
+    return GroupChat(
+      lastReadMessage: Message.initialChat(), 
+      lastUpdate: DateTime.now(), 
+      id: "", 
+      lastMessage: "Envie a primeira mensagem", 
+      nameChat: nameChat, 
+      participantsIds: members.map((u) => u.id).toList(), photoUrl: photoUrl
+    );
   }
 
-  Map<String, dynamic> toJson(){
+
+  Map<String, dynamic> toMap() {
     return {
-      "lastUpdate": lastUpdate?.toIso8601String(),
-      "lastMessage": lastMessage,
-      "nameGroup": nameGroup,
-      "participants": participants.map((participant) => participant.toJson()).toList(),
-      "participantsIds": participantsIds
+      'chatType': 'group', // <-- O DISCRIMINADOR
+      'nameChat': nameChat, // Nome é armazenado
+      'photoUrl': photoUrl, // Foto é armazenada
+      'lastUpdate': lastUpdate?.toIso8601String(),
+      'lastMessage': lastMessage,
+      'participantsIds': participantsIds,
+      'lastReadMessage': lastReadMessage.toJson(),
     };
   }
 
+  // Factory para construir o modelo a partir de um Map
+  factory GroupChat.fromMap(Map<String, dynamic> map, String id) {
+    try {
+      return GroupChat(
+        id: id,
+        nameChat: map['nameChat'],
+        photoUrl: map['photoUrl'],
+        lastUpdate: map["lastUpdate"] != null ? DateTime.tryParse(map["lastUpdate"]) : null,
+        lastMessage: map["lastMessage"] ?? '',
+        participantsIds: List.from(map['participants']),
+        lastReadMessage: Message.fromMap(map['lastReadMessage']),
+      );
+    } catch (e) {
+      throw Exception("Erro ao mapear GroupChat: $e");
+    }
+  }
 }
