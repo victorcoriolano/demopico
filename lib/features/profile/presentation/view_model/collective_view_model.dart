@@ -1,19 +1,19 @@
 import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
-import 'package:demopico/features/profile/domain/usecases/get_collective_uc.dart';
+import 'package:demopico/features/profile/domain/usecases/get_collective_by_id_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_collectives_for_profile_uc.dart';
 import 'package:flutter/material.dart';
 
 class CollectiveViewModel extends ChangeNotifier {
   final GetCollectivesForProfileUc _getCollectivesForProfileUc;
-  final GetCollectiveUc _getTotalInformation;
+  final GetCollectiveById _getTotalInformation;
 
     static CollectiveViewModel? _instance;
     static CollectiveViewModel get instance =>
-      _instance ??= CollectiveViewModel(getColUC: GetCollectivesForProfileUc.instance, getColl: GetCollectiveUc.instance);
+      _instance ??= CollectiveViewModel(getColUC: GetCollectivesForProfileUc.instance, getColl: GetCollectiveById.instance);
 
   CollectiveViewModel({
-    required GetCollectiveUc getColl,
+    required GetCollectiveById getColl,
     required GetCollectivesForProfileUc getColUC 
   }): _getCollectivesForProfileUc = getColUC, _getTotalInformation = getColl;
 

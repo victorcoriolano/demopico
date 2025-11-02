@@ -1,6 +1,7 @@
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
+import 'package:demopico/core/common/widgets/glass_widget.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';
 import 'package:demopico/features/profile/presentation/view_model/collective_view_model.dart';
 import 'package:flutter/material.dart';
@@ -76,8 +77,10 @@ Widget _buildSliverAppBar(BuildContext context, ColetivoEntity coletivo) {
     flexibleSpace: FlexibleSpaceBar(
       title: Text(
         coletivo.nameColetivo,
-        style: const TextStyle(color: kRed, fontWeight: FontWeight.bold),
+        style: const TextStyle(color: kWhite, fontWeight: FontWeight.bold, fontSize: 30),
       ),
+      expandedTitleScale: 1.5,
+
       centerTitle: true,
       background: Stack(
         fit: StackFit.expand,
@@ -96,11 +99,8 @@ Widget _buildSliverAppBar(BuildContext context, ColetivoEntity coletivo) {
                   colors: [kBlack, Colors.transparent],
                   begin: AlignmentGeometry.bottomCenter,
                   end: AlignmentDirectional.topCenter,
-
-                  )
-                
+                )
               ),
-              child: Image.network(coletivo.logo, fit: BoxFit.cover),
             ),
           ),
           
@@ -108,40 +108,40 @@ Widget _buildSliverAppBar(BuildContext context, ColetivoEntity coletivo) {
           // 2. O Logo do Coletivo
           Positioned(
             top: 80, // Posição do logo
-            left: screenWidth / 2 - 50, // Centralizado
-            child: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: kRedAccent, width: 3), // Borda vermelha
-                boxShadow: [
-                  BoxShadow(
-                    color: kBlack.withValues(alpha: .5),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
+            left: 0, // Centralizado
+            right: 0,
+            child: Column(
+              children: [
+                Container(
+                  
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: kRedAccent, width: 3), // Borda vermelha
+                    boxShadow: [
+                      BoxShadow(
+                        color: kBlack.withValues(alpha: .5),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: CircleAvatar(
-                radius: 50,
-                backgroundColor: kMediumGrey,
-                backgroundImage: NetworkImage(coletivo.logo),
-                onBackgroundImageError: (e, s) =>
-                    const Icon(Icons.group, size: 50, color: kWhite),
-              ),
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundColor: kMediumGrey,
+                    backgroundImage: NetworkImage(coletivo.logo),
+                    onBackgroundImageError: (e, s) =>
+                        const Icon(Icons.group, size: 50, color: kWhite),
+                  ),
+                  
+                ),
+                SizedBox(height: 12,),
+                 _ColetivoStats(members: coletivo.members.length,
+                    posts: coletivo.publications.length,
+                    recs: coletivo.publications
+                        .where((p) => p.urlVideos != null && p.urlVideos!.isNotEmpty)
+                        .length,)
+              ],
             ),
-          ),
-
-          // 3. Info (Moderador) e Estatísticas
-          Positioned(
-            top: 30,
-            right: 12,
-            child: _ColetivoStats(
-                members: coletivo.members.length,
-                posts: coletivo.publications.length,
-                recs: coletivo.publications
-                    .where((p) => p.urlVideos != null && p.urlVideos!.isNotEmpty)
-                    .length,
-              ),
           ),
         ],
       ),
@@ -162,8 +162,8 @@ class _ColetivoStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         _buildStatItem(members.toString(), 'MEMBROS'),
         _buildStatItem(posts.toString(), 'POSTS'),
@@ -185,7 +185,7 @@ class _ColetivoStats extends StatelessWidget {
         ),
         Text(
           label,
-          style: const TextStyle(color: kMediumGrey, fontSize: 12),
+          style: const TextStyle(color: kWhite, fontSize: 12),
         ),
       ],
     );
@@ -227,7 +227,6 @@ class _SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint(onTap.toString());
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

@@ -46,9 +46,12 @@ class FirebaseNotificationDatasource implements INotificationDatasource<Firebase
   }
   
   @override
-  Future<void> updateNotification(FirebaseDTO notification) {
-    // TODO: implement updateNotification
-    throw UnimplementedError();
+  Future<void> updateNotification(String idUser, String notification) async {
+    final firebaseDatasource = _crudDataSource.dataSource;
+    await firebaseDatasource.collection(Collections.profiles.name)
+      .doc(idUser)
+      .collection('notifications')
+      .doc(notification).update({'isRead': true});    
   }
   
 }

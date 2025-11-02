@@ -128,10 +128,10 @@ class _CreateCollectivePageState extends State<CreateCollectivePage> {
                   colorScheme.surface.withValues(alpha: .5), // Cor do tema
                 ),
                 barHintText: "Adicionar membros",
-                onChanged: (value) {
+                onChanged: (value)  async {
                   final user =
                       context.read<AuthViewModelAccount>().user as UserEntity;
-                  listSuggetions = provider.searchUser(value, user);
+                  listSuggetions = await provider.searchUser(value, user);
                 },
                 suggestionsBuilder: (context, controllerSearch) {
                   // ... (lógica de sugestões mantida) ...
