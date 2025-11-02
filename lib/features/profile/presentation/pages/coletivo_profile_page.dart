@@ -2,9 +2,12 @@ import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';
+import 'package:demopico/features/profile/presentation/pages/collective_requests_page.dart';
 import 'package:demopico/features/profile/presentation/view_model/collective_view_model.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 
 
 class ColetivoProfilePage extends StatefulWidget {
@@ -21,16 +24,25 @@ class ColetivoProfilePage extends StatefulWidget {
 
 class _ColetivoProfilePageState extends State<ColetivoProfilePage> {
   late ColetivoEntity coletivo;
+  UserCollectiveRole rule = UserCollectiveRole.visitor;
 
   @override
   void initState() {
     coletivo = widget.initialColetivoInformation;
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async { 
-      await context.read<CollectiveViewModel>().getTotalInformationCollective(coletivo.id);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // <<< MUDANÇA AQUI >>>
+      // Além de buscar a informação, você precisa buscar o STATUS do usuário
+      // Ex: context.read<CollectiveViewModel>().checkUserRole(coletivo.id);
+      final currentUser = context.read<AuthViewModelAccount>().user;
+      
+      await context
+          .read<CollectiveViewModel>()
+          .getTotalInformationCollective(coletivo.id);
       if (mounted) {
         setState(() {
           coletivo = context.read<CollectiveViewModel>().coletivo;
+          rule = context.read<CollectiveViewModel>().checkUserRole(currentUser,coletivo);
         });
       }
     });
@@ -46,18 +58,29 @@ class _ColetivoProfilePageState extends State<ColetivoProfilePage> {
       backgroundColor: kBlack,
       body: CustomScrollView(
         slivers: [
-          _buildSliverAppBar(context, coletivo),
+          _buildSliverAppBar(context, coletivo, rule),
 
           // --- Seção de Membros ---
-          _SectionHeader(title: 'MEMBROS', cta: 'Ver todos (${coletivo.members.length})', onTap: () {},),
+          _SectionHeader(
+            title: 'MEMBROS',
+            cta: 'Ver todos (${coletivo.members.length})',
+            onTap: () {
+              // TODO: IMPLEMENT VER TODOS OS MEMBROS
+            },
+          ),
           _MembersListView(members: coletivo.members),
 
           // --- Seção de Recs (Vídeo Parts) ---
-          _SectionHeader(title: 'RECS', cta: 'Ver todas (${recs.length})',onTap: () {}),
+          _SectionHeader(
+              title: 'RECS', cta: 'Ver todas (${recs.length})', onTap: () { 
+                // TODO: IMPLEMENTAR VER TODAS AS RECS
+              }),
           _RecsListView(recs: recs),
 
           // --- Seção de Atividade (Todos os Posts) ---
-          _SectionHeader(title: 'ATIVIDADE DO COLETIVO',onTap: () {}),
+          _SectionHeader(title: 'ATIVIDADE DO COLETIVO', onTap: () {
+            // TODO: IMPLEMENTAR TODAS AS ATIVIDADES DO COLETIVO
+          }),
           _AllPostsListView(posts: coletivo.publications),
         ],
       ),
@@ -65,56 +88,51 @@ class _ColetivoProfilePageState extends State<ColetivoProfilePage> {
   }
 }
 
-Widget _buildSliverAppBar(BuildContext context, ColetivoEntity coletivo) {
+Widget _buildSliverAppBar(BuildContext context, ColetivoEntity coletivo, UserCollectiveRole rule) {
 
   return SliverAppBar(
-    expandedHeight: 320.0,
+    expandedHeight: 380.0,
     backgroundColor: kBlack,
-    pinned: true, 
+    pinned: true,
     iconTheme: const IconThemeData(color: kRed),
     flexibleSpace: FlexibleSpaceBar(
       title: Text(
         coletivo.nameColetivo,
-        style: const TextStyle(color: kWhite, fontWeight: FontWeight.bold, fontSize: 30),
+        style: const TextStyle(
+            color: kWhite, fontWeight: FontWeight.bold, fontSize: 30),
       ),
       expandedTitleScale: 1.5,
-
       centerTitle: true,
       background: Stack(
         fit: StackFit.expand,
         children: [
           ClipPath(
-            
             clipper: BottomCurveClipper(),
             child: Image.network(coletivo.logo, fit: BoxFit.cover),
           ),
           ClipPath(
-            
             clipper: BottomCurveClipper(),
             child: Container(
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [kBlack, Colors.transparent],
-                  begin: AlignmentGeometry.bottomCenter,
-                  end: AlignmentDirectional.topCenter,
-                )
-              ),
+                  gradient: LinearGradient(
+                colors: [kBlack, Colors.transparent],
+                begin: AlignmentGeometry.bottomCenter,
+                end: AlignmentDirectional.topCenter,
+              )),
             ),
           ),
-          
 
-          // 2. O Logo do Coletivo
+          // 2. O Logo do Coletivo e Stats
           Positioned(
             top: 80, // Posição do logo
-            left: 0, // Centralizado
+            left: 0,
             right: 0,
             child: Column(
               children: [
                 Container(
-                  
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(color: kRedAccent, width: 3), // Borda vermelha
+                    border: Border.all(color: kRedAccent, width: 3),
                     boxShadow: [
                       BoxShadow(
                         color: kBlack.withValues(alpha: .5),
@@ -130,14 +148,19 @@ Widget _buildSliverAppBar(BuildContext context, ColetivoEntity coletivo) {
                     onBackgroundImageError: (e, s) =>
                         const Icon(Icons.group, size: 50, color: kWhite),
                   ),
-                  
                 ),
-                SizedBox(height: 12,),
-                 _ColetivoStats(members: coletivo.members.length,
-                    posts: coletivo.publications.length,
-                    recs: coletivo.publications
-                        .where((p) => p.urlVideos != null && p.urlVideos!.isNotEmpty)
-                        .length,)
+                const SizedBox(height: 12),
+                _ColetivoStats(
+                  members: coletivo.members.length,
+                  posts: coletivo.publications.length,
+                  recs: coletivo.publications
+                      .where(
+                          (p) => p.urlVideos != null && p.urlVideos!.isNotEmpty)
+                      .length,
+                ),
+
+                const SizedBox(height: 16),
+                _CollectiveActionButtons(rule: rule,),
               ],
             ),
           ),
@@ -145,6 +168,127 @@ Widget _buildSliverAppBar(BuildContext context, ColetivoEntity coletivo) {
       ),
     ),
   );
+}
+
+class _CollectiveActionButtons extends StatelessWidget {
+  final UserCollectiveRole rule;
+  const _CollectiveActionButtons({required this.rule});
+
+  @override
+  Widget build(BuildContext context) {
+    
+    switch (rule) {
+      case UserCollectiveRole.visitor:
+        return _StyledActionButton(
+          text: 'Solicitar entrada',
+          icon: Icons.person_add_alt_1,
+          onPressed: () {
+            //TODO: IMPLEMENT SOLICITATION ENTRY 
+          },
+        );
+      case UserCollectiveRole.pending:
+        // TODO: ADICIONAR BOTÃO DE CANCELAR SOLICITAÇÃO
+        return _StyledActionButton(
+          text: 'Solicitação pendente',
+          icon: Icons.pending,
+          onPressed: null, // Desabilita o botão
+          backgroundColor: kMediumGrey, // Cor diferente para estado pendente
+        );
+      case UserCollectiveRole.member:
+        return _StyledActionButton(
+          text: 'Enviar vídeo (Rec)',
+          icon: Icons.video_call,
+          onPressed: () {
+            // TODO: LÓGICA DE UPLOAD NO COLETIVO
+          },
+        );
+      case UserCollectiveRole.moderator:
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _StyledActionButton(
+              text: 'Enviar vídeo',
+              icon: Icons.video_call,
+              onPressed: () {
+                // // TODO: LÓGICA DE UPLOAD NO COLETIVO
+              },
+            ),
+            const SizedBox(width: 12),
+            // Botão secundário (outline) para gerenciar
+            _StyledActionButton(
+              text: 'Gerenciar',
+              icon: Icons.admin_panel_settings,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ColetivoRequestsPage(),
+                  ),
+                );
+              },
+              isOutlined: true, // Estilo diferente
+            ),
+          ],
+        );
+    }
+  }
+}
+
+class _StyledActionButton extends StatelessWidget {
+  final String text;
+  final IconData icon;
+  final VoidCallback? onPressed;
+  final Color backgroundColor;
+  final bool isOutlined;
+
+  const _StyledActionButton({
+    required this.text,
+    required this.icon,
+    required this.onPressed,
+    this.backgroundColor = kRedAccent,
+    this.isOutlined = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final style = ButtonStyle(
+      backgroundColor: WidgetStateProperty.all(
+          isOutlined ? Colors.transparent : backgroundColor),
+      foregroundColor: WidgetStateProperty.all(isOutlined ? kRedAccent : kWhite),
+      padding: WidgetStateProperty.all(
+        const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      ),
+      shape: WidgetStateProperty.all(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+          side: isOutlined
+              ? const BorderSide(color: kRedAccent, width: 2)
+              : BorderSide.none,
+        ),
+      ),
+    );
+
+    // Botão desabilitado
+    if (onPressed == null) {
+      return FilledButton.icon(
+        icon: Icon(icon, size: 18),
+        label: Text(text),
+        onPressed: null,
+        style: style.copyWith(
+          backgroundColor: WidgetStateProperty.all(kMediumGrey),
+          foregroundColor: WidgetStateProperty.all(kWhite.withOpacity(0.7)),
+        ),
+      );
+    }
+
+    // Botão habilitado
+    return FilledButton.icon(
+      icon: Icon(icon, size: 18),
+      label: Text(text, style: const TextStyle(fontWeight: FontWeight.bold)),
+      onPressed: onPressed,
+      style: style,
+    );
+  }
 }
 
 class _ColetivoStats extends StatelessWidget {
@@ -190,7 +334,7 @@ class _ColetivoStats extends StatelessWidget {
   }
 }
 
-// O Clipper para fazer a curva "para dentro"
+// Clipper para fazer a curva "para dentro"
 class BottomCurveClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
@@ -265,11 +409,12 @@ class _MembersListView extends StatelessWidget {
     if (members.isEmpty) {
       return const SliverToBoxAdapter(
         child: Center(
-          child: Text('Este coletivo ainda não tem membros.', style: TextStyle(color: kMediumGrey)),
+          child: Text('Este coletivo ainda não tem membros.',
+              style: TextStyle(color: kMediumGrey)),
         ),
       );
     }
-    
+
     return SliverToBoxAdapter(
       child: SizedBox(
         height: 90,
@@ -289,9 +434,9 @@ class _MembersListView extends StatelessWidget {
                     backgroundImage: member.profilePictureUrl != null
                         ? NetworkImage(member.profilePictureUrl!)
                         : null,
-                    onBackgroundImageError: member.profilePictureUrl != null 
-                        ?  (e, s) =>
-                          const Icon(Icons.person, color: kLightGrey)
+                    onBackgroundImageError: member.profilePictureUrl != null
+                        ? (e, s) =>
+                            const Icon(Icons.person, color: kLightGrey)
                         : null,
                     child: member.profilePictureUrl == null
                         ? const Icon(Icons.person, color: kLightGrey)
@@ -314,7 +459,7 @@ class _MembersListView extends StatelessWidget {
   }
 }
 
-// Lista Horizontal de Recs (substitui "Goals")
+// Lista Horizontal de Recs
 class _RecsListView extends StatelessWidget {
   final List<Post> recs;
 
@@ -327,7 +472,8 @@ class _RecsListView extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 20),
           child: Center(
-            child: Text('Nenhuma vídeo part publicada.', style: TextStyle(color: kMediumGrey)),
+            child: Text('Nenhuma vídeo part publicada.',
+                style: TextStyle(color: kMediumGrey)),
           ),
         ),
       );
@@ -360,17 +506,19 @@ class _RecsListView extends StatelessWidget {
                       Image.network(
                         thumbnailUrl,
                         fit: BoxFit.cover,
-                        color: kBlack.withValues(alpha: 0.3), // Escurece a imagem
+                        color:
+                            kBlack.withValues(alpha: 0.3), // Escurece a imagem
                         colorBlendMode: BlendMode.darken,
                       )
                     else
                       Container(color: kMediumGrey.withValues(alpha: 0.3)),
-                    
+
                     // Ícone de "Play"
                     const Center(
-                      child: Icon(Icons.play_circle_outline, color: kWhite, size: 50),
+                      child: Icon(Icons.play_circle_outline,
+                          color: kWhite, size: 50),
                     ),
-                    
+
                     // Descrição
                     Positioned(
                       bottom: 8,
@@ -382,7 +530,10 @@ class _RecsListView extends StatelessWidget {
                           color: kWhite,
                           fontWeight: FontWeight.bold,
                           shadows: [
-                            Shadow(color: kBlack, blurRadius: 4, offset: Offset(0, 1))
+                            Shadow(
+                                color: kBlack,
+                                blurRadius: 4,
+                                offset: Offset(0, 1))
                           ],
                         ),
                         maxLines: 2,
@@ -409,13 +560,15 @@ class _AllPostsListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (posts.isEmpty) {
-      return const SliverFillRemaining( // Ocupa o resto da tela
+      return const SliverFillRemaining(
+        // Ocupa o resto da tela
         child: Center(
-          child: Text('Nenhuma atividade no coletivo.', style: TextStyle(color: kMediumGrey)),
+          child: Text('Nenhuma atividade no coletivo.',
+              style: TextStyle(color: kMediumGrey)),
         ),
       );
     }
-    
+
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
@@ -472,14 +625,14 @@ class _PostCardWidget extends StatelessWidget {
               ],
             ),
           ),
-          
+
           // Imagem do Post
           if (thumbnailUrl != null)
             AspectRatio(
               aspectRatio: 16 / 9,
               child: Image.network(thumbnailUrl, fit: BoxFit.cover),
             ),
-            
+
           // Descrição
           Padding(
             padding: const EdgeInsets.all(12),
