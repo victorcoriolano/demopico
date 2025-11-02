@@ -1,4 +1,5 @@
 import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/core/common/widgets/image_validator_widget.dart';
 import 'package:demopico/features/mapa/presentation/controllers/add_pico_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,7 @@ class QuartaTela extends StatefulWidget {
 class _QuartaTelaState extends State<QuartaTela> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+
 
   @override
   void initState() {
@@ -100,12 +102,15 @@ class _QuartaTelaState extends State<QuartaTela> {
                   onChanged: (value) => provider.descricao = value,
                 ),
                 const SizedBox(height: 20),
+              Visibility(
+                  visible: provider.isLoading,
+                  child:  ImageValidatorWidget()),
                 // Botão para anexar imagens
                 Visibility(
-                  visible: provider.files.length <= 3,
+                  visible: provider.files.length <= 3 && provider.isLoading == false,
                   child: GestureDetector(
-                    onTap: provider.files.length <= 3
-                        ? () async => provider.pickImages()
+                    onTap:  provider.files.length <= 3
+                        ? ()  async => provider.pickImages() 
                         : null,
                     child: const Column(
                       children: [
@@ -120,6 +125,7 @@ class _QuartaTelaState extends State<QuartaTela> {
                     ),
                   ),
                 ),
+                  
                 Visibility(
                   visible: provider.files.isNotEmpty,
                   child: Row(
@@ -151,6 +157,7 @@ class _QuartaTelaState extends State<QuartaTela> {
                                       ),
                                     ),
                                   ),
+                                  
                                   Positioned(
                                     top: -10,
                                     right: -10,
