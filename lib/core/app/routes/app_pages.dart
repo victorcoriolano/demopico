@@ -10,7 +10,6 @@
   import 'package:demopico/features/mapa/presentation/pages/my_spots_page.dart';
   import 'package:demopico/features/profile/presentation/bidings/auth_biding.dart';
   import 'package:demopico/features/profile/presentation/pages/chat_room_page.dart';
-  import 'package:demopico/features/profile/presentation/pages/create_colective_page.dart';
   import 'package:demopico/features/profile/presentation/pages/create_post_page.dart';
   import 'package:demopico/features/profile/presentation/pages/edit_profile_page.dart';
   import 'package:demopico/features/profile/presentation/pages/my_friends_page.dart';

@@ -1,5 +1,4 @@
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
-import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/core/common/media_management/models/file_model.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/custom_buttons.dart';
 import 'package:demopico/features/profile/domain/models/profile_user.dart';
@@ -8,7 +7,6 @@ import 'package:demopico/features/profile/presentation/view_model/create_collect
 import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class CreateCollectivePage extends StatefulWidget {
@@ -131,7 +129,7 @@ class _CreateCollectivePageState extends State<CreateCollectivePage> {
                 onChanged: (value)  async {
                   final user =
                       context.read<AuthViewModelAccount>().user as UserEntity;
-                  listSuggetions = await provider.searchUser(value, user);
+                  listSuggetions = provider.searchUser(value, user);
                 },
                 suggestionsBuilder: (context, controllerSearch) {
                   // ... (lógica de sugestões mantida) ...

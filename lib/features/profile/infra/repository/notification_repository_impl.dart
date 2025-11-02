@@ -2,11 +2,8 @@ import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto_mapper.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_notification_datasource.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_notification_repository.dart';
-import 'package:demopico/features/profile/domain/interfaces/i_profile_data_source.dart';
 import 'package:demopico/features/profile/domain/models/notification.dart';
-import 'package:demopico/features/profile/domain/models/profile_user.dart';
 import 'package:demopico/features/profile/infra/datasource/firebase_notification_datasource.dart';
-import 'package:demopico/features/profile/infra/datasource/firebase_profile_datasource.dart';
 
 class NotificationRepositoryImpl implements INotificationRepository {
     static NotificationRepositoryImpl? _instance;

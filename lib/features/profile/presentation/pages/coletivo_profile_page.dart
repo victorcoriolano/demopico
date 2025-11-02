@@ -1,7 +1,6 @@
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
-import 'package:demopico/core/common/widgets/glass_widget.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';
 import 'package:demopico/features/profile/presentation/view_model/collective_view_model.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +66,6 @@ class _ColetivoProfilePageState extends State<ColetivoProfilePage> {
 }
 
 Widget _buildSliverAppBar(BuildContext context, ColetivoEntity coletivo) {
-  final double screenWidth = MediaQuery.of(context).size.width;
 
   return SliverAppBar(
     expandedHeight: 320.0,
