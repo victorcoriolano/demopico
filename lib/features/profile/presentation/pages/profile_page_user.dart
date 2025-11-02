@@ -1,8 +1,10 @@
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/custom_buttons.dart';
 import 'package:demopico/features/profile/domain/models/profile_user.dart';
 import 'package:demopico/features/profile/domain/models/relationship.dart';
+import 'package:demopico/features/profile/presentation/view_model/chat_list_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
 import 'package:demopico/features/profile/presentation/object_for_only_view/suggestion_profile.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_posts_widget.dart';
@@ -190,7 +192,10 @@ class _ProfilePageUserState extends State<ProfilePageUser>
                       textButton: _isMyFriend ? "Desconectar" : "Conectar"),
                   ElevatedButton.icon(
                     onPressed: () {
-                      // TODO: implementar criação de chat
+                      final currentUserIdentification = context.read<AuthViewModelAccount>().userIdentification;
+                      final otherUser = UserIdentification(
+                        id: profile.userID, name: profile.displayName, profilePictureUrl: profile.avatar);
+                      if (currentUserIdentification != null) context.read<ChatListViewModel>().createChat(currentUserIdentification, otherUser);
                     },
                     icon: Icon(Icons.chat_outlined),
                     style: CustomElevatedButton.formatation,
