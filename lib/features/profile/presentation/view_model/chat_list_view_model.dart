@@ -20,9 +20,9 @@ class ChatListViewModel extends ChangeNotifier {
 
   
 
-  Future<void> fetchChats(String idUser) async {
+  Future<void> fetchChats(UserIdentification userIdenti) async {
     try {
-      chats = await _repository.getChatForUser(idUser);
+      chats = await _repository.getChatForUser(userIdenti);
       debugPrint("chats: ${chats.length}");
       stateVM = StateViewModel.success;
     } catch (e, st){
@@ -36,6 +36,8 @@ class ChatListViewModel extends ChangeNotifier {
 
   Future<Chat?> createChat(UserIdentification currentUser, UserIdentification otherUser) async {
     try {
+      if (chats.isEmpty) await fetchChats(currentUser);
+      if (chats.any((chat) => chat.participantsIds.contains(otherUser.id))) return chats.firstWhere((chat) => chat.participantsIds.contains(otherUser.id));
       final createChat = await _repository.createChat(currentUser, otherUser);
       chats.add(createChat);
       return createChat;
