@@ -1,5 +1,7 @@
 import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
+import 'package:demopico/features/profile/domain/usecases/get_all_collectives_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_collective_by_id_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_collectives_for_profile_uc.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:flutter/material.dart';
 class CollectiveViewModel extends ChangeNotifier {
   final GetCollectivesForProfileUc _getCollectivesForProfileUc;
   final GetCollectiveById _getTotalInformation;
+  final GetAllCollectivesUc _getAllCollectivesUc;
 
     static CollectiveViewModel? _instance;
     static CollectiveViewModel get instance =>
@@ -15,9 +18,13 @@ class CollectiveViewModel extends ChangeNotifier {
   CollectiveViewModel({
     required GetCollectiveById getColl,
     required GetCollectivesForProfileUc getColUC 
-  }): _getCollectivesForProfileUc = getColUC, _getTotalInformation = getColl;
+  }): 
+    _getCollectivesForProfileUc = getColUC, 
+    _getTotalInformation = getColl,
+    _getAllCollectivesUc = GetAllCollectivesUc();
 
-  List<ColetivoEntity> collectives = [];
+  List<ColetivoEntity> userCollectives = [];
+  List<ColetivoEntity> allCollectives = [];
   late ColetivoEntity coletivo;
   bool isLoading = false;
 
@@ -25,7 +32,7 @@ class CollectiveViewModel extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
     try {
-      collectives = await _getCollectivesForProfileUc.execute(id);
+      userCollectives = await _getCollectivesForProfileUc.execute(id);
 
     }on Failure catch (failure) {
       FailureServer.showError(failure);
@@ -43,4 +50,23 @@ class CollectiveViewModel extends ChangeNotifier {
       FailureServer.showError(failure);
     } 
   }
+
+  UserCollectiveRole checkUserRole(User user, ColetivoEntity coletivo){
+    switch (user){
+      case UserEntity():
+        return coletivo.ruleForUser(user.id);
+      case AnonymousUserEntity():
+        return UserCollectiveRole.visitor;
+    }
+  }
+
+
+  Future<void> getAllCollectives() async {
+    try {
+      allCollectives = await _getAllCollectivesUc.execute();
+    } on Failure catch (e) {
+      FailureServer.showError(e);
+    }
+  }
+
 }
