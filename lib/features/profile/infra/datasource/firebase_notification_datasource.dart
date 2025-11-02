@@ -34,9 +34,15 @@ class FirebaseNotificationDatasource implements INotificationDatasource<Firebase
   }
 
   @override
-  Stream<List<FirebaseDTO>> watchNotifications(String idUser) {
-    // TODO: implement watchNotifications
-    throw UnimplementedError();
+  Stream<List<FirebaseDTO>> watchNotifications(String idUser) async*{
+    final firebaseDatasource = _crudDataSource.dataSource;
+    await for (var snapshot in firebaseDatasource.collection(Collections.profiles.name)
+      .doc(idUser)
+      .collection('notifications')
+      .snapshots()) {
+        final notifications = snapshot.docs.map((doc) => FirebaseDTO(data: doc.data(), id: doc.id)).toList();
+        yield notifications;
+      } 
   }
   
   @override
