@@ -3,6 +3,7 @@ import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/core/common/mappers/i_mapper_dto.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
+import 'package:demopico/features/profile/domain/models/chat.dart';
 import 'package:demopico/features/profile/domain/models/notification.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';
 import 'package:demopico/features/user/domain/models/user_model.dart';
@@ -31,6 +32,40 @@ class FirebaseDtoMapper<Model> implements IMapperDto<Model, FirebaseDTO> {
     return FirebaseDTO(id: getId(model), data: toMap(model));
   }
 
+}
+
+FirebaseDtoMapper<Chat> createChatMapper(UserIdentification currentUser) {
+  return FirebaseDtoMapper<Chat>(
+
+    getId: (Chat model) => model.id,
+
+    // 2. O 'toMap' usa um 'switch' de tipo para chamar o 'toMap' correto
+    toMap: (Chat model) {
+      switch (model.runtimeType) {
+        case Conversation _ :
+          return (model as Conversation).toMap();
+        case GroupChat _ :
+          return (model as GroupChat).toMap();
+        default:
+          throw Exception("Tipo de Chat desconhecido: ${model.runtimeType}");
+      }
+    },
+
+    // 3. O 'fromJson' usa o campo 'chatType' para chamar o 'fromMap' correto
+    fromJson: (Map<String, dynamic> map, String id) {
+      final String chatType = map['chatType'] as String? ?? '';
+
+      switch (chatType) {
+        case 'conversation':
+          // O fromMap da Conversation precisa do currentUser
+          return Conversation.fromMap(map, id, currentUser);
+        case 'group':
+          return GroupChat.fromMap(map, id);
+        default:
+          throw Exception("Campo 'chatType' desconhecido ou ausente: $chatType");
+      }
+    },
+  );
 }
 
 
