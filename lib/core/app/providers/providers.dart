@@ -27,6 +27,7 @@ import 'package:demopico/features/profile/presentation/view_model/chat_room_view
 import 'package:demopico/features/profile/presentation/view_model/collective_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/create_collective_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
+import 'package:demopico/features/profile/presentation/view_model/notification_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/post_provider.dart';
 import 'package:demopico/features/profile/presentation/view_model/screen_provider.dart';
 import 'package:demopico/features/user/domain/enums/auth_state.dart';
@@ -47,8 +48,9 @@ final myProviders = [
   // Provider de perfil
   ChangeNotifierProvider(create: (_) => ProfileViewModel.getInstance),
   ChangeNotifierProvider(create: (_) => ChatListViewModel(repository: ChatRepository.instance)),
-  ChangeNotifierProvider(create: (_) => ChatRoomViewModel(repository: ChatRepository.instance)),
+  ChangeNotifierProvider(create: (_) => ChatRoomViewModel()),
   ChangeNotifierProvider(create: (_) => EditProfileViewModel.instance),
+  ChangeNotifierProvider(create: (_) => NotificationViewModel()),
   
   
   
