@@ -43,4 +43,5 @@ enum TypeNotification {
   newLikeOnPub,
   newCommentOnPub,  
   newMessage,
+  newUpdateOnCollective,
 }
