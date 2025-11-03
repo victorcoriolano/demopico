@@ -1,11 +1,13 @@
 import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/features/profile/presentation/view_model/collective_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ColetivoRequestsPage extends StatefulWidget {
-  const ColetivoRequestsPage({super.key});
+  final ColetivoEntity coletivo;
+  const ColetivoRequestsPage({super.key , required this.coletivo});
 
   @override
   State<ColetivoRequestsPage> createState() => _ColetivoRequestsPageState();
@@ -16,24 +18,12 @@ class _ColetivoRequestsPageState extends State<ColetivoRequestsPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // TODO: context.read<CollectiveViewModel>().fetchPendingRequests();
+      context.read<CollectiveViewModel>().fetchPendingRequests(widget.coletivo.entryRequests);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
-    // --- Simulação de dados ---
-    final requests = [
-      UserIdentification(id: '1', name: 'João Silva', profilePictureUrl: null),
-      UserIdentification(
-          id: '2',
-          name: 'Maria Clara',
-          profilePictureUrl: 'https://exemplo.com/foto.png'),
-      UserIdentification(id: '3', name: 'Pedro Antunes', profilePictureUrl: null),
-    ];
-    // --- Fim da Simulação ---
-
     return Scaffold(
       backgroundColor: kBlack,
       appBar: AppBar(
@@ -43,11 +33,11 @@ class _ColetivoRequestsPageState extends State<ColetivoRequestsPage> {
       ),
       body: Consumer<CollectiveViewModel>(
         builder: (context, vm, child) {
-          // if (vm.isLoading) {
-          //   return const Center(child: CircularProgressIndicator(color: kRedAccent));
-          // }
+          if (vm.isLoading) {
+             return const Center(child: CircularProgressIndicator(color: kRedAccent));
+          }
 
-          if (requests.isEmpty) {
+          if (vm.requests.isEmpty) {
             return const Center(
               child: Text(
                 'Nenhuma solicitação pendente.',
@@ -58,9 +48,9 @@ class _ColetivoRequestsPageState extends State<ColetivoRequestsPage> {
 
           // A lista de solicitações
           return ListView.builder(
-            itemCount: requests.length,
+            itemCount: vm.requests.length,
             itemBuilder: (context, index) {
-              final user = requests[index];
+              final user = vm.requests[index];
               return _RequestTile(
                 user: user,
                 onAccept: () {
