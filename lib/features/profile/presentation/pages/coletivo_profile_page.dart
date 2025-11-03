@@ -30,16 +30,15 @@ class _ColetivoProfilePageState extends State<ColetivoProfilePage> {
   void initState() {
     coletivo = widget.initialColetivoInformation;
     super.initState();
+    final currentUser = context.read<AuthViewModelAccount>().user;  
+    rule = context.read<CollectiveViewModel>().checkUserRole(currentUser,coletivo);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final currentUser = context.read<AuthViewModelAccount>().user;
-      
       await context
           .read<CollectiveViewModel>()
           .getTotalInformationCollective(coletivo.id);
       if (mounted) {
         setState(() {
           coletivo = context.read<CollectiveViewModel>().coletivo;
-          rule = context.read<CollectiveViewModel>().checkUserRole(currentUser,coletivo);
         });
       }
     });
@@ -47,6 +46,7 @@ class _ColetivoProfilePageState extends State<ColetivoProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    
     final List<Post> recs = coletivo.publications
         .where((p) => p.urlVideos != null && p.urlVideos!.isNotEmpty)
         .toList();
@@ -187,10 +187,9 @@ class _CollectiveActionButtonsState extends State<CollectiveActionButtons> {
           text: 'Solicitar entrada',
           icon: Icons.person_add_alt_1,
           onPressed: () async {
-            final idUser = context.read<AuthViewModelAccount>().userIdentification?.id;
-            if (idUser != null){
-
-               await context.read<CollectiveViewModel>().requestEntry(idUser);
+            final useridentification = context.read<AuthViewModelAccount>().userIdentification;
+            if (useridentification != null){
+               await context.read<CollectiveViewModel>().requestEntry(useridentification);
                 setState(() {
                 });
               }
