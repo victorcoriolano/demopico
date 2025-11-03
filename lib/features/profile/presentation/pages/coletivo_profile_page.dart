@@ -31,9 +31,6 @@ class _ColetivoProfilePageState extends State<ColetivoProfilePage> {
     coletivo = widget.initialColetivoInformation;
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // <<< MUDANÇA AQUI >>>
-      // Além de buscar a informação, você precisa buscar o STATUS do usuário
-      // Ex: context.read<CollectiveViewModel>().checkUserRole(coletivo.id);
       final currentUser = context.read<AuthViewModelAccount>().user;
       
       await context
@@ -160,7 +157,7 @@ Widget _buildSliverAppBar(BuildContext context, ColetivoEntity coletivo, UserCol
                 ),
 
                 const SizedBox(height: 16),
-                _CollectiveActionButtons(rule: rule,),
+                CollectiveActionButtons(rule: rule, coletivo: coletivo,),
               ],
             ),
           ),
@@ -170,20 +167,33 @@ Widget _buildSliverAppBar(BuildContext context, ColetivoEntity coletivo, UserCol
   );
 }
 
-class _CollectiveActionButtons extends StatelessWidget {
+class CollectiveActionButtons extends StatefulWidget {
   final UserCollectiveRole rule;
-  const _CollectiveActionButtons({required this.rule});
+  final ColetivoEntity coletivo;
+  const CollectiveActionButtons({super.key, required this.rule, required this.coletivo});
 
+  @override
+  State<CollectiveActionButtons> createState() => _CollectiveActionButtonsState();
+}
+
+class _CollectiveActionButtonsState extends State<CollectiveActionButtons> {
+  
   @override
   Widget build(BuildContext context) {
     
-    switch (rule) {
+    switch (widget.rule) {
       case UserCollectiveRole.visitor:
         return _StyledActionButton(
           text: 'Solicitar entrada',
           icon: Icons.person_add_alt_1,
-          onPressed: () {
-            //TODO: IMPLEMENT SOLICITATION ENTRY 
+          onPressed: () async {
+            final idUser = context.read<AuthViewModelAccount>().userIdentification?.id;
+            if (idUser != null){
+
+               await context.read<CollectiveViewModel>().requestEntry(idUser);
+                setState(() {
+                });
+              }
           },
         );
       case UserCollectiveRole.pending:
@@ -222,7 +232,7 @@ class _CollectiveActionButtons extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const ColetivoRequestsPage(),
+                    builder: (context) => ColetivoRequestsPage(coletivo: widget.coletivo,),
                   ),
                 );
               },
