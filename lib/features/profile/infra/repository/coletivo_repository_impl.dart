@@ -25,13 +25,6 @@ class ColetivoRepositoryImpl implements IColetivoRepository{
     postDatasource: FirebasePostDatasource.getInstance,
     userDatasource: UserFirebaseDataSource.getInstance, );  
 
-
-
-  @override
-  Future<void> addUserOnCollective(UserIdentification user) {
-    return _datasource.addUserOnCollective(userIdentificationMapper.toDTO(user));
-  }
-
   @override
   Future<ColetivoEntity> createColetivo(ColetivoEntity coletivo) async {
     final collectiveDTO = await _datasource.createColetivo(coletivoDtoMapper.toDTO(coletivo));
@@ -39,16 +32,8 @@ class ColetivoRepositoryImpl implements IColetivoRepository{
   }
 
   @override
-  Future<void> removeUser(UserIdentification user) {
-    // TODO: implement removeUser
-    throw UnimplementedError();
-  }
-
-
-  @override
-  Future<void> updateColetivo(ColetivoEntity coletivo) {
-    // TODO: implement updateColetivo
-    throw UnimplementedError();
+  Future<void> updateColetivo(ColetivoEntity coletivo) async {
+    return await _datasource.updateColetivo(coletivoDtoMapper.toDTO(coletivo));
   }
   
   @override
