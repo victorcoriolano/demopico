@@ -29,25 +29,16 @@ class NotSearchingView extends StatelessWidget {
                         ),
                       ),
                       
-                      const SizedBox(height: 18,),
+                      const SizedBox(height: 10,),
                       
                       SizedBox(
                         height: 150,
                         child: Consumer<CollectiveViewModel>(
                           builder: (context, vm, child) {
-                            return FutureBuilder(
-                              future: vm.getAllCollectives(),
-                              builder: (context, asyncSnapshot) {
-                                if (asyncSnapshot.connectionState == ConnectionState.waiting){
-                                  return Center(child: CircularProgressIndicator(),);
-                                }
-                                if (asyncSnapshot.hasError){
-                                  debugPrint(asyncSnapshot.error.toString());
-                                  return Center(child: Text("Não foi possível carregar os coletivos tente novamente mais tarde"),);
-                                }
-                                return  Expanded(child: CollectiveListWidget(coletivos: vm.allCollectives,));
-                              }
-                            );
+                            if (vm.isLoading){
+                              return Center(child: CircularProgressIndicator(),);
+                            }
+                            return  CollectiveListWidget(coletivos: vm.allCollectives,);
                           }
                         ),
                       ),
