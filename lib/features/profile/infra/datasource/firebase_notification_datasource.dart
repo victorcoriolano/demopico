@@ -39,6 +39,7 @@ class FirebaseNotificationDatasource implements INotificationDatasource<Firebase
     await for (var snapshot in firebaseDatasource.collection(Collections.profiles.name)
       .doc(idUser)
       .collection('notifications')
+      .orderBy('timestamp', descending: true)
       .snapshots()) {
         final notifications = snapshot.docs.map((doc) => FirebaseDTO(data: doc.data(), id: doc.id)).toList();
         yield notifications;

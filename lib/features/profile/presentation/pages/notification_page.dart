@@ -1,5 +1,6 @@
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/custom_buttons.dart';
 import 'package:demopico/features/profile/domain/models/notification.dart';
+import 'package:demopico/features/profile/presentation/pages/coletivo_profile_page.dart';
 import 'package:demopico/features/profile/presentation/view_model/notification_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/screen_provider.dart';
 import 'package:flutter/material.dart';
@@ -42,10 +43,12 @@ class _NotificationPageState extends State<NotificationPage> {
                 }
                 
                 return ListView.builder(
+                  
                   itemCount: vm.notifications.length,
                   itemBuilder: (context, item) {
                     final notification = vm.notifications[item];
                     return ListTile(
+                      
                       title: Text(
                         notification.message, 
                         style: TextStyle(
@@ -68,6 +71,7 @@ class _NotificationPageState extends State<NotificationPage> {
                               context.read<ScreenProvider>().setIndex(2);
                               Get.back();
                             } , textButton: "Ver Mensagem"),
+                          TypeNotification.newUpdateOnCollective => Icon(Icons.check)
                         },
                       subtitle: Text(
                         '${notification.timestamp.day}/${notification.timestamp.month}/${notification.timestamp.year}   ${notification.timestamp.hour}:${notification.timestamp.minute.toString().padLeft(2, '0')}',
