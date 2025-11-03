@@ -2,6 +2,7 @@ import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
+import 'package:demopico/features/profile/domain/usecases/accept_entry_on_collective_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_all_collectives_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_collective_by_id_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_collectives_for_profile_uc.dart';
@@ -15,11 +16,12 @@ class CollectiveViewModel extends ChangeNotifier {
   final GetAllCollectivesUc _getAllCollectivesUc;
   final GetUsersByIds _getUsersByIds;
   final RequestEntryOnCollectiveUc _requestEntryOnCollectiveUc;
+  final AcceptEntryOnCollectiveUc _acceptEntryOnCollectiveUc;
 
 
-    static CollectiveViewModel? _instance;
-    static CollectiveViewModel get instance =>
-      _instance ??= CollectiveViewModel(getColUC: GetCollectivesForProfileUc.instance, getColl: GetCollectiveById.instance);
+  static CollectiveViewModel? _instance;
+  static CollectiveViewModel get instance =>
+    _instance ??= CollectiveViewModel(getColUC: GetCollectivesForProfileUc.instance, getColl: GetCollectiveById.instance);
 
   CollectiveViewModel({
     required GetCollectiveById getColl,
@@ -29,7 +31,8 @@ class CollectiveViewModel extends ChangeNotifier {
     _getTotalInformation = getColl,
     _getAllCollectivesUc = GetAllCollectivesUc(),
     _getUsersByIds = GetUsersByIds(),
-    _requestEntryOnCollectiveUc = RequestEntryOnCollectiveUc();
+    _requestEntryOnCollectiveUc = RequestEntryOnCollectiveUc(),
+    _acceptEntryOnCollectiveUc = AcceptEntryOnCollectiveUc();
 
   List<ColetivoEntity> userCollectives = [];
   List<ColetivoEntity> allCollectives = [];
@@ -82,13 +85,13 @@ class CollectiveViewModel extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
     }
-
   }
 
   Future<void> fetchPendingRequests(List<String> ids) async {
     isLoading = true;
     notifyListeners();
     try {
+      if (ids.isEmpty) return;
       if (requests.isEmpty) requests = await _getUsersByIds.execute(ids);
     } on Failure catch (e) {
       FailureServer.showError(e);
@@ -98,19 +101,29 @@ class CollectiveViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> requestEntry(String idUser) async {
+  Future<void> requestEntry(UserIdentification user) async {
     try {
-      if (coletivo.entryRequests.contains(idUser)) return;
-      final listEntryRequests = coletivo.entryRequests;
-      debugPrint('lista atual: ${coletivo.entryRequests.length}');
-      listEntryRequests.add(idUser);
-      coletivo = coletivo.copyWith(entryRequests: listEntryRequests);
-      debugPrint('lista alterada: ${coletivo.entryRequests.length}');
-      await _requestEntryOnCollectiveUc.execute(idCollective: coletivo.id, newEntryRequestList: listEntryRequests);
+      coletivo = await _requestEntryOnCollectiveUc.execute(coletivo: coletivo, user: user);
       notifyListeners();
     } on Failure catch (e){
       FailureServer.showError(e);
     }
   }
+
+  Future<void> acceptUserOnCollective(UserIdentification user) async {
+    isLoading = true;
+    notifyListeners();
+    try {
+      coletivo = await _acceptEntryOnCollectiveUc.execute(user, coletivo);
+      requests.remove(user);
+      notifyListeners();
+    } on Failure catch (e) {
+      FailureServer.showError(e);
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
 
 }
