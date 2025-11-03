@@ -2,7 +2,7 @@ import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';
-import 'package:demopico/features/profile/presentation/pages/collective_requests_page.dart';
+import 'package:demopico/features/profile/presentation/pages/collective_manager_page.dart';
 import 'package:demopico/features/profile/presentation/view_model/collective_view_model.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
@@ -231,7 +231,7 @@ class _CollectiveActionButtonsState extends State<CollectiveActionButtons> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ColetivoRequestsPage(coletivo: widget.coletivo,),
+                    builder: (context) => ColetivoManagerPage(coletivo: widget.coletivo,),
                   ),
                 );
               },
