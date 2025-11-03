@@ -54,7 +54,7 @@ class _ColetivoRequestsPageState extends State<ColetivoRequestsPage> {
               return _RequestTile(
                 user: user,
                 onAccept: () {
-                  // TODO: Lógica de aceitar
+                  vm.acceptUserOnCollective(user);
                 },
                 onDeny: () {
                   // TODO: Lógica de recusar
