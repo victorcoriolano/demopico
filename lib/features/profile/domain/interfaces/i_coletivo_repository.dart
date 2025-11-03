@@ -9,4 +9,5 @@ abstract interface class IColetivoRepository {
   Future<void> updateColetivo(ColetivoEntity coletivo);
   Future<void> addUserOnCollective(UserIdentification user);
   Future<void> removeUser(UserIdentification user);
-} 
+  Future<void> requestEntryOnCollective({required String nameField, required String idCollective, required List<String> newEntryRequestList});
+ } 

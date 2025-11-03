@@ -8,12 +8,17 @@ import 'package:demopico/features/profile/domain/interfaces/i_coletivo_datasourc
 
 class FirebaseCollectiveDatasource implements IColetivoDatasource {
   final ICrudDataSource<FirebaseDTO, FirebaseFirestore> _crudBoilerplate;
-    static FirebaseCollectiveDatasource? _instance;
+  static FirebaseCollectiveDatasource? _instance;
 
-    FirebaseCollectiveDatasource({ required ICrudDataSource<FirebaseDTO, FirebaseFirestore> crudDatasoure}):_crudBoilerplate = crudDatasoure;
-    static FirebaseCollectiveDatasource get instance =>
-      _instance ??= FirebaseCollectiveDatasource(crudDatasoure: CrudFirebase(collection: Collections.collectives, firestore: Firestore.getInstance));
-  
+  FirebaseCollectiveDatasource(
+      {required ICrudDataSource<FirebaseDTO, FirebaseFirestore> crudDatasoure})
+      : _crudBoilerplate = crudDatasoure;
+  static FirebaseCollectiveDatasource get instance =>
+      _instance ??= FirebaseCollectiveDatasource(
+          crudDatasoure: CrudFirebase(
+              collection: Collections.collectives,
+              firestore: Firestore.getInstance));
+
   @override
   Future<void> addUserOnCollective(FirebaseDTO user) {
     // TODO: implement addUserOnCollective
@@ -37,24 +42,27 @@ class FirebaseCollectiveDatasource implements IColetivoDatasource {
   }
 
   @override
-  Future<void> requestEntry(FirebaseDTO user) {
-    // TODO: implement requestEntry
-    throw UnimplementedError();
-  }
-
-  @override
   Future<void> updateColetivo(FirebaseDTO coletivo) async {
     await _crudBoilerplate.update(coletivo);
   }
-  
+
   @override
   Future<List<FirebaseDTO>> getCollectiveForProfile(String idProfile) async {
-     return await _crudBoilerplate.readArrayContains(field: "members", value: idProfile);
+    return await _crudBoilerplate.readArrayContains(
+        field: "members", value: idProfile);
   }
-  
+
   @override
   Future<List<FirebaseDTO>> getAllCollectives() async {
     return await _crudBoilerplate.readAll();
   }
 
+  @override
+  Future<void> requestEntryOnCollective({
+    required String idCollective,
+    required String nameField,
+    required List<String> newEntryRequestList,
+  }) async {
+    return await _crudBoilerplate.updateField(idCollective, nameField, newEntryRequestList);
+  }
 }

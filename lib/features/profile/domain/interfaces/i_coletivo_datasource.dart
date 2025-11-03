@@ -8,5 +8,6 @@ abstract interface class IColetivoDatasource {
     Future<void> updateColetivo(FirebaseDTO coletivo);
     Future<void> addUserOnCollective(FirebaseDTO user);
     Future<void> removeUser(FirebaseDTO user);
-    Future<void> requestEntry(FirebaseDTO user);
+    Future<void> requestEntryOnCollective({required String nameField, required String idCollective, required List<String> newEntryRequestList});
+ 
 }

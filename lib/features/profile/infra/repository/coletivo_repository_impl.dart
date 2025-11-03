@@ -104,6 +104,11 @@ class ColetivoRepositoryImpl implements IColetivoRepository{
   Future<List<ColetivoEntity>> getAllCollectives() async {
     final collectivesDatasource = await _datasource.getAllCollectives();
     return collectivesDatasource.map((coll) => coletivoDtoMapper.toModel(coll)).toList();
+  }
+  
+  @override
+  Future<void> requestEntryOnCollective({required String nameField, required String idCollective, required List<String> newEntryRequestList}) {
+    return _datasource.requestEntryOnCollective(nameField: nameField, idCollective: idCollective, newEntryRequestList: newEntryRequestList);
   } 
   
 }
