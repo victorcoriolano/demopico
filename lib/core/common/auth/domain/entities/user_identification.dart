@@ -25,4 +25,9 @@ class UserIdentification {
       "profilePictureUrl": profilePictureUrl,
     };
   }
+
+  @override
+  String toString() {
+    return 'UserIdentification(id: $id, name: $name, profilePictureUrl: $profilePictureUrl)';
+  }
 }
