@@ -1,3 +1,4 @@
+import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/core/common/auth/domain/usecases/reset_password_uc.dart';
@@ -58,9 +59,9 @@ class AuthViewModelAccount extends ChangeNotifier {
     if(isSent){
       Get.snackbar(
       'Atenção',
-      'Um link para redefinir sua senha foi enviado para seu e-mail. Por favor, verifique sua caixa de entrada e também a caixa de spam.',
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.blueAccent,
+      'Um link para redefinir sua senha foi enviado para seu e-mail. Por favor, verifique sua caixa de entrada e se necessario a caixa de spam.',
+      snackPosition: SnackPosition.TOP,
+      backgroundColor: kRed,
       colorText: Colors.white,
       dismissDirection: DismissDirection.down
       );
