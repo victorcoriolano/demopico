@@ -55,23 +55,22 @@ class ChatListViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> createOrGetCollectiveChat({required 
+  Future<Chat?> createOrGetCollectiveChat({required 
     UserIdentification currentUser, required 
     List<UserIdentification> members,required String nameChat,required String photo}) async {
       debugPrint("chamou o método");
       try{
         if (chats.isEmpty) await fetchChats(currentUser);
-      if (chats.any((chat) => chat.participantsIds.toSet().containsAll(members.map((m) => m.id).toList()))) return;
+      if (chats.any((chat) => chat.nameChat == nameChat)) return (chats.firstWhere((chat) => chat.nameChat == nameChat) as GroupChat);
       debugPrint('grupo não encontrado - criando um novo');
       final chat = GroupChat.initial(members, nameChat, photo);
-      final createdChat = await _repository.createChat(chat, currentUser);
-      debugPrint(createdChat.toString());
-
-      chats.add(createdChat);
-      notifyListeners();
+      await _repository.createChat(chat, currentUser);
+      chats.add(chat);
+      return chat;
 
       } on Failure catch (e){
         FailureServer.showError(e);
+        return null;
       }
   }
 }
