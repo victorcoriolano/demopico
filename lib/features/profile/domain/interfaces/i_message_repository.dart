@@ -8,4 +8,7 @@ abstract class ImessageRepository {
     Future<Chat> createChat(Chat chat, UserIdentification currentUser );
     Future<Message> sendMessage(String idChat, Message message);
     Future<void> readMessage(String idChat, Message message);
+    Future<void> addUserOnGroup(String idChat, List<String> idUsers);
+    Future<void> removeUserOnGroup(String idChat, List<String> idUsers);
+    
 }
