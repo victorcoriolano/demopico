@@ -25,18 +25,22 @@ class MessageFirestoreDatasource implements IMessageDatasource<FirebaseDTO> {
 
   @override
   Stream<List<FirebaseDTO>> watchMessagesForChat(String idChat) {
-    final snapshots = _boilerplate.dataSource
-        .collection('chats')
-        .doc(idChat)
-        .collection('messages')
-        .orderBy('dateTime', descending: true)
-        .snapshots();
-
-    return snapshots.map((snapshot) {
-      return snapshot.docs.map((doc) {
-        return FirebaseDTO(id: doc.id, data: doc.data());
-      }).toList();
-    });
+    try {
+  final snapshots = _boilerplate.dataSource
+      .collection('chats')
+      .doc(idChat)
+      .collection('messages')
+      .orderBy('dateTime', descending: true)
+      .snapshots();
+  
+  return snapshots.map((snapshot) {
+    return snapshot.docs.map((doc) {
+      return FirebaseDTO(id: doc.id, data: doc.data());
+    }).toList();
+  });
+} on FirebaseException catch (e) {
+  throw FirebaseErrorsMapper.map(e);
+}
   }
 
   @override
