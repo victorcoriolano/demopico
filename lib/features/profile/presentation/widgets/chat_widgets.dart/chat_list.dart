@@ -20,9 +20,7 @@ class ChatList extends StatelessWidget {
         switch (chat) {
           case Conversation():
             {
-              final otherParticipant = chat.participants.firstWhere(
-                (user) => user.id != currentID,
-              );
+              final conversa = chat;
               return Container(
                 margin: EdgeInsets.only(top: 12, left: 12, right: 12),
                 decoration: BoxDecoration(
@@ -31,19 +29,17 @@ class ChatList extends StatelessWidget {
                 ),
                 child: ListTile(
                   leading: CircleAvatar(
-                    backgroundImage: otherParticipant.profilePictureUrl != null 
+                    backgroundImage: conversa.photoUrl != null 
                       ? CachedNetworkImageProvider(
-                        otherParticipant.profilePictureUrl!,
+                        conversa.photoUrl!,
                         errorListener: (error) => const Icon(Icons.person),
                       )
                       : null,
                   ),
-                  title: Text(otherParticipant.name, style: TextStyle(fontWeight: FontWeight.bold ),),
+                  title: Text(chat.nameChat, style: TextStyle(fontWeight: FontWeight.bold ),),
                   subtitle: Text(
-                    chat.lastMessage != null
-                        ? chat.lastMessage!
-                        : "Inicie uma conversa com ${otherParticipant.name}",
-                          style: TextStyle(
+                    chat.lastMessage, 
+                    style: TextStyle(
                             color: const Color.fromARGB(255, 87, 82, 82)
                           ),
                     maxLines: 1,
@@ -65,12 +61,9 @@ class ChatList extends StatelessWidget {
                 leading: CircleAvatar(
                   child: Icon(Icons.group),
                 ),
-                title: Text(chat.nameGroup),
+                title: Text(chat.nameChat),
                 subtitle: Text(
-                  chat.lastMessage != null
-                        ? chat.lastMessage!
-                        : "Inicie a conversa no ${chat.nameGroup}",
-                          style: TextStyle(
+                  chat.lastMessage ,style: TextStyle(
                             color: const Color.fromARGB(255, 87, 82, 82)
                           ),
                     maxLines: 1,

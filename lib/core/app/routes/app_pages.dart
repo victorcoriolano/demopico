@@ -15,6 +15,7 @@
   import 'package:demopico/features/profile/presentation/pages/edit_profile_page.dart';
   import 'package:demopico/features/profile/presentation/pages/my_friends_page.dart';
   import 'package:demopico/features/profile/presentation/pages/my_network_page.dart';
+import 'package:demopico/features/profile/presentation/pages/notification_page.dart';
   import 'package:demopico/features/profile/presentation/pages/search_profile_page.dart';
   import 'package:demopico/features/profile/presentation/pages/screens_profile.dart';
   import 'package:demopico/features/profile/presentation/widgets/profile_data/about_page_widget.dart';
@@ -97,6 +98,14 @@
     ),
     middlewares: [Middleware(AuthViewModelAccount.instance)],
     transition: Transition.rightToLeft,
+  ),
+
+  //NOTIFICATIONS
+  GetPage(
+    name: Paths.notifications,
+    page: () => NotificationPage(),
+    middlewares: [Middleware(AuthViewModelAccount.instance)],
+    transition: Transition.circularReveal,
   ),
 
   // OUTRAS
