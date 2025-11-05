@@ -9,6 +9,7 @@ import 'package:demopico/features/profile/domain/models/message.dart';
 import 'package:demopico/features/profile/domain/models/notification.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';
 import 'package:demopico/features/user/domain/models/user_model.dart';
+import 'package:flutter/material.dart';
 
 class FirebaseDtoMapper<Model> implements IMapperDto<Model, FirebaseDTO> {
 
@@ -148,6 +149,7 @@ class FirebaseDTOMapperForChat implements IMapperDto<Chat, FirebaseDTO>{
   }
 
   Map<String, dynamic> groupChatToJson(GroupChat model){
+    debugPrint(model.toString());
     return {
       'chatType': 'group', // ATRIBUTO DISCRIMINADOR PARA AJUDAR NO MAPEAMENTO DO DATASOURCE
       'lastUpdate': model.lastUpdate?.toIso8601String(),
