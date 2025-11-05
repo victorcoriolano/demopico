@@ -25,53 +25,49 @@ class _CentralPageState extends State<CentralPage> {
     return Scaffold(
       body: Stack(
         children: [
-          Column(
+          Stack(
             children: [
-              Stack(
-                children: [
-                CentralPageBackground(),
-                /* Consumer<OpenWeatherProvider>(
-                  builder: (context, weatherProvider, child) {
-                    //Carrega os dados do clima de acordo com o estado
-                    if (weatherProvider.isLoading) {
-                      return Positioned(
-                          top: 110,
-                          left: 5,
-                          child: Center(
-                              child: CircularProgressIndicator(
-                            color: Theme.of(context).colorScheme.primary,
-                          )));
-                    } else if (weatherProvider.errorMessage != null) {
-                      return Positioned(
-                        top: 110,
-                        left: 5,
-                        child: Center(
-                          child: Text(
-                            weatherProvider.errorMessage!,
-                            style: TextStyle(color: Colors.red),
-                          ),
-                        ),
-                      );
-                    }
-                    //Obtém o modelo de clima atual, mapeia os iniciais e passa pro widget
-                    final currentWeatherModel = weatherProvider.value;
-                    final weatherData = {
-                      'temperature': currentWeatherModel?.tempC ?? 0,
-                      'isDay': currentWeatherModel?.isDay ?? true,
-                    };
-                     */
-                     TopLevelHomeRow(
-                      /* userImage: switch (user) {
-                        AuthAuthenticated() => user.user.avatar,
-                        AuthUnauthenticated() => null,
-                      },
-                      initialWeatherInfo: weatherData, */
-                                         ),
-                  //},
-                //)
-              ]),
-            ],
-          ),
+            CentralPageBackground(),
+            /* Consumer<OpenWeatherProvider>(
+              builder: (context, weatherProvider, child) {
+                //Carrega os dados do clima de acordo com o estado
+                if (weatherProvider.isLoading) {
+                  return Positioned(
+                      top: 110,
+                      left: 5,
+                      child: Center(
+                          child: CircularProgressIndicator(
+                        color: Theme.of(context).colorScheme.primary,
+                      )));
+                } else if (weatherProvider.errorMessage != null) {
+                  return Positioned(
+                    top: 110,
+                    left: 5,
+                    child: Center(
+                      child: Text(
+                        weatherProvider.errorMessage!,
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                  );
+                }
+                //Obtém o modelo de clima atual, mapeia os iniciais e passa pro widget
+                final currentWeatherModel = weatherProvider.value;
+                final weatherData = {
+                  'temperature': currentWeatherModel?.tempC ?? 0,
+                  'isDay': currentWeatherModel?.isDay ?? true,
+                };
+                 */
+                 TopLevelHomeRow(
+                  /* userImage: switch (user) {
+                    AuthAuthenticated() => user.user.avatar,
+                    AuthUnauthenticated() => null,
+                  },
+                  initialWeatherInfo: weatherData, */
+                                     ),
+              //},
+            //)
+          ]),
           HubUpperSheet(),
           EventsBottomSheet(),
         ],

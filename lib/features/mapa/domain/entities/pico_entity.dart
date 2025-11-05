@@ -22,10 +22,12 @@ class Pico {
   final RatingVo rating;    
   final List<String>? reviewersUsers;
   final List<String>? idPostOnThis;
+  final List<String> favoritedBy;
 
   Pico._(
     {
       this.user,
+      required this.favoritedBy,
       required this.reviewersUsers,
       required this.idPostOnThis,
       required this.rating,
@@ -55,6 +57,7 @@ class PicoBuilder {
   RatingVo? rating;
   List<String>? reviewersUsers;
   List<String>? idPostOnThis;
+  List<String> favoritedBy = [];
 
   // dados opcionais para factory
   Map<String, dynamic>? attributesData;
@@ -72,6 +75,7 @@ class PicoBuilder {
   PicoBuilder withReviewers(List<String> r) { reviewersUsers = r; return this; }
   PicoBuilder withPosts(List<String> p) { idPostOnThis = p; return this; }
   PicoBuilder withRating(RatingVo v) { rating = v; return this; }
+  PicoBuilder withWhoFavorited(List<String> usersWhoFavorited) { favoritedBy.addAll(usersWhoFavorited); return this;}
 
   // dados auxiliares para factories
   PicoBuilder withAttributesData(Map<String, dynamic> data) { attributesData = data; return this; }
@@ -104,6 +108,7 @@ class PicoBuilder {
       rating: rating!,
       reviewersUsers: reviewersUsers,
       idPostOnThis: idPostOnThis,
+      favoritedBy: favoritedBy,
     );
   }
 }

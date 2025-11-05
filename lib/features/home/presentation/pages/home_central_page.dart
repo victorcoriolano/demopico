@@ -1,4 +1,3 @@
-import 'package:demopico/features/home/presentation/widgets/central_page_background.dart' show CentralPageBackground;
 import 'package:demopico/features/home/presentation/widgets/skatepico_logo.dart';
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/view_services/modal_helper.dart' show ModalHelper;

@@ -1,5 +1,4 @@
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
-import 'package:demopico/features/profile/domain/models/relationship.dart';
 
 class Message {
   final String id;
@@ -51,6 +50,16 @@ class Message {
       content: content, 
       dateTime: DateTime.now(), 
       infoUser: currentUser, 
+      isRead: false,
+    );
+  }
+
+  factory Message.initialChat(){
+    return Message(
+      id: "", 
+      content: "Envie uma mensagem pra iniciar o chat", 
+      dateTime: DateTime.now(), 
+      infoUser: UserIdentification(id: "", name: "",profilePictureUrl: "")  , 
       isRead: false,
     );
   }

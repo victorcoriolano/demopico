@@ -1,5 +1,6 @@
 import 'package:demopico/core/common/auth/infra/repositories/firebase_auth_repository.dart';
-import 'package:demopico/core/common/media_management/usecases/pick_files_uc.dart';
+import 'package:demopico/core/common/media_management/usecases/pick_mult_files_uc.dart';
+import 'package:demopico/core/common/media_management/usecases/pick_one_image_uc.dart';
 import 'package:demopico/core/common/media_management/usecases/pick_video_uc.dart';
 import 'package:demopico/features/home/infra/http_climate_service.dart';
 import 'package:demopico/features/home/presentation/provider/forecast_provider.dart';
@@ -15,6 +16,7 @@ import 'package:demopico/features/mapa/presentation/controllers/historico_contro
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_provider.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spots_controller.dart';
+import 'package:demopico/features/profile/domain/usecases/create_collective_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/create_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/delete_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_post_uc.dart';
@@ -22,13 +24,17 @@ import 'package:demopico/features/profile/domain/usecases/update_post_uc.dart';
 import 'package:demopico/features/profile/infra/repository/chat_repository.dart';
 import 'package:demopico/features/profile/presentation/view_model/chat_list_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/chat_room_view_model.dart';
+import 'package:demopico/features/profile/presentation/view_model/collective_view_model.dart';
+import 'package:demopico/features/profile/presentation/view_model/create_collective_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
+import 'package:demopico/features/profile/presentation/view_model/notification_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/post_provider.dart';
 import 'package:demopico/features/profile/presentation/view_model/screen_provider.dart';
 import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_sign_in.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_sign_up.dart';
+import 'package:demopico/features/user/presentation/controllers/edit_profile_view_model.dart';
 import 'package:demopico/features/user/presentation/controllers/profile_view_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
@@ -42,7 +48,10 @@ final myProviders = [
   // Provider de perfil
   ChangeNotifierProvider(create: (_) => ProfileViewModel.getInstance),
   ChangeNotifierProvider(create: (_) => ChatListViewModel(repository: ChatRepository.instance)),
-  ChangeNotifierProvider(create: (_) => ChatRoomViewModel(repository: ChatRepository.instance)),
+  ChangeNotifierProvider(create: (_) => ChatRoomViewModel()),
+  ChangeNotifierProvider(create: (_) => EditProfileViewModel.instance),
+  ChangeNotifierProvider(create: (_) => NotificationViewModel()),
+  
   
   
   // Providers de clima
@@ -50,9 +59,9 @@ final myProviders = [
     debugPrint('criou o OpenWeatherProvider');
     return OpenWeatherProvider();
   }),
-  
   ChangeNotifierProvider(
       create: (_) => ForecastProvider(null, climaService: HttpClimateService())),
+
 
   StreamProvider<AuthState>(
     create: (_) => FirebaseAuthRepository.instance.authState,
@@ -72,9 +81,13 @@ final myProviders = [
   ChangeNotifierProvider(create: (_) => SpotProvider.instance),
   ChangeNotifierProvider(create: (_) => HistoricoController.getInstance),
   ChangeNotifierProvider(create: (_) => CommentController.getInstance),
+  ChangeNotifierProvider(create: (_) => CreateCollectiveViewModel(
+    pickFile: PickOneImageUc.instance,
+    createUC: CreateCollectiveUc.instance
+  )),
+  ChangeNotifierProvider(create: (_) => CollectiveViewModel.instance),
   
-  // Providers de hub
-  ChangeNotifierProvider(create: (_) => CommentController.getInstance),
+   
   
   // Providers de hub
   ChangeNotifierProvider(

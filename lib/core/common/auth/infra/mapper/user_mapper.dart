@@ -1,3 +1,4 @@
+import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/features/profile/domain/models/profile_user.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/dob_vo.dart';
@@ -33,5 +34,12 @@ class UserMapper {
       latitude: entity.location?.latitude,
       longitude: entity.location?.longitude,
     );
+  }
+
+  static UserIdentification mapUserModelToUserIdentification(UserM userm) {
+    return UserIdentification(
+      id: userm.id, 
+      name: userm.name, 
+      profilePictureUrl: userm.avatar);
   }
 }

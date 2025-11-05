@@ -8,8 +8,8 @@ import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto
 import 'package:demopico/features/external/datasources/firebase/crud_firebase.dart';
 import 'package:demopico/features/external/datasources/firebase/firestore.dart';
 import 'package:demopico/features/external/interfaces/i_crud_datasource.dart';
-import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
-import 'package:demopico/features/user/domain/interfaces/i_user_database_service.dart';
+import 'package:demopico/core/common/mappers/firebase_errors_mapper.dart';
+import 'package:demopico/features/user/domain/interfaces/i_user_datasource_service.dart';
 import 'package:flutter/foundation.dart';
 
 class UserFirebaseDataSource implements IUserDataSource<FirebaseDTO> {
@@ -92,6 +92,7 @@ class UserFirebaseDataSource implements IUserDataSource<FirebaseDTO> {
   
   @override
   Future<void> update(FirebaseDTO user) async {
+    debugPrint("Executando update do user");
     await _dataSource.update(user); 
   }
   
@@ -123,5 +124,10 @@ class UserFirebaseDataSource implements IUserDataSource<FirebaseDTO> {
   @override
   Future<void> delete(String id) {
     return _dataSource.delete(id);
+  }
+  
+  @override
+  Future<void> updateOnlyField(String id, String nameField, data) {
+    return _dataSource.updateField(id, nameField, data);
   }
 }

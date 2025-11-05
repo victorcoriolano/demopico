@@ -31,9 +31,9 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
         key: _formkey,
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(70.0),
+            padding: const EdgeInsets.symmetric(horizontal:70.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 const SizedBox(
                     height: 200,
@@ -57,7 +57,7 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                 Consumer<AuthViewModelSignUp>(
                   builder: (context, provider, child) {
                     return TextFormField(
-                      decoration: customTextField("Vulgo"),
+                      decoration: customTextFieldDecoration("Vulgo"),
                       cursorColor: Colors.white,
                       style: const TextStyle(color: Colors.white),
                       controller: _vulgoCadastro,
@@ -78,7 +78,7 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                 Consumer<AuthViewModelSignUp>(
                   builder: (context, provider, child) {
                     return TextFormField(
-                      decoration: customTextField("Email"),
+                      decoration: customTextFieldDecoration("Email"),
                       cursorColor: Colors.white,
                       style: const TextStyle(color: Colors.white),
                       controller: _emailController,
@@ -102,7 +102,7 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                 ),
                 //senha
                 TextFormField(
-                  decoration: customTextField("Senha"),
+                  decoration: customTextFieldDecoration("Senha"),
                   cursorColor: Colors.white,
                   style: const TextStyle(color: Colors.white),
                   obscureText: true,
@@ -120,7 +120,7 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                 Consumer<AuthViewModelSignUp>(
                   builder: (context, provider, child) {
                     return TextFormField(
-                      decoration: customTextField("Confirmar senha "),
+                      decoration: customTextFieldDecoration("Confirmar senha "),
                       cursorColor: Colors.white,
                       style: const TextStyle(color: Colors.white),
                       obscureText: true,
@@ -137,7 +137,7 @@ class _RegisterFormState extends State<RegisterForm> with Validators {
                   }
                 ),
                 const SizedBox(
-                  height: 12,
+                  height: 35,
                 ),
     
                 // button (cadastrar)

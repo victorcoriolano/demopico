@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class ProfileTopSideDataWidget extends StatelessWidget {
-
   final String? avatarUrl;
   final String? backgroundUrl;
   final double avatarSize;
@@ -26,12 +25,15 @@ class ProfileTopSideDataWidget extends StatelessWidget {
               width: double.infinity,
               height: 175,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16)),
                 image: DecorationImage(
                   alignment: Alignment.center,
                   image: backgroundUrl != null && backgroundUrl!.isNotEmpty
-                      ?NetworkImage(backgroundUrl!) 
-                      : const AssetImage("assets/images/background_vermelho.png")
+                      ? NetworkImage(backgroundUrl!)
+                      : const AssetImage(
+                              "assets/images/background_vermelho.png")
                           as ImageProvider,
                   fit: BoxFit.cover,
                 ),
@@ -45,7 +47,6 @@ class ProfileTopSideDataWidget extends StatelessWidget {
                   CircleAvatar(
                     radius: avatarSize,
                     backgroundColor: Colors.white,
-                    
                     child: ClipOval(
                       child: avatarUrl != null && avatarUrl!.isNotEmpty
                           ? Image.network(
@@ -57,13 +58,15 @@ class ProfileTopSideDataWidget extends StatelessWidget {
                           : const Icon(Icons.person, size: 40),
                     ),
                   ),
-                  
                 ],
               ),
             ),
+            
           ],
         ),
       ],
     );
   }
+
+ 
 }

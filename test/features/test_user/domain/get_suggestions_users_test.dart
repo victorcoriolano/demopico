@@ -1,5 +1,5 @@
 import 'package:demopico/features/profile/domain/interfaces/i_network_repository.dart';
-import 'package:demopico/features/profile/presentation/view_objects/suggestion_profile.dart';
+import 'package:demopico/features/profile/presentation/object_for_only_view/suggestion_profile.dart';
 import 'package:demopico/features/user/domain/interfaces/i_users_repository.dart';
 import 'package:demopico/features/user/domain/usecases/get_sugestions_user_uc.dart';
 import 'package:mocktail/mocktail.dart';

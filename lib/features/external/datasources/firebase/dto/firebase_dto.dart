@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
+
 class FirebaseDTO {
   String _id;
   final Map<String, dynamic> data;
@@ -20,4 +23,44 @@ class FirebaseDTO {
     _id = newId;
   }
 
+  factory FirebaseDTO.fromDocumentSnapshot(DocumentSnapshot document){
+    return FirebaseDTO(
+      id: document.id, 
+      data: document.data() as Map<String, dynamic>);
+  }
+
+  FirebaseDTO resolveReference(String nameField){
+    final currentData = data;
+
+    if (currentData.containsKey(nameField) && currentData[nameField] is DocumentReference){
+
+      final copyData = Map<String, dynamic>.from(currentData);
+
+      copyData[nameField] = (currentData[nameField] as DocumentReference).id;
+
+      debugPrint(copyData[nameField]);
+      return copyWith(data: copyData);
+    }
+    return this;
+  }
+
+  FirebaseDTO resolveReferencesList(String nameField) {
+    final currentData = data;
+    if (currentData.containsKey(nameField) &&
+        currentData[nameField] is List) {
+      final list = currentData[nameField] as List;
+      if (list.isEmpty || list.first is! DocumentReference) {
+        return this;
+      }
+
+      final copyData = Map<String, dynamic>.from(currentData);
+      copyData[nameField] = list
+          .map((ref) => (ref as DocumentReference).id)
+          .toList()
+          .cast<String>(); // Garante a tipagem
+
+      return copyWith(data: copyData);
+    }
+    return this;
+  }
 }

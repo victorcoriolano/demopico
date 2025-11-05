@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/common/auth/domain/entities/auth_result.dart';
 import 'package:demopico/core/common/auth/domain/usecases/sign_in_email_password_uc.dart';
 import 'package:demopico/core/common/auth/domain/usecases/sign_in_vulgo_uc.dart';
@@ -69,7 +70,7 @@ class AuthViewModelSignIn extends ChangeNotifier {
       return true;
     } on Failure catch (failure){
       FailureServer.showError(failure);
-      return false;
+      return isLoading = false;
     }
   }
 
@@ -79,7 +80,7 @@ class AuthViewModelSignIn extends ChangeNotifier {
       return true;
     } on Failure catch (failure){
       FailureServer.showError(failure);
-      return false;
+      return  isLoading = false;
     }
   }
   
@@ -89,7 +90,7 @@ class AuthViewModelSignIn extends ChangeNotifier {
       return true;
     } on Failure catch (failure){
       FailureServer.showError(failure);
-      return false;
+      return isLoading = false;
     }
   }
 
@@ -97,17 +98,17 @@ class AuthViewModelSignIn extends ChangeNotifier {
   Future<void> signIn() async {
     isLoading = true;
     final AuthResult authResult;
-    if(!validateCreationPassword(password)) return;
-
-    switch (identifier){
+    if(!validateCreationPassword(password))return;
+    try {
+      switch (identifier){
       case Identifiers.email:
           debugPrint(login);
           if(!validateCreationEmail(login)) return;
           final credentials = EmailCredentialsSignIn(identifier: _email, senha: _passwordVo);
-          final validatedCredentials =
-            await _validateUserCredentials.validateEmailExist(credentials);
+          
+          final validatedCredentials = await _validateUserCredentials.validateEmailExist(credentials);
           authResult = await loginEmailUc.execute(validatedCredentials);
-       
+          
       case Identifiers.vulgo:
         if(!validateCreationVulgo(login)) return;
         final credentials = VulgoCredentialsSignIn(vulgo: _vulgo, password: PasswordVo(password));
@@ -118,15 +119,20 @@ class AuthViewModelSignIn extends ChangeNotifier {
 
     if(authResult.success){
       debugPrint("Autenticação bem sucedida");
-      AuthViewModelAccount.instance.currentUser = authResult.user!;
+      AuthViewModelAccount.instance.setCurrentUser = authResult.user!;
       isLoading = false;
       notifyListeners();
+      Get.offNamed(Paths.profile);
     }else {
       debugPrint("VM - Erro ao fazer login : ${authResult.failure.toString()}");
       FailureServer.showError(authResult.failure!);
       isLoading = false;
       notifyListeners();
-    }   
+    }
+    } on Failure catch (e){
+      getError(e);
+    }
+       
   }
 
   void getError(Failure e, [String? message]) {

@@ -29,7 +29,7 @@ class _TipoContaDropdownButtonState extends State<TipoContaDropdownButton> {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField(
-      decoration: customTextField("Tipo de conta"),
+      decoration: customTextFieldDecoration("Tipo de conta"),
       dropdownColor: const Color.fromARGB(255, 139, 0, 0),
       initialValue: _selectedValue,
       items: _items,

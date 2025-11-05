@@ -1,6 +1,5 @@
 import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/theme/theme.dart';
-import 'package:demopico/features/profile/presentation/pages/my_friends_page.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/text_stats_profile_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,6 +11,7 @@ class ProfileBottomSideDataWidget extends StatelessWidget {
   final int contributions;
   final String description;
   final bool isScrolling;
+ 
 
 
   const ProfileBottomSideDataWidget(
@@ -29,6 +29,7 @@ class ProfileBottomSideDataWidget extends StatelessWidget {
     final double screenWidth = MediaQuery.of(context).size.width;
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           margin: EdgeInsets.symmetric(
@@ -39,12 +40,17 @@ class ProfileBottomSideDataWidget extends StatelessWidget {
               TextStatsProfileWidget(
                 info: followers.toString(), 
                 legend: 'CONEXÕES',
-                onTap: () => Get.to(() => MyFriendsPage(), arguments: idUser),),
+                onTap: () => Get.toNamed(Paths.connections  , arguments: idUser),),
               TextStatsProfileWidget(info: contributions.toString(), legend: 'CONTRIBUIÇÕES',
               onTap: () => Get.toNamed(Paths.mySpots, arguments: nameUser),),
             ],
           ),
         ),
+       
+        
+        
+        
+        SizedBox(height: 12,),
         Center(
           child: Container(
             padding: const EdgeInsets.all(12),
@@ -54,13 +60,25 @@ class ProfileBottomSideDataWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
             ),
             width: screenWidth > 600 ? screenWidth - 100 : screenWidth - 50,
-            child: Text(
-              textAlign: TextAlign.center,
-              description,
-              style: const TextStyle(fontSize: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "BIO",
+                  style: const TextStyle(fontSize: 12, color: kMediumGrey, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  textAlign: TextAlign.justify,
+                  description,
+                  style: const TextStyle(fontSize: 16,),
+                ),
+              ],
             ),
           ),
-        )
+        ),
+        SizedBox(height: 12,),
+         
+                
       ],
     );
   }

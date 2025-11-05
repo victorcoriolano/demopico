@@ -16,7 +16,10 @@ class FileModel {
   bool isImage(){
     return contentType.isImage; 
   }
+}
 
+class NullFileModel extends FileModel{
+  NullFileModel() : super(fileName: "", bytes: Uint8List(8),contentType: ContentType.unavailable);
 }
 
 

@@ -4,7 +4,8 @@ import 'package:demopico/core/common/auth/domain/value_objects/email_vo.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/location_vo.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/vulgo_vo.dart';
 
-sealed class User {}
+sealed class User {
+}
 
 class UserEntity extends User{
   final String id;
@@ -56,19 +57,9 @@ class UserEntity extends User{
       profileUser: ProfileFactory.initialFromUser(id, displayName.value, avatar));
     
   }
+ 
 }
 
-class ColetivoEntity {
-  final String id;
-  final UserEntity modarator;
-  final List<User> members;
-  final String logo;
-  ColetivoEntity(
-      {required this.id,
-      required this.modarator,
-      required this.members,
-      required this.logo});
-}
 
 class AnonymousUserEntity extends User {
   final String id;
@@ -86,5 +77,7 @@ class AnonymousUserEntity extends User {
             dob = DobVo(DateTime.now()),
             email = EmailVO("anônimo@anônimo.com"),
             profileUser = Profile.empty;
+            
+             
             
 }

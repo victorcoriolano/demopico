@@ -3,7 +3,6 @@ import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/features/profile/presentation/pages/edit_profile_page.dart';
-import 'package:demopico/features/profile/presentation/widgets/profile_data/about_page_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/drawer_item.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
@@ -108,7 +107,7 @@ class _MyCustomDrawerState extends State<MyCustomDrawer> {
             icon: Icons.home,
             text: 'Home',
             onTap: () {
-              Get.to((_) => HomePage());
+              Get.toNamed(Paths.home);
             },
           ),
           DrawerItem(
@@ -152,7 +151,7 @@ class _MyCustomDrawerState extends State<MyCustomDrawer> {
             text: 'Sobre o App',
             onTap: () {
               // TODO: RESOLVER ERRO DE NAVEGAR PARA ABOUT PAGE
-              Get.to((_) => AboutPage());
+              Get.toNamed(Paths.aboutPage);
             },
           ),
         ],

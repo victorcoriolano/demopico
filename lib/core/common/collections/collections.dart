@@ -8,7 +8,9 @@ enum Collections {
   comments,
   posts,
   profiles,
+  collectives,
   chats;
+
 
   factory Collections.fromString(String value) {
     switch (value) {
@@ -32,6 +34,8 @@ enum Collections {
         return Collections.posts;
       case 'profiles':
         return Collections.profiles;
+      case 'collectives':
+        return Collections.collectives;
       default:
         throw Exception("Invalid Tables name");
     }
@@ -39,6 +43,8 @@ enum Collections {
 
   String get name {
     switch (this) {
+      case Collections.collectives: 
+        return 'collectives';
       case Collections.chats:
         return 'chats';
       case Collections.spots:

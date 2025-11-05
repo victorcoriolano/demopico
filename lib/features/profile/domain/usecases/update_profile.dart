@@ -5,10 +5,18 @@ import 'package:demopico/features/profile/domain/interfaces/i_profile_repository
 class UpdateProfile {
   final IProfileRepository _profileRepository;
 
-  UpdateProfile({required IProfileRepository userDataRepository})
-      : _profileRepository = userDataRepository;
+  UpdateProfile({required IProfileRepository profileDataRepo})
+      : _profileRepository = profileDataRepo;
 
-  Future<ProfileResult> updateProfile(Profile profileUpdated) async {
-    return  await _profileRepository.updateProfile(profileUpdated);
+  Future<ProfileResult> execute(Profile profileUpdated) async {
+    return await _profileRepository.updateProfile(profileUpdated);
+  }
+
+  Future<void> executeField(
+      {required String id,
+      required String field,
+      required dynamic data}) async {
+    return await _profileRepository.updateField(
+        field: field, id: id, newData: data);
   }
 }

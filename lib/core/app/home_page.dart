@@ -11,17 +11,19 @@
     State<HomePage> createState() => _HomePageState();
   }
 
-class _HomePageState extends State<HomePage> {
+  class _HomePageState extends State<HomePage> {
+
   @override
   void initState() {
     super.initState();
   }
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: GestureDetector(
-          key: const Key('home_page_gesture_detector_navigate'),
+
+    @override
+    Widget build(BuildContext context) {
+      return Scaffold(
+        body: SafeArea(
+            child: GestureDetector(
+              key: const Key('home_page_gesture_detector_navigate'),
           onHorizontalDragEnd: (details) {
             if (details.primaryVelocity! > 0) {
               Get.toNamed(Paths.map);

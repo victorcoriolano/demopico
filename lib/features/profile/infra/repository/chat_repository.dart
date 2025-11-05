@@ -7,20 +7,11 @@ import 'package:demopico/features/profile/domain/interfaces/i_message_repository
 import 'package:demopico/features/profile/domain/models/chat.dart';
 import 'package:demopico/features/profile/domain/models/message.dart';
 import 'package:demopico/features/profile/infra/datasource/firebase_message_datasourece.dart';
+import 'package:flutter/widgets.dart';
 
 class ChatRepository implements ImessageRepository {
   final IMessageDatasource<FirebaseDTO> _datasource;
-final chatConversationMapper = FirebaseDtoMapper<Conversation>(
-  fromJson: (map, id) => Conversation.fromMap(map, id),
-  toMap: (chat) => chat.toJson(),
-  getId: (chat) => chat.id,
-);
 
-final chatGroupMapper = FirebaseDtoMapper<GroupChat>(
-  fromJson: (map, id) => GroupChat.fromJson(map, id),
-  toMap: (chat) => chat.toJson(),
-  getId: (chat) => chat.id,
-);
 
 final messageMapper = FirebaseDtoMapper<Message>(
   fromJson: (map, id) {
@@ -43,9 +34,9 @@ final messageMapper = FirebaseDtoMapper<Message>(
     );
 
   @override
-  Stream<List<Message>> getMessagesForChat(String idChat) {
+  Stream<List<Message>> watchMessagesForChat(String idChat) {
     
-    final dtoStream = _datasource.getMessagesForChat(idChat);
+    final dtoStream = _datasource.watchMessagesForChat(idChat);
 
     
     return dtoStream.map((dtoList) {
@@ -54,11 +45,13 @@ final messageMapper = FirebaseDtoMapper<Message>(
   }
 
   @override
-  Future<List<Chat>> getChatForUser(String idUser) async {
+  Future<List<Chat>> getChatForUser(UserIdentification currentUser) async {
     
-    final dtoList = await _datasource.getChatForUser(idUser);
+    final dtoList = await _datasource.getChatForUser(currentUser.id);
     
-    return dtoList.map((dto) => chatConversationMapper.toModel(dto)).toList();
+    return dtoList.map((dto) { 
+      final mapper = createChatMapper(currentUser);
+      return mapper.toModel(dto);}).toList();
   }
 
   @override
@@ -78,8 +71,17 @@ final messageMapper = FirebaseDtoMapper<Message>(
   @override
   Future<Chat> createChat(UserIdentification currentUser, UserIdentification otherUser) async {
     final chat = Conversation.initFromUsers(currentUser, otherUser);
-    final chatDTO = chatConversationMapper.toDTO(chat);
-    final createdChat = await _datasource.createChatForUser(chatDTO);
-    return chatConversationMapper.toModel(createdChat);
+    final chatDTO = FirebaseDTO(
+      id: "", 
+      data: chat.toMap());
+    final createdChat = await _datasource.createChat(chatDTO);
+    debugPrint("Chat criado: $createdChat");
+    return chat;
+  }
+  
+  @override
+  Future<Chat> createGroupChat(List<UserIdentification> members) {
+    // TODO: implement createGroupChat
+    throw UnimplementedError();
   }
 }

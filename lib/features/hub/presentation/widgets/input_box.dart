@@ -4,19 +4,45 @@ class InputBox extends StatefulWidget {
   final String hintText;
   final Future<void> Function(String) sendAction;
   final void Function() chooseAction;
+  final ValueChanged<String>? onChanged;
+  final String value;
   const InputBox(
-      {super.key, required this.sendAction, required this.chooseAction, required this.hintText});
+      {super.key,
+      required this.sendAction,
+      required this.chooseAction,
+      required this.hintText,
+      this.onChanged,
+      required this.value});
 
   @override
   State<InputBox> createState() => _InputBoxState();
 }
 
 class _InputBoxState extends State<InputBox> {
-  final TextEditingController postController = TextEditingController();
+  TextEditingController postController = TextEditingController();
   Future<void> Function(String) get sendAction => widget.sendAction;
   void Function() get chooseAction => widget.chooseAction;
 
   bool isTapped = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant InputBox oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.value != oldWidget.value &&
+        widget.value != postController.text) {
+      postController.value = TextEditingValue(
+        text: widget.value,
+        selection: TextSelection.fromPosition(
+          TextPosition(offset: widget.value.length),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +56,8 @@ class _InputBoxState extends State<InputBox> {
               height: 90,
               width: 350,
               decoration: const BoxDecoration(
-                borderRadius: BorderRadius.vertical(bottom: Radius.circular(35)),
+                borderRadius:
+                    BorderRadius.vertical(bottom: Radius.circular(35)),
                 color: Color.fromARGB(255, 217, 217, 217),
               ),
             ),
@@ -67,7 +94,8 @@ class _InputBoxState extends State<InputBox> {
               height: 70,
               child: TextField(
                 style: const TextStyle(
-                    decoration: TextDecoration.none, overflow: TextOverflow.clip),
+                    decoration: TextDecoration.none,
+                    overflow: TextOverflow.clip),
                 decoration: InputDecoration(
                   helperStyle: TextStyle(),
                   counterText: '',
@@ -78,6 +106,7 @@ class _InputBoxState extends State<InputBox> {
                       fontWeight: FontWeight.bold),
                 ),
                 controller: postController,
+                onChanged: widget.onChanged,
                 maxLines: 5,
                 maxLength: 200,
                 keyboardType: TextInputType.multiline,
@@ -94,9 +123,9 @@ class _InputBoxState extends State<InputBox> {
               isSelected: isTapped,
               selectedIcon: const Icon(Icons.blur_on_outlined),
               icon: const Icon(Icons.keyboard_arrow_up),
-                focusColor: isTapped
-                    ? const Color.fromARGB(255, 74, 178, 230)
-                    : const Color.fromARGB(255, 0, 0, 0),
+              focusColor: isTapped
+                  ? const Color.fromARGB(255, 74, 178, 230)
+                  : const Color.fromARGB(255, 0, 0, 0),
               iconSize: 45,
               onPressed: chooseAction,
             ),
@@ -105,7 +134,10 @@ class _InputBoxState extends State<InputBox> {
             top: 23,
             right: 8,
             child: IconButton(
-                icon: const Icon(Icons.send_rounded, color:  Color.fromARGB(255, 128, 25, 18),),
+                icon: const Icon(
+                  Icons.send_rounded,
+                  color: Color.fromARGB(255, 128, 25, 18),
+                ),
                 iconSize: 30,
                 onPressed: () async => sendAction(postController.text),
                 disabledColor: const Color.fromARGB(255, 255, 72, 0)),

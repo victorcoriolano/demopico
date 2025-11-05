@@ -1,23 +1,27 @@
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
-import 'package:demopico/features/profile/domain/interfaces/i_message_repository.dart';
 import 'package:demopico/features/profile/domain/models/chat.dart';
 import 'package:demopico/features/profile/domain/models/message.dart';
+import 'package:demopico/features/profile/domain/usecases/send_message_uc.dart';
+import 'package:demopico/features/profile/domain/usecases/watch_message_uc.dart';
 import 'package:flutter/material.dart';
 
 class ChatRoomViewModel extends ChangeNotifier {
-  final ImessageRepository _repository;
+  final WatchMessageUc _watchMessageUc;
+  final SendMessageUc _sendMessageUc;
 
-  ChatRoomViewModel({required ImessageRepository repository})
-      : _repository = repository;
+  ChatRoomViewModel()
+      : _sendMessageUc = SendMessageUc(), _watchMessageUc = WatchMessageUc() ;
+
+      
   Stream<List<Message>> listenMessagesForChat(Chat chat) {
-    return _repository.getMessagesForChat(chat.id);
+    return _watchMessageUc.execute(chat);
   }
 
   Future<bool> sendMessage(UserIdentification currentUserIdentification,
-      String content, String idChat) async {
+      String content, Chat chat) async {
     try {
       final message = Message.initial(currentUserIdentification, content);
-      await _repository.sendMessage(idChat, message);
+      await _sendMessageUc.execute(chat, message);
       return true;
     } catch (e) {
       debugPrint("Erro ao enviar a mensagem: $e");

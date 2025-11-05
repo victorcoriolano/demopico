@@ -2,7 +2,6 @@
 import 'package:demopico/core/app/home_page.dart';
 import 'package:demopico/core/app/providers/providers.dart';
 import 'package:demopico/core/app/routes/app_pages.dart';
-import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/features/home/presentation/widgets/central_page_background.dart';
 import 'package:demopico/features/home/presentation/widgets/skatepico_logo.dart';
@@ -24,7 +23,7 @@ class MyAppWidget extends StatelessWidget {
     return MultiProvider(
       providers: myProviders,
       child: GetMaterialApp(
-        home: HomePageTest(),
+        //home: HomePageTest(),
         debugShowCheckedModeBanner: false,
         title: 'SKATEPICO',
         theme: appTheme,

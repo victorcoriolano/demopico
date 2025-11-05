@@ -14,6 +14,7 @@ final class MockUserRepository extends Mock implements UserDataRepositoryImpl {}
 final class MockPico extends Mock implements PicoModel {}
 
     final testPico = PicoModel(
+      usersWhoFavorited: List.empty(),
   id: "1",
   picoName: "Pico Legal",
   description: "Teste",

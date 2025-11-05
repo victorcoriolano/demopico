@@ -3,11 +3,16 @@ on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - main
 
 jobs: 
   flutter_test:
     name: Execute flutter test and flutter analyze
     runs-on: ubuntu-latest
+    env:
+      WEATHER_API_KEY: ${{ secrets.WEATHER_API_KEY }}
     steps:
       - uses: actions/checkout@v2
 
@@ -18,7 +23,7 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: 3.24.5  
+          flutter-version: 3.35.1  
           channel: stable
 
 

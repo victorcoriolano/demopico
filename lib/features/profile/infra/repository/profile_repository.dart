@@ -72,4 +72,17 @@ class ProfileRepositoryImpl implements IProfileRepository {
       return ProfileResult.failure(failure);
     }
   }
+  
+  @override
+  Future<void> updateField({required String id,required String field, required dynamic newData}) {
+    try {
+      return profileDatasource.updatedSingleField(id: id, field: field, value: newData);
+    } on Failure catch (failure) {
+      debugPrint("Ocorreu uma falha ao alterar o campo: $field com os dados ${newData.toString()} => ${failure.toString()}");
+      rethrow;
+    } catch (e,st) {
+      debugPrint("Ocorreu desconhecida uma falha ao atualizar o perfil do usuario");
+      throw UnknownFailure(unknownError: e, stackTrace: st);
+    }
+  }
 }

@@ -16,7 +16,7 @@ class ValidateUserCredentials {
   Future<EmailCredentialsSignIn> validateEmailExist(
       EmailCredentialsSignIn credentials) async {
     final bool exists;
-    exists = await repository.validateExist(
+    exists = await repository.validateExistData(
         data: credentials.identifier.value, field: "email");
     if (exists) return credentials;
     throw InvalidCredentialsFailure();
@@ -25,7 +25,7 @@ class ValidateUserCredentials {
   Future<VulgoCredentialsSignIn> validateVulgoExist(
       VulgoCredentialsSignIn credentials) async {
     final bool exists;
-    exists = await repository.validateExist(
+    exists = await repository.validateExistData(
         data: credentials.vulgo.value, field: "name");
     if (exists) return credentials;
     throw InvalidCredentialsFailure();
@@ -36,14 +36,14 @@ class ValidateUserCredentials {
     try {
       debugPrint("Validando email");
 
-      final existEmail = await repository.validateExist(
+      final existEmail = await repository.validateExistData(
         data: credentials.email.value,
         field: "email",
       );
       debugPrint("Email já existe: $existEmail");
 
       debugPrint("Validando vulgo");
-      final existVulgo = await repository.validateExist(
+      final existVulgo = await repository.validateExistData(
         data: credentials.vulgo.value,
         field: "name",
       );

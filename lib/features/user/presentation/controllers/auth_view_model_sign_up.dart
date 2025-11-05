@@ -111,7 +111,7 @@ class AuthViewModelSignUp extends ChangeNotifier {
 
       if (newUser.success) {
         debugPrint("VM - USUÁRIO CRIADO COM SUCESSO");
-        AuthViewModelAccount.instance.currentUser = newUser.user!;
+        AuthViewModelAccount.instance.setCurrentUser = newUser.user!;
         return;
       } else {
         debugPrint("VM - ERRO AO CRIAR USUÁRIO: ${newUser.failure.toString()}");

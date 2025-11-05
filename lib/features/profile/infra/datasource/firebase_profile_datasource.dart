@@ -43,4 +43,9 @@ class FirebaseProfileDatasource implements IProfileDataSource<FirebaseDTO>{
     return await _crudFirebase.update(profile);
   }
   
+  @override
+  Future<void> updatedSingleField({required String id, required String field, required value})  async{
+    return await _crudFirebase.updateField(id, field, value);
+  }
+  
 }

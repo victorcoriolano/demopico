@@ -2,7 +2,7 @@ import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/core/common/media_management/models/file_model.dart';
-import 'package:demopico/core/common/media_management/usecases/pick_files_uc.dart';
+import 'package:demopico/core/common/media_management/usecases/pick_mult_files_uc.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/media_management/services/upload_service.dart';
 import 'package:demopico/core/common/media_management/usecases/pick_video_uc.dart';
@@ -12,7 +12,7 @@ import 'package:demopico/features/profile/domain/usecases/create_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/delete_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/update_post_uc.dart';
-import 'package:demopico/features/profile/presentation/view_objects/media_url_item.dart';
+import 'package:demopico/features/profile/presentation/object_for_only_view/media_url_item.dart';
 import 'package:demopico/features/user/domain/enums/type_post.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -205,7 +205,9 @@ class PostProvider extends ChangeNotifier {
           avatar: user.avatar,
           urlVideos: _videoUrls.isEmpty ? null : _videoUrls,
           description: description,
-          urlImages: _imgUrls);
+          urlImages: _imgUrls,
+          profileRelated: user.id, // perfil do usuário tem o id por isso não passei o id do perfil 
+      );
 
       final post = await _createPostUc.execute(newPost);
       type == TypePost.post ? _posts.add(post) : _fullVideoPosts.add(post);

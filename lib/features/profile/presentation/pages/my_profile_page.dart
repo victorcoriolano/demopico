@@ -1,9 +1,16 @@
-
 import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/core/common/widgets/back_widget.dart';
+import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto_mapper.dart';
+import 'package:demopico/features/profile/presentation/pages/coletivo_profile_page.dart';
+import 'package:demopico/features/profile/presentation/pages/create_colective_page.dart';
+import 'package:demopico/features/profile/presentation/view_model/notification_view_model.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_posts_widget.dart';
+import 'package:demopico/features/profile/presentation/widgets/profile_data/colective_card_widget.dart';
+import 'package:demopico/features/profile/presentation/widgets/profile_data/collective_section_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_bottom_side_data_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_drawer_config.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/profile_top_side_data_widget.dart';
@@ -14,7 +21,7 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-class MyProfilePage  extends StatefulWidget {
+class MyProfilePage extends StatefulWidget {
   const MyProfilePage({super.key});
 
   @override
@@ -28,9 +35,8 @@ class _MyProfilePageState extends State<MyProfilePage>
   ScrollDirection? _lastDirection;
   double _accumulatedScroll = 0.0;
   double _lastOffset = 0.0;
-
   TypePost typePost = TypePost.post; // definindo o tipo de post
-
+  final List<ColetivoEntity> coletivos = [];
   final ScrollController _scrollController = ScrollController();
   final TextEditingController bioController = TextEditingController();
   late final TabController _tabController;
@@ -61,8 +67,9 @@ class _MyProfilePageState extends State<MyProfilePage>
     switch (currentUser) {
       case UserEntity():
         user = currentUser;
+        context.read<NotificationViewModel>().initWatch(currentUser.id);    
       case AnonymousUserEntity():
-        // do nothing
+      // do nothing
     }
     debugPrint("User no profile page: $user");
     super.didChangeDependencies();
@@ -71,6 +78,7 @@ class _MyProfilePageState extends State<MyProfilePage>
   @override
   void initState() {
     super.initState();
+
     _tabController = TabController(length: 3, vsync: this);
 
     _tabController.addListener(() {
@@ -144,17 +152,17 @@ class _MyProfilePageState extends State<MyProfilePage>
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    if (user == null){
+    if (user == null) {
       return Center(
         child: CircularProgressIndicator(),
       );
     }
 
-        return Scaffold(
+    return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: kRed,
@@ -169,14 +177,48 @@ class _MyProfilePageState extends State<MyProfilePage>
           colorIcon: kWhite,
         ),
         actions: [
+          // Notifications
+          Consumer<NotificationViewModel>(
+            builder: (context, vm, child) {
+              return SizedBox(
+                width: 30,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Get.toNamed(Paths.notifications);
+                      },
+                      icon: const Icon(Icons.notifications),
+                      iconSize: 30,
+                      color: kAlmostWhite,
+                    ),
+                    Visibility(
+                      visible: vm.notifications.where((notif) => notif.isRead == false).isNotEmpty,
+                      child: Positioned(
+                          top: 12,
+                          left: 12,
+                          child: CircleAvatar(
+                            radius: 5,
+                            backgroundColor: kRedAccent,
+                          )),
+                    )
+                  ],
+                ),
+              );
+            }
+          ),
+          SizedBox(
+            width: 12,
+          ),
           Builder(builder: (context) {
             return IconButton(
                 onPressed: () {
                   Scaffold.of(context).openDrawer();
                 },
-                icon: const Icon(Icons.settings),
+                icon: const Icon(Icons.more_vert),
                 iconSize: 30,
-                color: kWhite);
+                color: kAlmostWhite);
           }),
         ],
       ),
@@ -198,6 +240,38 @@ class _MyProfilePageState extends State<MyProfilePage>
                 contributions: user!.profileUser.spots.length,
                 description: user!.profileUser.description ?? '',
               ),
+              if (user!.profileUser.idColetivos.isNotEmpty)
+                CollectiveSectionWidget(profile: user!.profileUser)
+              else
+                Container(
+                  height: 80,
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.symmetric(
+                      horizontal: (screenWidth * 0.10) / 2),
+                  decoration: BoxDecoration(
+                    color: kWhite.withValues(alpha: .5),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Você não participa de nenhum coletivo",
+                        style: TextStyle(color: kMediumGrey, fontSize: 13),
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            Get.to(
+                              () => CreateCollectivePage(
+                                user: user!.profileUser,
+                              ),
+                            );
+                          },
+                          icon: Icon(Icons.add))
+                    ],
+                  ),
+                ),
               SizedBox(
                 height: 12,
               ),

@@ -26,10 +26,12 @@ final testPico = PicoModel(
     name: "user123",
     profilePictureUrl: "url.com.photo"
   ),
+  usersWhoFavorited: List.empty(),
 );
 
 // 🔹 Mock 2
 final testPico2 = PicoModel(
+  usersWhoFavorited: List.empty(),
   id: "2",
   picoName: "Pico Chave",
   description: "Teste",
@@ -54,6 +56,7 @@ final testPico2 = PicoModel(
 
 // 🔹 Mock 3
 final testPico3 = PicoModel(
+  usersWhoFavorited: List.empty(),
   id: "3",
   picoName: "Pico Dhora",
   description: "Teste",

@@ -18,7 +18,7 @@ class FilesStorageRepository implements IUploadFileRepository {
 
   @override
   ListUploadTask saveFiles(List<FileModel> files, String path) {
-    final tasks = dataSource.uploadFile(files, path);
+    final tasks = dataSource.uploadFiles(files, path);
     return tasks.map((task) => task.uploadStream).toList();
   }
 
@@ -27,5 +27,10 @@ class FilesStorageRepository implements IUploadFileRepository {
         urls.map((url) => dataSource.deleteFile(url).whenComplete(() {
               debugPrint("SUCCESSFULLY DELETED");
             })));
+  }
+  
+  @override
+  StreamUploadState saveOneFile(FileModel file, path) {
+    return dataSource.uploadFile(file, path).uploadStream;
   }
 }

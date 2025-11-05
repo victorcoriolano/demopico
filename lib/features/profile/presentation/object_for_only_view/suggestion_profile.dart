@@ -29,4 +29,15 @@ class SuggestionProfile {
     this.status = status;
   }
 
+  factory SuggestionProfile.fromRelationship(Relationship relationship, String idUser){
+    final otherUserInformation = relationship.addressed.id == idUser 
+      ? relationship.requesterUser
+      : relationship.addressed;
+    return SuggestionProfile(
+      idUser: otherUserInformation.id, 
+      name: otherUserInformation.name, 
+      photo: otherUserInformation.profilePictureUrl, 
+      status: relationship.status);
+  }
+
 }

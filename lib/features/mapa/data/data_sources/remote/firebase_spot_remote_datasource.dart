@@ -4,7 +4,7 @@ import 'package:demopico/core/common/collections/collections.dart';
 import 'package:demopico/features/external/datasources/firebase/crud_firebase.dart';
 import 'package:demopico/features/mapa/data/data_sources/interfaces/i_spot_datasource.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
-import 'package:demopico/features/mapa/data/mappers/firebase_errors_mapper.dart';
+import 'package:demopico/core/common/mappers/firebase_errors_mapper.dart';
 import 'package:demopico/features/mapa/domain/entities/filters.dart';
 import 'package:flutter/foundation.dart';
 
