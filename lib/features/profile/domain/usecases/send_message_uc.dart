@@ -28,7 +28,7 @@ class SendMessageUc {
               isRead: false,
               id: "",
               userId: user,
-              message: "Nova mensagem do ${message.infoUser.name}",
+              message: "Nova mensagem do ${chat.nameChat}",
               timestamp: DateTime.now()
           )).toList();
            
