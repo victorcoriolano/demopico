@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/features/profile/domain/models/chat.dart';
 import 'package:demopico/features/profile/presentation/pages/profile_page_user.dart';
@@ -59,13 +60,7 @@ class _MyFriendsPageState extends State<MyFriendsPage> {
                         .createChat(currentUserIdentification, friend);
                   }
                   if (chat != null) {
-                    Get.snackbar(
-                      "Chat Criado com sucesso",
-                      'Acesse seus chats para iniciar a conversa',
-                      snackPosition: SnackPosition.BOTTOM,
-                      backgroundColor: Colors.green,
-                      colorText: Colors.white,
-                    );
+                    Get.offAndToNamed(Paths.chat, arguments: chat);
                   } else {
                     Get.snackbar(
                       "Erro",
