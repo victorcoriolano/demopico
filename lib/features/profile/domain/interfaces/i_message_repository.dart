@@ -5,8 +5,7 @@ import 'package:demopico/features/profile/domain/models/message.dart';
 abstract class ImessageRepository {
     Stream<List<Message>> watchMessagesForChat(String idChat);
     Future<List<Chat>> getChatForUser(UserIdentification currentUser);
-    Future<Chat> createChat(UserIdentification currentUser, UserIdentification otherUser);
-    Future<Chat> createGroupChat(List<UserIdentification> members); 
+    Future<Chat> createChat(Chat chat, UserIdentification currentUser );
     Future<Message> sendMessage(String idChat, Message message);
     Future<void> readMessage(String idChat, Message message);
 }
