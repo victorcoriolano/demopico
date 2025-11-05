@@ -3,12 +3,13 @@ import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';
 import 'package:demopico/features/profile/presentation/pages/collective_manager_page.dart';
+import 'package:demopico/features/profile/presentation/view_model/chat_list_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/collective_view_model.dart';
+import 'package:demopico/features/profile/presentation/view_model/screen_provider.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:provider/provider.dart';
-
-
 
 class ColetivoProfilePage extends StatefulWidget {
   final ColetivoEntity initialColetivoInformation;
@@ -30,8 +31,10 @@ class _ColetivoProfilePageState extends State<ColetivoProfilePage> {
   void initState() {
     coletivo = widget.initialColetivoInformation;
     super.initState();
-    final currentUser = context.read<AuthViewModelAccount>().user;  
-    rule = context.read<CollectiveViewModel>().checkUserRole(currentUser,coletivo);
+    final currentUser = context.read<AuthViewModelAccount>().user;
+    rule = context
+        .read<CollectiveViewModel>()
+        .checkUserRole(currentUser, coletivo);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await context
           .read<CollectiveViewModel>()
@@ -46,7 +49,6 @@ class _ColetivoProfilePageState extends State<ColetivoProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    
     final List<Post> recs = coletivo.publications
         .where((p) => p.urlVideos != null && p.urlVideos!.isNotEmpty)
         .toList();
@@ -69,15 +71,19 @@ class _ColetivoProfilePageState extends State<ColetivoProfilePage> {
 
           // --- Seção de Recs (Vídeo Parts) ---
           _SectionHeader(
-              title: 'RECS', cta: 'Ver todas (${recs.length})', onTap: () { 
+              title: 'RECS',
+              cta: 'Ver todas (${recs.length})',
+              onTap: () {
                 // TODO: IMPLEMENTAR VER TODAS AS RECS
               }),
           _RecsListView(recs: recs),
 
           // --- Seção de Atividade (Todos os Posts) ---
-          _SectionHeader(title: 'ATIVIDADE DO COLETIVO', onTap: () {
-            // TODO: IMPLEMENTAR TODAS AS ATIVIDADES DO COLETIVO
-          }),
+          _SectionHeader(
+              title: 'ATIVIDADE DO COLETIVO',
+              onTap: () {
+                // TODO: IMPLEMENTAR TODAS AS ATIVIDADES DO COLETIVO
+              }),
           _AllPostsListView(posts: coletivo.publications),
         ],
       ),
@@ -85,21 +91,44 @@ class _ColetivoProfilePageState extends State<ColetivoProfilePage> {
   }
 }
 
-Widget _buildSliverAppBar(BuildContext context, ColetivoEntity coletivo, UserCollectiveRole rule) {
-
+Widget _buildSliverAppBar(
+    BuildContext context, ColetivoEntity coletivo, UserCollectiveRole rule) {
   return SliverAppBar(
     expandedHeight: 380.0,
     backgroundColor: kBlack,
+    actions: [
+      Padding(
+        padding: const EdgeInsets.only(right: 5.0),
+        child: IconButton(
+            onPressed: () {
+              final currentUser =
+                  context.read<AuthViewModelAccount>().userIdentification;
+        
+              if (currentUser != null) {
+                context.read<ChatListViewModel>().createOrGetCollectiveChat(
+                    currentUser: currentUser,
+                    members: coletivo.members,
+                    nameChat: coletivo.nameColetivo,
+                    photo: coletivo.logo);
+                //context.read<ScreenProvider>().setIndex(2);
+                Get.back();
+              }
+            },
+            icon: Icon(Icons.message_outlined),
+            ),
+      )
+    ],
     pinned: true,
-    iconTheme: const IconThemeData(color: kRed),
+    iconTheme: const IconThemeData(color: kAlmostWhite),
     flexibleSpace: FlexibleSpaceBar(
       title: Text(
         coletivo.nameColetivo,
         style: const TextStyle(
-            color: kWhite, fontWeight: FontWeight.bold, fontSize: 30),
+            color: kWhite, fontWeight: FontWeight.bold, fontSize: 30,),
       ),
       expandedTitleScale: 1.5,
       centerTitle: true,
+      titlePadding: EdgeInsets.all( 8.0),
       background: Stack(
         fit: StackFit.expand,
         children: [
@@ -155,9 +184,11 @@ Widget _buildSliverAppBar(BuildContext context, ColetivoEntity coletivo, UserCol
                           (p) => p.urlVideos != null && p.urlVideos!.isNotEmpty)
                       .length,
                 ),
-
                 const SizedBox(height: 16),
-                CollectiveActionButtons(rule: rule, coletivo: coletivo,),
+                CollectiveActionButtons(
+                  rule: rule,
+                  coletivo: coletivo,
+                ),
               ],
             ),
           ),
@@ -170,29 +201,31 @@ Widget _buildSliverAppBar(BuildContext context, ColetivoEntity coletivo, UserCol
 class CollectiveActionButtons extends StatefulWidget {
   final UserCollectiveRole rule;
   final ColetivoEntity coletivo;
-  const CollectiveActionButtons({super.key, required this.rule, required this.coletivo});
+  const CollectiveActionButtons(
+      {super.key, required this.rule, required this.coletivo});
 
   @override
-  State<CollectiveActionButtons> createState() => _CollectiveActionButtonsState();
+  State<CollectiveActionButtons> createState() =>
+      _CollectiveActionButtonsState();
 }
 
 class _CollectiveActionButtonsState extends State<CollectiveActionButtons> {
-  
   @override
   Widget build(BuildContext context) {
-    
     switch (widget.rule) {
       case UserCollectiveRole.visitor:
         return _StyledActionButton(
           text: 'Solicitar entrada',
           icon: Icons.person_add_alt_1,
           onPressed: () async {
-            final useridentification = context.read<AuthViewModelAccount>().userIdentification;
-            if (useridentification != null){
-               await context.read<CollectiveViewModel>().requestEntry(useridentification);
-                setState(() {
-                });
-              }
+            final useridentification =
+                context.read<AuthViewModelAccount>().userIdentification;
+            if (useridentification != null) {
+              await context
+                  .read<CollectiveViewModel>()
+                  .requestEntry(useridentification);
+              setState(() {});
+            }
           },
         );
       case UserCollectiveRole.pending:
@@ -231,7 +264,9 @@ class _CollectiveActionButtonsState extends State<CollectiveActionButtons> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ColetivoManagerPage(coletivo: widget.coletivo,),
+                    builder: (context) => ColetivoManagerPage(
+                      coletivo: widget.coletivo,
+                    ),
                   ),
                 );
               },
@@ -263,7 +298,8 @@ class _StyledActionButton extends StatelessWidget {
     final style = ButtonStyle(
       backgroundColor: WidgetStateProperty.all(
           isOutlined ? Colors.transparent : backgroundColor),
-      foregroundColor: WidgetStateProperty.all(isOutlined ? kRedAccent : kWhite),
+      foregroundColor:
+          WidgetStateProperty.all(isOutlined ? kRedAccent : kWhite),
       padding: WidgetStateProperty.all(
         const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       ),
@@ -444,8 +480,7 @@ class _MembersListView extends StatelessWidget {
                         ? NetworkImage(member.profilePictureUrl!)
                         : null,
                     onBackgroundImageError: member.profilePictureUrl != null
-                        ? (e, s) =>
-                            const Icon(Icons.person, color: kLightGrey)
+                        ? (e, s) => const Icon(Icons.person, color: kLightGrey)
                         : null,
                     child: member.profilePictureUrl == null
                         ? const Icon(Icons.person, color: kLightGrey)
