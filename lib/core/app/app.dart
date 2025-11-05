@@ -30,7 +30,6 @@ class MyAppWidget extends StatelessWidget {
         theme: appTheme,
         checkerboardRasterCacheImages: true,
         getPages: AppPages.routes,
-        home: const HomePage(),
         initialBinding: AuthBinding(),
       ),
     );

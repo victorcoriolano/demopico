@@ -11,8 +11,7 @@
     State<HomePage> createState() => _HomePageState();
   }
 
-  class _HomePageState extends State<HomePage> {
-
+class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
@@ -21,31 +20,17 @@
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-          child: GestureDetector(
-            key: const Key('home_page_gesture_detector_navigate'),
-        onHorizontalDragEnd: (details) {
-          if (details.primaryVelocity! > 0.5) {
-            Get.toNamed(Paths.map);
-    @override
-    void initState() {
-      super.initState();
-    }
-    @override
-    Widget build(BuildContext context) {
-      return Scaffold(
-        body: SafeArea(
-            child: GestureDetector(
-              key: const Key('home_page_gesture_detector_navigate'),
+        child: GestureDetector(
+          key: const Key('home_page_gesture_detector_navigate'),
           onHorizontalDragEnd: (details) {
             if (details.primaryVelocity! > 0) {
               Get.toNamed(Paths.map);
-
-          } else if (details.primaryVelocity! < 0.5) {
+            } else if (details.primaryVelocity! < 0.5) {
             Get.toNamed(Paths.profile);
-          }
-        },
-        child: CentralPage()
-      ),
+            }
+          },
+          child: CentralPage()
+        ),
       ),
     );
   }

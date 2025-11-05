@@ -239,10 +239,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   ImageProvider<Object>? getPfp() {
-    if(user.pictureUrl == null){
+    if(user.avatar == null){
       return AssetImage("assets/images/userPhoto.png");
     }
-    return CachedNetworkImageProvider(user.pictureUrl!);
+    return CachedNetworkImageProvider(user.avatar!);
   }
 
 }

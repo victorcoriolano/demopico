@@ -1,5 +1,6 @@
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
+import 'package:demopico/core/common/widgets/snackbar_utils.dart';
 import 'package:demopico/features/denunciar/denuncia_model.dart';
 import 'package:demopico/features/mapa/presentation/controllers/favorite_spot_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_provider.dart';
@@ -127,7 +128,7 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                               nameUserCreator: spotProvider.pico!.user?.name ?? "Anônimo", 
                                               //FIXED ? 1.0
                                               //FIXME: PASSANDO A IMAGEM COMO NULL MAIS FUTURAMENTE passar a imagem do user
-                                              urlImageUser: spotProvider.pico!.user?.photoUrl,
+                                              urlImageUser: spotProvider.pico!.user?.profilePictureUrl,
                                             ),
                                             const SizedBox(width: 15),
             
