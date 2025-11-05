@@ -13,11 +13,15 @@ class Post {
   final String profileRelated;
   final List<String> urlImages;
   final List<String>? urlVideos;
+  final List<String> likedBy;
+  final List<String> spotsIds; //spots linkados pode ser mais de um 
+  final List<String> mentionedUsers;
   final DateTime dateTime;
   final int curtidas;
   final TypePost typePost;
 
   Post({
+    required this.mentionedUsers,
     required this.profileRelated,
     required this.id,
     required this.nome,
@@ -27,6 +31,8 @@ class Post {
     required this.description,
     required this.urlImages,
     required this.typePost,
+    required this.spotsIds,
+    required this.likedBy,
     DateTime? dateTime,
     int? curtidas,
     this.urlVideos,
@@ -51,6 +57,9 @@ class Post {
       curtidas: json['curtidas'],
       typePost: TypePost.fromString(json["typePost"]),
       profileRelated: json["profileRelated"] ?? "",
+      spotsIds: List.from(json["spotsIds"] ?? []),
+      mentionedUsers: List.from(json["mentionedUsers"] ?? []),
+      likedBy: List.from(json["likedBy"] ?? []),
     );
   }
 
@@ -67,6 +76,9 @@ class Post {
       'curtidas': curtidas,
       'typePost': typePost.name,
       'profileRelated': profileRelated,
+      'spotsIds': spotsIds,
+      'mentionedUsers': mentionedUsers,
+      'likedBy': likedBy,
     };
   }
 
@@ -83,8 +95,13 @@ class Post {
     int? curtidas,
     TypePost? typePost,
     String? profileRelated,
+    List<String>? spotsIds,
+    List<String>? mentionedUsers,
+    List<String>? likedBy,
   }) {
     return Post(
+      mentionedUsers: mentionedUsers ?? this.mentionedUsers,
+      likedBy: likedBy ?? this.likedBy ,
       profileRelated: profileRelated ?? this.profileRelated,
       id: id ?? this.id,
       nome: nome ?? this.nome,
@@ -97,6 +114,7 @@ class Post {
       dateTime: dateTime ?? this.dateTime,
       curtidas: curtidas ?? this.curtidas,
       typePost: typePost ?? this.typePost,
+      spotsIds: spotsIds ?? this.spotsIds,
     );
   }  
 }
