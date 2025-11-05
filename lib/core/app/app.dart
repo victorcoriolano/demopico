@@ -23,13 +23,14 @@ class MyAppWidget extends StatelessWidget {
     return MultiProvider(
       providers: myProviders,
       child: GetMaterialApp(
-        //home: HomePageTest(),
+        home: HomePage(),
         debugShowCheckedModeBanner: false,
         title: 'SKATEPICO',
         theme: appTheme,
         checkerboardRasterCacheImages: true,
         getPages: AppPages.routes,
         initialBinding: AuthBinding(),
+
       ),
     );
   }
