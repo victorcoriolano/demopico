@@ -1,6 +1,8 @@
+import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
+import 'package:demopico/features/profile/domain/models/chat.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';
 import 'package:demopico/features/profile/presentation/pages/collective_manager_page.dart';
 import 'package:demopico/features/profile/presentation/view_model/chat_list_view_model.dart';
@@ -100,18 +102,30 @@ Widget _buildSliverAppBar(
       Padding(
         padding: const EdgeInsets.only(right: 5.0),
         child: IconButton(
-            onPressed: () {
+            onPressed: () async {
               final currentUser =
                   context.read<AuthViewModelAccount>().userIdentification;
         
               if (currentUser != null) {
-                context.read<ChatListViewModel>().createOrGetCollectiveChat(
+                final Chat? chat;
+                chat = await context.read<ChatListViewModel>().createOrGetCollectiveChat(
                     currentUser: currentUser,
                     members: coletivo.members,
                     nameChat: coletivo.nameColetivo,
                     photo: coletivo.logo);
-                //context.read<ScreenProvider>().setIndex(2);
-                Get.back();
+                
+                if (chat != null) {
+                  Get.offAndToNamed(Paths.chat, arguments: chat);
+                } 
+                else {
+                  Get.snackbar(
+                    "Erro",
+                    "Ocorreu um erro ao acessar o chat tente novamente mais tarde",
+                    snackPosition: SnackPosition.BOTTOM,
+                    backgroundColor: Colors.red,
+                    colorText: Colors.white,
+                  );
+                }
               }
             },
             icon: Icon(Icons.message_outlined),
