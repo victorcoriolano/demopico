@@ -404,15 +404,4 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators {
       ),
     );
   }
-
-<<<<<<< HEAD
-  ImageProvider<Object>? getPfp() {
-    if(user.avatar == null){
-      return AssetImage("assets/images/userPhoto.png");
-    }
-    return CachedNetworkImageProvider(user.avatar!);
-  }
-
-=======
->>>>>>> 424ad24c4338c7e56f44380eec2a625b1a240824
 }
