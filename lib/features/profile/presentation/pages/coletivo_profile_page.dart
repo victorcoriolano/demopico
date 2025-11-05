@@ -4,6 +4,7 @@ import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/features/profile/domain/models/chat.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';
+import 'package:demopico/features/profile/presentation/pages/add_post_on_collective.dart';
 import 'package:demopico/features/profile/presentation/pages/collective_manager_page.dart';
 import 'package:demopico/features/profile/presentation/view_model/chat_list_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/collective_view_model.dart';
@@ -255,7 +256,7 @@ class _CollectiveActionButtonsState extends State<CollectiveActionButtons> {
           text: 'Enviar vídeo (Rec)',
           icon: Icons.video_call,
           onPressed: () {
-            // TODO: LÓGICA DE UPLOAD NO COLETIVO
+            Get.to(() => AddPostOnCollective());
           },
         );
       case UserCollectiveRole.moderator:

@@ -1,5 +1,5 @@
 import 'package:demopico/core/app/theme/theme.dart';
-import 'package:demopico/features/profile/presentation/widgets/chat_widgets.dart/triangle.dart';
+import 'package:demopico/features/profile/presentation/widgets/chat_widgets/triangle.dart';
 import 'package:flutter/material.dart';
 
 class OutMessage extends StatelessWidget {

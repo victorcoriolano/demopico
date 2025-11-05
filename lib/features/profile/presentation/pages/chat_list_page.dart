@@ -1,6 +1,6 @@
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/features/profile/presentation/view_model/chat_list_view_model.dart';
-import 'package:demopico/features/profile/presentation/widgets/chat_widgets.dart/chat_list.dart';
+import 'package:demopico/features/profile/presentation/widgets/chat_widgets/chat_list.dart';
 import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
