@@ -20,6 +20,7 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> with Validators {
   final TextEditingController _loginController = TextEditingController();
+  final TextEditingController _recuperarController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
@@ -28,11 +29,11 @@ class _LoginFormState extends State<LoginForm> with Validators {
       context: context, 
       builder: (context) {
         return AlertDialog(
-          title: Text("Insira seu email pra redefinir a senha"),
+          title: Text("Insira seu Email para Redefinir a Senha"),
           content: Padding(
             padding: EdgeInsets.all(8.0),
             child: TextFormField(
-              controller: _loginController,
+              controller: _recuperarController,
             ),
           ),
           actionsAlignment: MainAxisAlignment.spaceBetween,
@@ -40,6 +41,7 @@ class _LoginFormState extends State<LoginForm> with Validators {
             TextButton(
               onPressed: () {
                 Get.back();
+   
               }, 
               child: Text("Cancelar")),
             CustomElevatedButton(
