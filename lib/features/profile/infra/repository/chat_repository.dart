@@ -1,4 +1,5 @@
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
+import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto_mapper.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_message_datasource.dart';
@@ -143,5 +144,15 @@ class ChatRepository implements ImessageRepository {
   Future<Message> _fetchMessageById(String idChat, String idMessage) async {
     return messageMapper
         .toModel(await _datasource.getMessageById(idChat, idMessage));
+  }
+  
+  @override
+  Future<void> addUserOnGroup(String idChat, List<String> idUser) async {
+      return await _datasource.updateUsersOnGroup(idChat, idUser);
+  }
+  
+  @override
+  Future<void> removeUserOnGroup(String idChat, List<String> idUser) async {
+    return await _datasource.updateUsersOnGroup(idChat, idUser);
   }
 }

@@ -104,4 +104,10 @@ class MessageFirestoreDatasource implements IMessageDatasource<FirebaseDTO> {
       throw FirebaseErrorsMapper.map(e);
     }
   }
+  
+  @override
+  Future<void> updateUsersOnGroup(String idChat, List<String> idUser) {
+    return _boilerplate.updateField(idChat, "participantsIds", idUser);
+  }
+  
 }
