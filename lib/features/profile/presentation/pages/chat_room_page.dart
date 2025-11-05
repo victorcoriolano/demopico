@@ -28,11 +28,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
 
   @override
   Widget build(BuildContext context) {
-    final nameChat = switch (chat) {
-      Conversation _ => (chat as Conversation)
-          .nameChat,
-      GroupChat _ => (chat as GroupChat).nameChat
-    };
+    final nameChat = chat.nameChat;
     final currentUserIdentification = context.read<AuthViewModelAccount>().userIdentification;
     return Scaffold(
       appBar: AppBar(
