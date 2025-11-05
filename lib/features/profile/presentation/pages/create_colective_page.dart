@@ -5,6 +5,7 @@ import 'package:demopico/features/profile/domain/models/profile_user.dart';
 import 'package:demopico/features/profile/presentation/object_for_only_view/suggestion_profile.dart';
 import 'package:demopico/features/profile/presentation/view_model/create_collective_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
+import 'package:demopico/features/profile/presentation/widgets/chat_widgets/container_users_selected.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -176,41 +177,7 @@ class _CreateCollectivePageState extends State<CreateCollectivePage> {
 
             const SizedBox(height: 16.0), // Espaço entre a busca e os chips
 
-            Consumer<CreateCollectiveViewModel>(builder: (context, vm, child) {
-              if (vm.members.isEmpty) {
-                return Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(24.0),
-                  child: Center(
-                    child: Text(
-                      'Os membros adicionados aparecerão aqui.',
-                      style: textTheme.bodyMedium
-                          ?.copyWith(color: colorScheme.onSurfaceVariant),
-                    ),
-                  ),
-                );
-              } else {
-                return Wrap(
-                  spacing: 8.0, // Espaço horizontal entre os chips
-                  runSpacing: 8.0, // Espaço vertical entre as linhas de chips
-                  children: vm.members.map((user) {
-                    return Chip(
-                      avatar: CircleAvatar(
-                        backgroundImage: user.profilePictureUrl != null
-                            ? NetworkImage(user.profilePictureUrl!)
-                            : null,
-                        // Adiciona um ícone de fallback
-                        child: user.profilePictureUrl == null
-                            ? const Icon(Icons.person, size: 18)
-                            : null,
-                      ),
-                      label: Text(user.name),
-                      onDeleted: () => vm.removeMember(user),
-                    );
-                  }).toList(),
-                );
-              }
-            }),
+            ContainerSelectedUsers(),
             const SizedBox(height: 16.0),
             Center(
               child: Consumer<CreateCollectiveViewModel>(
