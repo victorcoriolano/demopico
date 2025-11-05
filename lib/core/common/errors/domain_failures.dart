@@ -94,3 +94,7 @@ class InvalidObstacleFailure extends DomainFailure {
   InvalidObstacleFailure({required super.message});
 }
 
+class AnotherFailure extends DomainFailure {
+  AnotherFailure({required super.message});
+}
+

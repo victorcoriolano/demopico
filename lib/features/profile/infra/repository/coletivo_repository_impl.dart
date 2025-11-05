@@ -15,7 +15,7 @@ import 'package:demopico/features/user/infra/datasource/remote/user_firebase_dat
 class ColetivoRepositoryImpl implements IColetivoRepository{
   final IColetivoDatasource _datasource;
   final IPostDatasource _postDatasource;
-  final IUserDataSource<FirebaseDTO> _userDataSource;
+    final IUserDataSource<FirebaseDTO> _userDataSource;
 
   ColetivoRepositoryImpl({required IColetivoDatasource datasource, required IPostDatasource postDatasource, required IUserDataSource<FirebaseDTO> userDatasource}): _datasource = datasource, _postDatasource = postDatasource, _userDataSource = userDatasource;
 
@@ -25,13 +25,6 @@ class ColetivoRepositoryImpl implements IColetivoRepository{
     postDatasource: FirebasePostDatasource.getInstance,
     userDatasource: UserFirebaseDataSource.getInstance, );  
 
-
-
-  @override
-  Future<void> addUserOnCollective(UserIdentification user) {
-    return _datasource.addUserOnCollective(userIdentificationMapper.toDTO(user));
-  }
-
   @override
   Future<ColetivoEntity> createColetivo(ColetivoEntity coletivo) async {
     final collectiveDTO = await _datasource.createColetivo(coletivoDtoMapper.toDTO(coletivo));
@@ -39,16 +32,8 @@ class ColetivoRepositoryImpl implements IColetivoRepository{
   }
 
   @override
-  Future<void> removeUser(UserIdentification user) {
-    // TODO: implement removeUser
-    throw UnimplementedError();
-  }
-
-
-  @override
-  Future<void> updateColetivo(ColetivoEntity coletivo) {
-    // TODO: implement updateColetivo
-    throw UnimplementedError();
+  Future<void> updateColetivo(ColetivoEntity coletivo) async {
+    return await _datasource.updateColetivo(coletivoDtoMapper.toDTO(coletivo));
   }
   
   @override
@@ -98,6 +83,17 @@ class ColetivoRepositoryImpl implements IColetivoRepository{
   Future<List<ColetivoEntity>> getCollectiveForProfile(String idProfile) async {
     final collectives = await _datasource.getCollectiveForProfile(idProfile);
     return collectives.map((coll) => coletivoDtoMapper.toModel(coll)).toList();
+  }
+  
+  @override
+  Future<List<ColetivoEntity>> getAllCollectives() async {
+    final collectivesDatasource = await _datasource.getAllCollectives();
+    return collectivesDatasource.map((coll) => coletivoDtoMapper.toModel(coll)).toList();
+  }
+  
+  @override
+  Future<void> requestEntryOnCollective({required String nameField, required String idCollective, required List<String> newEntryRequestList}) {
+    return _datasource.requestEntryOnCollective(nameField: nameField, idCollective: idCollective, newEntryRequestList: newEntryRequestList);
   } 
   
 }

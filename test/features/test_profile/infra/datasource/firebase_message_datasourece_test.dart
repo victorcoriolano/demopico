@@ -51,7 +51,7 @@ void main() {
             .add(message2);
 
         // Act
-        final stream = datasource.getMessagesForChat(testChatId);
+        final stream = datasource.watchMessagesForChat(testChatId);
 
         // Assert
         // Expects messages to be ordered by dateTime descending
@@ -72,7 +72,7 @@ void main() {
         await fakeFirestore.collection('chats').doc(testChatId).set({});
 
         // Act
-        final stream = datasource.getMessagesForChat(testChatId);
+        final stream = datasource.watchMessagesForChat(testChatId);
 
         // Assert
         expect(stream, emits(<FirebaseDTO>[]));

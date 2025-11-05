@@ -1,5 +1,4 @@
 
-import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
@@ -9,7 +8,6 @@ import 'package:demopico/core/common/media_management/usecases/pick_one_image_uc
 import 'package:demopico/features/profile/domain/models/profile_user.dart';
 import 'package:demopico/features/profile/domain/usecases/create_collective_uc.dart';
 import 'package:demopico/features/profile/presentation/object_for_only_view/suggestion_profile.dart';
-import 'package:demopico/features/profile/presentation/pages/coletivo_profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

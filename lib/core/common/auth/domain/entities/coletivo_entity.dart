@@ -57,5 +57,29 @@ class ColetivoEntity {
       publications: publications ?? List<Post>.from(this.publications),
     );
   }
+
+  UserCollectiveRole ruleForUser(String userID){
+    if (entryRequests.contains(userID)){
+      return UserCollectiveRole.pending;
+    }
+
+    if (members.map((element) => element.id).contains(userID) && modarator.id != userID){
+      return UserCollectiveRole.member;
+    }
+
+    if (modarator.id == userID){
+      return UserCollectiveRole.moderator;
+    }
+
+    return UserCollectiveRole.visitor;
+  }
    
+}
+
+
+enum UserCollectiveRole {
+  visitor,
+  member,
+  moderator,
+  pending, 
 }

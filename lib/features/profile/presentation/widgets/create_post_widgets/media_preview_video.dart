@@ -20,7 +20,7 @@ class _MediaPreviewVideoState extends State<MediaPreviewVideo> {
           return Center(child: Text("Selecione uma Video"),);
         }
         return SizedBox(
-        height: 250,
+        height: 500,
         child: Stack(
               children: [
                 ClipRRect(

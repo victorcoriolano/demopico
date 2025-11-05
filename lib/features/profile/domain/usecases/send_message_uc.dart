@@ -21,14 +21,17 @@ class SendMessageUc {
       final newMessage =
           await _imessageRepository.sendMessage(chat.id, message);
       final notifications = chat.participantsIds
-          .map((participant) => NotificationItem(
+          .where((participant) => participant != message.infoUser.id)
+          .map((user) => 
+              NotificationItem(
               type: TypeNotification.newMessage,
               isRead: false,
               id: "",
-              userId: participant,
+              userId: user,
               message: "Nova mensagem do ${chat.nameChat}",
-              timestamp: DateTime.now()))
-          .toList();
+              timestamp: DateTime.now()
+          )).toList();
+           
 
       await Future.wait(notifications.map((notification) =>
           _notificaitonRepo.createNotification(notification)));
