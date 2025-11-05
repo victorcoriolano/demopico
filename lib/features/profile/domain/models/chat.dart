@@ -149,4 +149,9 @@ class GroupChat extends Chat{
       membersData: membersData ?? this.membersData,
     );
   }
+
+  @override
+  String toString() {
+    return "GroupChat(id: $id, lastUpdate: $lastUpdate, lastReadMessage: $lastReadMessage, lastMessage: $lastMessage, nameChat: $nameChat, participantsIds: $participantsIds, photoUrl: $photoUrl, membersData: $membersData)";
+  }
 }
