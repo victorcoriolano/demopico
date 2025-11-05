@@ -27,13 +27,12 @@
           onHorizontalDragEnd: (details) {
             if (details.primaryVelocity! > 0) {
               Get.toNamed(Paths.map);
-
-          } else if (details.primaryVelocity! < 0.5) {
+            } else if (details.primaryVelocity! < 0.5) {
             Get.toNamed(Paths.profile);
-          }
-        },
-        child: CentralPage()
-      ),
+            }
+          },
+          child: CentralPage()
+        ),
       ),
     );
   }
