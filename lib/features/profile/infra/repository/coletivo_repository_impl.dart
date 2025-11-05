@@ -15,7 +15,7 @@ import 'package:demopico/features/user/infra/datasource/remote/user_firebase_dat
 class ColetivoRepositoryImpl implements IColetivoRepository{
   final IColetivoDatasource _datasource;
   final IPostDatasource _postDatasource;
-  final IUserDataSource<FirebaseDTO> _userDataSource;
+    final IUserDataSource<FirebaseDTO> _userDataSource;
 
   ColetivoRepositoryImpl({required IColetivoDatasource datasource, required IPostDatasource postDatasource, required IUserDataSource<FirebaseDTO> userDatasource}): _datasource = datasource, _postDatasource = postDatasource, _userDataSource = userDatasource;
 

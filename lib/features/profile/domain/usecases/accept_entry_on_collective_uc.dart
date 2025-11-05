@@ -4,7 +4,6 @@ import 'package:demopico/core/common/auth/domain/entities/user_identification.da
 import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_coletivo_repository.dart';
-import 'package:demopico/features/profile/domain/interfaces/i_network_repository.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_notification_repository.dart';
 import 'package:demopico/features/profile/domain/models/notification.dart';
 import 'package:demopico/features/profile/infra/repository/coletivo_repository_impl.dart';

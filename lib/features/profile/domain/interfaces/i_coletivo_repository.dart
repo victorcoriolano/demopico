@@ -1,5 +1,4 @@
 import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
-import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 
 abstract interface class IColetivoRepository {
   Future<ColetivoEntity> getColetivoByID(String idColetivo);

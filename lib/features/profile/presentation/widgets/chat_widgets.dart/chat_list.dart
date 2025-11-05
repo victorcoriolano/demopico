@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 class ChatList extends StatelessWidget {
   final List<Chat> chats;
   final String currentID;
-  const ChatList({super.key, required this.chats, required this.currentID});
+  const   ChatList({super.key, required this.chats, required this.currentID});
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +21,9 @@ class ChatList extends StatelessWidget {
           case Conversation():
             {
               final conversa = chat;
+              debugPrint('conversa: ${conversa.photoUrl}');
+              debugPrint('conversa: ${conversa.nameChat}');
+              debugPrint('conversa: ${conversa.participantsIds}');
               return Container(
                 margin: EdgeInsets.only(top: 12, left: 12, right: 12),
                 decoration: BoxDecoration(
@@ -36,9 +39,9 @@ class ChatList extends StatelessWidget {
                       )
                       : null,
                   ),
-                  title: Text(chat.nameChat, style: TextStyle(fontWeight: FontWeight.bold ),),
+                  title: Text(conversa.nameChat, style: TextStyle(fontWeight: FontWeight.bold ),),
                   subtitle: Text(
-                    chat.lastMessage, 
+                    conversa.lastMessage, 
                     style: TextStyle(
                             color: const Color.fromARGB(255, 87, 82, 82)
                           ),
