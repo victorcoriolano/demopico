@@ -22,7 +22,7 @@ class PickFileUC {
 
   Future<void> execute() async {
     if (!_validateListFile(listFiles)) {
-      debugPrint("Limite já atingido");
+      debugPrint("Limite já atingido: ${listFiles.length}");
       throw FileLimitExceededFailure(
           messagemAdicional: "Já foram selecionados 3 arquivos");
     }
@@ -46,7 +46,9 @@ class PickFileUC {
 
     listFiles.addAll(selectedFiles);
 
-    if (listFiles.any((file) => file.contentType == ContentType.unavailable)) throw InvalidFormatFileFailure();
+    if (listFiles.any((file) => file.contentType == ContentType.unavailable)) {
+      listFiles.clear();
+      throw InvalidFormatFileFailure();}
   }
 
   bool _validateListFile(List<FileModel> files) =>
