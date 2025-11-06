@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "495399023145",
+    "firebase_url": "https://pico-skatepico-default-rtdb.firebaseio.com",
     "project_id": "pico-skatepico",
     "storage_bucket": "pico-skatepico.appspot.com"
   },

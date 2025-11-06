@@ -7,6 +7,14 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class GeminiApi implements IDangerContentApi {
+
+  static GeminiApi? _geminiApi;
+
+  static GeminiApi get getInstance {
+    _geminiApi ??= GeminiApi();
+    return _geminiApi!;
+  }
+
   TypeContent typeContent = TypeContent.danger;
 
   @override
