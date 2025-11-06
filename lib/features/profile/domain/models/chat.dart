@@ -6,9 +6,11 @@ sealed class Chat {
   String? get photoUrl;
   String get nameChat;
   DateTime? get lastUpdate;
-  Message get lastReadMessage;
+  Message? get lastReadMessage;
   String get lastMessage;
   List<String> get participantsIds;
+
+  
 }
 
 class Conversation extends Chat {
@@ -17,14 +19,17 @@ class Conversation extends Chat {
   @override
   final DateTime? lastUpdate;
   @override
-  final Message lastReadMessage;
+  final Message? lastReadMessage;
   @override
   final String lastMessage;
   @override
   final List<String> participantsIds;
   
+  final UserIdentification currentUser;
+  final UserIdentification otherUser;
   final List<UserIdentification> _participantsData;
   final String _currentUserId;
+  
 
   Conversation({
     required this.lastUpdate,
@@ -32,69 +37,52 @@ class Conversation extends Chat {
     required this.lastMessage,
     required this.participantsIds,
     required this.lastReadMessage,
-    required List<UserIdentification> participantsData,
-    required String currentUserId,
-  }) : _participantsData = participantsData,
-        _currentUserId = currentUserId;
+    required this.currentUser,
+    required this.otherUser,
+  }) : _participantsData = [currentUser, otherUser],
+        _currentUserId = currentUser.id;
 
   factory Conversation.initFromUsers(UserIdentification currentUser, UserIdentification otherUser){
     return Conversation(
-      currentUserId: currentUser.id,
-      participantsData: [currentUser, otherUser],
+      currentUser: currentUser,
+      otherUser:  otherUser,
       lastUpdate: null,
-      lastMessage: "Inicie uma conversa com ${otherUser.name}", 
+      lastMessage: "Inicie uma conversa", 
       participantsIds: List<String>.from([currentUser.id, otherUser.id]), 
       id: "", // sera inserido no bd
-      lastReadMessage: Message.initial(currentUser, "content"),
+      lastReadMessage: null,
     );    
   }
 
-  UserIdentification get _otherUser {
-    return _participantsData.firstWhere(
-      (user) => user.id != _currentUserId,
-      orElse: () => _participantsData.first, // Fallback
-    );
-  }
 
   @override
-  String? get photoUrl => _otherUser.profilePictureUrl;
+  String? get photoUrl => otherUser.profilePictureUrl;
 
   @override
-  String get nameChat => _otherUser.name;
+  String get nameChat => otherUser.name;
 
-  Map<String, dynamic> toMap() {
-    return {
-      'chatType': 'conversation', // ATRIBUTO DISCRIMINADOR PARA AJUDAR NO MAPEAMENTO DO DATASOURCE
-      'lastUpdate': lastUpdate?.toIso8601String(),
-      'lastMessage': lastMessage,
-      'participantsIds': participantsIds,
-      'participantsData': _participantsData.map((user) => user.toJson()).toList(), 
-      // 'nameChat' e 'photo' não é armazenado, pois é derivado (SÃO DADOS DO OUTRO USUÁRIO)
-      'lastReadMessage': lastReadMessage.toJson(),
-    };
-  }
-
-  factory Conversation.fromMap(Map<String, dynamic> map, String id, UserIdentification currentUser) {
-    try {
-      final participantsList = (map['participantsData'] as List)
-          .map((user) => UserIdentification.fromJson(user as Map<String, dynamic>))
-          .toList();
-      
-      
-
-      return Conversation(
-        participantsData: participantsList,
-        currentUserId: currentUser.id,
-        id: id,
-        lastUpdate: map["lastUpdate"] != null ? DateTime.tryParse(map["lastUpdate"]) : null,
-        lastMessage: map["lastMessage"] ?? '',
-        participantsIds: List.from(map['participantsIds'] ?? ''),
-        lastReadMessage: Message.fromMap(map['lastReadMessage']), // Assumindo que Message tem fromMap()
-      );
-    } catch (e) {
-      throw Exception("Erro ao mapear Conversation: $e");
+  Conversation copyWith(
+    {
+      String? id,
+      DateTime? lastUpdate,
+      Message? lastReadMessage,
+      String? lastMessage,
+      List<String>? participantsIds,
+      UserIdentification? currentUser,
+      UserIdentification? otherUser,
+      String? currentUserId,
     }
-  }
+  ){
+    return Conversation(
+      lastUpdate: lastUpdate ?? this.lastUpdate,
+      id: id ?? this.id,
+      lastMessage: lastMessage ?? this.lastMessage,
+      participantsIds: participantsIds ?? this.participantsIds,
+      lastReadMessage: lastReadMessage ?? this.lastReadMessage,
+      currentUser: currentUser ?? this.currentUser,
+      otherUser: otherUser ?? this.otherUser,); 
+    }
+
 }
 
 class GroupChat extends Chat{
@@ -103,7 +91,7 @@ class GroupChat extends Chat{
   @override
   final DateTime? lastUpdate;
   @override
-  final Message lastReadMessage;
+  final Message? lastReadMessage;
   @override
   final String lastMessage;
   @override
@@ -112,6 +100,9 @@ class GroupChat extends Chat{
   final List<String> participantsIds;
   @override
   final String? photoUrl;
+
+  final List<UserIdentification> membersData;
+
 
 
   GroupChat({
@@ -122,46 +113,45 @@ class GroupChat extends Chat{
     required this.nameChat,
     required this.participantsIds,
     required this.photoUrl,
+    required this.membersData,
   });
 
   factory GroupChat.initial(List<UserIdentification> members, String nameChat, String photoUrl,){
     return GroupChat(
-      lastReadMessage: Message.initialChat(), 
+      lastReadMessage: null, 
       lastUpdate: DateTime.now(), 
       id: "", 
       lastMessage: "Envie a primeira mensagem", 
       nameChat: nameChat, 
-      participantsIds: members.map((u) => u.id).toList(), photoUrl: photoUrl
+      participantsIds: members.map((u) => u.id).toList(), photoUrl: photoUrl,
+      membersData: members,
     );
   }
 
-
-  Map<String, dynamic> toMap() {
-    return {
-      'chatType': 'group', // <-- O DISCRIMINADOR
-      'nameChat': nameChat, // Nome é armazenado
-      'photoUrl': photoUrl, // Foto é armazenada
-      'lastUpdate': lastUpdate?.toIso8601String(),
-      'lastMessage': lastMessage,
-      'participantsIds': participantsIds,
-      'lastReadMessage': lastReadMessage.toJson(),
-    };
+  GroupChat copyWith({
+    String? lastMessage,
+    DateTime? lastUpdate,
+    String? id,
+    Message? lastReadMessage,
+    String? nameChat,
+    List<String>? participantsIds,
+    String? photoUrl,
+    List<UserIdentification>? membersData,
+  }){
+    return GroupChat(
+      id: id ?? this.id,
+      lastMessage: lastMessage ?? this.lastMessage,
+      lastReadMessage: lastReadMessage ?? this.lastReadMessage,
+      lastUpdate: lastUpdate ?? this.lastUpdate,
+      nameChat: nameChat ?? this.nameChat,
+      participantsIds: participantsIds ?? this.participantsIds,
+      photoUrl: photoUrl ?? this.photoUrl,
+      membersData: membersData ?? this.membersData,
+    );
   }
 
-  // Factory para construir o modelo a partir de um Map
-  factory GroupChat.fromMap(Map<String, dynamic> map, String id) {
-    try {
-      return GroupChat(
-        id: id,
-        nameChat: map['nameChat'],
-        photoUrl: map['photoUrl'],
-        lastUpdate: map["lastUpdate"] != null ? DateTime.tryParse(map["lastUpdate"]) : null,
-        lastMessage: map["lastMessage"] ?? '',
-        participantsIds: List.from(map['participants']),
-        lastReadMessage: Message.fromMap(map['lastReadMessage']),
-      );
-    } catch (e) {
-      throw Exception("Erro ao mapear GroupChat: $e");
-    }
+  @override
+  String toString() {
+    return "GroupChat(id: $id, lastUpdate: $lastUpdate, lastReadMessage: $lastReadMessage, lastMessage: $lastMessage, nameChat: $nameChat, participantsIds: $participantsIds, photoUrl: $photoUrl, membersData: $membersData)";
   }
 }

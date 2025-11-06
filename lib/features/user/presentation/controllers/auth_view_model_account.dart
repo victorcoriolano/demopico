@@ -28,7 +28,7 @@ class AuthViewModelAccount extends ChangeNotifier {
     required DeleteAccountUc deleteAccountUc,
     required ResetPasswordUc changePasswordUc,
   }): _resetPasswordUc = changePasswordUc,
-      _logoutUc = logoutUc,
+      _logoutUc = LogoutUc.getInstance,
       _deleteAccountUc = deleteAccountUc
       ;
 
@@ -48,6 +48,7 @@ class AuthViewModelAccount extends ChangeNotifier {
      try{
       await _logoutUc.deslogar();
       setCurrentUser = AnonymousUserEntity();
+      notifyListeners();
     } on Failure catch (failure){
       FailureServer.showError(failure);
     }

@@ -39,6 +39,7 @@ class FirebaseNotificationDatasource implements INotificationDatasource<Firebase
     await for (var snapshot in firebaseDatasource.collection(Collections.profiles.name)
       .doc(idUser)
       .collection('notifications')
+      .orderBy('timestamp', descending: true)
       .snapshots()) {
         final notifications = snapshot.docs.map((doc) => FirebaseDTO(data: doc.data(), id: doc.id)).toList();
         yield notifications;
@@ -46,9 +47,12 @@ class FirebaseNotificationDatasource implements INotificationDatasource<Firebase
   }
   
   @override
-  Future<void> updateNotification(FirebaseDTO notification) {
-    // TODO: implement updateNotification
-    throw UnimplementedError();
+  Future<void> updateNotification(String idUser, String notification) async {
+    final firebaseDatasource = _crudDataSource.dataSource;
+    await firebaseDatasource.collection(Collections.profiles.name)
+      .doc(idUser)
+      .collection('notifications')
+      .doc(notification).update({'isRead': true});    
   }
   
 }

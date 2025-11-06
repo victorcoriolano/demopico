@@ -207,6 +207,9 @@ class PostProvider extends ChangeNotifier {
           description: description,
           urlImages: _imgUrls,
           profileRelated: user.id, // perfil do usuário tem o id por isso não passei o id do perfil 
+          spotsIds: _selectedSpotId != null ? [_selectedSpotId!.id] : [],
+          mentionedUsers: [],
+          likedBy: [],
       );
 
       final post = await _createPostUc.execute(newPost);

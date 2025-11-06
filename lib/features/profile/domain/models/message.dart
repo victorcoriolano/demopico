@@ -64,3 +64,14 @@ class Message {
     );
   }
 }
+
+class NullMessage extends Message {
+  NullMessage(String id)
+      : super(
+          id: '',
+          content: '',
+          dateTime: DateTime.fromMillisecondsSinceEpoch(0),
+          infoUser: UserIdentification(id: '', name: '', profilePictureUrl: null),
+          isRead: false,
+        );
+}

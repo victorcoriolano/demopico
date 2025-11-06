@@ -363,12 +363,12 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
   }
 
   @override
-  Future<List<FirebaseDTO>> readExcept(String field, String value) async {
+  Future<List<FirebaseDTO>> readExceptID(String field, String value) async {
     debugPrint("CRUD read except - COLLECTION -> ${collection.name}");
     try {
       final query = await _firestore
           .collection(collection.name)
-          .where(field, isNotEqualTo: value)
+          .where(FieldPath.documentId, isNotEqualTo: value)
           .get();
       return query.docs.map((doc) {
         return FirebaseDTO(id: doc.id, data: doc.data());
@@ -386,11 +386,11 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
   @override
   Future<List<FirebaseDTO>> readMultiplesExcept(
       String field, Set<String> values) async {
-    debugPrint("CRUD READmultipleexcept - COLLECTION -> ${collection.name}");
+    debugPrint("CRUD READmultipleexcept - COLLECTION -> ${collection.name}, fields: $field - except: ${values.toString()}");
     try {
       final query = await _firestore
           .collection(collection.name)
-          .where(field, whereNotIn: values.toList())
+          .where(Filter(FieldPath.documentId, whereNotIn: values.toList()))
           .limit(7)
           .get();
       return query.docs.map((doc) {

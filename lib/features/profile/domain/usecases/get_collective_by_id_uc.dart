@@ -3,15 +3,15 @@ import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_coletivo_repository.dart';
 import 'package:demopico/features/profile/infra/repository/coletivo_repository_impl.dart';
 
-class GetCollectiveUc {
+class GetCollectiveById {
   final IColetivoRepository _repository;
 
-    static GetCollectiveUc? _instance;
-    static GetCollectiveUc get instance =>
-      _instance ??= GetCollectiveUc(repository: ColetivoRepositoryImpl.instance);
+    static GetCollectiveById? _instance;
+    static GetCollectiveById get instance =>
+      _instance ??= GetCollectiveById(repository: ColetivoRepositoryImpl.instance);
   
 
-  GetCollectiveUc({
+  GetCollectiveById({
     required IColetivoRepository  repository
   }) : _repository = repository;
 

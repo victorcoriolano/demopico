@@ -1,4 +1,5 @@
 
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_network_repository.dart';
 import 'package:demopico/features/profile/infra/repository/network_repository.dart';
 import 'package:demopico/features/profile/presentation/object_for_only_view/suggestion_profile.dart';
@@ -23,7 +24,8 @@ class GetSugestionsUserUc {
       : _userRepository = repository,
         _networkRepository = networkRepository;
 
-  Future<List<SuggestionProfile>> execute(String currentUserId) async {
+  Future<List<SuggestionProfile>> execute(UserEntity user) async {
+    final currentUserId = user.id;
     final allUsers = await _userRepository.findAll();
     final myConnectionsSent = await _networkRepository.getRelationshipSent(currentUserId);
     final myConnectionsAccepted = await _networkRepository.getRelationshipAccepted(currentUserId);
@@ -43,6 +45,6 @@ class GetSugestionsUserUc {
     return allUsers
         .where((u) => u.id != currentUserId && !exceptProfiles.map((e) => e.id).contains(u.id))
         .map((u) => SuggestionProfile.fromUser(u))
-        .toList();
+        .toList(); 
   }
 }
