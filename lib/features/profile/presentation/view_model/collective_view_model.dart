@@ -58,7 +58,9 @@ class CollectiveViewModel extends ChangeNotifier {
 
   Future<void> getTotalInformationCollective(String idCollective) async {
     try {
+      requests.clear();
       coletivo = await _getTotalInformation.execute(idCollective);
+      fetchPendingRequests(coletivo.entryRequests);
     }on Failure catch (failure){
       FailureServer.showError(failure);
     } 
@@ -115,7 +117,6 @@ class CollectiveViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       coletivo = await _acceptEntryOnCollectiveUc.execute(user, coletivo);
-      requests.remove(user);
       notifyListeners();
     } on Failure catch (e) {
       FailureServer.showError(e);
