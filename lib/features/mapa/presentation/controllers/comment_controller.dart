@@ -1,3 +1,4 @@
+import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/features/mapa/domain/entities/comment.dart';
 import 'package:demopico/features/mapa/domain/models/comment_model.dart';
 import 'package:demopico/features/mapa/domain/usecases/comment_spot_uc.dart';
@@ -38,11 +39,14 @@ class CommentController extends ChangeNotifier {
     }
   }
 
-  Future<void> addComment(String picoId, String content, String idUser) async {
+  Future<void> addComment(String picoId, String content, String idUser, String nome, String picture) async {
     final newComment = CommentModel(
       id: picoId,
-      peakId: picoId,
-      userId: idUser,
+      userIdentification: UserIdentification(
+        id: idUser,
+        name: nome,
+        profilePictureUrl: picture
+      ),
       content: content,
       timestamp: DateTime.now(),
     );
