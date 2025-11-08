@@ -38,7 +38,7 @@ class AcceptEntryOnCollectiveUc {
       await _coletivoRepository.updateColetivo(coletivo);
       // adicionado user ao chat
       await _imessageRepository.addUserOnGroup(
-          coletivo.id, listMembers.map((u) => u.id).toList());
+          nameChat: coletivo.nameColetivo, listMembers.map((u) => u.id).toList());
       //notificando o usuário
       final notify = NotificationItem(
           type: TypeNotification.newUpdateOnCollective,
