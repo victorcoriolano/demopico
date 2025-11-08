@@ -14,6 +14,8 @@ class FirebaseErrorsMapper {
         return TimeoutFailure(originalException: exception);
       case 'unavailable':
         return DatabaseFailure("Serviço indisponível", originalException: exception,);
+      case 'not-found':
+        return DataNotFoundFailure(originalException: exception);
       
      // Storage
       case 'unauthorized':
