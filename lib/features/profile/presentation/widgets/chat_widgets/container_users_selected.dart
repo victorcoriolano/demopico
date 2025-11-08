@@ -1,7 +1,5 @@
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
-import 'package:demopico/features/profile/presentation/view_model/create_collective_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ContainerSelectedUsers extends StatelessWidget {
   final List<UserIdentification> members;

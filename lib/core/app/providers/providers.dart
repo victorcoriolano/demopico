@@ -22,7 +22,6 @@ import 'package:demopico/features/profile/domain/usecases/delete_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_post_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/update_post_uc.dart';
 import 'package:demopico/features/profile/infra/repository/chat_repository.dart';
-import 'package:demopico/features/profile/presentation/pages/create_post_on_collective.dart';
 import 'package:demopico/features/profile/presentation/view_model/chat_list_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/chat_room_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/collective_view_model.dart';

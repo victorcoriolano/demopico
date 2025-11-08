@@ -1,14 +1,10 @@
-import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/media_management/models/file_model.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/custom_buttons.dart';
 import 'package:demopico/features/profile/domain/models/profile_user.dart';
 import 'package:demopico/features/profile/presentation/object_for_only_view/suggestion_profile.dart';
-import 'package:demopico/features/profile/presentation/view_model/collective_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/create_collective_view_model.dart';
-import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
 import 'package:demopico/features/profile/presentation/widgets/chat_widgets/container_users_selected.dart';
 import 'package:demopico/features/profile/presentation/widgets/search_page_widgets/search_bar_users.dart';
-import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

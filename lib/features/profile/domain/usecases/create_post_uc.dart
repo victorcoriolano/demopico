@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_notification_repository.dart';
 import 'package:demopico/features/profile/domain/models/notification.dart';
