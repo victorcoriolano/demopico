@@ -22,9 +22,7 @@ class _CommentPageState extends State<CommentPage> {
   @override
   void initState() {
     super.initState();
-    // Carregar os comentários ao iniciar a tela
     comentController = context.read<CommentController>();
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       comentController.loadComments(widget.picoId);
     });
@@ -38,70 +36,174 @@ class _CommentPageState extends State<CommentPage> {
 
   @override
   Widget build(BuildContext context) {
+ 
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
+        backgroundColor:kRed,
         centerTitle: true,
-        title: const Text('Comentários'),
+        title: Text(
+          'Comentários',
+          
+        ),
       ),
-      body: Consumer<CommentController>(builder: (context, provider, child) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            if (provider.isLoading)
-              const Center(child: CircularProgressIndicator())
-            else if (provider.error != null)
-              Center(child: Text(provider.error!))
-            else if (provider.comments.isEmpty)
-              Container(
-                margin: const EdgeInsets.only(top: 20),
-                child: const Center(
-                    child: Text(
-                  'Nenhum comentário ainda. Seja o primeiro!',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                )),
-              )
-            else
+      body: Consumer<CommentController>(
+        builder: (context, provider, child) {
+          return Column(
+            children: [
               Expanded(
-                child: ListView.builder(
-                  itemCount: provider.comments.length,
-                  itemBuilder: (context, index) {
-                    final comment = provider.comments[index];
-                    return ListTile(
-                      title: Text(comment.content),
-                      subtitle: Text(
-                          'Por ${comment.userId} em ${comment.timestamp.toLocal()}'),
-                    );
-                  },
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 250),
+                  child: provider.isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : provider.error != null
+                          ? Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Text(
+                                  provider.error!,
+                                  style: const TextStyle(fontSize: 16, color: Colors.redAccent),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            )
+                          : provider.comments.isEmpty
+                              ? Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(20),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.chat_bubble_outline,
+                                            size: 60, color: Colors.grey[400]),
+                                        const SizedBox(height: 10),
+                                        const Text(
+                                          'Nenhum comentário ainda.\nSeja o primeiro!',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              : ListView.builder(
+                                  padding: const EdgeInsets.all(10),
+                                  itemCount: provider.comments.length,
+                                  itemBuilder: (context, index) {
+                                    final comment = provider.comments[index];
+                                    return Container(
+                                      margin: const EdgeInsets.symmetric(vertical: 6),
+                                      padding: const EdgeInsets.all(12),
+                                      decoration: BoxDecoration(
+                                        color: kWhite,
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                comment.userIdentification.name,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                              Text(
+                                                _formatDate(comment.timestamp),
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.grey[600],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            comment.content,
+                                            style: const TextStyle(fontSize: 14),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
                 ),
               ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-              child: TextField(
-                controller: _controller,
-                decoration: InputDecoration(
-                  labelText: 'Adicionar comentário',
-                  labelStyle: const TextStyle(fontWeight: FontWeight.bold),
-                  suffix: IconButton(
-                    icon: const Icon(Icons.send, color: kRed),
-                    onPressed: _controller.text.isNotEmpty
-                        ? () {
-                            final content = _controller.text;
-                            final currentUser =
-                                context.read<AuthViewModelAccount>().user;
-                            if (currentUser == AnonymousUserEntity()) return SnackbarUtils.userNotLogged(context);
-                            UserEntity user = currentUser as UserEntity;
-                            provider.addComment(widget.picoId, content, user.displayName.value);
-                            _controller.clear();
-                          }
-                        : null,
+              SafeArea(
+                top: false,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: kWhite,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 6,
+                        offset: const Offset(0, -2),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _controller,
+                          maxLines: null,
+                          decoration: InputDecoration(
+                            hintText: 'Adicione um comentário...',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      IconButton(
+                        icon: const Icon(Icons.send_rounded, color: kRed),
+                        onPressed: _controller.text.isNotEmpty
+                            ? () {
+                                final content = _controller.text;
+                                final currentUser =
+                                    context.read<AuthViewModelAccount>().user;
+                                if (currentUser == AnonymousUserEntity()) {
+                                  return SnackbarUtils.userNotLogged(context);
+                                }
+                                UserEntity user = currentUser as UserEntity;
+                                provider.addComment(
+                                  widget.picoId,
+                                  content,
+                                  user.id,
+                                  user.displayName.value,
+                                  user.avatar!,
+                                );
+                                _controller.clear();
+                                FocusScope.of(context).unfocus();
+                              }
+                            : null,
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ),
-          ],
-        );
-      }),
+            ],
+          );
+        },
+      ),
     );
+  }
+
+  String _formatDate(DateTime date) {
+    final local = date.toLocal();
+    final time = "${local.day.toString().padLeft(2, '0')}/"
+        "${local.month.toString().padLeft(2, '0')} "
+        "${local.hour.toString().padLeft(2, '0')}:${local.minute.toString().padLeft(2, '0')}";
+    return time;
   }
 }
