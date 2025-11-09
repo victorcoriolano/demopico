@@ -55,7 +55,7 @@ final myProviders = [
 
   ChangeNotifierProvider(create: (_) => PostCollectiveViewModel(
     createPostUc: CreatePostUc.instace,
-    pickFileUC: PickFileUC.getInstance(),
+    pickFileUC: PickMultFileUC.getInstance(),
     pickVideo: PickVideoUC.getInstance,
   )),
 
@@ -109,7 +109,7 @@ final myProviders = [
   ChangeNotifierProvider(
       create: (_) => PostProvider(
             createPostUc: CreatePostUc.instace,
-            pickFileUC: PickFileUC.getInstance(),
+            pickFileUC: PickMultFileUC.getInstance(),
             getPosts: GetPostUc.instance,
             deleteUc: DeletePostUc.instance,
             updateUc: UpdatePostUc.instance,
