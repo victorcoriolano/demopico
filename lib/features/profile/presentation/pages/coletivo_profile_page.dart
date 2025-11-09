@@ -149,7 +149,10 @@ Widget _buildSliverAppBar(
         children: [
           ClipPath(
             clipper: BottomCurveClipper(),
-            child: Image.network(coletivo.logo, fit: BoxFit.cover),
+            child: Image.network(
+              coletivo.backgroundPicture ?? coletivo.logo, 
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) => Icon(Icons.group, size: 50, color: kWhite),),
           ),
           ClipPath(
             clipper: BottomCurveClipper(),
