@@ -21,7 +21,7 @@ class PostProvider extends ChangeNotifier {
   //TODO: Adicionar lógica de cache de imagens e videos para otimizar o carregamento
 
   final CreatePostUc _createPostUc;
-  final PickFileUC _pickFileUC;
+  final PickMultFileUC _pickFileUC;
   final PickVideoUC _pickVideoUC;
   final GetPostUc _getPostUc;
   final DeletePostUc _deletePostUc;
@@ -30,7 +30,7 @@ class PostProvider extends ChangeNotifier {
   PostProvider(
       {required DeletePostUc deleteUc,
       required CreatePostUc createPostUc,
-      required PickFileUC pickFileUC,
+      required PickMultFileUC pickFileUC,
       required GetPostUc getPosts,
       required UpdatePostUc updateUc,
       required PickVideoUC pickVideo})
