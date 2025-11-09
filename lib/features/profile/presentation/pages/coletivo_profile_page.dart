@@ -4,11 +4,11 @@ import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/features/profile/domain/models/chat.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';
-import 'package:demopico/features/profile/presentation/pages/add_post_on_collective.dart';
-import 'package:demopico/features/profile/presentation/pages/collective_manager_page.dart';
+import 'package:demopico/features/profile/presentation/pages/create_post_on_collective.dart';
+import 'package:demopico/features/profile/presentation/pages/manage_collective_page.dart';
+import 'package:demopico/features/profile/presentation/pages/full_screen_video_page.dart';
 import 'package:demopico/features/profile/presentation/view_model/chat_list_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/collective_view_model.dart';
-import 'package:demopico/features/profile/presentation/view_model/screen_provider.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
@@ -149,7 +149,10 @@ Widget _buildSliverAppBar(
         children: [
           ClipPath(
             clipper: BottomCurveClipper(),
-            child: Image.network(coletivo.logo, fit: BoxFit.cover),
+            child: Image.network(
+              coletivo.backgroundPicture ?? coletivo.logo, 
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) => Icon(Icons.group, size: 50, color: kWhite),),
           ),
           ClipPath(
             clipper: BottomCurveClipper(),
@@ -256,7 +259,7 @@ class _CollectiveActionButtonsState extends State<CollectiveActionButtons> {
           text: 'Enviar vídeo (Rec)',
           icon: Icons.video_call,
           onPressed: () {
-            Get.to(() => AddPostOnCollective());
+            Get.to(() => CreatePostOnCollective(idCollective: widget.coletivo));
           },
         );
       case UserCollectiveRole.moderator:
@@ -267,7 +270,7 @@ class _CollectiveActionButtonsState extends State<CollectiveActionButtons> {
               text: 'Enviar vídeo',
               icon: Icons.video_call,
               onPressed: () {
-                // // TODO: LÓGICA DE UPLOAD NO COLETIVO
+                Get.to(() => CreatePostOnCollective(idCollective: widget.coletivo,));
               },
             ),
             const SizedBox(width: 12),
@@ -279,7 +282,7 @@ class _CollectiveActionButtonsState extends State<CollectiveActionButtons> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ColetivoManagerPage(
+                    builder: (context) => ManageCollectivePage(
                       coletivo: widget.coletivo,
                     ),
                   ),
@@ -548,8 +551,7 @@ class _RecsListView extends StatelessWidget {
           itemBuilder: (context, index) {
             final post = recs[index];
             // Usa a primeira imagem do post como thumbnail
-            final thumbnailUrl =
-                post.urlImages.isNotEmpty ? post.urlImages[0] : null;
+            final thumbnailUrl = post.avatar;
 
             return Container(
               width: 200, // Largura do card
@@ -573,9 +575,12 @@ class _RecsListView extends StatelessWidget {
                       Container(color: kMediumGrey.withValues(alpha: 0.3)),
 
                     // Ícone de "Play"
-                    const Center(
-                      child: Icon(Icons.play_circle_outline,
-                          color: kWhite, size: 50),
+                    Center(
+                      child: IconButton(
+                        onPressed: () => Get.to(() => FullScreenVideoPage(urlVideo: recs[index].urlVideos!.first,)),
+                        icon: Icon(Icons.play_circle_outline,
+                            color: kWhite, size: 50),
+                      ),
                     ),
 
                     // Descrição

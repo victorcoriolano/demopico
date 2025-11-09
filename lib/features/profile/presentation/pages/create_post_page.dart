@@ -86,7 +86,10 @@ class _CreatePostPageState extends State<CreatePostPage> {
                     mediaPaths: provider.filesModels,
                     onRemoveMedia: provider.removeMedia,
                   )
-                  : MediaPreviewVideo(),
+                  : MediaPreviewVideo(
+                     videoFile: provider.rec,
+                      onRemoveMedia: (file) => provider.resetVideo(),
+                  ),
                 const SizedBox(height: 24),
 
                 // Botão para linkar ao pico no mapa
