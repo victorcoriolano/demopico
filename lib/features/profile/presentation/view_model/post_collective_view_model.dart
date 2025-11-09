@@ -20,13 +20,13 @@ class PostCollectiveViewModel extends ChangeNotifier {
   //TODO: Adicionar lógica de cache de imagens e videos para otimizar o carregamento
 
   final CreatePostUc _createPostUc;
-  final PickFileUC _pickFileUC;
+  final PickMultFileUC _pickFileUC;
   final PickVideoUC _pickVideoUC;
 
   PostCollectiveViewModel(
       {
       required CreatePostUc createPostUc,
-      required PickFileUC pickFileUC,
+      required PickMultFileUC pickFileUC,
       required PickVideoUC pickVideo})
       : _createPostUc = createPostUc,
         _pickVideoUC = pickVideo,
