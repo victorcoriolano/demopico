@@ -6,14 +6,14 @@ import 'package:demopico/core/common/media_management/services/image_picker_serv
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class PickFileUC {
-  factory PickFileUC.getInstance() {
-    return PickFileUC(repositoryIMP: ImagePickerService.getInstance);
+class PickMultFileUC {
+  factory PickMultFileUC.getInstance() {
+    return PickMultFileUC(repositoryIMP: ImagePickerService.getInstance);
   }
 
   final IPickFileRepository repositoryIMP;
 
-  PickFileUC({
+  PickMultFileUC({
     required this.repositoryIMP,
   }) : _limit = 3;
 
