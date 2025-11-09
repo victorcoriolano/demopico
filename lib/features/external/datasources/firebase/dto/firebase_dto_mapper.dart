@@ -71,6 +71,7 @@ final coletivoDtoMapper = FirebaseDtoMapper<ColetivoEntity>(
       id: id,
       nameColetivo: resolvedData['nameColetivo'] ?? '',
       logo: resolvedData['logo'] ?? '',
+      backgroundPicture: resolvedData['backgroundPicture'],
       guests: List<String>.from(resolvedData['guests'] ?? []) ,
       entryRequests: List<String>.from(resolvedData['entryRequests'] ?? []),
       // Mapeia a ID do moderador para um UserIdentification "parcial"
@@ -109,6 +110,8 @@ final coletivoDtoMapper = FirebaseDtoMapper<ColetivoEntity>(
           .map((user) =>
               user.id)
           .toList(),
+      'backgroundPicture': model.backgroundPicture,
+      
       // 'publications' não é armazenado no documento principal.
     };
   },
