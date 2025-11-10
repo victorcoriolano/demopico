@@ -19,11 +19,6 @@ class FirebaseCollectiveDatasource implements IColetivoDatasource {
               collection: Collections.collectives,
               firestore: Firestore.getInstance));
 
-  @override
-  Future<void> addUserOnCollective(FirebaseDTO user) {
-    // TODO: implement addUserOnCollective
-    throw UnimplementedError();
-  }
 
   @override
   Future<FirebaseDTO> createColetivo(FirebaseDTO coletivo) async {
@@ -35,11 +30,6 @@ class FirebaseCollectiveDatasource implements IColetivoDatasource {
     return await _crudBoilerplate.read(id);
   }
 
-  @override
-  Future<void> removeUser(FirebaseDTO user) {
-    // TODO: implement removeUser
-    throw UnimplementedError();
-  }
 
   @override
   Future<void> updateColetivo(FirebaseDTO coletivo) async {
@@ -58,11 +48,11 @@ class FirebaseCollectiveDatasource implements IColetivoDatasource {
   }
 
   @override
-  Future<void> requestEntryOnCollective({
+  Future<void> updateListOnCollective({
     required String idCollective,
     required String nameField,
-    required List<String> newEntryRequestList,
+    required List<dynamic> newListData
   }) async {
-    return await _crudBoilerplate.updateField(idCollective, nameField, newEntryRequestList);
+    return await _crudBoilerplate.updateField(idCollective, nameField, newListData);
   }
 }
