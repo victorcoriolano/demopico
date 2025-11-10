@@ -1,7 +1,7 @@
 
 
 abstract class Paths {
-  static const home = '/home';
+  static const home = '/';
   static const hub = '/hub';
 
   

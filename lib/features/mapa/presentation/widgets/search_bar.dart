@@ -41,7 +41,7 @@ class _SearchBarSpotsState extends State<SearchBarSpots> {
               onTap: () {
                 controllerSearch.closeView(pico.id);
                 controllerSearch.clear();
-widget.onTapSuggestion(pico);
+                widget.onTapSuggestion(pico);
               } 
             );
           }).toList();

@@ -46,25 +46,21 @@ class _HomePageTestState extends State<HomePageTest> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
+      body: Column(
         children: [
-          const CentralPageBackground(),
-          Center(
-            child: Column(
-              children: [
-                SkatePicoLogo(),
-                SearchBarSpots(
-                  onTapSuggestion: (pico) {
-                    context
-                        .read<MapControllerProvider>()
-                        .reajustarCameraPosition(LatLng(pico.location.latitude, pico.location.longitude));
-                    ModalHelper.openModalInfoPico(
-                        context, pico);
-              }),
-              Expanded(child: SizedBox(height: 20)),
-              ],
-            ),
+          SkatePicoLogo(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: SearchBarSpots(
+              onTapSuggestion: (pico) {
+                context
+                    .read<MapControllerProvider>()
+                    .reajustarCameraPosition(LatLng(pico.location.latitude, pico.location.longitude));
+                ModalHelper.openModalInfoPico(
+                    context, pico);
+                    }),
           ),
+        Expanded(child: SizedBox(height: 20)),
         ],
       ),
     );
