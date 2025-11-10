@@ -36,10 +36,10 @@ class RequestEntryOnCollectiveUc {
         message: "Nova solicitação de entrada ",
         timestamp: DateTime.now());
     _notificationRepository.createNotification(notification);
-    await _repository.requestEntryOnCollective(
+    await _repository.updateListOnCollective(
         nameField: "entryRequests",
         idCollective: coletivo.id,
-        newEntryRequestList: listEntry.toList());
+        newListData: listEntry.toList());
     return coletivo;
   }
 }
