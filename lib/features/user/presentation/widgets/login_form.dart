@@ -20,45 +20,59 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> with Validators {
   final TextEditingController _loginController = TextEditingController();
+  final TextEditingController _recuperarController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
+  final _formForgetKey = GlobalKey<FormState>();
 
-  void inputEmailToUpdatePassword(BuildContext context){
+  void inputEmailToUpdatePassword(BuildContext context) {
     showDialog(
-      context: context, 
-      builder: (context) {
-        return AlertDialog(
-          title: Text("Insira seu email pra redefinir a senha"),
-          content: Padding(
-            padding: EdgeInsets.all(8.0),
-            child: TextFormField(
-              controller: _loginController,
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Insira seu Email para Redefinir a Senha"),
+            content: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Form(
+                key: _formForgetKey,
+                child: TextFormField(
+                  onChanged: (value) => value,
+                  controller: _recuperarController,
+                  validator: (value) {
+                    if (isValidEmail(value) != null && isNotEmpty(value) != null) {
+                      return isValidEmail(value);
+                    }
+                    return null; // tudo certo
+                  },
+                ),
+              ),
             ),
-          ),
-          actionsAlignment: MainAxisAlignment.spaceBetween,
-          actions: [
-            TextButton(
-              onPressed: () {
-                Get.back();
-              }, 
-              child: Text("Cancelar")),
-            CustomElevatedButton(
-              onPressed: () async {
-                final email = _loginController.text;
-                await context.read<AuthViewModelAccount>().resetPasswordFlow(email);
-              }, 
-              textButton: "OK")
-            
-          ],
-        );
-      }
-    );
+            actionsAlignment: MainAxisAlignment.spaceBetween,
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: Text("Cancelar")),
+              CustomElevatedButton(
+                  onPressed: () async {
+                    if (_formForgetKey.currentState?.validate() == true) {
+                      final email = _recuperarController.text.toLowerCase();
+                      await context
+                          .read<AuthViewModelAccount>()
+                          .resetPasswordFlow(email);
+                    }  
+                  },
+                  textButton: "OK")
+            ],
+          );
+        });
   }
 
   @override
   Widget build(BuildContext context) {
     return Form(
-        key: formKey,
+        key: _formKey,
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(70.0),
@@ -96,10 +110,12 @@ class _LoginFormState extends State<LoginForm> with Validators {
                 ),
 
                 //email ou vulgo
-                Consumer<AuthViewModelSignIn>(builder: (context, provider, child) {
+                Consumer<AuthViewModelSignIn>(
+                    builder: (context, provider, child) {
                   return TextFormField(
                     onChanged: (value) => provider.login = value,
-                    decoration: customTextFieldDecoration(provider.getHintToFieldLogin()),
+                    decoration: customTextFieldDecoration(
+                        provider.getHintToFieldLogin()),
                     cursorColor: kWhite,
                     style: const TextStyle(color: kWhite),
                     controller: _loginController,
@@ -114,24 +130,23 @@ class _LoginFormState extends State<LoginForm> with Validators {
                 ),
                 //senha
                 Consumer<AuthViewModelSignIn>(
-                  builder: (context, provider, child) {
-                    return TextFormField(
-                      onFieldSubmitted: (value) async {
-                        await provider.signIn(); 
-                      },
-                      onChanged: (value) => provider.password = value,
-                      decoration: customTextFieldDecoration("Senha"),
-                      cursorColor: kWhite,
-                      style: const TextStyle(color: kWhite),
-                      obscureText: true,
-                      controller: _senhaController,
-                      validator: (value) => combineValidators([
-                        () => isNotEmpty(value),
-                        () => isValidPassword(value),
-                      ]),
-                    );
-                  }
-                ),
+                    builder: (context, provider, child) {
+                  return TextFormField(
+                    onFieldSubmitted: (value) async {
+                      await provider.signIn();
+                    },
+                    onChanged: (value) => provider.password = value,
+                    decoration: customTextFieldDecoration("Senha"),
+                    cursorColor: kWhite,
+                    style: const TextStyle(color: kWhite),
+                    obscureText: true,
+                    controller: _senhaController,
+                    validator: (value) => combineValidators([
+                      () => isNotEmpty(value),
+                      () => isValidPassword(value),
+                    ]),
+                  );
+                }),
                 // text input(esqueceu senha)
                 TextButton(
                     onPressed: () async {
@@ -149,26 +164,24 @@ class _LoginFormState extends State<LoginForm> with Validators {
 
                 // button (entrar)
                 Consumer<AuthViewModelSignIn>(
-                  builder: (context, provider, child) {
-                    if (provider.isLoading){
-                      return Center(child: CircularProgressIndicator());
-                    }
-                    return ElevatedButton(
-                      onPressed: () async {
-                        final viewModel = context.read<AuthViewModelSignIn>();
-                        await viewModel.signIn(); 
-                        
-                      },
-                      style: buttonStyle(),
-                      child: const Text(
-                        "Entrar",
-                        style: TextStyle(
-                          color: kWhite,
-                        ),
-                      ),
-                    );
+                    builder: (context, provider, child) {
+                  if (provider.isLoading) {
+                    return Center(child: CircularProgressIndicator());
                   }
-                ),
+                  return ElevatedButton(
+                    onPressed: () async {
+                      final viewModel = context.read<AuthViewModelSignIn>();
+                      await viewModel.signIn();
+                    },
+                    style: buttonStyle(),
+                    child: const Text(
+                      "Entrar",
+                      style: TextStyle(
+                        color: kWhite,
+                      ),
+                    ),
+                  );
+                }),
                 const SizedBox(
                   height: 12,
                 ),

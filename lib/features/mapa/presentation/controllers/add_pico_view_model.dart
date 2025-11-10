@@ -18,6 +18,7 @@ import 'package:demopico/features/mapa/domain/value_objects/rating_vo.dart';
 import 'package:demopico/features/mapa/domain/value_objects/type_spot_vo.dart';
 import 'package:flutter/material.dart';
 
+
 class AddPicoViewModel extends ChangeNotifier {
   static AddPicoViewModel? _addPicoProvider;
 
@@ -56,8 +57,10 @@ class AddPicoViewModel extends ChangeNotifier {
   String nomePico = "";
   String descricao = "";
   List<String> imgUrls = [];
+  bool isLoading = false;
 
   List<FileModel> get files => _pickImageUC.listFile;
+
 
   Map<String, bool> utilidadesSelecionadas = {};
 
@@ -120,12 +123,15 @@ class AddPicoViewModel extends ChangeNotifier {
 
   // --- IMAGENS ---
   Future<void> pickImages() async {
+    isLoading = true;
+    notifyListeners();
     try {
       await _pickImageUC.pick();
     } on Failure catch (e) {
       debugPrint("Erro ao selecionar imagens: $e");
       FailureServer.showError(e);
     }
+    isLoading = false;
     notifyListeners();
   }
 

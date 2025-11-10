@@ -11,8 +11,11 @@ class SnackbarUtils extends SnackBar {
   });
 
   static void userNotLogged(BuildContext context) {
+    debugPrint("Usuário não logado");
     ScaffoldMessenger.of(context).showSnackBar(
+
       SnackBar(
+        
         content: Text("Usuário não logado"),
         action: SnackBarAction(
           label: "Fazer login",

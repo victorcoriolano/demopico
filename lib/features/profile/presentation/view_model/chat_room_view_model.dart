@@ -14,7 +14,11 @@ class ChatRoomViewModel extends ChangeNotifier {
 
       
   Stream<List<Message>> listenMessagesForChat(Chat chat) {
-    return _watchMessageUc.execute(chat);
+    try {
+      return _watchMessageUc.execute(chat);
+    } catch (e) {
+      return Stream.value([]);
+    }
   }
 
   Future<bool> sendMessage(UserIdentification currentUserIdentification,

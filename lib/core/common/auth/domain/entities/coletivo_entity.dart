@@ -11,6 +11,7 @@ class ColetivoEntity {
   final List<String> entryRequests; // lista de ids que solicitaram a entrada no coletivo;
   final List<String> guests; // lista de  usuários convidados a entrar;
   final String logo;
+  final String? backgroundPicture;
   final List<Post> publications;
   
   ColetivoEntity(
@@ -21,7 +22,8 @@ class ColetivoEntity {
       required this.nameColetivo,
       required this.modarator,
       required this.members,
-      required this.logo});
+      required this.logo,
+      required this.backgroundPicture });
 
   factory ColetivoEntity.initial(String nameColetivo, UserIdentification mod, String logo, [List<String>? guests]){
     return ColetivoEntity(
@@ -33,6 +35,7 @@ class ColetivoEntity {
       logo: logo,
       guests: guests ?? [],
       entryRequests: [],
+      backgroundPicture: null,
     );
   }
 
@@ -45,8 +48,10 @@ class ColetivoEntity {
     List<Post>? publications,
     List<String>? guests,
     List<String>? entryRequests,
+    String? backgroundPicture,
   }) {
     return ColetivoEntity(
+      backgroundPicture: backgroundPicture ?? this.backgroundPicture,
       entryRequests: entryRequests ?? this.entryRequests,
       guests: guests ?? this.guests,
       id: id ?? this.id,
@@ -57,5 +62,29 @@ class ColetivoEntity {
       publications: publications ?? List<Post>.from(this.publications),
     );
   }
+
+  UserCollectiveRole ruleForUser(String userID){
+    if (entryRequests.contains(userID)){
+      return UserCollectiveRole.pending;
+    }
+
+    if (members.map((element) => element.id).contains(userID) && modarator.id != userID){
+      return UserCollectiveRole.member;
+    }
+
+    if (modarator.id == userID){
+      return UserCollectiveRole.moderator;
+    }
+
+    return UserCollectiveRole.visitor;
+  }
    
+}
+
+
+enum UserCollectiveRole {
+  visitor,
+  member,
+  moderator,
+  pending, 
 }

@@ -2,6 +2,7 @@
 import 'package:demopico/features/profile/domain/interfaces/i_message_repository.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_network_repository.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_profile_repository.dart';
+import 'package:demopico/features/profile/domain/models/chat.dart';
 import 'package:demopico/features/profile/domain/models/relationship.dart';
 import 'package:demopico/features/profile/infra/repository/chat_repository.dart';
 import 'package:demopico/features/profile/infra/repository/network_repository.dart';
@@ -38,17 +39,17 @@ class AcceptConnectionUc {
     
     profileAddressedUser.profile!.connections.add(connection.requesterUser.id);
     profileRequesterUser.profile!.connections.add(connection.addressed.id);
-
-
+    
+    final chat = Conversation.initFromUsers(relationship.addressed, relationship.requesterUser);
+    
     await Future.wait(
       [
         _profileRepository.updateProfile(profileAddressedUser.profile!),
-        _profileRepository.updateProfile(profileRequesterUser.profile!)
+        _profileRepository.updateProfile(profileRequesterUser.profile!),
+        _chatRepository.createChat(chat, relationship.addressed),
       ]
     );
 
-    //criando chat
-    await _chatRepository.createChat(relationship.addressed, relationship.requesterUser);
     return relationship;
 
   }

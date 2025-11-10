@@ -18,7 +18,7 @@ class MediaPreviewList extends StatelessWidget {
       return const Center(child: Text("Nenhum arquivo selecionado"),);
     }
     return SizedBox(
-      height: 120, // Altura fixa para a lista de pré-visualização
+      height: 400, // Altura fixa para a lista de pré-visualização
       child: ListView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
@@ -32,8 +32,8 @@ class MediaPreviewList extends StatelessWidget {
             children: [
               Container(
                 margin: const EdgeInsets.only(right: 8.0),
-                width: 100,
-                height: 100,
+                width: 300,
+                height: 400,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                   color: Colors.grey[200],
@@ -55,7 +55,7 @@ class MediaPreviewList extends StatelessWidget {
               Positioned(
                 top: 0,
                 right: 0,
-                child: GestureDetector(
+                child: InkWell(
                   onTap: () => onRemoveMedia(mediaPath),
                   child: Container(
                     decoration: BoxDecoration(

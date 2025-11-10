@@ -1,4 +1,4 @@
-  import 'package:demopico/core/app/app.dart';
+import 'package:demopico/core/app/home_page.dart';
   import 'package:demopico/core/app/routes/app_routes.dart';
   import 'package:demopico/core/app/routes/middleware.dart';
   import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
@@ -10,7 +10,6 @@
   import 'package:demopico/features/mapa/presentation/pages/my_spots_page.dart';
   import 'package:demopico/features/profile/presentation/bidings/auth_biding.dart';
   import 'package:demopico/features/profile/presentation/pages/chat_room_page.dart';
-  import 'package:demopico/features/profile/presentation/pages/create_colective_page.dart';
   import 'package:demopico/features/profile/presentation/pages/create_post_page.dart';
   import 'package:demopico/features/profile/presentation/pages/edit_profile_page.dart';
   import 'package:demopico/features/profile/presentation/pages/my_friends_page.dart';
@@ -114,6 +113,6 @@ import 'package:demopico/features/profile/presentation/pages/notification_page.d
   GetPage(name: Paths.historySpot, page: () => HistoricoPage()),
   GetPage(name: Paths.login, page: () => LoginPage()),
   GetPage(name: Paths.signUp, page: () => RegisterPage()),
-  GetPage(name: Paths.home, page: () => HomePageTest()),
+  GetPage(name: Paths.home, page: () => HomePage()),
 ];
 }

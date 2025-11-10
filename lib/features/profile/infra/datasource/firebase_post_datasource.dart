@@ -56,4 +56,19 @@ class FirebasePostDatasource implements IPostDatasource {
   Future<FirebaseDTO> updatePost(FirebaseDTO firebaseDTO) async {
     return await crudFirebase.update(firebaseDTO);
   }
+  
+  @override
+  Future<List<FirebaseDTO>> getPostsByCollectiveId(String idCollective) async {
+    final query = await crudFirebase.dataSource
+      .collection(crudFirebase.collection.name)
+      .where("profileRelated", isEqualTo: idCollective)
+      .get();
+
+    return query.docs.map(
+      (doc) => FirebaseDTO(
+        id: doc.id,
+        data: doc.data()
+      )
+    ).toList();
+  }
 }

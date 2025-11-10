@@ -6,14 +6,14 @@ import 'package:demopico/core/common/media_management/services/image_picker_serv
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class PickFileUC {
-  factory PickFileUC.getInstance() {
-    return PickFileUC(repositoryIMP: ImagePickerService.getInstance);
+class PickMultFileUC {
+  factory PickMultFileUC.getInstance() {
+    return PickMultFileUC(repositoryIMP: ImagePickerService.getInstance);
   }
 
   final IPickFileRepository repositoryIMP;
 
-  PickFileUC({
+  PickMultFileUC({
     required this.repositoryIMP,
   }) : _limit = 3;
 
@@ -22,7 +22,7 @@ class PickFileUC {
 
   Future<void> execute() async {
     if (!_validateListFile(listFiles)) {
-      debugPrint("Limite já atingido");
+      debugPrint("Limite já atingido: ${listFiles.length}");
       throw FileLimitExceededFailure(
           messagemAdicional: "Já foram selecionados 3 arquivos");
     }
@@ -46,7 +46,9 @@ class PickFileUC {
 
     listFiles.addAll(selectedFiles);
 
-    if (listFiles.any((file) => file.contentType == ContentType.unavailable)) throw InvalidFormatFileFailure();
+    if (listFiles.any((file) => file.contentType == ContentType.unavailable)) {
+      listFiles.clear();
+      throw InvalidFormatFileFailure();}
   }
 
   bool _validateListFile(List<FileModel> files) =>

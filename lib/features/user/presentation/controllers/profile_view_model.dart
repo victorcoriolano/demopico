@@ -2,7 +2,7 @@ import 'package:demopico/features/profile/domain/models/profile_user.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/user/domain/usecases/update_data_user_uc.dart';
 import 'package:flutter/material.dart';
-import 'package:demopico/features/user/domain/usecases/get_profile_user_by_id.dart';
+import 'package:demopico/features/profile/domain/usecases/get_profile_user_by_id.dart';
 
 class ProfileViewModel extends ChangeNotifier {
   static ProfileViewModel? _userDatabaseProvider;

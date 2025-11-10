@@ -22,7 +22,6 @@ enum TypePost {
       default:
         return TypePost.unavailable; 
     }
-  }
-
-  
+  } 
 }
+

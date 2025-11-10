@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 class ChatList extends StatelessWidget {
   final List<Chat> chats;
   final String currentID;
-  const ChatList({super.key, required this.chats, required this.currentID});
+  const   ChatList({super.key, required this.chats, required this.currentID});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,29 @@ class ChatList extends StatelessWidget {
           case Conversation():
             {
               final conversa = chat;
-              return Container(
+              debugPrint('conversa: ${conversa.photoUrl}');
+              debugPrint('conversa: ${conversa.nameChat}');
+              debugPrint('conversa: ${conversa.participantsIds}');
+              return ItemChat(chat: chat, isConversation: true);
+            }
+          case GroupChat():
+            {
+              return ItemChat(chat: chat, isConversation: false);
+            }
+        }
+      },
+    );
+  }
+}
+
+class ItemChat extends StatelessWidget {
+  final Chat chat;
+  final bool isConversation;
+  const ItemChat({super.key , required this.chat, required this.isConversation});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
                 margin: EdgeInsets.only(top: 12, left: 12, right: 12),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -29,9 +51,9 @@ class ChatList extends StatelessWidget {
                 ),
                 child: ListTile(
                   leading: CircleAvatar(
-                    backgroundImage: conversa.photoUrl != null 
+                    backgroundImage: chat.photoUrl != null 
                       ? CachedNetworkImageProvider(
-                        conversa.photoUrl!,
+                        chat.photoUrl!,
                         errorListener: (error) => const Icon(Icons.person),
                       )
                       : null,
@@ -54,32 +76,5 @@ class ChatList extends StatelessWidget {
                   },
                 ),
               );
-            }
-          case GroupChat():
-            {
-              return ListTile(
-                leading: CircleAvatar(
-                  child: Icon(Icons.group),
-                ),
-                title: Text(chat.nameChat),
-                subtitle: Text(
-                  chat.lastMessage ,style: TextStyle(
-                            color: const Color.fromARGB(255, 87, 82, 82)
-                          ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                ),
-                trailing: chat.lastUpdate != null
-                      ? Text(
-                          '${chat.lastUpdate!.hour}:${chat.lastUpdate!.minute.toString().padLeft(2, '0')}')
-                      : null,
-                onTap: () {
-                  // TODO: Navegar para a tela de detalhes do chat
-                },
-              );
-            }
-        }
-      },
-    );
   }
 }

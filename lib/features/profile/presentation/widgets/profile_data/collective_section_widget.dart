@@ -1,5 +1,4 @@
 import 'package:demopico/core/app/theme/theme.dart';
-import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/features/profile/domain/models/profile_user.dart';
 import 'package:demopico/features/profile/presentation/pages/coletivo_profile_page.dart';
 import 'package:demopico/features/profile/presentation/pages/create_colective_page.dart';
@@ -36,7 +35,7 @@ class _CollectiveSectionWidgetState extends State<CollectiveSectionWidget> {
           child: CircularProgressIndicator(),
         );
       }
-      if (vm.collectives.isEmpty) {
+      if (vm.userCollectives.isEmpty) {
         return Container(
           height: 80,
           width: double.infinity,
@@ -69,11 +68,11 @@ class _CollectiveSectionWidgetState extends State<CollectiveSectionWidget> {
           children: [
             ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: vm.collectives.length,
+              itemCount: vm.userCollectives.length,
               padding:
                   EdgeInsets.symmetric(horizontal: (screenWidth * 0.10) / 2),
               itemBuilder: (context, index) {
-                final group = vm.collectives[index];
+                final group = vm.userCollectives[index];
                 return ColectiveCardWidget(
                   coletivo: group,
                   onTap: () {
