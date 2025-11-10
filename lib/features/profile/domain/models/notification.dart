@@ -5,6 +5,7 @@ class NotificationItem {
   final bool isRead;
   final DateTime timestamp;
   final TypeNotification type;
+  final String? data;
 
   NotificationItem({
     required this.type,
@@ -13,10 +14,12 @@ class NotificationItem {
     required this.userId,
     required this.message,
     required this.timestamp,
+    required this.data,
   }); 
 
   factory NotificationItem.fromMap(Map<String, dynamic> map) {
     return NotificationItem(
+      data: map['data'],
       id: map['id'],
       userId: map['userId'],
       message: map['message'],
@@ -33,6 +36,7 @@ class NotificationItem {
       'isRead': isRead,
       'timestamp': timestamp.toIso8601String(),
       'type': type.name,
+      'data': data,
     };  
   }
 }
@@ -44,4 +48,5 @@ enum TypeNotification {
   newCommentOnPub,  
   newMessage,
   newUpdateOnCollective,
+  newRelactionshipRequest,
 }
