@@ -1,39 +1,44 @@
 import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/features/home/presentation/widgets/search_home_bar.dart';
-import 'package:demopico/features/profile/presentation/view_model/post_provider.dart';
+import 'package:demopico/features/profile/presentation/view_model/post_collective_view_model.dart';
+import 'package:demopico/features/profile/presentation/widgets/chat_widgets/container_users_selected.dart';
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/media_preview_list.dart';
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/media_preview_video.dart';
 import 'package:demopico/features/profile/presentation/widgets/create_post_widgets/midia_input_card.dart';
+import 'package:demopico/features/profile/presentation/widgets/search_page_widgets/search_bar_users.dart';
 import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:demopico/features/user/domain/enums/type_post.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-class AddPostOnCollective extends StatefulWidget {
-
-  const AddPostOnCollective({ super.key });
+class CreatePostOnCollective extends StatefulWidget {
+  final ColetivoEntity idCollective;
+  const CreatePostOnCollective({super.key, required this.idCollective});
 
   @override
-  State<AddPostOnCollective> createState() => _AddPostOnCollectiveState();
+  State<CreatePostOnCollective> createState() => _CreatePostOnCollectiveState();
 }
 
-class _AddPostOnCollectiveState extends State<AddPostOnCollective> {
+class _CreatePostOnCollectiveState extends State<CreatePostOnCollective> {
   bool isPost = true;
   TypePost typePost = TypePost.post;
   final TextEditingController _descriptionController = TextEditingController();
 
-  void _showSpotSelectionDialog(BuildContext context, PostProvider provider) {
+  void _showSpotSelectionDialog(
+    BuildContext context,
+  ) {
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
         return Center(
           child: SearchBarSpots(
             onTapSuggestion: (selectedSpot) {
-              provider.selectSpot(selectedSpot);
+              context.read<PostCollectiveViewModel>().selectSpot(selectedSpot);
             },
           ),
         );
@@ -41,10 +46,8 @@ class _AddPostOnCollectiveState extends State<AddPostOnCollective> {
     );
   }
 
-
-   @override
-   Widget build(BuildContext context) {
-       
+  @override
+  Widget build(BuildContext context) {
     // Cores do tema escuro
     final backgroundColor = const Color(0xFF121212);
     final surfaceColor = const Color(0xFF1E1E1E);
@@ -57,19 +60,19 @@ class _AddPostOnCollectiveState extends State<AddPostOnCollective> {
       appBar: AppBar(
         backgroundColor: surfaceColor,
         title: Text(
-          "Nova postagem no coletivo", 
+          "Nova postagem no coletivo",
           style: const TextStyle(color: Colors.white),
         ),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: Consumer<PostProvider>(
+      body: Consumer<PostCollectiveViewModel>(
         builder: (context, provider, child) {
           if (provider.isLoading) {
             return const Center(child: CircularProgressIndicator());
           }
 
           return SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(12.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -84,10 +87,12 @@ class _AddPostOnCollectiveState extends State<AddPostOnCollective> {
                         });
                       },
                       style: OutlinedButton.styleFrom(
-                        backgroundColor: isPost ? kRed : null ,
-                        foregroundColor: isPost ? kWhite : null,
-                        side: BorderSide(color: isPost? kRed: kWhite)
-                      ),
+                          backgroundColor: isPost ? kRed : null,
+                          foregroundColor:
+                              isPost ? kWhite : kWhite.withAlpha(60),
+                          side: BorderSide(
+                            color: kWhite.withAlpha(60),
+                          )),
                       child: Text("Post"),
                     ),
                     OutlinedButton(
@@ -98,38 +103,50 @@ class _AddPostOnCollectiveState extends State<AddPostOnCollective> {
                         });
                       },
                       style: OutlinedButton.styleFrom(
-                        backgroundColor: isPost ? null : kRed ,
-                        foregroundColor: isPost ? null : kWhite,
-                        side: BorderSide(color: isPost? kRed: kWhite)
-                      ),
+                          backgroundColor: isPost ? null : kRed,
+                          foregroundColor:
+                              !isPost ? kWhite : kWhite.withAlpha(60),
+                          side: BorderSide(
+                            color: kWhite.withAlpha(60),
+                          )),
                       child: Text("Rec"),
                     ),
-                    
                   ],
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
                 // Input de mídia
-                MediaInputCard(
-                  onAddMedia: () async {
-                    isPost
-                        ? await provider.getFiles()
-                        : await provider.getVideo();
-                  },
-                  typePost: typePost,
+                Visibility(
+                  visible: isPost
+                      ? (provider.filesModels.length < 3)
+                      : provider.rec == null,
+                  child: MediaInputCard(
+                    onAddMedia: () async {
+                      isPost
+                          ? await provider.getFiles()
+                          : await provider.getVideo();
+                    },
+                    typePost: typePost,
+                  ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
                 // Pré-visualização
-                isPost
-                    ? MediaPreviewList(
-                        mediaPaths: provider.filesModels,
-                        onRemoveMedia: provider.removeMedia,
-                      )
-                    : MediaPreviewVideo(),
+                SizedBox(
+                  height: 200,
+                  child: isPost
+                      ? MediaPreviewList(
+                          mediaPaths: provider.filesModels,
+                          onRemoveMedia: provider.removeMedia,
+                        )
+                      : MediaPreviewVideo(
+                          videoFile: provider.rec,
+                          onRemoveMedia: (file) => provider.resetVideo(),
+                        ),
+                ),
                 const SizedBox(height: 24),
 
                 // Botão para selecionar pico
                 ElevatedButton.icon(
-                  onPressed: () => _showSpotSelectionDialog(context, provider),
+                  onPressed: () => _showSpotSelectionDialog(context),
                   icon: const Icon(Icons.location_on),
                   label: Text(
                     provider.selectedSpotId != null
@@ -145,7 +162,7 @@ class _AddPostOnCollectiveState extends State<AddPostOnCollective> {
                     ),
                   ),
                 ),
-                
+
                 const SizedBox(height: 24),
 
                 // Campo de descrição
@@ -168,16 +185,34 @@ class _AddPostOnCollectiveState extends State<AddPostOnCollective> {
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                      borderSide:
-                          BorderSide(color: primaryColor),
+                      borderSide: BorderSide(color: primaryColor),
                     ),
                     alignLabelWithHint: true,
                   ),
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 12),
 
-                //mensionar usuários 
-                
+                //mensionar usuários
+                SearchBarUsers(
+                  hint: "Mencionar usuários",
+                  onTapSuggestion: (suggestion) => provider.addMentionedUser(
+                    UserIdentification(
+                      id: suggestion.idUser,
+                      name: suggestion.name,
+                      profilePictureUrl: suggestion.photo,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                ContainerSelectedUsers(
+                  hint: "Usuários mencionados apareceram aqui",
+                  members: context.read<PostCollectiveViewModel>().mentionedUsers,
+                  onRemoveMember: (user) =>
+                      context.read<PostCollectiveViewModel>().removeMentionedUser(user),
+                ),
+                const SizedBox(height: 12),
+
+
                 // Botão de publicar
                 ElevatedButton(
                   onPressed: () async {
@@ -185,7 +220,7 @@ class _AddPostOnCollectiveState extends State<AddPostOnCollective> {
                     switch (auth) {
                       case AuthAuthenticated():
                         try {
-                          await provider.createPost(auth.user, typePost);
+                          await provider.createPost(auth.user, typePost, widget.idCollective);
                           Get.snackbar(
                             'Sucesso',
                             'Postagem criada com sucesso!',

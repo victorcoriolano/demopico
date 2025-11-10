@@ -1,6 +1,7 @@
 import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
-import 'package:demopico/core/common/errors/repository_failures.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/core/common/media_management/models/file_model.dart';
 import 'package:demopico/core/common/media_management/usecases/pick_mult_files_uc.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
@@ -9,37 +10,27 @@ import 'package:demopico/core/common/media_management/usecases/pick_video_uc.dar
 import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';
 import 'package:demopico/features/profile/domain/usecases/create_post_uc.dart';
-import 'package:demopico/features/profile/domain/usecases/delete_post_uc.dart';
-import 'package:demopico/features/profile/domain/usecases/get_post_uc.dart';
-import 'package:demopico/features/profile/domain/usecases/update_post_uc.dart';
 import 'package:demopico/features/profile/presentation/object_for_only_view/media_url_item.dart';
+import 'package:demopico/features/profile/presentation/view_model/collective_view_model.dart';
 import 'package:demopico/features/user/domain/enums/type_post.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class PostProvider extends ChangeNotifier {
+class PostCollectiveViewModel extends ChangeNotifier {
   //TODO: Adicionar lógica de cache de imagens e videos para otimizar o carregamento
 
   final CreatePostUc _createPostUc;
   final PickMultFileUC _pickFileUC;
   final PickVideoUC _pickVideoUC;
-  final GetPostUc _getPostUc;
-  final DeletePostUc _deletePostUc;
-  final UpdatePostUc _updateUc;
 
-  PostProvider(
-      {required DeletePostUc deleteUc,
+  PostCollectiveViewModel(
+      {
       required CreatePostUc createPostUc,
       required PickMultFileUC pickFileUC,
-      required GetPostUc getPosts,
-      required UpdatePostUc updateUc,
       required PickVideoUC pickVideo})
       : _createPostUc = createPostUc,
         _pickVideoUC = pickVideo,
-        _pickFileUC = pickFileUC,
-        _getPostUc = getPosts,
-        _deletePostUc = deleteUc,
-        _updateUc = updateUc;
+        _pickFileUC = pickFileUC;
 
   final List<FileModel> _videos = [];
   final List<FileModel> _images = [];
@@ -49,9 +40,9 @@ class PostProvider extends ChangeNotifier {
   Pico? _selectedSpotId;
   final List<String> _imgUrls = [];
   final List<String> _videoUrls = [];
+  final List<UserIdentification> _users = [];
+  final List<Pico> _spots = []; 
   double progress = 0.0;
-  final List<Post> _posts = [];
-  final List<Post> _fullVideoPosts = [];
   bool _isLoading = false;
 
   FileModel? get rec => _rec;
@@ -59,8 +50,9 @@ class PostProvider extends ChangeNotifier {
   String get description => _description;
   Pico? get selectedSpotId => _selectedSpotId;
   bool get isLoading => _isLoading;
-  List<Post> get post => _posts;
-  List<Post> get fullVideos => _fullVideoPosts;
+  List<UserIdentification> get mentionedUsers => _users;
+  List<Pico> get spots => _spots;
+
 
   void removeMedia(FileModel file) {
       _pickFileUC.listFiles.remove(file);    
@@ -76,6 +68,20 @@ class PostProvider extends ChangeNotifier {
     _selectedSpotId = spotId;
     notifyListeners();
   }
+
+  void addMentionedUser(UserIdentification user) {
+    _users.add(user);
+    notifyListeners();
+  }
+
+  void removeMentionedUser(UserIdentification user) {
+    _users.remove(user);
+    notifyListeners();
+  }
+
+  
+
+
 
   Future<void> getVideo() async {    
     try{
@@ -148,36 +154,8 @@ class PostProvider extends ChangeNotifier {
       }
   }
 
-  // Gateway carregar postagem para ui
-  // retorna caso a requisição já tenha sido feita postagens ja tenha sido feitas
-  Future<void> loadPosts(String userId) async {
-    debugPrint("Carregando postagens do usuário: $userId");
-    // 
-    //if (_posts.isNotEmpty) return;
-    getPosts(userId);
-  }
-
-  Future<void> deletePost(Post postagem) async {
-    _isLoading = true;
-    notifyListeners();
-
-    final urls = <String>[];
-    urls.addAll(postagem.urlImages);
-    if (postagem.urlVideos != null) urls.addAll(postagem.urlVideos!);
-    try{
-      await _deletePostUc.execute(postagem.id, urls);
-      _isLoading = false;
-      notifyListeners();
-    } on Failure catch (e) {
-      getError(e);
-      _isLoading = false;
-      notifyListeners();
-    }finally {
-      _isLoading = false;
-      notifyListeners();}
-  }
-
-  Future<void> createPost(UserEntity user, TypePost type) async {
+  
+  Future<void> createPost(UserEntity user, TypePost type, ColetivoEntity coletivo) async {
     try {
       _isLoading = true;
       notifyListeners();
@@ -206,18 +184,20 @@ class PostProvider extends ChangeNotifier {
           urlVideos: _videoUrls.isEmpty ? null : _videoUrls,
           description: description,
           urlImages: _imgUrls,
-          profileRelated: user.id, // perfil do usuário tem o id por isso não passei o id do perfil 
+          profileRelated: coletivo.id, 
           spotsIds: _selectedSpotId != null ? [_selectedSpotId!.id] : [],
-          mentionedUsers: [],
+          mentionedUsers: _users.map((e) => e.id).toList(),
           likedBy: [],
       );
 
-      final post = await _createPostUc.execute(newPost);
-      type == TypePost.post ? _posts.add(post) : _fullVideoPosts.add(post);
+      final post = await _createPostUc.execute(newPost, coletivo);
+      CollectiveViewModel.instance.coletivo = coletivo.copyWith(publications: [...coletivo.publications, post]);
+      debugPrint("postagens atuais do coletivo: ${CollectiveViewModel.instance.coletivo.publications.length}");
       _isLoading = false;
       notifyListeners();
       clear();
     } on Failure catch (e) {
+      debugPrint("Erro ao criar postagem: $e");
       getError(e);
       _isLoading = false;
       notifyListeners();
@@ -225,57 +205,15 @@ class PostProvider extends ChangeNotifier {
   }
   
 
-  Future<void> getPosts(String userId) async {
-    try {
-      _isLoading = true;
-      clear();
-      notifyListeners();
-      final myPosts = await _getPostUc.execute(userId);
-      if (myPosts.isEmpty) {
-        debugPrint("Nenhum post encontrado no banco de dados");        
-        _isLoading = false;
-        notifyListeners();
-        return;
-      }
-      _posts.addAll(myPosts.where((post) => post.typePost == TypePost.post));
-      debugPrint("lista atual de posts: $_posts");
-      _fullVideoPosts.addAll(myPosts.where((post) => post.typePost == TypePost.fullVideo));
-      debugPrint("lista atual de recs: $_fullVideoPosts tamanho da lista: ${_fullVideoPosts.length}");
-      _isLoading = false;
-      notifyListeners();
-    } on Failure catch (e) {
-      getError(e);
-      _isLoading = false;
-      notifyListeners();
-    } catch (e) {
-      getError(UnknownFailure(unknownError: e));
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-  
-  Future<void> updatePost(Post updatedPost, int index) async {
-    try{
-      _posts.removeAt(index);
-      final result = await _updateUc.execute(updatedPost);
-      _posts.add(result);
-      notifyListeners();
-    } on Failure catch (e) {
-      getError(e);
-    } catch (e, st) {
-      debugPrint("Falha desconhecida ao atualizar postagem: $e, $st");
-      getError(UnknownFailure(unknownError: e, stackTrace: st));
-    }
-  }
 
   void clear() {
-    _posts.clear();
     _pickFileUC.listFiles.clear();
     _description = '';
     _selectedSpotId = null;
     _videos.clear();
-    _fullVideoPosts.clear();
     _images.clear();
+    _users.clear();
+    _spots.clear();
     progress = 0.0;
     notifyListeners();
   }

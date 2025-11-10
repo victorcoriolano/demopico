@@ -28,6 +28,7 @@ import 'package:demopico/features/profile/presentation/view_model/collective_vie
 import 'package:demopico/features/profile/presentation/view_model/create_collective_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/notification_view_model.dart';
+import 'package:demopico/features/profile/presentation/view_model/post_collective_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/post_provider.dart';
 import 'package:demopico/features/profile/presentation/view_model/screen_provider.dart';
 import 'package:demopico/features/user/domain/enums/auth_state.dart';
@@ -51,6 +52,13 @@ final myProviders = [
   ChangeNotifierProvider(create: (_) => ChatRoomViewModel()),
   ChangeNotifierProvider(create: (_) => EditProfileViewModel.instance),
   ChangeNotifierProvider(create: (_) => NotificationViewModel()),
+
+  ChangeNotifierProvider(create: (_) => PostCollectiveViewModel(
+    createPostUc: CreatePostUc.instace,
+    pickFileUC: PickMultFileUC.getInstance(),
+    pickVideo: PickVideoUC.getInstance,
+  )),
+
   
   
   
@@ -101,7 +109,7 @@ final myProviders = [
   ChangeNotifierProvider(
       create: (_) => PostProvider(
             createPostUc: CreatePostUc.instace,
-            pickFileUC: PickFileUC.getInstance(),
+            pickFileUC: PickMultFileUC.getInstance(),
             getPosts: GetPostUc.instance,
             deleteUc: DeletePostUc.instance,
             updateUc: UpdatePostUc.instance,

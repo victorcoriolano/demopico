@@ -1,24 +1,26 @@
-import 'package:demopico/features/profile/presentation/view_model/create_collective_view_model.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ContainerSelectedUsers extends StatelessWidget {
+  final List<UserIdentification> members;
+  final void Function(UserIdentification) onRemoveMember;
+  final String? hint;
 
-  const ContainerSelectedUsers({ super.key });
+  const ContainerSelectedUsers({ this.hint, super.key , required this.members, required this.onRemoveMember  });
 
    @override
    Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
-       return Consumer<CreateCollectiveViewModel>(builder: (context, vm, child) {
-              if (vm.members.isEmpty) {
+       
+              if (members.isEmpty) {
                 return Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(24.0),
+                  padding: const EdgeInsets.all(12.0),
                   child: Center(
                     child: Text(
-                      'Os membros adicionados aparecerão aqui.',
+                      hint ?? 'Os membros adicionados aparecerão aqui.',
                       style: textTheme.bodyMedium
                           ?.copyWith(color: colorScheme.onSurfaceVariant),
                     ),
@@ -28,7 +30,7 @@ class ContainerSelectedUsers extends StatelessWidget {
                 return Wrap(
                   spacing: 8.0, // Espaço horizontal entre os chips
                   runSpacing: 8.0, // Espaço vertical entre as linhas de chips
-                  children: vm.members.map((user) {
+                  children: members.map((user) {
                     return Chip(
                       avatar: CircleAvatar(
                         backgroundImage: user.profilePictureUrl != null
@@ -40,11 +42,13 @@ class ContainerSelectedUsers extends StatelessWidget {
                             : null,
                       ),
                       label: Text(user.name),
-                      onDeleted: () => vm.removeMember(user),
+                      onDeleted: () => onRemoveMember(user),
+                      deleteIcon: const Icon(Icons.close),
+                      deleteIconColor: colorScheme.error,
                     );
                   }).toList(),
                 );
               }
-            });
+   
   }
 }

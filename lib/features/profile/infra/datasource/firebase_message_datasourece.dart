@@ -106,8 +106,18 @@ class MessageFirestoreDatasource implements IMessageDatasource<FirebaseDTO> {
   }
   
   @override
-  Future<void> updateUsersOnGroup(String idChat, List<String> idUser) {
-    return _boilerplate.updateField(idChat, "participantsIds", idUser);
+  Future<void> updateUsersOnGroup( List<String> users, {required String nameChat}) async {
+    final datasource =  _boilerplate.dataSource;
+    await datasource
+          .collection("chats")
+          .where('nameChat', isEqualTo: nameChat)
+          .limit(1)
+          .get()
+          .then((querySnapshot) {
+            querySnapshot.docs.map((doc) async {
+              await datasource.collection("chats").doc(doc.id).update({'participantsIds': users});
+            });
+          });
   }
   
 }

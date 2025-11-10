@@ -250,11 +250,16 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                                       FavoriteSpotController>()
                                                   .favPico(user!.id);
                                             } else {
-                                              Get.snackbar(
-                                                  "Erro", "Usuário não logado");
+                                              SnackbarUtils.userNotLogged(
+                                                  context);
+                                              return;
+
                                             }
                                           },
-                                          icon: const Icon(Icons.favorite),
+                                          icon: Icon(spotProvider.pico!
+                                                  .favoritedBy.contains(user?.id ?? "")
+                                              ? Icons.favorite
+                                              : Icons.favorite_border ),
                                           tooltip: "Favoritar Pico",
                                           iconSize: 35,
                                         ),

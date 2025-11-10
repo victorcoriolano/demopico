@@ -1,6 +1,5 @@
 import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/theme/theme.dart';
-import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/custom_buttons.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_sign_in.dart';
