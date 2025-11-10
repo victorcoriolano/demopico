@@ -1,6 +1,7 @@
 
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';
+import 'package:flutter/cupertino.dart';
 
 class ColetivoEntity {
   final String id;
@@ -65,14 +66,17 @@ class ColetivoEntity {
 
   UserCollectiveRole ruleForUser(String userID){
     if (entryRequests.contains(userID)){
+      debugPrint("solicitação pendente");
       return UserCollectiveRole.pending;
     }
 
     if (members.map((element) => element.id).contains(userID) && modarator.id != userID){
+      debugPrint('membro');
       return UserCollectiveRole.member;
     }
 
     if (modarator.id == userID){
+      debugPrint('moderador');
       return UserCollectiveRole.moderator;
     }
 
