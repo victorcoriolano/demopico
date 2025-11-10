@@ -8,6 +8,8 @@ import 'package:demopico/features/profile/domain/usecases/accept_entry_on_collec
 import 'package:demopico/features/profile/domain/usecases/get_all_collectives_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_collective_by_id_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_collectives_for_profile_uc.dart';
+import 'package:demopico/features/profile/domain/usecases/refuse_entry_request_uc.dart';
+import 'package:demopico/features/profile/domain/usecases/remove_member_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/request_entry_on_collective_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/update_collective_uc.dart';
 import 'package:demopico/features/user/domain/usecases/get_users_by_ids.dart';
@@ -21,25 +23,27 @@ class CollectiveViewModel extends ChangeNotifier {
   final RequestEntryOnCollectiveUc _requestEntryOnCollectiveUc;
   final AcceptEntryOnCollectiveUc _acceptEntryOnCollectiveUc;
   final UpdateCollectiveUc _updateCollectiveUc;
-
-
+  final RefuseEntryRequestUseCase _refuseEntryRequestUseCase;
+  final RemoveMemberUseCase _removeMemberUseCase;
 
   static CollectiveViewModel? _instance;
   static CollectiveViewModel get instance =>
-    _instance ??= CollectiveViewModel();
+      _instance ??= CollectiveViewModel();
 
-  CollectiveViewModel(): 
-    _getCollectivesForProfileUc = GetCollectivesForProfileUc.instance, 
-    _getTotalInformation = GetCollectiveById.instance,
-    _getAllCollectivesUc = GetAllCollectivesUc(),
-    _getUsersByIds = GetUsersByIds(),
-    _requestEntryOnCollectiveUc = RequestEntryOnCollectiveUc(),
-    _acceptEntryOnCollectiveUc = AcceptEntryOnCollectiveUc(),
-    _updateCollectiveUc = UpdateCollectiveUc();
+  CollectiveViewModel()
+      : _getCollectivesForProfileUc = GetCollectivesForProfileUc.instance,
+        _getTotalInformation = GetCollectiveById.instance,
+        _getAllCollectivesUc = GetAllCollectivesUc(),
+        _getUsersByIds = GetUsersByIds(),
+        _requestEntryOnCollectiveUc = RequestEntryOnCollectiveUc(),
+        _acceptEntryOnCollectiveUc = AcceptEntryOnCollectiveUc(),
+        _updateCollectiveUc = UpdateCollectiveUc(),
+        _refuseEntryRequestUseCase = RefuseEntryRequestUseCase(),
+        _removeMemberUseCase = RemoveMemberUseCase();
 
   List<ColetivoEntity> userCollectives = [];
   List<ColetivoEntity> allCollectives = [];
-  
+
   late ColetivoEntity coletivo;
   bool isLoading = false;
   List<UserIdentification> requests = [];
@@ -49,11 +53,9 @@ class CollectiveViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       userCollectives = await _getCollectivesForProfileUc.execute(id);
-
-    }on Failure catch (failure) {
+    } on Failure catch (failure) {
       FailureServer.showError(failure);
-    }
-    finally {
+    } finally {
       isLoading = false;
       notifyListeners();
     }
@@ -64,13 +66,13 @@ class CollectiveViewModel extends ChangeNotifier {
       requests.clear();
       coletivo = await _getTotalInformation.execute(idCollective);
       fetchPendingRequests(coletivo.entryRequests);
-    }on Failure catch (failure){
+    } on Failure catch (failure) {
       FailureServer.showError(failure);
-    } 
+    }
   }
 
-  UserCollectiveRole checkUserRole(User user, ColetivoEntity coletivo){
-    switch (user){
+  UserCollectiveRole checkUserRole(User user, ColetivoEntity coletivo) {
+    switch (user) {
       case UserEntity():
         return coletivo.ruleForUser(user.id);
       case AnonymousUserEntity():
@@ -78,12 +80,12 @@ class CollectiveViewModel extends ChangeNotifier {
     }
   }
 
-
   Future<void> getAllCollectives() async {
     isLoading = true;
     notifyListeners();
     try {
-      if (allCollectives.isEmpty) allCollectives = await _getAllCollectivesUc.execute();
+      if (allCollectives.isEmpty)
+        allCollectives = await _getAllCollectivesUc.execute();
     } on Failure catch (e) {
       FailureServer.showError(e);
     } finally {
@@ -108,9 +110,10 @@ class CollectiveViewModel extends ChangeNotifier {
 
   Future<void> requestEntry(UserIdentification user) async {
     try {
-      coletivo = await _requestEntryOnCollectiveUc.execute(coletivo: coletivo, user: user);
+      coletivo = await _requestEntryOnCollectiveUc.execute(
+          coletivo: coletivo, user: user);
       notifyListeners();
-    } on Failure catch (e){
+    } on Failure catch (e) {
       FailureServer.showError(e);
     }
   }
@@ -133,30 +136,60 @@ class CollectiveViewModel extends ChangeNotifier {
     required String id,
     required String name,
     FileModel? background,
-    FileModel? insignia,}) async {
-    
+    FileModel? insignia,
+  }) async {
     isLoading = true;
     notifyListeners();
     try {
-      final urlBaground = background != null 
-          ? await UploadService.getInstance.uploadAFileWithoutStream(background, 'collectives/backgrounds/$id')
+      final urlBaground = background != null
+          ? await UploadService.getInstance.uploadAFileWithoutStream(
+              background, 'collectives/backgrounds/$id')
           : null;
-      final urlInsignia = insignia != null 
-          ? await UploadService.getInstance.uploadAFileWithoutStream(insignia, 'collectives/insignias/$id')
+      final urlInsignia = insignia != null
+          ? await UploadService.getInstance
+              .uploadAFileWithoutStream(insignia, 'collectives/insignias/$id')
           : null;
 
-      coletivo = coletivo.copyWith(backgroundPicture: urlBaground, logo: urlInsignia, nameColetivo: name);
+      coletivo = coletivo.copyWith(
+          backgroundPicture: urlBaground,
+          logo: urlInsignia,
+          nameColetivo: name);
       await _updateCollectiveUc.execute(coletivo);
       notifyListeners();
-    }on Failure catch (failure){
+    } on Failure catch (failure) {
       FailureServer.showError(failure);
-    }
-    finally {
+    } finally {
       isLoading = false;
       notifyListeners();
     }
-  
-}
+  }
 
+  Future<void> refuseUserOnCollective(String userId) async {
+    isLoading = true;
+    notifyListeners();
+    try {
+      coletivo = await _refuseEntryRequestUseCase.execute(
+          userId: userId, coletivo: coletivo);
+    } on Failure catch (failure) {
+      FailureServer.showError(failure);
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
 
+  Future<void> removeMember(UserIdentification user) async {
+    isLoading = true;
+    notifyListeners();
+    try {
+      await _removeMemberUseCase.execute(user: user, coletivo: coletivo);
+      coletivo.members.remove(user);
+      notifyListeners();
+    } on Failure catch (e) {
+      FailureServer.showError(e);
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
 }
