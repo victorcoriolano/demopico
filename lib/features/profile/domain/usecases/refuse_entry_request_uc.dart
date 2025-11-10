@@ -31,11 +31,12 @@ class RefuseEntryRequestUseCase {
 
       await _notificationRepository.createNotification(
         NotificationItem(
+          data: coletivo.id,
           type: TypeNotification.newUpdateOnCollective,
           isRead: false,
           id: "",
           userId: userId,
-          message: "Sua solicitação de entrada no coletivo ${coletivo.nameColetivo} foi recusada",
+          message: "😭 Sua solicitação de entrada no coletivo ${coletivo.nameColetivo} foi recusada",
           timestamp: DateTime.now(),
         ),
       );
