@@ -6,5 +6,8 @@ abstract interface class IColetivoRepository {
   Future<List<ColetivoEntity>> getCollectiveForProfile(String idProfile);
   Future<List<ColetivoEntity>> getAllCollectives();
   Future<void> updateColetivo(ColetivoEntity coletivo);
-  Future<void> requestEntryOnCollective({required String nameField, required String idCollective, required List<String> newEntryRequestList});
+  Future<void> updateListOnCollective({
+    required String nameField, 
+    required String idCollective, 
+    required List<dynamic> newListData});
  } 
