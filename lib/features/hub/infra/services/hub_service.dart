@@ -1,69 +1,74 @@
-import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:demopico/features/external/datasources/firestore.dart';
-import 'package:demopico/features/hub/domain/entities/communique.dart';
-import 'package:demopico/features/hub/infra/interfaces/i_hub_repository.dart';
-import 'package:demopico/features/hub/infra/repository/hub_repository.dart';
-import 'package:demopico/features/user/data/models/user.dart';
-import 'package:demopico/features/user/data/services/user_service.dart';
-import 'package:flutter/foundation.dart';
+import 'package:demopico/core/common/errors/repository_failures.dart';
+import 'package:demopico/core/common/collections/collections.dart';
+import 'package:demopico/features/external/datasources/firebase/crud_firebase.dart';
+import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
+import 'package:demopico/features/external/datasources/firebase/firestore.dart';
+import 'package:demopico/features/external/interfaces/i_crud_datasource.dart';
+import 'package:demopico/features/hub/domain/interfaces/i_hub_service.dart';
+import 'package:demopico/core/common/mappers/firebase_errors_mapper.dart';
 
-class HubService {
-
+class HubService implements IHubService<FirebaseDTO> {
   static HubService? _hubService;
-  final UserService userService;
-  final IHubRepository iHubRepository; 
 
+  HubService({required this.crudBoilerplate});
 
-  HubService({required this.userService, required this.iHubRepository});
-
-   HubService get getInstance {
-    _hubService ??= HubService(userService: userService, iHubRepository: HubRepository(firestore: Firestore()));
+  static HubService get getInstance {
+    _hubService ??= HubService(crudBoilerplate: CrudFirebase(collection: Collections.communique, firestore: Firestore.getInstance));
     return _hubService!;
   }
 
-// Postar no hub
- Future<void> postHubCommuniqueToFirebase(String text, type) async {
-  try {
-    UserM? user = await userService.getCurrentUser();
-    if (user != null) {
-      Communique newCommunique = Communique(
-        id: Random(27345).toString(),
-        uid: user.id!,
-        vulgo: user.name!,
-        pictureUrl: user.pictureUrl ?? '',
-        text: text,
-        timestamp: DateTime.now().toString(),
-        likeCount: 0,
-        likedBy: [],
-        type: type,
-      );
-      await iHubRepository.createCommunique(newCommunique);
-    } else {
-      if (kDebugMode) {
-        print('Usuário não encontrado.');
-      }
-    }
-  } on FirebaseException catch (e) {
-    if (kDebugMode) {
-      print(e.code);
-      print(e.message);
-      print(e.stackTrace);
+  final ICrudDataSource<FirebaseDTO, FirebaseFirestore> crudBoilerplate;
+  
+  @override
+  Future<FirebaseDTO> create(FirebaseDTO communique) async {
+    try {
+      return await crudBoilerplate.createWithTwoCollections(communique);
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorsMapper.map(e);
+    } on Exception catch (e, stacktrace) {
+      throw UnknownFailure(originalException: e, stackTrace: stacktrace);
+    } catch (e) {
+      throw UnknownFailure(unknownError: e);
     }
   }
-}
-// Deletar do hub
-
-// Pegar o hub
-  Future<List<Communique>> getAllCommuniques() async {
+  
+  @override
+  Future<void> delete(String id) async {
     try {
-      return  await iHubRepository.listCommuniques();
+      await crudBoilerplate.delete(id);
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorsMapper.map(e);
+    } on Exception catch (e, stacktrace) {
+      throw UnknownFailure(originalException: e, stackTrace: stacktrace);
     } catch (e) {
-      Exception("Não foi possível pegar todos comunicados");
-      if (kDebugMode) {
-        print(e);
-      }
-      return [];
+      throw UnknownFailure(unknownError: e);
+    }
+  }
+  
+  @override
+  Stream<List<FirebaseDTO>> list(String docRef, String collectionPath) {
+    try {
+      return crudBoilerplate.watchDocWithCollection(docRef, collectionPath);
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorsMapper.map(e);
+    } on Exception catch (e, stacktrace) {
+      throw UnknownFailure(originalException: e, stackTrace: stacktrace);
+    } catch (e) {
+      throw UnknownFailure(unknownError: e);
+    }
+  }
+  
+  @override
+  Future<FirebaseDTO> update(FirebaseDTO communique) async {
+    try {
+      return await crudBoilerplate.update(communique);
+    } on FirebaseException catch (e) {
+      throw FirebaseErrorsMapper.map(e);
+    } on Exception catch (e, stacktrace) {
+      throw UnknownFailure(originalException: e, stackTrace: stacktrace);
+    } catch (e) {
+      throw UnknownFailure(unknownError: e);
     }
   }
 }

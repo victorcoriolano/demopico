@@ -1,14 +1,16 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
 
-import 'package:demopico/features/hub/presentation/pages/hub_page.dart';
+import 'package:demopico/core/app/routes/app_routes.dart';
+import 'package:demopico/features/home/presentation/provider/home_provider.dart';
 import 'package:demopico/features/home/presentation/widgets/efemero_scroll_text.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
-const double minHeight = 90;
+const double minHeight = 120;
 const double iconStartSize = 44;
 const double iconEndSize = 120;
 const double iconStartMarginTop = 36;
@@ -26,6 +28,7 @@ class HubUpperSheet extends StatefulWidget {
 class _HubUpperSheetState extends State<HubUpperSheet>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  late final listenProvider = Provider.of<HomeProvider>(context);
 
   //método base
   double lerp(double min, double max) =>
@@ -45,6 +48,10 @@ class _HubUpperSheetState extends State<HubUpperSheet>
     return lerp(index * (iconsHorizontalSpacing + iconStartSize), 0);
   }
 
+  Future<void> _loadRecentComuniques() async {
+    await context.read<HomeProvider>().fetchRecentCommuniques();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -52,6 +59,10 @@ class _HubUpperSheetState extends State<HubUpperSheet>
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadRecentComuniques();
+    });
   }
 
   @override
@@ -62,14 +73,16 @@ class _HubUpperSheetState extends State<HubUpperSheet>
 
   @override
   Widget build(BuildContext context) {
+    final communiques = listenProvider.allCommuniques.firstOrNull;
+
     return AnimatedBuilder(
         animation: _controller,
         builder: (context, child) {
           return Positioned(
-              height: lerp(minHeight, maxHeight + 100),
+              height: lerp(minHeight, maxHeight + 180),
               left: 0,
               right: 0,
-              bottom: MediaQuery.maybeSizeOf(context)!.height / 3.3 +
+              bottom: MediaQuery.maybeSizeOf(context)!.height / 3.5 +
                   maxHeight -
                   maxHeight * _controller.value,
               child: GestureDetector(
@@ -101,8 +114,9 @@ class _HubUpperSheetState extends State<HubUpperSheet>
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                  text:
-                                      'Lorem ipsum is a placeholder text commonly used to demonstrate the visual form'),
+                                  text: communiques != null
+                                      ? "${communiques.vulgo}: ${communiques.text}"
+                                      : "Sem comunicados"),
                               Positioned(
                                 child: Align(
                                   alignment: Alignment.bottomCenter,
@@ -123,11 +137,8 @@ class _HubUpperSheetState extends State<HubUpperSheet>
   void _toggle() {
     final bool isOpen = _controller.status == AnimationStatus.completed;
     _controller.fling(velocity: isOpen ? -2 : 2);
-    Get.to(
-      () => HubPage(),
-      transition: Transition.upToDown,
-      duration: const Duration(milliseconds: 600),
-      curve: Curves.fastEaseInToSlowEaseOut,
+    Get.toNamed(
+      Paths.hub,
     );
     _controller.value = 0;
   }
@@ -140,11 +151,8 @@ class _HubUpperSheetState extends State<HubUpperSheet>
     if (_controller.status == AnimationStatus.completed ||
         _controller.value >= 0.5) {
       _controller.fling(velocity: _controller.value < 0.5 ? -2 : 2);
-      Get.to(
-        () => HubPage(),
-        transition: Transition.upToDown,
-        duration: const Duration(milliseconds: 600),
-        curve: Curves.fastEaseInToSlowEaseOut,
+      Get.toNamed(
+        Paths.hub,
       );
     }
 

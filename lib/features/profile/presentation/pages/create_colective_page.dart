@@ -1,0 +1,143 @@
+import 'package:demopico/core/common/media_management/models/file_model.dart';
+import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/custom_buttons.dart';
+import 'package:demopico/features/profile/domain/models/profile_user.dart';
+import 'package:demopico/features/profile/presentation/object_for_only_view/suggestion_profile.dart';
+import 'package:demopico/features/profile/presentation/view_model/create_collective_view_model.dart';
+import 'package:demopico/features/profile/presentation/widgets/chat_widgets/container_users_selected.dart';
+import 'package:demopico/features/profile/presentation/widgets/search_page_widgets/search_bar_users.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+class CreateCollectivePage extends StatefulWidget {
+  final Profile user;
+  const CreateCollectivePage({super.key, required this.user});
+
+  @override
+  State<CreateCollectivePage> createState() => _CreateCollectivePageState();
+}
+
+class _CreateCollectivePageState extends State<CreateCollectivePage> {
+  final TextEditingController _nameCollectiveController = TextEditingController();
+
+  @override
+  void dispose() {
+    _nameCollectiveController.dispose();
+    super.dispose();
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Criar coletivo'),
+      ),
+      
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // --- SEÇÃO 1: NOME DO COLETIVO ---
+
+           Text(
+              "Nome do Coletivo",
+              style: textTheme.titleMedium,
+            ),
+            const SizedBox(height: 8.0), // Espaço menor entre label e campo
+
+            TextFormField(
+              controller: _nameCollectiveController,
+              decoration: const InputDecoration(
+                hintText: 'Ex: OS+SEMROLAMENTO',
+                border: OutlineInputBorder(),
+              ),
+              onChanged: (value) => context.read<CreateCollectiveViewModel>().nameCollective = value,
+            ),
+            const SizedBox(height: 24.0), 
+
+            // --- SEÇÃO 2: IMAGEM DO COLETIVO ---
+
+            Text(
+              "Imagem do Coletivo",
+              style: textTheme.titleMedium,
+            ),
+            const SizedBox(height: 8.0),
+            Consumer<CreateCollectiveViewModel>(
+              builder: (context, vm, child) {
+                if (vm.photoCollective is NullFileModel){
+                  return OutlinedButton.icon(
+                  onPressed: () async {
+                    await context.read<CreateCollectiveViewModel>().addImage();
+                  },
+                  icon: Icon(
+                    Icons.add_a_photo_outlined, // Ícone mais leve
+                    color: colorScheme.onSurface.withValues(alpha: .7),
+                  ),
+                  label: Text(
+                    'Selecione uma imagem',
+                    style: TextStyle(
+                      color: colorScheme.onSurface.withValues(alpha: .7),
+                    ),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 60), // Ocupa a largura
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0), // Borda padrão
+                    ),
+                  ),
+                );
+                }
+                else {
+                  return Image.memory(
+                    vm.photoCollective.bytes,
+                    errorBuilder: (context, error, stackTrace) => Icon(Icons.broken_image)
+                  );
+                }
+                
+              }
+            ),
+            const SizedBox(height: 24.0), // Espaço maior entre seções
+
+            // --- SEÇÃO 3: MEMBROS ---
+
+            Text(
+              "Membros",
+              style: textTheme.titleMedium, // Consistência de título
+            ),
+            const SizedBox(height: 12.0),
+
+            SearchBarUsers(onTapSuggestion: (SuggestionProfile suggestion) => context.read<CreateCollectiveViewModel>().addMember(suggestion)),
+
+            const SizedBox(height: 16.0), // Espaço entre a busca e os chips
+
+            ContainerSelectedUsers(
+              members: context.read<CreateCollectiveViewModel>().members,
+              onRemoveMember: (user) => context.read<CreateCollectiveViewModel>().removeMember(user),
+            ),
+            const SizedBox(height: 16.0),
+            Center(
+              child: Consumer<CreateCollectiveViewModel>(
+                builder: (context, vm, child) {
+                  return CustomElevatedButton(
+                    onPressed: vm.validateForCreate() 
+                    ? () {
+                        context.read<CreateCollectiveViewModel>().createCollective(widget.user);
+                      }
+                    : null,
+                    textButton: "Criar Coletivo",
+                  );
+                }
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

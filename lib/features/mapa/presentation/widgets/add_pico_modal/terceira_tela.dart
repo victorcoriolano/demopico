@@ -1,4 +1,4 @@
-import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
+import 'package:demopico/features/mapa/presentation/controllers/add_pico_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,27 +9,7 @@ class TerceiraTela extends StatelessWidget {
   Widget build(BuildContext context) {
     // Obtém a altura da tela
     final screenHeight = MediaQuery.of(context).size.height;
-    final List<String> listaObstaculos = [
-      "45° graus",
-      "Barreira newjersey",
-      "Bowl zão",
-      "Banco",
-      "Corrimão",
-      "Escada",
-      "Funbox",
-      "Gap",
-      "Jump",
-      "Megaramp",
-      "Miniramp",
-      "Pirâmide",
-      "Quarter",
-      "Spine",
-      "Stepper",
-      "Transição",
-      "Hidrante",
-      "Parede",
-      "Bowl zinho",
-    ];
+    
 
     final List<String> listaIcon = [
       "assets/images/icons/45graus.png", // 45° graus
@@ -51,9 +31,10 @@ class TerceiraTela extends StatelessWidget {
       "assets/images/icons/hidrante.png", // Hidrante
       "assets/images/icons/wallObstaculo.png", // Parede
       "assets/images/icons/bowl.png", // Bowl zinho
+      "assets/images/icons/lixeira.png", //Lixeira
     ];
 
-    return Consumer<AddPicoProvider>(
+    return Consumer<AddPicoViewModel>(
       builder: (context, provider, child) => Scaffold(
         // Cor de fundo da tela
         backgroundColor: Colors.grey[200],
@@ -89,15 +70,15 @@ class TerceiraTela extends StatelessWidget {
                 Container(
                   margin: const EdgeInsets.only(bottom: 20),
                   child: Visibility(
-                    visible: provider.obstaculos.isNotEmpty,
+                    visible: provider.obstaculoVo.selectedValues.isNotEmpty,
                     child: Wrap(
                       spacing: 6,
                       runSpacing: 3,
-                      children: provider.obstaculos.map((obstaculo) {
+                      children: provider.obstaculoVo.selectedValues.map((obstaculo) {
                         return Chip(
                           label: Text(obstaculo),
                           onDeleted: () {
-                            provider.removerObstaculo(obstaculo);
+                            provider.removeObstacle(obstaculo);
                           },
                         );
                       }).toList(),
@@ -116,8 +97,11 @@ class TerceiraTela extends StatelessWidget {
                       crossAxisSpacing: 6, // Espaçamento entre colunas
                       childAspectRatio: 1.0, // Faz as caixas serem quadradas
                     ),
-                    itemCount: listaObstaculos.length, // Total de 15 caixas
+                    itemCount: provider.obstaculoVo.options.length, // Total de 15 caixas
                     itemBuilder: (context, index) {
+                      final obstacle = provider.obstaculoVo.options.elementAt(index);
+                      final options = provider.obstaculoVo.options;
+                      final selectedObstacles = provider.obstaculoVo.obstacles;
                       return Padding(
                         padding: const EdgeInsets.all(5),
                         child: Container(
@@ -126,34 +110,22 @@ class TerceiraTela extends StatelessWidget {
                           child: InkWell(
                             onTap: () {
                               // Se estiver na lista, remove; caso contrário, adiciona
-                              if (provider.obstaculos
-                                  .contains(listaObstaculos[index])) {
-                                provider.obstaculos
-                                    .remove(listaObstaculos[index]);
+                              if (selectedObstacles
+                                  .contains(options[index])) {
+                                provider.removeObstacle(obstacle);
                               } else {
-                                provider.atualizarObstaculos(
-                                    listaObstaculos[index]);
+                                provider.selectObstacle(obstacle);
                               }
-                              print(provider.obstaculos);
                             },
                             child: Image.asset(
-                              listaIcon[index], // Garante que é uma string
-                              fit: BoxFit.contain, // Ajusta a imagem ao botão
+                              listaIcon[index], 
+                              fit: BoxFit.contain,
                             ),
                           ),
                         ),
                       );
                     },
                   ),
-                ),
-                // Botão de voltar
-
-                const SizedBox(
-                    height: 10), // Espaço de 10 pixels entre os botões
-                // Botão de prosseguir
-                const Padding(
-                  padding: EdgeInsets.only(
-                      bottom: 20.0), // Adiciona um padding embaixo do botão
                 ),
               ],
             ),

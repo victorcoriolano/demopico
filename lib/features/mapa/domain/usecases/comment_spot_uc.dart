@@ -1,28 +1,33 @@
-import 'package:demopico/features/mapa/data/repository/comment_repository.dart';
+import 'package:demopico/features/mapa/data/repositories/comment_spot_repository.dart';
 import 'package:demopico/features/mapa/domain/entities/comment.dart';
+import 'package:demopico/features/mapa/domain/interfaces/i_comment_repository.dart';
 
 class CommentSpotUC {
-  final CommentRepository commentRepository;
+  static CommentSpotUC? _commentSpotUC;
+  static CommentSpotUC get getInstance {
+    _commentSpotUC ??=
+        CommentSpotUC(commentRepositoryIMP: CommentSpotRepositoryImpl.getInstance);
+    return _commentSpotUC!;
+  }
 
-  CommentSpotUC(this.commentRepository);
+  final ICommentRepository commentRepositoryIMP;
 
-  Future<void> execulteAdd(Comment comentario)async{
-    try{
-      await commentRepository.addComment(comentario);
+  CommentSpotUC({required this.commentRepositoryIMP});
 
-    }catch (e){
-      print("Erro aou comentera: $e");
+  Future<void> execulteAdd(Comment comentario) async {
+    try {
+      await commentRepositoryIMP.addComment(comentario);
+    } catch (e) {
+      throw Exception("Erro ao comentar: $e");
     }
   }
 
-    Future<List<Comment>> execulte(String idPico)async{
-    try{
-      final listComment = await commentRepository.getCommentsByPeak(idPico);
+  Future<List<Comment>> execulte(String idPico) async {
+    try {
+      final listComment = await commentRepositoryIMP.getCommentsByPeak(idPico);
       return listComment;
-    }catch (e){
-      print("Erro aou comentera: $e");
+    } catch (e) {
       return [];
     }
   }
-
 }

@@ -1,0 +1,102 @@
+import 'dart:async';
+
+import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
+import 'package:demopico/core/common/mappers/i_mapper_dto.dart';
+import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto_mapper.dart';
+import 'package:demopico/features/mapa/data/data_sources/interfaces/i_spot_datasource.dart';
+import 'package:demopico/features/mapa/data/data_sources/remote/firebase_spot_remote_datasource.dart';
+import 'package:demopico/features/mapa/domain/entities/filters.dart';
+import 'package:demopico/features/mapa/domain/interfaces/i_spot_repository.dart';
+import 'package:demopico/features/mapa/domain/models/pico_model.dart';
+import 'package:flutter/foundation.dart';
+
+class SpotRepositoryImpl implements ISpotRepository {
+
+  static SpotRepositoryImpl? _spotRepositoryImpl;
+  static SpotRepositoryImpl get getInstance 
+    => _spotRepositoryImpl ??= SpotRepositoryImpl(
+      FirebaseSpotRemoteDataSource.getInstance
+    );
+    
+
+  final ISpotDataSource<FirebaseDTO> dataSource;
+  SpotRepositoryImpl(this.dataSource);
+
+  final IMapperDto<PicoModel, FirebaseDTO> _mapper = FirebaseDtoMapper<PicoModel>(
+    fromJson: (data, id) => PicoModel.fromJson(data, id),
+    toMap: (model) => model.toMap() , 
+    getId: (model) => model.id,
+  );
+
+
+  @override
+  Future<PicoModel> createSpot(PicoModel pico) async {
+    
+    final picoDto = await dataSource.create(
+      _mapper.toDTO(pico)
+    );
+    
+    return  _mapper.toModel(picoDto);
+
+  }
+
+  @override
+  Future<void> deleteSpot(String id) async{
+    await dataSource.delete(id);
+  }
+
+  @override
+  Future<PicoModel> getPicoByID(String id) async {
+    var picoDto = await  dataSource.getbyID(id);
+    return _mapper.toModel(picoDto);
+  }
+
+  @override
+  Stream<List<PicoModel>> watchListSpots([Filters? filtros]) {    
+
+    final dataStream = dataSource.load(filtros);
+
+      return dataStream.map((data) {
+        final picos = data.map((pico) {
+          return _mapper.toModel(pico);
+        }).toList();
+        debugPrint("picos: $picos");
+        return picos;
+      });
+
+    
+  }
+    
+  @override
+  Future<PicoModel> updateSpot(PicoModel pico) async {
+    final dto = _mapper.toDTO(pico);
+    await dataSource.update(dto);
+    return  pico;
+  }
+  
+  @override
+  Future<List<PicoModel>> getMySpots(String userID) async {
+    debugPrint('REPSITORY - pegando spots do userid: $userID ${userID.length}');
+    final listDto = await dataSource.getList(userID);
+    return listDto.map((dto) => _mapper.toModel(dto)).toList();
+  }
+
+  @override
+  Future<void> evaluateSpot(String id, double newRating, Function updateFunction) async {
+    // Atribuindo a função para uma variável para poder passar para o datasource 
+    // Pensei em passar aqui por conta que essa camada de repository esta mesmo mais
+    // relacionada as models já que ela cuida de mapear dto para models.
+    
+    return await dataSource.updateRealtime(id, newRating, updateFunction);
+  }
+
+  @override
+  Stream<PicoModel> watchSpot(String id)  {
+    return dataSource.watchData(id).map((dto) => _mapper.toModel(dto));
+  }
+}
+
+
+  
+  
+  

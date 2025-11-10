@@ -1,13 +1,21 @@
-import 'package:demopico/features/hub/infra/services/hub_service.dart';
+import 'package:demopico/features/hub/domain/entities/communique.dart';
+import 'package:demopico/features/hub/domain/interfaces/i_communique_repository.dart';
+import 'package:demopico/features/hub/infra/repository/communique_repository.dart';
 
 class PostarComunicado {
-  HubService hubService;
-  PostarComunicado({required this.hubService});
 
-  Future<void> postar(text, type) async {
-    if (text.isEmpty || type.isEmpty) {
-      throw Exception('Texto e tipo são obrigatórios') as FormatException;
-    }
-    await hubService.postHubCommuniqueToFirebase(text, type);
+  static PostarComunicado? _postarComunicado;
+
+ static PostarComunicado get getInstance{
+    _postarComunicado ??= PostarComunicado(iHubRepository: CommuniqueRepository.getInstance);
+    return _postarComunicado!;
+  }
+
+  ICommuniqueRepository iHubRepository;
+  PostarComunicado({required this.iHubRepository});
+
+  Future<void> postar(Communique communique) async {
+
+    await iHubRepository.postHubCommuniqueToDataSource(communique);
   }
 }

@@ -1,11 +1,11 @@
-import 'package:demopico/features/mapa/presentation/widgets/add_pico_widget.dart';
-import 'package:demopico/features/mapa/presentation/widgets/drawer_widget.dart';
+import 'package:demopico/features/mapa/presentation/widgets/button_add_pico.dart';
+import 'package:demopico/features/mapa/presentation/widgets/map_drawer_widget.dart';
 import 'package:demopico/features/mapa/presentation/widgets/map_widget.dart';
 import 'package:demopico/features/mapa/presentation/widgets/top_side_map_widget.dart';
 import 'package:flutter/material.dart';
 
 
-class MapPage extends StatelessWidget { // convertendo pra stl pq eh imutalvel 
+class MapPage extends StatelessWidget { 
   const MapPage({super.key});
 
   @override
@@ -16,10 +16,10 @@ class MapPage extends StatelessWidget { // convertendo pra stl pq eh imutalvel
         body: Stack(
           children: [
             MapWidget(),
-            AddPicoWidget(),
+            ButtonAddPico(),
           ],
         ),
-        endDrawer: MyDrawer(),
+        endDrawer: MapDrawer(),
       );
   }
 }

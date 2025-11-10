@@ -1,248 +1,127 @@
-import 'package:demopico/core/common/inject_dependencies.dart';
-import 'package:demopico/features/mapa/domain/entities/pico_entity.dart';
-import 'package:demopico/features/mapa/presentation/controllers/add_pico_controller.dart';
-import 'package:demopico/features/mapa/presentation/controllers/spot_controller.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
+import 'package:demopico/core/common/auth/domain/value_objects/location_vo.dart';
+import 'package:demopico/features/mapa/presentation/controllers/add_pico_view_model.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/primeira_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/quarta_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/segunda_tela.dart';
 import 'package:demopico/features/mapa/presentation/widgets/add_pico_modal/terceira_tela.dart';
-import 'package:demopico/features/user/data/services/database_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/custom_buttons.dart';
+import 'package:demopico/features/user/domain/enums/auth_state.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 class ContainerTelas extends StatefulWidget {
-  final double lat;
-  final double long;
+  final LatLng latlang;
   final bool expanded;
   const ContainerTelas(
-      {super.key,
-      required this.lat,
-      required this.long,
-      required this.expanded});
+      {super.key, required this.latlang, required this.expanded});
 
   @override
-  _ContainerTelasState createState() => _ContainerTelasState();
+  State<ContainerTelas> createState() => _ContainerTelasState();
 }
 
 class _ContainerTelasState extends State<ContainerTelas> {
-  int _currentIndex = 0;
-  
-
-  final List<Widget> _screens = [
-    const EspecificidadeScreen(), // Página 1
-    const SegundaTela(), // Página 2
-    const TerceiraTela(), // Página 3
-    const QuartaTela(), // Página 4
-  ];
+  late AuthState? authstate;
+  StepsAddPico etapa = StepsAddPico.especificidade;
 
   void _nextScreen() {
     setState(() {
-      _currentIndex =
-          (_currentIndex + 1) % _screens.length; // Muda para o próximo índice
+      etapa = etapa.next();
     });
   }
 
   void _backScreen() {
     setState(() {
-      _currentIndex =
-          (_currentIndex - 1) % _screens.length; // Muda para o próximo índice
+      etapa = etapa.back();
     });
   }
 
-  final user = FirebaseAuth.instance.currentUser;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      authstate = context.read<AuthViewModelAccount>().authState;
+      final location = LocationVo(
+          latitude: widget.latlang.latitude,
+          longitude: widget.latlang.longitude);
+      context.read<AddPicoViewModel>().initialize(location);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AddPicoProvider>(
+    return Consumer<AddPicoViewModel>(
       builder: (context, provider, child) => Scaffold(
-        body: Stack(// colocando stack para funcionar direito o positionaded
-            children: [
-          Positioned.fill(
+        body: Container(
+          color: Colors.black54,
+          child: Center(
             child: Container(
-              color: Colors.black54, // Fundo semitransparente
-              child: Center(
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                  width: MediaQuery.of(context).size.width * 0.95,
-                  height: MediaQuery.of(context).size.height * 0.95,
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(
-                          12), // Arredondamento das bordas
-                      border: Border.all(
-                          color: const Color(0xFF8B0000), width: 3), // Borda vermelha
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child:
-                                _screens[_currentIndex], // Exibe o widget atual
-                          ),
-                          const SizedBox(height: 10),
-                          if (!(_currentIndex == 0))
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    const Color(0xFF8B0000), // Cor do botão
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 50, vertical: 15),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              onPressed: () {
-                                _backScreen(); // Chama a função para mudar a tela
-                              },
-                              child: const Text('VOLTAR',
-                                  style: TextStyle(fontSize: 15)),
-                            ),
-                          const SizedBox(height: 10),
-                          if (_currentIndex == 3)
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    const Color(0xFF8B0000), // Cor do botão
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 50, vertical: 15),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              onPressed: () async {
-                                if(user != null){
-                                  final DatabaseService  dataUser = DatabaseService();
-                                  dataUser.atualizarContribuicoes();
-                                  if (provider.validarFormulario())  {
-                                  final pico = Pico(
-                                      imgUrl: provider.urlImage,
-                                      modalidade: provider.selectedModalidade,
-                                      tipoPico: provider.tipo,
-                                      nota: 0.0,
-                                      numeroAvaliacoes: 0,
-                                      long: widget.long,
-                                      lat: widget.lat,
-                                      description: provider.descricao,
-                                      atributos: provider.atributos,
-                                      fotoPico: null,
-                                      obstaculos: provider.obstaculos,
-                                      utilidades: provider.utilidades,
-                                      userCreator: user!.displayName ?? user!.email,
-                                      picoName: provider.nomePico);
-                                  try  {
-                                    await serviceLocator<SpotControllerProvider>()
-                                        .createSpot(pico, context);
-                                    if(context.mounted){
-                                      serviceLocator<SpotControllerProvider>().showAllPico(context);
-                                      provider.dispose();
-                                      Navigator.pop(context);
-                                    }
-                                    
-                                  } on Exception catch (e) {
-                                    print('Erro na boca do balção: $e');
-                                    if(context.mounted){
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                            content: Text(
-                                                "Preencha todos os campos ou insira alguma imagem")));
-                                    }
-                                    
-                                  } catch (e) {
-                                    print("Erro desconhecido: $e");
-                                  }
-                                }
-                                }
-                                // função para criar o pico
-                                if (provider.validarFormulario())  {
-                                  final pico = Pico(
-                                      imgUrl: provider.urlImage,
-                                      modalidade: provider.selectedModalidade,
-                                      tipoPico: provider.tipo,
-                                      nota: 0.0,
-                                      numeroAvaliacoes: 0,
-                                      long: widget.long,
-                                      lat: widget.lat,
-                                      description: provider.descricao,
-                                      atributos: provider.atributos,
-                                      fotoPico: null,
-                                      obstaculos: provider.obstaculos,
-                                      utilidades: provider.utilidades,
-                                      userCreator: "Anônimo",
-                                      picoName: provider.nomePico);
-                                  try  {
-                                    await serviceLocator<SpotControllerProvider>()
-                                        .createSpot(pico, context);
-                                    if(context.mounted){
-                                      serviceLocator<SpotControllerProvider>().showAllPico(context);
-                                      provider.limpar();
-                                      Navigator.pop(context);
-                                    }
-                                    
-                                  } on Exception catch (e) {
-                                    print('Erro na boca do balção: $e');
-                                    if(context.mounted){
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                            content: Text(
-                                                "Preencha todos os campos ou insira alguma imagem")));
-                                    }
-                                    
-                                  } catch (e) {
-                                    print("Erro desconhecido: $e");
-                                  }
-                                }
-                              },
-                              child: const Text('POSTAR PICO',
-                                  style: TextStyle(fontSize: 15)),
-                            )
-                          else
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    const Color(0xFF8B0000), // Cor do botão
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 50,
-                                  vertical: 15,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              onPressed: () {
-                                print(provider.utilidadesSelecionadas);
-                                // chama a proxima página somente se tiver validada
-                                if (provider
-                                    .validarPaginaAtual(_currentIndex)) {
-                                  _nextScreen(); // Chama a função para mudar a tela
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content: Text(
-                                              "Preenche todos as informações"),),);
-                                }
-                              },
-                              child: const Text('PROSSEGUIR',
-                                  style: TextStyle(fontSize: 15)),
-                            ),
-                        ],
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+              width: MediaQuery.of(context).size.width * 0.95,
+              height: MediaQuery.of(context).size.height * 0.95,
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius:
+                      BorderRadius.circular(12), // Arredondamento das bordas
+                  border: Border.all(
+                      color: const Color(0xFF8B0000),
+                      width: 3), // Borda vermelha
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: switch (etapa){  
+                          StepsAddPico.especificidade => EspecificidadeScreen(),
+                          StepsAddPico.atributos => SegundaTela(),
+                          StepsAddPico.obstaculos => TerceiraTela(),
+                          StepsAddPico.detalhesAdicionais => QuartaTela(),
+                        }, // Exibe o widget atual
                       ),
-                    ),
+                      const SizedBox(height: 10),
+                      Visibility(
+                        visible: etapa != StepsAddPico.especificidade,
+                        child: CustomElevatedButton(
+                          onPressed: _backScreen, 
+                          textButton: 'Voltar'
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      CustomElevatedButton(
+                        onPressed: provider.isFormValid(etapa) 
+                          ? () {
+                            etapa == StepsAddPico.detalhesAdicionais
+                              ? provider.createSpot(createIdentification(authstate))
+                              : _nextScreen();
+                          }
+                          : provider.showError, 
+                        textButton: etapa == StepsAddPico.detalhesAdicionais ? "CRIAR PICO" : "PROSSEGUIR"),
+                    ],
                   ),
                 ),
               ),
             ),
           ),
-        ]),
+        ),
       ),
     );
+  }
+
+  UserIdentification? createIdentification(AuthState? authstate) {
+    switch (authstate){
+      case null || AuthUnauthenticated():
+        return null;
+      case AuthAuthenticated():
+         return UserIdentification(
+        id: authstate.user.id, name: authstate.user.displayName.value, profilePictureUrl: authstate.user.profileUser.avatar);
+    }
+
+   
   }
 }

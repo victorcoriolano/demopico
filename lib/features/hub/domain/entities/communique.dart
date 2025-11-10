@@ -1,17 +1,19 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 
 class Communique {
+  final String server;
   final String id;
   final String uid;
   final String? pictureUrl;
   final String vulgo;
   final String text;
   final String timestamp;
-  int likeCount;
+  final int likeCount;
   final List<String> likedBy;
-  final String type;
+  final TypeCommunique type;
 
   Communique({
+    required this.server,
     required this.id,
     required this.uid,
     required this.vulgo,
@@ -23,18 +25,35 @@ class Communique {
     required this.type,
   });
 
-  //converte doc em objeto
-  factory Communique.fromDocument(DocumentSnapshot doc) {
+
+  factory Communique.initial(String content, TypeCommunique type, UserEntity user, String server) {
     return Communique(
-      id: doc.id,
-      uid: doc['uid'],
-      vulgo: doc['vulgo'],
-      text: doc['text'],
-      timestamp: doc['timestamp'],
-      pictureUrl: doc['pictureUrl'],
-      likeCount: doc['likeCount'],
-      likedBy: List<String>.from(doc['likedBy'] ?? []),
-      type: doc['type'],
+      id: '',
+      server:  server,
+      uid: user.id,
+      vulgo: user.displayName.value,
+      text: content,
+      pictureUrl: user.avatar ?? '',
+      timestamp: DateTime.now().toIso8601String(),
+      likeCount: 0,
+      likedBy: [],
+      type: type,
+    );
+  }
+
+  //converte doc em objeto
+  factory Communique.fromJson(Map<String, dynamic> json, String id) {
+    return Communique(
+      id: id,
+      uid: json['uid'],
+      vulgo: json['vulgo'],
+      text: json['text'],
+      server: json['server'] ?? 'serverGlobal',
+      timestamp: json['timestamp'],
+      pictureUrl: json['pictureUrl'],
+      likeCount: json['likeCount'],
+      likedBy: List<String>.from(json['likedBy'] ?? []),
+      type: TypeCommunique.fromString(json['type']),
     );
   }
 
@@ -45,11 +64,34 @@ class Communique {
       'uid': uid,
       'vulgo': vulgo,
       'text': text,
+      'server': server,
       'pictureUrl': pictureUrl,
       'timestamp': timestamp,
       'likeCount': likeCount,
       'likedBy': likedBy,
-      'type': type,
+      'type': type.name,
     };
+  }
+}
+
+enum TypeCommunique {
+  donation,
+  event,
+  normal,
+  announcement;
+
+  factory TypeCommunique.fromString(String type) {
+    switch (type) {
+      case 'donation':
+        return TypeCommunique.donation;
+      case 'event':
+        return TypeCommunique.event;
+      case 'normal':
+        return TypeCommunique.normal;
+      case 'announcement':
+        return TypeCommunique.announcement;
+      default:
+        throw ArgumentError('Unknown type: $type');
+    }
   }
 }

@@ -64,7 +64,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions web = FirebaseOptions(
-      apiKey: "AIzaSyD1-BgFXNQcgU589XVeiluCl1g8AK5FQbg",
+      apiKey: "AIzaSyBHUyAejc79CWSY1Zb-6Vqs_r1B51dIR9E",
       authDomain: "pico-skatepico.firebaseapp.com",
       projectId: "pico-skatepico",
       storageBucket: "pico-skatepico.appspot.com",

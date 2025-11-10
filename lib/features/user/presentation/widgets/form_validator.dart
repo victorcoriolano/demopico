@@ -1,16 +1,25 @@
 mixin Validators {
+  bool validPassword = true;
+
   String? isNotEmpty(String? value){
     if(value!.isEmpty) return "Campo obrigatório";
     return null;
   }
 
   String? isValidEmail(String? value){
-    if(!(value!.contains('@'))) return "Insira um email valido";
+    if(!(value!.contains('@') && '@'.allMatches(value).length > 1 && !value.contains('.'))) return "Insira um email valido";
     return null;
   }
 
   String? isValidPassword(String? value){
-    if(value!.length < 8) return "A senha deve ter no mínimo 8 caracteres";
+    if(value!.length < 8) {
+      validPassword = false;
+      return "A senha deve ter no mínimo 8 caracteres";}
+    return null;
+  }
+
+  String? isValidVulgo(String? vulgo){
+    if(vulgo!.length < 3) return "Vulgo muito curto";
     return null;
   }
 
@@ -23,7 +32,9 @@ mixin Validators {
   }
 
   String? checkPassword(String? senha1, String? senha2){
-    if(senha1 == senha2) return null;
+    if(senha1 == senha2) {
+      validPassword = false;
+      return null;}
     return "As senhas devem ser iguais";
   }
 

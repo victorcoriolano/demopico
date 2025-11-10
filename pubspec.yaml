@@ -14,7 +14,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   get: ^4.6.6
   provider: ^6.1.2
-  intl: ^0.19.0
+  intl: ^0.20.2
   firebase_core: ^3.4.1
   firebase_auth: ^5.2.1
   cloud_firestore: ^5.4.1
@@ -22,31 +22,57 @@ dependencies:
   google_maps_flutter: ^2.9.0
   dartz: ^0.10.1
   geolocator: ^13.0.1
-  permission_handler: ^11.3.1
-  get_it: ^7.7.0
+  permission_handler: ^12.0.0+1
+  get_it: ^8.0.3
   firebase_storage: ^12.3.2
   image_picker: ^1.1.2
   icon_decoration: ^2.0.2
   flutter_rating_bar: ^4.0.0
   widget_to_marker: ^1.0.6
   shared_preferences: ^2.3.3
+  flutter_native_splash: ^2.4.4
+  mocktail: ^1.0.4
+  http: ^1.4.0
+  flutter_dotenv: ^5.2.1
+  video_player: ^2.9.5
+  redis: ^3.0.0
+  cached_network_image: ^3.4.1
+
+flutter_native_splash:
+  color: "#8B0000"
+  
+  android_12:
+    image: "assets/images/logo_splash.png"
+
+    image_dark: "assets/images/logo_splash.png"
+  
 
 dev_dependencies:
+  mockito: ^5.4.4
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
+  integration_test:
+      sdk: flutter
+  flutter_driver:
+      sdk: flutter
+  test: ^1.25.7
+  build_runner: ^2.4.13
+  fake_cloud_firestore: ^3.1.0
+
+  cloud_firestore_platform_interface: any
+  image_picker_platform_interface: ^2.10.1
 
 flutter:
+    fonts:
+      - family: Misfit
+        fonts:
+          - asset: assets/fonts/Misfit.ttf
+         
     uses-material-design: true
     assets:
-      - assets/images/skatepico-icon.png
-      - assets/images/containerLogin.jpg
-      - assets/images/containerCadastro.jpg
-      - assets/images/iconPico.png
-      - assets/images/progresso1.png
-      - assets/images/progresso2.png
-      - assets/images/progresso3.png
-      - assets/images/progresso4.png
-      - assets/images/userPhoto.png
-      - assets/images/Location.png 
+      - .env
+      - assets/images/
       - assets/images/icons/
+      - assets/images/servidores/
+

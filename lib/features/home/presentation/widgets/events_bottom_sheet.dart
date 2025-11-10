@@ -139,7 +139,9 @@ class _EventsBottomSheetState extends State<EventsBottomSheet>
 
   void _handleDragEnd(DragEndDetails details) {
     if (_controller.isAnimating ||
-        _controller.status == AnimationStatus.completed) return;
+        _controller.status == AnimationStatus.completed) {
+      return;
+    }
 
     final double flingVelocity =
         details.velocity.pixelsPerSecond.dy / maxHeight;
