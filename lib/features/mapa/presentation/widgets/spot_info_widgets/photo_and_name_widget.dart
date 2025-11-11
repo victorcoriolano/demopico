@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 class PhotoAndNameWidget extends StatelessWidget {
   final String nameUserCreator;
   final String? urlImageUser;
-  const PhotoAndNameWidget({super.key, required this.nameUserCreator, required this.urlImageUser});
+  const PhotoAndNameWidget(
+      {super.key, required this.nameUserCreator, required this.urlImageUser});
 
   @override
   Widget build(BuildContext context) {
@@ -19,22 +20,25 @@ class PhotoAndNameWidget extends StatelessWidget {
               shape: BoxShape.circle,
               border: Border.all(
                 color: kRedAccent,
-                width: 0.5, 
+                width: 0.5,
               ),
             ),
-            child: const CircleAvatar(
-              foregroundColor: kWhite,
-              backgroundColor: kLightRed,
-              radius: 25,
-              child: Icon(
-                Icons.person,
-                size: 38,
-              ),
-            ),
+            child: CircleAvatar(
+                foregroundColor: kWhite,
+                backgroundColor: kLightRed,
+                backgroundImage:
+                    urlImageUser != null ? NetworkImage(urlImageUser!) : null,
+                radius: 25,
+                child: urlImageUser == null
+                    ? Icon(
+                        Icons.person,
+                        size: 38,
+                      )
+                    : null),
           ),
           const SizedBox(height: 5),
           Text(
-            nameUserCreator, 
+            nameUserCreator,
             textAlign: TextAlign.center,
             style: const TextStyle(
               color: Color.fromARGB(255, 93, 93, 93),
