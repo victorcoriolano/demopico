@@ -145,7 +145,10 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                               spotProvider.pico!.user?.name ??
                                                   "Anônimo",
                                           urlImageUser: spotProvider
-                                              .pico!.user?.profilePictureUrl),
+                                              .pico!.user?.profilePictureUrl,
+                                              idUserCreator: spotProvider.pico!.user?.id ?? "",
+                                              ),
+                                            
                                       const SizedBox(width: 15),
                                       NameDescription(
                                           name: spotProvider.pico!.picoName,
