@@ -96,7 +96,8 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                     children: [
                       // widget da imagem dos spots
                       TopInfoSpot(
-                        mapControllerProvider: context.read<MapControllerProvider>(),
+                        mapControllerProvider:
+                            context.read<MapControllerProvider>(),
                         location: LatLng(
                             spotProvider.pico?.location.latitude ?? 0,
                             spotProvider.pico?.location.latitude ?? 0),
@@ -140,12 +141,11 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       PhotoAndNameWidget(
-                                        nameUserCreator:
-                                            spotProvider.pico!.user?.name ??
-                                                "Anônimo",
-                                        //FIXME: PASSANDO A IMAGEM COMO NULL MAIS FUTURAMENTE passar a imagem do user
-                                        urlImageUser: null,
-                                      ),
+                                          nameUserCreator:
+                                              spotProvider.pico!.user?.name ??
+                                                  "Anônimo",
+                                          urlImageUser: spotProvider
+                                              .pico!.user?.profilePictureUrl),
                                       const SizedBox(width: 15),
                                       NameDescription(
                                           name: spotProvider.pico!.picoName,
@@ -245,21 +245,23 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                             //TODO: REFATORAR LÓGICA DE SALVAR SPOT PARA PASSAR
                                             //TER UMA LÓGICA PARA SALVAR E UMA PARA FAVORITAR
                                             if (user != null) {
+                                              ;
                                               return context
                                                   .read<
                                                       FavoriteSpotController>()
                                                   .favPico(user!.id);
+
                                             } else {
                                               SnackbarUtils.userNotLogged(
                                                   context);
                                               return;
-
                                             }
                                           },
-                                          icon: Icon(spotProvider.pico!
-                                                  .favoritedBy.contains(user?.id ?? "")
+                                          icon: Icon(spotProvider
+                                                  .pico!.favoritedBy
+                                                  .contains(user?.id ?? "")
                                               ? Icons.favorite
-                                              : Icons.favorite_border ),
+                                              : Icons.favorite_border),
                                           tooltip: "Favoritar Pico",
                                           iconSize: 35,
                                         ),
