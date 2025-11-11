@@ -236,38 +236,8 @@ class _MyProfilePageState extends State<MyProfilePage>
                 contributions: user!.profileUser.spots.length,
                 description: user!.profileUser.description ?? '',
               ),
-              if (user!.profileUser.idColetivos.isNotEmpty)
-                CollectiveSectionWidget(profile: user!.profileUser)
-              else
-                Container(
-                  height: 80,
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.symmetric(
-                      horizontal: (screenWidth * 0.10) / 2),
-                  decoration: BoxDecoration(
-                    color: kWhite.withValues(alpha: .5),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "Você não participa de nenhum coletivo",
-                        style: TextStyle(color: kMediumGrey, fontSize: 13),
-                      ),
-                      IconButton(
-                          onPressed: () {
-                            Get.to(
-                              () => CreateCollectivePage(
-                                user: user!.profileUser,
-                              ),
-                            );
-                          },
-                          icon: Icon(Icons.add))
-                    ],
-                  ),
-                ),
+                CollectiveSectionWidget(profile: user!.profileUser),
+              
               SizedBox(
                 height: 12,
               ),

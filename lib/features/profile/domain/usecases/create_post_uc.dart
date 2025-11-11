@@ -23,7 +23,10 @@ class CreatePostUc {
     if (coletivo != null) {
       for (final member in coletivo.members) {
         debugPrint("notificando o usuario ${member.id}");
-        _notificationRepository.createNotification(NotificationItem(
+        _notificationRepository.createNotification(
+
+          NotificationItem(
+            data: coletivo.id,
             type: TypeNotification.newUpdateOnCollective,
             isRead: false,
             id: "",
@@ -38,6 +41,7 @@ class CreatePostUc {
         for (final user in post.mentionedUsers) {
           debugPrint("notificando o usuario sobre a mensão de $user");
           _notificationRepository.createNotification(NotificationItem(
+              data: coletivo.id,
               type: TypeNotification.newPostCollective,
               isRead: false,
               id: "",

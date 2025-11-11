@@ -6,8 +6,6 @@ abstract interface class IColetivoDatasource {
   Future<List<FirebaseDTO>> getAllCollectives();
     Future<FirebaseDTO> createColetivo(FirebaseDTO coletivo);
     Future<void> updateColetivo(FirebaseDTO coletivo);
-    Future<void> addUserOnCollective(FirebaseDTO user);
-    Future<void> removeUser(FirebaseDTO user);
-    Future<void> requestEntryOnCollective({required String nameField, required String idCollective, required List<String> newEntryRequestList});
+    Future<void> updateListOnCollective({required String nameField, required String idCollective, required List<dynamic> newListData});
  
 }

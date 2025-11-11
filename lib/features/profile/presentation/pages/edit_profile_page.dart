@@ -54,6 +54,15 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators {
     await context.read<EditProfileViewModel>().updateAll();
     debugPrint('Salvando alterações...');
 
+    newBackGround = NullFileModel();
+    newAvatar = NullFileModel();
+    user = user.copyWith(
+      displayName: hasNewText ? VulgoVo(_nameController.text) : null,
+      profileUser: hasNewText ? user.profileUser.copyWith(
+        description: _bioController.text,
+      ) : null,
+    );
+
     // ...
     Get.snackbar('Sucesso!', 'Perfil atualizado com sucesso!',
         snackPosition: SnackPosition.BOTTOM,
