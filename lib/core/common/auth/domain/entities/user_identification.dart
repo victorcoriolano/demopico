@@ -30,4 +30,13 @@ class UserIdentification {
   String toString() {
     return 'UserIdentification(id: $id, name: $name, profilePictureUrl: $profilePictureUrl)';
   }
+
+  @override
+  bool operator ==(Object other){
+    if (identical(this, other)) return true;
+    return other is UserIdentification && other.id == id && other.name == name && other.profilePictureUrl == profilePictureUrl;
+  }
+
+  @override
+  int get hashCode => Object.hash(id, profilePictureUrl, name);
 }

@@ -51,7 +51,7 @@ class _MyFriendsPageState extends State<MyFriendsPage> {
             ),
             trailing: IconButton(
                 onPressed: () async {
-                  late Chat? chat;
+                  Chat? chat;
                   final currentUserIdentification =
                       context.read<AuthViewModelAccount>().userIdentification;
                   if (currentUserIdentification != null) {

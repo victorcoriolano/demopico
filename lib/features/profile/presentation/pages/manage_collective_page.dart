@@ -3,7 +3,6 @@ import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/media_management/models/file_model.dart';
-import 'package:demopico/core/common/media_management/usecases/pick_mult_files_uc.dart';
 import 'package:demopico/core/common/media_management/usecases/pick_one_image_uc.dart';
 import 'package:demopico/features/profile/presentation/view_model/collective_view_model.dart';
 import 'package:flutter/material.dart';
@@ -102,7 +101,9 @@ class _ManageCollectivePageState extends State<ManageCollectivePage>
                     user: user,
                     onAccept: () => vm.acceptUserOnCollective(user),
                     onDeny: () {
-                      //TODO IMPLEMENTAR RECUSAR USER NO COLETIVO
+                      final viewModel = context.read<CollectiveViewModel>();
+                      viewModel.refuseUserOnCollective(user.id);
+                      
                     },
                   );
                 },
@@ -182,7 +183,10 @@ class _ManageCollectivePageState extends State<ManageCollectivePage>
               const SizedBox(height: 16),
               Text(
                 'Tem certeza de que deseja remover este membro do coletivo? Esta ação não pode ser desfeita.',
-                style: const TextStyle(color: kMediumGrey, fontSize: 14),
+                style: const TextStyle(
+                  color: kMediumGrey, 
+                  fontSize: 14,
+                ),
               ),
               const SizedBox(height: 24),
               Row(
@@ -193,20 +197,26 @@ class _ManageCollectivePageState extends State<ManageCollectivePage>
                       Navigator.of(context).pop();
                     },
                     child:
-                        const Text('Cancelar', style: TextStyle(color: kWhite)),
+                        const Text(
+                          'Cancelar', 
+                          style: TextStyle(color: kWhite)),
                   ),
                   const SizedBox(width: 16),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: kRedAccent,
                     ),
-                    onPressed: () {
-                      debugPrint("NÃO IMPLEMENTADO HAHAHAHAH");
-                      //TODO IMPLEMENTAR REMOVER USER DO COLETIVO
-                      Navigator.of(context).pop();
+                    onPressed: () async {
+                      final viewModel = context.read<CollectiveViewModel>();
+                      await viewModel.removeMember(member);
+                      if (context.mounted) {
+                        Navigator.of(context).pop();
+                      }
                     },
-                    child:
-                        const Text('Remover', style: TextStyle(color: kWhite)),
+                    child: const Text(
+                      'Remover',
+                      style: TextStyle(color: kWhite),
+                    ),
                   ),
                 ],
               ),
@@ -246,7 +256,10 @@ class _MembersTile extends StatelessWidget {
       title: Text(
         user.name,
         style: const TextStyle(
-            color: kWhite, fontWeight: FontWeight.bold, fontSize: 16),
+          color: kWhite, 
+          fontWeight: FontWeight.bold, 
+          fontSize: 16,
+        ),
       ),
 
       // Botões de Ação (Feedback Visual Claro)

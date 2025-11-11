@@ -1,5 +1,8 @@
+import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/custom_buttons.dart';
 import 'package:demopico/features/profile/domain/models/notification.dart';
+import 'package:demopico/features/profile/presentation/pages/profile_page_user.dart';
+import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/notification_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/screen_provider.dart';
 import 'package:flutter/material.dart';
@@ -70,7 +73,31 @@ class _NotificationPageState extends State<NotificationPage> {
                               context.read<ScreenProvider>().setIndex(2);
                               Get.back();
                             } , textButton: "Ver Mensagem"),
-                          TypeNotification.newUpdateOnCollective => Icon(Icons.check)
+                          TypeNotification.newUpdateOnCollective => Icon(Icons.group),
+                          
+                          TypeNotification.newRelactionshipRequest => Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  if (notification.data != null){
+                                    Get.to(() => ProfilePageUser(), arguments: notification.data);
+                                  }
+                                }, 
+                                child: Text("Ver perfil"),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  Get.toNamed(Paths.myNetwork);
+                                }, 
+                                icon: Icon(Icons.person_add_alt_sharp),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  Get.toNamed(Paths.myNetwork);
+                                }, icon: Icon(Icons.close)),
+                            ],
+                          ),
                         },
                       subtitle: Text(
                         '${notification.timestamp.day}/${notification.timestamp.month}/${notification.timestamp.year}   ${notification.timestamp.hour}:${notification.timestamp.minute.toString().padLeft(2, '0')}',

@@ -1,6 +1,7 @@
 import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/features/profile/domain/models/chat.dart';
 import 'package:demopico/features/profile/domain/models/post.dart';
@@ -29,12 +30,14 @@ class ColetivoProfilePage extends StatefulWidget {
 class _ColetivoProfilePageState extends State<ColetivoProfilePage> {
   late ColetivoEntity coletivo;
   UserCollectiveRole rule = UserCollectiveRole.visitor;
+  late UserIdentification identification;
 
   @override
   void initState() {
     coletivo = widget.initialColetivoInformation;
     super.initState();
     final currentUser = context.read<AuthViewModelAccount>().user;
+    identification = context.read<AuthViewModelAccount>().userIdentification!;
     rule = context
         .read<CollectiveViewModel>()
         .checkUserRole(currentUser, coletivo);
@@ -60,7 +63,7 @@ class _ColetivoProfilePageState extends State<ColetivoProfilePage> {
       backgroundColor: kBlack,
       body: CustomScrollView(
         slivers: [
-          _buildSliverAppBar(context, coletivo, rule),
+          MySliverAppBar(coletivo: coletivo, currentUser: identification),
 
           // --- Seção de Membros ---
           _SectionHeader(
@@ -94,9 +97,15 @@ class _ColetivoProfilePageState extends State<ColetivoProfilePage> {
   }
 }
 
-Widget _buildSliverAppBar(
-    BuildContext context, ColetivoEntity coletivo, UserCollectiveRole rule) {
-  return SliverAppBar(
+
+class MySliverAppBar extends StatelessWidget {
+  final ColetivoEntity coletivo;
+  final UserIdentification currentUser;
+  const MySliverAppBar ({super.key , required this.coletivo, required this.currentUser});
+
+  @override
+  Widget build(BuildContext context) {
+    return  SliverAppBar(
     expandedHeight: 380.0,
     backgroundColor: kBlack,
     actions: [
@@ -138,8 +147,10 @@ Widget _buildSliverAppBar(
     flexibleSpace: FlexibleSpaceBar(
       title: Text(
         coletivo.nameColetivo,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
         style: const TextStyle(
-            color: kWhite, fontWeight: FontWeight.bold, fontSize: 30,),
+            color: kWhite, fontWeight: FontWeight.bold, fontSize: 30, ),
       ),
       expandedTitleScale: 1.5,
       centerTitle: true,
@@ -204,7 +215,7 @@ Widget _buildSliverAppBar(
                 ),
                 const SizedBox(height: 16),
                 CollectiveActionButtons(
-                  rule: rule,
+                  identification: currentUser,
                   coletivo: coletivo,
                 ),
               ],
@@ -214,13 +225,15 @@ Widget _buildSliverAppBar(
       ),
     ),
   );
+  }
 }
 
+
 class CollectiveActionButtons extends StatefulWidget {
-  final UserCollectiveRole rule;
+  final UserIdentification identification;
   final ColetivoEntity coletivo;
   const CollectiveActionButtons(
-      {super.key, required this.rule, required this.coletivo});
+      {super.key, required this.identification, required this.coletivo});
 
   @override
   State<CollectiveActionButtons> createState() =>
@@ -228,9 +241,27 @@ class CollectiveActionButtons extends StatefulWidget {
 }
 
 class _CollectiveActionButtonsState extends State<CollectiveActionButtons> {
+  late UserCollectiveRole rule;
+
+  @override
+  void initState() {
+    rule = widget.coletivo.ruleForUser(widget.identification.id);
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant CollectiveActionButtons oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    setState(() {
+      rule = widget.coletivo.ruleForUser(widget.identification.id);
+    });
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
-    switch (widget.rule) {
+    switch (rule) {
       case UserCollectiveRole.visitor:
         return _StyledActionButton(
           text: 'Solicitar entrada',
@@ -241,8 +272,14 @@ class _CollectiveActionButtonsState extends State<CollectiveActionButtons> {
             if (useridentification != null) {
               await context
                   .read<CollectiveViewModel>()
-                  .requestEntry(useridentification);
-              setState(() {});
+                  .requestEntry(useridentification).then((value) {
+                    debugPrint('atualizado com sucesso');
+                    if (mounted ) {
+                      setState(() {
+                      rule = UserCollectiveRole.pending;
+                    });
+                    }
+                });
             }
           },
         );
