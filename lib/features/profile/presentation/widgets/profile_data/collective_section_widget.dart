@@ -22,7 +22,7 @@ class _CollectiveSectionWidgetState extends State<CollectiveSectionWidget> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) { 
-      context.read<CollectiveViewModel>().getCollectives(widget.profile.userID);
+      context.read<CollectiveViewModel>().getCollectivesForUser(widget.profile.userID);
     });
   }
 

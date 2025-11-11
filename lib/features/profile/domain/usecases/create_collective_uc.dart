@@ -40,6 +40,7 @@ class CreateCollectiveUc {
         await _notificationRepository.createNotification(
           NotificationItem(
             type: TypeNotification.inviteCollective,
+            data: coletivo.id,
             isRead: false,
             id: "", 
             userId: user, 

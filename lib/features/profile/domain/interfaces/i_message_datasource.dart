@@ -6,5 +6,5 @@ abstract class IMessageDatasource<DTO> {
     Future<DTO> createGroupChat(DTO initialChat);
     Future<DTO> sendMessage(String idChat, DTO message);
     Future<void> readMessage(String idChat, DTO message);
-    Future<void> updateUsersOnGroup(String idChat, List<String> idUser);
+    Future<void> updateUsersOnGroup( List<String> idUser, {required String nameChat});
 }

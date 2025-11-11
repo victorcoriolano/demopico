@@ -1,5 +1,7 @@
 import 'package:demopico/core/common/media_management/models/file_model.dart';
+import 'package:demopico/features/profile/presentation/pages/full_screen_video_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 
 class MyVideoPlayer extends StatefulWidget {
@@ -30,16 +32,28 @@ class _MyVideoPlayerState extends State<MyVideoPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
+    return  Center(
           child: _controller.value.isInitialized
               ? AspectRatio(
+
                   aspectRatio: _controller.value.aspectRatio,
                   child: Stack(children:[ 
                     VideoPlayer(_controller),
                     Positioned(
-                      bottom: 10,
-                      left: 10,
+                    
+                    child: IconButton(
+                        icon: Icon(
+                          Icons.fullscreen,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          Get.to(() => FullScreenVideoPage(localFile: widget.videoFile,));
+                        },), 
+                  ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
                       child: IconButton(
                         icon: Icon(
                           _controller.value.isPlaying
@@ -58,7 +72,6 @@ class _MyVideoPlayerState extends State<MyVideoPlayer> {
                     ),])
                 )
               : Container(),
-        ),
     );
   }
 }

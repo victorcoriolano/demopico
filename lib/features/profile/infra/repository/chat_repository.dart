@@ -146,12 +146,12 @@ class ChatRepository implements ImessageRepository {
   }
   
   @override
-  Future<void> addUserOnGroup(String idChat, List<String> idUser) async {
-      return await _datasource.updateUsersOnGroup(idChat, idUser);
+  Future<void> addUserOnGroup( List<String> idUser, {required String nameChat}) async {
+      return await _datasource.updateUsersOnGroup(nameChat: nameChat, idUser);
   }
   
   @override
-  Future<void> removeUserOnGroup(String idChat, List<String> idUser) async {
-    return await _datasource.updateUsersOnGroup(idChat, idUser);
+  Future<void> removeUserOnGroup( List<String> idUser, {required String nameChat}) async {
+    return await _datasource.updateUsersOnGroup(nameChat: nameChat, idUser);
   }
 }

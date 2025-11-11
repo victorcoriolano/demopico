@@ -12,7 +12,7 @@ class SkatePicoLogo extends StatelessWidget {
         alignment: Alignment.center,
         transform: Matrix4.identity()..setRotationZ(10.2),
         child: Image.asset('assets/images/skatepico-icon.png',
-            filterQuality: FilterQuality.high, width: 100, height: 100),
+            filterQuality: FilterQuality.high, width: 150, height: 150),
       ),
     );
   }

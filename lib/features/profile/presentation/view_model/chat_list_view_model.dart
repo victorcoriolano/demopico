@@ -35,8 +35,13 @@ class ChatListViewModel extends ChangeNotifier {
     }
   }
 
+  bool isLoading = false; 
+  /// gerenciador de estado auxiliar para poder gerenciar outros widgets
+  ///  que também dependam do chat mais não são as telas de chat ou 
+  /// repository que são gerenciadas pelo [StateViewModel]
+
   Future<Conversation?> createChat(UserIdentification currentUser, UserIdentification otherUser) async {
-    stateVM = StateViewModel.loading;
+    isLoading = true;
     notifyListeners();
     try {
       if (chats.isEmpty) await fetchChats(currentUser);
@@ -44,13 +49,16 @@ class ChatListViewModel extends ChangeNotifier {
       final chat = Conversation.initFromUsers(currentUser, otherUser);
       final createChat = await _repository.createChat(chat ,currentUser);
       chats.add(createChat);
+      isLoading = false;
+      notifyListeners();
       return createChat as Conversation;
     } catch (e, st){
       debugPrint("VM - Erro na view model: ${e.toString()} $st");
-      stateVM = StateViewModel.error;
-      statement = "Ocorreu um erro ao criar chat";
+      isLoading = false;
+      notifyListeners();
       return null;
     } finally {
+      isLoading = false;
       notifyListeners();
     }
   }

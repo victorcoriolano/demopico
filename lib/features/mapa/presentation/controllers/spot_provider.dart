@@ -85,9 +85,9 @@ class SpotProvider with ChangeNotifier {
     try {
       await _avaliarSpotUc.executar(pico!, rate);
     } on Failure catch (e) {
-      error = e.message;
+      FailureServer.showError(e);
     } catch (e) {
-      error = e.toString();
+      FailureServer.showError(UnknownFailure(unknownError: e));
     } finally {
       isLoading = false;
       notifyListeners();

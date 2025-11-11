@@ -95,10 +95,10 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
   Future<void> updateField(String id, String field, dynamic value) async {
     debugPrint("CRUD updateField - COLLECTION -> ${collection.name}");
     try {
-      await _firestore
-          .collection(collection.name)
-          .doc(id)
-          .update({field: value});
+        await _firestore
+            .collection(collection.name)
+            .doc(id)
+            .update({field: value});
     } on FirebaseException catch (e) {
       debugPrint("Data Source Error: $e");
       throw FirebaseErrorsMapper.map(e);

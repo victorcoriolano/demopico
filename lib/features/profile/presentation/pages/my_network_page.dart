@@ -6,6 +6,7 @@ import 'package:demopico/features/profile/presentation/view_model/network_view_m
 import 'package:demopico/features/profile/presentation/widgets/search_page_widgets/connection_action_card.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class MyNetworkScreen extends StatefulWidget {
@@ -35,7 +36,9 @@ class _MyNetworkScreenState extends State<MyNetworkScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final tabNumber = Get.arguments as int?;
     return DefaultTabController(
+      initialIndex: tabNumber ?? 0,
       length: 2,
       child: Scaffold(
         appBar: AppBar(
@@ -83,7 +86,7 @@ enum ActionType {
   cancel,
 }
 
-class ProfileList extends StatelessWidget {
+class ProfileList extends StatefulWidget {
   final List<UserIdentification> userProfiles;
   final ActionType actionType;
 
@@ -91,20 +94,27 @@ class ProfileList extends StatelessWidget {
       {super.key, required this.userProfiles, required this.actionType});
 
   @override
+  State<ProfileList> createState() => _ProfileListState();
+}
+
+class _ProfileListState extends State<ProfileList> {
+
+  
+  @override
   Widget build(BuildContext context) {
-    return userProfiles.isEmpty
+    return widget.userProfiles.isEmpty
         ? const Center(
             child: Text('Nenhum usuário encontrado'),
           )
         : ListView.builder(
             shrinkWrap: true, 
-            itemCount: userProfiles.length,
+            itemCount: widget.userProfiles.length,
             itemBuilder: (context, index) {
               return Card(
                 margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 child: ConnectionActionCard(
-                  user: userProfiles[index],
-                  actionButton: actionType == ActionType.accept
+                  user: widget.userProfiles[index],
+                  actionButton: widget.actionType == ActionType.accept
                       ? ElevatedButton(
                           onPressed: () async {
                             final currentUser = context.read<AuthViewModelAccount>().user;
@@ -112,7 +122,7 @@ class ProfileList extends StatelessWidget {
                             switch (currentUser){
                               case UserEntity():
                                 await provider.acceptConnection(
-                                  userProfiles[index], currentUser
+                                  widget.userProfiles[index], currentUser
                                 );
                               case AnonymousUserEntity():
                                 // some error occourred - user not logged
@@ -123,7 +133,11 @@ class ProfileList extends StatelessWidget {
                         )
                       : ElevatedButton(
                           onPressed: () async {
-                            await context.read<NetworkViewModel>().cancelRelationship(userProfiles[index]);
+                            await context.read<NetworkViewModel>().cancelRelationship(widget.userProfiles[index]);
+                            setState(() {
+                              widget.userProfiles.removeAt(index);  
+                            });
+                            
                           },
                           child: const Text('Cancelar'),
                         ),

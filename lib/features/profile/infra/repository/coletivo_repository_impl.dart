@@ -76,7 +76,7 @@ class ColetivoRepositoryImpl implements IColetivoRepository{
   }
 
   Future<List<Post>> _fetchPublications(String id) async{
-    return (await _postDatasource.getPostsByUserId(id)).map((dto) => postMapper.fromJson(dto.data, dto.id)).toList();
+    return (await _postDatasource.getPostsByCollectiveId(id)).map((dto) => postMapper.fromJson(dto.data, dto.id)).toList();
   }
   
   @override
@@ -92,8 +92,8 @@ class ColetivoRepositoryImpl implements IColetivoRepository{
   }
   
   @override
-  Future<void> requestEntryOnCollective({required String nameField, required String idCollective, required List<String> newEntryRequestList}) {
-    return _datasource.requestEntryOnCollective(nameField: nameField, idCollective: idCollective, newEntryRequestList: newEntryRequestList);
+  Future<void> updateListOnCollective({required String nameField, required String idCollective, required List<dynamic> newListData}) {
+    return _datasource.updateListOnCollective(nameField: nameField, idCollective: idCollective, newListData: newListData);
   } 
   
 }

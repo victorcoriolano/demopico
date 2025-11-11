@@ -30,18 +30,17 @@ class FirebaseCommentRemoteDataSource implements ICommentSpotDataSource<Firebase
   }
 
   @override
-  Future<List<FirebaseDTO>> getBySpotId(String peakId) async {
-    final querySnapshot = await firebaseFirestore
-        .collection('comments')
-        .where('peakId', isEqualTo: peakId)
-        .orderBy('timestamp', descending: true)
-        .get();
+ Future<List<FirebaseDTO>> getBySpotId(String picoId) async {
+  final querySnapshot = await firebaseFirestore
+      .collection('comments')
+      .where('picoId', isEqualTo: picoId)
+      .get();
+  return querySnapshot.docs.map((doc) {
+    final data = doc.data();
+    return FirebaseDTO(id: doc.id, data: data);
+  }).toList();
+}
 
-    return querySnapshot.docs.map((doc) {
-      final data = doc.data();
-      return FirebaseDTO(id: doc.id, data: data);
-    }).toList();
-  }
 
   @override
   Future<void> delete(String commentId) async {
