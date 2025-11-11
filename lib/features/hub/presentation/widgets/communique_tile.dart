@@ -1,4 +1,10 @@
+import 'package:demopico/core/app/routes/app_routes.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
+import 'package:demopico/core/common/mixins/route_profile_validator.dart';
 import 'package:demopico/features/hub/domain/entities/communique.dart';
+import 'package:demopico/features/profile/presentation/pages/profile_page_user.dart';
+import 'package:demopico/features/user/domain/enums/auth_state.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -53,9 +59,6 @@ class _CommuniqueTileState extends State<CommuniqueTile> {
     }
   }
 
-  final String _defaultPicUrl =
-      "https://firebasestorage.googleapis.com/v0/b/pico-skatepico.appspot.com/o/users%2F%7BkGwNgh3myaVxmuCSweq3wZoQanz2%7D%2F350497514_618246436914572_6911710937269163378_n.jpg?alt=media&token=bd55be24-d53f-41fd-b4b3-52fde86cce2a";
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -79,28 +82,48 @@ class _CommuniqueTileState extends State<CommuniqueTile> {
                         print(
                             "ERRO NO SNAPSHOT : ${snapshot.hasError ? snapshot.error : snapshot.data}, ${snapshot.data.isBlank}");
                       }
-                      return ClipOval(
-                          clipBehavior: Clip.antiAlias,
-                          child: Image.network(
-                              post.pictureUrl == "" || post.pictureUrl == null
-                                  ? _defaultPicUrl
-                                  : post.pictureUrl!,
-                              width: 40,
-                              height: 40,
-                              alignment: Alignment.centerLeft,
-                              fit: BoxFit.contain));
+                      return InkWell(
+                        onTap: () {
+                          AuthState user =
+                              AuthViewModelAccount.instance.authState;
+                          RouteProfileValidator.validateRoute(user, post.uid);
+                        },
+                        child: ClipOval(
+                            clipBehavior: Clip.antiAlias,
+                            child:
+                                post.pictureUrl == "" || post.pictureUrl == null
+                                    ? Image.asset('assets/images/userPhoto.png',
+                                        width: 40,
+                                        height: 40,
+                                        alignment: Alignment.centerLeft,
+                                        fit: BoxFit.contain)
+                                    : Image.network(post.pictureUrl!,
+                                        width: 40,
+                                        height: 40,
+                                        alignment: Alignment.centerLeft,
+                                        fit: BoxFit.contain)),
+                      );
                     }
-
-                    return ClipOval(
-                      clipBehavior: Clip.antiAlias,
-                      child: Image.network(
-                          post.pictureUrl == "" || post.pictureUrl == null
-                              ? _defaultPicUrl
-                              : post.pictureUrl!,
-                          width: 40,
-                          height: 40,
-                          alignment: Alignment.centerLeft,
-                          fit: BoxFit.contain),
+                    return InkWell(
+                      onTap: () {
+                        AuthState user =
+                            AuthViewModelAccount.instance.authState;
+                        RouteProfileValidator.validateRoute(user, post.uid);
+                      },
+                      child: ClipOval(
+                          clipBehavior: Clip.antiAlias,
+                          child:
+                              post.pictureUrl == "" || post.pictureUrl == null
+                                  ? Image.asset('assets/images/userPhoto.png',
+                                      width: 40,
+                                      height: 40,
+                                      alignment: Alignment.centerLeft,
+                                      fit: BoxFit.contain)
+                                  : Image.network(post.pictureUrl!,
+                                      width: 40,
+                                      height: 40,
+                                      alignment: Alignment.centerLeft,
+                                      fit: BoxFit.contain)),
                     );
                   }),
               const SizedBox(height: 15),
