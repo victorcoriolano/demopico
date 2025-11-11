@@ -3,9 +3,11 @@ import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
+import 'package:demopico/core/common/mixins/route_profile_validator.dart';
 import 'package:demopico/features/profile/presentation/pages/profile_page_user.dart';
 import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
 import 'package:demopico/features/profile/presentation/object_for_only_view/suggestion_profile.dart';
+import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -24,7 +26,6 @@ class SuggestionProfilesWidget extends StatefulWidget {
 }
 
 class _SuggestionProfilestState extends State<SuggestionProfilesWidget> {
-
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -46,8 +47,10 @@ class _SuggestionProfilestState extends State<SuggestionProfilesWidget> {
         ],
       ),
       child: InkWell(
-        onTap: () { 
-          Get.to(() => ProfilePageUser(), arguments: widget.suggestionProfile.idUser);
+        onTap: () {
+          AuthState userActual = AuthViewModelAccount.instance.authState;
+          RouteProfileValidator.validateRoute(
+              userActual, widget.suggestionProfile.idUser);
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -60,7 +63,9 @@ class _SuggestionProfilestState extends State<SuggestionProfilesWidget> {
                 children: [
                   CircleAvatar(
                     backgroundImage: widget.suggestionProfile.photo != null
-                        ? CachedNetworkImageProvider(widget.suggestionProfile.photo!, errorListener: (error) => const Icon(Icons.error))
+                        ? CachedNetworkImageProvider(
+                            widget.suggestionProfile.photo!,
+                            errorListener: (error) => const Icon(Icons.error))
                         : null,
                     radius: 20,
                   ),
@@ -84,15 +89,18 @@ class _SuggestionProfilestState extends State<SuggestionProfilesWidget> {
                 final currentUser = context.read<AuthViewModelAccount>().user;
                 switch (currentUser) {
                   case UserEntity():
-                    context.read<NetworkViewModel>().requestConnection(widget.suggestionProfile, currentUser);
+                    context.read<NetworkViewModel>().requestConnection(
+                        widget.suggestionProfile, currentUser);
                   case AnonymousUserEntity():
                     FailureServer.showError(UnauthenticatedFailure());
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: widget.suggestionProfile.status.statusForSuggestions == 'Conectar'
-                    ? kRed
-                    : kMediumGrey,
+                backgroundColor:
+                    widget.suggestionProfile.status.statusForSuggestions ==
+                            'Conectar'
+                        ? kRed
+                        : kMediumGrey,
               ),
               child: Text(widget.suggestionProfile.status.statusForSuggestions),
             ),
