@@ -1,9 +1,15 @@
+import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
+import 'package:demopico/core/common/mixins/route_profile_validator.dart';
 import 'package:demopico/core/common/widgets/snackbar_utils.dart';
 import 'package:demopico/features/mapa/presentation/controllers/comment_controller.dart';
+import 'package:demopico/features/profile/presentation/pages/profile_page_user.dart';
+import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -19,7 +25,7 @@ class CommentPage extends StatefulWidget {
 class _CommentPageState extends State<CommentPage> {
   final TextEditingController _controller = TextEditingController();
   late CommentController comentController;
-  
+
   @override
   void initState() {
     super.initState();
@@ -37,7 +43,6 @@ class _CommentPageState extends State<CommentPage> {
 
   @override
   Widget build(BuildContext context) {
-
     final width = MediaQuery.of(context).size.width * 0.90;
     return Scaffold(
       appBar: AppBar(
@@ -99,7 +104,7 @@ class _CommentPageState extends State<CommentPage> {
                                   itemBuilder: (context, index) {
                                     final comment = provider.comments[index];
                                     return Container(
-                                      width: width ,
+                                      width: width,
                                       margin: const EdgeInsets.symmetric(
                                           vertical: 6),
                                       padding: const EdgeInsets.all(12),
@@ -116,45 +121,63 @@ class _CommentPageState extends State<CommentPage> {
                                         ],
                                       ),
                                       child: Row(
-                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
                                           // Avatar do usuário
                                           Expanded(
                                             child: Row(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Container(
-                                                  margin: EdgeInsets.only(
-                                                      left: 2, right: 12),
-                                                  child: CircleAvatar(
-                                                    radius: 22,
-                                                    backgroundImage: comment
+                                                InkWell(
+                                                  onTap: () {
+                                                    AuthState user =
+                                                        AuthViewModelAccount
+                                                            .instance.authState;
+                                                    RouteProfileValidator
+                                                        .validateRoute(
+                                                            user,
+                                                            comment
                                                                 .userIdentification
-                                                                .profilePictureUrl !=
-                                                            null
-                                                        ? NetworkImage(comment
-                                                            .userIdentification
-                                                            .profilePictureUrl!)
-                                                        : const AssetImage(
-                                                                "assets/images/userPhoto.png")
-                                                            as ImageProvider,
+                                                                .id);
+                                                  },
+                                                  child: Container(
+                                                    margin: EdgeInsets.only(
+                                                        left: 2, right: 12),
+                                                    child: CircleAvatar(
+                                                      radius: 22,
+                                                      backgroundImage: comment
+                                                                  .userIdentification
+                                                                  .profilePictureUrl !=
+                                                              null
+                                                          ? NetworkImage(comment
+                                                              .userIdentification
+                                                              .profilePictureUrl!)
+                                                          : const AssetImage(
+                                                                  "assets/images/userPhoto.png")
+                                                              as ImageProvider,
+                                                    ),
                                                   ),
                                                 ),
-                                                
                                                 Expanded(
                                                   child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
                                                     children: [
                                                       Text(
-                                                        comment.userIdentification
+                                                        comment
+                                                            .userIdentification
                                                             .name,
                                                         style: const TextStyle(
                                                           fontWeight:
                                                               FontWeight.bold,
                                                           fontSize: 15,
                                                         ),
-                                                      
                                                       ),
                                                       Text(
                                                         comment.content,
@@ -164,7 +187,6 @@ class _CommentPageState extends State<CommentPage> {
                                                         ),
                                                         softWrap:
                                                             true, // quebra em múltiplas linhas
-                                                        
                                                       ),
                                                     ],
                                                   ),
@@ -173,13 +195,15 @@ class _CommentPageState extends State<CommentPage> {
                                             ),
                                           ),
                                           Container(
-                                            margin: const EdgeInsets.only(left: 8),
+                                            margin:
+                                                const EdgeInsets.only(left: 8),
                                             child: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.end,
                                               children: [
                                                 Text(
-                                                  _formatHour(comment.timestamp),
+                                                  _formatHour(
+                                                      comment.timestamp),
                                                   style: TextStyle(
                                                     fontSize: 12,
                                                     color: Colors.grey[700],
@@ -271,7 +295,7 @@ class _CommentPageState extends State<CommentPage> {
                   widget.picoId,
                   user.id,
                   user.displayName.value,
-                  user.avatar ,
+                  user.avatar,
                 );
 
                 _controller.clear();
