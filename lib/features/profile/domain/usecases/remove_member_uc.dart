@@ -16,7 +16,7 @@ class RemoveMemberUseCase {
     _repository = ColetivoRepositoryImpl.instance,
     _notificationRepository = NotificationRepositoryImpl.getInstance;
 
-  Future<void> execute({
+  Future<ColetivoEntity> execute({
     required UserIdentification user,
     required ColetivoEntity coletivo,
   }) async {
@@ -27,8 +27,11 @@ class RemoveMemberUseCase {
       await _repository.updateListOnCollective(
         nameField: "members",
         idCollective: coletivo.id,
-        newListData: updatedMembers,
+        newListData: updatedMembers.map((user) => user.id).toList(),
       );
+
+      coletivo = coletivo.copyWith(members: updatedMembers);
+
 
       await _notificationRepository.createNotification(
         NotificationItem(
@@ -38,11 +41,13 @@ class RemoveMemberUseCase {
           userId: user.id,
           message: "Você foi removido do coletivo ${coletivo.nameColetivo}",
           timestamp: DateTime.now(),
+          data: coletivo.id,
         ),
       );
 
       debugPrint('Notificação enviada para o usuário ${user.id} sobre remoção.');
 
+      return coletivo;
     } on Failure catch (e) {
       debugPrint('Erro ao remover membro do coletivo: $e');
       rethrow;
