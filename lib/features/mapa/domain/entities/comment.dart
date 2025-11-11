@@ -1,12 +1,14 @@
+import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
+
 class Comment {
-  final String peakId;
-  final String userId;
+  final UserIdentification userIdentification;
+  final String picoId;
   final String content;
   final DateTime timestamp;
-
+  
   Comment({
-    required this.peakId,
-    required this.userId,
+    required this.userIdentification,
+    required this.picoId,
     required this.content,
     required this.timestamp,
   });
