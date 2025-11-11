@@ -23,13 +23,14 @@ class SendMessageUc {
       final notifications = chat.participantsIds
           .where((participant) => participant != message.infoUser.id)
           .map((user) => 
-              NotificationItem(
+            NotificationItem(
               type: TypeNotification.newMessage,
               isRead: false,
               id: "",
               userId: user,
               message: "Nova mensagem do ${chat.nameChat}",
-              timestamp: DateTime.now()
+              timestamp: DateTime.now(),
+              data: message.content,
           )).toList();
            
 
