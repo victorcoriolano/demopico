@@ -136,7 +136,7 @@ class _CommentPageState extends State<CommentPage> {
                                                             .userIdentification
                                                             .profilePictureUrl!)
                                                         : const AssetImage(
-                                                                'assets/images/avatar_placeholder.png')
+                                                                "assets/images/userPhoto.png")
                                                             as ImageProvider,
                                                   ),
                                                 ),
@@ -271,7 +271,7 @@ class _CommentPageState extends State<CommentPage> {
                   widget.picoId,
                   user.id,
                   user.displayName.value,
-                  user.avatar!,
+                  user.avatar ,
                 );
 
                 _controller.clear();
