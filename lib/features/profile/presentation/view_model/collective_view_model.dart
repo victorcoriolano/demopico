@@ -47,8 +47,9 @@ class CollectiveViewModel extends ChangeNotifier {
   late ColetivoEntity coletivo;
   bool isLoading = false;
   List<UserIdentification> requests = [];
+  List<UserIdentification> members = [];
 
-  Future<void> getCollectives(String id) async {
+  Future<void> getCollectivesForUser(String id) async {
     isLoading = true;
     notifyListeners();
     try {
@@ -65,7 +66,8 @@ class CollectiveViewModel extends ChangeNotifier {
     try {
       requests.clear();
       coletivo = await _getTotalInformation.execute(idCollective);
-      fetchPendingRequests(coletivo.entryRequests);
+      members = coletivo.members;
+      notifyListeners();
     } on Failure catch (failure) {
       FailureServer.showError(failure);
     }
@@ -73,7 +75,7 @@ class CollectiveViewModel extends ChangeNotifier {
 
   UserCollectiveRole checkUserRole(User user, ColetivoEntity coletivo) {
     switch (user) {
-      case UserEntity():
+      case UserEntity():  
         return coletivo.ruleForUser(user.id);
       case AnonymousUserEntity():
         return UserCollectiveRole.visitor;
@@ -84,8 +86,8 @@ class CollectiveViewModel extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
     try {
-      if (allCollectives.isEmpty)
-        allCollectives = await _getAllCollectivesUc.execute();
+      if (allCollectives.isNotEmpty) return;
+      allCollectives = await _getAllCollectivesUc.execute();
     } on Failure catch (e) {
       FailureServer.showError(e);
     } finally {
@@ -123,6 +125,8 @@ class CollectiveViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       coletivo = await _acceptEntryOnCollectiveUc.execute(user, coletivo);
+      requests.remove(user); // atualização rápida pra retorno instantâneo na view
+      members.add(user);     // idem
       notifyListeners();
     } on Failure catch (e) {
       FailureServer.showError(e);
@@ -170,6 +174,8 @@ class CollectiveViewModel extends ChangeNotifier {
     try {
       coletivo = await _refuseEntryRequestUseCase.execute(
           userId: userId, coletivo: coletivo);
+      requests.removeWhere((element) => element.id == userId);
+      notifyListeners();
     } on Failure catch (failure) {
       FailureServer.showError(failure);
     } finally {
@@ -182,8 +188,8 @@ class CollectiveViewModel extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
     try {
-      await _removeMemberUseCase.execute(user: user, coletivo: coletivo);
-      coletivo.members.remove(user);
+      coletivo = await _removeMemberUseCase.execute(user: user, coletivo: coletivo);
+      members.remove(user);
       notifyListeners();
     } on Failure catch (e) {
       FailureServer.showError(e);
@@ -192,4 +198,6 @@ class CollectiveViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+
 }
