@@ -3,8 +3,9 @@ import 'package:demopico/features/profile/presentation/pages/profile_page_user.d
 import 'package:demopico/features/user/domain/enums/auth_state.dart';
 import 'package:get/get.dart';
 
-mixin RouteValidator {
-  void validateRoute(AuthState auth, String idCreator) {
+mixin RouteProfileValidator {
+
+  static void validateRoute(AuthState auth, String idCreator) {
     switch (auth) {
       case AuthAuthenticated _:
         auth.user.id == idCreator
