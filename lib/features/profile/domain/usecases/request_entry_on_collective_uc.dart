@@ -33,8 +33,10 @@ class RequestEntryOnCollectiveUc {
         isRead: false,
         id: "",
         userId: coletivo.modarator.id,
-        message: "Nova solicitação de entrada ",
-        timestamp: DateTime.now());
+        message: "User ${user.name} solicitou a entrada no coletivo ${coletivo.nameColetivo}",
+        timestamp: DateTime.now(),
+        data: user.id,
+    );
     _notificationRepository.createNotification(notification);
     await _repository.updateListOnCollective(
         nameField: "entryRequests",
