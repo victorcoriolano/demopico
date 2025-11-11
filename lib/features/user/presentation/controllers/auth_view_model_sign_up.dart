@@ -45,6 +45,7 @@ class AuthViewModelSignUp extends ChangeNotifier {
 
   void updateFieldEmail(String email) {
     try {
+      errorEmail = null;
       emailField = EmailVO(email);
     } on Failure catch (e) {
       errorEmail = e.message;
