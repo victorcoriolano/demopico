@@ -29,12 +29,8 @@ class CreateCollectiveUc {
     required INotificationRepository notificationRepository,
   }): _repository = repository, _profileRepository = profRepo, _notificationRepository = notificationRepository;
 
-  Future<ColetivoEntity> execute(ColetivoEntity coletivo, List<String> idcoletivos) async {
-    debugPrint("Lista de idcoletivos do user atual: $idcoletivos - ${idcoletivos.length}");
+  Future<ColetivoEntity> execute(ColetivoEntity coletivo,) async {
     final newColetivo = await _repository.createColetivo(coletivo);
-    idcoletivos.add(newColetivo.id);
-    debugPrint("Lista de coletivos do user atual: $idcoletivos");
-    await _profileRepository.updateField(id: coletivo.modarator.id, field: "idColetivos", newData: idcoletivos);
     if (coletivo.guests.isNotEmpty) {
       for (final user in coletivo.guests){
         await _notificationRepository.createNotification(
