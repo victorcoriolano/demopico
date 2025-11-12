@@ -169,10 +169,10 @@ class MySliverAppBar extends StatelessWidget {
             clipper: BottomCurveClipper(),
             child: Container(
               decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                colors: [kBlack, Colors.transparent],
-                begin: AlignmentGeometry.bottomCenter,
-                end: AlignmentDirectional.topCenter,
+                  gradient: RadialGradient(
+                colors: [Colors.transparent, kBlack],
+                radius: 1.0,
+                center: Alignment.topCenter,
               )),
             ),
           ),
