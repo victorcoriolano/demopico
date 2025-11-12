@@ -68,7 +68,18 @@ class TerceiraTela extends StatelessWidget {
                       children:
                           provider.obstaculoVo.selectedValues.map((obstaculo) {
                         return Chip(
+                          deleteIconColor: const Color.fromARGB(255, 255, 255, 255),
                           label: Text(obstaculo),
+                          labelStyle: TextStyle(color: kWhite),
+                          backgroundColor:
+                              kRed,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            side: BorderSide(
+                              color: kRed, // cor da borda
+                              width: 2, // espessura
+                            ),
+                          ),
                           onDeleted: () {
                             provider.removeObstacle(obstaculo);
                           },
