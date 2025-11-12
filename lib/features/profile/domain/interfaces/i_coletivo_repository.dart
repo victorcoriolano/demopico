@@ -10,4 +10,6 @@ abstract interface class IColetivoRepository {
     required String nameField, 
     required String idCollective, 
     required List<dynamic> newListData});
+
+  Future<void> deleteCollective(String idCollective);
  } 
