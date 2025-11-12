@@ -76,8 +76,25 @@ class _ContainerTelasState extends State<ContainerTelas> {
                   padding: const EdgeInsets.all(10),
                   child: Column(
                     children: [
+                      Center(
+                        child: Padding(
+                            padding: const EdgeInsets.only(bottom: 0),
+                            child: switch (etapa) {
+                              StepsAddPico.especificidade =>
+                                Image.asset('assets/images/progresso1.png'),
+                              StepsAddPico.atributos => Image.asset(
+                                  'assets/images/progresso2.png',
+                                ),
+                              StepsAddPico.obstaculos => Image.asset(
+                                  'assets/images/progresso3.png',
+                                ),
+                              StepsAddPico.detalhesAdicionais => Image.asset(
+                                  'assets/images/progresso4.png',
+                                ),
+                            }),
+                      ),
                       Expanded(
-                        child: switch (etapa){  
+                        child: switch (etapa) {
                           StepsAddPico.especificidade => EspecificidadeScreen(),
                           StepsAddPico.atributos => SegundaTela(),
                           StepsAddPico.obstaculos => TerceiraTela(),
@@ -88,20 +105,21 @@ class _ContainerTelasState extends State<ContainerTelas> {
                       Visibility(
                         visible: etapa != StepsAddPico.especificidade,
                         child: CustomElevatedButton(
-                          onPressed: _backScreen, 
-                          textButton: 'Voltar'
-                        ),
+                            onPressed: _backScreen, textButton: 'Voltar'),
                       ),
                       const SizedBox(height: 10),
                       CustomElevatedButton(
-                        onPressed: provider.isFormValid(etapa) 
-                          ? () {
-                            etapa == StepsAddPico.detalhesAdicionais
-                              ? provider.createSpot(createIdentification(authstate))
-                              : _nextScreen();
-                          }
-                          : provider.showError, 
-                        textButton: etapa == StepsAddPico.detalhesAdicionais ? "CRIAR PICO" : "PROSSEGUIR"),
+                          onPressed: provider.isFormValid(etapa)
+                              ? () {
+                                  etapa == StepsAddPico.detalhesAdicionais
+                                      ? provider.createSpot(
+                                          createIdentification(authstate))
+                                      : _nextScreen();
+                                }
+                              : provider.showError,
+                          textButton: etapa == StepsAddPico.detalhesAdicionais
+                              ? "CRIAR PICO"
+                              : "PROSSEGUIR"),
                     ],
                   ),
                 ),
@@ -114,14 +132,14 @@ class _ContainerTelasState extends State<ContainerTelas> {
   }
 
   UserIdentification? createIdentification(AuthState? authstate) {
-    switch (authstate){
+    switch (authstate) {
       case null || AuthUnauthenticated():
         return null;
       case AuthAuthenticated():
-         return UserIdentification(
-        id: authstate.user.id, name: authstate.user.displayName.value, profilePictureUrl: authstate.user.profileUser.avatar);
+        return UserIdentification(
+            id: authstate.user.id,
+            name: authstate.user.displayName.value,
+            profilePictureUrl: authstate.user.profileUser.avatar);
     }
-
-   
   }
 }
