@@ -1,3 +1,4 @@
+import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/features/mapa/presentation/controllers/add_pico_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +10,6 @@ class TerceiraTela extends StatelessWidget {
   Widget build(BuildContext context) {
     // Obtém a altura da tela
     final screenHeight = MediaQuery.of(context).size.height;
-    
 
     final List<String> listaIcon = [
       "assets/images/icons/45graus.png", // 45° graus
@@ -45,15 +45,6 @@ class TerceiraTela extends StatelessWidget {
               crossAxisAlignment:
                   CrossAxisAlignment.center, // Centraliza o conteúdo na coluna
               children: [
-                // Imagem do topo
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Image.asset(
-                      'assets/images/progresso3.png',
-                    ),
-                  ),
-                ),
                 // Título da seção
                 const Padding(
                   padding: EdgeInsets.symmetric(
@@ -63,7 +54,7 @@ class TerceiraTela extends StatelessWidget {
                     style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black), // Estilo do texto
+                        color: kRed), // Estilo do texto
                   ),
                 ),
                 // conteiner pra demostrar os obstáculos selecionados
@@ -74,7 +65,8 @@ class TerceiraTela extends StatelessWidget {
                     child: Wrap(
                       spacing: 6,
                       runSpacing: 3,
-                      children: provider.obstaculoVo.selectedValues.map((obstaculo) {
+                      children:
+                          provider.obstaculoVo.selectedValues.map((obstaculo) {
                         return Chip(
                           label: Text(obstaculo),
                           onDeleted: () {
@@ -97,9 +89,16 @@ class TerceiraTela extends StatelessWidget {
                       crossAxisSpacing: 6, // Espaçamento entre colunas
                       childAspectRatio: 1.0, // Faz as caixas serem quadradas
                     ),
-                    itemCount: provider.obstaculoVo.options.length, // Total de 15 caixas
+                    itemCount: provider
+                        .obstaculoVo.options.length, // Total de 15 caixas
                     itemBuilder: (context, index) {
-                      final obstacle = provider.obstaculoVo.options.elementAt(index);
+                      if (provider.obstaculoVo.options.isEmpty) {
+                        return const Center(
+                            child: Text("Nenhum obstáculo disponível"));
+                      }
+
+                      final obstacle =
+                          provider.obstaculoVo.options.elementAt(index);
                       final options = provider.obstaculoVo.options;
                       final selectedObstacles = provider.obstaculoVo.obstacles;
                       return Padding(
@@ -110,15 +109,14 @@ class TerceiraTela extends StatelessWidget {
                           child: InkWell(
                             onTap: () {
                               // Se estiver na lista, remove; caso contrário, adiciona
-                              if (selectedObstacles
-                                  .contains(options[index])) {
+                              if (selectedObstacles.contains(options[index])) {
                                 provider.removeObstacle(obstacle);
                               } else {
-                                provider.selectObstacle(obstacle);
+                                provider.selectObstacle(obstacle, context);
                               }
                             },
                             child: Image.asset(
-                              listaIcon[index], 
+                              listaIcon[index],
                               fit: BoxFit.contain,
                             ),
                           ),
