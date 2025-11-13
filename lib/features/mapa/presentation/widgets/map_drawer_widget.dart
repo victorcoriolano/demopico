@@ -29,8 +29,17 @@ class _MapDrawerState extends State<MapDrawer> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               MenuItem(
-                icon: Icons.spoke,
-                text: " MEUS PICOS",
+                icon: Icons.home, // Ícone para Home
+                text: 'HOME', // Texto do botão
+                onPressed: () {
+                  // Navega de volta para a tela inicial
+                  Get.offAndToNamed(Paths.home);
+                },
+              ),
+
+              MenuItem(
+                icon: Icons.person_pin_circle ,
+                text: "MEUS PICOS",
                 onPressed: () {
                   switch (authState) {
                     case AuthAuthenticated():
@@ -61,15 +70,6 @@ class _MapDrawerState extends State<MapDrawer> {
                   }),
 
               Divider(),
-              // Botão Configurar Mapa
-              MenuItem(
-                icon: Icons.map,
-                text: 'CONFIGURAR MAPA',
-                onPressed: () {
-                  Get.back();
-                  ModalHelper.abrirModalConfgMap(context);
-                },
-              ),
 
               // Botão Histórico
               MenuItem(
@@ -80,13 +80,13 @@ class _MapDrawerState extends State<MapDrawer> {
                 },
               ),
 
-              // Botão Home
+              // Botão Configurar Mapa
               MenuItem(
-                icon: Icons.home, // Ícone para Home
-                text: 'HOME', // Texto do botão
+                icon: Icons.settings,
+                text: 'CONFIGURAR MAPA',
                 onPressed: () {
-                  // Navega de volta para a tela inicial
-                  Get.offAndToNamed(Paths.home);
+                  Get.back();
+                  ModalHelper.abrirModalConfgMap(context);
                 },
               ),
             ],
