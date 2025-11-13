@@ -21,15 +21,7 @@ class _EspecificidadeScreenState extends State<EspecificidadeScreen> {
           mainAxisSize:
               MainAxisSize.min, // Para o dialog ajustar o tamanho ao conteúdo
           children: [
-            // Imagem do topo
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 0),
-                child: Image.asset(
-                  'assets/images/progresso1.png',
-                ),
-              ),
-            ),
+          
             // Título da seção de modalidades
             const Text(
               'MODALIDADE',

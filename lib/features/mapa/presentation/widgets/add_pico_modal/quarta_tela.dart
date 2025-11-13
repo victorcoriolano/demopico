@@ -42,14 +42,6 @@ class _QuartaTelaState extends State<QuartaTela> {
               crossAxisAlignment:
                   CrossAxisAlignment.center, 
               children: [
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Image.asset(
-                      'assets/images/progresso4.png',
-                    ),
-                  ),
-                ),
                 const SizedBox(height: 20), 
                 const Text(
                   'NOME DO PICO:',
