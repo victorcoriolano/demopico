@@ -66,7 +66,7 @@ class _NotificationPageState extends State<NotificationPage> {
                           // TODO: Handle new Like on pub.
                           TypeNotification.newLikeOnPub => Icon(Icons.favorite),
                           // TODO: Handle new comment on pub.
-                          TypeNotification.newCommentOnPub => throw UnimplementedError(),
+                          TypeNotification.newCommentOnPub => Icon(Icons.comment),
                           
                           TypeNotification.newMessage => CustomElevatedButton(
                             onPressed: () {
