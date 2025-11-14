@@ -20,6 +20,7 @@ class MapWidget extends StatefulWidget {
 class MapWidgetState extends State<MapWidget> {
   late SpotsControllerProvider _spotControllerProvider;
   late MapControllerProvider _mapControllerProvider;
+  bool isClosed = true;
 
   @override
   void initState() {
@@ -29,16 +30,20 @@ class MapWidgetState extends State<MapWidget> {
   }
 
   @override
-  void didChangeDependencies(){
+  void didChangeDependencies() {
     super.didChangeDependencies();
     _initializeProviders();
   }
 
   Future<void> _initializeProviders() async {
     await _mapControllerProvider.getLocation();
-    _spotControllerProvider.setOnTapMarker(
-      (pico) => ModalHelper.openModalInfoPico(context, pico),
-    );
+
+    _spotControllerProvider.setOnTapMarker((pico) async {
+      setState(() => isClosed = false); // antes de abrir o modal
+      await ModalHelper.openModalInfoPico(context, pico);
+      setState(() => isClosed = true);
+    });
+
     _spotControllerProvider.initialize();
   }
 
@@ -59,13 +64,14 @@ class MapWidgetState extends State<MapWidget> {
             zoom: mapProvider.zoomInicial,
           ),
           mapType: mapProvider.myMapType,
-          scrollGesturesEnabled: true,
-          rotateGesturesEnabled: true,
+          scrollGesturesEnabled: isClosed,
+          rotateGesturesEnabled: isClosed,
           myLocationEnabled: true,
           myLocationButtonEnabled: true,
-          tiltGesturesEnabled: true,
+          tiltGesturesEnabled: isClosed,
           markers: provider.markers,
-          onLongPress: (latlang) => ModalHelper.openAddPicoModal(context, latlang),
+          onLongPress: (latlang) =>
+              ModalHelper.openAddPicoModal(context, latlang),
 
 /*           onLongPress: (latlang) {
             _mapControllerProvider.reajustarCameraPosition(latlang);
@@ -77,7 +83,8 @@ class MapWidgetState extends State<MapWidget> {
                   onTap: () => Get.toNamed(""),
                 )));
           },
- */        ),
+ */
+        ),
       ),
     );
   }
