@@ -38,14 +38,20 @@ class _MapDrawerState extends State<MapDrawer> {
               ),
 
               MenuItem(
-                icon: Icons.person_pin_circle ,
+                icon: Icons.person_pin_circle,
                 text: "MEUS PICOS",
                 onPressed: () {
                   switch (authState) {
                     case AuthAuthenticated():
                       // FIXME: PASSANDO O NOME AO INVÉS DE PASSAR O ID Pq nossa infra n tem o id
-                      Get.toNamed(Paths.mySpots,
-                          arguments: authState.user.displayName.value);
+                      Get.toNamed(
+                        Paths.mySpots,
+                        arguments: [
+                          authState.user.displayName.value,
+                          authState.user.id,
+                        ],
+                      );
+
                     case AuthUnauthenticated():
                       Get.snackbar("Erro",
                           "Usuário não logado faça login para acessar seus picos",
