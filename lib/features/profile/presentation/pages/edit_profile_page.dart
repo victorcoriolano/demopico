@@ -70,21 +70,6 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators {
         colorText: Colors.white);
   }
 
-  void _changeEmail() {
-    // TODO: CHANGE EMAIL FLOW
-    // Lógica complexa para alterar o e-mail:
-    // 1. Mostrar um modal ou nova tela para o usuário confirmar a ação.
-    // 2. Enviar um e-mail de validação para o novo endereço.
-    // 3. Exibir uma mensagem de sucesso ou erro.
-    debugPrint('Iniciando fluxo de alteração de e-mail...');
-    Get.snackbar(
-      'Atenção',
-      'Um link de validação foi enviado para seu e-mail. Por favor, verifique sua caixa de entrada.',
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.blueAccent,
-      colorText: Colors.white,
-    );
-  }
 
   void _handleChangePassword() {
     showDialog(
@@ -387,11 +372,7 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators {
                         child: Text(user.email.value,
                             style: const TextStyle(fontSize: 16)),
                       ),
-                      TextButton(
-                        onPressed: _changeEmail,
-                        child: const Text('Alterar E-mail',
-                            style: TextStyle(color: kRed)),
-                      ),
+                      
                     ],
                   ),
                   const Divider(),
