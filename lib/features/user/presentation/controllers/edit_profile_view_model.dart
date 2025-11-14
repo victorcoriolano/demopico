@@ -1,7 +1,9 @@
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
+import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
 import 'package:demopico/core/common/auth/domain/usecases/update_password_uc.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/password_vo.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/vulgo_vo.dart';
+import 'package:demopico/core/common/auth/infra/mapper/user_mapper.dart';
 import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/media_management/models/file_model.dart';
@@ -21,7 +23,7 @@ class EditProfileViewModel extends ChangeNotifier {
     
     static EditProfileViewModel get instance =>
       _instance ??= EditProfileViewModel(
-        updateProfile: UpdateProfile(profileDataRepo: ProfileRepositoryImpl.getInstance),
+        updateProfile: UpdateProfile.instance,
         account: AuthViewModelAccount.instance,
         updatePassword: UpdatePasswordUc.getInstance,
         pickAImage: PickOneImageUc.instance,
@@ -50,6 +52,7 @@ class EditProfileViewModel extends ChangeNotifier {
   final AuthViewModelAccount _account;
   final UpdateProfile _updateProfile;
   final UpdateUserUc _updateUser;
+  
 
   /// inicializando como null object pra não ter ficar fazendo verificações de null toda hora  
   FileModel avatar = NullFileModel();
@@ -136,6 +139,8 @@ class EditProfileViewModel extends ChangeNotifier {
     notifyListeners();
     UserEntity originalUser = _account.user as UserEntity;
     UserEntity userModificado = originalUser.copyWith();
+    UserIdentification userIdentification = UserIdentification(
+      id: originalUser.id, name: originalUser.displayName.value, profilePictureUrl: originalUser.avatar);
     try {
       // verifica se alguma foto foi alterada
       final (urlAvatar, backgroundImageUrl) = await ( 
@@ -146,6 +151,7 @@ class EditProfileViewModel extends ChangeNotifier {
       if (urlAvatar != null){
         final profileUpdated = userModificado.profileUser.copyWith(avatar: urlAvatar);
         userModificado = userModificado.copyWith(profileUser: profileUpdated, avatar: urlAvatar);
+        userIdentification = userIdentification.copyWith(profilePictureUrl: urlAvatar);
       }
         
       if (backgroundImageUrl != null){
@@ -154,7 +160,10 @@ class EditProfileViewModel extends ChangeNotifier {
       }
 
       // verify text changes as update entity
-      if (newVulgo != null) userModificado = userModificado.copyWith(displayName: newVulgo);
+      if (newVulgo != null) {
+        userModificado = userModificado.copyWith(displayName: newVulgo);
+        userIdentification = userIdentification.copyWith(name: newVulgo!.value);
+      }
       if (newBio != null) {
         final profileUpdated = userModificado.profileUser.copyWith(description: newBio);
         userModificado = userModificado.copyWith(profileUser: profileUpdated);
@@ -163,8 +172,10 @@ class EditProfileViewModel extends ChangeNotifier {
       // finally uploads to the database if the data is really different
       if (userModificado != _account.user) {
         final result = await _updateProfile.execute(userModificado.profileUser);
-        if (result.success) {
-          await _updateUser.updateOnlyField(id: userModificado.id, nameField: "avatar", data: userModificado.avatar);
+        if (result.success ) {
+          final userM = UserMapper.fromEntity(userModificado);
+          
+          await _updateUser.fullUpdate(userM);
           debugPrint("Perfil atualizado com sucesso");
           _account.setCurrentUser = userModificado;
         } else {
