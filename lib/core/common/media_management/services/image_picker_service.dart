@@ -2,7 +2,6 @@ import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/core/common/media_management/interfaces/repository/i_pick_image_repository.dart';
 import 'package:demopico/core/common/media_management/models/file_model.dart';
 import 'package:demopico/features/external/api/gemini_api.dart';
-import 'package:demopico/features/external/enuns/type_content.dart';
 import 'package:demopico/features/external/interfaces/i_danger_content_api.dart';
 import 'package:demopico/core/common/errors/domain_failures.dart';
 import 'package:demopico/features/mapa/domain/enums/mime_type.dart';
