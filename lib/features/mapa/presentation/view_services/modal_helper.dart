@@ -41,7 +41,7 @@ class ModalHelper{
     );
   }
 
-  static void openModalInfoPico(
+  static Future<void> openModalInfoPico(
       BuildContext context, Pico pico, ) {
     debugPrint("chamou o modal para o pico ${pico.picoName}");
     // salvando no histórico
@@ -49,7 +49,8 @@ class ModalHelper{
     provider.salvarNoHistorico(pico.picoName, pico.location.latitude, pico.location.longitude);
 
     try {
-      showModalBottomSheet(
+      return showModalBottomSheet(
+        useSafeArea: true,
         context: context,
         isScrollControlled: true,
         backgroundColor: Colors.transparent, // Transparência para o fundo
