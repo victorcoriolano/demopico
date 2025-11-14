@@ -6,6 +6,7 @@ import 'package:demopico/core/common/auth/domain/value_objects/email_vo.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/location_vo.dart';
 import 'package:demopico/core/common/auth/domain/value_objects/vulgo_vo.dart';
 import 'package:demopico/features/user/domain/models/user_model.dart';
+import 'package:flutter/material.dart';
 
 class UserMapper {
   
@@ -37,6 +38,7 @@ class UserMapper {
   }
 
   static UserIdentification mapUserModelToUserIdentification(UserM userm) {
+    debugPrint("avatar do user: ${userm.avatar}");
     return UserIdentification(
       id: userm.id, 
       name: userm.name, 
