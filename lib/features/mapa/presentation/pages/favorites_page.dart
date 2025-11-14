@@ -1,4 +1,5 @@
 import 'package:demopico/core/app/routes/app_routes.dart';
+import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/favorite_spot_controller.dart';
 import 'package:flutter/material.dart';
@@ -76,14 +77,14 @@ class _FavoriteSpotPageState extends State<FavoriteSpotPage> {
                 child: ListTile(
                   minTileHeight: 100,
                   minLeadingWidth: 100,
-                  contentPadding: const EdgeInsets.all(16),
+                  contentPadding: const EdgeInsets.all(6),
                   leading: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: pico.pico.imgUrls.firstOrNull != null
                         ? Image.network(
                             pico.pico.imgUrls.first,
-                            width: 70,
-                            height: 70,
+                            width: 100,
+                            height: 150,
                             fit: BoxFit.cover,
                           )
                         : Container(
@@ -107,12 +108,13 @@ class _FavoriteSpotPageState extends State<FavoriteSpotPage> {
                       color: Colors.grey,
                     ),
                   ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
+                  
+                  trailing: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       IconButton(
                         tooltip: "Localização no mapa",
-                        icon: const Icon(Icons.location_on, color: Colors.blue),
+                        icon: const Icon(Icons.location_on, color: kRed),
                         onPressed: () {
                           mapController.reajustarCameraPosition(
                               LatLng(pico.pico.location.latitude, pico.pico.location.longitude));
@@ -121,10 +123,10 @@ class _FavoriteSpotPageState extends State<FavoriteSpotPage> {
                       ),
                       IconButton(
                         tooltip: "Remover Favorito",
-                        icon: const Icon(Icons.delete, color: Colors.red),
+                        icon: const Icon(Icons.delete, color: kRed),
                         onPressed: () async {
                           final deletar = await provider
-                              .deleteSave(pico.picoFavoritoModel.id);
+                              .deleteSave(pico.picoFavoritoModel);
                           if (context.mounted) {
                             if (deletar) {
                               ScaffoldMessenger.of(context).showSnackBar(

@@ -141,14 +141,14 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       PhotoAndNameWidget(
-                                          nameUserCreator:
-                                              spotProvider.pico!.user?.name ??
-                                                  "Anônimo",
-                                          urlImageUser: spotProvider
-                                              .pico!.user?.profilePictureUrl,
-                                              idUserCreator: spotProvider.pico!.user?.id ?? "",
-                                              ),
-                                            
+                                        nameUserCreator:
+                                            spotProvider.pico!.user?.name ??
+                                                "Anônimo",
+                                        urlImageUser: spotProvider
+                                            .pico!.user?.profilePictureUrl,
+                                        idUserCreator:
+                                            spotProvider.pico!.user?.id ?? "",
+                                      ),
                                       const SizedBox(width: 15),
                                       NameDescription(
                                           name: spotProvider.pico!.picoName,
@@ -248,12 +248,29 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                             //TODO: REFATORAR LÓGICA DE SALVAR SPOT PARA PASSAR
                                             //TER UMA LÓGICA PARA SALVAR E UMA PARA FAVORITAR
                                             if (user != null) {
-                                              ;
+                                              if (spotProvider.pico!.favoritedBy
+                                                  .contains(user?.id ?? "")) {
+                                                return showDialog(
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      AlertDialog(
+                                                    title: Text("Aviso"),
+                                                    content: Text(
+                                                        "Você já favoritou esse Pico!"),
+                                                    actions: [
+                                                      TextButton(
+                                                          onPressed: () =>
+                                                              Navigator.pop(
+                                                                  context),
+                                                          child: Text("OK")),
+                                                    ],
+                                                  ),
+                                                );
+                                              }
                                               return context
                                                   .read<
                                                       FavoriteSpotController>()
                                                   .favPico(user!.id);
-
                                             } else {
                                               SnackbarUtils.userNotLogged(
                                                   context);

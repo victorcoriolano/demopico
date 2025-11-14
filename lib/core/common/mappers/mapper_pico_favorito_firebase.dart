@@ -22,12 +22,10 @@ class MapperFavoriteSpotFirebase {
     );
   }
 
-  static Map<String, dynamic> toFirebase(FirebaseDTO picoFavorito, FirebaseFirestore firebaseInstance) {
+  static Map<String, dynamic> toFirebase(FirebaseDTO picoFavorito) {
     return {
       'idUser': picoFavorito.data['idUser'] as String,
-      'idPico': firebaseInstance
-        .collection('spots')  
-        .doc(picoFavorito.data["idPico"]),
+      'idPico': picoFavorito.data['idPico'] as String,
     };
   }
 }

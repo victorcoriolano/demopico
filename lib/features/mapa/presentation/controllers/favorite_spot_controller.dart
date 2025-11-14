@@ -1,5 +1,6 @@
 import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/errors/repository_failures.dart';
+import 'package:demopico/features/mapa/domain/entities/pico_favorito.dart';
 import 'package:demopico/features/mapa/domain/usecases/favorite_save_spot_uc.dart';
 import 'package:demopico/features/mapa/presentation/controllers/spot_provider.dart';
 import 'package:demopico/features/mapa/presentation/dtos/spot_cart_ui_dto.dart';
@@ -59,9 +60,9 @@ class FavoriteSpotController extends ChangeNotifier {
     }
   }
 
-  Future<bool> deleteSave(String idPicoFavModel) async {
+  Future<bool> deleteSave(PicoFavorito pico,) async {
     try {
-      await saveSpot.removeSaveSpot(idPicoFavModel);
+      await saveSpot.removeSaveSpot(pico);
       notifyListeners();
       return true;
     } catch (e) {
