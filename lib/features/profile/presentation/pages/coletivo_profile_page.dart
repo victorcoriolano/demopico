@@ -11,11 +11,14 @@ import 'package:demopico/features/profile/presentation/pages/profile_page_user.d
 import 'package:demopico/features/profile/presentation/view_model/chat_list_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/collective_view_model.dart';
 import 'package:demopico/features/profile/presentation/widgets/collectives_members_widgets.dart';
+import 'package:demopico/features/profile/presentation/widgets/post_widgets/container_videos_widget.dart';
+import 'package:demopico/features/profile/presentation/widgets/post_widgets/video_player_from_network.dart';
 import 'package:demopico/features/user/domain/enums/type_post.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:provider/provider.dart';
+import 'package:video_player/video_player.dart';
 
 class ColetivoProfilePage extends StatefulWidget {
   final ColetivoEntity initialColetivoInformation;
@@ -96,7 +99,7 @@ class _ColetivoProfilePageState extends State<ColetivoProfilePage> {
               onTap: () {
                 // TODO: IMPLEMENTAR TODAS AS ATIVIDADES DO COLETIVO
               }),
-          _AllPostsListView(posts: coletivo.publications),
+          _AllPostsListView(posts: coletivo.publications.where((post) => post.typePost != TypePost.fullVideo).toList()),
         ],
       ),
     );
@@ -213,10 +216,10 @@ class MySliverAppBar extends StatelessWidget {
                 const SizedBox(height: 12),
                 _ColetivoStats(
                   members: coletivo.members.length,
-                  posts: coletivo.publications.length,
+                  posts: coletivo.publications.where((p) => p.typePost != TypePost.fullVideo).length,
                   recs: coletivo.publications
                       .where(
-                          (p) => p.urlVideos != null && p.urlVideos!.isNotEmpty)
+                          (p) => p.typePost == TypePost.fullVideo)
                       .length,
                 ),
                 const SizedBox(height: 16),
@@ -687,23 +690,38 @@ class _AllPostsListView extends StatelessWidget {
           final post = posts[index];
           // Aqui você usaria seu widget de Card de Post
           // Vou criar um placeholder:
-          return _PostCardWidget(post: post);
+          return PostCardWidget(post: post);
         },
         childCount: posts.length,
       ),
     );
   }
 }
-
-// Card de Post (Placeholder - ajuste conforme seu app)
-class _PostCardWidget extends StatelessWidget {
+class PostCardWidget extends StatefulWidget {
   final Post post;
 
-  const _PostCardWidget({required this.post});
+  const PostCardWidget({super.key, required this.post});
+
+  @override
+  State<PostCardWidget> createState() => _PostCardWidgetState();
+}
+
+class _PostCardWidgetState extends State<PostCardWidget> {
+  final PageController _pageController = PageController();
+
+  
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final thumbnailUrl = post.urlImages.isNotEmpty ? post.urlImages[0] : null;
+    final thumbnailUrl = widget.post.urlImages.isNotEmpty ? widget.post.urlImages[0] : null;
+    final media = [...widget.post.urlVideos?? [] , ...widget.post.urlImages];
+
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -723,14 +741,14 @@ class _PostCardWidget extends StatelessWidget {
                   radius: 20,
                   backgroundColor: kMediumGrey,
                   backgroundImage:
-                      post.avatar != null ? NetworkImage(post.avatar!) : null,
-                  child: post.avatar == null
+                      widget.post.avatar != null ? NetworkImage(widget.post.avatar!) : null,
+                  child: widget.post.avatar == null
                       ? const Icon(Icons.person, color: kDarkGrey)
                       : null,
                 ),
                 const SizedBox(width: 10),
                 Text(
-                  post.nome, // Nome do autor do post
+                  widget.post.nome, // Nome do autor do post
                   style: const TextStyle(
                       color: kWhite, fontWeight: FontWeight.bold),
                 ),
@@ -742,14 +760,76 @@ class _PostCardWidget extends StatelessWidget {
           if (thumbnailUrl != null)
             AspectRatio(
               aspectRatio: 16 / 9,
-              child: Image.network(thumbnailUrl, fit: BoxFit.cover),
+              child: Stack(
+                children: [
+
+                  PageView.builder(
+                    controller: _pageController,
+                    itemCount: media.length,
+                    scrollDirection: Axis.horizontal,
+                    onPageChanged: (value) => setState(() {}),
+                    itemBuilder: (context, index) {
+                      final mediaUrl = media[index];
+                      final isVideo = widget.post.urlVideos != null && widget.post.urlVideos!.contains(mediaUrl);
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: isVideo
+                            ? Stack(
+                                children: [
+                                  VideoPlayerFromNetwork(url: mediaUrl),
+                                  Positioned(
+                                    top: 0,
+                                    bottom: 0,
+                                    left: 0,
+                                    right: 0,
+                                    child: IconButton(
+                                      icon: Icon(Icons.play_circle_outline,
+                                          color: kWhite.withValues(alpha: 0.7), size: 50),
+                                      onPressed: () {
+                                        Get.to(() => FullScreenVideoPage(urlVideo: mediaUrl,));
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Image.network(
+                                mediaUrl,
+                                fit: BoxFit.contain,
+                                width: 300,
+                              ),
+                      );
+                    }),
+                    //Indicador de páginas
+                    Positioned(
+                      right: 0,
+                      left: 0,
+                      bottom: 3,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(media.length, (index) {
+                          return Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                            width: 8,
+                            height: 8,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: _pageController.hasClients && _pageController.page?.round() == index
+                                  ? kRedAccent
+                                  : kLightGrey,
+                            ),
+                          );
+                        }),
+                      ),
+                    ),
+                ],
+              ),
             ),
 
           // Descrição
           Padding(
             padding: const EdgeInsets.all(12),
             child: Text(
-              post.description,
+              widget.post.description,
               style: const TextStyle(color: kLightGrey),
             ),
           ),
