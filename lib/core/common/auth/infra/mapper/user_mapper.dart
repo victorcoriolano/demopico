@@ -34,6 +34,7 @@ class UserMapper {
       dob: entity.dob.value,
       latitude: entity.location?.latitude,
       longitude: entity.location?.longitude,
+      avatar: entity.avatar,
     );
   }
 

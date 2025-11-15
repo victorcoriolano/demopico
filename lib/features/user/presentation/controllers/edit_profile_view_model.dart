@@ -161,7 +161,9 @@ class EditProfileViewModel extends ChangeNotifier {
 
       // verify text changes as update entity
       if (newVulgo != null) {
-        userModificado = userModificado.copyWith(displayName: newVulgo);
+        var profileUpdated = userModificado.profileUser;
+        profileUpdated = profileUpdated.copyWith(displayName: newVulgo!.value);
+        userModificado = userModificado.copyWith(displayName: newVulgo, profileUser: profileUpdated);
         userIdentification = userIdentification.copyWith(name: newVulgo!.value);
       }
       if (newBio != null) {
@@ -174,7 +176,7 @@ class EditProfileViewModel extends ChangeNotifier {
         final result = await _updateProfile.execute(userModificado.profileUser);
         if (result.success ) {
           final userM = UserMapper.fromEntity(userModificado);
-          
+          debugPrint("UserM para update: $userM");
           await _updateUser.fullUpdate(userM);
           debugPrint("Perfil atualizado com sucesso");
           _account.setCurrentUser = userModificado;
