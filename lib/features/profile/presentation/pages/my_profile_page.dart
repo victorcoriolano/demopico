@@ -3,7 +3,6 @@ import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_entity.dart';
 import 'package:demopico/core/common/widgets/back_widget.dart';
-import 'package:demopico/features/profile/presentation/pages/create_colective_page.dart';
 import 'package:demopico/features/profile/presentation/view_model/notification_view_model.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/profile_posts_widget.dart';
 import 'package:demopico/features/profile/presentation/widgets/profile_data/collective_section_widget.dart';

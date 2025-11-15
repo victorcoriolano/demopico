@@ -58,9 +58,11 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators {
     newAvatar = NullFileModel();
     user = user.copyWith(
       displayName: hasNewText ? VulgoVo(_nameController.text) : null,
-      profileUser: hasNewText ? user.profileUser.copyWith(
-        description: _bioController.text,
-      ) : null,
+      profileUser: hasNewText
+          ? user.profileUser.copyWith(
+              description: _bioController.text,
+            )
+          : null,
     );
 
     // ...
@@ -69,7 +71,6 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators {
         backgroundColor: kAccentColor,
         colorText: Colors.white);
   }
-
 
   void _handleChangePassword() {
     showDialog(
@@ -101,8 +102,8 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators {
                         height: 12,
                       ),
                       TextFormField(
-                        decoration:
-                            customTextFieldDecoration("Confirme a sua senha", kLightGrey),
+                        decoration: customTextFieldDecoration(
+                            "Confirme a sua senha", kLightGrey),
                         controller: _passwordController2,
                         validator: (value) => combineValidators([
                           () => isNotEmpty(value),
@@ -146,15 +147,14 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators {
     final vm = context.read<EditProfileViewModel>();
     FileModel selectedImage = NullFileModel();
     // selecionando imagem
-    if (isBackGround){
-      selectedImage = await vm.selectBackgroundPicture(); 
-    }
-    else{
-       selectedImage = await vm.selectAvatar();
+    if (isBackGround) {
+      selectedImage = await vm.selectBackgroundPicture();
+    } else {
+      selectedImage = await vm.selectAvatar();
     }
 
     if (mounted && selectedImage is! NullFileModel) {
-      return showDialog(  
+      return showDialog(
         context: context,
         builder: (BuildContext context) {
           return Consumer<EditProfileViewModel>(
@@ -232,164 +232,186 @@ class _EditProfilePageState extends State<EditProfilePage> with Validators {
         ],
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 270.0,
-              child: Stack(
-                clipBehavior: Clip.none,
-                alignment: Alignment.center,
-                children: [
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    left: 0,
-                    child: Container(
-                      margin: const EdgeInsets.all(16),
-                      height: 200,
-                      decoration: BoxDecoration(
-                        image: newBackGround is NullFileModel
-                            ? user.profileUser.backgroundPicture == null
-                                ? null
-                                : DecorationImage(
-                                    image: CachedNetworkImageProvider(
-                                      user.profileUser.backgroundPicture!,
-                                      errorListener: (erro) => Icons.error,
-                                    ),
-                                    fit: BoxFit.cover,
-                                  )
-                            : DecorationImage(
-                                image: MemoryImage(newBackGround.bytes)),
-                        color: kRedAccent,
-                        borderRadius: BorderRadius.all(Radius.circular(16)),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 15,
-                    right: 17,
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.photo_camera,
-                        color: kRed,
-                        size: 28,
-                      ),
-                      onPressed: () => _changeProfilePicture(true),
-                    ),
-                  ),
-                  // Foto de Perfil
-                  Positioned(
-                    bottom: 20,
-                    child: Stack(
-                      alignment: Alignment.bottomRight,
-                      children: [
-                        CircleAvatar(
-                          radius: 60,
-                          backgroundColor: kWhite,
-                          backgroundImage: newAvatar is NullFileModel
-                              ? user.profileUser.avatar == null
-                                  ? AssetImage("assets/images/userPhoto.png")
-                                  : CachedNetworkImageProvider(
-                                      user.profileUser.avatar!)
-                              : MemoryImage(newAvatar.bytes),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              SizedBox(
+                height: 270.0,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  alignment: Alignment.center,
+                  children: [
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      left: 0,
+                      child: Container(
+                        margin: const EdgeInsets.all(16),
+                        height: 200,
+                        decoration: BoxDecoration(
+                          image: newBackGround is NullFileModel
+                              ? user.profileUser.backgroundPicture == null
+                                  ? null
+                                  : DecorationImage(
+                                      image: CachedNetworkImageProvider(
+                                        user.profileUser.backgroundPicture!,
+                                        errorListener: (erro) => Icons.error,
+                                      ),
+                                      fit: BoxFit.cover,
+                                    )
+                              : DecorationImage(
+                                  image: MemoryImage(newBackGround.bytes)),
+                          color: kRedAccent,
+                          borderRadius: BorderRadius.all(Radius.circular(16)),
                         ),
-                        Positioned(
-                          right: 0,
-                          bottom: 0,
-                          child: CircleAvatar(
-                            backgroundColor: kRed,
-                            radius: 20,
-                            child: IconButton(
-                              icon: const Icon(Icons.camera_alt,
-                                  color: kWhite, size: 20),
-                              onPressed: () => _changeProfilePicture(false),
+                      ),
+                    ),
+                    Positioned(
+                      top: 15,
+                      right: 17,
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.photo_camera,
+                          color: kRed,
+                          size: 28,
+                        ),
+                        onPressed: () => _changeProfilePicture(true),
+                      ),
+                    ),
+                    // Foto de Perfil
+                    Positioned(
+                      bottom: 20,
+                      child: Stack(
+                        alignment: Alignment.bottomRight,
+                        children: [
+                          CircleAvatar(
+                            radius: 60,
+                            backgroundColor: kWhite,
+                            backgroundImage: newAvatar is NullFileModel
+                                ? user.profileUser.avatar == null
+                                    ? AssetImage("assets/images/userPhoto.png")
+                                    : CachedNetworkImageProvider(
+                                        user.profileUser.avatar!)
+                                : MemoryImage(newAvatar.bytes),
+                          ),
+                          Positioned(
+                            right: 0,
+                            bottom: 0,
+                            child: CircleAvatar(
+                              backgroundColor: kRed,
+                              radius: 20,
+                              child: IconButton(
+                                icon: const Icon(Icons.camera_alt,
+                                    color: kWhite, size: 20),
+                                onPressed: () => _changeProfilePicture(false),
+                              ),
                             ),
                           ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Center(
+                      child: Text('Editar Perfil',
+                          style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: kRed)),
+                    ),
+                    const SizedBox(height: 30),
+                    EditableCustomField(
+                      label: 'Nome',
+                      controller: _nameController,
+                      icon: Icons.person_outline,
+                      onEditingComplete: () {
+                        final viewModel = context.read<EditProfileViewModel>();
+                        if (_nameController.text != user.displayName.value) {
+                          try {
+                            viewModel.newVulgo = VulgoVo(_nameController.text);
+                          } on Failure catch (e) {
+                            FailureServer.showError(e);
+                          }
+                        } else {
+                          viewModel.newVulgo = null;
+                        }
+                      },
+                      onChanged: (value) {
+                        _formKey.currentState?.validate();
+                      },
+                      validator: (value) {
+                        try {
+                          final vulgoVo = VulgoVo(value ?? '');
+                          return null; // válido
+                        } on Failure catch (e) {
+                          return e.message; // retorna a mensagem de erro
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    EditableCustomField(
+                      label: 'Bio',
+                      controller: _bioController,
+                      icon: Icons.description_outlined,
+                      isMultiline: true,
+                      onEditingComplete: () {
+                        final viewModel = context.read<EditProfileViewModel>();
+                        if (_bioController.text != user.profileUser.description) {
+                          viewModel.newBio = _bioController.text;
+                        } else {
+                          viewModel.newBio = null;
+                        }
+                      },
+                      onChanged: (value) {
+                        _formKey.currentState?.validate();
+                      },
+                      validator: (value) {
+                        if (value != null && value.length > 150) {
+                          return 'A bio deve ter no máximo 150 caracteres.';
+                        }
+                        return null;
+                      } ,
+                    ),
+                    const SizedBox(height: 20),
+                    const Text('E-mail',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: kRed)),
+                    const SizedBox(height: 5),
+                    Row(
+                      children: [
+                        const Icon(Icons.email_outlined, color: kRed, size: 24),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(user.email.value,
+                              style: const TextStyle(fontSize: 16)),
                         ),
                       ],
                     ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Center(
-                    child: Text('Editar Perfil',
-                        style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: kRed)),
-                  ),
-                  const SizedBox(height: 30),
-                  EditableCustomField(
-                    label: 'Nome',
-                    controller: _nameController,
-                    icon: Icons.person_outline,
-                    onChanged: (value) {
-                      final viewModel = context.read<EditProfileViewModel>();
-                      if (value != user.displayName.value) {
-                        try {
-                          viewModel.newVulgo = VulgoVo(value);
-                        } on Failure catch (e){
-                          FailureServer.showError(e);
-                        }
-                      } else {
-                        viewModel.newVulgo = null;
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  EditableCustomField(
-                    label: 'Bio',
-                    controller: _bioController,
-                    icon: Icons.description_outlined,
-                    isMultiline: true,
-                    onChanged: (value) {
-                      final viewModel = context.read<EditProfileViewModel>();
-                      if (value != user.profileUser.description) {
-                        viewModel.newBio = value;
-                      } else {
-                        viewModel.newBio = null;
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  const Text('E-mail',
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: kRed)),
-                  const SizedBox(height: 5),
-                  Row(
-                    children: [
-                      const Icon(Icons.email_outlined, color: kRed, size: 24),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Text(user.email.value,
-                            style: const TextStyle(fontSize: 16)),
+                    const Divider(),
+                    const SizedBox(height: 30),
+                    Center(
+                      child: ElevatedButton.icon(
+                        icon: const Icon(Icons.password, color: kWhite),
+                        onPressed: _handleChangePassword,
+                        label: const Text('Alterar Senha',
+                            style: TextStyle(color: kWhite)),
                       ),
-                      
-                    ],
-                  ),
-                  const Divider(),
-                  const SizedBox(height: 30),
-                  Center(
-                    child: ElevatedButton.icon(
-                      icon: const Icon(Icons.password, color: kWhite),
-                      onPressed: _handleChangePassword,
-                      label: const Text('Alterar Senha',
-                          style: TextStyle(color: kWhite)),
                     ),
-                  ),
-                  const SizedBox(height: 30),
-                ],
+                    const SizedBox(height: 30),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

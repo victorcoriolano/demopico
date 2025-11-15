@@ -2,7 +2,6 @@ import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/features/mapa/presentation/widgets/spot_info_widgets/custom_buttons.dart';
 import 'package:demopico/features/profile/domain/models/notification.dart';
 import 'package:demopico/features/profile/presentation/pages/profile_page_user.dart';
-import 'package:demopico/features/profile/presentation/view_model/network_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/notification_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/screen_provider.dart';
 import 'package:flutter/material.dart';

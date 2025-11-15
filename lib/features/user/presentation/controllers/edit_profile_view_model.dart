@@ -10,7 +10,6 @@ import 'package:demopico/core/common/media_management/models/file_model.dart';
 import 'package:demopico/core/common/media_management/services/upload_service.dart';
 import 'package:demopico/core/common/media_management/usecases/pick_one_image_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/update_profile.dart';
-import 'package:demopico/features/profile/infra/repository/profile_repository.dart';
 import 'package:demopico/features/user/domain/usecases/update_data_user_uc.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
@@ -161,8 +160,7 @@ class EditProfileViewModel extends ChangeNotifier {
 
       // verify text changes as update entity
       if (newVulgo != null) {
-        var profileUpdated = userModificado.profileUser;
-        profileUpdated = profileUpdated.copyWith(displayName: newVulgo!.value);
+        var profileUpdated = userModificado.profileUser.copyWith(displayName: newVulgo!.value);
         userModificado = userModificado.copyWith(displayName: newVulgo, profileUser: profileUpdated);
         userIdentification = userIdentification.copyWith(name: newVulgo!.value);
       }

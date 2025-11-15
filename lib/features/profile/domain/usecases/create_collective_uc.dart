@@ -7,7 +7,6 @@ import 'package:demopico/features/profile/domain/models/notification.dart';
 import 'package:demopico/features/profile/infra/repository/coletivo_repository_impl.dart';
 import 'package:demopico/features/profile/infra/repository/notification_repository_impl.dart';
 import 'package:demopico/features/profile/infra/repository/profile_repository.dart';
-import 'package:flutter/widgets.dart';
 
 class CreateCollectiveUc {
   final IColetivoRepository _repository;
