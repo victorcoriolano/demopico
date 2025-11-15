@@ -1,4 +1,5 @@
 import 'package:demopico/core/app/routes/app_routes.dart';
+import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/favorite_spot_controller.dart';
 import 'package:flutter/material.dart';
@@ -70,87 +71,125 @@ class _FavoriteSpotPageState extends State<FavoriteSpotPage> {
             itemCount: provider.picosFavoritos.length,
             itemBuilder: (context, index) {
               var pico = provider.picosFavoritos[index];
+
               return Card(
-                margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                elevation: 5,
-                child: ListTile(
-                  minTileHeight: 100,
-                  minLeadingWidth: 100,
-                  contentPadding: const EdgeInsets.all(16),
-                  leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: pico.pico.imgUrls.firstOrNull != null
-                        ? Image.network(
-                            pico.pico.imgUrls.first,
-                            width: 70,
-                            height: 70,
-                            fit: BoxFit.cover,
-                          )
-                        : Container(
-                            width: 70,
-                            height: 70,
-                            color: Colors.grey,
-                            child: const Icon(Icons.image, color: Colors.white),
-                          ),
-                  ),
-                  title: Text(
-                    pico.pico.picoName,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  subtitle: Text(
-                    pico.pico.user?.name ?? 'Anônimmo',
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        tooltip: "Localização no mapa",
-                        icon: const Icon(Icons.location_on, color: Colors.blue),
-                        onPressed: () {
-                          mapController.reajustarCameraPosition(
-                              LatLng(pico.pico.location.latitude, pico.pico.location.longitude));
-                          if (context.mounted) Navigator.pop(context);
-                        },
-                      ),
-                      IconButton(
-                        tooltip: "Remover Favorito",
-                        icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () async {
-                          final deletar = await provider
-                              .deleteSave(pico.picoFavoritoModel.id);
-                          if (context.mounted) {
-                            if (deletar) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                      "Pico ${pico.pico.picoName} removido com sucesso"),
-                                ),
-                              );
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                      "Ocorreu um erro ao remover ${pico.pico.picoName} dos favoritos"),
-                                ),
-                              );
-                            }
-                          }
-                        },
-                      ),
-                    ],
-                  ),
+                margin:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                elevation: 6,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(14),
                   onTap: () {
-                    final latlang = LatLng(pico.pico.location.latitude, pico.pico.location.longitude);
+                    final latlang = LatLng(pico.pico.location.latitude,
+                        pico.pico.location.longitude);
+
                     mapController.reajustarCameraPosition(latlang);
                     Get.toNamed(Paths.map, arguments: latlang);
                   },
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // IMAGEM
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: pico.pico.imgUrls.firstOrNull != null
+                              ? Image.network(
+                                  pico.pico.imgUrls.first,
+                                  width: 100,
+                                  height: 100,
+                                  fit: BoxFit.cover,
+                                )
+                              : Container(
+                                  width: 100,
+                                  height: 100,
+                                  color: Colors.grey.shade300,
+                                  child: const Icon(Icons.image,
+                                      color: Colors.white),
+                                ),
+                        ),
+
+                        const SizedBox(width: 16),
+
+                        // TEXTOS
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                pico.pico.picoName,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                pico.pico.user?.name ?? 'Anônimo',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey.shade600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(width: 10),
+
+                        // ÍCONES NA DIREITA
+                        Column(
+                          children: [
+                            IconButton(
+                              tooltip: "Localização no mapa",
+                              icon: const Icon(Icons.location_on,
+                                  color: kRed, size: 26),
+                              onPressed: () {
+                                mapController.reajustarCameraPosition(
+                                  LatLng(
+                                    pico.pico.location.latitude,
+                                    pico.pico.location.longitude,
+                                  ),
+                                );
+                                if (context.mounted) Navigator.pop(context);
+                              },
+                            ),
+                            IconButton(
+                              tooltip: "Remover Favorito",
+                              icon: const Icon(Icons.delete,
+                                  color: kRed, size: 26),
+                              onPressed: () async {
+                                final deletar = await provider
+                                    .deleteSave(pico.picoFavoritoModel);
+
+                                if (!context.mounted) return;
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    backgroundColor: kRed,
+                                    content: Text(
+                                      deletar
+                                          ? "Pico ${pico.pico.picoName} removido com sucesso"
+                                          : "Erro ao remover ${pico.pico.picoName} dos favoritos",
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               );
             },

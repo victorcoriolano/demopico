@@ -96,7 +96,8 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                     children: [
                       // widget da imagem dos spots
                       TopInfoSpot(
-                        mapControllerProvider: context.read<MapControllerProvider>(),
+                        mapControllerProvider:
+                            context.read<MapControllerProvider>(),
                         location: LatLng(
                             spotProvider.pico?.location.latitude ?? 0,
                             spotProvider.pico?.location.latitude ?? 0),
@@ -143,8 +144,10 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                         nameUserCreator:
                                             spotProvider.pico!.user?.name ??
                                                 "Anônimo",
-                                        //FIXME: PASSANDO A IMAGEM COMO NULL MAIS FUTURAMENTE passar a imagem do user
-                                        urlImageUser: null,
+                                        urlImageUser: spotProvider
+                                            .pico!.user?.profilePictureUrl,
+                                        idUserCreator:
+                                            spotProvider.pico!.user?.id ?? "",
                                       ),
                                       const SizedBox(width: 15),
                                       NameDescription(
@@ -245,6 +248,25 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                             //TODO: REFATORAR LÓGICA DE SALVAR SPOT PARA PASSAR
                                             //TER UMA LÓGICA PARA SALVAR E UMA PARA FAVORITAR
                                             if (user != null) {
+                                              if (spotProvider.pico!.favoritedBy
+                                                  .contains(user?.id ?? "")) {
+                                                return showDialog(
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      AlertDialog(
+                                                    title: Text("Aviso"),
+                                                    content: Text(
+                                                        "Você já favoritou esse Pico!"),
+                                                    actions: [
+                                                      TextButton(
+                                                          onPressed: () =>
+                                                              Navigator.pop(
+                                                                  context),
+                                                          child: Text("OK")),
+                                                    ],
+                                                  ),
+                                                );
+                                              }
                                               return context
                                                   .read<
                                                       FavoriteSpotController>()
@@ -253,13 +275,13 @@ class _ShowPicoWidgetState extends State<ShowPicoWidget> {
                                               SnackbarUtils.userNotLogged(
                                                   context);
                                               return;
-
                                             }
                                           },
-                                          icon: Icon(spotProvider.pico!
-                                                  .favoritedBy.contains(user?.id ?? "")
+                                          icon: Icon(spotProvider
+                                                  .pico!.favoritedBy
+                                                  .contains(user?.id ?? "")
                                               ? Icons.favorite
-                                              : Icons.favorite_border ),
+                                              : Icons.favorite_border),
                                           tooltip: "Favoritar Pico",
                                           iconSize: 35,
                                         ),

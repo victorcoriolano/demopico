@@ -40,7 +40,7 @@ class CommentController extends ChangeNotifier {
     }
   }
 
-  Future<void> addComment(String id, String content, String idPico, String idUser, String nome, String picture) async {
+  Future<void> addComment(String id, String content, String idPico, String idUser, String nome, String? picture) async {
     final newComment = CommentModel(
       id: id,
       userIdentification: UserIdentification(

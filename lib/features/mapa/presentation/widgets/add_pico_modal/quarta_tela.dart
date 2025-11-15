@@ -1,5 +1,6 @@
 import 'package:demopico/core/app/theme/theme.dart';
 import 'package:demopico/core/common/widgets/image_validator_widget.dart';
+import 'package:demopico/core/common/widgets/snackbar_utils.dart';
 import 'package:demopico/features/mapa/presentation/controllers/add_pico_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +15,6 @@ class QuartaTela extends StatefulWidget {
 class _QuartaTelaState extends State<QuartaTela> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-
 
   @override
   void initState() {
@@ -37,20 +37,11 @@ class _QuartaTelaState extends State<QuartaTela> {
       builder: (context, provider, child) => Scaffold(
         backgroundColor: Colors.grey[200],
         body: SingleChildScrollView(
-            child: Center(
+          child: Center(
             child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.center, 
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Image.asset(
-                      'assets/images/progresso4.png',
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20), 
+                const SizedBox(height: 20),
                 const Text(
                   'NOME DO PICO:',
                   style: TextStyle(
@@ -102,16 +93,17 @@ class _QuartaTelaState extends State<QuartaTela> {
                   onChanged: (value) => provider.descricao = value,
                 ),
                 const SizedBox(height: 20),
-              Visibility(
-                  visible: provider.isLoading,
-                  child:  ImageValidatorWidget()),
+                Visibility(
+                    visible: provider.isLoading, child: ImageValidatorWidget()),
                 // Botão para anexar imagens
                 Visibility(
-                  visible: provider.files.length <= 3 && provider.isLoading == false,
+                  visible:
+                      provider.files.length <= 3 && provider.isLoading == false,
                   child: GestureDetector(
-                    onTap:  provider.files.length <= 3
-                        ? ()  async => provider.pickImages() 
-                        : null,
+                    onTap: provider.files.length < 3
+                        ? () async => provider.pickImages()
+                        : () => SnackbarUtils.showSnackbarError(
+                            context, "Você já anexou 3 imagens!"),
                     child: const Column(
                       children: [
                         Icon(Icons.cloud_upload,
@@ -125,7 +117,7 @@ class _QuartaTelaState extends State<QuartaTela> {
                     ),
                   ),
                 ),
-                  
+
                 Visibility(
                   visible: provider.files.isNotEmpty,
                   child: Row(
@@ -145,8 +137,9 @@ class _QuartaTelaState extends State<QuartaTela> {
                                 clipBehavior: Clip.none,
                                 children: [
                                   Container(
-                                    width: 120,
-                                    height: 120,
+                                    height:
+                                        provider.files.length < 3 ? 120 : 75,
+                                    width: provider.files.length < 3 ? 120 : 75,
                                     decoration: BoxDecoration(
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(20)),
@@ -157,7 +150,6 @@ class _QuartaTelaState extends State<QuartaTela> {
                                       ),
                                     ),
                                   ),
-                                  
                                   Positioned(
                                     top: -10,
                                     right: -10,

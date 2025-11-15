@@ -109,8 +109,8 @@ class AddPicoViewModel extends ChangeNotifier {
   }
 
   // --- PÁGINA 3 ---
-  void selectObstacle(String selected) {
-    obstaculoVo.selectObstacle(selected);
+  void selectObstacle(String selected, BuildContext context) {
+    obstaculoVo.selectObstacle(selected, context);
     notifyListeners();
   }
 

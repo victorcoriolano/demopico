@@ -31,7 +31,6 @@ class SpotRepositoryImpl implements ISpotRepository {
 
   @override
   Future<PicoModel> createSpot(PicoModel pico) async {
-    
     final picoDto = await dataSource.create(
       _mapper.toDTO(pico)
     );

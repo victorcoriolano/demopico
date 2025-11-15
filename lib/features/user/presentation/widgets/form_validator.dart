@@ -7,7 +7,7 @@ mixin Validators {
   }
 
   String? isValidEmail(String? value){
-    if((!(value!.contains('@'))) && '@'.allMatches(value).length > 1 && !value.contains('.')) return "Insira um email valido";
+    if(!(value!.contains('@')) && '@'.allMatches(value).length > 1 && !value.contains('.')) return "Insira um email valido";
     return null;
   }
 

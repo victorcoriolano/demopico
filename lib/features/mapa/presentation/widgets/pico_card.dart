@@ -85,7 +85,7 @@ class PicoCard extends StatelessWidget {
                       Icon(Icons.category, size: 18, color: Colors.grey[700]),
                       const SizedBox(width: 4),
                       Text(
-                        '${pico.modalidade} - ${pico.tipoPico}',
+                        '${pico.modalidade.value.name} - ${pico.tipoPico.selectedValue}',
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.grey[700],

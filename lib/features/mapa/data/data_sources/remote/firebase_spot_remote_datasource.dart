@@ -6,6 +6,7 @@ import 'package:demopico/features/mapa/data/data_sources/interfaces/i_spot_datas
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 import 'package:demopico/core/common/mappers/firebase_errors_mapper.dart';
 import 'package:demopico/features/mapa/domain/entities/filters.dart';
+import 'package:demopico/features/mapa/domain/value_objects/rating_vo.dart';
 import 'package:flutter/foundation.dart';
 
 class FirebaseSpotRemoteDataSource implements ISpotDataSource<FirebaseDTO> {
@@ -117,7 +118,7 @@ class FirebaseSpotRemoteDataSource implements ISpotDataSource<FirebaseDTO> {
 
   @override
   Future<List<FirebaseDTO>> getList(String id) async {
-    final posts = await _firebaseFirestore.readAllWithFilter("criador", id);
+    final posts = await _firebaseFirestore.readAllWithFilter("creatorUser.id", id);
     debugPrint('DATASOURCE - getList - posts: $posts');
     return posts;
   }
@@ -149,11 +150,12 @@ class FirebaseSpotRemoteDataSource implements ISpotDataSource<FirebaseDTO> {
 
       // Para manter o Clean, a lógica de cálculo deve vir do DOMÍNIO.
       // Aqui execultamos a função q vem do domínio  e atualizamos os dados frescos 
-      final (double, int) updatedSpot = updateFunction(newRating);
+      final RatingVo updatedSpot = updateFunction(newRating);
+      
       
       transaction.update(spotRef, {
-        'nota': updatedSpot.$1,
-        'avaliacoes': updatedSpot.$2,
+        'nota': updatedSpot.average,
+        'avaliacoes': updatedSpot.numberOfReviews,
       });
       return;
     });

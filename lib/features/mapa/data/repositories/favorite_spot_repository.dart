@@ -22,8 +22,9 @@ class FavoriteSpotRepository implements IFavoriteSpotRepository {
 
 
   @override
-  Future<void> deleteSave(String id) async{
-    await dataSource.removeFavorito(id);
+  Future<void> deleteSave(PicoFavorito pico) async{
+    final dto =  MapperFavoriteSpotFirebase.toDto(pico);
+    await dataSource.removeFavorito(dto);
   }
 
 

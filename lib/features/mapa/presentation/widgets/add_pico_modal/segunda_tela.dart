@@ -20,14 +20,7 @@ class _SegundaTelaState extends State<SegundaTela> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Center(
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 10.0),
-                      child: Image.asset(
-                        'assets/images/progresso2.png',
-                      ),
-                    ),
-                  ),
+                SizedBox(height: 15),
                 AttributesWidget(),
               ],
             ),
