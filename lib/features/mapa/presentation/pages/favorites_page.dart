@@ -1,5 +1,6 @@
 import 'package:demopico/core/app/routes/app_routes.dart';
 import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/features/mapa/domain/entities/pico_favorito.dart';
 import 'package:demopico/features/mapa/presentation/controllers/map_controller.dart';
 import 'package:demopico/features/mapa/presentation/controllers/favorite_spot_controller.dart';
 import 'package:flutter/material.dart';
@@ -166,8 +167,9 @@ class _FavoriteSpotPageState extends State<FavoriteSpotPage> {
                               icon: const Icon(Icons.delete,
                                   color: kRed, size: 26),
                               onPressed: () async {
+                                final picoFav = pico.picoFavoritoModel;
                                 final deletar = await provider
-                                    .deleteSave(pico.picoFavoritoModel);
+                                    .deleteSave(PicoFavorito(idPicoFavorito: picoFav.id, idPico: picoFav.idPico, idUsuario: picoFav.idUsuario));
 
                                 if (!context.mounted) return;
 
