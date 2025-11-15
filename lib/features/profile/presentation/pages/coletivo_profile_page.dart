@@ -7,8 +7,11 @@ import 'package:demopico/features/profile/domain/models/post.dart';
 import 'package:demopico/features/profile/presentation/pages/create_post_on_collective.dart';
 import 'package:demopico/features/profile/presentation/pages/manage_collective_page.dart';
 import 'package:demopico/features/profile/presentation/pages/full_screen_video_page.dart';
+import 'package:demopico/features/profile/presentation/pages/profile_page_user.dart';
 import 'package:demopico/features/profile/presentation/view_model/chat_list_view_model.dart';
 import 'package:demopico/features/profile/presentation/view_model/collective_view_model.dart';
+import 'package:demopico/features/profile/presentation/widgets/collectives_members_widgets.dart';
+import 'package:demopico/features/user/domain/enums/type_post.dart';
 import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
@@ -55,8 +58,9 @@ class _ColetivoProfilePageState extends State<ColetivoProfilePage> {
   @override
   Widget build(BuildContext context) {
     final List<Post> recs = coletivo.publications
-        .where((p) => p.urlVideos != null && p.urlVideos!.isNotEmpty)
+        .where((p) => p.typePost == TypePost.fullVideo)
         .toList();
+    
 
     return Scaffold(
       backgroundColor: kBlack,
@@ -69,7 +73,10 @@ class _ColetivoProfilePageState extends State<ColetivoProfilePage> {
             title: 'MEMBROS',
             cta: 'Ver todos (${coletivo.members.length})',
             onTap: () {
-              // TODO: IMPLEMENT VER TODOS OS MEMBROS
+              Get.to(() =>  CollectivesMembersWidgets(
+                      members: coletivo.members,
+                    ));
+                  
             },
           ),
           _MembersListView(members: coletivo.members),
@@ -375,7 +382,7 @@ class _StyledActionButton extends StatelessWidget {
         onPressed: null,
         style: style.copyWith(
           backgroundColor: WidgetStateProperty.all(kMediumGrey),
-          foregroundColor: WidgetStateProperty.all(kWhite.withOpacity(0.7)),
+          foregroundColor: WidgetStateProperty.all(kWhite.withValues(alpha: .7)),
         ),
       );
     }
@@ -523,31 +530,36 @@ class _MembersListView extends StatelessWidget {
           itemCount: members.length,
           itemBuilder: (context, index) {
             final member = members[index];
-            return SizedBox(
-              width: 70,
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    radius: 28,
-                    backgroundColor: kDarkGrey,
-                    backgroundImage: member.profilePictureUrl != null
-                        ? NetworkImage(member.profilePictureUrl!)
-                        : null,
-                    onBackgroundImageError: member.profilePictureUrl != null
-                        ? (e, s) => const Icon(Icons.person, color: kLightGrey)
-                        : null,
-                    child: member.profilePictureUrl == null
-                        ? const Icon(Icons.person, color: kLightGrey)
-                        : null,
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    member.name,
-                    style: const TextStyle(color: kLightGrey, fontSize: 12),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
+            return InkWell(
+              onTap: () {
+                Get.to(() => ProfilePageUser(), arguments: member.id);
+              },
+              child: SizedBox(
+                width: 70,
+                child: Column(
+                  children: [
+                    CircleAvatar(
+                      radius: 28,
+                      backgroundColor: kDarkGrey,
+                      backgroundImage: member.profilePictureUrl != null
+                          ? NetworkImage(member.profilePictureUrl!)
+                          : null,
+                      onBackgroundImageError: member.profilePictureUrl != null
+                          ? (e, s) => const Icon(Icons.person, color: kLightGrey)
+                          : null,
+                      child: member.profilePictureUrl == null
+                          ? const Icon(Icons.person, color: kLightGrey)
+                          : null,
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      member.name,
+                      style: const TextStyle(color: kLightGrey, fontSize: 12),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
               ),
             );
           },
