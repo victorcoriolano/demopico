@@ -117,4 +117,47 @@ class Post {
       spotsIds: spotsIds ?? this.spotsIds,
     );
   }  
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+  
+    return other is Post &&
+      other.id == id &&
+      other.nome == nome &&
+      other.userId == userId &&
+      other.spotID == spotID &&
+      other.avatar == avatar &&
+      other.description == description &&
+      other.urlImages == urlImages &&
+      other.urlVideos == urlVideos &&
+      other.dateTime == dateTime &&
+      other.curtidas == curtidas &&
+      other.typePost == typePost &&
+      other.profileRelated == profileRelated &&
+      other.spotsIds == spotsIds &&
+      other.mentionedUsers == mentionedUsers &&
+      other.likedBy == likedBy;
+  }
+
+  @override
+  int get hashCode {
+    return Object.hash(
+      id,
+      nome,
+      userId,
+      spotID,
+      avatar,
+      description,
+      urlImages,
+      urlVideos,
+      dateTime,
+      curtidas,
+      typePost,
+      profileRelated,
+      spotsIds,
+      mentionedUsers,
+      likedBy,
+    );
+  }
 }
