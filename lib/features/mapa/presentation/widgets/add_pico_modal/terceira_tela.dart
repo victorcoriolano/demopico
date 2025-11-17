@@ -45,7 +45,6 @@ class TerceiraTela extends StatelessWidget {
       "assets/images/icons/icone31.png",
       "assets/images/icons/icone32.png",
       "assets/images/icons/icone33.png",
-      "assets/images/icons/icone34.png",
     ];
 
     return Consumer<AddPicoViewModel>(

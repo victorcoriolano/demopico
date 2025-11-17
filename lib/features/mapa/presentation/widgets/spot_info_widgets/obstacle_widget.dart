@@ -44,7 +44,6 @@ class _ObstacleWidgetState extends State<ObstacleWidget> {
     "Icone31": "assets/images/icons/icone31.png",
     "Icone32": "assets/images/icons/icone32.png",
     "Icone33": "assets/images/icons/icone33.png",
-    "Icone34": "assets/images/icons/icone34.png",
   };
 
   @override
