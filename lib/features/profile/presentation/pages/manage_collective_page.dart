@@ -365,7 +365,6 @@ class _ConfigCollectiveTabState extends State<_ConfigCollectiveTab> {
   }
 
   Future<void> _pickImage(bool isBackground) async {
-    // TODO IMPLEMENTAR PEGAR IMAGEM VALIDAR E TRAZER AQUI PARA O APLICATIVO 
     FileModel? image;
     try {
   final picker = PickOneImageUc.instance;

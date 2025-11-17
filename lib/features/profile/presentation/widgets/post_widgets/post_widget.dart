@@ -33,27 +33,29 @@ class _PostWidgetState extends State<PostWidget> {
     super.initState();
     _pageController = PageController();
     curtidas = widget.post.curtidas;
-  }
-
-  @override
-  void didChangeDependencies() async{
-    super.didChangeDependencies();
-    final currentUser = context.read<AuthViewModelAccount>().user;
+    WidgetsBinding.instance.addPostFrameCallback((_) async{ 
+      final currentUser = context.read<AuthViewModelAccount>().user;
     switch (currentUser) {
-      case UserEntity():
-        final userId = currentUser.id;
-         await context.read<PostProvider>().loadPosts(userId);
+      case UserEntity _:
+        //final userId = currentUser.id;
+         //await context.read<PostProvider>().loadPosts(userId);
          if (mounted){
+          debugPrint("user que postou: ${widget.post.userId}");
           isMypost = VerifyIsMy.isMy(widget.post.userId, context);
           _provider = context.read<PostProvider>();
           urlsItems.addAll(_provider.getMediaItemsFor(widget.post));
-          
+          setState(() {
+            
+          });
          }
-      case AnonymousUserEntity():
+      case AnonymousUserEntity _:
         // do nothing
+        debugPrint("anonimo");
         break; 
     }
+    });
   }
+
 
   @override
   void dispose() {
