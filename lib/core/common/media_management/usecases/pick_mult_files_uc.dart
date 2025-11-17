@@ -24,7 +24,7 @@ class PickMultFileUC {
     if (!_validateListFile(listFiles)) {
       debugPrint("Limite já atingido: ${listFiles.length}");
       throw FileLimitExceededFailure(
-          messagemAdicional: "Já foram selecionados 3 arquivos");
+          messagemAdicional: "Limite atingido");
     }
     final selectedFiles = <FileModel>[];
 
@@ -52,5 +52,5 @@ class PickMultFileUC {
   }
 
   bool _validateListFile(List<FileModel> files) =>
-      files.length <= _limit && listFiles.length + files.length <= _limit;
+      files.length <= _limit;
 }
