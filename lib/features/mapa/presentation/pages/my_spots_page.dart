@@ -14,13 +14,13 @@ class MySpotsPage extends StatefulWidget {
 }
 
 class _MySpotsPageState extends State<MySpotsPage> {
-  final idUser = Get.arguments as String;
-  
+  final idName = Get.arguments[0] as String;
+  final idUser = Get.arguments[1] as String;
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) { 
-      debugPrint("myspotspage - userid: $idUser");
+      debugPrint("myspotspage - userid: $idName");
       context.read<SpotsControllerProvider>().getMySpots(idUser);
     });
   }
@@ -29,7 +29,7 @@ class _MySpotsPageState extends State<MySpotsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('PICOS - $idUser'),
+        title: Text('PICOS - $idName'),
         centerTitle: true,
       ),
       body: Consumer<SpotsControllerProvider>(

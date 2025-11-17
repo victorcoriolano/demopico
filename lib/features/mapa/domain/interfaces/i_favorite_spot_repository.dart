@@ -5,5 +5,5 @@ abstract class IFavoriteSpotRepository {
   //save methods
   Future<PicoFavoritoModel> saveSpot(PicoFavorito pico);
   Future<List<PicoFavoritoModel>> listFavoriteSpot(String idUser);
-  Future<void> deleteSave(String id);
+  Future<void> deleteSave(PicoFavorito pico);
 }

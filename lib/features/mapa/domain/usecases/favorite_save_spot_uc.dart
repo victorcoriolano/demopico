@@ -59,9 +59,9 @@ class FavoriteSpotUC {
       
   }
 
-  Future<void> removeSaveSpot(String idPicoFavModel) async {
+  Future<void> removeSaveSpot(PicoFavorito pico,) async {
     try {
-      await spotFavRepositoryIMP.deleteSave(idPicoFavModel);
+      await spotFavRepositoryIMP.deleteSave(pico);
     } on Failure catch (e) {
       debugPrint("Erro ao remover o pico favorito caiu no use case: $e");
       rethrow;
