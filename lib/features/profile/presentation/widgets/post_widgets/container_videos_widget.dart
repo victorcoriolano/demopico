@@ -39,7 +39,6 @@ class _ContainerVideosWidgetState extends State<ContainerVideosWidget> {
                 if (count < 0 || count >= listRec.length) {
                   return null;
                 }
-                debugPrint(count.toString());
                 return VideoPlayerFromNetwork(
                     url: listRec[count].urlVideos![0]);
               },

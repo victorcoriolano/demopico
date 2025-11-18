@@ -150,12 +150,13 @@ class PostProvider extends ChangeNotifier {
 
   // Gateway carregar postagem para ui
   // retorna caso a requisição já tenha sido feita postagens ja tenha sido feitas
-  Future<void> loadPosts(String userId) async {
+  Future<void> loadPosts(String userId, bool isOtherProfile) async {
     debugPrint("Carregando postagens do usuário: $userId");
     // 
-    if (_posts.isNotEmpty) return;
     getPosts(userId);
   }
+
+  
 
   Future<void> deletePost(Post postagem) async {
     _isLoading = true;
