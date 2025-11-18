@@ -37,6 +37,7 @@ dependencies:
   video_player: ^2.9.5
   redis: ^3.0.0
   cached_network_image: ^3.4.1
+  flutter_animate: ^4.5.2
 
 flutter_native_splash:
   color: "#8B0000"
@@ -65,9 +66,9 @@ dev_dependencies:
 
 flutter:
     fonts:
-      - family: Misfit
+      - family: Urban
         fonts:
-          - asset: assets/fonts/Misfit.ttf
+          - asset: assets/fonts/Urban.ttf
          
     uses-material-design: true
     assets:
