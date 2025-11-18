@@ -32,6 +32,19 @@ class TerceiraTela extends StatelessWidget {
       "assets/images/icons/wallObstaculo.png", // Parede
       "assets/images/icons/bowl.png", // Bowl zinho
       "assets/images/icons/lixeira.png", //Lixeira
+      "assets/images/icons/icone21.png",
+      "assets/images/icons/icone22.png",
+      "assets/images/icons/icone23.png",
+      "assets/images/icons/icone24.png",
+      "assets/images/icons/icone25.png",
+      "assets/images/icons/icone26.png",
+      "assets/images/icons/icone27.png",
+      "assets/images/icons/icone28.png",
+      "assets/images/icons/icone29.png",
+      "assets/images/icons/icone30.png",
+      "assets/images/icons/icone31.png",
+      "assets/images/icons/icone32.png",
+      "assets/images/icons/icone33.png",
     ];
 
     return Consumer<AddPicoViewModel>(
