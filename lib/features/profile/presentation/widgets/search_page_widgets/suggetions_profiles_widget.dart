@@ -57,7 +57,7 @@ class _SuggestionProfilestState extends State<SuggestionProfilesWidget> {
               alignment: Alignment.center,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CircleAvatar(
                     backgroundImage: widget.suggestionProfile.photo != null
