@@ -9,14 +9,11 @@ class Profile {
   final List<String> spots;
   final List<String> posts;
   final RuleProfile profileRule;
-  final List<String> idColetivos;
-
 
   const Profile({
     required this.userID,
     required this.displayName,
     required this.profileRule,
-    this.idColetivos = const [],
     this.avatar,
     this.description,
     this.backgroundPicture,
@@ -35,7 +32,6 @@ class Profile {
     List<String>? spots,
     List<String>? posts,
     RuleProfile? profileRule,
-    List<String>? idColetivos,
   }) {
     return Profile(
       userID: userID ?? this.userID,
@@ -47,7 +43,6 @@ class Profile {
       spots: spots ?? this.spots,
       posts: posts ?? this.posts,
       profileRule: profileRule ?? this.profileRule,
-      idColetivos: idColetivos ?? this.idColetivos,
     );
   }
 
@@ -61,8 +56,7 @@ class Profile {
     'connections': connections,
     'spots': spots,
     'posts': posts,
-    'profileRule': profileRule.name, // Converte a enum para uma string
-    'idColetivos': idColetivos,
+    'profileRule': profileRule.name, 
   };
 }
 
@@ -76,7 +70,6 @@ class Profile {
     connections: [],
     spots: [],
     posts: [],
-    idColetivos: [],
     profileRule: RuleProfile.viewer,
   );
 }
@@ -94,7 +87,6 @@ class ProfileFactory {
       posts: List.empty(),
       spots: List.empty(),
       profileRule: RuleProfile.owner,
-      idColetivos: List.empty(),
     );
   }
 
@@ -108,7 +100,6 @@ class ProfileFactory {
       connections: List<String>.from(data['connections'] ?? []),
       spots: List<String>.from(data['spots'] ?? []),
       posts: List<String>.from(data['posts'] ?? []),
-      idColetivos: List<String>.from(data['idColetivos'] ?? []),
       profileRule: RuleProfile.fromString(data['profileRule'] ?? 'viewer'),
     );
   }

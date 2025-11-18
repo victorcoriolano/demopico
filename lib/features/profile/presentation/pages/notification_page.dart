@@ -59,13 +59,13 @@ class _NotificationPageState extends State<NotificationPage> {
                         switch (notification.type){
                           
                           // TODO: Handle invite Collective.
-                          TypeNotification.inviteCollective => throw UnimplementedError(),
+                          TypeNotification.inviteCollective => Icon(Icons.inbox),
                           // TODO: Handle new Post on Collective.
-                          TypeNotification.newPostCollective => throw UnimplementedError(),
+                          TypeNotification.newPostCollective => Icon(Icons.post_add),
                           // TODO: Handle new Like on pub.
-                          TypeNotification.newLikeOnPub => throw UnimplementedError(),
+                          TypeNotification.newLikeOnPub => Icon(Icons.favorite),
                           // TODO: Handle new comment on pub.
-                          TypeNotification.newCommentOnPub => throw UnimplementedError(),
+                          TypeNotification.newCommentOnPub => Icon(Icons.comment),
                           
                           TypeNotification.newMessage => CustomElevatedButton(
                             onPressed: () {

@@ -55,4 +55,9 @@ class FirebaseCollectiveDatasource implements IColetivoDatasource {
   }) async {
     return await _crudBoilerplate.updateField(idCollective, nameField, newListData);
   }
+  
+  @override
+  Future<void> deleteCollective(String id) async {
+    await _crudBoilerplate.delete(id);
+  }
 }

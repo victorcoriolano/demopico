@@ -7,14 +7,19 @@ class EditableCustomField extends StatelessWidget {
   final IconData icon;
   final bool isMultiline;
   final Function(String) onChanged;
+  final Function() onEditingComplete;
+  final String? Function(String?)? validator;
+
 
   const EditableCustomField({
     super.key,
+    required this.onEditingComplete,
     required this.label,
     required this.controller,
     required this.icon,
     required this.onChanged,
     this.isMultiline = false,
+    this.validator,
   });
 
   @override
@@ -28,8 +33,10 @@ class EditableCustomField extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 color: kMediumGrey)),
         const SizedBox(height: 5),
-        TextField(
+        TextFormField(
           onChanged: onChanged,
+          onEditingComplete: onEditingComplete,
+          validator: validator,
           controller: controller,
           maxLines: isMultiline ? null : 1,
           keyboardType: isMultiline ? TextInputType.multiline : TextInputType.text,

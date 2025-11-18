@@ -39,4 +39,17 @@ class UserIdentification {
 
   @override
   int get hashCode => Object.hash(id, profilePictureUrl, name);
+
+
+  UserIdentification copyWith({
+    String? id,
+    String? name,
+    String? profilePictureUrl,
+  }){
+    return UserIdentification(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      profilePictureUrl: profilePictureUrl ?? this.profilePictureUrl,
+    );
+  }
 }

@@ -24,6 +24,7 @@ class CreateCollectiveViewModel extends ChangeNotifier {
   List<UserIdentification> members = [];
   FileModel photoCollective = NullFileModel();
   String nameCollective = '';
+  bool isLoading = false;
   
 
   void addMember(SuggestionProfile suggestion){
@@ -53,8 +54,12 @@ class CreateCollectiveViewModel extends ChangeNotifier {
   }
 
   Future<void> createCollective(Profile profile) async {
+    isLoading = true;
+    notifyListeners();
     if (!validateForCreate()){
       FailureServer.showError(OtherError(message: "Preencha corretamente os campos"));
+      isLoading = false;
+      notifyListeners();
       return;
     }
     try{
@@ -63,7 +68,7 @@ class CreateCollectiveViewModel extends ChangeNotifier {
       final userIdentification = UserIdentification(
         id: profile.userID, name: profile.displayName, profilePictureUrl: profile.avatar);
       final newCollective = ColetivoEntity.initial(nameCollective, userIdentification, url, guests);
-      final collective = await _createCollectiveUc.execute(newCollective, profile.idColetivos);
+      final collective = await _createCollectiveUc.execute(newCollective);
       debugPrint("Coletivo criado com sucesso: $collective");
       Get.snackbar(
       'Sucesso',
@@ -74,13 +79,22 @@ class CreateCollectiveViewModel extends ChangeNotifier {
         dismissDirection: DismissDirection.down
       );
       Get.back();
-
-
-      /// TODO: IMPLEMENTAR ADIÇÃO DE USUÁRIOS NO COLETIVO
-      /// TODO: IMPLEMENTAR SOLICITAÇÃO DE ENTRADA DE USUÁRIOS NO COLETIVO
-      /// TODO: IMPLEMENTAR INFRAESTRUTURA DE NOTIFICAÇÕES
+      
     } on Failure catch (failure) {
       FailureServer.showError(failure);
+    } finally {
+      isLoading = false;
+      notifyListeners();
     }
+  
+  }
+
+
+  @override
+  void dispose() {
+    members.clear();
+    photoCollective = NullFileModel();
+    nameCollective = '';
+    super.dispose();
   }
 } 

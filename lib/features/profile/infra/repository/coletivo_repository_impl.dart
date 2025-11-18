@@ -94,6 +94,11 @@ class ColetivoRepositoryImpl implements IColetivoRepository{
   @override
   Future<void> updateListOnCollective({required String nameField, required String idCollective, required List<dynamic> newListData}) {
     return _datasource.updateListOnCollective(nameField: nameField, idCollective: idCollective, newListData: newListData);
+  }
+  
+  @override
+  Future<void> deleteCollective(String idCollective) {
+    return _datasource.deleteCollective(idCollective);
   } 
   
 }

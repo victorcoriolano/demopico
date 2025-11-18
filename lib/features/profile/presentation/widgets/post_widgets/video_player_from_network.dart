@@ -15,10 +15,11 @@ class _VideoPlayerFromNetworkState extends State<VideoPlayerFromNetwork> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.url))
+    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.url),)
       ..initialize().then((_) {
         setState(() {});
       });
+      
   }
 
   @override
@@ -29,35 +30,42 @@ class _VideoPlayerFromNetworkState extends State<VideoPlayerFromNetwork> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: _controller.value.isInitialized
-            ? AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: Stack(
-                  children:[ 
-                  VideoPlayer(_controller),
-                  Positioned(
-                    bottom: 10,
-                    left: 10,
-                    child: IconButton(
-                      icon: Icon(
-                        _controller.value.isPlaying
-                            ? Icons.pause
-                            : Icons.play_arrow,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          
-                          _controller.value.isPlaying
-                              ? _controller.pause()
-                              : _controller.play();
-                        });
-                      },
-                    ),
-                  ),])
-              )
-            : Container(),
-      );
+    // Verificando carregamento.
+    if (!_controller.value.isInitialized) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    // O Stack vai preencher o espaço dado pelo GridView.
+    return Stack(
+      fit: StackFit.expand, 
+      children: [
+        FittedBox(
+          fit: BoxFit.cover,
+          // Clip.hardEdge corta o que vaza para fora do container.
+          clipBehavior: Clip.hardEdge,
+          child: SizedBox(
+            width: _controller.value.size.width,
+            height: _controller.value.size.height,
+            child: VideoPlayer(_controller),
+          ),
+        ),
+
+        Align(
+          child: IconButton(
+            icon: Icon(
+              _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              setState(() {
+                _controller.value.isPlaying
+                    ? _controller.pause()
+                    : _controller.play();
+              });
+            },
+          ),
+        ),
+      ],
+    );
   }
 }

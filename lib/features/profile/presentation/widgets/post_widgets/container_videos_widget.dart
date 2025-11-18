@@ -1,7 +1,10 @@
 import 'package:demopico/core/app/theme/theme.dart';
+import 'package:demopico/features/profile/presentation/pages/full_screen_video_page.dart';
 import 'package:demopico/features/profile/presentation/view_model/post_provider.dart';
 import 'package:demopico/features/profile/presentation/widgets/post_widgets/video_player_from_network.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
+import 'package:get/utils.dart';
 import 'package:provider/provider.dart';
 
 class ContainerVideosWidget extends StatefulWidget {
@@ -24,35 +27,24 @@ class _ContainerVideosWidgetState extends State<ContainerVideosWidget> {
       return listRec.isNotEmpty 
       ? Stack(
         children: [
-          ListWheelScrollView.useDelegate(
-            itemExtent: 350,
-            diameterRatio: 0.8,
-            physics: FixedExtentScrollPhysics(),
-            perspective: 0.0009,
-            onSelectedItemChanged: (index) {},
-            childDelegate: ListWheelChildBuilderDelegate(
-              builder: (context, count) {
+          GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              childAspectRatio: 1,
+              crossAxisSpacing: 2,
+              mainAxisExtent: 100,
+              mainAxisSpacing: 2,
+            ),
+            itemBuilder: (context, count) {
                 if (count < 0 || count >= listRec.length) {
                   return null;
                 }
-                debugPrint(count.toString());
                 return VideoPlayerFromNetwork(
                     url: listRec[count].urlVideos![0]);
               },
-              childCount: listRec.length,
-            ),
+            
           ),
-          Positioned(
-            right: 10,
-            top: 10,
-            child: IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.fullscreen,
-                color: kWhite,
-              ),
-            ),
-          ),
+          
         ],
       )
       :  const Center(

@@ -365,7 +365,6 @@ class _ConfigCollectiveTabState extends State<_ConfigCollectiveTab> {
   }
 
   Future<void> _pickImage(bool isBackground) async {
-    // TODO IMPLEMENTAR PEGAR IMAGEM VALIDAR E TRAZER AQUI PARA O APLICATIVO 
     FileModel? image;
     try {
   final picker = PickOneImageUc.instance;
@@ -548,6 +547,16 @@ class _ConfigCollectiveTabState extends State<_ConfigCollectiveTab> {
               ),
             ),
           ),
+          const SizedBox(height: 20),
+
+          // --- Botão de deletar coletivo ---
+          TextButton.icon(
+            onPressed: () {
+              final vm = context.read<CollectiveViewModel>();
+              vm.deleteCollective(widget.coletivo);
+            }, 
+            icon: Icon(Icons.delete),
+            label: Text("Deletar coletivo"))
         ],
       ),
     );

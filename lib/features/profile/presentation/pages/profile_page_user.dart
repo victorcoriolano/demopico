@@ -28,7 +28,6 @@ class ProfilePageUser extends StatefulWidget {
 class _ProfilePageUserState extends State<ProfilePageUser>
     with TickerProviderStateMixin {
   String idProfile = Get.arguments as String;
-  Profile profile = Profile.empty; // profile inicia vazio - null object
 
   ScrollDirection? _lastDirection;
   double _accumulatedScroll = 0.0;
@@ -122,13 +121,7 @@ class _ProfilePageUserState extends State<ProfilePageUser>
       _lastOffset = currentOffset;
     });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final provider = context.read<ProfileViewModel>();
-      await provider.fetchProfileDataByID(idProfile);
-      setState(() {
-        profile = provider.currentProfile;
-      });
-    });
+
   }
 
   @override
@@ -142,91 +135,118 @@ class _ProfilePageUserState extends State<ProfilePageUser>
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: kRed,
-        centerTitle: true,
-        title: Text(
-          profile.displayName,
-          style: TextStyle(
-              color: kWhite, fontSize: 22, fontWeight: FontWeight.bold),
-        ),
-      ),
-      backgroundColor: kAlmostWhite,
-      body: SafeArea(
-        child: ListView(
-            shrinkWrap: true,
-            padding: const EdgeInsets.all(0),
-            children: [
-              ProfileTopSideDataWidget(
-                avatarUrl: profile.avatar,
-                backgroundUrl: profile.backgroundPicture,
-              ),
-              ProfileBottomSideDataWidget(
-                nameUser: profile.displayName,
-                idUser: profile.userID,
-                followers: profile.connections.length,
-                contributions: profile.spots.length,
-                description: profile.description ?? '',
-              ),
-              SizedBox(
-                height: 12,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  CustomElevatedButton(
-                      onPressed: () async {
-                        final userVM = context.read<AuthViewModelAccount>().user as UserEntity;
-                        if (_isMyFriend){
-                          userVM.profileUser.connections.remove(profile.userID);
-                          profile.connections.remove(userVM.id);
-                          await context.read<NetworkViewModel>().disconnectUsers(userVM.id, profile.userID);
-                        } else {
-                          final userToConnect = SuggestionProfile(idUser: profile.userID, name: profile.displayName, photo: profile.avatar, status: RequestConnectionStatus.pending);
-                          await context.read<NetworkViewModel>().requestConnection(userToConnect, userVM);
-                        }
-                      }, 
-                      textButton: _isMyFriend ? "Desconectar" : "Conectar"),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      final currentUserIdentification = context.read<AuthViewModelAccount>().userIdentification;
-                      final otherUser = UserIdentification(
-                        id: profile.userID, name: profile.displayName, profilePictureUrl: profile.avatar);
-                      if (currentUserIdentification != null) context.read<ChatListViewModel>().createChat(currentUserIdentification, otherUser);
-                    },
-                    icon: Icon(Icons.chat_outlined),
-                    style: CustomElevatedButton.formatation,
-                    label: Text("Acessar chat"),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 12,
-              ),
-              Container(
+   
+    if (idProfile.isEmpty) {
+      return Center(
+        child: Text("Não foi possivel carregar o perfil"),
+      );
+    }
+   
+    return FutureBuilder(
+      future: context.read<ProfileViewModel>().fetchAnotherProfile(idProfile),
+      builder: (context, asyncSnapshot) {
+        if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        if (asyncSnapshot.hasError) {
+          return Center(
+            child: Text("Erro ao carregar o perfil"),
+          );
+        }
+
+        final profile = asyncSnapshot.data;
+
+        return Scaffold(
+          extendBodyBehindAppBar: true,
+          appBar: AppBar(
+            backgroundColor: kRed,
+            centerTitle: true,
+            title: Text(
+              profile!.displayName,
+              style: TextStyle(
+                  color: kWhite, fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+          ),
+          backgroundColor: kAlmostWhite,
+          body: SafeArea(
+            child: ListView(
+                shrinkWrap: true,
                 padding: const EdgeInsets.all(0),
-                margin: const EdgeInsets.all(0),
-                child: SingleChildScrollView(
-                  controller: _scrollController,
-                  child: Column(
+                children: [
+                  ProfileTopSideDataWidget(
+                    avatarUrl: profile.avatar,
+                    backgroundUrl: profile.backgroundPicture,
+                  ),
+                  ProfileBottomSideDataWidget(
+                    nameUser: profile.displayName,
+                    idUser: profile.userID,
+                    followers: profile.connections.length,
+                    contributions: profile.spots.length,
+                    description: profile.description ?? '',
+                  ),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.all(0),
-                        height: screenHeight * 0.55,
-                        child: ProfilePostsWidget(
-                          profile: profile,
-                          controller: _tabController,
-                        ),
+                      CustomElevatedButton(
+                          onPressed: () async {
+                            final userVM = context.read<AuthViewModelAccount>().user as UserEntity;
+                            if (_isMyFriend){
+                              userVM.profileUser.connections.remove(profile.userID);
+                              profile.connections.remove(userVM.id);
+                              await context.read<NetworkViewModel>().disconnectUsers(userVM.id, profile.userID);
+                            } else {
+                              final userToConnect = SuggestionProfile(idUser: profile.userID, name: profile.displayName, photo: profile.avatar, status: RequestConnectionStatus.pending);
+                              await context.read<NetworkViewModel>().requestConnection(userToConnect, userVM);
+                            }
+                          }, 
+                          textButton: _isMyFriend ? "Desconectar" : "Conectar"),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          final currentUserIdentification = context.read<AuthViewModelAccount>().userIdentification;
+                          final otherUser = UserIdentification(
+                            id: profile.userID, 
+                            name: profile.displayName, profilePictureUrl: profile.avatar);
+                          if (currentUserIdentification != null) context.read<ChatListViewModel>().createChat(currentUserIdentification, otherUser);
+                        },
+                        icon: Icon(Icons.chat_outlined),
+                        style: CustomElevatedButton.formatation,
+                        label: Text("Acessar chat"),
                       ),
                     ],
                   ),
-                ),
-              ),
-            ]),
-      ),
-      extendBody: true,
+                  SizedBox(
+                    height: 12,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(0),
+                    margin: const EdgeInsets.all(0),
+                    child: SingleChildScrollView(
+                      controller: _scrollController,
+                      child: Column(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(0),
+                            height: screenHeight * 0.55,
+                            child: ProfilePostsWidget(
+                              profile: profile,
+                              controller: _tabController,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ]),
+          ),
+          extendBody: true,
+        );
+      }
     );
   }
 }

@@ -26,7 +26,10 @@ class FavoriteSpotUC {
 
   Future<void> execute(Pico newPicoFav, String idUser) async {
     try {
-      final picoFav = PicoFavorito(idPico: newPicoFav.id, idUsuario: idUser);
+      final picoFav = PicoFavorito(
+        idPico: newPicoFav.id, 
+        idUsuario: idUser, 
+        idPicoFavorito: "",); // passando o id vazio mais sera preenchido no retorno do datasource
       await spotFavRepositoryIMP.saveSpot(picoFav);
 
     } on Failure catch (e) {

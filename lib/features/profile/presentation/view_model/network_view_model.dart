@@ -12,6 +12,7 @@ import 'package:demopico/features/profile/domain/usecases/get_connections_reques
 import 'package:demopico/features/profile/domain/usecases/get_connections_sent.dart';
 import 'package:demopico/features/profile/domain/usecases/get_sugestions_user_uc.dart';
 import 'package:demopico/features/profile/presentation/object_for_only_view/suggestion_profile.dart';
+import 'package:demopico/features/user/presentation/controllers/auth_view_model_account.dart';
 import 'package:flutter/material.dart';
 
 class NetworkViewModel extends ChangeNotifier {
@@ -150,6 +151,11 @@ class NetworkViewModel extends ChangeNotifier {
       final relationshiptoUpdate = _connectionsRequests.firstWhere((relactionship) => relactionship.requesterUser == requester);
       final connection = relationshiptoUpdate.copyWith(status: RequestConnectionStatus.accepted);
       await _acceptConnection.execute(connection);
+      UserEntity user = AuthViewModelAccount.instance.user as UserEntity;
+      final listConnections = user.profileUser.connections;
+      listConnections.add(requester.id);
+      user = user.copyWith(profileUser: user.profileUser.copyWith(connections: listConnections));
+      AuthViewModelAccount.instance.setCurrentUser = user;
     } on Failure catch (e) {
       FailureServer.showError(e);
     }

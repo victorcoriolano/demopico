@@ -35,4 +35,12 @@ class ProfileViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<Profile?> fetchAnotherProfile(String id) async {
+    final result = await pegarDadosUserUc.execute(id);
+    if (result.success){
+      return result.profile;
+    }
+    return null;
+  }
+
 }

@@ -1,11 +1,13 @@
 import 'package:demopico/features/mapa/domain/entities/pico_favorito.dart';
 
-class PicoFavoritoModel extends PicoFavorito {
+class PicoFavoritoModel  {
   final String id;
+  final String idPico;
+  final String idUsuario;
 
   PicoFavoritoModel({
-    required super.idPico,
-    required super.idUsuario,
+    required this.idPico,
+    required this.idUsuario,
     required this.id,
   });
 

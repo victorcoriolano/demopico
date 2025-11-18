@@ -123,7 +123,7 @@ class PostProvider extends ChangeNotifier {
             ?.map((e) => MediaUrlItem(url: e, contentType: MediaType.video)) ??
         []);
 
-    return items;
+    return items.toSet().toList();
   }
 
   void mapearFiles(TypePost typePost){
@@ -150,12 +150,13 @@ class PostProvider extends ChangeNotifier {
 
   // Gateway carregar postagem para ui
   // retorna caso a requisição já tenha sido feita postagens ja tenha sido feitas
-  Future<void> loadPosts(String userId) async {
+  Future<void> loadPosts(String userId, bool isOtherProfile) async {
     debugPrint("Carregando postagens do usuário: $userId");
     // 
-    //if (_posts.isNotEmpty) return;
     getPosts(userId);
   }
+
+  
 
   Future<void> deletePost(Post postagem) async {
     _isLoading = true;
@@ -241,6 +242,7 @@ class PostProvider extends ChangeNotifier {
       debugPrint("lista atual de posts: $_posts");
       _fullVideoPosts.addAll(myPosts.where((post) => post.typePost == TypePost.fullVideo));
       debugPrint("lista atual de recs: $_fullVideoPosts tamanho da lista: ${_fullVideoPosts.length}");
+      debugPrint("ids full recs: ${_fullVideoPosts.map((e) => e.id)}");
       _isLoading = false;
       notifyListeners();
     } on Failure catch (e) {

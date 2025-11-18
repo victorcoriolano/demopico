@@ -32,7 +32,8 @@ class _ContainerPostsWidgetState extends State<ContainerPostsWidget> {
     switch (user){
       
       case UserEntity():
-        await _postProvider.loadPosts(widget.profile.userID);
+        debugPrint("user id: ${widget.profile.userID}");
+        await _postProvider.loadPosts(widget.profile.userID, widget.profile.userID == user.id);
 
       case AnonymousUserEntity():
         // do nothing

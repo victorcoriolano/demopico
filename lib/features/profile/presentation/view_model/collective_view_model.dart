@@ -5,6 +5,7 @@ import 'package:demopico/core/common/errors/failure_server.dart';
 import 'package:demopico/core/common/media_management/models/file_model.dart';
 import 'package:demopico/core/common/media_management/services/upload_service.dart';
 import 'package:demopico/features/profile/domain/usecases/accept_entry_on_collective_uc.dart';
+import 'package:demopico/features/profile/domain/usecases/delete_collective_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_all_collectives_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_collective_by_id_uc.dart';
 import 'package:demopico/features/profile/domain/usecases/get_collectives_for_profile_uc.dart';
@@ -25,6 +26,7 @@ class CollectiveViewModel extends ChangeNotifier {
   final UpdateCollectiveUc _updateCollectiveUc;
   final RefuseEntryRequestUseCase _refuseEntryRequestUseCase;
   final RemoveMemberUseCase _removeMemberUseCase;
+  final DeleteCollectiveUc _deleteCollectiveUc;
 
   static CollectiveViewModel? _instance;
   static CollectiveViewModel get instance =>
@@ -39,7 +41,8 @@ class CollectiveViewModel extends ChangeNotifier {
         _acceptEntryOnCollectiveUc = AcceptEntryOnCollectiveUc(),
         _updateCollectiveUc = UpdateCollectiveUc(),
         _refuseEntryRequestUseCase = RefuseEntryRequestUseCase(),
-        _removeMemberUseCase = RemoveMemberUseCase();
+        _removeMemberUseCase = RemoveMemberUseCase(),
+        _deleteCollectiveUc = DeleteCollectiveUc.instance;
 
   List<ColetivoEntity> userCollectives = [];
   List<ColetivoEntity> allCollectives = [];
@@ -199,5 +202,19 @@ class CollectiveViewModel extends ChangeNotifier {
     }
   }
 
-
+  
+Future<void> deleteCollective(ColetivoEntity coletivo) async {
+    isLoading = true;
+    notifyListeners();
+    try {
+      await _deleteCollectiveUc.execute(coletivo);
+      userCollectives.removeWhere((c) => c.id == coletivo.id);
+      notifyListeners();
+    } on Failure catch (e) {
+      FailureServer.showError(e);
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
 }
