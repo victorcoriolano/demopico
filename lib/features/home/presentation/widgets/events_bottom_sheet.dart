@@ -67,32 +67,28 @@ class _EventsBottomSheetState extends State<EventsBottomSheet>
     return AnimatedBuilder(
         animation: _controller,
         builder: (context, child) {
-          return Positioned(
-              height: lerp(minHeigth - 30, maxHeight),
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: GestureDetector(
-                onVerticalDragUpdate: _handleDragUpdate,
-                onVerticalDragEnd: _handleDragEnd,
-                child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 30),
-                    decoration: const BoxDecoration(
-                      color: Color.fromARGB(255, 139, 0, 0),
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(32)),
+          return GestureDetector(
+            onVerticalDragUpdate: _handleDragUpdate,
+            onVerticalDragEnd: _handleDragEnd,
+            child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 139, 0, 0),
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(32)),
+                ),
+                child: Stack(
+                  
+                  children: <Widget>[
+                    SheetHeader(
+                      fontSize: headerFontSize,
+                      topMargin: headerTopMargin,
                     ),
-                    child: Stack(
-                      children: <Widget>[
-                        SheetHeader(
-                          fontSize: headerFontSize,
-                          topMargin: headerTopMargin,
-                        ),
-                        for (Event event in events) _buildFullItem(event),
-                        for (Event event in events) _buildIcon(event),
-                      ],
-                    )),
-              ));
+                    for (Event event in events) _buildFullItem(event),
+                    for (Event event in events) _buildIcon(event),
+                  ],
+                )),
+          );
         });
   }
 
