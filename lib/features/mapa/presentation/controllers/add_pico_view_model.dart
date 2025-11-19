@@ -17,6 +17,7 @@ import 'package:demopico/features/mapa/domain/value_objects/obstacle_vo.dart';
 import 'package:demopico/features/mapa/domain/value_objects/rating_vo.dart';
 import 'package:demopico/features/mapa/domain/value_objects/type_spot_vo.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 
 class AddPicoViewModel extends ChangeNotifier {
@@ -225,6 +226,14 @@ class AddPicoViewModel extends ChangeNotifier {
       await _createSpotUc.createSpot(picoModel);
 
       limpar();
+      Get.back();
+      Get.snackbar("Sucesso ✅", "Pico criado com sucesso!",
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+        dismissDirection: DismissDirection.down
+      );
+
     } on Failure catch (e) {
       debugPrint("Erro ao criar pico: ${e.message}");
       FailureServer.showError(e);
