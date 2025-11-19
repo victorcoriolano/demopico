@@ -52,8 +52,13 @@ class _ContainerTelasState extends State<ContainerTelas> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AddPicoViewModel>(
-      builder: (context, provider, child) => Scaffold(
+    return Consumer<AddPicoViewModel>(builder: (context, provider, child) {
+      if (provider.isLoading) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+      return Scaffold(
         body: Container(
           color: Colors.black54,
           child: Center(
@@ -127,8 +132,8 @@ class _ContainerTelasState extends State<ContainerTelas> {
             ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   UserIdentification? createIdentification(AuthState? authstate) {

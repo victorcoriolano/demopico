@@ -216,6 +216,8 @@ class AddPicoViewModel extends ChangeNotifier {
   }
 
   Future<void> createSpot([UserIdentification? user]) async {
+    isLoading = true;
+    notifyListeners();
     try {
       final urls = await _uploadService.uploadFiles(files, "spots");
       imgUrls.addAll(urls);
@@ -224,7 +226,6 @@ class AddPicoViewModel extends ChangeNotifier {
       final picoModel = PicoModel.fromEntity(picoEntity);
 
       await _createSpotUc.createSpot(picoModel);
-
       limpar();
       Get.back();
       Get.snackbar("Sucesso ✅", "Pico criado com sucesso!",
@@ -240,6 +241,9 @@ class AddPicoViewModel extends ChangeNotifier {
     } on ArgumentError catch (e) {
       debugPrint("Erro ao criar spot: ${e.toString()}");
       FailureServer.showError(OtherError(message: "${e.message} - ${e.invalidValue}")); 
+    } finally {
+      isLoading = false;
+      notifyListeners();
     }
   }
 
