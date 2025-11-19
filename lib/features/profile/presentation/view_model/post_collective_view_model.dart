@@ -164,12 +164,12 @@ class PostCollectiveViewModel extends ChangeNotifier {
 
       //cria urls separadas para imagens e vídeos
       final urlsimages =
-          await UploadService.getInstance.uploadFiles(_images, "posts/images");
+          await UploadService.getInstance.uploadFiles(_images, "posts/${user.id}/images");
       _imgUrls.addAll(urlsimages);
 
       if (_videos.isNotEmpty) {
         final urlvideos = await UploadService.getInstance
-            .uploadFiles(_videos, "posts/videos");
+            .uploadFiles(_videos, "posts/${user.id}/videos");
         _videoUrls.addAll(urlvideos);
       }
 

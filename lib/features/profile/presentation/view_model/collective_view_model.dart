@@ -72,6 +72,7 @@ class CollectiveViewModel extends ChangeNotifier {
       members = coletivo.members;
       notifyListeners();
     } on Failure catch (failure) {
+      debugPrint("Erro ao pegar as informações do coletivo: $failure");
       FailureServer.showError(failure);
     }
   }
