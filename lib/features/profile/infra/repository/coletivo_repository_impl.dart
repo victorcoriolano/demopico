@@ -1,5 +1,7 @@
 import 'package:demopico/core/common/auth/domain/entities/coletivo_entity.dart';
 import 'package:demopico/core/common/auth/domain/entities/user_identification.dart';
+import 'package:demopico/core/common/errors/failure_server.dart';
+import 'package:demopico/core/common/errors/repository_failures.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto.dart';
 import 'package:demopico/features/external/datasources/firebase/dto/firebase_dto_mapper.dart';
 import 'package:demopico/features/profile/domain/interfaces/i_coletivo_datasource.dart';
@@ -10,24 +12,34 @@ import 'package:demopico/features/profile/infra/datasource/firebase_collective_d
 import 'package:demopico/features/profile/infra/datasource/firebase_post_datasource.dart';
 import 'package:demopico/features/user/domain/interfaces/i_user_datasource_service.dart';
 import 'package:demopico/features/user/infra/datasource/remote/user_firebase_datasource.dart';
+import 'package:flutter/widgets.dart';
 
-
-class ColetivoRepositoryImpl implements IColetivoRepository{
+class ColetivoRepositoryImpl implements IColetivoRepository {
   final IColetivoDatasource _datasource;
   final IPostDatasource _postDatasource;
-    final IUserDataSource<FirebaseDTO> _userDataSource;
+  final IUserDataSource<FirebaseDTO> _userDataSource;
 
-  ColetivoRepositoryImpl({required IColetivoDatasource datasource, required IPostDatasource postDatasource, required IUserDataSource<FirebaseDTO> userDatasource}): _datasource = datasource, _postDatasource = postDatasource, _userDataSource = userDatasource;
+  ColetivoRepositoryImpl(
+      {required IColetivoDatasource datasource,
+      required IPostDatasource postDatasource,
+      required IUserDataSource<FirebaseDTO> userDatasource})
+      : _datasource = datasource,
+        _postDatasource = postDatasource,
+        _userDataSource = userDatasource;
 
   static ColetivoRepositoryImpl? _instance;
-  static ColetivoRepositoryImpl get instance => _instance ?? ColetivoRepositoryImpl(
-    datasource: FirebaseCollectiveDatasource.instance,
-    postDatasource: FirebasePostDatasource.getInstance,
-    userDatasource: UserFirebaseDataSource.getInstance, );  
+  static ColetivoRepositoryImpl get instance =>
+      _instance ??
+      ColetivoRepositoryImpl(
+        datasource: FirebaseCollectiveDatasource.instance,
+        postDatasource: FirebasePostDatasource.getInstance,
+        userDatasource: UserFirebaseDataSource.getInstance,
+      );
 
   @override
   Future<ColetivoEntity> createColetivo(ColetivoEntity coletivo) async {
-    final collectiveDTO = await _datasource.createColetivo(coletivoDtoMapper.toDTO(coletivo));
+    final collectiveDTO =
+        await _datasource.createColetivo(coletivoDtoMapper.toDTO(coletivo));
     return coletivoDtoMapper.toModel(collectiveDTO);
   }
 
@@ -35,70 +47,114 @@ class ColetivoRepositoryImpl implements IColetivoRepository{
   Future<void> updateColetivo(ColetivoEntity coletivo) async {
     return await _datasource.updateColetivo(coletivoDtoMapper.toDTO(coletivo));
   }
-  
+
   @override
   Future<ColetivoEntity> getColetivoByID(String idColetivo) async {
-    final coletivoDto = await _datasource.getCollectivoDoc(idColetivo);
-    
-    final partialColetivo = coletivoDtoMapper.toModel(coletivoDto);
+    try {
+      final coletivoDto = await _datasource.getCollectivoDoc(idColetivo);
+      debugPrint("coletivoDto: $coletivoDto");
+      final partialColetivo = coletivoDtoMapper.toModel(coletivoDto);
 
-    final futures = await Future.wait([
-      _fetchUser(partialColetivo.modarator.id),
-      
-      _fetchMembers(partialColetivo.members.map((m) => m.id).toList()),
-      
-      _fetchPublications(idColetivo),
-    ]);
+      final futures = await Future.wait([
+        _fetchUser(partialColetivo.modarator.id),
+        _fetchMembers(partialColetivo.members.map((m) => m.id).toList()),
+        _fetchPublications(idColetivo),
+      ]);
 
-    final UserIdentification modarator = futures[0] as UserIdentification;
-    final List<UserIdentification> members = futures[1] as List<UserIdentification>;
-    final List<Post> publications = futures[2] as List<Post>;
+      final UserIdentification modarator = futures[0] as UserIdentification;
+      final List<UserIdentification> members =
+          futures[1] as List<UserIdentification>;
+      final List<Post> publications = futures[2] as List<Post>;
 
-    return partialColetivo.copyWith(
-      modarator: modarator,
-      members: members,
-      publications: publications,
-    );
+      return partialColetivo.copyWith(
+        modarator: modarator,
+        members: members,
+        publications: publications,
+      );
+    } on Failure catch (e) {
+      debugPrint("FAILURE Erro ao carregar todas as informações do coletivo: $e");
+      rethrow;
+    } catch (e) {
+      debugPrint("Erro ao pegar o coletivo $e");
+      throw UnknownFailure(unknownError: e);
+    }
   }
 
   Future<UserIdentification> _fetchUser(String id) async {
-    final user = mapperUserModel.toModel(await _userDataSource.getUserDetails(id));
-    return UserIdentification(
+
+    try {
+  final user =
+      mapperUserModel.toModel(await _userDataSource.getUserDetails(id));
+  return UserIdentification(
       id: id, name: user.name, profilePictureUrl: user.avatar);
+} on Failure catch (e) {
+  debugPrint("FAILURE Erro ao pegar o usuário $e");
+  rethrow;
+} catch (e) {
+  debugPrint("UNKNOW Erro ao pegar o usuário $e");
+  throw UnknownFailure(unknownError: e);
+}
   }
 
   Future<List<UserIdentification>> _fetchMembers(List<String> ids) async {
-    final users = (await _userDataSource.getUsersByIds(ids)).map((u) => mapperUserModel.toModel(u)).toList();
-    return users.map((user) {
-      return UserIdentification(
-      id: user.id, name: user.name, profilePictureUrl: user.avatar);
-    }).toList();
+    try {
+  final users = (await _userDataSource.getUsersByIds(ids))
+      .map((u) => mapperUserModel.toModel(u))
+      .toList();
+  return users.map((user) {
+    return UserIdentification(
+        id: user.id, name: user.name, profilePictureUrl: user.avatar);
+  }).toList();
+} on Failure catch (e) {
+  debugPrint("FAILURE Erro ao pegar o usuário $e");
+  rethrow;
+} catch (e) {
+  debugPrint("UNKNOW Erro ao pegar o usuário $e");
+  throw UnknownFailure(unknownError: e);
+}
   }
 
-  Future<List<Post>> _fetchPublications(String id) async{
-    return (await _postDatasource.getPostsByCollectiveId(id)).map((dto) => postMapper.fromJson(dto.data, dto.id)).toList();
+  Future<List<Post>> _fetchPublications(String id) async {
+    try {
+  return (await _postDatasource.getPostsByCollectiveId(id))
+      .map((dto) => postMapper.fromJson(dto.data, dto.id))
+      .toList();
+} on Failure catch (e) {
+  debugPrint("\n FAILURE Erro ao pegar as publicações do coletivo $e");
+  rethrow;
+} catch (e) {
+  debugPrint("\n UNKNOW Erro ao pegar as pub não mapeado $e");
+  throw UnknownFailure(unknownError: e);
+}
   }
-  
+
   @override
   Future<List<ColetivoEntity>> getCollectiveForProfile(String idProfile) async {
     final collectives = await _datasource.getCollectiveForProfile(idProfile);
     return collectives.map((coll) => coletivoDtoMapper.toModel(coll)).toList();
   }
-  
+
   @override
   Future<List<ColetivoEntity>> getAllCollectives() async {
     final collectivesDatasource = await _datasource.getAllCollectives();
-    return collectivesDatasource.map((coll) => coletivoDtoMapper.toModel(coll)).toList();
+    return collectivesDatasource
+        .map((coll) => coletivoDtoMapper.toModel(coll))
+        .toList();
   }
-  
+
   @override
-  Future<void> updateListOnCollective({required String nameField, required String idCollective, required List<dynamic> newListData}) {
-    return _datasource.updateListOnCollective(nameField: nameField, idCollective: idCollective, newListData: newListData);
+  Future<void> updateListOnCollective(
+      {required String nameField,
+      required String idCollective,
+      required List<dynamic> newListData}) {
+    return _datasource.updateListOnCollective(
+        nameField: nameField,
+        idCollective: idCollective,
+        newListData: newListData);
   }
-  
+
   @override
   Future<void> deleteCollective(String idCollective) {
     return _datasource.deleteCollective(idCollective);
-  } 
-  
+  }
 }
