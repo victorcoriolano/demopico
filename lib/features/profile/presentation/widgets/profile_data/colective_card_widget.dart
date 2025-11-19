@@ -18,7 +18,7 @@ class ColectiveCardWidget extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 6),
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: Colors.transparent, 
+          color: const Color.fromARGB(143, 255, 255, 255), 
           borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
