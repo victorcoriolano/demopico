@@ -265,6 +265,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
           .collection(collection.name)
           .doc(docRef)
           .collection(collectionPath)
+          .orderBy('timestamp', descending: true)
           .snapshots()
           .map((collection) {
         if (collection.docs.isEmpty) {
@@ -294,6 +295,7 @@ class CrudFirebase implements ICrudDataSource<FirebaseDTO, FirebaseFirestore> {
           .collection(collection.name)
           .doc(docRef)
           .collection(collectionsPath)
+          .orderBy('timestamp', descending: true)
           .snapshots()
           .map((collection) {
         return collection.docs.map((doc) {
