@@ -65,9 +65,9 @@ class CreateCollectiveViewModel extends ChangeNotifier {
     try{
       final url = await UploadService.getInstance.uploadAFileWithoutStream(photoCollective, "collectives/photos");
       final guests = members.map((u) => u.id).toList();
-      final userIdentification = UserIdentification(
+      final moderator = UserIdentification(
         id: profile.userID, name: profile.displayName, profilePictureUrl: profile.avatar);
-      final newCollective = ColetivoEntity.initial(nameCollective, userIdentification, url, guests);
+      final newCollective = ColetivoEntity.initial(nameCollective, moderator, url, guests);
       final collective = await _createCollectiveUc.execute(newCollective);
       debugPrint("Coletivo criado com sucesso: $collective");
       Get.snackbar(

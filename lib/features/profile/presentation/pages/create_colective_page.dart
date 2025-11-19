@@ -74,10 +74,9 @@ class _CreateCollectivePageState extends State<CreateCollectivePage> {
                   style: textTheme.titleMedium,
                 ),
                 const SizedBox(height: 8.0),
-                Consumer<CreateCollectiveViewModel>(
-                  builder: (context, vm, child) {
-                    if (vm.photoCollective is NullFileModel){
-                      return OutlinedButton.icon(
+                
+                    if (vm.photoCollective is NullFileModel)
+                      OutlinedButton.icon(
                       onPressed: () async {
                         await context.read<CreateCollectiveViewModel>().addImage();
                       },
@@ -97,17 +96,13 @@ class _CreateCollectivePageState extends State<CreateCollectivePage> {
                           borderRadius: BorderRadius.circular(8.0), // Borda padrão
                         ),
                       ),
-                    );
-                    }
-                    else {
-                      return Image.memory(
+                    )
+                    
+                    else 
+                       Image.memory(
                         vm.photoCollective.bytes,
                         errorBuilder: (context, error, stackTrace) => Icon(Icons.broken_image)
-                      );
-                    }
-                    
-                  }
-                ),
+                      ),
                 const SizedBox(height: 24.0), // Espaço maior entre seções
           
                 // --- SEÇÃO 3: MEMBROS ---

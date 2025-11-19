@@ -6,6 +6,7 @@ import 'package:demopico/core/common/media_management/models/file_model.dart';
 import 'package:demopico/core/common/media_management/usecases/pick_one_image_uc.dart';
 import 'package:demopico/features/profile/presentation/view_model/collective_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class ManageCollectivePage extends StatefulWidget {
@@ -554,6 +555,7 @@ class _ConfigCollectiveTabState extends State<_ConfigCollectiveTab> {
             onPressed: () {
               final vm = context.read<CollectiveViewModel>();
               vm.deleteCollective(widget.coletivo);
+              Get.back();
             }, 
             icon: Icon(Icons.delete),
             label: Text("Deletar coletivo"))
