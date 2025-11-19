@@ -10,37 +10,39 @@ class CardPostWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onLongPress: () {
-      }, 
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => PostWidget(post: post),
-          ),
-        );
-      },
-      child: Card(
-        margin: const EdgeInsets.all(0),
-        shape: LinearBorder(),
-        clipBehavior: Clip.antiAlias,
-        child: post.urlImages.isNotEmpty 
-          ? Image.network(
-            post.urlImages[0],
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: double.infinity,
-          )
-          : post.urlVideos != null && post.urlVideos!.isNotEmpty 
-            ? VideoPlayerFromNetwork(url: post.urlVideos![0])
-            : const Center(
-                child: Icon(
-                  Icons.broken_image,
-                  size: 50,
-                  color: Colors.grey,
+    return Center(
+      child: GestureDetector(
+        onLongPress: () {
+        }, 
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => Center(child: PostWidget(post: post)),
+            ),
+          );
+        },
+        child: Card(
+          margin: const EdgeInsets.all(0),
+          shape: LinearBorder(),
+          clipBehavior: Clip.antiAlias,
+          child: post.urlImages.isNotEmpty 
+            ? Image.network(
+              post.urlImages[0],
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
+            )
+            : post.urlVideos != null && post.urlVideos!.isNotEmpty 
+              ? VideoPlayerFromNetwork(url: post.urlVideos![0])
+              : const Center(
+                  child: Icon(
+                    Icons.broken_image,
+                    size: 50,
+                    color: Colors.grey,
+                  ),
                 ),
-              ),
+        ),
       ),
     );
   }
